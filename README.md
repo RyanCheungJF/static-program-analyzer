@@ -30,3 +30,4 @@ No additional instructions required.
 Name | Mobile | Email | Development OS/Toolchain
 -:|:-:|:-|-|
 John Doe | 99887766 | john@doe.com | Windows 10/Visual Studio 2019
+Hoon Darren | 96353534 | e0523347@u.nus.edu | MacOS/CLion
