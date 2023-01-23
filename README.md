@@ -32,3 +32,4 @@ Name | Mobile | Email | Development OS/Toolchain
 John Doe | 99887766 | john@doe.com | Windows 10/Visual Studio 2019
 Hoon Darren | 96353534 | e0523347@u.nus.edu | MacOS/CLion
 Cui Langyuan | 98225819 | e0148779@u.nus.edu | Windows 11/Visual Studio 2019
+Muhammad Faruq Bin Jahangeer | 81268656 | e0544096@u.nus.edu | MacOS/CLion
