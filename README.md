@@ -29,10 +29,10 @@ No additional instructions required.
 
 Name | Mobile | Email | Development OS/Toolchain
 -:|:-:|:-|-|
-John Doe | 99887766 | john@doe.com | Windows 10/Visual Studio 2019
 Hoon Darren | 96353534 | e0523347@u.nus.edu | MacOS/CLion
 Cui Langyuan | 98225819 | e0148779@u.nus.edu | Windows 11/Visual Studio 2019
 Muhammad Faruq Bin Jahangeer | 81268656 | e0544096@u.nus.edu | MacOS/CLion
 Calvin Tan Wei Jie | 92207978 | e0544514@u.nus.edu | Windows 10/Visual Studio 2022
 Ong Xing Wei | 81852377 | e0543718@u.nus.edu | Windows 10/Visual Studio 2022
+Ryan Cheung Jing Feng | 83213902 | e0543623@u.nus.edu | Windows10/Visual Studio 2019
 
