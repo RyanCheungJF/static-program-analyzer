@@ -1,0 +1,9 @@
+# Ignore any test cases and xml files
+# Please put your test cases inside the correct directory; this is a scratch directory
+*.xml
+*.txt
+# Not sure if the intial committed text files are important
+# So I set it to ignore all new txt files except the original ones
+!Sample_queries.txt
+!Sample_source.txt
+!prototype_sample_SIMPLE_source.txt
