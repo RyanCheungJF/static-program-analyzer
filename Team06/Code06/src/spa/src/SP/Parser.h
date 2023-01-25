@@ -10,5 +10,6 @@ class Parser {
 public:
 	Parser();
 
+	void parse(std::vector<std::string> tokens);
 
 };

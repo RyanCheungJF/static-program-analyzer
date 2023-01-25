@@ -7,10 +7,16 @@ SP::SP() {
 void SP::processFile(std::string filePath) {
 	std::ifstream sourceFile(filePath);
 
-	if (sourceFile) {
+	if (!sourceFile) {
 		std::cerr << "File not found" << std::endl;
 	}
 
+	std::stringstream strStream;
+	strStream << sourceFile.rdbuf();
 
+	std::vector<std::string> tokens;
+	tokens = tokenizer.tokenize(strStream);
+
+	parser.parse(tokens);
 
 }

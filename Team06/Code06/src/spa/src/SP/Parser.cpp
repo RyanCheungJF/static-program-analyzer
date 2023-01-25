@@ -4,7 +4,7 @@ Parser::Parser() {
 
 }
 
-int Parse () {
+void Parser::parse(std::vector<std::string> tokens) {
 
-	return 0;
+	
 }
