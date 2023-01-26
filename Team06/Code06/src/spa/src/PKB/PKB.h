@@ -21,3 +21,6 @@ public:
 
     FollowsAPI followsApi;
 };
+
+
+PKB pkbInstance;

@@ -18,3 +18,4 @@ public:
     bool getFollowsT(StmtNum left, StmtNum right);
 };
 
+
