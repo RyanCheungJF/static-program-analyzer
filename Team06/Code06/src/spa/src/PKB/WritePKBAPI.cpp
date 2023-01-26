@@ -1,9 +1,11 @@
-# include "WritePKBAPI.h"
+#include "WritePKBAPI.h"
 
-void WritePKBAPI::SetFollows(StmtNum left, StmtNum right) {
+PKB pkbInstance;
 
+void WritePKBAPI::setFollows(StmtNum left, StmtNum right) {
+    pkbInstance.followsApi.setFollows(left, right);
 }
 
-void WritePKBAPI::SetFollowsT(StmtNum left, StmtNum right) {
+void WritePKBAPI::setFollowsT(StmtNum left, StmtNum right) {
 
 }
