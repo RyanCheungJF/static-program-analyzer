@@ -28,12 +28,14 @@ enum class TokenType {
 	ASSIGN, // =
 
 	// Keywords
-	PROCEDURE,
-	READ,
-	PRINT,
-	CALL,
-	WHILE,
-	IF,
-	THEN,
-	ELSE,
+	//PROCEDURE,
+	//READ,
+	//PRINT,
+	//CALL,
+	//WHILE,
+	//IF,
+	//THEN,
+	//ELSE,
+
+	ENDOFFILE
 };

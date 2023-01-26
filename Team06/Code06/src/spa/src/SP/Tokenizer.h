@@ -5,13 +5,14 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <Token.h>
 
 class Tokenizer {
 
 public:
 	Tokenizer();
 
-	std::vector<std::string> tokenize(std::stringstream& file);
+	std::vector<Token> tokenize(std::stringstream& file);
 
 };
 

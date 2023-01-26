@@ -5,11 +5,12 @@
 
 class Token {
 public:
+	TokenType type;
+	std::string value;
+
 	Token();
 
 	Token(TokenType type, std::string value);
 
-	TokenType type;
-	std::string value;
-
+	std::string toString();
 };
