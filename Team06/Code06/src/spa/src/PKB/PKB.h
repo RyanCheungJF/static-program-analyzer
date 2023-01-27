@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "api/FollowsAPI.h"
+#include "api/Follows.h"
 
 using namespace std;
 typedef short PROC;
@@ -19,7 +19,7 @@ public:
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST (PROC p);
 
-    FollowsAPI followsApi;
+    Follows followsApi;
 };
 
 

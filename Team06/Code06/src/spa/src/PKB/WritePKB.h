@@ -2,13 +2,13 @@
 
 #include "PKB.h"
 
-//#ifndef SPA_WRITEPKBAPI_H
-//#define SPA_WRITEPKBAPI_H
-//#endif //SPA_WRITEPKBAPI_H
+//#ifndef SPA_WRITEPKB_H
+//#define SPA_WRITEPKB_H
+//#endif //SPA_WRITEPKB_H
 
 typedef int StmtNum;
 
-class WritePKBAPI {
+class WritePKB {
 public:
 
     // Sets Follows relation in PKB
