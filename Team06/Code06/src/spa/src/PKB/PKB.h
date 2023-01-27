@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "api/Follows.h"
 
 using namespace std;
 typedef short PROC;
@@ -18,4 +19,8 @@ public:
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST (PROC p);
 
+    Follows followsApi;
 };
+
+
+PKB pkbInstance;
