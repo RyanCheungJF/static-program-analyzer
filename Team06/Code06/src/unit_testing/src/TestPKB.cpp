@@ -18,8 +18,8 @@ TEST_CASE("Write Follows(1, 2), Read (1, 2)") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    writePkb.pkbInstance = &pkb;
-    readPkb.pkbInstance = &pkb;
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
 
     writePkb.setFollows(1, 2);
     bool res = readPkb.getFollows(1, 2);
@@ -31,8 +31,8 @@ TEST_CASE("Write Follows(1, 2), Read (1, 3)") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    writePkb.pkbInstance = &pkb;
-    readPkb.pkbInstance = &pkb;
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
 
     writePkb.setFollows(1, 2);
     bool res = readPkb.getFollows(1, 3);
