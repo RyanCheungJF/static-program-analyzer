@@ -1,5 +1,5 @@
 #include "DesignExtractor.h"
 
-int DesignExtractor () {
+int DesignExtractor() {
 	return 0;
 }
