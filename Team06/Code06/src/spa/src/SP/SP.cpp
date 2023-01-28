@@ -14,7 +14,7 @@ void SP::processFile(std::string filePath) {
 	std::stringstream strStream;
 	strStream << sourceFile.rdbuf();
 
-	std::vector<Token> tokens;
+	std::deque<Token> tokens;
 	tokens = tokenizer.tokenize(strStream);
 
 	// parser.parse(tokens);

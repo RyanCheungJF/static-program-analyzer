@@ -4,8 +4,8 @@ Tokenizer::Tokenizer() {
 
 }
 
-std::vector<Token> Tokenizer::tokenize(std::stringstream& file) {
-	std::vector<Token> tokens;
+std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
+	std::deque<Token> tokens;
 
 	while (file.peek() != EOF) {
 		// Eat whitespace

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <vector>
+#include <deque>
 #include <string>
 #include <Token.h>
 
@@ -12,7 +12,7 @@ class Tokenizer {
 public:
 	Tokenizer();
 
-	std::vector<Token> tokenize(std::stringstream& file);
+	std::deque<Token> tokenize(std::stringstream& file);
 
 };
 
