@@ -9,6 +9,8 @@ class Follows {
 public:
     void setFollows(StmtNum left, StmtNum right);
     bool checkFollows(StmtNum left, StmtNum right);
+    StmtNum getFollower(StmtNum followee);
+    StmtNum getFollowee(StmtNum follower);
 private:
     FollowsStorage store;
 };

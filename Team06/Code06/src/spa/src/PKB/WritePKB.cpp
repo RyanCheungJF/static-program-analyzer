@@ -1,9 +1,17 @@
 #include "WritePKB.h"
 
-void WritePKB::setFollows(StmtNum left, StmtNum right) {
-    pkbInstance.followsApi.setFollows(left, right);
+void WritePKB::setInstancePKB(PKB &pkb) {
+    if (this -> pkbInstance != NULL) {
+        return;
+    }
+    this -> pkbInstance = &pkb;
+    return;
 }
 
-void WritePKB::setFollowsT(StmtNum left, StmtNum right) {
+void WritePKB::setFollows(StmtNum followee, StmtNum follower) {
+    pkbInstance -> followsApi.setFollows(followee, follower);
+}
+
+void WritePKB::setFollowsT(StmtNum follower, StmtNum followee) {
 
 }
