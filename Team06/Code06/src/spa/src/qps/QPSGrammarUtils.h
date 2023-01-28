@@ -23,6 +23,7 @@ bool isDeclaration(string);
 bool isDesignEntity(string);
 bool isStmtRef(string);
 bool isEntRef(string);
+bool isExprSpec(string);
 //bool isFollows(string);
 //bool isParent(string);
 //bool isUses(string);

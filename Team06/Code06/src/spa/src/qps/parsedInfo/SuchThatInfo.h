@@ -12,7 +12,7 @@ class SuchThatInfo {
 
 	SuchThatInfo();
 	SuchThatInfo(string, vector<string>);
-	SuchThatInfo(SuchThatInfo& sti);
+	SuchThatInfo(const SuchThatInfo&);
 };
 
 #endif // !SPA_QPS_SUCHTHATINFO_H

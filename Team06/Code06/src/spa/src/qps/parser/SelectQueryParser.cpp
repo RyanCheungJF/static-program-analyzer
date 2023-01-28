@@ -103,39 +103,40 @@ SuchThatInfo SelectClauseParser::parseSuchThatClause(vector<string>& wordList, i
 
 	//TODO: extract this out into a util function
 	//Find relref
+	string rel;
+	string param1;
+	string param2;
+	string delimiter = "(";
 	size_t itemStart = 0;
-	size_t itemEnd = condString.find("(");
-	if (itemEnd == string::npos) {
-		throw Exception();
+	size_t itemEnd;
+	try {
+		tie(rel, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
+		itemStart = itemEnd;
+		delimiter = ",";
+		tie(param1, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
+		itemStart = itemEnd;
+		delimiter = ")";
+		tie(param2, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
 	}
-	string rel = condString.substr(itemStart, itemEnd);
+	catch (Exception e) {
+		cout << "Exception encountered: " << e;
+	}
+
 	if (!isRelRef(rel)) {
 		throw Exception();
 	}
-	//Find 1st param
-	itemStart = itemEnd;
-	itemEnd = condString.find(",", itemStart);
-	if (itemEnd == string::npos) {
-		throw Exception();
-	}
-	string param1 = condString.substr(itemStart, itemEnd);
+
 	//TODO: parse relationship first, and from there we can decide on how to filter params
 	//or it could be done while creating the relationship object
 	if (!isStmtRef(param1) && !isEntRef(param1)) {
 		throw Exception();
 	}
-	//Find 2nd param
-	itemStart = itemEnd;
-	itemEnd = condString.find(")", itemStart);
-	if (itemEnd == string::npos) {
-		throw Exception();
-	}
-	string param2 = condString.substr(itemStart, itemEnd);
+
 	if (!isStmtRef(param2) && !isEntRef(param2)) {
 		throw Exception();
 	}
-	//Check closing bracket is last char
-	if (itemEnd != condString.size() - 1) {
+
+	if (itemEnd != condString.size()) {
 		throw Exception();
 	}
 
@@ -148,9 +149,9 @@ SuchThatInfo SelectClauseParser::parseSuchThatClause(vector<string>& wordList, i
 
 PatternInfo SelectClauseParser::parsePatternClause(vector<string>& wordList, int start, int end)
 {
-	//logic is similar to suchThatParser
+	//logic is similar to suchThatParser, not sure how to extract both out
 	if (start == -1 && end == -1) {
-		return SuchThatInfo();
+		return PatternInfo();
 	}
 	if (end <= start) {
 		throw Exception();
@@ -158,6 +159,50 @@ PatternInfo SelectClauseParser::parsePatternClause(vector<string>& wordList, int
 	if (end - start < 3) {
 		throw Exception();
 	}
-	return PatternInfo();
+
+	stringstream ss;
+	int condStart = start + 1;
+	while (int i = condStart; i < end; i++) {
+		ss << wordList[i];
+	}
+	string condString = ss.str();
+
+	string assignSyn;
+	string entRef;
+	string pattern;
+	string delimiter = "(";
+	size_t itemStart = 0;
+	size_t itemEnd;
+
+	try {
+		tie(assignSyn, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
+		itemStart = itemEnd;
+		delimiter = ",";
+		tie(entRef, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
+		itemStart = itemEnd;
+		delimiter = ")";
+		tie(pattern, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
+	}
+	catch (Exception e) {
+		cout << "Exception encountered: " << e;
+	}
+
+	if (!isSynonym(assignSyn)) {
+		throw Exception();
+	}
+
+	if (!isEntRef(entRef)) {
+		throw Exception();
+	}
+
+	if (!isExprSpec(pattern)) {
+		throw Exception();
+	}
+
+	if (itemEnd != condString.size()) {
+		throw Exception();
+	}
+
+	return PatternInfo(assignSyn, entRef, pattern);
 }
 

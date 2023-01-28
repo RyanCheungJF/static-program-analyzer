@@ -3,12 +3,14 @@
 #include <string>
 #include <bits/stdc++.h>
 #include <vector>
+#include <tuple>
 #include "qps/QPSGrammarUtils.h"
 
 using namespace std;
 
 long findSuchThat(const vector<string> &wordList);
 long findPattern(const vector<string> &wordList);
+tuple<string, size_t> extractSubStringUntilDelimiter(const string& original, int start, string delimiter);
 vector<string> stringToWordList(string s);
 
 #endif // !SPA_QPS_PARSERUTIL_H

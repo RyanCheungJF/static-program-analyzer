@@ -8,7 +8,7 @@ public:
 	Synonym synonym;
 
 	SelectClauseInfo(Synonym s);
-	SelectClauseInfo(SelectClauseInfo& sci);
+	SelectClauseInfo(const SelectClauseInfo& sci);
 };
 
 #endif //SPA_SELECTCLAUSEINFO_H

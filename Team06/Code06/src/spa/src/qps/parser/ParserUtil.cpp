@@ -41,6 +41,16 @@ long findPattern(const vector<string> &wordList)
 	return -1;
 }
 
+tuple<string, size_t> extractSubStringUntilDelimiter(const string& original, int start, string delimiter)
+{
+	size_t end = original.find(delimiter, start);
+	if (end == string::npos) {
+		throw Exception();
+	}
+	string substr = original.substr(start, end);
+	return tuple<string, int>(substr, end + 1);
+}
+
 vector<string> stringToWordList(string s) {
 	vector<string> wordList;
 	istringstream ss(s);

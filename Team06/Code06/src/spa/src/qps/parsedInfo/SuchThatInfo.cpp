@@ -10,7 +10,7 @@ SuchThatInfo::SuchThatInfo(string rel, vector<string> ps)
 	params = ps;
 }
 
-SuchThatInfo::SuchThatInfo(SuchThatInfo& sti) 
+SuchThatInfo::SuchThatInfo(const SuchThatInfo& sti) 
 {
 	relationship = sti.relationship;
 	params = sti.params;

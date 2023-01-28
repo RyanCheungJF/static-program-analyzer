@@ -62,12 +62,19 @@ bool isEntRef(string entRef) {
     return isSynonym(entRef) || (entRef == "_") || regex_match(entRef, regex("^\"[a-zA-Z][a-zA-Z0-9]*\"$"));
 }
 
+
 bool isRelRef(string s) {
     return isFollows(s) || isParent(s) || isUses(s) || isModifies(s);
 }
 
-// Please implement this, just do string matching, i.e. check if given string is the correct keyword
+//TODO: implement this, just do string matching, i.e. check if given string is the correct keyword
 //bool QPSGrammarUtils::isFollows(string)
 //bool QPSGrammarUtils::isParent(string)
 //bool QPSGrammarUtils::isUses(string)
 //bool QPSGrammarUtils::isModifies(string)
+
+//TODO: Implement this
+bool isExprSpec(string)
+{
+    return true;
+}
