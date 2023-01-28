@@ -26,5 +26,7 @@ class QPSGrammarUtils {
         bool isModifies(string);
 };
 
+bool isPattern(string);
+bool startsWithLetter(string);
 
 #endif //SPA_QPSGRAMMARUTILS_H

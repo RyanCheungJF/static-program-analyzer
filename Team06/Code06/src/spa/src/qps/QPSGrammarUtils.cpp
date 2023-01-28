@@ -31,6 +31,14 @@ bool QPSGrammarUtils::isSuchThatClause(string suchThatClause) {
     return regex_match(suchThatClause, regex("^such that"));
 }
 
+bool isPattern(string s) {
+    return regex_match(s, regex("^pattern$"));
+}
+
+bool startsWithLetter(string s) {
+    return regex_match(s, regex("^[a-zA-Z].*"));
+}
+
 bool QPSGrammarUtils::isDeclaration(string declaration) {
     int index = declaration.find(" ");
     string declarationToken = declaration.substr(0, index);
