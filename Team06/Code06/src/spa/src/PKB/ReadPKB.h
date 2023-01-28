@@ -1,5 +1,4 @@
 #pragma once
-
 #include "PKB.h"
 
 //#ifndef SPA_READPKB_H
@@ -16,6 +15,9 @@ public:
 
     // Gets FollowsT relation in PKB
     bool getFollowsT(StmtNum left, StmtNum right);
+
+//private:
+    PKB* pkbInstance;
 };
 
 

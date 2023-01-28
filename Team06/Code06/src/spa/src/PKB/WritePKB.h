@@ -16,4 +16,7 @@ public:
 
     // Sets FollowsT relation in PKB
     void setFollowsT(StmtNum left, StmtNum right);
+
+//private:
+    PKB* pkbInstance;
 };
