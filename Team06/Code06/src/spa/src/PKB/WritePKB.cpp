@@ -8,10 +8,10 @@ void WritePKB::setInstancePKB(PKB &pkb) {
     return;
 }
 
-void WritePKB::setFollows(StmtNum left, StmtNum right) {
-    pkbInstance -> followsApi.setFollows(left, right);
+void WritePKB::setFollows(StmtNum followee, StmtNum follower) {
+    pkbInstance -> followsApi.setFollows(followee, follower);
 }
 
-void WritePKB::setFollowsT(StmtNum left, StmtNum right) {
+void WritePKB::setFollowsT(StmtNum follower, StmtNum followee) {
 
 }

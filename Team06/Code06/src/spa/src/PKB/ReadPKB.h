@@ -14,7 +14,14 @@ public:
     void setInstancePKB(PKB &pkb);
 
     // Gets a Follows relation in PKB
-    bool getFollows(StmtNum left, StmtNum right);
+    bool checkFollows(StmtNum left, StmtNum right);
+
+    // Find the follower of a followee
+    StmtNum getFollower(StmtNum followee);
+
+    // Find the followee of a follower
+    StmtNum getFollowee(StmtNum follower);
+
 
     // Gets FollowsT relation in PKB
     bool getFollowsT(StmtNum left, StmtNum right);
