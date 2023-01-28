@@ -39,4 +39,38 @@ TEST_CASE("Write Follows(1, 2), Read (1, 3)") {
     REQUIRE(res == false);
 }
 
+TEST_CASE("Ensure that PKB pointer in WritePKB is set to first pkb instance and not overwritten") {
+
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb1;
+    writePkb.setInstancePKB(pkb1);
+    readPkb.setInstancePKB(pkb1);
+
+    writePkb.setFollows(1, 2);
+
+    PKB pkb2;
+    writePkb.setInstancePKB(pkb2);
+
+    bool res = readPkb.getFollows(1, 2);
+    REQUIRE(res);
+}
+
+TEST_CASE("Ensure that PKB pointer in ReadPKB is set to first pkb instance and not overwritten") {
+
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb1;
+    writePkb.setInstancePKB(pkb1);
+    readPkb.setInstancePKB(pkb1);
+
+    writePkb.setFollows(1, 2);
+
+    PKB pkb2;
+    readPkb.setInstancePKB(pkb2);
+
+    bool res = readPkb.getFollows(1, 2);
+    REQUIRE(res);
+}
+
 
