@@ -5,7 +5,10 @@ using namespace std;
 
 class SelectClauseInfo {
 public:
-	Synonym s;
+	Synonym synonym;
+
+	SelectClauseInfo(Synonym s);
+	SelectClauseInfo(SelectClauseInfo& sci);
 };
 
 #endif //SPA_SELECTCLAUSEINFO_H

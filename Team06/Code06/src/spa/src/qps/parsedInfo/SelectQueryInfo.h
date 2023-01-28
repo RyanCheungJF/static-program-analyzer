@@ -8,9 +8,11 @@ using namespace std;
 
 class SelectQueryInfo {
 public:
-	vector<SelectClauseInfo> selectClauseInfos;
-	vector<SuchThatInfo> suchThatInfos;
-	vector<PatternInfo> patternInfos;
+	SelectClauseInfo selectClauseInfo;
+	SuchThatInfo suchThatInfo;
+	PatternInfo patternInfo;
+
+	SelectQueryInfo(SelectClauseInfo, SuchThatInfo, PatternInfo);
 };
 
 #endif // !SPA_QPS_SELECTQUERYINFO_H

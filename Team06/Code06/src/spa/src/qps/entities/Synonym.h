@@ -7,4 +7,8 @@ class Synonym {
 public:
 	string type;
 	string name;
+
+	Synonym();
+	Synonym(const Synonym& s);
+	Synonym(string, string);
 };

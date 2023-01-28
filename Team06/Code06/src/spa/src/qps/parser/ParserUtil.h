@@ -3,7 +3,7 @@
 #include <string>
 #include <bits/stdc++.h>
 #include <vector>
-#include <qps/QPSGrammarUtils.h>
+#include "qps/QPSGrammarUtils.h"
 
 using namespace std;
 

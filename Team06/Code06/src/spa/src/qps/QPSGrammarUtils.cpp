@@ -7,16 +7,16 @@
 #include <string>
 #include <regex>
 
-bool QPSGrammarUtils::isName(string name) {
-    return regex_match(name, regex("^[a-zA-Z][a-zA-Z0-9]*$"));
+bool isName(string s) {
+    return regex_match(s, regex("^[a-zA-Z][a-zA-Z0-9]*$"));
 }
 
-bool QPSGrammarUtils::isIdent(string ident) {
-    return isName(ident);
+bool isIdent(string s) {
+    return isName(s);
 }
 
-bool QPSGrammarUtils::isSynonym(string synonym) {
-    return isIdent(synonym);
+bool isSynonym(string s) {
+    return isIdent(s);
 }
 
 bool QPSGrammarUtils::isInteger(string integer) {
@@ -29,6 +29,10 @@ bool QPSGrammarUtils::isSelectClause(string selectClause) {
 
 bool QPSGrammarUtils::isSuchThatClause(string suchThatClause) {
     return regex_match(suchThatClause, regex("^such that"));
+}
+
+bool isSelect(string s) {
+    return regex_match(s, regex("^select$"));
 }
 
 bool isPattern(string s) {

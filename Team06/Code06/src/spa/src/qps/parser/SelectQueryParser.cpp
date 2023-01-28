@@ -15,10 +15,7 @@ SelectQueryInfo SelectClauseParser::parse(string selectQuery) {
 	suchThatInfo = parseSuchThatClause(wordList, clauseStarts[1], clauseStarts[1]);
 	patternInfo = parsePatternClause(wordList, clauseStarts[2], clauseStarts[2]);
 
-	SelectQueryInfo queryInfo;
-	queryInfo.selectClauseInfos = selectClauseInfos;
-	queryInfo.selectClauseInfos = suchThatInfos;
-	queryInfo.patternInfos = patternInfos;
+	SelectQueryInfo queryInfo(selectClauseInfo, suchThatInfo, patternInfo);
 	return queryInfo;
 }
 
@@ -65,7 +62,18 @@ vector<int> SelectClauseParser::getClauseEnds(vector<int> clauseStarts, int word
 
 SelectClauseInfo SelectClauseParser::parseSelectClause(vector<string>& wordList, int start, int end)
 {
-	return SelectClauseInfo();
+	if (wordList.size() != 2) {
+		throw Exception();
+	}
+	if (!isSelect(wordList[0])) {
+		throw Exception();
+	}
+	if (!isSynonym(wordList[1])) {
+		throw Exception();
+	}
+	//TODO: replace with synonym type rather than string
+	Synonym syn("unknown", wordList[1]);
+	return SelectClauseInfo(syn);
 }
 
 SuchThatInfo SelectClauseParser::parseSuchThatClause(vector<string>& wordList, int start, int end)

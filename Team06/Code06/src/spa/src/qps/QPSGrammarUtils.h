@@ -9,9 +9,6 @@ using namespace std;
 
 class QPSGrammarUtils {
     public:
-        bool isName(string);
-        bool isIdent(string);
-        bool isSynonym(string);
         bool isInteger(string);
         bool isSelectClause(string);
         bool isSuchThatClause(string);
@@ -26,7 +23,12 @@ class QPSGrammarUtils {
         bool isModifies(string);
 };
 
+bool isName(string);
+bool isIdent(string);
+bool isSynonym(string);
 bool isPattern(string);
 bool startsWithLetter(string);
+bool isSelect(string);
+
 
 #endif //SPA_QPSGRAMMARUTILS_H
