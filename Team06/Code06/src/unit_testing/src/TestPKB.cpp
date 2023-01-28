@@ -23,17 +23,20 @@ TEST_CASE("Write Follows(1, 2), Read (1, 2)") {
 
     writePkb.setFollows(1, 2);
     bool res = readPkb.getFollows(1, 2);
-
-//    pkbInstance.followsApi.setFollows(1, 2);
-//    bool res = pkbInstance.followsApi.checkFollows(1, 2);
     REQUIRE(res);
 }
 
 TEST_CASE("Write Follows(1, 2), Read (1, 3)") {
 
-//    pkbInstance.followsApi.setFollows(1, 2);
-//    bool res = pkbInstance.followsApi.checkFollows(1, 3);
-//    REQUIRE(res == false);
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    writePkb.pkbInstance = &pkb;
+    readPkb.pkbInstance = &pkb;
+
+    writePkb.setFollows(1, 2);
+    bool res = readPkb.getFollows(1, 3);
+    REQUIRE(res == false);
 }
 
 
