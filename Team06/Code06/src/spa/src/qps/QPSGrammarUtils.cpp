@@ -19,15 +19,15 @@ bool isSynonym(string s) {
     return isIdent(s);
 }
 
-bool QPSGrammarUtils::isInteger(string integer) {
+bool isInteger(string integer) {
     return regex_match(integer, regex("^[0-9]*$"));
 }
 
-bool QPSGrammarUtils::isSelectClause(string selectClause) {
+bool isSelectClause(string selectClause) {
     return regex_match(selectClause, regex("^select"));
 }
 
-bool QPSGrammarUtils::isSuchThatClause(string suchThatClause) {
+bool isSuchThatClause(string suchThatClause) {
     return regex_match(suchThatClause, regex("^such that"));
 }
 
@@ -43,7 +43,7 @@ bool startsWithLetter(string s) {
     return regex_match(s, regex("^[a-zA-Z].*"));
 }
 
-bool QPSGrammarUtils::isDeclaration(string declaration) {
+bool isDeclaration(string declaration) {
     int index = declaration.find(" ");
     string declarationToken = declaration.substr(0, index);
     // The logic below will probably be used in parse declaration or something
@@ -51,21 +51,22 @@ bool QPSGrammarUtils::isDeclaration(string declaration) {
     return isDesignEntity(declarationToken);
 }
 
-bool QPSGrammarUtils::isDesignEntity(string designEntity) {
+bool isDesignEntity(string designEntity) {
     return regex_match(designEntity, regex("^(stmt|read|print|call|while|if|assign|variable|constant|procedure)"));
 }
-bool QPSGrammarUtils::isStmtRef(string stmtRef) {
+bool isStmtRef(string stmtRef) {
     return isSynonym(stmtRef) || isInteger(stmtRef) || (stmtRef == "_");
 }
 
-bool QPSGrammarUtils::isEntRef(string entRef) {
+bool isEntRef(string entRef) {
     return isSynonym(entRef) || (entRef == "_") || regex_match(entRef, regex("^\"[a-zA-Z][a-zA-Z0-9]*\"$"));
 }
 
-bool QPSGrammarUtils::isRelRef(string relRef) {
-    return isFollows(relRef) || isParent(relRef) || isUses(relRef) || isModifies(relRef);
+bool isRelRef(string s) {
+    return isFollows(s) || isParent(s) || isUses(s) || isModifies(s);
 }
-// NOT SURE IF WE WANT TO IMPLEMENT THIS HERE
+
+// Please implement this, just do string matching, i.e. check if given string is the correct keyword
 //bool QPSGrammarUtils::isFollows(string)
 //bool QPSGrammarUtils::isParent(string)
 //bool QPSGrammarUtils::isUses(string)

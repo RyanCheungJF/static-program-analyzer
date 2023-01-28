@@ -60,15 +60,18 @@ vector<int> SelectClauseParser::getClauseEnds(vector<int> clauseStarts, int word
 	return res;
 }
 
+/*
+assumes start and end won't be -1 i.e. select clause must exist
+*/
 SelectClauseInfo SelectClauseParser::parseSelectClause(vector<string>& wordList, int start, int end)
 {
-	if (wordList.size() != 2) {
+	if (end - start != 2) {
 		throw Exception();
 	}
-	if (!isSelect(wordList[0])) {
+	if (!isSelect(wordList[start])) {
 		throw Exception();
 	}
-	if (!isSynonym(wordList[1])) {
+	if (!isSynonym(wordList[end - 1])) {
 		throw Exception();
 	}
 	//TODO: replace with synonym type rather than string
@@ -76,13 +79,85 @@ SelectClauseInfo SelectClauseParser::parseSelectClause(vector<string>& wordList,
 	return SelectClauseInfo(syn);
 }
 
+/*
+Currently capable of parsing one condition after such that, with 2 params
+*/
 SuchThatInfo SelectClauseParser::parseSuchThatClause(vector<string>& wordList, int start, int end)
 {
-	return SuchThatInfo();
+	if (start == -1 && end == -1) {
+		return SuchThatInfo();
+	}
+	if (end <= start) {
+		throw Exception();
+	}
+	if (end - start < 3) {
+		throw Exception();
+	}
+
+	stringstream ss;
+	int condStart = start + 2;
+	while (int i = condStart; i < end; i++) {
+		ss << wordList[i];
+	}
+	string condString = ss.str();
+
+	//TODO: extract this out into a util function
+	//Find relref
+	size_t itemStart = 0;
+	size_t itemEnd = condString.find("(");
+	if (itemEnd == string::npos) {
+		throw Exception();
+	}
+	string rel = condString.substr(itemStart, itemEnd);
+	if (!isRelRef(rel)) {
+		throw Exception();
+	}
+	//Find 1st param
+	itemStart = itemEnd;
+	itemEnd = condString.find(",", itemStart);
+	if (itemEnd == string::npos) {
+		throw Exception();
+	}
+	string param1 = condString.substr(itemStart, itemEnd);
+	//TODO: parse relationship first, and from there we can decide on how to filter params
+	//or it could be done while creating the relationship object
+	if (!isStmtRef(param1) && !isEntRef(param1)) {
+		throw Exception();
+	}
+	//Find 2nd param
+	itemStart = itemEnd;
+	itemEnd = condString.find(")", itemStart);
+	if (itemEnd == string::npos) {
+		throw Exception();
+	}
+	string param2 = condString.substr(itemStart, itemEnd);
+	if (!isStmtRef(param2) && !isEntRef(param2)) {
+		throw Exception();
+	}
+	//Check closing bracket is last char
+	if (itemEnd != condString.size() - 1) {
+		throw Exception();
+	}
+
+	vector<string> params{ param1, param2 };
+
+	return SuchThatInfo(rel, params);
 }
+
+
 
 PatternInfo SelectClauseParser::parsePatternClause(vector<string>& wordList, int start, int end)
 {
+	//logic is similar to suchThatParser
+	if (start == -1 && end == -1) {
+		return SuchThatInfo();
+	}
+	if (end <= start) {
+		throw Exception();
+	}
+	if (end - start < 3) {
+		throw Exception();
+	}
 	return PatternInfo();
 }
 

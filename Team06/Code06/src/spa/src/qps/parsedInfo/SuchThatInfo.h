@@ -10,7 +10,9 @@ class SuchThatInfo {
 	//TODO: change to actual entities rather than strings
 	vector<string> params;
 
+	SuchThatInfo();
 	SuchThatInfo(string, vector<string>);
+	SuchThatInfo(SuchThatInfo& sti);
 };
 
 #endif // !SPA_QPS_SUCHTHATINFO_H
