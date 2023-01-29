@@ -3,6 +3,8 @@
 // general entry point of programs
 class Program;
 class Procedure;
+class StatementList;
+class Statement;
 
 // statements
 class ReadStatement;
@@ -16,10 +18,12 @@ class WhileStatement;
 class ASTVisitor {
 public:
 	// general entry point of programs
-	virtual void visitProgram(Program& program) = 0;
-	virtual void visitProcedure(Procedure& procedure) = 0;
+	virtual void visitProgram(const Program *program) = 0;
+	virtual void visitProcedure(const Procedure *procedure) = 0;
+	virtual void visitStatementList(const StatementList *statementList) = 0;
 
 	// statements
+	virtual void visitStatement(const Statement *statement) = 0;
 	virtual void visitReadStatement(ReadStatement& readStatement) = 0;
 	virtual void visitPrintStatement(PrintStatement& printStatement) = 0;
 	virtual void visitAssignStatement(AssignStatement& assignStatement) = 0;

@@ -1,9 +1,13 @@
 #include "Procedure.h"
 
-Procedure::Procedure(StatementList statementList) {
-	this->statementList = statementList;
+Procedure::Procedure() {
+
+}
+
+Procedure::Procedure(std::string procedureName) {
+	this->procedureName = procedureName;
 };
 
-void Procedure::accept(ASTVisitor visitor) {
+void Procedure::accept(ASTVisitor *visitor) const {
 	visitor->visitProcedure(this);
 };

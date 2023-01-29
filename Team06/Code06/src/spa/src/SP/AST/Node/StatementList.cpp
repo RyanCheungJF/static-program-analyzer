@@ -1,7 +1,9 @@
 #include "StatementList.h"
 
-StatementList::StatementList(std::vector<Statement> statementList) {
-	this->statementList = statementList;
-};
+StatementList::StatementList() {
 
-void StatementList::accept(ASTVisitor visitor) {};
+}
+
+void StatementList::accept(ASTVisitor *visitor) const{
+	visitor->visitStatementList(this);
+};

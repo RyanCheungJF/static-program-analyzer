@@ -1,15 +1,15 @@
-#pragma once
-
-#include "Statement.h"
-#include "Variable.h"
-#include "../Visitor/ASTVisitor.h"
-
-class PrintStatement : public Statement {
-public:
-	Variable variable;
-	int lineNumber;
-
-	PrintStatement(Variable variable, int lineNumber);
-
-	void accept(ASTVisitor visitor);
-};
+//#pragma once
+//
+//#include "Statement.h"
+//#include "Variable.h"
+//#include "../Visitor/ASTVisitor.h"
+//
+//class PrintStatement : public Statement {
+//public:
+//	Variable variable;
+//	int lineNumber;
+//
+//	PrintStatement(Variable variable, int lineNumber);
+//
+//	void accept(ASTVisitor visitor);
+//};

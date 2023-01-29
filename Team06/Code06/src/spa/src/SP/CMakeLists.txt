@@ -1,4 +1,7 @@
-file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+file(GLOB srcs 
+"${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" 
+"${CMAKE_CURRENT_SOURCE_DIR}/AST/Visitor/*.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/AST/Node/*.cpp")
 file(GLOB headers 
 "${CMAKE_CURRENT_SOURCE_DIR}/*.h" 
 "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp" 

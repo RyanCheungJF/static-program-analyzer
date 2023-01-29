@@ -1,10 +1,14 @@
 #include "Program.h"
 
-Program::Program(std::vector<Procedure> procedureList, std::string fileName) {
-	this->procedureList = procedureList;
+Program::Program() {
+
+}
+
+
+Program::Program(std::string fileName) {
 	this->fileName = fileName;
 };
 
-void Program::accept(ASTVisitor visitor) {
+void Program::accept(ASTVisitor *visitor) const {
 	visitor->visitProgram(this);
 };

@@ -9,10 +9,11 @@
 
 class Program : public ASTNode {
 public:
-	std::vector<std::shared_ptr<Procedure>> procedureList;
+	std::vector<std::unique_ptr<Procedure>> procedureList;
 	std::string fileName;
 
-	Program(std::vector<Procedure> procedureList, std::string fileName);
+	Program();
+	Program(std::string fileName);
 
-	void accept(ASTVisitor visitor);
+	void accept(ASTVisitor *visitor) const override;
 };

@@ -1,14 +1,17 @@
 #pragma once
 
+#include <string>
 #include "ASTNode.h"
 #include "StatementList.h"
 #include "../Visitor/ASTVisitor.h"
 
 class Procedure : public ASTNode {
 public:
-	StatementList statementList;
+	std::string procedureName;
+	std::unique_ptr<StatementList> statementList;
 
-	Procedure(StatementList statementList);
+	Procedure();
+	Procedure(std::string procedureName);
 
-	void accept(ASTVisitor visitor);
+	void accept(ASTVisitor *visitor) const override;
 };

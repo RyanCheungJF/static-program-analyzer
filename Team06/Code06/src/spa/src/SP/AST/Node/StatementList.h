@@ -2,15 +2,16 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "ASTNode.h"
 #include "Statement.h"
 #include "../Visitor/ASTVisitor.h"
 
 class StatementList : public ASTNode {
 public:
-	std::vector<Statement> statementList;
+	std::vector<std::unique_ptr<Statement>> statements;
 
-	StatementList(std::vector<Statement> statementList);
+	StatementList();
 
-	void accept(ASTVisitor visitor);
+	void accept(ASTVisitor *visitor) const override;
 };

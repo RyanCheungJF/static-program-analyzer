@@ -17,6 +17,6 @@ void SP::processFile(std::string filePath) {
 	std::deque<Token> tokens;
 	tokens = tokenizer.tokenize(strStream);
 
-	// parser.parse(tokens);
+	std::shared_ptr<Program> program = parser.parseProgram(tokens);
 
 }

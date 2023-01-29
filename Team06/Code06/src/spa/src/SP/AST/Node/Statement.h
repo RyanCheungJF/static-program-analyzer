@@ -4,5 +4,9 @@
 
 class Statement : public ASTNode {
 public:
-	int lineNumber;
+	//int lineNumber;
+
+	Statement();
+
+	void accept(ASTVisitor* visitor) const override;
 };
