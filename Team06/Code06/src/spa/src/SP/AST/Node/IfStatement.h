@@ -8,6 +8,7 @@ class IfStatement : public Statement {
 public:
 	//ConditionalExpression conditional;
 	//StatementList thenStatementList;
+	// !!!!! if no else condition, initialize to empty vector !!!!!
 	//StatementList elseStatementList;
 	//int lineNumber;
 

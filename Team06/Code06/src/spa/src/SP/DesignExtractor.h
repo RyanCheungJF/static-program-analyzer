@@ -4,9 +4,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "AST/Node/Program.h"
+#include "AST/Visitor/FollowsExtractor.h"
 
 class DesignExtractor {
 
 public:
 	DesignExtractor() = default;
+
+	void extractRelationships(Program* program);
 };

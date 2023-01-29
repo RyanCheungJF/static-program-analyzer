@@ -1,5 +1,7 @@
 #include "DesignExtractor.h"
 
-int DesignExtractor() {
-	return 0;
-}
+void DesignExtractor::extractRelationships(Program* program) {
+	FollowsExtractor followsExtractor;
+	// starts from root to extract out relationships
+	program->accept(&followsExtractor);
+};
