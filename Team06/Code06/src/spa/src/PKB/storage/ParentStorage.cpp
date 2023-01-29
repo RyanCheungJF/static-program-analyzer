@@ -1,7 +1,8 @@
 #include "ParentStorage.h"
+#include <iostream>
 
 void ParentStorage::writeParent(StmtNum parent, StmtNum child) {
-	if (parentChildMap.find(parent) != parentChildMap.end()) {
+	if (parentChildMap.find(parent) == parentChildMap.end()) {
 		std::unordered_set<StmtNum> childList;
 		childList.insert(child);
 		parentChildMap.insert({ parent, childList });
@@ -16,6 +17,7 @@ void ParentStorage::writeParent(StmtNum parent, StmtNum child) {
 
 bool ParentStorage::checkParent(StmtNum parent, StmtNum child) {
 	std::unordered_map<StmtNum, StmtNum>::const_iterator iter = childParentMap.find(child);
+	if (iter == childParentMap.end()) return false;
 	return iter->second == parent;
 }
 
