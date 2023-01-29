@@ -75,7 +75,7 @@ SelectClauseInfo SelectClauseParser::parseSelectClause(vector<string>& wordList,
 		throw Exception();
 	}
 	//TODO: replace with synonym type rather than string
-	Synonym syn("unknown", wordList[1]);
+	Parameter param("synonym", wordList[1]);
 	return SelectClauseInfo(syn);
 }
 
@@ -101,8 +101,6 @@ SuchThatInfo SelectClauseParser::parseSuchThatClause(vector<string>& wordList, i
 	}
 	string condString = ss.str();
 
-	//TODO: extract this out into a util function
-	//Find relref
 	string rel;
 	string param1;
 	string param2;

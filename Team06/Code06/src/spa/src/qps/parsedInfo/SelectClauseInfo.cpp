@@ -1,11 +1,11 @@
 #include "SelectClauseInfo.h"
 
-SelectClauseInfo::SelectClauseInfo(Synonym s)
+SelectClauseInfo::SelectClauseInfo(Parameter s)
 {
-	synonym = s;
+	param = s;
 }
 
 SelectClauseInfo::SelectClauseInfo(const SelectClauseInfo& sci)
 {
-	synonym = sci.synonym;
+	param = sci.param;
 }
