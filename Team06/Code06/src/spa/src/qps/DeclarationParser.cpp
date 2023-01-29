@@ -17,7 +17,7 @@ map<string, string> parse(string declarations) {
         next = declarations.substr(index + 2, declarations.length());
     }
     while(currentDeclaration != "") {
-        pair<string, string> declarationPair = extractDeclaration(currentDeclaration);
+        pair<string, string> declarationPair("s1", "s2");//extractDeclaration(currentDeclaration);
         variableStore.insert(declarationPair);
         index = next.find(";");
         if (index == -1) {
@@ -27,10 +27,10 @@ map<string, string> parse(string declarations) {
         if (index + 2 >= next.length()) {
             next = next.substr(index + 2, next.length());
         } else {
-            next = ""
+            next = "";
         }
 
     }
-
+    return variableStore;
 
 }
