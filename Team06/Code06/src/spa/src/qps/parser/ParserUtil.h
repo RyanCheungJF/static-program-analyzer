@@ -9,7 +9,7 @@
 
 using namespace std;
 
-long findSuchThat(vector<string> &wordList);
+long findSuchThat(const vector<string> &wordList);
 long findPattern(const vector<string> &wordList);
 tuple<string, size_t> extractSubStringUntilDelimiter(const string& original, int start, string delimiter);
 vector<string> stringToWordList(string s);

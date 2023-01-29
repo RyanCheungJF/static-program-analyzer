@@ -4,7 +4,7 @@
 returns index of "such" which is followed immediately by a "that" in the word list
 
 */
-long findSuchThat(vector<string> &wordList)
+long findSuchThat(const vector<string> &wordList)
 {
 	string such = "such";
 	string that = "that";
