@@ -1,7 +1,3 @@
-//#ifndef SPA_FOLLOWSSTORAGE_H
-//#define SPA_FOLLOWSSTORAGE_H
-//#endif //SPA_FOLLOWSSTORAGE_H
-
 #include <unordered_map>
 
 typedef int StmtNum;
