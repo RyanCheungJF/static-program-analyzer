@@ -9,6 +9,6 @@ Constant::Constant() {
 
 }
 
-void Constant::accept(ASTVisitor* visitor) const {
-	visitor->visitConstant(this);
-}
+//void Constant::accept(ASTVisitor* visitor) const {
+//	visitor->visitConstant(this);
+//}

@@ -12,5 +12,5 @@ public:
 
 	//ConditionalExpression(std::vector<RelationalExpression> relationsList);
 
-
+	void accept(ASTVisitor* visitor) const override;
 };

@@ -3,7 +3,7 @@
 #include <string>
 #include "ASTNode.h"
 #include "StatementList.h"
-#include "../Visitor/ASTVisitor.h"
+//#include "../Visitor/ASTVisitor.h"
 
 class Procedure : public ASTNode {
 public:

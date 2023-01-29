@@ -11,7 +11,7 @@ class StatementList : public ASTNode {
 public:
 	std::vector<std::unique_ptr<Statement>> statements;
 
-	StatementList() = default;
+	StatementList();
 
 	void accept(ASTVisitor* visitor) const override;
 };

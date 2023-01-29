@@ -1,9 +1,8 @@
 #include "PrintStatement.h"
 
-//PrintStatement::PrintStatement(Variable variable, int lineNumber) {
-//	this->variable = variable;
-//	this->lineNumber = lineNumber;
-//}
+PrintStatement::PrintStatement(std::string varName) {
+	this->varName = varName;
+}
 
 PrintStatement::PrintStatement() {}
 

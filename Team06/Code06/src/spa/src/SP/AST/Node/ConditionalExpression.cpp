@@ -6,3 +6,6 @@
 
 ConditionalExpression::ConditionalExpression() {}
 
+void ConditionalExpression::accept(ASTVisitor* visitor) const {
+	visitor->visitConditionalExpression(this);
+}

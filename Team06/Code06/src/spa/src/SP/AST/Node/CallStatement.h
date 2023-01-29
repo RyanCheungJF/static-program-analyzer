@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Statement.h"
-#include "Procedure.h"
+#include <string>
 #include "../Visitor/ASTVisitor.h"
 
 class CallStatement : public Statement {
 public:
-	Procedure procedure;
-	int lineNumber;
+	std::string procName;
+	//int lineNumber;
 
 	CallStatement();
 

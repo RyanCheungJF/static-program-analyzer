@@ -12,7 +12,7 @@ public:
 	std::vector<std::unique_ptr<Procedure>> procedureList;
 	std::string fileName;
 
-	Program() = default;
+	Program();
 
 	Program(std::string fileName);
 

@@ -7,6 +7,6 @@ Variable::Variable(std::string variableName, std::string value) {
 	this->value = value;
 }
 
-void Variable::accept(ASTVisitor *visitor) const {
-	visitor->visitVariable(this);
-};
+//void Variable::accept(ASTVisitor *visitor) const {
+//	visitor->visitVariable(this);
+//};

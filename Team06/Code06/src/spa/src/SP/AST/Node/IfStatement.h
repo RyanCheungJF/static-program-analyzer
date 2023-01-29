@@ -6,10 +6,9 @@
 
 class IfStatement : public Statement {
 public:
-	//ConditionalExpression conditional;
-	//StatementList thenStatementList;
-	// !!!!! if no else condition, initialize to empty vector !!!!!
-	//StatementList elseStatementList;
+	std::unique_ptr<ConditionalExpression> condExpr;
+	std::unique_ptr<StatementList> thenStmtList;
+	std::unique_ptr<StatementList> elseStmtList;
 	//int lineNumber;
 
 	IfStatement();

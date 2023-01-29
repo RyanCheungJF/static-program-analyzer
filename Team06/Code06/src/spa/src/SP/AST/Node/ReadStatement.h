@@ -2,16 +2,16 @@
 
 #include "Statement.h"
 #include "Variable.h"
-#include "../Visitor/ASTVisitor.h"
+//#include "../Visitor/ASTVisitor.h"
 
 class ReadStatement : public Statement {
 public:
-	//Variable variable;
+	std::string varName;
 	//int lineNumber;
 
 	ReadStatement();
 
-	//ReadStatement(Variable variable, int lineNumber);
+	ReadStatement(std::string varName);
 
 	void accept(ASTVisitor* visitor) const override;
 };

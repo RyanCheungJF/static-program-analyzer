@@ -3,7 +3,7 @@
 #include <iostream>
 #include "ASTNode.h"
 
-class Constant : public ASTNode {
+class Constant {
 public:
 	//std::string variableName;
 	//int value;
@@ -12,5 +12,5 @@ public:
 
 	//Constant(std::string variableName, int value);
 
-	void accept(ASTVisitor* visitor) const override;
+	//void accept(ASTVisitor* visitor) const override;
 };

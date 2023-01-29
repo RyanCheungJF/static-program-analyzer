@@ -6,12 +6,12 @@
 
 class PrintStatement : public Statement {
 public:
-	//Variable variable;
+	std::string varName;
 	//int lineNumber;
 
 	PrintStatement();
 
-	//PrintStatement(Variable variable, int lineNumber);
+	PrintStatement(std::string varName);
 
 	void accept(ASTVisitor* visitor) const override;
 };

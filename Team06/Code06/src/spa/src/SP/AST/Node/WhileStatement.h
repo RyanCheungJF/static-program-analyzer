@@ -6,8 +6,8 @@
 
 class WhileStatement : public Statement {
 public:
-	//ConditionalExpression conditional;
-	//StatementList statementList;
+	std::unique_ptr<ConditionalExpression> condExpr;
+	std::unique_ptr<StatementList> stmtList;
 	//int lineNumber;
 
 	WhileStatement();
