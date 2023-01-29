@@ -1,8 +1,8 @@
 #ifndef SPA_QPS_SELECTQUERYINFO_H
 #define SPA_QPS_SELECTQUERYINFO_H
-#include <PatternInfo.h>
-#include <SelectClauseInfo.h>
-#include <SuchThatInfo.h>
+#include "PatternInfo.h"
+#include "SelectClauseInfo.h"
+#include "SuchThatInfo.h"
 #include <vector>
 using namespace std;
 
@@ -11,7 +11,7 @@ public:
 	SelectClauseInfo selectClauseInfo;
 	SuchThatInfo suchThatInfo;
 	PatternInfo patternInfo;
-
+public:
 	SelectQueryInfo(SelectClauseInfo, SuchThatInfo, PatternInfo);
 };
 

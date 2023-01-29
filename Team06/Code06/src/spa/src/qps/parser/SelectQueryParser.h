@@ -2,7 +2,7 @@
 #define SPA_SELECTCLAUSEPARSER_H
 #include "qps/parsedInfo/SelectClauseInfo.h"
 #include "qps/parsedInfo/SelectQueryInfo.h"
-#include "src/exceptions/Exception.h"
+#include "exceptions/Exception.h"
 #include "parserUtil.h"
 #include <string>
 #include <vector>

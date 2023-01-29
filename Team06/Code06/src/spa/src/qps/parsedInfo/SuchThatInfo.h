@@ -9,7 +9,7 @@ class SuchThatInfo {
 	string relationship;
 	//TODO: change to actual entities rather than strings
 	vector<string> params;
-
+public:
 	SuchThatInfo();
 	SuchThatInfo(string, vector<string>);
 	SuchThatInfo(const SuchThatInfo&);

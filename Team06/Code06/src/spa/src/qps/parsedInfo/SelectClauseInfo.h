@@ -6,7 +6,8 @@ using namespace std;
 class SelectClauseInfo {
 public:
 	Parameter param;
-
+public:
+	SelectClauseInfo();
 	SelectClauseInfo(Parameter s);
 	SelectClauseInfo(const SelectClauseInfo& sci);
 };

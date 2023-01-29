@@ -13,8 +13,20 @@ ParameterType Parameter::getType()
 Parameter::Parameter(string t, string v)
 {
 
-	type = stringToType;
+	type = stringToType(t);
 	value = v;
+}
+
+Parameter::Parameter(const Parameter& p)
+{
+	value = p.value;
+	type = p.type;
+}
+
+Parameter::Parameter()
+{
+	type = ParameterType::UNKNOWN;
+	value = "";
 }
 
 //TODO: IF NOT FOUND, MAY WANT TO THROW ERROR
@@ -42,5 +54,5 @@ const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
 	{"wildcard", ParameterType::WILDCARD},
 	{"fixed_int", ParameterType::FIXED_INT},
 	{"fixed_string", ParameterType::FIXED_STRING},
-	{"fixed_string_with_wildcard", ParameterType::FIXED_STRING_WITH_WILDCARD}
+	{"fixed_string_with_wildcard", ParameterType::FIXED_STRING_WITH_WILDCARD},
 };

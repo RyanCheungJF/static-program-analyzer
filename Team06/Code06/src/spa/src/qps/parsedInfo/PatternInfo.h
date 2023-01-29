@@ -8,7 +8,7 @@ public:
 	string synAssign;
 	string entRef;
 	string pattern;
-
+public:
 	PatternInfo();
 	PatternInfo(const PatternInfo&);
 	PatternInfo(string, string, string);

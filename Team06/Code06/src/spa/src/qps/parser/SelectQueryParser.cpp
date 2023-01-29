@@ -30,7 +30,7 @@ vector<int> SelectClauseParser::getClauseStarts(vector<string> &wordList) {
 	int suchThatStart = findSuchThat(wordList);
 	int patternStart = findPattern(wordList);
 	int selectStart = 0;
-	vector<int> res{selectStart, suchThatStart, patternStart}
+	vector<int> res{ selectStart, suchThatStart, patternStart };
 	return res;
 }
 
@@ -76,7 +76,7 @@ SelectClauseInfo SelectClauseParser::parseSelectClause(vector<string>& wordList,
 	}
 	//TODO: replace with synonym type rather than string
 	Parameter param("synonym", wordList[1]);
-	return SelectClauseInfo(syn);
+	return SelectClauseInfo(param);
 }
 
 /*
@@ -96,7 +96,7 @@ SuchThatInfo SelectClauseParser::parseSuchThatClause(vector<string>& wordList, i
 
 	stringstream ss;
 	int condStart = start + 2;
-	while (int i = condStart; i < end; i++) {
+	for (int i = condStart; i < end; i++) {
 		ss << wordList[i];
 	}
 	string condString = ss.str();
@@ -117,7 +117,7 @@ SuchThatInfo SelectClauseParser::parseSuchThatClause(vector<string>& wordList, i
 		tie(param2, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
 	}
 	catch (Exception e) {
-		cout << "Exception encountered: " << e;
+		//do nothing for now
 	}
 
 	if (!isRelRef(rel)) {
@@ -160,7 +160,7 @@ PatternInfo SelectClauseParser::parsePatternClause(vector<string>& wordList, int
 
 	stringstream ss;
 	int condStart = start + 1;
-	while (int i = condStart; i < end; i++) {
+	for (int i = condStart; i < end; i++) {
 		ss << wordList[i];
 	}
 	string condString = ss.str();
@@ -182,7 +182,7 @@ PatternInfo SelectClauseParser::parsePatternClause(vector<string>& wordList, int
 		tie(pattern, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
 	}
 	catch (Exception e) {
-		cout << "Exception encountered: " << e;
+		//do nothing for now
 	}
 
 	if (!isSynonym(assignSyn)) {

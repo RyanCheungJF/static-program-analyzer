@@ -28,8 +28,10 @@ public:
 	string getValue();
 	ParameterType getType();
 	Parameter(string, string);
+	Parameter(const Parameter&);
+	Parameter();
 private:
-	static unordered_map<string, ParameterType> stringToTypeMap;
+	const static unordered_map<string, ParameterType> stringToTypeMap;
 	static ParameterType stringToType(string);
 	string value;
 	ParameterType type;

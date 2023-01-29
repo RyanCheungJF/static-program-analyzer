@@ -63,9 +63,6 @@ bool isEntRef(string entRef) {
 }
 
 
-bool isRelRef(string s) {
-    return isFollows(s) || isParent(s) || isUses(s) || isModifies(s);
-}
 
 //TODO: implement this, just do string matching, i.e. check if given string is the correct keyword
 //bool QPSGrammarUtils::isFollows(string)
@@ -77,4 +74,25 @@ bool isRelRef(string s) {
 bool isExprSpec(string)
 {
     return true;
+}
+
+bool isFollows(string s) {
+    return true;
+}
+
+bool isParent(string s) {
+    return true;
+}
+
+bool isUses(string s) {
+    return true;
+}
+
+bool isModifies(string s) {
+    return true;
+}
+
+
+bool isRelRef(string s) {
+    return isFollows(s) || isParent(s) || isUses(s) || isModifies(s);
 }
