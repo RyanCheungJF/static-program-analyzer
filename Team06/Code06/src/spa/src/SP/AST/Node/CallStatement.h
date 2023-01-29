@@ -9,9 +9,7 @@ public:
 	Procedure procedure;
 	int lineNumber;
 
-	CallStatement() = default;
+	CallStatement();
 
-	CallStatement(Procedure procedure, int lineNumber);
-
-	void accept(ASTVisitor* visitor) const override;
+	void accept(ASTVisitor *visitor) const override;
 };

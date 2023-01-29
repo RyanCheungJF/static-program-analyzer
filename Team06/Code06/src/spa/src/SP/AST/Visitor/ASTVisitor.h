@@ -14,6 +14,11 @@ class CallStatement;
 class IfStatement;
 class WhileStatement;
 
+class Variable;
+class Constant;
+class RelationalExpression;
+class ConditionalExpression;
+
 // interface for visitor design pattern 
 class ASTVisitor {
 public:
@@ -24,10 +29,15 @@ public:
 
 	// statements
 	virtual void visitStatement(const Statement *statement) = 0;
-	virtual void visitReadStatement(ReadStatement& readStatement) = 0;
-	virtual void visitPrintStatement(PrintStatement& printStatement) = 0;
-	virtual void visitAssignStatement(AssignStatement& assignStatement) = 0;
-	virtual void visitCallStatement(CallStatement& callStatement) = 0;
-	virtual void visitIfStatement(IfStatement& IfStatement) = 0;
-	virtual void visitWhileStatement(WhileStatement& whileStatement) = 0;
+	virtual void visitReadStatement(const ReadStatement *readStatement) = 0;
+	virtual void visitPrintStatement(const PrintStatement *printStatement) = 0;
+	virtual void visitAssignStatement(const AssignStatement *assignStatement) = 0;
+	virtual void visitCallStatement(const CallStatement *callStatement) = 0;
+	virtual void visitIfStatement(const IfStatement *IfStatement) = 0;
+	virtual void visitWhileStatement(const WhileStatement *whileStatement) = 0;
+
+	virtual void visitVariable(const Variable* variable) = 0;
+	virtual void visitConstant(const Constant* constant) = 0;
+	virtual void visitRelationalExpression(const RelationalExpression* relExpression) = 0;
+	virtual void visitConditionalExpression(const ConditionalExpression* conditionalExpression) = 0;
 };

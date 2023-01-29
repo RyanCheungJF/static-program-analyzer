@@ -5,10 +5,12 @@
 
 class Constant : public ASTNode {
 public:
-	std::string variableName;
-	int value;
+	//std::string variableName;
+	//int value;
 
-	Constant() = default;
+	Constant();
 
-	Constant(std::string variableName, int value);
+	//Constant(std::string variableName, int value);
+
+	void accept(ASTVisitor* visitor) const override;
 };

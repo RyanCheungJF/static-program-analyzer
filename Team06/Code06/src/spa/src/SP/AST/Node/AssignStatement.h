@@ -6,13 +6,11 @@
 
 class AssignStatement : public Statement {
 public:
-	Variable lhs;
-	Statement rhs;
-	int lineNumber;
+	//Variable lhs;
+	//Statement rhs;
+	//int lineNumber;
 
-	AssignStatement() = default;
-
-	AssignStatement(Variable lhs, Statement rhs, int lineNumber);
+	AssignStatement();
 
 	void accept(ASTVisitor* visitor) const override;
 };

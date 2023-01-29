@@ -6,14 +6,14 @@
 
 class IfStatement : public Statement {
 public:
-	ConditionalExpression conditional;
-	StatementList thenStatementList;
-	StatementList elseStatementList;
-	int lineNumber;
+	//ConditionalExpression conditional;
+	//StatementList thenStatementList;
+	//StatementList elseStatementList;
+	//int lineNumber;
 
-	IfStatement() = default;
+	IfStatement();
 
-	IfStatement(ConditionalExpression conditional, StatementList thenstatementList, StatementList elseStatementList, int lineNumber);
+	//IfStatement(ConditionalExpression conditional, StatementList thenstatementList, StatementList elseStatementList, int lineNumber);
 
 	void accept(ASTVisitor* visitor) const override;
 };

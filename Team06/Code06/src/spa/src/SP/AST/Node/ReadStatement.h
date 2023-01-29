@@ -6,12 +6,12 @@
 
 class ReadStatement : public Statement {
 public:
-	Variable variable;
-	int lineNumber;
+	//Variable variable;
+	//int lineNumber;
 
-	ReadStatement() = default;
+	ReadStatement();
 
-	ReadStatement(Variable variable, int lineNumber);
+	//ReadStatement(Variable variable, int lineNumber);
 
 	void accept(ASTVisitor* visitor) const override;
 };

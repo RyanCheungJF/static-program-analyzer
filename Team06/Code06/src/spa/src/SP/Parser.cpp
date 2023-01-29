@@ -12,6 +12,10 @@ std::unique_ptr<Program> Parser::parseProgram(std::deque<Token> tokens) {
 		program->procedureList.push_back(parseProcedure(tokens));
 	}
 
+	if (program->procedureList.size() == 0) {
+		std::cerr << "Program should contain at least one procedure" << std::endl;
+	}
+
 	return program;
 }
 
@@ -54,12 +58,19 @@ std::unique_ptr<StatementList> Parser::parseStatementList(std::deque<Token>& tok
 		statementList->statements.push_back(parseStatement(tokens));
 	}
 
+	if (statementList->statements.size() == 0) {
+		std::cerr << "Statement List should contain at least one statement" << std::endl;
+	}
+
 	return statementList;
 }
 
 std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
-
+	// Rule: read | print | call | while | if | assign
 	std::unique_ptr<Statement> statement = std::make_unique<Statement>();
+
+	//if (tokens.front().type == TokenType::)
+
 
 	while (tokens.front().type != TokenType::RIGHT_BRACE) {
 		tokens.pop_front();

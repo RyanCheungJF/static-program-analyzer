@@ -6,12 +6,12 @@
 
 class PrintStatement : public Statement {
 public:
-	Variable variable;
-	int lineNumber;
+	//Variable variable;
+	//int lineNumber;
 
-	PrintStatement() = default;
+	PrintStatement();
 
-	PrintStatement(Variable variable, int lineNumber);
+	//PrintStatement(Variable variable, int lineNumber);
 
 	void accept(ASTVisitor* visitor) const override;
 };

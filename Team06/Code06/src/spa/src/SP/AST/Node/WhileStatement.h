@@ -6,13 +6,11 @@
 
 class WhileStatement : public Statement {
 public:
-	ConditionalExpression conditional;
-	StatementList statementList;
-	int lineNumber;
+	//ConditionalExpression conditional;
+	//StatementList statementList;
+	//int lineNumber;
 
-	WhileStatement() = default;
-
-	WhileStatement(ConditionalExpression conditional, StatementList statementList, int lineNumber);
+	WhileStatement();
 
 	void accept(ASTVisitor* visitor) const override;
 };

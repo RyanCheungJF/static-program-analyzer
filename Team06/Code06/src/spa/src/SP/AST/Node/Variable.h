@@ -8,5 +8,9 @@ public:
 	std::string variableName;
 	std::string value;
 
+	Variable();
+
 	Variable(std::string variableName, std::string value);
+
+	void accept(ASTVisitor *visitor) const override;
 };

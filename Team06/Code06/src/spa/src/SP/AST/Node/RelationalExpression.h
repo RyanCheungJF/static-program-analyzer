@@ -7,10 +7,12 @@
 
 class RelationalExpression : public Expression {
 public:
-	std::vector<Constant> constantsList;
-	std::vector<Variable> variablesList;
+	//std::vector<Constant> constantsList;
+	//std::vector<Variable> variablesList;
 
-	RelationalExpression() = default;
+	RelationalExpression();
 
-	RelationalExpression(std::vector<Constant> constantsList, std::vector<Variable> variablesList);
+	//RelationalExpression(std::vector<Constant> constantsList, std::vector<Variable> variablesList);
+
+	void accept(ASTVisitor* visitor) const override;
 };

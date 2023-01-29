@@ -6,7 +6,7 @@ class Statement : public ASTNode {
 public:
 	//int lineNumber;
 
-	Statement() = default;
+	Statement();
 
 	void accept(ASTVisitor* visitor) const override;
 };

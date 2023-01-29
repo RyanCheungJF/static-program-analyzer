@@ -6,9 +6,11 @@
 
 class ConditionalExpression : public Expression {
 public:
-	std::vector<RelationalExpression> relationsList;
+	//std::vector<RelationalExpression> relationsList;
 
-	ConditionalExpression() = default;
+	ConditionalExpression();
 
-	ConditionalExpression(std::vector<RelationalExpression> relationsList);
+	//ConditionalExpression(std::vector<RelationalExpression> relationsList);
+
+
 };
