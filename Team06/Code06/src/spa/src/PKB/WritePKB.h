@@ -20,6 +20,9 @@ public:
     // Sets FollowsT relation in PKB
     void setFollowsT(StmtNum left, StmtNum right);
 
+    // Sets Parent relation in PKB
+    void setParent(StmtNum parent, StmtNum child);
+
 private:
     PKB* pkbInstance = NULL;
 };

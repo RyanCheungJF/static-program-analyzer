@@ -26,6 +26,18 @@ public:
     // Gets FollowsT relation in PKB
     bool getFollowsT(StmtNum left, StmtNum right);
 
+
+    // Checks if a statement is a parent of another given their statement numbers
+    bool checkParent(StmtNum parent, StmtNum child);
+
+    // Finds all children of a statement given its statement number
+    // Returns a vector of child statement numbers
+    std::vector<StmtNum> getChildren(StmtNum parent);
+
+    // Finds parent of a statement given its statement number
+    StmtNum getParent(StmtNum child);
+
+
 private:
     PKB* pkbInstance = NULL;
 };

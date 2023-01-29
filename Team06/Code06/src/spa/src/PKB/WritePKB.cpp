@@ -15,3 +15,7 @@ void WritePKB::setFollows(StmtNum followee, StmtNum follower) {
 void WritePKB::setFollowsT(StmtNum follower, StmtNum followee) {
 
 }
+
+void WritePKB::setParent(StmtNum parent, StmtNum children) {
+    pkbInstance->parentApi.setParent(parent, children);
+}

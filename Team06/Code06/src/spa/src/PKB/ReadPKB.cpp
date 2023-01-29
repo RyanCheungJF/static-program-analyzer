@@ -23,3 +23,15 @@ StmtNum ReadPKB::getFollowee(StmtNum follower) {
 bool ReadPKB::getFollowsT(StmtNum left, StmtNum right) {
     return true;
 }
+
+bool ReadPKB::checkParent(StmtNum parent, StmtNum child) {
+    return pkbInstance->parentApi.checkParent(parent, child);
+}
+
+std::vector<StmtNum> ReadPKB::getChildren(StmtNum parent) {
+    return pkbInstance->parentApi.getChildren(parent);
+}
+
+StmtNum ReadPKB::getParent(StmtNum child) {
+    return pkbInstance->parentApi.getParent(child);
+}

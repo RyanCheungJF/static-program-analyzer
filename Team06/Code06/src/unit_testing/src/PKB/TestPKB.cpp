@@ -1,9 +1,9 @@
 
 
 #include "catch.hpp"
-#include "../../spa/src/PKB/WritePKB.h"
-#include "../../spa/src/PKB/ReadPKB.h"
-#include "../../spa/src/PKB/PKB.h"
+#include "../../../spa/src/PKB/WritePKB.h"
+#include "../../../spa/src/PKB/ReadPKB.h"
+#include "../../../spa/src/PKB/PKB.h"
 
 using namespace std;
 
@@ -62,7 +62,7 @@ TEST_CASE("Write Follows(1, 2), Check that followee of 2 is 1") {
 
     writePkb.setFollows(1, 2);
     StmtNum res = readPkb.getFollowee(2);
-    REQUIRE(res == 2);
+    REQUIRE(res == 1);
 }
 
 TEST_CASE("Write Follows(1, 2), Check that follower of 3 returns a -1 to indicate error") {
