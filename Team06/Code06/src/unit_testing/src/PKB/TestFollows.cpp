@@ -117,19 +117,3 @@ TEST_CASE("Checks that PKB pointer in ReadPKB is set to first pkb instance and n
     REQUIRE(res);
 }
 
-
-//TODO
-/**
- * Given a PQL query of `if i; Select i such that Follows*(2, i)`
- * We want to find all if-statements that follows* line 2
- */
-TEST_CASE("Check that we can find an if statement from a Follows relationship") {
-
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
-    REQUIRE(true);
-}
