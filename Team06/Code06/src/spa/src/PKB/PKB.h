@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "api/Follows.h"
+#include "api/FollowsT.h"
 #include "api/Parent.h"
 
 using namespace std;
@@ -21,5 +22,6 @@ public:
 	static TNode* getRootAST (PROC p);
 
     Follows followsApi;
+    FollowsT followsTApi;
 	Parent parentApi;
 };

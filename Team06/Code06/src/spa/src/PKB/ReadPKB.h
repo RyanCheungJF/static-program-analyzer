@@ -23,8 +23,14 @@ public:
     StmtNum getFollowee(StmtNum follower);
 
 
-    // Gets FollowsT relation in PKB
-    bool getFollowsT(StmtNum left, StmtNum right);
+    // checks if a follower is in a transitive follows relationship with a followee
+    bool checkFollowsT(StmtNum followee, StmtNum follower);
+
+    // Gets followers of a followee, transitive relationship
+    std::unordered_set<StmtNum> getFollowersT(StmtNum followee);
+
+    // Gets followees of a follower, transitive relationship
+    std::unordered_set<StmtNum> getFolloweesT(StmtNum follower);
 
 
     // Checks if a statement is a parent of another given their statement numbers

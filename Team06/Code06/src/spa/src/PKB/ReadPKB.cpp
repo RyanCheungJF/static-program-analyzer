@@ -20,8 +20,16 @@ StmtNum ReadPKB::getFollowee(StmtNum follower) {
     return pkbInstance -> followsApi.getFollowee(follower);
 }
 
-bool ReadPKB::getFollowsT(StmtNum left, StmtNum right) {
-    return true;
+bool ReadPKB::checkFollowsT(StmtNum followee, StmtNum follower) {
+    return pkbInstance -> followsTApi.checkFollowsT(followee, follower);
+}
+
+std::unordered_set<StmtNum> ReadPKB::getFollowersT(StmtNum followee) {
+    return pkbInstance -> followsTApi.getFollowersT(followee);
+}
+
+std::unordered_set<StmtNum> ReadPKB::getFolloweesT(StmtNum follower) {
+    return pkbInstance -> followsTApi.getFolloweesT(follower);
 }
 
 bool ReadPKB::checkParent(StmtNum parent, StmtNum child) {

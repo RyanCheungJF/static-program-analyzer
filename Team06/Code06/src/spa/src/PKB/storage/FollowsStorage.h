@@ -4,8 +4,8 @@ typedef int StmtNum;
 
 class FollowsStorage {
 public:
-    virtual void writeFollows(StmtNum left, StmtNum right);
-    virtual bool checkFollows(StmtNum left, StmtNum right);
+    virtual void writeFollows(StmtNum followee, StmtNum follower);
+    virtual bool checkFollows(StmtNum followee, StmtNum follower);
     virtual StmtNum getFollower(StmtNum followee);
     virtual StmtNum getFollowee(StmtNum follower);
 private:
