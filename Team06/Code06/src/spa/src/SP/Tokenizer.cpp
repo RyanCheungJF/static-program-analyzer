@@ -100,19 +100,19 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 					tokens.push_back(Token(TokenType::SEMICOLON, ";"));
 					break;
 				case '+':
-					tokens.push_back(Token(TokenType::LEFT_BRACE, "{"));
+					tokens.push_back(Token(TokenType::PLUS, "+"));
 					break;
 				case '-':
-					tokens.push_back(Token(TokenType::LEFT_BRACE, "{"));
+					tokens.push_back(Token(TokenType::MINUS, "-"));
 					break;
 				case '*':
-					tokens.push_back(Token(TokenType::LEFT_BRACE, "{"));
+					tokens.push_back(Token(TokenType::MULTIPLY, "*"));
 					break;
 				case '/':
-					tokens.push_back(Token(TokenType::LEFT_BRACE, "{"));
+					tokens.push_back(Token(TokenType::DIVIDE, "/"));
 					break;
 				case '%':
-					tokens.push_back(Token(TokenType::LEFT_BRACE, "{"));
+					tokens.push_back(Token(TokenType::MODULO, "%"));
 					break;
 				default:
 					throw SyntaxErrorException("Invalid token -> " + tokenValue);
