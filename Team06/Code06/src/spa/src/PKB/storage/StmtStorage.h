@@ -1,7 +1,7 @@
 #include <unordered_map>
 #include <unordered_set>
-#include <string>
 #include <vector>
+#include <string>
 
 typedef std::string Stmt;
 typedef int StmtNum;
