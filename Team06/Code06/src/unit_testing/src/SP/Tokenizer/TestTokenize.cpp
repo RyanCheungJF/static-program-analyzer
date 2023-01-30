@@ -18,7 +18,7 @@ TEST_CASE("Valid source program") {
 		Token t2(TokenType::NAME, "There");
 		Token t3(TokenType::NAME, "test123");
 		Token t4(TokenType::ENDOFFILE, "End of File");
-		expectedTokens = {t1, t2, t3, t4};
+		expectedTokens = { t1, t2, t3, t4 };
 
 		generatedTokens = testTokenizer.tokenize(strStream);
 
@@ -68,6 +68,43 @@ TEST_CASE("Valid source program") {
 		Token t4(TokenType::ENDOFFILE, "End of File");
 
 		expectedTokens = { t1, t2, t3, t4 };
+
+		generatedTokens = testTokenizer.tokenize(strStream);
+
+		REQUIRE(generatedTokens == expectedTokens);
+	}
+
+	SECTION("Valid comparators") {
+		std::ifstream testFile(testDirectory + "valid5.txt");
+		strStream << testFile.rdbuf();
+
+		Token t1(TokenType::GREATER, ">");
+		Token t2(TokenType::LESS, "<");
+		Token t3(TokenType::EQUAL, "==");
+		Token t4(TokenType::LESS_EQUAL, "<=");
+		Token t5(TokenType::GREATER_EQUAL, ">=");
+		Token t6(TokenType::NOT_EQUAL, "!=");
+		Token t7(TokenType::ENDOFFILE, "End of File");
+
+		expectedTokens = { t1, t2, t3, t4, t5, t6, t7 };
+
+		generatedTokens = testTokenizer.tokenize(strStream);
+
+		REQUIRE(generatedTokens == expectedTokens);
+	}
+
+	SECTION("Valid operators") {
+		std::ifstream testFile(testDirectory + "valid6.txt");
+		strStream << testFile.rdbuf();
+
+		Token t1(TokenType::MODULO, "%");
+		Token t2(TokenType::DIVIDE, "/");
+		Token t3(TokenType::MULTIPLY, "*");
+		Token t4(TokenType::MINUS, "-");
+		Token t5(TokenType::PLUS, "+");
+		Token t6(TokenType::ENDOFFILE, "End of File");
+
+		expectedTokens = { t1, t2, t3, t4, t5, t6 };
 
 		generatedTokens = testTokenizer.tokenize(strStream);
 
