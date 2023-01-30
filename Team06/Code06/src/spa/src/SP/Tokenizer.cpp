@@ -11,7 +11,9 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 		if (std::isdigit(file.peek())) { // DIGIT: 0-9
 			std::string tokenValue;
 			tokenValue += (char)(file.get());
-			while (std::isdigit(file.peek())) {
+			/* Between two alphanumeric tokens, there must be at least one whitespace
+			   in between them, so something like 123ab should throw an error */
+			while (std::isalnum(file.peek())) {
 				tokenValue += (char)(file.get());
 			}
 			if (!isInteger(tokenValue)) {
@@ -21,7 +23,7 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 		} else if (std::isalpha(file.peek())) { // LETTER: A-Z | a-z
 			std::string tokenValue;
 			tokenValue += (char)(file.get());
-			while (std::isalpha(file.peek()) || std::isdigit(file.peek())) {
+			while (std::isalnum(file.peek())) {
 				tokenValue += (char)(file.get());
 			}
 			if (!isName(tokenValue)) {
