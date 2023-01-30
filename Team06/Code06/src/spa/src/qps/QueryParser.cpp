@@ -1,6 +1,3 @@
-////
-//// Created by Faruq on 26/1/23.
-////
 //#include<stdio.h>
 //#include <iostream>
 //#include <string>
