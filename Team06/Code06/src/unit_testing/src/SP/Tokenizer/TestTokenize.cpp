@@ -110,6 +110,48 @@ TEST_CASE("Valid source program") {
 		REQUIRE(generatedTokens == expectedTokens);
 	}
 
+	// whitespace test for alphanumeric, valid but parser will catch
+	SECTION("Valid with no whitespace") {
+		std::ifstream testFile(testDirectory + "valid7.txt");
+		strStream << testFile.rdbuf();
+
+		Token t1(TokenType::NAME, "aBc12");
+		Token t2(TokenType::LEFT_BRACE, "{");
+		Token t3(TokenType::RIGHT_BRACE, "}");
+		Token t4(TokenType::SEMICOLON, ";");
+		Token t5(TokenType::ENDOFFILE, "End of File");
+
+		expectedTokens = { t1, t2, t3, t4, t5 };
+
+		generatedTokens = testTokenizer.tokenize(strStream);
+
+		REQUIRE(generatedTokens == expectedTokens);
+	}
+
+	SECTION("Valid sample program") {
+		std::ifstream testFile(testDirectory + "validSampleProgram.txt");
+		strStream << testFile.rdbuf();
+
+		Token t1(TokenType::NAME, "procedure");
+		Token t2(TokenType::NAME, "A");
+		Token t3(TokenType::LEFT_BRACE, "{");
+		Token t4(TokenType::NAME, "x");
+		Token t5(TokenType::ASSIGN, "=");
+		Token t6(TokenType::INTEGER, "1");
+		Token t7(TokenType::SEMICOLON, ";");
+		Token t8(TokenType::NAME, "y");
+		Token t9(TokenType::LESS, "<");
+		Token t10(TokenType::NAME, "z");
+		Token t11(TokenType::SEMICOLON, ";");
+		Token t12(TokenType::RIGHT_BRACE, "}");
+		Token t13(TokenType::ENDOFFILE, "End of File");
+
+		expectedTokens = { t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13 };
+		generatedTokens = testTokenizer.tokenize(strStream);
+
+		REQUIRE(generatedTokens == expectedTokens);
+	}
+
 }
 
 TEST_CASE("Invalid source program") {
@@ -131,8 +173,8 @@ TEST_CASE("Invalid source program") {
 		REQUIRE_THROWS_AS(testTokenizer.tokenize(strStream), SyntaxErrorException);
 	}
 
-	/*Upon detecting a '&', another '&' must follow (even though no whitespace between 
-	  non-alphanumeric tokens is allowed), the lone '&' is not a valid token.*/ 
+	/*Upon detecting a '&', another '&' must follow (even though no whitespace between
+	  non-alphanumeric tokens is allowed), the lone '&' is not a valid token.*/
 	SECTION("Invalid and operator, lone ampersand") {
 		std::ifstream testFile(testDirectory + "invalid3.txt");
 		strStream << testFile.rdbuf();
