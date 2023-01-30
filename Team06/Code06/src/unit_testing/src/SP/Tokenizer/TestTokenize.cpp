@@ -76,7 +76,23 @@ TEST_CASE("Valid source program") {
 
 }
 
-//TEST_CASE("Invalid source program") {
-//
-//
-//}
+TEST_CASE("Invalid source program") {
+	std::stringstream strStream;
+	Tokenizer testTokenizer;
+	std::string testDirectory = "../../../../../../Tests06/sp/";
+
+	SECTION("Invalid Integer") {
+		std::ifstream testFile(testDirectory + "invalid1.txt");
+		strStream << testFile.rdbuf();
+
+		REQUIRE_THROWS_AS(testTokenizer.tokenize(strStream), SyntaxErrorException);
+	}
+
+	SECTION("Invalid Integer") {
+		std::ifstream testFile(testDirectory + "invalid1.txt");
+		strStream << testFile.rdbuf();
+
+		REQUIRE_THROWS_AS(testTokenizer.tokenize(strStream), SyntaxErrorException);
+	}
+
+}
