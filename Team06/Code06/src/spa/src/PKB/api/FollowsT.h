@@ -6,10 +6,10 @@ typedef int StmtNum;
 
 class FollowsT {
 public:
-    virtual void writeFollowsT(std::vector<std::pair<StmtNum, StmtNum>> followee_follower);
-    virtual bool checkFollowsT(StmtNum followee, StmtNum follower);
-    virtual std::unordered_set<StmtNum> getFollowersT(StmtNum followee);
-    virtual std::unordered_set<StmtNum> getFolloweesT(StmtNum follower);
+    void writeFollowsT(std::vector<std::pair<StmtNum, StmtNum>> followee_follower);
+    bool checkFollowsT(StmtNum followee, StmtNum follower);
+    std::unordered_set<StmtNum> getFollowersT(StmtNum followee);
+    std::unordered_set<StmtNum> getFolloweesT(StmtNum follower);
 private:
     FollowsTStorage store;
 };
