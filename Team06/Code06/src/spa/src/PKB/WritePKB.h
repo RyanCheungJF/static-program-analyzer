@@ -21,6 +21,9 @@ public:
     // Sets Parent relation in PKB
     void setParent(StmtNum parent, StmtNum child);
 
+    // Sets the statement along with the statement lines that they appear in
+    void setStatement(Stmt s, std::vector<StmtNum> lines);
+
 private:
     PKB* pkbInstance = NULL;
 };

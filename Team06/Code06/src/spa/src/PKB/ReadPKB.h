@@ -44,6 +44,14 @@ public:
     StmtNum getParent(StmtNum child);
 
 
+    // check if given a statement type and statement line number, whether that statement line number is indeed
+    // of that statement type
+    bool checkStatement(Stmt stmt, StmtNum num);
+
+    // returns all the statement lines of a statement
+    std::unordered_set<StmtNum> getStatementNumbers(Stmt stmt);
+
+
 private:
     PKB* pkbInstance = NULL;
 };

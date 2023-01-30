@@ -1,24 +1,22 @@
 #include "StmtStorage.h"
 
-
-void StmtStorage::writeStmt(Stmt s, StmtNum line) {
-
-    // defensive check but might not be needed if unordered_set automatically creates a new key if it does not exist
-//    if (stmt_stmtNum.find(s) == stmt_stmtNum.end()) {}
-    stmt_stmtNum[s].insert(line);
-//    stmtNum_stmt[line].insert(s);
-    return;
-}
-
-void StmtStorage::writeStmt(Stmt s, std::vector<StmtNum> lines) {
+void StmtStorage::writeStatement(Stmt s, std::vector<StmtNum> lines) {
     for (StmtNum line: lines) {
         stmt_stmtNum[s].insert(line);
-//        stmtNum_stmt[line].insert(s);
     }
     return;
 }
 
-std::unordered_set<StmtNum> StmtStorage::getStmtNums(Stmt s) {
+bool StmtStorage::checkStatement(Stmt stmt, StmtNum num) {
+
+    // source code does not even contain this type of statement
+    if (stmt_stmtNum.find(stmt) == stmt_stmtNum.end()) {
+        return false;
+    }
+    return stmt_stmtNum[stmt].find(num) != stmt_stmtNum[stmt].end();
+}
+
+std::unordered_set<StmtNum> StmtStorage::getStatementNumbers(Stmt s) {
     if (stmt_stmtNum.find(s) == stmt_stmtNum.end()) {
         std::unordered_set<StmtNum> emptySet;
         return emptySet;
