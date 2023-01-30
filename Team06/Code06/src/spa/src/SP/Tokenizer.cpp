@@ -1,100 +1,87 @@
 #include "Tokenizer.h"
 
-Tokenizer::Tokenizer() {
-
-}
-
 std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 	std::deque<Token> tokens;
 
 	while (file.peek() != EOF) {
-		// Eat whitespace
-		while (((char)file.peek() == '\n' || (char)file.peek() == '\r' || (char)file.peek() == '\t' || (char)file.peek() == ' ' || (char)file.peek() == '\f' || (char)file.peek() == '\v')) {
-			file.get();
+		while (std::isspace(file.peek())) {
+			file.get(); // Eat whitespace
 		}
 
-		if ('0' <= (char)file.peek() && (char)file.peek() <= '9') { // Number
+		if (std::isdigit(file.peek())) { // DIGIT: 0-9
 			std::string tokenValue;
 			tokenValue += (char)(file.get());
-			while ('0' <= (char)file.peek() && (char)file.peek() <= '9') {
+			while (std::isdigit(file.peek())) {
 				tokenValue += (char)(file.get());
 			}
-			if (tokenValue.length() > 1 && tokenValue[0] == '0') { // INTEGER: 0 | NZDIGIT ( DIGIT )*
-				std::cerr << "Integer with more than 1 digit cannot start with 0, " << tokenValue << std::endl;
+			if (!isInteger(tokenValue)) {
+				std::cerr << "Integer does not follow format: 0 | NZDIGIT ( DIGIT )*  -> " << tokenValue << std::endl;
 			}
 			tokens.push_back(Token(TokenType::INTEGER, tokenValue));
-		} else if (('a' <= (char)file.peek() && (char)file.peek() <= 'z' || 'A' <= (char)file.peek() && (char)file.peek() <= 'Z')) { // Name (Could be keyword as well)
+		} else if (std::isalpha(file.peek())) { // LETTER: A-Z | a-z
 			std::string tokenValue;
 			tokenValue += (char)(file.get());
-			while ('a' <= (char)file.peek() && (char)file.peek() <= 'z' || 'A' <= (char)file.peek() && (char)file.peek() <= 'Z') {
+			while (std::isalpha(file.peek()) || std::isdigit(file.peek())) {
 				tokenValue += (char)(file.get());
+			}
+			if (!isName(tokenValue)) {
+				std::cerr << "Name does not follow format: LETTER (LETTER | DIGIT)*  -> " << tokenValue << std::endl;
 			}
 			tokens.push_back(Token(TokenType::NAME, tokenValue));
-		}
-		else if ((char)file.peek() == '<') {
-			std::string tokenValue;
-			tokenValue += (char)(file.get());
+		} else if ((char)file.peek() == '<') { // Handle <, <=
+			file.get();
 			if ((char)file.peek() == '=') {
-				tokenValue += (char)(file.get());
-				tokens.push_back(Token(TokenType::LESS_EQUAL, tokenValue));
+				file.get();
+				tokens.push_back(Token(TokenType::LESS_EQUAL, "<="));
+			} else {
+				tokens.push_back(Token(TokenType::LESS, "<"));
 			}
-			else {
-				tokens.push_back(Token(TokenType::LESS, tokenValue));
-			}
-		} else if ((char)file.peek() == '>') {
-			std::string tokenValue;
-			tokenValue += (char)(file.get());
+		} else if ((char)file.peek() == '>') { // Handle >, >=
+			file.get();
 			if ((char)file.peek() == '=') {
-				tokenValue += (char)(file.get());
-				tokens.push_back(Token(TokenType::GREATER_EQUAL, tokenValue));
+				file.get();
+				tokens.push_back(Token(TokenType::GREATER_EQUAL, ">="));
+			} else {
+				tokens.push_back(Token(TokenType::GREATER, ">"));
 			}
-			else {
-				tokens.push_back(Token(TokenType::GREATER, tokenValue));
-			}
-		} else if ((char)file.peek() == '=') {
-			std::string tokenValue;
-			tokenValue += (char)(file.get());
+		} else if ((char)file.peek() == '=') { // Handle =, ==
+			file.get();
 			if ((char)file.peek() == '=') {
-				tokenValue += (char)(file.get());
-				tokens.push_back(Token(TokenType::EQUAL, tokenValue));
+				file.get();
+				tokens.push_back(Token(TokenType::EQUAL, "=="));
+			} else {
+				tokens.push_back(Token(TokenType::ASSIGN, "="));
 			}
-			else {
-				tokens.push_back(Token(TokenType::ASSIGN, tokenValue));
-			}
-		} else if ((char)file.peek() == '!') {
-			std::string tokenValue;
-			tokenValue += (char)(file.get());
+		} else if ((char)file.peek() == '!') { // Handle !, !=
+			file.get();
 			if ((char)file.peek() == '=') {
-				tokenValue += (char)(file.get());
-				tokens.push_back(Token(TokenType::NOT_EQUAL, tokenValue));
+				file.get();
+				tokens.push_back(Token(TokenType::NOT_EQUAL, "!="));
+			} else {
+				tokens.push_back(Token(TokenType::NOT, "!"));
 			}
-			else {
-				tokens.push_back(Token(TokenType::NOT, tokenValue));
-			}
-		} else if ((char)file.peek() == '&') {
+		} else if ((char)file.peek() == '&') { // Handle &&
 			std::string tokenValue;
 			tokenValue += (char)(file.get());
 			if ((char)file.peek() == '&') {
-				tokenValue += (char)(file.get());
-				tokens.push_back(Token(TokenType::AND, tokenValue));
-			}
-			else {
+				file.get();
+				tokens.push_back(Token(TokenType::AND, "&&"));
+			} else {
 				tokenValue += (char)(file.get());
 				std::cerr << "Expecting &&, but got: " << tokenValue << std::endl;
 			}
-		} else if ((char)file.peek() == '|') {
+		} else if ((char)file.peek() == '|') { // Handle ||
 			std::string tokenValue;
 			tokenValue += (char)(file.get());
 			if ((char)file.peek() == '|') {
-				tokenValue += (char)(file.get());
-				tokens.push_back(Token(TokenType::OR, tokenValue));
+				file.get();
+				tokens.push_back(Token(TokenType::OR, "||"));
 			} else {
 				tokenValue += (char)(file.get());
 				std::cerr << "Expecting ||, but got: " << tokenValue << std::endl;
 			}
-		} else {
+		} else { // Handle the rest of the tokens
 			char tokenValue = (char)file.get();
-			Token token;
 
 			switch (tokenValue) {
 				case '{': 
@@ -127,19 +114,28 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 				case '%':
 					tokens.push_back(Token(TokenType::LEFT_BRACE, "{"));
 					break;
-				case '\0':
-					break;
 				default:
 					std::cerr << "Invalid token: " << tokenValue << std::endl;
 			}
 		}
 	}
-	tokens.push_back(Token(TokenType::ENDOFFILE, "EOF"));
+	tokens.push_back(Token(TokenType::ENDOFFILE, "End of File"));
 
-	//for (int i = 0; i < tokens.size(); i++) {
-	//	std::cout << tokens[i].toString() << std::endl;
-	//}
+	for (int i = 0; i < tokens.size(); i++) {
+		std::cout << tokens[i].toString() << std::endl;
+	}
 
 	return tokens;
+}
 
+bool Tokenizer::isInteger(std::string value) {
+	// INTEGER: 0 | NZDIGIT ( DIGIT )*
+	std::regex integerRegex("^[1-9][0-9]*$");
+	return value == "0" || std::regex_match(value, integerRegex);
+}
+
+bool Tokenizer::isName(std::string value) {
+	// NAME: LETTER (LETTER | DIGIT)*
+	std::regex nameRegex("^[a-zA-Z]([0-9]|[a-zA-Z])*$");
+	return std::regex_match(value, nameRegex);
 }

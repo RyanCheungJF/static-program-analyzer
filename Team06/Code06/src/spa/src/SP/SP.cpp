@@ -1,9 +1,5 @@
 #include "SP.h"
 
-SP::SP() {
-
-}
-
 void SP::processFile(std::string filePath) {
 	std::ifstream sourceFile(filePath);
 
@@ -15,8 +11,16 @@ void SP::processFile(std::string filePath) {
 	strStream << sourceFile.rdbuf();
 
 	std::deque<Token> tokens;
-	tokens = tokenizer.tokenize(strStream);
 
-	std::shared_ptr<Program> program = parser.parseProgram(tokens);
+	try {
+		tokens = tokenizer.tokenize(strStream);
+	} catch (SyntaxErrorException e) {
+		std::cout << "Syntax Error caught" << std::endl;
+		std::cout << e.what() << std::endl;
+	} catch (SemanticErrorException e) {
+		std::cout << "Semantic Error caught" << std::endl;
+		std::cout << e.what() << std::endl;
+	}
 
+	std::unique_ptr<Program> program = parser.parseProgram(tokens);
 }

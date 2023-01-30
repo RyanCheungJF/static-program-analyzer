@@ -1,4 +1,3 @@
-// Following the grammar rules, these are all the possible token types
 enum class TokenType {
 	NAME,
 	INTEGER,
@@ -9,10 +8,10 @@ enum class TokenType {
 	RIGHT_PARENTHESIS, // )
 	SEMICOLON, // ;
 
-	// Expressions
 	AND, // &&
 	OR, // ||
 	NOT, // !
+
 	GREATER, // >
 	GREATER_EQUAL, // >=
 	LESS, // <
@@ -25,17 +24,8 @@ enum class TokenType {
 	MULTIPLY, // *
 	DIVIDE, // /
 	MODULO, // %
-	ASSIGN, // =
 
-	// Keywords
-	//PROCEDURE,
-	//READ,
-	//PRINT,
-	//CALL,
-	//WHILE,
-	//IF,
-	//THEN,
-	//ELSE,
+	ASSIGN, // =
 
 	ENDOFFILE
 };

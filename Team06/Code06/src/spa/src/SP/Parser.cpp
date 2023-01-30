@@ -268,8 +268,24 @@ std::unique_ptr<AssignStatement> Parser::parseAssignStatement(std::deque<Token>&
 
 std::unique_ptr<ConditionalExpression> Parser::parseConditionalExpression(std::deque<Token>& tokens) {
 	// Rule: rel_expr | '!' '(' cond_expr ')' | '(' cond_expr ')' '&&' '(' cond_expr ')' | '(' cond_expr ')' '||' '(' cond_expr ')'
-	std::unique_ptr<ConditionalExpression> condExpr = std::make_unique<ConditionalExpression>();
-	return condExpr;
+	if (tokens.front().type == TokenType::NOT) { // '!' '(' path
+		std::unique_ptr<ConditionalExpression> conditionalExpression;
+		tokens.pop_front(); // Pop '!'
+		if (tokens.front().type != TokenType::LEFT_PARENTHESIS) {
+			std::cerr << "Expecting ( in conditional expression" << std::endl;
+		}
+		tokens.pop_front(); // Pop '('
+		//conditionalExpression->
+		if (tokens.front().type != TokenType::RIGHT_PARENTHESIS) {
+			std::cerr << "Expecting ( in conditional expression" << std::endl;
+		}
+		tokens.pop_front(); // Pop ')'
+
+	} else if (tokens.front().type == TokenType::LEFT_PARENTHESIS) {
+
+	}
+	
+	return std::make_unique<ConditionalExpression>();
 }
 
 std::unique_ptr<Expression> Parser::parseExpression(std::deque<Token>& tokens) {

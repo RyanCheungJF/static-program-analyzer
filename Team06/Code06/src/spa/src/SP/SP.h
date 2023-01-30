@@ -4,19 +4,17 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <SPExceptions.h>
 #include <Tokenizer.h>
 #include <Parser.h>
 #include <DesignExtractor.h>
 
 class SP {
-
-public:
+private:
 	Tokenizer tokenizer;
 	Parser parser;
 	DesignExtractor designExtractor;
 
-	SP();
-
+public:
 	void processFile(std::string filepath);
-
 };
