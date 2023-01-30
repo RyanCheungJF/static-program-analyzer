@@ -1,17 +1,21 @@
 #include "FollowsTStorage.h"
 
-void FollowsTStorage::writeFollowsT(StmtNum followee, StmtNum follower) {
-    followee_followers[followee].insert(follower);
-    follower_followees[follower].insert(followee);
-    return;
-}
-
-void FollowsTStorage::writeFollowsT(StmtNum followee, std::vector<StmtNum> followers) {
-    for (StmtNum follower: followers) {
+void FollowsTStorage::writeFollowsT(std::vector<std::pair<StmtNum, StmtNum>> followee_follower) {
+    for (std::pair<StmtNum, StmtNum> p: followee_follower) {
+        StmtNum followee = p.first;
+        StmtNum follower = p.second;
         followee_followers[followee].insert(follower);
         follower_followees[follower].insert(followee);
     }
     return;
+}
+
+bool FollowsTStorage::checkFollowsT(StmtNum followee, StmtNum follower) {
+    // followee does not exist in table, meaning relationship not present
+    if (follower_followee.find(followee) == follower_followee.end()) {
+        return false;
+    }
+    return follower_followee.at(followee) == follower;
 }
 
 std::unordered_set<StmtNum> FollowsTStorage::getFollowers(StmtNum followee) {
