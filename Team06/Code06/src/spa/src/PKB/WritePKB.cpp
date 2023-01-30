@@ -10,10 +10,12 @@ void WritePKB::setInstancePKB(PKB &pkb) {
 
 void WritePKB::setFollows(StmtNum followee, StmtNum follower) {
     pkbInstance -> followsApi.setFollows(followee, follower);
+    return;
 }
 
-void WritePKB::setFollowsT(StmtNum follower, StmtNum followee) {
-
+void WritePKB::setFollowsT(std::vector<std::pair<StmtNum, StmtNum>> followee_follower) {
+    pkbInstance -> followsTApi.writeFollowsT(followee_follower);
+    return;
 }
 
 void WritePKB::setParent(StmtNum parent, StmtNum children) {

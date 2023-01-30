@@ -11,10 +11,17 @@ void FollowsTStorage::writeFollowsT(std::vector<std::pair<StmtNum, StmtNum>> fol
 }
 
 bool FollowsTStorage::checkFollowsT(StmtNum followee, StmtNum follower) {
-    return false;
+
+    // meaning the followee does not exist
+    if (followee_followers.find(followee) == followee_followers.end()) {
+        return false;
+    }
+    return followee_followers[followee].find(follower) != followee_followers[followee].end();
 }
 
 std::unordered_set<StmtNum> FollowsTStorage::getFollowers(StmtNum followee) {
+
+    // followee does not exist
     if (followee_followers.find(followee) == followee_followers.end()) {
         std::unordered_set<StmtNum> emptySet;
         return emptySet;
@@ -23,6 +30,8 @@ std::unordered_set<StmtNum> FollowsTStorage::getFollowers(StmtNum followee) {
 }
 
 std::unordered_set<StmtNum> FollowsTStorage::getFollowees(StmtNum follower) {
+
+    // follower does not exist
     if (follower_followees.find(follower) == follower_followees.end()) {
         std::unordered_set<StmtNum> emptySet;
         return emptySet;
