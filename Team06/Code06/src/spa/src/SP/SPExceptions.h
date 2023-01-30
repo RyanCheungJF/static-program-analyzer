@@ -1,22 +1,23 @@
 #pragma once
+#include <string>
 #include <iostream>
 
 class SyntaxErrorException : public std::exception {
 private:
-	char* message;
+	std::string message;
 public:
-	SyntaxErrorException(char* msg) : message(msg) {}
-	char* what() {
-		return message;
+	SyntaxErrorException(const std::string msg) : message(msg) {}
+	const char* what() {
+		return (this->message).c_str();
 	}
 };
 
 class SemanticErrorException : public std::exception {
 private:
-	char* message;
+	std::string message;
 public:
-	SemanticErrorException(char* msg) : message(msg) {}
-	char* what() {
-		return message;
+	SemanticErrorException(const std::string msg) : message(msg) {}
+	const char* what() {
+		return (this->message).c_str();
 	}
 };

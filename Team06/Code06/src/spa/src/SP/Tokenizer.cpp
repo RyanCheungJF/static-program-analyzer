@@ -15,7 +15,7 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 				tokenValue += (char)(file.get());
 			}
 			if (!isInteger(tokenValue)) {
-				std::cerr << "Integer does not follow format: 0 | NZDIGIT ( DIGIT )*  -> " << tokenValue << std::endl;
+				throw SyntaxErrorException("Integer does not follow format: 0 | NZDIGIT ( DIGIT )*  -> " + tokenValue);
 			}
 			tokens.push_back(Token(TokenType::INTEGER, tokenValue));
 		} else if (std::isalpha(file.peek())) { // LETTER: A-Z | a-z
@@ -25,7 +25,7 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 				tokenValue += (char)(file.get());
 			}
 			if (!isName(tokenValue)) {
-				std::cerr << "Name does not follow format: LETTER (LETTER | DIGIT)*  -> " << tokenValue << std::endl;
+				throw SyntaxErrorException("Name does not follow format: LETTER (LETTER | DIGIT)*  -> " + tokenValue);
 			}
 			tokens.push_back(Token(TokenType::NAME, tokenValue));
 		} else if ((char)file.peek() == '<') { // Handle <, <=
@@ -68,7 +68,7 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 				tokens.push_back(Token(TokenType::AND, "&&"));
 			} else {
 				tokenValue += (char)(file.get());
-				std::cerr << "Expecting &&, but got: " << tokenValue << std::endl;
+				throw SyntaxErrorException("Expected &&, but got -> " + tokenValue);
 			}
 		} else if ((char)file.peek() == '|') { // Handle ||
 			std::string tokenValue;
@@ -78,7 +78,7 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 				tokens.push_back(Token(TokenType::OR, "||"));
 			} else {
 				tokenValue += (char)(file.get());
-				std::cerr << "Expecting ||, but got: " << tokenValue << std::endl;
+				throw SyntaxErrorException("Expected ||, but got -> " + tokenValue);
 			}
 		} else { // Handle the rest of the tokens
 			char tokenValue = (char)file.get();
@@ -115,7 +115,7 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 					tokens.push_back(Token(TokenType::LEFT_BRACE, "{"));
 					break;
 				default:
-					std::cerr << "Invalid token: " << tokenValue << std::endl;
+					throw SyntaxErrorException("Invalid token -> " + tokenValue);
 			}
 		}
 	}
