@@ -11,11 +11,7 @@ void FollowsTStorage::writeFollowsT(std::vector<std::pair<StmtNum, StmtNum>> fol
 }
 
 bool FollowsTStorage::checkFollowsT(StmtNum followee, StmtNum follower) {
-    // followee does not exist in table, meaning relationship not present
-    if (follower_followee.find(followee) == follower_followee.end()) {
-        return false;
-    }
-    return follower_followee.at(followee) == follower;
+    return false;
 }
 
 std::unordered_set<StmtNum> FollowsTStorage::getFollowers(StmtNum followee) {
