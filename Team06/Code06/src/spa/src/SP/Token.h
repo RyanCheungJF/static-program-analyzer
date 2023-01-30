@@ -8,9 +8,7 @@ public:
 	TokenType type;
 	std::string value;
 
-	Token();
-
 	Token(TokenType type, std::string value);
-
 	std::string toString();
+	friend bool operator==(const Token& lhs, const Token& rhs);
 };

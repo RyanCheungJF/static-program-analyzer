@@ -135,9 +135,9 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 	}
 	tokens.push_back(Token(TokenType::ENDOFFILE, "End of File"));
 
-	for (int i = 0; i < tokens.size(); i++) {
-		std::cout << tokens[i].toString() << std::endl;
-	}
+	//for (int i = 0; i < tokens.size(); i++) {
+	//	std::cout << tokens[i].toString() << std::endl;
+	//}
 
 	return tokens;
 }
