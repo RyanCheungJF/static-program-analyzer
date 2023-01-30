@@ -10,11 +10,9 @@
 #include <SPExceptions.h>
 
 class Tokenizer {
-private:
+public:
 	bool isInteger(std::string value);
 	bool isName(std::string value);
-
-public:
 	std::deque<Token> tokenize(std::stringstream& file);
 };
 

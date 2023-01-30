@@ -11,5 +11,5 @@ public:
 
 	CallStatement();
 
-	void accept(ASTVisitor *visitor) const override;
+	void accept(ASTVisitor* visitor) const override;
 };
