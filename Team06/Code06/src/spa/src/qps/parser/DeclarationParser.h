@@ -6,14 +6,13 @@
 #define SPA_DECLARATIONPARSER_H
 #include <map>
 #include <string>
+#include "../VariableStore.h"
 using namespace std;
 
 
-class DeclarationParser {
 
-    public:
-        map<string, string> parse(string item);
-};
+VariableStore parseDeclarations(string);
+vector<Parameter> declarationToParameter(string);
 
 
 #endif //SPA_DECLARATIONPARSER_H
