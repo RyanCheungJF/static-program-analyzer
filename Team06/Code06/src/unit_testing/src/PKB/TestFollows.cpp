@@ -1,16 +1,11 @@
-
-
 #include "catch.hpp"
 #include "../../../spa/src/PKB/WritePKB.h"
 #include "../../../spa/src/PKB/ReadPKB.h"
 
 using namespace std;
 
-//void require(bool b) {
-//    REQUIRE(b);
-//}
 
-TEST_CASE("Write Follows(1, 2), Read (1, 2)") {
+TEST_CASE("Checks that write and read works") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -23,7 +18,7 @@ TEST_CASE("Write Follows(1, 2), Read (1, 2)") {
     REQUIRE(res);
 }
 
-TEST_CASE("Write Follows(1, 2), Read (1, 3)") {
+TEST_CASE("Checks that a non-existent follows relationship is detected") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -36,7 +31,7 @@ TEST_CASE("Write Follows(1, 2), Read (1, 3)") {
     REQUIRE(res == false);
 }
 
-TEST_CASE("Write Follows(1, 2), Check that follower of 1 is 2") {
+TEST_CASE("Checks that follower is correct given a followee") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -49,7 +44,7 @@ TEST_CASE("Write Follows(1, 2), Check that follower of 1 is 2") {
     REQUIRE(res == 2);
 }
 
-TEST_CASE("Write Follows(1, 2), Check that followee of 2 is 1") {
+TEST_CASE("Checks that followee is correct given a follower") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -62,7 +57,7 @@ TEST_CASE("Write Follows(1, 2), Check that followee of 2 is 1") {
     REQUIRE(res == 1);
 }
 
-TEST_CASE("Write Follows(1, 2), Check that follower of 3 returns a -1 to indicate error") {
+TEST_CASE("Checks that given a followee, if it does not have a certain follower, a -1 is returned to indicate error") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -75,7 +70,7 @@ TEST_CASE("Write Follows(1, 2), Check that follower of 3 returns a -1 to indicat
     REQUIRE(res == -1);
 }
 
-TEST_CASE("Write Follows(1, 2), Check that followee of 3 returns a -1 to indicate error") {
+TEST_CASE("Checks that given a follower, if it does not have a certain followee, a -1 is returned to indicate error") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -88,7 +83,7 @@ TEST_CASE("Write Follows(1, 2), Check that followee of 3 returns a -1 to indicat
     REQUIRE(res == -1);
 }
 
-TEST_CASE("Ensure that PKB pointer in WritePKB is set to first pkb instance and not overwritten") {
+TEST_CASE("Checks that PKB pointer in WritePKB is set to first pkb instance and not overwritten") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -105,7 +100,7 @@ TEST_CASE("Ensure that PKB pointer in WritePKB is set to first pkb instance and 
     REQUIRE(res);
 }
 
-TEST_CASE("Ensure that PKB pointer in ReadPKB is set to first pkb instance and not overwritten") {
+TEST_CASE("Checks that PKB pointer in ReadPKB is set to first pkb instance and not overwritten") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -122,19 +117,3 @@ TEST_CASE("Ensure that PKB pointer in ReadPKB is set to first pkb instance and n
     REQUIRE(res);
 }
 
-
-//TODO
-/**
- * Given a PQL query of `if i; Select i such that Follows*(2, i)`
- * We want to find all if-statements that follows* line 2
- */
-TEST_CASE("Check that we can find an if statement from a Follows relationship") {
-
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
-    REQUIRE(true);
-}

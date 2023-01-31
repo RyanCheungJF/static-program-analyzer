@@ -43,3 +43,11 @@ std::vector<StmtNum> ReadPKB::getChildren(StmtNum parent) {
 StmtNum ReadPKB::getParent(StmtNum child) {
     return pkbInstance->parentApi.getParent(child);
 }
+
+bool ReadPKB::checkStatement(Stmt stmt, StmtNum num){
+    return pkbInstance->statementApi.checkStatement(stmt, num);
+}
+
+std::unordered_set<StmtNum> ReadPKB::getStatementNumbers(Stmt stmt) {
+    return pkbInstance->statementApi.getStatementNumbers(stmt);
+}

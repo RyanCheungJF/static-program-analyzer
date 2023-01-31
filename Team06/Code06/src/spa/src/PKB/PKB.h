@@ -7,6 +7,7 @@
 #include "api/Follows.h"
 #include "api/FollowsT.h"
 #include "api/Parent.h"
+#include "api/Statement.h"
 
 using namespace std;
 typedef short PROC;
@@ -24,4 +25,5 @@ public:
     Follows followsApi;
     FollowsT followsTApi;
 	Parent parentApi;
+    Statement statementApi;
 };
