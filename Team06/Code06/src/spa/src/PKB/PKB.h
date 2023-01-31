@@ -22,8 +22,19 @@ public:
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST (PROC p);
 
-    Follows followsApi;
-    FollowsT followsTApi;
-	Parent parentApi;
-    Statement statementApi;
+    void setFollows(Follows &instance);
+    void setFollowsT(FollowsT &instance);
+    void setParent(Parent &instance);
+    void setStatement(Statement &instance);
+
+    Follows getFollows();
+    FollowsT getFollowsT();
+    Parent getParent();
+    Statement getStatement();
+
+private:
+    Follows* followsApi;
+    FollowsT* followsTApi;
+	Parent* parentApi;
+    Statement* statementApi;
 };
