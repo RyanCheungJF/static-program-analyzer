@@ -1,19 +1,17 @@
 #include "Parser.h"
 
-Parser::Parser() {
-
-}
-
 std::unique_ptr<Program> Parser::parseProgram(std::deque<Token> tokens) {
 	// Rule: procedure+
 	std::unique_ptr<Program> program = std::make_unique<Program>();
+
+	std::cout << "Program Node" << std::endl;
 
 	while (tokens.front().type != TokenType::ENDOFFILE) {
 		program->procedureList.push_back(parseProcedure(tokens));
 	}
 
 	if (program->procedureList.size() == 0) {
-		std::cerr << "Program should contain at least one procedure" << std::endl;
+		throw SyntaxErrorException("Program should contain at least one procedure");
 	}
 
 	return program;
@@ -23,27 +21,26 @@ std::unique_ptr<Procedure> Parser::parseProcedure(std::deque<Token>& tokens) {
 	// Rule: 'procedure' proc_name '{' stmtLst '}'
 	std::unique_ptr<Procedure> procedure = std::make_unique<Procedure>();
 
-	if (tokens.front().type != TokenType::NAME && tokens.front().value != "procedure") {
-		std::cerr << "Expected 'procedure' keyword, but got: " << tokens.front().value << std::endl;
+	if (tokens.front().type != TokenType::NAME || tokens.front().value != "procedure") {
+		throw SyntaxErrorException("Expected 'procedure' keyword, but got -> " + tokens.front().value);
 	}
 	tokens.pop_front();
 
 	if (tokens.front().type != TokenType::NAME) {
-		std::cerr << "Expected 'proc_name', but got: " << tokens.front().value << std::endl;
+		throw SyntaxErrorException("Expected 'proc_name', but got -> " + tokens.front().value);
 	}
-	std::string procedureName = tokens.front().value;
-	std::cout << procedureName << std::endl;
+	procedure->procedureName = tokens.front().value;
 	tokens.pop_front();
 
 	if (tokens.front().type != TokenType::LEFT_BRACE) {
-		std::cerr << "Expected '{', but got: " << tokens.front().value << std::endl;
+		throw SyntaxErrorException("Expected '{', but got -> " + tokens.front().value);
 	}
 	tokens.pop_front();
 
 	procedure->statementList = parseStatementList(tokens);
 
 	if (tokens.front().type != TokenType::RIGHT_BRACE) {
-		std::cerr << "Expected '}', but got: " << tokens.front().value << std::endl;
+		throw SyntaxErrorException("Expected '}', but got -> " + tokens.front().value);
 	}
 	tokens.pop_front();
 
@@ -54,12 +51,12 @@ std::unique_ptr<StatementList> Parser::parseStatementList(std::deque<Token>& tok
 	// Rule: stmt+
 	std::unique_ptr<StatementList> statementList = std::make_unique<StatementList>();
 
-	while (tokens.front().type != TokenType::RIGHT_BRACE) {
+	while (tokens.front().type != TokenType::RIGHT_BRACE) { // Reached end of statementList
 		statementList->statements.push_back(parseStatement(tokens));
 	}
 
 	if (statementList->statements.size() == 0) {
-		std::cerr << "Statement List should contain at least one statement" << std::endl;
+		throw SyntaxErrorException("Statement List should contain at least one statement");
 	}
 
 	return statementList;
@@ -83,14 +80,12 @@ std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
 		} else if (tokens.front().value == "if") {
 			auto ifStatement = parseIfStatement(tokens);
 			return ifStatement;
-		} else { // Assign statement
-			auto assignStatement = std::make_unique<AssignStatement>();
+		} else { // Else, it must be an assign statement
+			auto assignStatement = parseAssignStatement(tokens);
 			return assignStatement;
 		}
-	}
-	else {
-		std::cerr << "Unexpected token when parsing statement" << tokens.front().value << std::endl;
-		return std::make_unique<ReadStatement>(); // To be removed
+	} else {
+		throw SyntaxErrorException("Unexpected token when parsing statement -> " + tokens.front().value);
 	}
 }
 
@@ -252,14 +247,14 @@ std::unique_ptr<AssignStatement> Parser::parseAssignStatement(std::deque<Token>&
 	tokens.pop_front(); // Pop var_name
 
 	if (tokens.front().type != TokenType::ASSIGN) {
-		std::cerr << "Expected \"=\" in assign statement" << std::endl;
+		throw SyntaxErrorException("Expected '=', but got -> " + tokens.front().value);
 	}
 	tokens.pop_front(); // Pop "="
 
 	assignStatement->expr = parseExpression(tokens);
 
 	if (tokens.front().type != TokenType::SEMICOLON) {
-		std::cerr << "Expected ; at end of assign statement" << std::endl;
+		throw SyntaxErrorException("Expected ';' at end of assign statement, but got -> " + tokens.front().value);
 	}
 	tokens.pop_front(); // Pop ;
 
@@ -289,6 +284,12 @@ std::unique_ptr<ConditionalExpression> Parser::parseConditionalExpression(std::d
 }
 
 std::unique_ptr<Expression> Parser::parseExpression(std::deque<Token>& tokens) {
-	// Rule: expr: expr '+' term | expr '-' term | term
-	return std::make_unique<ConditionalExpression>(); // To be removed
+	/* Rule: expr: expr '+' term | expr '-' term | term
+	*  After eliminating left recursion:
+	*    expr: term(expr')
+	*    expr': '+' term(expr') | '-' term(expr') | epsilon
+	*/ 
+
+
+	return std::make_unique<Constant>(); // To be removed
 }

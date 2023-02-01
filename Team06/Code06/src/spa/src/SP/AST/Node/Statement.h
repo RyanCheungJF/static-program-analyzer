@@ -6,5 +6,4 @@ class Statement : public ASTNode {
 public:
 	//int lineNumber;
 
-	//Statement();
 };

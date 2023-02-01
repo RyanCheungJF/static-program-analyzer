@@ -1,18 +1,16 @@
 #pragma once
 
+#include <string>
+#include <memory>
 #include <vector>
-#include "Constant.h"
+#include "ConditionalExpression.h"
 #include "Expression.h"
-#include "Variable.h"
 
-class RelationalExpression : public Expression {
+class RelationalExpression : public ConditionalExpression {
 public:
-	//std::vector<Constant> constantsList;
-	//std::vector<Variable> variablesList;
-
-	RelationalExpression();
-
-	//RelationalExpression(std::vector<Constant> constantsList, std::vector<Variable> variablesList);
+	std::string relationalOperator;
+	std::unique_ptr<Expression> lhs;
+	std::unique_ptr<Expression> rhs;
 
 	void accept(ASTVisitor* visitor) const override;
 };

@@ -5,6 +5,7 @@
 #include <string>
 #include <deque>
 #include <Token.h>
+#include "SPExceptions.h"
 #include "./AST/Node/Program.h"
 #include "./AST/Node/Procedure.h"
 #include "./AST/Node/StatementList.h"
@@ -17,6 +18,7 @@
 #include "./AST/Node/AssignStatement.h"
 #include "./AST/Node/Expression.h"
 #include "./AST/Node/ConditionalExpression.h"
+#include "./AST/Node/Constant.h"
 
 class Parser {
 private:
@@ -33,6 +35,5 @@ private:
 	std::unique_ptr<Expression> parseExpression(std::deque<Token>& tokens);
 
 public:
-	Parser();
 	std::unique_ptr<Program> parseProgram(std::deque<Token> tokens);
 };

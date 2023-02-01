@@ -40,10 +40,6 @@ void FollowsExtractor::visitWhileStatement(const WhileStatement* whileStatement)
 	// whileStatement->statementList.accept(this);
 };
 
-void FollowsExtractor::visitVariable(const Variable* variable) {};
-
-void FollowsExtractor::visitConstant(const Constant* constant) {};
-
-void FollowsExtractor::visitRelationalExpression(const RelationalExpression* relExpression) {};
+void FollowsExtractor::visitExpression(const Expression* variable) {};
 
 void FollowsExtractor::visitConditionalExpression(const ConditionalExpression* conditionalExpression) {};
