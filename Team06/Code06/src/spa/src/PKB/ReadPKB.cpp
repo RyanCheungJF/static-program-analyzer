@@ -60,3 +60,11 @@ std::unordered_set<StmtNum> ReadPKB::getEntityStatementNumbers(Ent e) {
     return pkbInstance->entityStorage->getEntityStmtNums(e);
 }
 
+bool ReadPKB::checkProcedure(Proc p, StmtNum num) {
+    return pkbInstance->procedureStorage->checkProcedure(p, num);
+}
+
+std::unordered_set<StmtNum> ReadPKB::getProcedureStatementNumbers(Proc p) {
+    return pkbInstance->procedureStorage->getProcedureStatementNumbers(p);
+}
+

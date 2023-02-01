@@ -9,6 +9,7 @@
 #include "api/Parent.h"
 #include "api/Statement.h"
 #include "storage/EntityStorage.h"
+#include "storage/ProcedureStorage.h"
 
 using namespace std;
 typedef short PROC;
@@ -28,6 +29,7 @@ public:
     Parent* parentApi;
     Statement* statementApi;
     EntityStorage* entityStorage;
+    ProcedureStorage* procedureStorage;
 
 private:
 };
