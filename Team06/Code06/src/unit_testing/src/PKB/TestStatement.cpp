@@ -30,7 +30,7 @@ TEST_CASE("Check that all statements are recorded") {
     REQUIRE(res);
 }
 
-TEST_CASE("Check that a statement can have zero statement nums") {
+TEST_CASE("Check that a statement does not appear in the source code, it should return an empty set") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -51,24 +51,7 @@ TEST_CASE("Check that a statement can have zero statement nums") {
     REQUIRE(res);
 }
 
-TEST_CASE("Check that if a statement is not in the source code, it returns an empty set") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    Statement st;
-    pkb.statementApi = &st;
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
-    Stmt s = "if";
-    std::vector<StmtNum> lines;
-    writePkb.setStatement(s, lines);
-    std::unordered_set<StmtNum> statementNums = readPkb.getStatementNumbers("while");
-
-    REQUIRE(statementNums.size() == 0);
-}
-
-TEST_CASE("Check that given a statement and their statement numbers, a query for the statement and its statement number returns the right boolean") {
+TEST_CASE("Check that given query for a statement and a statementNumber that it appears in, it returns true") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -85,6 +68,19 @@ TEST_CASE("Check that given a statement and their statement numbers, a query for
     bool res = true;
     res = res && (readPkb.checkStatement("if", 3) == true);
     res = res && (readPkb.checkStatement("if", 4) == false);
+    REQUIRE(res);
+}
+
+TEST_CASE("Check that if a statement does not exist, it returns false") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    Statement st;
+    pkb.statementApi = &st;
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    bool res = (readPkb.checkStatement("if", 4) == false);
     REQUIRE(res);
 }
 
