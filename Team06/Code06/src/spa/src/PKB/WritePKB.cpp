@@ -26,3 +26,8 @@ void WritePKB::setStatement(Stmt s, std::vector<StmtNum> lines) {
     pkbInstance->statementApi->writeStatement(s, lines);
     return;
 }
+
+void WritePKB::setEntity(Ent e, std::vector<StmtNum> lines) {
+    pkbInstance->entityStorage->writeEntity(e, lines);
+    return;
+}

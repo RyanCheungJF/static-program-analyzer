@@ -51,3 +51,12 @@ bool ReadPKB::checkStatement(Stmt stmt, StmtNum num){
 std::unordered_set<StmtNum> ReadPKB::getStatementNumbers(Stmt stmt) {
     return pkbInstance->statementApi->getStatementNumbers(stmt);
 }
+
+bool ReadPKB::checkEntity(Ent e, StmtNum num) {
+    return pkbInstance->entityStorage->checkEntity(e, num);
+}
+
+std::unordered_set<StmtNum> ReadPKB::getEntityStatementNumbers(Ent e) {
+    return pkbInstance->entityStorage->getEntityStmtNums(e);
+}
+

@@ -52,6 +52,13 @@ public:
     std::unordered_set<StmtNum> getStatementNumbers(Stmt stmt);
 
 
+    // check if given an entity is indeed in the given statement line number
+    bool checkEntity(Ent e, StmtNum num);
+
+    // returns all the statement lines that an entity appears in
+    std::unordered_set<StmtNum> getEntityStatementNumbers(Ent e);
+
+
 private:
     PKB* pkbInstance = NULL;
 };

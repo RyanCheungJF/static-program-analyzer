@@ -5,7 +5,7 @@
 using namespace std;
 
 
-TEST_CASE("Checks that write and read works") {
+TEST_CASE("Checks that write and read works for Follows") {
 
     WritePKB writePkb;
     ReadPKB readPkb;

@@ -24,6 +24,9 @@ public:
     // Sets the statement along with the statement lines that they appear in
     void setStatement(Stmt s, std::vector<StmtNum> lines);
 
+    // Sets the entity along with the statement lines that the entities appears in
+    void setEntity(Ent e, std::vector<StmtNum> lines);
+
 private:
     PKB* pkbInstance = NULL;
 };

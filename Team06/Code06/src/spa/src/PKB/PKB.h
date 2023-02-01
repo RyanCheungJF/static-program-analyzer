@@ -8,6 +8,7 @@
 #include "api/FollowsT.h"
 #include "api/Parent.h"
 #include "api/Statement.h"
+#include "storage/EntityStorage.h"
 
 using namespace std;
 typedef short PROC;
@@ -26,6 +27,7 @@ public:
     FollowsT* followsTApi;
     Parent* parentApi;
     Statement* statementApi;
+    EntityStorage* entityStorage;
 
 private:
 };
