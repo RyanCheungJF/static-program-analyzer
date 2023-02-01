@@ -137,17 +137,22 @@ SuchThatInfo SelectClauseParser::parseSuchThatClause(vector<string>& wordList, i
 	if (itemEnd != condString.size()) {
 		throw Exception();
 	}
-
+	
 	vector<string> params{ param1, param2 };
+	//need to parse params first
+	Relationship relationship = Relationship::makeRelationship(rel, params);
 
 	return SuchThatInfo(rel, params);
 }
 
 
-
+//TODO fix bug with patternclause
 PatternInfo SelectClauseParser::parsePatternClause(vector<string>& wordList, int start, int end)
 {
-	//logic is similar to suchThatParser, not sure how to extract both out
+	//Delete this when ready
+
+	return PatternInfo();
+
 	if (start == -1 && end == -1) {
 		return PatternInfo();
 	}

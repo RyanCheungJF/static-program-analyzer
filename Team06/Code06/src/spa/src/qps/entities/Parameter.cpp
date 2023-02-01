@@ -29,6 +29,16 @@ Parameter::Parameter()
 	value = "";
 }
 
+bool Parameter::isStatementRef(Parameter& p)
+{
+	return isStmtRef(p.getValue());
+}
+
+bool Parameter::isEntityRef(Parameter& p)
+{
+	return isEntRef(p.getValue());
+}
+
 //TODO: IF NOT FOUND, MAY WANT TO THROW ERROR
 ParameterType Parameter::stringToType(string s)
 {

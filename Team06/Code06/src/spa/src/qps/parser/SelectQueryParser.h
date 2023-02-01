@@ -3,6 +3,7 @@
 #include "qps/parsedInfo/SelectClauseInfo.h"
 #include "qps/parsedInfo/SelectQueryInfo.h"
 #include "exceptions/Exception.h"
+#include "qps/entities/Relationship.h"
 #include "parserUtil.h"
 #include <string>
 #include <vector>

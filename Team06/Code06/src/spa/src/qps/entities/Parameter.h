@@ -2,6 +2,7 @@
 #define SPA_QPS_PARAMETER_H
 #include <string>
 #include <unordered_map>
+#include "qps/QPSGrammarUtils.h"
 using namespace std;
 
 enum class ParameterType {
@@ -30,6 +31,8 @@ public:
 	Parameter(string, string);
 	Parameter(const Parameter&);
 	Parameter();
+	static bool isEntityRef(Parameter&);
+	static bool isStatementRef(Parameter&);
 private:
 	const static unordered_map<string, ParameterType> stringToTypeMap;
 	static ParameterType stringToType(string);
