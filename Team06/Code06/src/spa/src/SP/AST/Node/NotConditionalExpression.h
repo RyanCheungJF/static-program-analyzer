@@ -7,7 +7,7 @@
 
 class NotConditionalExpression : public ConditionalExpression {
 public:
-	std::string operator = '!';
+	std::string op = "!";
 	std::unique_ptr<ConditionalExpression> condExpr;
 
 	void accept(ASTVisitor* visitor) const override;

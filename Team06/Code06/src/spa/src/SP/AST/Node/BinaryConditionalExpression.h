@@ -7,9 +7,9 @@
 
 class BinaryConditionalExpression : public ConditionalExpression {
 public:
-	std::string operator;
+	std::string condOperator;
 	std::unique_ptr<ConditionalExpression> lhs;
-	std::unique_ptr<ConditionalExpression> lhs;
+	std::unique_ptr<ConditionalExpression> rhs;
 
 	void accept(ASTVisitor* visitor) const override;
 };

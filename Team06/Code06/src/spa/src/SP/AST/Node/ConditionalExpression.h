@@ -2,6 +2,6 @@
 
 #include "Expression.h"
 
-class ConditionalExpression : public Expression {
+class ConditionalExpression : public ASTNode {
 
 };

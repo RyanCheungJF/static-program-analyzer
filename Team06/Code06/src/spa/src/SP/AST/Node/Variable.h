@@ -5,7 +5,8 @@
 
 class Variable : public Expression {
 public:
-	std::string variableName;
+	std::string name;
 
-	void accept(ASTVisitor *visitor) const override;
+	Variable(std::string val);
+	void accept(ASTVisitor* visitor) const override;
 };

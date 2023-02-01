@@ -1,5 +1,9 @@
 #include "Variable.h"
 
-void Variable::accept(ASTVisitor *visitor) const {
+Variable::Variable(std::string val) {
+	name = val;
+}
+
+void Variable::accept(ASTVisitor* visitor) const {
 	visitor->visitExpression(this);
 };
