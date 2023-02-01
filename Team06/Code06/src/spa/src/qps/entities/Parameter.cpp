@@ -5,7 +5,7 @@ string Parameter::getValue()
 	return value;
 }
 
-ParameterType Parameter::getType()
+ParameterType Parameter::getType() const
 {
 	return type;
 }
@@ -47,6 +47,15 @@ ParameterType Parameter::stringToType(string s)
 		return ParameterType::UNKNOWN;
 	}
 	return iter->second;
+}
+
+string Parameter::typeToString(ParameterType t) const {
+    for(pair<string, ParameterType> item: stringToTypeMap) {
+        if(item.second == t) {
+            return item.first;
+        }
+    }
+    return "None";
 }
 
 const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {

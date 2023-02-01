@@ -20,19 +20,19 @@ bool isSynonym(string s) {
 }
 
 bool isInteger(string integer) {
-    return regex_match(integer, regex("^[0-9]*$"));
+    return regex_match(integer, regex("^0$|^[1-9][0-9]*$"));
 }
 
-bool isSelectClause(string selectClause) {
-    return regex_match(selectClause, regex("^select"));
-}
-
-bool isSuchThatClause(string suchThatClause) {
-    return regex_match(suchThatClause, regex("^such that"));
-}
+//bool isSelectClause(string selectClause) {
+//    return regex_match(selectClause, regex("^Select"));
+//}
+//
+//bool isSuchThatClause(string suchThatClause) {
+//    return regex_match(suchThatClause, regex("^such that"));
+//}
 
 bool isSelect(string s) {
-    return regex_match(s, regex("^select$"));
+    return regex_match(s, regex("^Select$"));
 }
 
 bool isPattern(string s) {
@@ -52,14 +52,33 @@ bool isDeclaration(string declaration) {
 }
 
 bool isDesignEntity(string designEntity) {
-    return regex_match(designEntity, regex("^(stmt|read|print|call|while|if|assign|variable|constant|procedure)"));
+    return regex_search(designEntity, regex("^(stmt|read|print|call|while|if|assign|variable|constant|procedure)"));
 }
+
+pair<string,string> extractDesignEntity(string designEntity) {
+    regex rgx("^(stmt|read|print|call|while|if|assign|variable|constant|procedure)\\s+");
+    smatch match;
+    string remainder;
+    if (regex_search(designEntity, match, rgx)) {
+        remainder = match.suffix().str();
+    }
+    return pair(match[1], remainder);
+}
+
+bool isFixedString(string s) {
+    return regex_match(s, regex("^\"[a-zA-Z][a-zA-Z0-9]*\"$"));
+}
+
+bool isWildCard(string s) {
+    return s == "_";
+}
+
 bool isStmtRef(string stmtRef) {
-    return isSynonym(stmtRef) || isInteger(stmtRef) || (stmtRef == "_");
+    return isSynonym(stmtRef) || isInteger(stmtRef) || isWildCard(stmtRef);
 }
 
 bool isEntRef(string entRef) {
-    return isSynonym(entRef) || (entRef == "_") || regex_match(entRef, regex("^\"[a-zA-Z][a-zA-Z0-9]*\"$"));
+    return isSynonym(entRef) || isWildCard(entRef) || isFixedString(entRef);
 }
 
 

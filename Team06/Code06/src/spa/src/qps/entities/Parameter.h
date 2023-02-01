@@ -27,12 +27,13 @@ enum class ParameterType {
 class Parameter {
 public:
 	string getValue();
-	ParameterType getType();
+    ParameterType getType() const;
 	Parameter(string, string);
 	Parameter(const Parameter&);
 	Parameter();
 	static bool isEntityRef(Parameter&);
 	static bool isStatementRef(Parameter&);
+    string typeToString(ParameterType t) const;
 private:
 	const static unordered_map<string, ParameterType> stringToTypeMap;
 	static ParameterType stringToType(string);
