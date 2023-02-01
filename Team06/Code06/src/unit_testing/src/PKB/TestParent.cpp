@@ -8,6 +8,8 @@ TEST_CASE("Write Parent(1, 2), Read Parent(1, 2)") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Parent par;
+    pkb.parentApi = &par;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -20,6 +22,8 @@ TEST_CASE("Write Parent(1, 2), Read Parent(1, 3)") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Parent par;
+    pkb.parentApi = &par;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -32,6 +36,8 @@ TEST_CASE("Write Parent(1, 2), Read Parent(3, 2)") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Parent par;
+    pkb.parentApi = &par;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -44,6 +50,8 @@ TEST_CASE("Write Parent(1, 2), Write Parent(1, 3), Get Children of 1") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Parent par;
+    pkb.parentApi = &par;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -58,6 +66,8 @@ TEST_CASE("Write Parent(1, 2), Write Parent(1, 3), Get Children of 2") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Parent par;
+    pkb.parentApi = &par;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -72,6 +82,8 @@ TEST_CASE("Write Parent(1, 2), Get children of non-existant statement number") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Parent par;
+    pkb.parentApi = &par;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -85,6 +97,8 @@ TEST_CASE("Write Parent(1, 2), Get Parent of 2") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Parent par;
+    pkb.parentApi = &par;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -97,6 +111,8 @@ TEST_CASE("Write Parent(1, 2), Get Parent of non-existant statement number") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Parent par;
+    pkb.parentApi = &par;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -109,6 +125,8 @@ TEST_CASE("Write Parent(1, 2), Get Parent of 1") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Parent par;
+    pkb.parentApi = &par;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 

@@ -8,6 +8,8 @@ TEST_CASE("Check that all statements are recorded") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Statement st;
+    pkb.statementApi = &st;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -32,6 +34,8 @@ TEST_CASE("Check that a statement can have zero statement nums") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Statement st;
+    pkb.statementApi = &st;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -51,6 +55,8 @@ TEST_CASE("Check that if a statement is not in the source code, it returns an em
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Statement st;
+    pkb.statementApi = &st;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -66,6 +72,8 @@ TEST_CASE("Check that given a statement and their statement numbers, a query for
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Statement st;
+    pkb.statementApi = &st;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -84,6 +92,8 @@ TEST_CASE("Check that given a statement and their statement numbers, a query for
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    Statement st;
+    pkb.statementApi = &st;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 

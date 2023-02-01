@@ -9,45 +9,45 @@ void ReadPKB::setInstancePKB(PKB &pkb) {
 }
 
 bool ReadPKB::checkFollows(StmtNum left, StmtNum right) {
-    return pkbInstance -> followsApi.checkFollows(left, right);
+    return pkbInstance -> followsApi->checkFollows(left, right);
 }
 
 StmtNum ReadPKB::getFollower(StmtNum followee) {
-    return pkbInstance -> followsApi.getFollower(followee);
+    return pkbInstance -> followsApi->getFollower(followee);
 }
 
 StmtNum ReadPKB::getFollowee(StmtNum follower) {
-    return pkbInstance -> followsApi.getFollowee(follower);
+    return pkbInstance -> followsApi->getFollowee(follower);
 }
 
 bool ReadPKB::checkFollowsT(StmtNum followee, StmtNum follower) {
-    return pkbInstance -> followsTApi.checkFollowsT(followee, follower);
+    return pkbInstance -> followsTApi->checkFollowsT(followee, follower);
 }
 
 std::unordered_set<StmtNum> ReadPKB::getFollowersT(StmtNum followee) {
-    return pkbInstance -> followsTApi.getFollowersT(followee);
+    return pkbInstance -> followsTApi->getFollowersT(followee);
 }
 
 std::unordered_set<StmtNum> ReadPKB::getFolloweesT(StmtNum follower) {
-    return pkbInstance -> followsTApi.getFolloweesT(follower);
+    return pkbInstance -> followsTApi->getFolloweesT(follower);
 }
 
 bool ReadPKB::checkParent(StmtNum parent, StmtNum child) {
-    return pkbInstance->parentApi.checkParent(parent, child);
+    return pkbInstance->parentApi->checkParent(parent, child);
 }
 
 std::vector<StmtNum> ReadPKB::getChildren(StmtNum parent) {
-    return pkbInstance->parentApi.getChildren(parent);
+    return pkbInstance->parentApi->getChildren(parent);
 }
 
 StmtNum ReadPKB::getParent(StmtNum child) {
-    return pkbInstance->parentApi.getParent(child);
+    return pkbInstance->parentApi->getParent(child);
 }
 
 bool ReadPKB::checkStatement(Stmt stmt, StmtNum num){
-    return pkbInstance->statementApi.checkStatement(stmt, num);
+    return pkbInstance->statementApi->checkStatement(stmt, num);
 }
 
 std::unordered_set<StmtNum> ReadPKB::getStatementNumbers(Stmt stmt) {
-    return pkbInstance->statementApi.getStatementNumbers(stmt);
+    return pkbInstance->statementApi->getStatementNumbers(stmt);
 }
