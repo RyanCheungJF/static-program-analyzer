@@ -13,7 +13,7 @@ using namespace std;
 
 class Query {
 public:
-    vector<string> process(string);
+    vector<string> process();
 private:
     Relationship r;
     Parameter selectParameter;

@@ -1,4 +1,5 @@
 #include "Relationship.h"
+#include "FollowsRelationship.h"
 
 Relationship Relationship::makeRelationship(string type, vector<Parameter> params)
 {
@@ -8,6 +9,18 @@ Relationship Relationship::makeRelationship(string type, vector<Parameter> param
 		return FollowsRelationship(params);
 	}
 	throw - 1;
+}
+
+Relationship::Relationship(Relationship& r)
+{
+	type = r.type;
+	params = r.params;
+}
+
+Relationship::Relationship()
+{
+	type = RelationshipType::UNKNOWN;
+	params;
 }
 
 RelationshipType Relationship::stringToType(string s)
@@ -21,4 +34,4 @@ RelationshipType Relationship::stringToType(string s)
 
 const unordered_map<string, RelationshipType> Relationship::stringToTypeMap = {
 	{"Follows" , RelationshipType::FOLLOWS}
-}
+};

@@ -2,7 +2,7 @@
 #define SPA_QPS_RELATIONSHIP_H
 #include <string>
 #include "Parameter.h"
-#include "FollowsRelationship.h"
+
 using namespace std;
 
 enum class RelationshipType {
@@ -16,10 +16,14 @@ public:
 	static Relationship makeRelationship(string type, vector<Parameter> params);
 	RelationshipType type;
 	vector<Parameter> params;
-	virtual bool validateParams(vector<Parameter> params);
+	Relationship();
+	Relationship(Relationship&);
 private:
 	static const unordered_map<string, RelationshipType> stringToTypeMap;
 	static RelationshipType stringToType(string);
 };
+
+
+
 
 #endif // !SPA_QPS_RELATIONSHIP_H

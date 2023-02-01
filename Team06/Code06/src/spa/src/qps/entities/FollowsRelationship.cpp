@@ -16,7 +16,7 @@ bool FollowsRelationship::validateParams(vector<Parameter> ps)
 
 FollowsRelationship::FollowsRelationship(vector<Parameter> ps)
 {
-	if (!FollowsRelationship::validateParams(ps)) {
+	if (!validateParams(ps)) {
 		throw -1;
 	}
 	type = RelationshipType::FOLLOWS;

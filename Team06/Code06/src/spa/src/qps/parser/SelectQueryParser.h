@@ -14,7 +14,7 @@
 
 using namespace std;
 
-class SelectClauseParser {
+class SelectQueryParser {
 public:
 	SelectQueryInfo parse(string selectQuery);
 private:
