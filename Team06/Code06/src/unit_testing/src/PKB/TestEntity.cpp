@@ -4,22 +4,23 @@
 
 using namespace std;
 
-TEST_CASE("Check that all statements are recorded") {
+TEST_CASE("Checks that write and read works for entityStorage") {
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    Statement st;
-    pkb.statementApi = &st;
+    EntityStorage es;
+    pkb.entityStorage = &es;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    Stmt s = "if";
+    Ent e = "v";
     std::vector<StmtNum> lines;
     lines.push_back(3);
     lines.push_back(6);
     lines.push_back(9);
-    writePkb.setStatement(s, lines);
-    std::unordered_set<StmtNum> statementNums = readPkb.getStatementNumbers(s);
+    writePkb.setEntity(e, lines);
+    std::unordered_set<StmtNum> statementNums = readPkb.getEntityStatementNumbers(e);
 
     bool res = true;
     res = res && statementNums.size() == 3;
@@ -30,19 +31,19 @@ TEST_CASE("Check that all statements are recorded") {
     REQUIRE(res);
 }
 
-TEST_CASE("Check that a statement does not appear in the source code, it should return an empty set") {
+TEST_CASE("Check that if an entity does not appear in the source code, it should return an empty set") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    Statement st;
-    pkb.statementApi = &st;
+    EntityStorage et;
+    pkb.entityStorage = &et;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    Stmt s = "if";
+    Ent e = "v";
     std::vector<StmtNum> lines;
-    writePkb.setStatement(s, lines);
-    std::unordered_set<StmtNum> statementNums = readPkb.getStatementNumbers(s);
+    writePkb.setEntity(e, lines);
+    std::unordered_set<StmtNum> statementNums = readPkb.getEntityStatementNumbers(e);
 
     bool res = true;
     res = res && statementNums.size() == 0;
@@ -51,40 +52,41 @@ TEST_CASE("Check that a statement does not appear in the source code, it should 
     REQUIRE(res);
 }
 
-TEST_CASE("Check that given query for a statement and a statementNumber that it appears in, it returns true") {
+TEST_CASE("Check that given query for an entity and a statementNumber that it appears in, it returns true") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    Statement st;
-    pkb.statementApi = &st;
+    EntityStorage et;
+    pkb.entityStorage = &et;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    Stmt s = "if";
+    Ent e = "v";
     std::vector<StmtNum> lines;
     lines.push_back(3);
-    writePkb.setStatement(s, lines);
+    writePkb.setEntity(e, lines);
 
     bool res = true;
-    res = res && (readPkb.checkStatement("if", 3) == true);
-    res = res && (readPkb.checkStatement("if", 4) == false);
+    res = res && (readPkb.checkEntity(e, 3) == true);
+    res = res && (readPkb.checkEntity(e, 4) == false);
     REQUIRE(res);
 }
 
-TEST_CASE("Check that if a statement does not exist, it returns false") {
+TEST_CASE("Check that if an entity does not exist, it returns false") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    Statement st;
-    pkb.statementApi = &st;
+    EntityStorage et;
+    pkb.entityStorage = &et;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    bool res = (readPkb.checkStatement("if", 4) == false);
+    bool res = true;
+    res = res && (readPkb.checkEntity("v", 4) == false);
     REQUIRE(res);
 }
 
-TEST_CASE("Check that given a statement and their statement numbers, a query for an non-existent statement returns false") {
+TEST_CASE("Check that given an entity and their statement numbers, a query for an non-existent statement returns false") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -98,6 +100,7 @@ TEST_CASE("Check that given a statement and their statement numbers, a query for
     lines.push_back(3);
     writePkb.setStatement(s, lines);
 
-    REQUIRE(readPkb.checkStatement("while", 4) == false);
+    REQUIRE(readPkb.checkStatement("while", 200) == false);
 }
+
 

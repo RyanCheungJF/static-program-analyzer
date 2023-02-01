@@ -52,6 +52,20 @@ public:
     std::unordered_set<StmtNum> getStatementNumbers(Stmt stmt);
 
 
+    // check if given an entity is indeed in the given statement line number
+    bool checkEntity(Ent e, StmtNum num);
+
+    // returns all the statement lines that an entity appears in
+    std::unordered_set<StmtNum> getEntityStatementNumbers(Ent e);
+
+
+    // check if a statement number is contained within the given procedure
+    bool checkProcedure(Proc p, StmtNum num);
+
+    // returns all the statement lines that are contained in the given procedure
+    std::unordered_set<StmtNum> getProcedureStatementNumbers(Proc p);
+
+
 private:
     PKB* pkbInstance = NULL;
 };

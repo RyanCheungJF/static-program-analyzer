@@ -21,8 +21,17 @@ public:
     // Sets Parent relation in PKB
     void setParent(StmtNum parent, StmtNum child);
 
+
     // Sets the statement along with the statement lines that they appear in
     void setStatement(Stmt s, std::vector<StmtNum> lines);
+
+
+    // Sets the entity along with the statement lines that the entities appears in
+    void setEntity(Ent e, std::vector<StmtNum> lines);
+
+
+    // Sets the procedure along with the statement lines that are in that procedure appears in
+    void setProcedure(Proc p, std::vector<StmtNum> lines);
 
 private:
     PKB* pkbInstance = NULL;

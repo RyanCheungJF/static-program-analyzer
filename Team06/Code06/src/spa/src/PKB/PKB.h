@@ -8,6 +8,8 @@
 #include "api/FollowsT.h"
 #include "api/Parent.h"
 #include "api/Statement.h"
+#include "storage/EntityStorage.h"
+#include "storage/ProcedureStorage.h"
 
 using namespace std;
 typedef short PROC;
@@ -22,8 +24,12 @@ public:
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST (PROC p);
 
-    Follows followsApi;
-    FollowsT followsTApi;
-	Parent parentApi;
-    Statement statementApi;
+    Follows* followsApi;
+    FollowsT* followsTApi;
+    Parent* parentApi;
+    Statement* statementApi;
+    EntityStorage* entityStorage;
+    ProcedureStorage* procedureStorage;
+
+private:
 };

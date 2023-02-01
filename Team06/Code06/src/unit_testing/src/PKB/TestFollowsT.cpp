@@ -8,6 +8,8 @@ TEST_CASE("Check that all followers are recorded in the followee") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    FollowsT ft;
+    pkb.followsTApi = &ft;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -28,6 +30,8 @@ TEST_CASE("Check that a follower is not recorded as a followee") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    FollowsT ft;
+    pkb.followsTApi = &ft;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -43,6 +47,8 @@ TEST_CASE("Check that all of the followers of each followee is accurate, even wi
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    FollowsT ft;
+    pkb.followsTApi = &ft;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -76,6 +82,8 @@ TEST_CASE("Check that all of the followees of each follower is accurate, even wi
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    FollowsT ft;
+    pkb.followsTApi = &ft;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -123,6 +131,10 @@ TEST_CASE("Check that we can find an if statement from a Follows relationship") 
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
+    FollowsT ft;
+    Statement statement;
+    pkb.followsTApi = &ft;
+    pkb.statementApi = &statement;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
