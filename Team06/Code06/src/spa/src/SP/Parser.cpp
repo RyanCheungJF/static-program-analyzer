@@ -438,7 +438,7 @@ std::unique_ptr<Expression> Parser::parseFactor(std::deque<Token>& tokens) {
 
 		expression = parseExpression(tokens);
 
-		if (tokens.front().type != TokenType::RIGHT_PARENTHESIS) {\
+		if (tokens.front().type != TokenType::RIGHT_PARENTHESIS) {
 			throw SyntaxErrorException("Expected ')' in factor, but got -> " + tokens.front().value);
 		}
 		tokens.pop_front(); // Pop ')'

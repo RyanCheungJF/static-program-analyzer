@@ -19,7 +19,119 @@ TEST_CASE("Invalid Source Program") {
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
+		//REQUIRE_THROWS_MATCHES(testParser.parseProgram(tokenQueue), SyntaxErrorException, Catch::Message("SyntaxErrorException::what"));
 		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
 	}
 
+	SECTION("Procedure has invalid syntax") {
+		std::ifstream testFile(testDirectory + "invalid2.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
+
+	SECTION("Statement List has no statement") {
+		std::ifstream testFile(testDirectory + "invalid3.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
+
+	SECTION("Invalid read statement") {
+		std::ifstream testFile(testDirectory + "invalid4.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
+
+	SECTION("Invalid print statement") {
+		std::ifstream testFile(testDirectory + "invalid5.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
+
+	SECTION("Invalid call statement") {
+		std::ifstream testFile(testDirectory + "invalid6.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
+
+	SECTION("Invalid while statement") {
+		std::ifstream testFile(testDirectory + "invalid7.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
+
+	SECTION("Invalid if statement") {
+		std::ifstream testFile(testDirectory + "invalid8.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
+
+	SECTION("Invalid assign statement") {
+		std::ifstream testFile(testDirectory + "invalid9.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
+
+	SECTION("Invalid conditional") {
+		std::ifstream testFile(testDirectory + "invalid10.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
+
+	SECTION("Invalid statement type") {
+		std::ifstream testFile(testDirectory + "invalid11.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
+
+	SECTION("Invalid relational expression") {
+		std::ifstream testFile(testDirectory + "invalid12.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
+
+	SECTION("Invalid expression") {
+		std::ifstream testFile(testDirectory + "invalid13.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
+
+	SECTION("Invalid term") {
+		std::ifstream testFile(testDirectory + "invalid14.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
+
+	SECTION("Invalid factor") {
+		std::ifstream testFile(testDirectory + "invalid15.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+	}
 }
