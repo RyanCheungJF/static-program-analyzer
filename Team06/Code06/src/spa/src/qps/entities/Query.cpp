@@ -4,6 +4,6 @@
 
 #include "Query.h"
 
-vector<string> Query::process(string s) {
+vector<string> Query::process() {
     return {"hello", "world"};
 }

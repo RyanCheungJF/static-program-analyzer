@@ -10,11 +10,17 @@ ParameterType Parameter::getType() const
 	return type;
 }
 
-Parameter::Parameter(string t, string v)
+Parameter::Parameter(string v, string t)
 {
 
 	type = stringToType(t);
 	value = v;
+}
+
+Parameter::Parameter(string v, ParameterType t)
+{
+	value = v;
+	type = t;
 }
 
 Parameter::Parameter(const Parameter& p)
@@ -27,6 +33,16 @@ Parameter::Parameter()
 {
 	type = ParameterType::UNKNOWN;
 	value = "";
+}
+
+bool Parameter::isStatementRef(Parameter& p)
+{
+	return isStmtRef(p.getValue());
+}
+
+bool Parameter::isEntityRef(Parameter& p)
+{
+	return isEntRef(p.getValue());
 }
 
 //TODO: IF NOT FOUND, MAY WANT TO THROW ERROR
@@ -46,6 +62,23 @@ string Parameter::typeToString(ParameterType t) const {
         }
     }
     return "None";
+}
+
+ParameterType Parameter::guessParameterType(string s)
+{
+	if (isSynonym(s)) {
+		return ParameterType::SYNONYM;
+	}
+	if (isFixedString(s)) {
+		return ParameterType::FIXED_STRING;
+	}
+	if (isInteger(s)) {
+		return ParameterType::FIXED_INT;
+	}
+	if (isWildCard(s)) {
+		return ParameterType::WILDCARD;
+	}
+	return ParameterType::UNKNOWN;
 }
 
 const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {

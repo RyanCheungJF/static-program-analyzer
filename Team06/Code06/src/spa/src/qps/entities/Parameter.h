@@ -2,6 +2,7 @@
 #define SPA_QPS_PARAMETER_H
 #include <string>
 #include <unordered_map>
+#include "qps/QPSGrammarUtils.h"
 using namespace std;
 
 enum class ParameterType {
@@ -28,9 +29,13 @@ public:
 	string getValue();
     ParameterType getType() const;
 	Parameter(string, string);
+	Parameter(string, ParameterType);
 	Parameter(const Parameter&);
 	Parameter();
+	static bool isEntityRef(Parameter&);
+	static bool isStatementRef(Parameter&);
     string typeToString(ParameterType t) const;
+	static ParameterType guessParameterType(string);
 private:
 	const static unordered_map<string, ParameterType> stringToTypeMap;
 	static ParameterType stringToType(string);

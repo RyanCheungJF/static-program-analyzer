@@ -11,19 +11,19 @@ QPSParser::QPSParser() {
 vector<Query> QPSParser::parse(string qpsQuery) {
     // split the code
     vector<string> queryStatements = splitQuery(qpsQuery);
-    SelectClauseParser selectClauseParser = SelectClauseParser();
+    SelectQueryParser selectClauseParser = SelectQueryParser();
     vector<Query> queryVec;
     VariableStore vStore = VariableStore();
     for (string queryStatement:queryStatements) {
         if (isSelectClause(queryStatement)) {
             // Assuming return type of the query parser is a Query
             // Currently its a different type. hence the error.
-            queryVec.push_back(selectClauseParser.parse(queryStatement));
+            // queryVec.push_back(selectClauseParser.parse(queryStatement));
         } else {
             // Prolly make this a class method so I have to instantiate a version of this.
             // Not sure if this is needed but this is in the case we have more than one var declaration clauses.
             // Like multiline.
-            vStore.addDeclarations(parseDeclarations(queryStatement));
+            // vStore.addDeclarations(parseDeclarations(queryStatement));
         }
     }
 

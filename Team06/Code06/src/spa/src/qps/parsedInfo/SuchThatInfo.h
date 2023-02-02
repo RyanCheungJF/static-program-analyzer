@@ -2,16 +2,14 @@
 #define SPA_QPS_SUCHTHATINFO_H
 #include <string>
 #include <vector>
+#include "../entities/Relationship.h"
 using namespace std;
 
 class SuchThatInfo {
-	//TODO: change to a relationship object
-	string relationship;
-	//TODO: change to actual entities rather than strings
-	vector<string> params;
+	Relationship rel;
 public:
 	SuchThatInfo();
-	SuchThatInfo(string, vector<string>);
+	SuchThatInfo(Relationship);
 	SuchThatInfo(const SuchThatInfo&);
 };
 

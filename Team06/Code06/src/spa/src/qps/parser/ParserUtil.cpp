@@ -98,3 +98,5 @@ vector<string> stringToWordListByDelimiter(string original, string delimiter) {
     }
     return wordList;
 }
+
+

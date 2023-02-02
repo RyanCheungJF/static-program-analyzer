@@ -1,17 +1,14 @@
 #include "SuchThatInfo.h"
 
 SuchThatInfo::SuchThatInfo() {
-	relationship = "";
 }
 
-SuchThatInfo::SuchThatInfo(string rel, vector<string> ps)
+SuchThatInfo::SuchThatInfo(Relationship r)
 {
-	relationship = rel;
-	params = ps;
+	rel = r;
 }
 
 SuchThatInfo::SuchThatInfo(const SuchThatInfo& sti) 
 {
-	relationship = sti.relationship;
-	params = sti.params;
+	rel = sti.rel;
 }

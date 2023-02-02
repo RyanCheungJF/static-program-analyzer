@@ -7,7 +7,7 @@ vector<string> QPS::processQueries(string queryString) {
     vector<string> result;
     for (Query query: queryVec) {
         // Some API call
-        result.push_back(query.process());
+        query.process();
     }
     return result;
 }

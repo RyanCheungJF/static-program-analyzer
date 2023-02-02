@@ -1,4 +1,5 @@
 #include "catch.hpp"
+#include <iostream>
 #include "qps/parser/ParserUtil.h"
 using namespace std;
 
@@ -51,4 +52,11 @@ TEST_CASE("FindSuchThat / neither such nor that present / return -1") {
 	long result = findSuchThat(wordList);
 
 	REQUIRE(expected == result);
+}
+
+TEST_CASE("stringToWordList / string with consecutive spaces / return wordlist without whitespace") {
+	string input = " a  b c   d		e \n \n f ";
+	vector<string> expected = { "a", "b", "c", "d", "e", "f" };
+	vector<string> output = stringToWordList(input);
+	REQUIRE(expected == output);
 }

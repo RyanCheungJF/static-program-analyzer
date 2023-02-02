@@ -2,7 +2,7 @@
 
 //assumes select clause is valid
 //does not check if synonym is declared
-SelectQueryInfo SelectClauseParser::parse(string selectQuery) {
+SelectQueryInfo SelectQueryParser::parse(string selectQuery) {
 	vector<string> wordList = stringToWordList(selectQuery);
 	vector<int> clauseStarts = getClauseStarts(wordList);
 	vector<int> clauseEnds = getClauseEnds(clauseStarts, wordList.size());
@@ -25,7 +25,7 @@ assuming we only have at most one of each type of clauses
 
 @returns: a vector of size 3, containing list of select clause, list of such that clause, and list of pattern clause in that order
 */
-vector<int> SelectClauseParser::getClauseStarts(vector<string> &wordList) {
+vector<int> SelectQueryParser::getClauseStarts(vector<string> &wordList) {
 	//TODO: Implement this
 	int suchThatStart = findSuchThat(wordList);
 	int patternStart = findPattern(wordList);
@@ -37,7 +37,7 @@ vector<int> SelectClauseParser::getClauseStarts(vector<string> &wordList) {
 /*
 
 */
-vector<int> SelectClauseParser::getClauseEnds(vector<int> clauseStarts, int wordListLength)
+vector<int> SelectQueryParser::getClauseEnds(vector<int> clauseStarts, int wordListLength)
 {
 	map<int, int> initialIndices;
 	vector<int> res(clauseStarts.size(), -1);
@@ -63,7 +63,7 @@ vector<int> SelectClauseParser::getClauseEnds(vector<int> clauseStarts, int word
 /*
 assumes start and end won't be -1 i.e. select clause must exist
 */
-SelectClauseInfo SelectClauseParser::parseSelectClause(vector<string>& wordList, int start, int end)
+SelectClauseInfo SelectQueryParser::parseSelectClause(vector<string>& wordList, int start, int end)
 {
 	if (end - start != 2) {
 		throw Exception();
@@ -81,8 +81,9 @@ SelectClauseInfo SelectClauseParser::parseSelectClause(vector<string>& wordList,
 
 /*
 Currently capable of parsing one condition after such that, with 2 params
+use loops for extensibility
 */
-SuchThatInfo SelectClauseParser::parseSuchThatClause(vector<string>& wordList, int start, int end)
+SuchThatInfo SelectQueryParser::parseSuchThatClause(vector<string>& wordList, int start, int end)
 {
 	if (start == -1 && end == -1) {
 		return SuchThatInfo();
@@ -137,17 +138,23 @@ SuchThatInfo SelectClauseParser::parseSuchThatClause(vector<string>& wordList, i
 	if (itemEnd != condString.size()) {
 		throw Exception();
 	}
+	Parameter p1(param1, Parameter::guessParameterType(param1));
+	Parameter p2(param2, Parameter::guessParameterType(param2));
+	vector<Parameter> params{ p1, p2 };
+	//need to parse params first
+	Relationship relationship = Relationship::makeRelationship(rel, params);
 
-	vector<string> params{ param1, param2 };
-
-	return SuchThatInfo(rel, params);
+	return SuchThatInfo(relationship);
 }
 
 
-
-PatternInfo SelectClauseParser::parsePatternClause(vector<string>& wordList, int start, int end)
+//TODO fix bug with patternclause
+PatternInfo SelectQueryParser::parsePatternClause(vector<string>& wordList, int start, int end)
 {
-	//logic is similar to suchThatParser, not sure how to extract both out
+	//Delete this when ready
+
+	return PatternInfo();
+
 	if (start == -1 && end == -1) {
 		return PatternInfo();
 	}
