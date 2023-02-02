@@ -34,10 +34,12 @@ public:
 	Parameter();
 	static bool isEntityRef(Parameter&);
 	static bool isStatementRef(Parameter&);
+    static bool isDsgEntity(Parameter&);
 	bool isUncheckedSynonym();
 	void updateSynonymType(ParameterType);
-    string typeToString(ParameterType t) const;
-	static ParameterType guessParameterType(string);
+    string getTypeString() const;
+    bool isEqualTo(Parameter);
+    static ParameterType guessParameterType(string);
 private:
 	const static unordered_map<string, ParameterType> stringToTypeMap;
 	static ParameterType stringToType(string);

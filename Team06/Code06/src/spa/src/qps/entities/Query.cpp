@@ -4,8 +4,36 @@
 
 #include "Query.h"
 
-vector<string> Query::process() {
-    return {"hello", "world"};
+vector<string> Query::evaluate() {
+    // I am going to assume here that since the object has been created it means that the variables are correctly
+    // instantiated.
+    QueryDB queryDb = QueryDB();
+    bool isFalseQuery = false;
+    for(Relationship relation: relations) {
+        // Run an PKB API call for each relationship.
+        // Taking the example of select s1 follows(s1, s2)
+        vector<vector<string>> response = {{"1", "2"}};
+                // PKB.getRelation(relation);
+        Table table(relation.getParameters(), response);
+        if(response.empty()) {
+            isFalseQuery = true;
+        }
+        // This will remove wild cards and FIXED INT from the table.
+        table = table.extractDesignEntities();
+        queryDb.insertTable(table);
+    }
+    vector<string> result;
+    if (queryDb.hasParameter(selectParameters[0])) {
+        result = queryDb.fetch(selectParameters[0]);
+    } else {
+        if (isFalseQuery) {
+            return {};
+        } else {
+            return {"v", "v"};
+            //PKB.getAll(selectParameters[0]);
+        }
+    }
+    return result;
 }
 
 Query::Query()

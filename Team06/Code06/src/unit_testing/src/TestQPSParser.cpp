@@ -14,5 +14,4 @@ TEST_CASE("parse / given valid string / parse into correct vector of queries") {
 	string test = "stmt s; variable v    ;\n     Select v such that Follows (s, 1) ";
 	QPSParser qp;
 	vector<Query> queries = qp.parse(test);
-	REQUIRE(true);
-}
+	REQUIRE(true);}

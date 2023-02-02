@@ -40,6 +40,10 @@ bool Parameter::isStatementRef(Parameter& p)
 	return isStmtRef(p.getValue());
 }
 
+bool Parameter::isDsgEntity(Parameter& p) {
+    return isDesignEntity(p.getValue());
+}
+
 bool Parameter::isUncheckedSynonym()
 {
 	return type == ParameterType::SYNONYM;
@@ -68,9 +72,9 @@ ParameterType Parameter::stringToType(string s)
 	return iter->second;
 }
 
-string Parameter::typeToString(ParameterType t) const {
+string Parameter::getTypeString() const {
     for(pair<string, ParameterType> item: stringToTypeMap) {
-        if(item.second == t) {
+        if(item.second == this->getType()) {
             return item.first;
         }
     }
@@ -92,6 +96,10 @@ ParameterType Parameter::guessParameterType(string s)
 		return ParameterType::WILDCARD;
 	}
 	return ParameterType::UNKNOWN;
+}
+
+bool Parameter::isEqualTo(Parameter p) {
+    return p.getValue() == this->getValue();
 }
 
 const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {

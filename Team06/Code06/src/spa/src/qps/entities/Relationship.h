@@ -1,6 +1,7 @@
 #ifndef SPA_QPS_RELATIONSHIP_H
 #define SPA_QPS_RELATIONSHIP_H
 #include <string>
+#include <vector>
 #include "Parameter.h"
 
 using namespace std;
@@ -19,6 +20,7 @@ public:
 	Relationship();
 	Relationship(const Relationship&);
 	vector<Parameter*> getAllUncheckedSynonyms();
+    vector<Parameter>& getParameters();
 private:
 	static const unordered_map<string, RelationshipType> stringToTypeMap;
 	static RelationshipType stringToType(string);
