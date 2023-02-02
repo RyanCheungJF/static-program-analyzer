@@ -7,16 +7,16 @@
 #include "DeclarationParser.h"
 #include "ParserUtil.h"
 #include "SelectQueryParser.h"
-#include "../entities/Query.h"
-
+#include "qps/entities/Query.h"
+using namespace std;
 
 class QPSParser {
 public:
     QPSParser();
     vector<Query> parse(string);
-private:
+//private:
     vector<string> splitQuery(string);
-    void checkParameters(Query, VariableStore);
+    void checkSynonyms(Query*, VariableStore);
 };
 
 

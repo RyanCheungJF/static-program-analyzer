@@ -12,9 +12,10 @@ using namespace std;
 class VariableStore {
 public:
     VariableStore();
-    ParameterType getType(string);
+    ParameterType getType(Parameter);
     int insertVariable(Parameter);
     bool hasVariable(Parameter);
+    bool updateSynonym(Parameter*);
     string toString();
 //private:
     unordered_map<string, Parameter> store;

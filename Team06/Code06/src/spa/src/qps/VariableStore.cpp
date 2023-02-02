@@ -9,8 +9,8 @@ VariableStore::VariableStore() {
 
 }
 
-ParameterType VariableStore::getType(string synonym) {
-    return store[synonym].getType();
+ParameterType VariableStore::getType(Parameter synonym) {
+    return store[synonym.getValue()].getType();
 }
 
 int VariableStore::insertVariable(Parameter p) {
@@ -25,6 +25,16 @@ int VariableStore::insertVariable(Parameter p) {
 
 bool VariableStore::hasVariable(Parameter p) {
     return !(store.find(p.getValue()) == store.end());
+}
+
+bool VariableStore::updateSynonym(Parameter* synP)
+{
+    if (!hasVariable(*synP)) {
+        return false;
+    }
+    ParameterType synType = getType(*synP);
+    synP->updateSynonymType(synType);
+    return true;
 }
 
 string VariableStore::toString() {

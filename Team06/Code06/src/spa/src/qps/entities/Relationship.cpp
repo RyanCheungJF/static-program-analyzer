@@ -11,10 +11,21 @@ Relationship Relationship::makeRelationship(string type, vector<Parameter> param
 	throw - 1;
 }
 
-Relationship::Relationship(Relationship& r)
+Relationship::Relationship(const Relationship& r)
 {
 	type = r.type;
 	params = r.params;
+}
+
+vector<Parameter*> Relationship::getAllUncheckedSynonyms()
+{
+	vector<Parameter*> synonyms;
+	for (int i = 0; i < params.size(); i++) {
+		if (params.at(i).isUncheckedSynonym()) {
+			synonyms.push_back(&params.at(0));
+		}
+	}
+	return synonyms;
 }
 
 Relationship::Relationship()

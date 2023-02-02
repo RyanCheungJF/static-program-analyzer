@@ -34,6 +34,8 @@ public:
 	Parameter();
 	static bool isEntityRef(Parameter&);
 	static bool isStatementRef(Parameter&);
+	bool isUncheckedSynonym();
+	void updateSynonymType(ParameterType);
     string typeToString(ParameterType t) const;
 	static ParameterType guessParameterType(string);
 private:

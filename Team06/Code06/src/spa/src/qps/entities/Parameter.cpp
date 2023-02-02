@@ -40,6 +40,19 @@ bool Parameter::isStatementRef(Parameter& p)
 	return isStmtRef(p.getValue());
 }
 
+bool Parameter::isUncheckedSynonym()
+{
+	return type == ParameterType::SYNONYM;
+}
+
+void Parameter::updateSynonymType(ParameterType pt)
+{
+	if (type != ParameterType::SYNONYM) {
+		throw - 1;
+	}
+	type = pt;
+}
+
 bool Parameter::isEntityRef(Parameter& p)
 {
 	return isEntRef(p.getValue());

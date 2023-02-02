@@ -14,9 +14,12 @@ using namespace std;
 class Query {
 public:
     vector<string> process();
-private:
-    Relationship r;
-    Parameter selectParameter;
+    Query();
+    Query(const Query&);
+    Query(const vector<Parameter>&, const vector<Relationship>&);
+    vector<Relationship> relations;
+    vector<Parameter> selectParameters;
+    vector<Parameter*> getAllUncheckedSynonyms();
 };
 
 

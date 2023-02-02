@@ -11,7 +11,7 @@ using namespace std;
 
 
 
-VariableStore parseDeclarations(string);
+VariableStore parseDeclarations(vector<string>);
 vector<Parameter> declarationToParameter(string);
 
 
