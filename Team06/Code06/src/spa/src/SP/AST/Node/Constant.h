@@ -1,16 +1,11 @@
 #pragma once
 
 #include <iostream>
-#include "ASTNode.h"
+#include "Expression.h"
 
-class Constant {
+class Constant : public Expression {
 public:
-	//std::string variableName;
-	//int value;
+	int value;
 
-	Constant();
-
-	//Constant(std::string variableName, int value);
-
-	//void accept(ASTVisitor* visitor) const override;
+	void accept(ASTVisitor* visitor) const override;
 };

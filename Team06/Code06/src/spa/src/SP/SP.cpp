@@ -11,9 +11,11 @@ void SP::processFile(std::string filePath) {
 	strStream << sourceFile.rdbuf();
 
 	std::deque<Token> tokens;
+	std::unique_ptr<Program> root;
 
 	try {
 		tokens = tokenizer.tokenize(strStream);
+		root = parser.parseProgram(tokens);
 	} catch (SyntaxErrorException e) {
 		std::cout << "Syntax Error caught" << std::endl;
 		std::cout << e.what() << std::endl;
@@ -21,6 +23,4 @@ void SP::processFile(std::string filePath) {
 		std::cout << "Semantic Error caught" << std::endl;
 		std::cout << e.what() << std::endl;
 	}
-
-	std::unique_ptr<Program> program = parser.parseProgram(tokens);
 }

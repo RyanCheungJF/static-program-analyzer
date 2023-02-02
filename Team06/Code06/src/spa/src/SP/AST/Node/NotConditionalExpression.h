@@ -1,13 +1,14 @@
 #pragma once
 
+#include <memory>
+#include <string>
 #include "ConditionalExpression.h"
-#include "StatementList.h"
+#include "ASTNode.h"
 
-class WhileStatement : public Statement {
+class NotConditionalExpression : public ConditionalExpression {
 public:
+	std::string op = "!";
 	std::unique_ptr<ConditionalExpression> condExpr;
-	std::unique_ptr<StatementList> stmtList;
-	//int lineNumber;
 
 	void accept(ASTVisitor* visitor) const override;
 };

@@ -1,16 +1,7 @@
 #pragma once
 
-#include <vector>
-#include "RelationalExpression.h"
-#include "Variable.h"
+#include "Expression.h"
 
-class ConditionalExpression : public Expression {
-public:
-	//std::vector<RelationalExpression> relationsList;
+class ConditionalExpression : public ASTNode {
 
-	ConditionalExpression();
-
-	//ConditionalExpression(std::vector<RelationalExpression> relationsList);
-
-	void accept(ASTVisitor* visitor) const override;
 };

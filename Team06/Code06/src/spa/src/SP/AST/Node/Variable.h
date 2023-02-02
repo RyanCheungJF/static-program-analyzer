@@ -1,16 +1,11 @@
 #pragma once
 
 #include <iostream>
-#include "ASTNode.h"
+#include "Expression.h"
 
-class Variable {
+class Variable : public Expression {
 public:
-	std::string variableName;
-	std::string value;
+	std::string name;
 
-	Variable();
-
-	Variable(std::string variableName, std::string value);
-
-	//void accept(ASTVisitor *visitor) const override;
+	void accept(ASTVisitor* visitor) const override;
 };

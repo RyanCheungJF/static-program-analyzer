@@ -24,8 +24,6 @@ public:
 	void visitIfStatement(const IfStatement* IfStatement) override;
 	void visitWhileStatement(const WhileStatement* whileStatement) override;
 
-	void visitVariable(const Variable* variable) override;
-	void visitConstant(const Constant* constant) override;
-	void visitRelationalExpression(const RelationalExpression* relExpression) override;
+	void visitExpression(const Expression* expression) override;
 	void visitConditionalExpression(const ConditionalExpression* conditionalExpression) override;
 };
