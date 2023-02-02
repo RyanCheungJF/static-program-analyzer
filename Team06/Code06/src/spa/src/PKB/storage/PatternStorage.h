@@ -52,4 +52,13 @@ public:
     virtual std::vector<StmtNum> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
 private:
     std::unordered_map<std::string, std::unordered_set<Node*>> rhsVariable_Nodes;
+    std::unordered_map<std::string, std::unordered_set<Node*>> lhsVariableAppearence_StmtNum;
+
+    //TODO: what does pattern side take in from query? because if they give us pattern(_, _"x / y * a"_), how do I know which root to search?
+    // i need to know how the order of operations occur right? Take the parser from SP side?
+    /* this looks like the below btw:
+     *          *
+     *       /     a
+     *    x   y
+     */
 };
