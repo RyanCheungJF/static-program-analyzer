@@ -12,15 +12,20 @@ public:
     Node* right;
     std::string value;
     StmtNum line;
+
+    Node(std::string str, StmtNum line) {
+        this->value = str;
+        this->line = line;
+    }
 };
 
 class PatternStorage {
 public:
     //TODO: change this to pointer and table to pointer later. figure out logic first
-    virtual void writePatternNode(Node assignNode);
+    virtual void writePatternNode(Node &assignNode);
 
     // pattern(_, _)
-    virtual std::vector<StmtNum> getMatchingAllAssignStatements();
+    virtual std::vector<StmtNum> getAllAssignStatements();
 
     // pattern("a", "v")
     virtual std::vector<StmtNum> getMatchingRHSNoWildcard(std::string lhs, std::string rhs);

@@ -1,13 +1,29 @@
 #include "PatternStorage.h"
 
 
-void PatternStorage::writePatternNode(Node assignNode) {
+void PatternStorage::writePatternNode(Node &assignNode) {
     std::string rhsVariable = assignNode.left->value;
     rhsVariable_Nodes[rhsVariable].insert(&assignNode);
     return;
 }
 
-std::vector<StmtNum> PatternStorage::getMatchingAllAssignStatements() {}
+std::vector<StmtNum> PatternStorage::getAllAssignStatements() {
+    std::unordered_set<StmtNum> set;
+    for (auto keyValuePair: rhsVariable_Nodes) {
+        std::string rhs = keyValuePair.first;
+        std::unordered_set<Node*> value = keyValuePair.second;
+
+        for (Node* ptr: value) {
+            set.insert(ptr->line);
+        }
+    }
+
+    std::vector<StmtNum> res;
+    for (StmtNum num: set) {
+        res.push_back(num);
+    }
+    return res;
+}
 
 std::vector<StmtNum> PatternStorage::getMatchingRHSNoWildcard(std::string lhs, std::string rhs) {}
 

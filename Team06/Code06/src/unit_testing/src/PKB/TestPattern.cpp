@@ -13,5 +13,74 @@ TEST_CASE("All nodes can be added") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    REQUIRE(true);
+    // c = 5 + 2 * c
+    /* Looks something like this:
+     *      assign
+     *    c        +
+     *          5     *
+     *              2   c
+     */
+    Node root = Node("assign", 1);
+    Node lhs = Node("c", 1);
+    Node n1 = Node("5", 1);
+    Node n2 = Node("+", 1);
+    Node n3 = Node("2", 1);
+    Node n4 = Node("*", 1);
+    Node n5 = Node("c", 1);
+    root.left = &lhs;
+    root.right = &n2;
+    n2.left = &n1;
+    n2.right = &n4;
+    n4.left = &n3;
+    n4.right = &n5;
+    pa.writePatternNode(root);
+
+    // a = b / c
+    /* Looks something like this:
+     *      assign
+     *    a        /
+     *          b     c
+     */
+    Node root2 = Node("assign", 5);
+    Node n6 = Node("a", 5);
+    Node n7 = Node("b", 5);
+    Node n8 = Node("/", 5);
+    Node n9 = Node("c", 5);
+    root2.left = &n6;
+    root2.right = &n8;
+    n8.left = &n7;
+    n8.right = &n9;
+    pa.writePatternNode(root2);
+
+    // a = d * 5
+    /* Looks something like this:
+     *      assign
+     *    a        *
+     *          d     5
+     */
+    Node root3 = Node("assign", 8);
+    Node n10 = Node("a", 8);
+    Node n11 = Node("d", 8);
+    Node n12 = Node("*", 8);
+    Node n13 = Node("5", 8);
+    root3.left = &n10;
+    root3.right = &n12;
+    n12.left = &n11;
+    n12.right = &n13;
+    pa.writePatternNode(root3);
+
+    bool res = true;
+    std::vector<StmtNum> allAssignStatements = pa.getAllAssignStatements();
+    res = res && allAssignStatements.size() == 3;
+
+    /*
+    std::sort(allAssignStatements.begin(), allAssignStatements.end());
+    // prints out allAssignStatements
+    std::copy(allAssignStatements.begin(),
+              allAssignStatements.end(),
+              std::ostream_iterator<int>(std::cout, " "));
+    std::cout << "\n";
+     */
+
+    REQUIRE(res);
 }
