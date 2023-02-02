@@ -1,3 +1,4 @@
+#include <iostream>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -9,7 +10,6 @@ class Node {
 public:
     Node* left;
     Node* right;
-private:
     std::string value;
     StmtNum line;
 };
@@ -46,5 +46,5 @@ public:
     // pattern(_, _"v"_)
     virtual std::vector<StmtNum> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
 private:
-    std::unordered_map<std::string, std::unordered_set<Node>> rhsVariable_Nodes;
+    std::unordered_map<std::string, std::unordered_set<Node*>> rhsVariable_Nodes;
 };

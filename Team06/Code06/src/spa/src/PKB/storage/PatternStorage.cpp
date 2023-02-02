@@ -2,7 +2,9 @@
 
 
 void PatternStorage::writePatternNode(Node assignNode) {
-
+    std::string rhsVariable = assignNode.left->value;
+    rhsVariable_Nodes[rhsVariable].insert(&assignNode);
+    return;
 }
 
 std::vector<StmtNum> PatternStorage::getMatchingAllAssignStatements() {}

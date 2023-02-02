@@ -10,6 +10,7 @@
 #include "api/Statement.h"
 #include "storage/EntityStorage.h"
 #include "storage/ProcedureStorage.h"
+#include "storage/PatternStorage.h"
 
 using namespace std;
 typedef short PROC;
@@ -30,6 +31,7 @@ public:
     Statement* statementApi;
     EntityStorage* entityStorage;
     ProcedureStorage* procedureStorage;
+    PatternStorage* patternStorage;
 
 private:
 };
