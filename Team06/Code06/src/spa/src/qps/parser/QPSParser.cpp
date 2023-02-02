@@ -11,34 +11,46 @@ QPSParser::QPSParser() {
 vector<Query> QPSParser::parse(string qpsQuery) {
     // split the code
     vector<string> queryStatements = splitQuery(qpsQuery);
-    SelectQueryParser selectClauseParser = SelectQueryParser();
+    SelectQueryParser selectQueryParser;
     vector<Query> queryVec;
-    VariableStore vStore = VariableStore();
+    VariableStore vStore;
+    vector<string> declarations;
     for (string queryStatement:queryStatements) {
-        if (isSelectClause(queryStatement)) {
-            // Assuming return type of the query parser is a Query
-            // Currently its a different type. hence the error.
-            // queryVec.push_back(selectClauseParser.parse(queryStatement));
+        if (isDeclaration(queryStatement)) {
+            declarations.push_back(queryStatement);
         } else {
-            // Prolly make this a class method so I have to instantiate a version of this.
-            // Not sure if this is needed but this is in the case we have more than one var declaration clauses.
-            // Like multiline.
-            // vStore.addDeclarations(parseDeclarations(queryStatement));
+            Query query = selectQueryParser.parse(queryStatement);
+            queryVec.push_back(query);
         }
     }
-
-    // Check Parameters to make sure they are variables that has been declared.
-    for (Query query: queryVec) {
-        checkParameters(query, vStore);
+    vStore = parseDeclarations(declarations);
+    // need to do it this way cuz dealing with pointer
+    for (int i = 0; i < queryVec.size(); i++) {
+        checkSynonyms(&queryVec.at(i), vStore);
     }
 
     return queryVec;
 }
 
-void checkParameters(Query q, VariableStore v) {
-    1 + 1;
+vector<string> QPSParser::splitQuery(string qpsQuery) {
+    string delimiter = ";";
+    vector<string> clauses;
+    int start = 0;
+    while (start != qpsQuery.size()) {
+        string clause;
+        tie(clause, start) = extractSubStringUntilDelimiter(qpsQuery, start, delimiter);
+        clause = trim(clause);
+        clauses.push_back(clause);
+    }
+    return clauses;
 }
 
-vector<string> QPSParser::splitQuery(string qpsQuery) {
-    return {"", ""};
+void QPSParser::checkSynonyms(Query* query, VariableStore varStore)
+{
+    vector<Parameter*> synPs = query->getAllUncheckedSynonyms();
+    for (Parameter* synP : synPs) {
+        if (!varStore.updateSynonym(synP)) {
+            throw Exception();
+        }
+    }
 }

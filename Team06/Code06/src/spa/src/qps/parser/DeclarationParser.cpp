@@ -16,7 +16,7 @@ vector<Parameter> declarationToParameter(string s) {
         tie(designEntity,synonyms) = extractDesignEntity(s);
         vector<string> synonymList = stringToWordListByDelimiter(synonyms, ",");
         for (string synonym: synonymList) {
-            Parameter p = Parameter(designEntity, synonym);
+            Parameter p = Parameter(synonym, designEntity);
             paramList.push_back(p);
         }
 
@@ -27,11 +27,10 @@ vector<Parameter> declarationToParameter(string s) {
     return paramList;
 }
 
-VariableStore parseDeclarations(string declarations) {
+VariableStore parseDeclarations(vector<string> declarations) {
     // The string should look something like "stmt s1, s2; call cl; assign a1, a2;" at this point
-    vector<string> declList = stringToWordListByDelimiter(declarations, ";");
     VariableStore store = VariableStore();
-    for (string declaration: declList) {
+    for (string declaration: declarations) {
         // extract each declaration and insert it to the store.
         vector<Parameter> paramList = declarationToParameter(declaration);
         for (Parameter parameter: paramList) {

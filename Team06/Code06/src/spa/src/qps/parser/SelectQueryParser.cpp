@@ -7,8 +7,8 @@ Query SelectQueryParser::parse(string selectQuery) {
 	vector<int> clauseStarts = getClauseStarts(wordList);
 	vector<int> clauseEnds = getClauseEnds(clauseStarts, wordList.size());
 
-	vector<Parameter> selectParams = parseSelectClause(wordList, clauseStarts[0], clauseStarts[0]);
-	vector<Relationship> suchThatRelations = parseSuchThatClause(wordList, clauseStarts[1], clauseStarts[1]);
+	vector<Parameter> selectParams = parseSelectClause(wordList, clauseStarts[0], clauseEnds[0]);
+	vector<Relationship> suchThatRelations = parseSuchThatClause(wordList, clauseStarts[1], clauseEnds[1]);
 	//patternInfo = parsePatternClause(wordList, clauseStarts[2], clauseStarts[2]);
 
 	Query query(selectParams, suchThatRelations);
@@ -50,7 +50,7 @@ vector<int> SelectQueryParser::getClauseEnds(vector<int> clauseStarts, int wordL
 		if (clauseStarts[i] == -1) {
 			continue;
 		}
-		clauseEnd = (i != clauseStarts.size() - 1) ? clauseStarts[i + 1] : wordListLength;
+		clauseEnd = (i != clauseStarts.size() - 1) ? clauseStarts[i + (size_t) 1] : wordListLength;
 		res[initialIndices[clauseStarts[i]]] = clauseEnd;
 	}
 
@@ -69,11 +69,11 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
 	if (!isSelect(wordList[start])) {
 		throw Exception();
 	}
-	if (!isSynonym(wordList[end - 1])) {
+	if (!isSynonym(wordList[end - (size_t) 1])) {
 		throw Exception();
 	}
 	//TODO: replace with synonym type rather than string
-	Parameter param("synonym", wordList[1]);
+	Parameter param(wordList[1], "synonym");
 	params.push_back(param);
 	return params;
 }

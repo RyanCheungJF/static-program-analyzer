@@ -48,9 +48,10 @@ tuple<string, size_t> extractSubStringUntilDelimiter(const string& original, int
 {
 	size_t end = original.find(delimiter, start);
 	if (end == string::npos) {
-		throw Exception();
+		return tuple<string, int>(original.substr(start, original.size()), original.size());
 	}
-	string substr = original.substr(start, end);
+	size_t length = end - start;
+	string substr = original.substr(start, length);
 	return tuple<string, int>(substr, end + 1);
 }
 

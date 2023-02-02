@@ -14,5 +14,6 @@ long findPattern(const vector<string> &wordList);
 tuple<string, size_t> extractSubStringUntilDelimiter(const string& original, int start, string delimiter);
 vector<string> stringToWordList(string s);
 vector<string> stringToWordListByDelimiter(string original, string delimiter);
+string trim(const string&);
 
 #endif // !SPA_QPS_PARSERUTIL_H

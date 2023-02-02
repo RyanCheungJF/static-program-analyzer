@@ -17,6 +17,17 @@ Relationship::Relationship(const Relationship& r)
 	params = r.params;
 }
 
+vector<Parameter*> Relationship::getAllUncheckedSynonyms()
+{
+	vector<Parameter*> synonyms;
+	for (int i = 0; i < params.size(); i++) {
+		if (params.at(i).isUncheckedSynonym()) {
+			synonyms.push_back(&params.at(0));
+		}
+	}
+	return synonyms;
+}
+
 Relationship::Relationship()
 {
 	type = RelationshipType::UNKNOWN;

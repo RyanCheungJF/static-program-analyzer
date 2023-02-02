@@ -55,6 +55,7 @@ bool isDesignEntity(string designEntity) {
     return regex_search(designEntity, regex("^(stmt|read|print|call|while|if|assign|variable|constant|procedure)"));
 }
 
+//TODO: Does this belong in parser util?
 pair<string,string> extractDesignEntity(string designEntity) {
     regex rgx("^(stmt|read|print|call|while|if|assign|variable|constant|procedure)\\s+");
     smatch match;

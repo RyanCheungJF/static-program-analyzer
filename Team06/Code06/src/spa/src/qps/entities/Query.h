@@ -19,6 +19,7 @@ public:
     Query(const vector<Parameter>&, const vector<Relationship>&);
     vector<Relationship> relations;
     vector<Parameter> selectParameters;
+    vector<Parameter*> getAllUncheckedSynonyms();
 };
 
 
