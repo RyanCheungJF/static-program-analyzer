@@ -7,7 +7,7 @@ TEST_CASE("Valid source program") {
 	Tokenizer testTokenizer;
 	std::deque<Token> generatedTokens;
 	std::deque<Token> expectedTokens;
-	std::string testDirectory = "../../../../../../Tests06/sp/";
+	std::string testDirectory = "../../../../../../Tests06/sp/tokenizer/";
 
 	SECTION("Valid names") {
 		std::ifstream testFile(testDirectory + "valid1.txt");
@@ -157,7 +157,7 @@ TEST_CASE("Valid source program") {
 TEST_CASE("Invalid source program") {
 	std::stringstream strStream;
 	Tokenizer testTokenizer;
-	std::string testDirectory = "../../../../../../Tests06/sp/";
+	std::string testDirectory = "../../../../../../Tests06/sp/tokenizer/";
 
 	SECTION("Invalid Integer") {
 		std::ifstream testFile(testDirectory + "invalid1.txt");
