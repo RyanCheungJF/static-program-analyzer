@@ -17,7 +17,7 @@ public:
 	RelationshipType type;
 	vector<Parameter> params;
 	Relationship();
-	Relationship(Relationship&);
+	Relationship(const Relationship&);
 private:
 	static const unordered_map<string, RelationshipType> stringToTypeMap;
 	static RelationshipType stringToType(string);

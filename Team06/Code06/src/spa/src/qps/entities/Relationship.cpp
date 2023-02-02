@@ -11,7 +11,7 @@ Relationship Relationship::makeRelationship(string type, vector<Parameter> param
 	throw - 1;
 }
 
-Relationship::Relationship(Relationship& r)
+Relationship::Relationship(const Relationship& r)
 {
 	type = r.type;
 	params = r.params;
