@@ -7,6 +7,7 @@
 #include <string>
 #include "Relationship.h"
 #include "Parameter.h"
+#include "Pattern.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ public:
     Query(const vector<Parameter>&, const vector<Relationship>&);
     vector<Relationship> relations;
     vector<Parameter> selectParameters;
+    vector<Pattern> patterns;
     vector<Parameter*> getAllUncheckedSynonyms();
 };
 
