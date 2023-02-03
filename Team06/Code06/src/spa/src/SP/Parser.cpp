@@ -72,23 +72,29 @@ std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
 		if (tokens.front().value == "read") {
 			auto readStatement = parseReadStatement(tokens);
 			return readStatement;
-		} else if (tokens.front().value == "print") {
+		}
+		else if (tokens.front().value == "print") {
 			auto printStatement = parsePrintStatement(tokens);
 			return printStatement;
-		} else if (tokens.front().value == "call") {
+		}
+		else if (tokens.front().value == "call") {
 			auto callStatement = parseCallStatement(tokens);
 			return callStatement;
-		} else if (tokens.front().value == "while") {
+		}
+		else if (tokens.front().value == "while") {
 			auto whileStatement = parseWhileStatement(tokens);
 			return whileStatement;
-		} else if (tokens.front().value == "if") {
+		}
+		else if (tokens.front().value == "if") {
 			auto ifStatement = parseIfStatement(tokens);
 			return ifStatement;
-		} else { // Else, it must be an assign statement
+		}
+		else { // Else, it must be an assign statement
 			auto assignStatement = parseAssignStatement(tokens);
 			return assignStatement;
 		}
-	} else {
+	}
+	else {
 		throw SyntaxErrorException("Unexpected token when parsing statement -> " + tokens.front().value);
 	}
 }
@@ -305,7 +311,8 @@ std::unique_ptr<ConditionalExpression> Parser::parseConditionalExpression(std::d
 		tokens.pop_front(); // Pop ')'
 
 		return notConditionalExpression;
-	} else if (tokens.front().type == TokenType::LEFT_PARENTHESIS) { // Binary Cond Expr Path
+	}
+	else if (tokens.front().type == TokenType::LEFT_PARENTHESIS) { // Binary Cond Expr Path
 		auto binaryConditionalExpression = std::make_unique<BinaryConditionalExpression>();
 		tokens.pop_front(); // Pop '('
 
@@ -335,7 +342,8 @@ std::unique_ptr<ConditionalExpression> Parser::parseConditionalExpression(std::d
 		tokens.pop_front(); // Pop ')'
 
 		return binaryConditionalExpression;
-	} else { // Relational Expression
+	}
+	else { // Relational Expression
 		return parseRelationalExpression(tokens);
 	}
 }
@@ -343,7 +351,7 @@ std::unique_ptr<ConditionalExpression> Parser::parseConditionalExpression(std::d
 std::unique_ptr<ConditionalExpression> Parser::parseRelationalExpression(std::deque<Token>& tokens) {
 	/* Rule: rel_factor '>' rel_factor | rel_factor '>=' rel_factor |
 			 rel_factor '<' rel_factor | rel_factor '<=' rel_factor |
-		     rel_factor '==' rel_factor | rel_factor '!=' rel_factor */
+			 rel_factor '==' rel_factor | rel_factor '!=' rel_factor */
 	std::cout << "Parsing Relational Expression" << std::endl;
 
 	auto relationalExpression = std::make_unique<RelationalExpression>();
@@ -374,7 +382,7 @@ std::unique_ptr<Expression> Parser::parseExpression(std::deque<Token>& tokens) {
 	*  After eliminating left recursion:
 	*    expr: term(expr')
 	*    expr': '+' term(expr') | '-' term(expr') | epsilon
-	*/ 
+	*/
 	std::cout << "Parsing Expression" << std::endl;
 
 	std::unique_ptr<Expression> lhs = parseTerm(tokens);
@@ -386,7 +394,8 @@ std::unique_ptr<Expression> Parser::parseExpression(std::deque<Token>& tokens) {
 		tokens.pop_front(); // Pop the '+' or '-'
 		mathExpression->rhs = parseExpression(tokens);
 		return mathExpression;
-	} else { // Reached the epsilon
+	}
+	else { // Reached the epsilon
 		return lhs;
 	}
 }
@@ -395,7 +404,7 @@ std::unique_ptr<Expression> Parser::parseTerm(std::deque<Token>& tokens) {
 	/* Rule: term '*' factor | term '/' factor | term '%' factor | factor
 	*  After eliminating left recursion:
 	*    term: factor(term')
-    *    term': '*' factor(term') | '/' factor(term') | '%' factor(term') | epsilon
+	*    term': '*' factor(term') | '/' factor(term') | '%' factor(term') | epsilon
 	*/
 	std::cout << "Parsing Term" << std::endl;
 
@@ -409,7 +418,8 @@ std::unique_ptr<Expression> Parser::parseTerm(std::deque<Token>& tokens) {
 		tokens.pop_front(); // Pop the '*' or '/' or '%'
 		mathExpression->rhs = parseTerm(tokens);
 		return mathExpression;
-	} else { // Reached the epsilon
+	}
+	else { // Reached the epsilon
 		return lhs;
 	}
 }
@@ -425,26 +435,29 @@ std::unique_ptr<Expression> Parser::parseFactor(std::deque<Token>& tokens) {
 		constant->value = stoi(tokens.front().value);
 		tokens.pop_front();
 		return constant;
-	} else if (tokens.front().type == TokenType::NAME) {
+	}
+	else if (tokens.front().type == TokenType::NAME) {
 		std::cout << "Parsing Variable" << std::endl;
 
 		auto variable = std::make_unique<Variable>();
 		variable->name = tokens.front().value;
 		tokens.pop_front();
 		return variable;
-	} else if (tokens.front().type == TokenType::LEFT_PARENTHESIS) {
+	}
+	else if (tokens.front().type == TokenType::LEFT_PARENTHESIS) {
 		std::unique_ptr<Expression> expression;
 		tokens.pop_front(); // Pop '('
 
 		expression = parseExpression(tokens);
 
-		if (tokens.front().type != TokenType::RIGHT_PARENTHESIS) {\
+		if (tokens.front().type != TokenType::RIGHT_PARENTHESIS) {
 			throw SyntaxErrorException("Expected ')' in factor, but got -> " + tokens.front().value);
 		}
 		tokens.pop_front(); // Pop ')'
 
 		return expression;
-	} else {
+	}
+	else {
 		throw SyntaxErrorException("Parsing factor failed, got -> " + tokens.front().value);
 	}
 }

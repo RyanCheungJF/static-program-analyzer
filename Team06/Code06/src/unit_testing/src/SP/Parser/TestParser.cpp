@@ -8,7 +8,7 @@
 bool checkIfSameStatement(std::unique_ptr<Statement> expectedStatement, std::unique_ptr<Statement> actualStatement) {
 	auto expected = expectedStatement.get();
 	auto actual = actualStatement.get();
-
+	
 	if (dynamic_cast<PrintStatement*>(expected) && dynamic_cast<PrintStatement*>(actual)) {
 		return static_cast<PrintStatement*>(expected)->varName == static_cast<PrintStatement*>(actual)->varName;
 	}
@@ -21,11 +21,12 @@ bool checkIfSameStatement(std::unique_ptr<Statement> expectedStatement, std::uni
 	else {
 		return false;
 	}
+	return false;
 }
 
 bool checkIfSameTree(std::unique_ptr<Program> expectedRoot, std::unique_ptr<Program> actualRoot) {
-	auto expectedProcedures = expectedRoot.get()->procedureList;
-	auto actualProcedures = actualRoot.get()->procedureList;
+	auto actualProcedures = std::move(actualRoot.get()->procedureList);
+	auto expectedProcedures = std::move(expectedRoot.get()->procedureList);
 
 	// preliminary check for procedurelist
 	if (expectedProcedures.size() != actualProcedures.size()) {
@@ -35,20 +36,18 @@ bool checkIfSameTree(std::unique_ptr<Program> expectedRoot, std::unique_ptr<Prog
 
 	// loop thru procedures
 	for (int i = 0; i < expectedProcedures.size(); i++) {
-		auto expectedStatements = expectedProcedures[i].get()->statementList.get()->statements;
-		auto actualStatements = actualProcedures[i].get()->statementList.get()->statements;
+		auto expectedStatements = std::move(expectedProcedures[i].get()->statementList.get()->statements);
+		auto actualStatements = std::move(actualProcedures[i].get()->statementList.get()->statements);
 
-		// preliminary check for statementlist
+	// preliminary check for statementlist
 		if (expectedStatements.size() != actualStatements.size()) {
 			std::cout << "LOG: Trees differ in number of statements" << std::endl;
 			return false;
 		}
 
-		// recurse each statement tree to check if they are the same
+	// recurse each statement tree to check if they are the same
 		for (int j = 0; j < expectedStatements.size(); j++) {
-			auto expectedStatement = std::move(expectedStatements[j]);
-			auto actualStatement = std::move(actualStatements[j]);
-			if (!checkIfSameStatement(std::move(expectedStatement), std::move(actualStatement))) {
+			if (!checkIfSameStatement(std::move(expectedStatements[j]), std::move(actualStatements[j]))) {
 				return false;
 			}
 		}
@@ -69,7 +68,10 @@ TEST_CASE("Valid Source Program") {
 		std::ifstream testFile(testDirectory + "valid1.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
+
 		auto rootNode = testParser.parseProgram(tokenQueue);
+		
+		auto printNode = std::make_unique<PrintStatement>();
 
 		REQUIRE(rootNode.get()->procedureList.size() == 1);
 		REQUIRE(rootNode.get()->procedureList.front().get()->procedureName == "A");
