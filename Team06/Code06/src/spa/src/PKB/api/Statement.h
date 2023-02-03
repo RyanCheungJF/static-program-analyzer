@@ -7,7 +7,7 @@
 typedef std::string Stmt;
 typedef int StmtNum;
 
-class Statement {
+class StatementAPI {
 public:
     void writeStatement(Stmt s, std::vector<StmtNum> lines);
 

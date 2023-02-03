@@ -126,13 +126,13 @@ TEST_CASE("Check that all of the followees of each follower is accurate, even wi
  * Given a PQL query of `if i; Select i such that Follows*(1, i)`
  * We want to find all if-statements that follows* line 1
  */
-TEST_CASE("Check that we can find an if statement from a Follows relationship") {
+TEST_CASE("Check that we can find an if StatementAPI from a Follows relationship") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
     FollowsT ft;
-    Statement statement;
+    StatementAPI statement;
     pkb.followsTApi = &ft;
     pkb.statementApi = &statement;
     writePkb.setInstancePKB(pkb);
@@ -140,13 +140,13 @@ TEST_CASE("Check that we can find an if statement from a Follows relationship") 
 
     std::vector<std::pair<StmtNum, StmtNum>> followee_follower;
 
-    // line 2 is the if-statement and line 4 is the last line in the else clause
-    // line 5 is a normal statement nested on the same level as line 1
+    // line 2 is the if-StatementAPI and line 4 is the last line in the else clause
+    // line 5 is a normal StatementAPI nested on the same level as line 1
     followee_follower.push_back({1, 2});
     followee_follower.push_back({1, 5});
 
-    // line 6 is the if-statement and line 9 is the last line in the else clause
-    // line 10 is a normal statement nested on the same level as line 1
+    // line 6 is the if-StatementAPI and line 9 is the last line in the else clause
+    // line 10 is a normal StatementAPI nested on the same level as line 1
     followee_follower.push_back({1, 6});
     followee_follower.push_back({1, 10});
     writePkb.setFollowsT(followee_follower);

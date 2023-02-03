@@ -90,7 +90,7 @@ TEST_CASE("Check that given an entity and their statement numbers, a query for a
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    Statement st;
+    StatementAPI st;
     pkb.statementApi = &st;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);

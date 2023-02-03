@@ -16,7 +16,8 @@ void FollowsExtractor::visitStatementList(const StatementList* statementList) {
 	// within a statement list, pairs of statements have a follows relation
 	for (int i = 0; i < statementList->statements.size() - 1; i++) {
 		// write relationship to PKB
-		// write(statementList->statements[i], statementList->statements[i + 1])
+        // write(statementList->statements[i], statementList->statements[i + 1])
+        writeApi->setFollows(statementList->statements[i]->lineNumber, statementList->statements[i + 1]->lineNumber);
 	};
 };
 

@@ -8,7 +8,7 @@ TEST_CASE("Check that all statements are recorded") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    Statement st;
+    StatementAPI st;
     pkb.statementApi = &st;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
@@ -30,11 +30,11 @@ TEST_CASE("Check that all statements are recorded") {
     REQUIRE(res);
 }
 
-TEST_CASE("Check that a statement does not appear in the source code, it should return an empty set") {
+TEST_CASE("Check that a StatementAPI does not appear in the source code, it should return an empty set") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    Statement st;
+    StatementAPI st;
     pkb.statementApi = &st;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
@@ -51,11 +51,11 @@ TEST_CASE("Check that a statement does not appear in the source code, it should 
     REQUIRE(res);
 }
 
-TEST_CASE("Check that given query for a statement and a statementNumber that it appears in, it returns true") {
+TEST_CASE("Check that given query for a StatementAPI and a statementNumber that it appears in, it returns true") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    Statement st;
+    StatementAPI st;
     pkb.statementApi = &st;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
@@ -71,11 +71,11 @@ TEST_CASE("Check that given query for a statement and a statementNumber that it 
     REQUIRE(res);
 }
 
-TEST_CASE("Check that if a statement does not exist, it returns false") {
+TEST_CASE("Check that if a StatementAPI does not exist, it returns false") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    Statement st;
+    StatementAPI st;
     pkb.statementApi = &st;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
@@ -84,11 +84,11 @@ TEST_CASE("Check that if a statement does not exist, it returns false") {
     REQUIRE(res);
 }
 
-TEST_CASE("Check that given a statement and their statement numbers, a query for an non-existent statement returns false") {
+TEST_CASE("Check that given a StatementAPI and their StatementAPI numbers, a query for an non-existent StatementAPI returns false") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    Statement st;
+    StatementAPI st;
     pkb.statementApi = &st;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
