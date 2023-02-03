@@ -8,25 +8,45 @@
 #include "../../../spa/src/PKB/ReadPKB.h"
 
 TEST_CASE("Valid Source Program") {
-    Procedure proc1;
-    Procedure proc2;
+    std::unique_ptr<Procedure> up1 = std::make_unique<Procedure>(Procedure());
+    std::unique_ptr<Procedure> up2 = std::make_unique<Procedure>(Procedure());
 
-    for (int i = 1; i < 6; i ++) {
+    for (int i = 1; i <= 4; i ++) {
         Statement s;
         s.lineNumber = i;
-        unique_ptr<Statement> u = std::make_unique<Statement>(s);
-        proc1.statementList->statements.push_back(std::move(u));
+        std::unique_ptr<Statement> u = std::make_unique<Statement>(s);
+        up1->statementList->statements.push_back(std::move(u));
     }
 
-    for (int i = 6; i <= 10; i + 2) {
+    for (int i = 10; i < 12; i ++) {
         Statement s;
         s.lineNumber = i;
-        unique_ptr<Statement> u = std::make_unique<Statement>(s);
-        proc1.statementList->statements.push_back(std::move(u));
+        std::unique_ptr<Statement> u = std::make_unique<Statement>(s);
+        up2->statementList->statements.push_back(std::move(u));
     }
 
-    Program p;
+    Program program;
+    program.procedureList.push_back(std::move(up1));
+    program.procedureList.push_back(std::move(up2));
 
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    Follows f;
+    pkb.followsApi = &f;
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
 
-    REQUIRE(true);
+    FollowsExtractor fe;
+    fe.writeApi = &writePkb;
+    fe.visitProgram(&program);
+
+    bool res = true;
+    res = res && readPkb.checkFollows(1, 2);
+    res = res && readPkb.checkFollows(2, 3);
+    res = res && readPkb.checkFollows(3, 4);
+
+    res = res && readPkb.checkFollows(10, 11);
+
+    REQUIRE(res);
 }
