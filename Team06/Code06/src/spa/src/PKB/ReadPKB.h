@@ -1,7 +1,9 @@
 #pragma once
 #include "PKB.h"
-#include "queryHandlers/StmtStmtRLQueryHandler.h"
-#include "storage/Storage.h"
+#include "queryHandlers/StmtStmtRLHandler.h"
+#include "queryHandlers/StmtEntRLHandler.h"
+#include "queryHandlers/EntEntRLHandler.h"
+#include "../qps/entities/Relationship.h"
 
 //#ifndef SPA_READPKB_H
 //#define SPA_READPKB_H
@@ -17,7 +19,7 @@ public:
 
     void populateMap();
 
-    std::vector<std::pair<std::string, std::string>> findRelationship(std::string relationship);
+    std::vector<std::pair<std::string, std::string>> findRelationship(Relationship rs);
 
     // Gets a Follows relation in PKB
     bool checkFollows(StmtNum left, StmtNum right);
@@ -74,8 +76,10 @@ public:
 
 private:
     PKB* pkbInstance = NULL;
-    std::unordered_map <std::string, std::pair<RLQueryHandler, Storage*>> queryHandlerMap;
-
+    std::unordered_map <RelationshipType, StmtStmtRLStorage*> stmtStmtHandlerMap = { {RelationshipType::FOLLOWS, pkbInstance->followsStorage} };
+    std::unordered_map <RelationshipType, StmtEntRLStorage*> stmtEntHandlerMap = {};
+    std::unordered_map <RelationshipType, EntEntRLStorage*> entEntHandlerMap = {};
+        
 };
 
 

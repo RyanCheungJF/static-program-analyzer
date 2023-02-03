@@ -1,7 +1,7 @@
 #include <unordered_map>
-#include "Storage.h"
+#include "StmtStmtRLStorage.h"
 
-class FollowsStorage : public Storage {
+class FollowsStorage : public StmtStmtRLStorage {
 public:
     void write(StmtNum stmtNum1, StmtNum stmtNum2);
     bool exists(StmtNum stmtNum1, StmtNum stmtNum2);

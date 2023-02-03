@@ -8,15 +8,21 @@ void ReadPKB::setInstancePKB(PKB& pkb) {
     return;
 }
 
-void ReadPKB::populateMap() {
-    queryHandlerMap = std::unordered_map <std::string, std::pair<RLQueryHandler, Storage*>>();
-
-    queryHandlerMap.insert({ "follows", {StmtStmtRLQueryHandler(), this -> pkbInstance -> followsStorage} });
-}
-
-std::vector<std::pair<std::string, std::string>> ReadPKB::findRelationship(std::string relationship) {
-    std::pair<RLQueryHandler, Storage*> res = queryHandlerMap.at("follows");
-    return res.first.handle(res.second);
+std::vector<std::pair<std::string, std::string>> ReadPKB::findRelationship(Relationship rs) {
+    RelationshipType type = rs.type;
+    std::string param1 = rs.params[0].getValue();
+    std::string param2 = rs.params[1].getValue();
+    if (stmtStmtHandlerMap.find(type) != stmtStmtHandlerMap.end()) {
+        StmtStmtRLHandler handler;
+        return handler.handle(stmtStmtHandlerMap.at(type));
+    } else if (stmtEntHandlerMap.find(type) != stmtEntHandlerMap.end()) {
+        StmtEntRLHandler handler;
+        return handler.handle(stmtEntHandlerMap.at(type));
+    } else if (entEntHandlerMap.find(type) != entEntHandlerMap.end()) {
+        EntEntRLHandler handler;
+        return handler.handle(entEntHandlerMap.at(type));
+    }
+    return std::vector<std::pair<std::string, std::string>>();
 }
 
 bool ReadPKB::checkFollows(StmtNum left, StmtNum right) {
