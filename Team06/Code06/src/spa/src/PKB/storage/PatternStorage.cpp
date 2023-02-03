@@ -26,7 +26,8 @@ std::vector<StmtNum> PatternStorage::getAllAssignStatements() {
     return res;
 }
 
-std::vector<StmtNum> PatternStorage::getMatchingExact(std::string lhs, std::string rhs) {}
+std::vector<StmtNum> PatternStorage::getMatchingExact(std::string lhs, std::string rhs) {
+}
 
 std::vector<StmtNum> PatternStorage::getMatchingRHSLeftWildcard(std::string lhs, std::string rhs) {}
 
@@ -36,7 +37,6 @@ std::vector<StmtNum> PatternStorage::getMatchingRHSBothWildcard(std::string lhs,
 
 
 std::vector<StmtNum> PatternStorage::getMatchingLHS(std::string lhs) {
-
     // if lhs does not exist
     if (rhsVariable_Nodes.find(lhs) == rhsVariable_Nodes.end()) {
         std::vector<StmtNum> empty;
