@@ -28,7 +28,7 @@ public:
     virtual std::vector<StmtNum> getAllAssignStatements();
 
     // pattern("a", "v")
-    virtual std::vector<StmtNum> getMatchingRHSNoWildcard(std::string lhs, std::string rhs);
+    virtual std::vector<StmtNum> getMatchingExact(std::string lhs, std::string rhs);
 
     // pattern("a", _"v")
     virtual std::vector<StmtNum> getMatchingRHSLeftWildcard(std::string lhs, std::string rhs);
@@ -37,7 +37,10 @@ public:
     virtual std::vector<StmtNum> getMatchingRHSRightWildcard(std::string lhs, std::string rhs);
 
     // pattern("a", _"v"_)
-    virtual std::vector<StmtNum> getMatchingRHSBothWildcard(std::string lhs);
+    virtual std::vector<StmtNum> getMatchingRHSBothWildcard(std::string lhs, std::string rhs);
+
+    // pattern("a", _)
+    virtual std::vector<StmtNum> getMatchingLHS(std::string lhs);
 
     // pattern(_, "v")
     virtual std::vector<StmtNum> getMatchingLHSWildcardRHSNoWildcard(std::string rhs);
@@ -50,6 +53,7 @@ public:
 
     // pattern(_, _"v"_)
     virtual std::vector<StmtNum> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
+
 private:
     std::unordered_map<std::string, std::unordered_set<Node*>> rhsVariable_Nodes;
     std::unordered_map<std::string, std::unordered_set<Node*>> lhsVariableAppearence_StmtNum;

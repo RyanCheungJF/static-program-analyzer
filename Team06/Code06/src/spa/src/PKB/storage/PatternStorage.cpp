@@ -22,16 +22,35 @@ std::vector<StmtNum> PatternStorage::getAllAssignStatements() {
     for (StmtNum num: set) {
         res.push_back(num);
     }
+    std::sort(res.begin(), res.end());
     return res;
 }
 
-std::vector<StmtNum> PatternStorage::getMatchingRHSNoWildcard(std::string lhs, std::string rhs) {}
+std::vector<StmtNum> PatternStorage::getMatchingExact(std::string lhs, std::string rhs) {}
 
 std::vector<StmtNum> PatternStorage::getMatchingRHSLeftWildcard(std::string lhs, std::string rhs) {}
 
 std::vector<StmtNum> PatternStorage::getMatchingRHSRightWildcard(std::string lhs, std::string rhs) {}
 
-std::vector<StmtNum> PatternStorage::getMatchingRHSBothWildcard(std::string lhs) {}
+std::vector<StmtNum> PatternStorage::getMatchingRHSBothWildcard(std::string lhs, std::string rhs) {}
+
+
+std::vector<StmtNum> PatternStorage::getMatchingLHS(std::string lhs) {
+
+    // if lhs does not exist
+    if (rhsVariable_Nodes.find(lhs) == rhsVariable_Nodes.end()) {
+        std::vector<StmtNum> empty;
+        return empty;
+    }
+
+    std::unordered_set<Node*> set = rhsVariable_Nodes[lhs];
+    std::vector<StmtNum> res;
+    for (Node* ptr: set) {
+        res.push_back(ptr->line);
+    }
+    std::sort(res.begin(), res.end());
+    return res;
+}
 
 std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSNoWildcard(std::string rhs) {}
 
