@@ -1,7 +1,3 @@
-//
-// Created by Faruq on 3/2/23.
-//
-
 #include "QueryDB.h"
 
 QueryDB::QueryDB() {

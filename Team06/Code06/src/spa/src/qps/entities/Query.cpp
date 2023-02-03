@@ -22,9 +22,8 @@ vector<string> Query::evaluate() {
         table = table.extractDesignEntities();
         queryDb.insertTable(table);
     }
-    vector<string> result;
     if (queryDb.hasParameter(selectParameters[0])) {
-        result = queryDb.fetch(selectParameters[0]);
+        return queryDb.fetch(selectParameters[0]);
     } else {
         if (isFalseQuery) {
             return {};
