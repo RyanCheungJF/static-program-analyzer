@@ -7,8 +7,12 @@
 
 // include your other headers here
 #include "AbstractWrapper.h"
+#include "SP.h"
 
 class TestWrapper : public AbstractWrapper {
+private:
+	SP sourceProcessor;
+
  public:
   // default constructor
   TestWrapper();
