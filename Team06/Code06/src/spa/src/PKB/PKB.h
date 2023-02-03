@@ -28,6 +28,7 @@ public:
     FollowsT* followsTApi;
     Parent* parentApi;
     Statement* statementApi;
+    FollowsStorage* followsStorage;
     EntityStorage* entityStorage;
     ProcedureStorage* procedureStorage;
 

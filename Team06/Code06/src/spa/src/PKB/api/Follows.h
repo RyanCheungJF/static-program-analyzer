@@ -5,8 +5,8 @@ class Follows {
 public:
     void setFollows(StmtNum followee, StmtNum follower);
     bool checkFollows(StmtNum followee, StmtNum follower);
-    StmtNum getFollower(StmtNum followee);
-    StmtNum getFollowee(StmtNum follower);
+    std::vector<StmtNum> getFollower(StmtNum followee);
+    std::vector<StmtNum> getFollowee(StmtNum follower);
 private:
     FollowsStorage store;
 };

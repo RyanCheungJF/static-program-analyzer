@@ -1,5 +1,7 @@
 #pragma once
 #include "PKB.h"
+#include "queryHandlers/StmtStmtRLQueryHandler.h"
+#include "storage/Storage.h"
 
 //#ifndef SPA_READPKB_H
 //#define SPA_READPKB_H
@@ -11,7 +13,11 @@ class ReadPKB {
 public:
 
     // Sets the pointer to the PKB instance if it is not set yet
-    void setInstancePKB(PKB &pkb);
+    void setInstancePKB(PKB& pkb);
+
+    void populateMap();
+
+    std::vector<std::pair<std::string, std::string>> findRelationship(std::string relationship);
 
     // Gets a Follows relation in PKB
     bool checkFollows(StmtNum left, StmtNum right);
@@ -68,6 +74,8 @@ public:
 
 private:
     PKB* pkbInstance = NULL;
+    std::unordered_map <std::string, std::pair<RLQueryHandler, Storage*>> queryHandlerMap;
+
 };
 
 

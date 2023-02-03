@@ -1,6 +1,6 @@
 #include "ReadPKB.h"
 
-void ReadPKB::setInstancePKB(PKB &pkb) {
+void ReadPKB::setInstancePKB(PKB& pkb) {
     if (this -> pkbInstance != NULL) {
         return;
     }
@@ -8,10 +8,21 @@ void ReadPKB::setInstancePKB(PKB &pkb) {
     return;
 }
 
+void ReadPKB::populateMap() {
+    queryHandlerMap = std::unordered_map <std::string, std::pair<RLQueryHandler, Storage*>>();
+
+    queryHandlerMap.insert({ "follows", {StmtStmtRLQueryHandler(), this -> pkbInstance -> followsStorage} });
+}
+
+std::vector<std::pair<std::string, std::string>> ReadPKB::findRelationship(std::string relationship) {
+    std::pair<RLQueryHandler, Storage*> res = queryHandlerMap.at("follows");
+    return res.first.handle(res.second);
+}
+
 bool ReadPKB::checkFollows(StmtNum left, StmtNum right) {
     return pkbInstance -> followsApi->checkFollows(left, right);
 }
-
+/*
 StmtNum ReadPKB::getFollower(StmtNum followee) {
     return pkbInstance -> followsApi->getFollower(followee);
 }
@@ -19,6 +30,7 @@ StmtNum ReadPKB::getFollower(StmtNum followee) {
 StmtNum ReadPKB::getFollowee(StmtNum follower) {
     return pkbInstance -> followsApi->getFollowee(follower);
 }
+*/
 
 bool ReadPKB::checkFollowsT(StmtNum followee, StmtNum follower) {
     return pkbInstance -> followsTApi->checkFollowsT(followee, follower);

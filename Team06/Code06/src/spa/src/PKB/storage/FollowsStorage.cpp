@@ -1,6 +1,6 @@
 #include "FollowsStorage.h"
 
-void FollowsStorage::writeFollows(StmtNum followee, StmtNum follower) {
+void FollowsStorage::write(StmtNum followee, StmtNum follower) {
 
     // defensive check to add the relationship if it does not exist yet.
     // but if we can guarantee that SP gives us non-duplicates, we can omit this part to improve runtime efficiency
@@ -19,7 +19,7 @@ void FollowsStorage::writeFollows(StmtNum followee, StmtNum follower) {
     return;
 }
 
-bool FollowsStorage::checkFollows(StmtNum followee, StmtNum follower) {
+bool FollowsStorage::exists(StmtNum followee, StmtNum follower) {
 
     // followee does not exist in table
     if (followee_follower.find(followee) == followee_follower.end()) {
@@ -35,20 +35,20 @@ bool FollowsStorage::checkFollows(StmtNum followee, StmtNum follower) {
     return follower_followee.at(follower) == followee && followee_follower.at(followee) == follower;
 }
 
-StmtNum FollowsStorage::getFollower(StmtNum followee) {
+std::vector<StmtNum> FollowsStorage::getRightWildcard(StmtNum followee) {
 
     // followee does not exist in table
     if (followee_follower.find(followee) == followee_follower.end()) {
-        return (StmtNum) -1;
+        return std::vector<StmtNum>();
     }
-    return followee_follower.at(followee);
+    return std::vector<StmtNum> {followee_follower.at(followee)};
 }
 
-StmtNum FollowsStorage::getFollowee(StmtNum follower) {
+std::vector<StmtNum> FollowsStorage::getLeftWildcard(StmtNum follower) {
 
     // follower does not exist in table
     if (follower_followee.find(follower) == follower_followee.end()) {
-        return -1;
+        return std::vector<StmtNum>();
     }
-    return follower_followee.at(follower);
+    return std::vector<StmtNum> {follower_followee.at(follower)};
 }

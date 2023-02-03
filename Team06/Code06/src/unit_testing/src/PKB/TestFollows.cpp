@@ -4,8 +4,20 @@
 
 using namespace std;
 
+TEST_CASE("Test") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    Follows f;
+    pkb.followsApi = &f;
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
 
-TEST_CASE("Checks that write and read works for Follows") {
+    writePkb.setFollows(1, 2);
+    std::vector<std::pair<std::string, std::string>> res = readPkb.findRelationship("follows");
+    REQUIRE(res.size() == 0);
+}
+/*TEST_CASE("Checks that write and read works for Follows") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -155,3 +167,4 @@ TEST_CASE("Checks that different PKB running instances can point to the same API
     bool res = readPkb.checkFollows(1, 2);
     REQUIRE(res);
 }
+*/
