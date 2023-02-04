@@ -68,3 +68,11 @@ std::unordered_set<StmtNum> ReadPKB::getProcedureStatementNumbers(Proc p) {
     return pkbInstance->procedureStorage->getProcedureStatementNumbers(p);
 }
 
+
+bool ReadPKB::checkConstant(Constant c, StmtNum num) {
+    return pkbInstance->constantStorage->checkConstant(c, num);
+}
+
+std::unordered_set<StmtNum> ReadPKB::getConstantStatementNumbers(Constant c) {
+    return pkbInstance->constantStorage->getConstantStmtNums(c);
+}

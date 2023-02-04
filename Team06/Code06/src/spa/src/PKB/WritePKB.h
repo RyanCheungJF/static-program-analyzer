@@ -32,7 +32,7 @@ public:
     // Sets the entity along with the statement lines that the entities appears in
     void setEntity(Ent e, std::vector<StmtNum> lines);
 
-    // Sets the entity along with the statement lines that it appears in
+    // Sets the entity along with the statement line that it appears in
     void setEntity(Ent e, StmtNum line);
 
 
@@ -41,6 +41,10 @@ public:
 
     // Sets statement line to the procedure that it is in
     void setProcedure(Proc p, StmtNum line);
+
+
+    // Sets the constant to the statement line that it appears in
+    void setConstant(Constant c, StmtNum line);
 
 private:
     PKB* pkbInstance = NULL;

@@ -1,6 +1,5 @@
 #include "ConstantStorage.h"
 
-
 void ConstantStorage::writeConstant(Constant c, StmtNum line) {
     constant_stmtNum[c].insert(line);
     return;
@@ -8,7 +7,7 @@ void ConstantStorage::writeConstant(Constant c, StmtNum line) {
 
 bool ConstantStorage::checkConstant(Constant c, StmtNum num) {
 
-    // source code does not even contain this type of statement
+    // source code does not even contain this constant
     if (constant_stmtNum.find(c) == constant_stmtNum.end()) {
         return false;
     }

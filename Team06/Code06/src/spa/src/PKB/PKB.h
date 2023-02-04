@@ -11,6 +11,7 @@
 #include "storage/EntityStorage.h"
 #include "storage/ProcedureStorage.h"
 #include "storage/PatternStorage.h"
+#include "storage/ConstantStorage.h"
 
 using namespace std;
 typedef short PROC;
@@ -32,6 +33,7 @@ public:
     EntityStorage* entityStorage;
     ProcedureStorage* procedureStorage;
     PatternStorage* patternStorage;
+    ConstantStorage* constantStorage;
 
 private:
 };

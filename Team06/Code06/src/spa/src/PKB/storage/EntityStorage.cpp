@@ -14,7 +14,7 @@ void EntityStorage::writeEntity(Ent e, StmtNum line) {
 
 bool EntityStorage::checkEntity(Ent e, StmtNum num) {
 
-    // source code does not even contain this type of statement
+    // source code does not even contain this entity
     if (ent_stmtNum.find(e) == ent_stmtNum.end()) {
         return false;
     }
