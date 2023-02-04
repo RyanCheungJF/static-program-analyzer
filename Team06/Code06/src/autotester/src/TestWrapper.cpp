@@ -16,6 +16,7 @@ TestWrapper::TestWrapper() {
 	pkb.entityStorage = &et;
 	pkb.procedureStorage = &ps;
 	pkb.statementApi = &st;
+	pkb.followsApi = &f;
 	writePKB.setInstancePKB(pkb);
 }
 

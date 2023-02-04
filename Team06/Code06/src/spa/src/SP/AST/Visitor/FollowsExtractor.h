@@ -11,7 +11,9 @@
 
 class FollowsExtractor : public ASTVisitor {
 public:
-	FollowsExtractor();
+	WritePKB* writeApi;
+
+	FollowsExtractor(WritePKB* writePKB);
 
 	void visitProgram(const Program *program) override;
 	void visitProcedure(const Procedure* procedure) override;
@@ -27,6 +29,4 @@ public:
 
 	void visitExpression(const Expression *expression) override;
 	void visitConditionalExpression(const ConditionalExpression *conditionalExpression) override;
-
-    WritePKB *writeApi;
 };

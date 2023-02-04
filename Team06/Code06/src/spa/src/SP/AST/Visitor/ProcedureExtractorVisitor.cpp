@@ -44,13 +44,11 @@ void ProcedureExtractorVisitor::visitProcedure(const Procedure *procedure) {
 	if (dynamic_cast<WhileStatement*>(procedure->statementList->statements.back().get())) {
 		lastStatementNumber = visitWhileStatementHelper(dynamic_cast<WhileStatement*>(procedure->statementList->statements.back().get()));
 	}
-	std::cout << "First Number! " << firstStatementNumber << std::endl;
-	std::cout << "Last Number! " << lastStatementNumber << std::endl;
 	std::vector<int> statementNumbers;
 	for (int i = firstStatementNumber; i <= lastStatementNumber; i++) {
 		statementNumbers.push_back(i);
 	}
-	// writeApi->setProcedure(procedure->procedureName, statementNumbers);
+	writeApi->setProcedure(procedure->procedureName, statementNumbers);
 }
 void ProcedureExtractorVisitor::visitStatementList(const StatementList *statementList) {}
 

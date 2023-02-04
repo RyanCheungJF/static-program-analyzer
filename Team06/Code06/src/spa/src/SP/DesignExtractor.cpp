@@ -8,7 +8,7 @@ DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writeP
 }
 
 void DesignExtractor::extractRelationships() {
-	FollowsExtractor followsExtractor;
+	FollowsExtractor followsExtractor(writePkb);
 	for (const auto& procedure : ASTroot->procedureList) {
 		procedure->statementList->accept(&followsExtractor);
 		for (const auto& statement : procedure->statementList->statements) {

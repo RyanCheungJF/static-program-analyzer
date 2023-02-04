@@ -15,6 +15,7 @@ private:
 	SP sourceProcessor;
 	WritePKB writePKB;
 	PKB pkb;
+	Follows f;
 	EntityStorage et;
 	ProcedureStorage ps;
 	StatementAPI st;
