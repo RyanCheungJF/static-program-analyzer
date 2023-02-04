@@ -8,9 +8,9 @@
 #include "AST/Node/StatementList.h"
 #include "AST/Node/WhileStatement.h"
 
-class FollowsVisitor : public ASTVisitor {
+class FollowsExtractor : public ASTVisitor {
 public:
-	FollowsVisitor();
+	FollowsExtractor();
 
 	void visitProgram(const Program *program) override;
 	void visitProcedure(const Procedure* procedure) override;

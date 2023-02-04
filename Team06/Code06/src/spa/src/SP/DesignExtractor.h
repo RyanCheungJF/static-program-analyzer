@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 #include "AST/Node/Program.h"
-#include "AST/Visitor/FollowsVisitor.h"
-#include "AST//Visitor/ProcedureExtractorVisitor.h"
+#include "AST/Visitor/FollowsExtractor.h"
+#include "AST/Visitor/ProcedureExtractorVisitor.h"
 #include "AST/Visitor/StatementExtractorVisitor.h"
 //#include "../../../PKB/WritePKB.h"
 

@@ -1,8 +1,8 @@
-#include "ProcedureVisitor.h"
+#include "ProcedureExtractorVisitor.h"
 
-ProcedureVisitor::ProcedureVisitor() {}
+ProcedureExtractorVisitor::ProcedureExtractorVisitor() {}
 
-int ProcedureVisitor::visitIfStatementHelper(const IfStatement* ifStatement) {
+int ProcedureExtractorVisitor::visitIfStatementHelper(const IfStatement* ifStatement) {
 	auto statementList = ifStatement->elseStmtList.get();
 
 	if (dynamic_cast<IfStatement*>(statementList->statements.back().get())) {
@@ -16,7 +16,7 @@ int ProcedureVisitor::visitIfStatementHelper(const IfStatement* ifStatement) {
 	}
 }
 
-int ProcedureVisitor::visitWhileStatementHelper(const WhileStatement* whileStatement) {
+int ProcedureExtractorVisitor::visitWhileStatementHelper(const WhileStatement* whileStatement) {
 	auto statementList = whileStatement->stmtList.get();
 	if (dynamic_cast<IfStatement*>(statementList->statements.back().get())) {
 		return visitIfStatementHelper(dynamic_cast<IfStatement*>(statementList->statements.back().get()));
@@ -29,9 +29,9 @@ int ProcedureVisitor::visitWhileStatementHelper(const WhileStatement* whileState
 	}
 }
 
-void ProcedureVisitor::visitProgram(const Program *program) {}
+void ProcedureExtractorVisitor::visitProgram(const Program *program) {}
 
-void ProcedureVisitor::visitProcedure(const Procedure *procedure) {
+void ProcedureExtractorVisitor::visitProcedure(const Procedure *procedure) {
 	int firstStatementNumber = procedure->statementList.get()->statements.front()->statementNumber;
 	int lastStatementNumber = procedure->statementList.get()->statements.back()->statementNumber;
 
@@ -48,22 +48,22 @@ void ProcedureVisitor::visitProcedure(const Procedure *procedure) {
 		// setProcedure(procedure->procedureName, i);
 	}
 }
-void ProcedureVisitor::visitStatementList(const StatementList *statementList) {}
+void ProcedureExtractorVisitor::visitStatementList(const StatementList *statementList) {}
 
-void ProcedureVisitor::visitStatement(const Statement *statement) {}
+void ProcedureExtractorVisitor::visitStatement(const Statement *statement) {}
 
-void ProcedureVisitor::visitReadStatement(const ReadStatement* readStatement) {}
+void ProcedureExtractorVisitor::visitReadStatement(const ReadStatement* readStatement) {}
 
-void ProcedureVisitor::visitPrintStatement(const PrintStatement *printStatement) {}
+void ProcedureExtractorVisitor::visitPrintStatement(const PrintStatement *printStatement) {}
 
-void ProcedureVisitor::visitAssignStatement(const AssignStatement *assignStatement) {}
+void ProcedureExtractorVisitor::visitAssignStatement(const AssignStatement *assignStatement) {}
 
-void ProcedureVisitor::visitCallStatement(const CallStatement *callStatement) {}
+void ProcedureExtractorVisitor::visitCallStatement(const CallStatement *callStatement) {}
 
-void ProcedureVisitor::visitIfStatement(const IfStatement *ifStatement) {}
+void ProcedureExtractorVisitor::visitIfStatement(const IfStatement *ifStatement) {}
 
-void ProcedureVisitor::visitWhileStatement(const WhileStatement* whileStatement) {}
+void ProcedureExtractorVisitor::visitWhileStatement(const WhileStatement* whileStatement) {}
 
-void ProcedureVisitor::visitExpression(const Expression* variable) {}
+void ProcedureExtractorVisitor::visitExpression(const Expression* variable) {}
 
-void ProcedureVisitor::visitConditionalExpression(const ConditionalExpression* conditionalExpression) {}
+void ProcedureExtractorVisitor::visitConditionalExpression(const ConditionalExpression* conditionalExpression) {}

@@ -10,9 +10,9 @@
 #include "AST/Node/StatementList.h"
 #include "AST/Node/WhileStatement.h"
 
-class ProcedureVisitor : public ASTVisitor {
+class ProcedureExtractorVisitor : public ASTVisitor {
 public:
-	ProcedureVisitor();
+	ProcedureExtractorVisitor();
 
 	int visitIfStatementHelper(const IfStatement* ifStatement);
 	int visitWhileStatementHelper(const WhileStatement* whileStatement);
