@@ -13,5 +13,39 @@ void DesignExtractor::extractRelationships(Program* program) {
 };
 
 void DesignExtractor::extractEntities() {
-	//StatementExtractorVisitor statementVisitor;
+	StatementExtractorVisitor statementVisitor;
+	for (const auto& procedure : ASTroot->procedureList) {
+		procedure->accept(&statementVisitor);
+		for (const auto& statement : procedure->statementList->statements) {
+			statement->accept(&statementVisitor);
+			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
+				recurseStatementHelper(statement.get(), &statementVisitor);
+			}
+		}
+	}
+}
+
+void DesignExtractor::recurseStatementHelper(Statement* recurseStmt, StatementExtractorVisitor* statementVisitor) {
+	if (auto i = dynamic_cast<IfStatement*>(recurseStmt)) {
+		for (const auto& statement : i->thenStmtList->statements) {
+			statement->accept(statementVisitor);
+			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
+				recurseStatementHelper(statement.get(), statementVisitor);
+			}
+		}
+		for (const auto& statement : i->elseStmtList->statements) {
+			statement->accept(statementVisitor);
+			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
+				recurseStatementHelper(statement.get(), statementVisitor);
+			}
+		}
+	}
+	else if (auto i = dynamic_cast<WhileStatement*>(recurseStmt)) {
+		for (const auto& statement : i->stmtList->statements) {
+			statement->accept(statementVisitor);
+			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
+				recurseStatementHelper(statement.get(), statementVisitor);
+			}
+		}
+	}
 }
