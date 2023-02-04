@@ -52,7 +52,7 @@ void WritePKB::setProcedure(Proc p, StmtNum line) {
     return;
 }
 
-void WritePKB::setConstant(Constant c, StmtNum line) {
+void WritePKB::setConstant(Const c, StmtNum line) {
     pkbInstance->constantStorage->writeConstant(c, line);
     return;
 }

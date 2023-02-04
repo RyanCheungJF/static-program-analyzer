@@ -44,7 +44,7 @@ public:
 
 
     // Sets the constant to the statement line that it appears in
-    void setConstant(Constant c, StmtNum line);
+    void setConstant(Const c, StmtNum line);
 
 private:
     PKB* pkbInstance = NULL;

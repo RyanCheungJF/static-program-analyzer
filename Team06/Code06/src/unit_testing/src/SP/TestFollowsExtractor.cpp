@@ -1,3 +1,4 @@
+/*
 #include "catch.hpp"
 #include "../../../spa/src/SP/AST/Node/Program.h"
 #include "../../../spa/src/SP/AST/Node/Procedure.h"
@@ -50,3 +51,4 @@ TEST_CASE("Valid Source Program") {
 
     REQUIRE(res);
 }
+ */

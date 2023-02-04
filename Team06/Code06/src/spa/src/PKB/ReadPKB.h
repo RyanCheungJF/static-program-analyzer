@@ -67,10 +67,10 @@ public:
 
 
     // check if given a constant, is indeed in the given statement line number
-    bool checkConstant(Constant c, StmtNum num);
+    bool checkConstant(Const c, StmtNum num);
 
     // returns all the statement lines that the constant appears in
-    std::unordered_set<StmtNum> getConstantStatementNumbers(Constant c);
+    std::unordered_set<StmtNum> getConstantStatementNumbers(Const c);
 
 private:
     PKB* pkbInstance = NULL;

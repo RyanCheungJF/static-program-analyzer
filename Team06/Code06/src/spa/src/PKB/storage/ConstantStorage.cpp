@@ -1,11 +1,11 @@
 #include "ConstantStorage.h"
 
-void ConstantStorage::writeConstant(Constant c, StmtNum line) {
+void ConstantStorage::writeConstant(Const c, StmtNum line) {
     constant_stmtNum[c].insert(line);
     return;
 }
 
-bool ConstantStorage::checkConstant(Constant c, StmtNum num) {
+bool ConstantStorage::checkConstant(Const c, StmtNum num) {
 
     // source code does not even contain this constant
     if (constant_stmtNum.find(c) == constant_stmtNum.end()) {
@@ -14,7 +14,7 @@ bool ConstantStorage::checkConstant(Constant c, StmtNum num) {
     return constant_stmtNum[c].find(num) != constant_stmtNum[c].end();
 }
 
-std::unordered_set<StmtNum> ConstantStorage::getConstantStmtNums(Constant c) {
+std::unordered_set<StmtNum> ConstantStorage::getConstantStmtNums(Const c) {
     if (constant_stmtNum.find(c) == constant_stmtNum.end()) {
         std::unordered_set<StmtNum> emptySet;
         return emptySet;
