@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include "ASTVisitor.h"
 #include "AST/Node/Program.h"
 #include "AST/Node/Procedure.h"
@@ -11,6 +12,9 @@
 class ProcedureVisitor : public ASTVisitor {
 public:
 	ProcedureVisitor();
+
+	int visitIfStatementHelper(const IfStatement* ifStatement);
+	int visitWhileStatementHelper(const WhileStatement* whileStatement);
 
 	void visitProgram(const Program* program) override;
 	void visitProcedure(const Procedure* procedure) override;
