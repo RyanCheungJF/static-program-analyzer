@@ -9,10 +9,13 @@
 #include "AST/Node/Statement.h"
 #include "AST/Node/StatementList.h"
 #include "AST/Node/WhileStatement.h"
+#include "../../../PKB/WritePKB.h"
 
 class ProcedureExtractorVisitor : public ASTVisitor {
 public:
-	ProcedureExtractorVisitor();
+	WritePKB* writeApi;
+
+	ProcedureExtractorVisitor(WritePKB* writePKB);
 
 	int visitIfStatementHelper(const IfStatement* ifStatement);
 	int visitWhileStatementHelper(const WhileStatement* whileStatement);

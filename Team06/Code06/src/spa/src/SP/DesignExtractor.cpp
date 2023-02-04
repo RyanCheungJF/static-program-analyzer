@@ -2,8 +2,9 @@
 
 DesignExtractor::DesignExtractor() : ASTroot() {}
 
-DesignExtractor::DesignExtractor(std::unique_ptr<Program> root) {
+DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writePKB) {
 	ASTroot = std::move(root);
+	writePkb = writePKB;
 }
 
 void DesignExtractor::extractRelationships(Program* program) {
@@ -13,8 +14,11 @@ void DesignExtractor::extractRelationships(Program* program) {
 };
 
 void DesignExtractor::extractEntities() {
-	StatementExtractorVisitor statementVisitor;
-	ProcedureExtractorVisitor procedureVisitor;
+	StatementExtractorVisitor statementVisitor(writePkb);
+	ProcedureExtractorVisitor procedureVisitor(writePkb);
+
+	//std::vector<ASTVisitor> { statementVisitor, procedureVisitor };
+
 	for (const auto& procedure : ASTroot->procedureList) {
 		procedure->accept(&statementVisitor);
 		procedure->accept(&procedureVisitor);

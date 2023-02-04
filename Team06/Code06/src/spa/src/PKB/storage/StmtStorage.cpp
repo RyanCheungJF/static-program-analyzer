@@ -1,4 +1,5 @@
 #include "StmtStorage.h"
+#include <iostream>
 
 void StmtStorage::writeStatement(Stmt s, std::vector<StmtNum> lines) {
     for (StmtNum line: lines) {

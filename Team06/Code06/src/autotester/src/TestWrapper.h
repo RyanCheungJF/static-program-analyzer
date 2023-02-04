@@ -8,10 +8,16 @@
 // include your other headers here
 #include "AbstractWrapper.h"
 #include "SP.h"
+#include "PKB/PKB.h"
 
 class TestWrapper : public AbstractWrapper {
 private:
 	SP sourceProcessor;
+	WritePKB writePKB;
+	PKB pkb;
+	EntityStorage et;
+	ProcedureStorage ps;
+	StatementAPI st;
 
  public:
   // default constructor

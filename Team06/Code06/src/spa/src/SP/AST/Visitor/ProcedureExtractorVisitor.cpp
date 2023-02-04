@@ -1,6 +1,8 @@
 #include "ProcedureExtractorVisitor.h"
 
-ProcedureExtractorVisitor::ProcedureExtractorVisitor() {}
+ProcedureExtractorVisitor::ProcedureExtractorVisitor(WritePKB* writePKB) {
+	writeApi = writePKB;
+}
 
 int ProcedureExtractorVisitor::visitIfStatementHelper(const IfStatement* ifStatement) {
 	auto statementList = ifStatement->elseStmtList.get();
