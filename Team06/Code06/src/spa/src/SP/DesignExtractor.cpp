@@ -14,8 +14,10 @@ void DesignExtractor::extractRelationships(Program* program) {
 
 void DesignExtractor::extractEntities() {
 	StatementExtractorVisitor statementVisitor;
+	ProcedureExtractorVisitor procedureVisitor;
 	for (const auto& procedure : ASTroot->procedureList) {
 		procedure->accept(&statementVisitor);
+		procedure->accept(&procedureVisitor);
 		for (const auto& statement : procedure->statementList->statements) {
 			statement->accept(&statementVisitor);
 			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
