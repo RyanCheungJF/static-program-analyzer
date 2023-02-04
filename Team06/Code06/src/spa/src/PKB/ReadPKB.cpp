@@ -71,11 +71,11 @@ StmtNum ReadPKB::getParent(StmtNum child) {
 }
 
 bool ReadPKB::checkStatement(Stmt stmt, StmtNum num){
-    return pkbInstance->statementApi->checkStatement(stmt, num);
+    return pkbInstance->statementStorage->checkStatement(stmt, num);
 }
 
 std::unordered_set<StmtNum> ReadPKB::getStatementNumbers(Stmt stmt) {
-    return pkbInstance->statementApi->getStatementNumbers(stmt);
+    return pkbInstance->statementStorage->getStatementNumbers(stmt);
 }
 
 bool ReadPKB::checkEntity(Ent e, StmtNum num) {

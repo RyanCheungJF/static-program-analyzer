@@ -15,5 +15,5 @@ public:
 private:
     std::unordered_map<Ent, std::unordered_set<StmtNum>> ent_stmtNum;
     std::unordered_map<StmtNum, std::unordered_set<Ent>> stmtNum_ent;
-    std::unordered_map<ent, std::unordered_set<std::string>> entToNameMap;
+    std::unordered_map<Ent, std::unordered_set<std::string>> entToNameMap;
 };

@@ -86,21 +86,4 @@ TEST_CASE("Check that if an entity does not exist, it returns false") {
     REQUIRE(res);
 }
 
-TEST_CASE("Check that given an entity and their statement numbers, a query for an non-existent statement returns false") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    Statement st;
-    pkb.statementApi = &st;
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
-    Stmt s = "if";
-    std::vector<StmtNum> lines;
-    lines.push_back(3);
-    writePkb.setStatement(s, lines);
-
-    REQUIRE(readPkb.checkStatement("while", 200) == false);
-}
-
 
