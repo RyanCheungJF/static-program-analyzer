@@ -4,12 +4,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "api/Follows.h"
 #include "api/FollowsT.h"
 #include "api/Parent.h"
-#include "api/Statement.h"
+#include "storage/FollowsStorage.h"
 #include "storage/EntityStorage.h"
 #include "storage/ProcedureStorage.h"
+#include "storage/StmtStorage.h"
 
 using namespace std;
 typedef short PROC;
@@ -26,10 +26,10 @@ public:
 
     FollowsT* followsTApi;
     Parent* parentApi;
-    Statement* statementApi;
     FollowsStorage* followsStorage;
     EntityStorage* entityStorage;
     ProcedureStorage* procedureStorage;
+    StmtStorage* statementStorage;
 
 private:
 };

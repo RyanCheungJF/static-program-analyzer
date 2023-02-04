@@ -5,14 +5,14 @@ std::vector<std::pair<std::string, std::string>> StmtStmtRLHandler::handle(StmtS
 	bool isIntParam1 = Parameter::guessParameterType(param1) == ParameterType::FIXED_INT;
 	bool isIntParam2 = Parameter::guessParameterType(param2) == ParameterType::FIXED_INT;
 	if (isIntParam1) {
-		// e.g. Follows*(1, 2)
+		// e.g. FollowsT(1, 2)
 		if (Parameter::guessParameterType(param2) == ParameterType::FIXED_INT) {
 			if (storage->exists(stoi(param1), stoi(param2))) {
 				res.push_back({ param1, param2 });
 			}
 			return res;
 		}
-		// e.g. Follows*(1, _)
+		// e.g. FollowsT(1, _)
 		else {
 			std::vector<StmtNum> stmtNums = storage->getRightWildcard(stoi(param1));
 			for (auto stmtNum : stmtNums) {
@@ -23,7 +23,7 @@ std::vector<std::pair<std::string, std::string>> StmtStmtRLHandler::handle(StmtS
 		}
 	}
 	else {
-		// e.g. Follows*(_, 2)
+		// e.g. FollowsT(_, 2)
 		if (isIntParam2) {
 			std::vector<StmtNum> stmtNums = storage->getLeftWildcard(stoi(param2));
 			for (auto stmtNum : stmtNums) {
@@ -32,7 +32,7 @@ std::vector<std::pair<std::string, std::string>> StmtStmtRLHandler::handle(StmtS
 			}
 			return res;
 		}
-		// e.g. Follows*(_, _)
+		// e.g. FollowsT(_, _)
 		else {
 			std::pair<std::vector<StmtNum>, std::vector<StmtNum>> stmtNumsArrayPair = storage->getAllPairs();
 			std::vector<StmtNum> leftStmtNums = stmtNumsArrayPair.first;

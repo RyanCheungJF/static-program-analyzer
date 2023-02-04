@@ -26,18 +26,25 @@ std::vector<std::pair<std::string, std::string>> ReadPKB::findRelationship(Relat
     return std::vector<std::pair<std::string, std::string>>();
 }
 
-bool ReadPKB::checkFollows(StmtNum left, StmtNum right) {
-    return pkbInstance -> followsStorage->exists(left, right);
+//TODO Needs to handle Procedures 
+std::vector<std::string> ReadPKB::findDesignEntities(Parameter p) {
+    std::vector<std::string> res;
+    std::string typeString = p.typeToString(p.getType());
+    if (p.isStatementRef(p)) {
+        std::unordered_set stmtNums = pkbInstance->statementStorage->getStatementNumbers(typeString);
+        for (auto stmtNum : stmtNums) {
+            res.push_back(to_string(stmtNum));
+        }
+    }
+    else if (p.isEntityRef(p)) {
+        std::unordered_set vars = pkbInstance->entityStorage->getEntNames(typeString);
+        for (auto var : vars) {
+            res.push_back(var);
+        }
+    }
+  
+    return res;
 }
-/*
-StmtNum ReadPKB::getFollower(StmtNum followee) {
-    return pkbInstance -> followsApi->getFollower(followee);
-}
-
-StmtNum ReadPKB::getFollowee(StmtNum follower) {
-    return pkbInstance -> followsApi->getFollowee(follower);
-}
-*/
 
 bool ReadPKB::checkFollowsT(StmtNum followee, StmtNum follower) {
     return pkbInstance -> followsTApi->checkFollowsT(followee, follower);

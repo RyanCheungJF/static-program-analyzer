@@ -17,9 +17,11 @@ public:
     // Sets the pointer to the PKB instance if it is not set yet
     void setInstancePKB(PKB& pkb);
 
-    void populateMap();
-
+    // Returns a vector of string tuples based on the Relationship object passed
     std::vector<std::pair<std::string, std::string>> findRelationship(Relationship rs);
+
+    // Returns a vector of strings based on the Parameter object passed
+    std::vector<std::string> findDesignEntities(Parameter p);
 
     // Gets a Follows relation in PKB
     bool checkFollows(StmtNum left, StmtNum right);
