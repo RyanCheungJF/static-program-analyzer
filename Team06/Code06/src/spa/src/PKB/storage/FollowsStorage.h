@@ -7,7 +7,8 @@ public:
     bool exists(StmtNum stmtNum1, StmtNum stmtNum2);
     std::vector<StmtNum> getRightWildcard(StmtNum followee);
     std::vector<StmtNum> getLeftWildcard(StmtNum follower);
+    std::pair<std::vector<StmtNum>, std::vector<StmtNum>> getAllPairs();
 private:
-    std::unordered_map<StmtNum, StmtNum> follower_followee;
-    std::unordered_map<StmtNum, StmtNum> followee_follower;
+    std::unordered_map<StmtNum, StmtNum> followerFolloweeMap;
+    std::unordered_map<StmtNum, StmtNum> followeeFollowerMap;
 };

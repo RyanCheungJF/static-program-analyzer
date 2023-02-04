@@ -76,7 +76,7 @@ public:
 
 private:
     PKB* pkbInstance = NULL;
-    std::unordered_map <RelationshipType, StmtStmtRLStorage*> stmtStmtHandlerMap = { {RelationshipType::FOLLOWS, pkbInstance->followsStorage} };
+    std::unordered_map <RelationshipType, StmtStmtRLStorage*> stmtStmtHandlerMap = { {RelationshipType::FOLLOWS, NULL} };
     std::unordered_map <RelationshipType, StmtEntRLStorage*> stmtEntHandlerMap = {};
     std::unordered_map <RelationshipType, EntEntRLStorage*> entEntHandlerMap = {};
         

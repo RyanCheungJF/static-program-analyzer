@@ -8,14 +8,22 @@ TEST_CASE("Test") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    Follows f;
-    pkb.followsApi = &f;
+    FollowsStorage fs;
+    pkb.followsStorage = &fs;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
     writePkb.setFollows(1, 2);
-    std::vector<std::pair<std::string, std::string>> res = readPkb.findRelationship("follows");
-    REQUIRE(res.size() == 0);
+    Parameter param1 = Parameter("1", "fixed_int");
+    Parameter param2 = Parameter("2", "fixed_int");
+    std::vector<Parameter> params;
+    params.push_back(param1);
+    params.push_back(param2);
+    Relationship rs = Relationship::makeRelationship("Follows", params);
+
+    std::vector<std::pair<std::string, std::string>> check = { {"1", "2"} };
+    std::vector<std::pair<std::string, std::string>> res = readPkb.findRelationship(rs);
+    REQUIRE(check == res);
 }
 /*TEST_CASE("Checks that write and read works for Follows") {
 

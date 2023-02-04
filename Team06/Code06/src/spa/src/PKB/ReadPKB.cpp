@@ -1,10 +1,11 @@
 #include "ReadPKB.h"
 
-void ReadPKB::setInstancePKB(PKB& pkb) {
+void ReadPKB::setInstancePKB(PKB &pkb) {
     if (this -> pkbInstance != NULL) {
         return;
     }
     this -> pkbInstance = &pkb;
+    this->stmtStmtHandlerMap[RelationshipType::FOLLOWS] = pkb.followsStorage;
     return;
 }
 
@@ -14,7 +15,7 @@ std::vector<std::pair<std::string, std::string>> ReadPKB::findRelationship(Relat
     std::string param2 = rs.params[1].getValue();
     if (stmtStmtHandlerMap.find(type) != stmtStmtHandlerMap.end()) {
         StmtStmtRLHandler handler;
-        return handler.handle(stmtStmtHandlerMap.at(type));
+        return handler.handle(stmtStmtHandlerMap.at(type), param1, param2);
     } else if (stmtEntHandlerMap.find(type) != stmtEntHandlerMap.end()) {
         StmtEntRLHandler handler;
         return handler.handle(stmtEntHandlerMap.at(type));
@@ -26,7 +27,7 @@ std::vector<std::pair<std::string, std::string>> ReadPKB::findRelationship(Relat
 }
 
 bool ReadPKB::checkFollows(StmtNum left, StmtNum right) {
-    return pkbInstance -> followsApi->checkFollows(left, right);
+    return pkbInstance -> followsStorage->exists(left, right);
 }
 /*
 StmtNum ReadPKB::getFollower(StmtNum followee) {

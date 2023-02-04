@@ -4,7 +4,7 @@
 #include<string>
 
 typedef int StmtNum;
-typedef string Ent;
+typedef std::string Ent;
 
 class StmtEntRLStorage {
 public:

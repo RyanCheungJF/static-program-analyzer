@@ -9,7 +9,7 @@ void WritePKB::setInstancePKB(PKB &pkb) {
 }
 
 void WritePKB::setFollows(StmtNum followee, StmtNum follower) {
-    pkbInstance->followsApi->setFollows(followee, follower);
+    pkbInstance->followsStorage->write(followee, follower);
     return;
 }
 

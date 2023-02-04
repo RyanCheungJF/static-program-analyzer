@@ -3,7 +3,7 @@
 #include<utility>
 #include<string>
 
-typedef string Ent;
+typedef std::string Ent;
 
 class EntEntRLStorage {
 public:
