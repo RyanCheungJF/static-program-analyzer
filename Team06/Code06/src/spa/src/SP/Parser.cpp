@@ -1,5 +1,7 @@
 #include "Parser.h"
 
+int currStatementNumber = 1;
+
 std::unique_ptr<Program> Parser::parseProgram(std::deque<Token> tokens) {
 	// Rule: procedure+
 	std::cout << "Parsing Program" << std::endl;
@@ -104,6 +106,8 @@ std::unique_ptr<ReadStatement> Parser::parseReadStatement(std::deque<Token>& tok
 	std::cout << "Parsing Read Statement" << std::endl;
 
 	auto readStatement = std::make_unique<ReadStatement>();
+	readStatement->statementNumber = currStatementNumber;
+	currStatementNumber++;
 
 	tokens.pop_front(); // Pop 'read'
 
@@ -127,6 +131,8 @@ std::unique_ptr<PrintStatement> Parser::parsePrintStatement(std::deque<Token>& t
 	std::cout << "Parsing Print Statement" << std::endl;
 
 	auto printStatement = std::make_unique<PrintStatement>();
+	printStatement->statementNumber = currStatementNumber;
+	currStatementNumber++;
 
 	tokens.pop_front(); // Pop 'print'
 
@@ -150,6 +156,8 @@ std::unique_ptr<CallStatement> Parser::parseCallStatement(std::deque<Token>& tok
 	std::cout << "Parsing Call Statement" << std::endl;
 
 	auto callStatement = std::make_unique<CallStatement>();
+	callStatement->statementNumber = currStatementNumber;
+	currStatementNumber++;
 
 	tokens.pop_front(); // Pop 'call'
 
@@ -173,6 +181,8 @@ std::unique_ptr<WhileStatement> Parser::parseWhileStatement(std::deque<Token>& t
 	std::cout << "Parsing While Statement" << std::endl;
 
 	auto whileStatement = std::make_unique<WhileStatement>();
+	whileStatement->statementNumber = currStatementNumber;
+	currStatementNumber++;
 
 	tokens.pop_front(); // Pop 'while'
 
@@ -210,6 +220,8 @@ std::unique_ptr<IfStatement> Parser::parseIfStatement(std::deque<Token>& tokens)
 	std::cout << "Parsing If Statement" << std::endl;
 
 	auto ifStatement = std::make_unique<IfStatement>();
+	ifStatement->statementNumber = currStatementNumber;
+	currStatementNumber++;
 
 	tokens.pop_front(); // Pop 'if'
 
@@ -270,6 +282,8 @@ std::unique_ptr<AssignStatement> Parser::parseAssignStatement(std::deque<Token>&
 	std::cout << "Parsing Assign Statement" << std::endl;
 
 	auto assignStatement = std::make_unique<AssignStatement>();
+	assignStatement->statementNumber = currStatementNumber;
+	currStatementNumber++;
 
 	assignStatement->varName = tokens.front().value;
 	tokens.pop_front(); // Pop var_name

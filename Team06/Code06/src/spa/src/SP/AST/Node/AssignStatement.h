@@ -9,7 +9,6 @@ class AssignStatement : public Statement {
 public:
 	std::string varName;
 	std::unique_ptr<Expression> expr;
-	//int lineNumber;
 
 	AssignStatement();
 

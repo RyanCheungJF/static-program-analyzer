@@ -4,6 +4,5 @@
 
 class Statement : public ASTNode {
 public:
-	//int lineNumber;
-
+	int statementNumber;
 };

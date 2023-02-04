@@ -6,7 +6,6 @@
 class PrintStatement : public Statement {
 public:
 	std::string varName;
-	//int lineNumber;
 
 	PrintStatement();
 
