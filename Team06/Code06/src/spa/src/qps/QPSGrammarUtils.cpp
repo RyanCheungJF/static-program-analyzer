@@ -112,6 +112,11 @@ bool isModifies(string s) {
     return true;
 }
 
+bool isPatternCl(string s)
+{
+    return true;
+}
+
 
 bool isRelRef(string s) {
     return isFollows(s) || isParent(s) || isUses(s) || isModifies(s);

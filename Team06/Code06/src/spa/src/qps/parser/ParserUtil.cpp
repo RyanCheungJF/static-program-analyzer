@@ -44,6 +44,68 @@ long findPattern(const vector<string> &wordList)
 	return -1;
 }
 
+vector<tuple<string, string, string>> extractParameters(string s)
+{
+	vector<tuple<string, string, string>> res;
+	int endOfString = s.size();
+	int curIndex = 0;
+	string param1;
+	string param2;
+	string param3;
+	int bracCount;
+	char curChar;
+	while (curIndex < endOfString) {
+		param1 = "";
+		param2 = "";
+		param3 = "";
+		bracCount = 0;
+		curChar = '\0';
+		while (curIndex < endOfString) {
+			curChar = s[curIndex];
+			if (curChar == '(') {
+				bracCount++;
+				break;
+			}
+			param1 += curChar;
+			curIndex++;
+		}
+		curIndex++;
+		while (curIndex < endOfString) {
+			curChar = s[curIndex];
+			if (curChar == ',') {
+				break;
+			}
+			param2 += curChar;
+			curIndex++;
+		}
+		curIndex++;
+		while (curIndex < endOfString) {
+			curChar = s[curIndex];
+			if (curChar == '(') {
+				bracCount++;
+			}
+			if (curChar == ')') {
+				bracCount--;
+				if (bracCount == 0) break;
+			}
+			param3 += curChar;
+			curIndex++;
+		}
+		if (param1 == "" || param2 == "" || param3 == "" || curChar != ')') {
+			throw - 1;
+		}
+		//validate param3 first
+		param3 = removeCharFromString(param3, '\"');
+		res.push_back(tuple<string, string, string>(param1, param2, param3));
+		curIndex++;
+	}
+	return res;
+}
+
+string removeCharFromString(string s, char c) {
+	s.erase(remove(s.begin(), s.end(), c), s.end());
+	return s;
+}
 tuple<string, size_t> extractSubStringUntilDelimiter(const string& original, int start, string delimiter)
 {
 	size_t end = original.find(delimiter, start);

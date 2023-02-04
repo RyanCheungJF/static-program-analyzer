@@ -16,13 +16,14 @@ Query::Query(const Query& q)
 {
     relations = q.relations;
     selectParameters = q.selectParameters;
+    patterns = q.patterns;
 }
 
-Query::Query(const vector<Parameter>& ps, const vector<Relationship>& rs)
+Query::Query(const vector<Parameter>& ss, const vector<Relationship>& rs, const vector<Pattern>& ps)
 {
+    selectParameters = ss;
     relations = rs;
-    selectParameters = ps;
-    string s;
+    patterns = ps;
 }
 
 vector<Parameter*> Query::getAllUncheckedSynonyms()
@@ -39,5 +40,21 @@ vector<Parameter*> Query::getAllUncheckedSynonyms()
             synonyms.push_back(paramP);
         }
     }
+    for (int i = 0; i < patterns.size(); i++) {
+        Parameter* entRef = patterns.at(i).getEntRef();
+        if (entRef->getType() != ParameterType::SYNONYM) {
+            continue;
+        }
+        synonyms.push_back(entRef);
+    }
     return synonyms;
+}
+
+vector<Parameter> Query::getAllSynAssigns()
+{
+    vector<Parameter> synAssigns;
+    for (int i = 0; i < patterns.size(); i++) {
+        synAssigns.push_back(patterns.at(i).getSynAssign());
+    }
+    return synAssigns;
 }

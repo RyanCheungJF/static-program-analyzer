@@ -31,6 +31,7 @@ bool isFollows(string);
 bool isParent(string);
 bool isUses(string);
 bool isModifies(string);
+bool isFixedStringWithWildCard(string);
 
 
 #endif //SPA_QPSGRAMMARUTILS_H
