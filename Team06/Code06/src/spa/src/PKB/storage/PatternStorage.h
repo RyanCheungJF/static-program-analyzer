@@ -7,6 +7,7 @@
 
 typedef int StmtNum;
 
+// this is a stub
 class Node {
 public:
     Node* left;
