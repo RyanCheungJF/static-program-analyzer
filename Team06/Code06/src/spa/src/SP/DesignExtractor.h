@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include "AST/Node/Program.h"
-#include "AST/Visitor/FollowsExtractor.h"
 
 class DesignExtractor {
 
