@@ -7,6 +7,10 @@ void PatternStorage::writePatternNode(Node &assignNode) {
     return;
 }
 
+std::vector<StmtNum> buildSubtree() {
+
+};
+
 std::vector<StmtNum> PatternStorage::getAllAssignStatements() {
     std::unordered_set<StmtNum> set;
     for (auto keyValuePair: rhsVariable_Nodes) {

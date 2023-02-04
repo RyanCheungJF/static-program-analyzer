@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include <vector>
 #include <string>
+#include "../../SP/AST/Node/AssignStatement.h"
 
 typedef int StmtNum;
 
@@ -23,6 +24,9 @@ class PatternStorage {
 public:
     //TODO: change this to pointer and table to pointer later. figure out logic first
     virtual void writePatternNode(Node &assignNode);
+
+    // TODO: get the subtree builder algorithm (KIV: enhancement is to change it to string after demo1)
+    virtual AssignStatement buildSubtree();
 
     // pattern(_, _)
     virtual std::vector<StmtNum> getAllAssignStatements();
