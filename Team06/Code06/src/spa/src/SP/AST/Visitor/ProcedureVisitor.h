@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include "ASTVisitor.h"
 #include "AST/Node/Program.h"
 #include "AST/Node/Procedure.h"

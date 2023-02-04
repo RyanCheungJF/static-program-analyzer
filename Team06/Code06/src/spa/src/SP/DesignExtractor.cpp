@@ -14,4 +14,11 @@ void DesignExtractor::extractRelationships(Program* program) {
 
 void DesignExtractor::extractEntities() {
 	//StatementExtractorVisitor statementVisitor;
+
+	ProcedureVisitor procedureVisitor;
+
+	for (int i = 0; i < this->ASTroot->procedureList.size(); i++) {
+		procedureVisitor.visitProcedure(this->ASTroot->procedureList[i].get());
+	}
 }
+
