@@ -7,6 +7,7 @@
 #include "AST/Node/Statement.h"
 #include "AST/Node/StatementList.h"
 #include "AST/Node/WhileStatement.h"
+#include "../../../PKB/WritePKB.h"
 
 class FollowsExtractor : public ASTVisitor {
 public:
@@ -26,4 +27,6 @@ public:
 
 	void visitExpression(const Expression *expression) override;
 	void visitConditionalExpression(const ConditionalExpression *conditionalExpression) override;
+
+    WritePKB *writeApi;
 };

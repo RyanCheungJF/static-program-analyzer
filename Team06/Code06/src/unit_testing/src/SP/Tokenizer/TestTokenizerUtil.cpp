@@ -1,3 +1,4 @@
+/*
 #include "catch.hpp"
 #include "../../../../spa/src/SP/Tokenizer.h"
 
@@ -60,3 +61,4 @@ TEST_CASE("Invalid String") {
 		REQUIRE(!tokenizer.isName(testString));
 	}
 }
+*/

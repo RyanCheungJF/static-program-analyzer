@@ -6,7 +6,8 @@
 
 class Procedure : public ASTNode {
 public:
-	std::string procedureName;
+
+    std::string procedureName;
 	std::unique_ptr<StatementList> statementList;
 
 	void accept(ASTVisitor* visitor) const override;
