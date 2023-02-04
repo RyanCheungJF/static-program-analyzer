@@ -9,6 +9,7 @@ typedef int StmtNum;
 class EntityStorage {
 public:
     virtual void writeEntity(Ent e, std::vector<StmtNum> lines);
+    virtual void writeEntity(Ent e, StmtNum line);
     virtual bool checkEntity(Ent e, StmtNum num);
     virtual std::unordered_set<StmtNum> getEntityStmtNums(Ent e);
 private:

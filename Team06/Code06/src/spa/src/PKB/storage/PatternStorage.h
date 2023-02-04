@@ -27,7 +27,7 @@ public:
     virtual void writePatternNode(Node &assignNode);
 
     // TODO: get the subtree builder algorithm (KIV: enhancement is to change it to string after demo1)
-    virtual AssignStatement buildSubtree();
+    AssignStatement buildSubtree();
 
     // pattern(_, _)
     virtual std::vector<StmtNum> getAllAssignStatements();
