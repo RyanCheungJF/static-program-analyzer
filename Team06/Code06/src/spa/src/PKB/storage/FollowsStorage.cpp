@@ -58,7 +58,7 @@ std::pair<std::vector<StmtNum>, std::vector<StmtNum>> FollowsStorage::getAllPair
     std::vector<StmtNum> followers;
     for (auto followeeFollower : followeeFollowerMap) {
         followees.push_back(followeeFollower.first);
-        followees.push_back(followeeFollower.second);
+        followers.push_back(followeeFollower.second);
     }
     return { followees, followers };
 }

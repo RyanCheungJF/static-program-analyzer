@@ -28,7 +28,7 @@ std::vector<std::pair<std::string, std::string>> StmtStmtRLHandler::handle(StmtS
 			std::vector<StmtNum> stmtNums = storage->getLeftWildcard(stoi(param2));
 			for (auto stmtNum : stmtNums) {
 				std::string stmtNumString = to_string(stmtNum);
-				res.push_back({ param1, stmtNumString });
+				res.push_back({ stmtNumString, param2 });
 			}
 			return res;
 		}
