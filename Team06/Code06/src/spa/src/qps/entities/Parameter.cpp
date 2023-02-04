@@ -12,9 +12,8 @@ ParameterType Parameter::getType() const
 
 Parameter::Parameter(string v, string t)
 {
-
-	type = stringToType(t);
 	value = v;
+	type = stringToType(t);
 }
 
 Parameter::Parameter(string v, ParameterType t)
