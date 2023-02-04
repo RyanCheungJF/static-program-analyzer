@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-typedef std::string Const;
+typedef int Const;
 typedef int StmtNum;
 
 class ConstantStorage {

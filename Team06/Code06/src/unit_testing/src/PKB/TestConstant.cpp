@@ -14,7 +14,7 @@ TEST_CASE("Checks that write and read works for constantStorage") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    Const c = "5";
+    Const c = 5;
     writePkb.setConstant(c, 4);
     writePkb.setConstant(c, 8);
     writePkb.setConstant(c, 9);
@@ -38,7 +38,7 @@ TEST_CASE("Check that if a constant does not appear in the source code, it shoul
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    Const c = "7";
+    Const c = 7;
     std::unordered_set<StmtNum> statementNums = readPkb.getConstantStatementNumbers(c);
 
     bool res = true;
@@ -57,7 +57,7 @@ TEST_CASE("Check that given query for a constant and a statementNumber that it a
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    Const c = "8";
+    Const c = 8;
     writePkb.setConstant(c, 3);
 
     bool res = true;
@@ -76,7 +76,7 @@ TEST_CASE("Check that if a constant does not exist, it returns false") {
     readPkb.setInstancePKB(pkb);
 
     bool res = true;
-    res = res && (readPkb.checkConstant("c", 4) == false);
+    res = res && (readPkb.checkConstant(3, 4) == false);
     REQUIRE(res);
 }
 
