@@ -34,21 +34,23 @@ int ProcedureExtractorVisitor::visitWhileStatementHelper(const WhileStatement* w
 void ProcedureExtractorVisitor::visitProgram(const Program *program) {}
 
 void ProcedureExtractorVisitor::visitProcedure(const Procedure *procedure) {
-	int firstStatementNumber = procedure->statementList.get()->statements.front()->statementNumber;
-	int lastStatementNumber = procedure->statementList.get()->statements.back()->statementNumber;
+	int firstStatementNumber = procedure->statementList->statements.front()->statementNumber;
+	int lastStatementNumber = procedure->statementList->statements.back()->statementNumber;
 
 	// if its an if or while statement, we recurse down further
-	if (dynamic_cast<IfStatement*>(procedure->statementList.get()->statements.back().get())) {
-		lastStatementNumber = visitIfStatementHelper(dynamic_cast<IfStatement*>(procedure->statementList.get()->statements.back().get()));
+	if (dynamic_cast<IfStatement*>(procedure->statementList->statements.back().get())) {
+		lastStatementNumber = visitIfStatementHelper(dynamic_cast<IfStatement*>(procedure->statementList->statements.back().get()));
 	}
-	if (dynamic_cast<WhileStatement*>(procedure->statementList.get()->statements.back().get())) {
-		lastStatementNumber = visitWhileStatementHelper(dynamic_cast<WhileStatement*>(procedure->statementList.get()->statements.back().get()));
+	if (dynamic_cast<WhileStatement*>(procedure->statementList->statements.back().get())) {
+		lastStatementNumber = visitWhileStatementHelper(dynamic_cast<WhileStatement*>(procedure->statementList->statements.back().get()));
 	}
 	std::cout << "First Number! " << firstStatementNumber << std::endl;
 	std::cout << "Last Number! " << lastStatementNumber << std::endl;
+	std::vector<int> statementNumbers;
 	for (int i = firstStatementNumber; i <= lastStatementNumber; i++) {
-		// setProcedure(procedure->procedureName, i);
+		statementNumbers.push_back(i);
 	}
+	// writeApi->setProcedure(procedure->procedureName, statementNumbers);
 }
 void ProcedureExtractorVisitor::visitStatementList(const StatementList *statementList) {}
 

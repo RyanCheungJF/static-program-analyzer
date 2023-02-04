@@ -7,10 +7,17 @@ DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writeP
 	writePkb = writePKB;
 }
 
-void DesignExtractor::extractRelationships(Program* program) {
+void DesignExtractor::extractRelationships() {
 	FollowsExtractor followsExtractor;
-	// starts from root to extract out relationships
-	program->accept(&followsExtractor);
+	for (const auto& procedure : ASTroot->procedureList) {
+		procedure->statementList->accept(&followsExtractor);
+		for (const auto& statement : procedure->statementList->statements) {
+			statement->accept(&followsExtractor);
+			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
+				recurseStatementHelper(statement.get(), &followsExtractor);
+			}
+		}
+	}
 };
 
 void DesignExtractor::extractEntities() {
@@ -31,14 +38,16 @@ void DesignExtractor::extractEntities() {
 	}
 }
 
-void DesignExtractor::recurseStatementHelper(Statement* recurseStmt, StatementExtractorVisitor* statementVisitor) {
+void DesignExtractor::recurseStatementHelper(Statement* recurseStmt, ASTVisitor* statementVisitor) {
 	if (auto i = dynamic_cast<IfStatement*>(recurseStmt)) {
+		i->thenStmtList->accept(statementVisitor);
 		for (const auto& statement : i->thenStmtList->statements) {
 			statement->accept(statementVisitor);
 			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
 				recurseStatementHelper(statement.get(), statementVisitor);
 			}
 		}
+		i->elseStmtList->accept(statementVisitor);
 		for (const auto& statement : i->elseStmtList->statements) {
 			statement->accept(statementVisitor);
 			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
@@ -47,6 +56,7 @@ void DesignExtractor::recurseStatementHelper(Statement* recurseStmt, StatementEx
 		}
 	}
 	else if (auto i = dynamic_cast<WhileStatement*>(recurseStmt)) {
+		i->stmtList->accept(statementVisitor);
 		for (const auto& statement : i->stmtList->statements) {
 			statement->accept(statementVisitor);
 			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {

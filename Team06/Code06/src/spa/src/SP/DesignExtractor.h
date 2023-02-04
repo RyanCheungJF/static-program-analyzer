@@ -18,7 +18,7 @@ public:
 	DesignExtractor();
 	DesignExtractor(std::unique_ptr<Program>, WritePKB* writePKB);
 
-	void extractRelationships(Program* program);
+	void extractRelationships();
 	void extractEntities();
-	void recurseStatementHelper(Statement* statement, StatementExtractorVisitor* visitor);
+	void recurseStatementHelper(Statement* statement, ASTVisitor* visitor);
 };

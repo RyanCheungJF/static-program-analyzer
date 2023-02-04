@@ -34,4 +34,6 @@ public:
 
 	void visitExpression(const Expression* expression) override;
 	void visitConditionalExpression(const ConditionalExpression* conditionalExpression) override;
+
+	WritePKB* writeApi;
 };
