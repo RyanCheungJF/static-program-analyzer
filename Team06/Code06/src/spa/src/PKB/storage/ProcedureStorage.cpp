@@ -7,6 +7,10 @@ void ProcedureStorage::writeProcedure(Proc p, std::vector<StmtNum> lines) {
     return;
 }
 
+void ProcedureStorage::writeProcedure(Proc p, StmtNum line) {
+    proc_stmtNum[p].insert(line);
+}
+
 bool ProcedureStorage::checkProcedure(Proc p, StmtNum num) {
 
     // source code does not even contain this type of statement

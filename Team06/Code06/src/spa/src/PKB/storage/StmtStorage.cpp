@@ -7,6 +7,11 @@ void StmtStorage::writeStatement(Stmt s, std::vector<StmtNum> lines) {
     return;
 }
 
+void StmtStorage::writeStatement(Stmt s, StmtNum line) {
+    stmt_stmtNum[s].insert(line);
+    return;
+}
+
 bool StmtStorage::checkStatement(Stmt stmt, StmtNum num) {
 
     // source code does not even contain this type of statement

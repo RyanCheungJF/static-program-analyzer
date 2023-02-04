@@ -7,6 +7,11 @@ void EntityStorage::writeEntity(Ent e, std::vector<StmtNum> lines) {
     return;
 }
 
+void EntityStorage::writeEntity(Ent e, StmtNum line) {
+    ent_stmtNum[e].insert(line);
+    return;
+}
+
 bool EntityStorage::checkEntity(Ent e, StmtNum num) {
 
     // source code does not even contain this type of statement

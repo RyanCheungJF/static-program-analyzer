@@ -5,6 +5,11 @@ void StatementAPI::writeStatement(Stmt s, std::vector<StmtNum> lines) {
     return;
 }
 
+void StatementAPI::writeStatement(Stmt s, StmtNum line) {
+    store.writeStatement(s, line);
+    return;
+}
+
 bool StatementAPI::checkStatement(Stmt stmt, StmtNum num) {
     return store.checkStatement(stmt, num);
 }

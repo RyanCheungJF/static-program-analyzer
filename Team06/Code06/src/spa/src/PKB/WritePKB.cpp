@@ -36,3 +36,18 @@ void WritePKB::setProcedure(Proc p, std::vector<StmtNum> lines) {
     pkbInstance->procedureStorage->writeProcedure(p, lines);
     return;
 }
+
+void WritePKB::setStatement(Stmt s, StmtNum line) {
+    pkbInstance->statementApi->writeStatement(s, line);
+    return;
+}
+
+void WritePKB::setEntity(Ent e, StmtNum line) {
+    pkbInstance->entityStorage->writeEntity(e, line);
+    return;
+}
+
+void WritePKB::setProcedure(Proc p, StmtNum line) {
+    pkbInstance->procedureStorage->writeProcedure(p, line);
+    return;
+}

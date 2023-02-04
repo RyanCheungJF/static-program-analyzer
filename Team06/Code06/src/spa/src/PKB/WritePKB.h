@@ -25,13 +25,22 @@ public:
     // Sets the statement along with the statement lines that they appear in
     void setStatement(Stmt s, std::vector<StmtNum> lines);
 
+    // Sets the statement along with the statement line that it appears in
+    void setStatement(Stmt s, StmtNum line);
+
 
     // Sets the entity along with the statement lines that the entities appears in
     void setEntity(Ent e, std::vector<StmtNum> lines);
 
+    // Sets the entity along with the statement lines that it appears in
+    void setEntity(Ent e, StmtNum line);
+
 
     // Sets the procedure along with the statement lines that are in that procedure appears in
     void setProcedure(Proc p, std::vector<StmtNum> lines);
+
+    // Sets statement line to the procedure that it is in
+    void setProcedure(Proc p, StmtNum line);
 
 private:
     PKB* pkbInstance = NULL;
