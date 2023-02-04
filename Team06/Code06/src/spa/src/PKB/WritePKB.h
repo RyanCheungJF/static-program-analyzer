@@ -29,8 +29,8 @@ public:
     void setStatement(Stmt s, StmtNum line);
 
 
-    // Sets the entity along with the statement lines that the entities appears in
-    void setEntity(Ent e, std::vector<StmtNum> lines);
+    // Sets the entity along with the statement line that the entities appears in
+    void setEntity(StmtNum line, std::vector<Ent> entities);
 
     // Sets the entity along with the statement line that it appears in
     void setEntity(Ent e, StmtNum line);
@@ -45,6 +45,8 @@ public:
 
     // Sets the constant to the statement line that it appears in
     void setConstant(Const c, StmtNum line);
+
+    void setConstant(StmtNum line, std::vector<Const> constants);
 
 private:
     PKB* pkbInstance = NULL;

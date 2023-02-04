@@ -27,11 +27,6 @@ void WritePKB::setStatement(Stmt s, std::vector<StmtNum> lines) {
     return;
 }
 
-void WritePKB::setEntity(Ent e, std::vector<StmtNum> lines) {
-    pkbInstance->entityStorage->writeEntity(e, lines);
-    return;
-}
-
 void WritePKB::setProcedure(Proc p, std::vector<StmtNum> lines) {
     pkbInstance->procedureStorage->writeProcedure(p, lines);
     return;
@@ -39,6 +34,13 @@ void WritePKB::setProcedure(Proc p, std::vector<StmtNum> lines) {
 
 void WritePKB::setStatement(Stmt s, StmtNum line) {
     pkbInstance->statementApi->writeStatement(s, line);
+    return;
+}
+
+void WritePKB::setEntity(StmtNum line, std::vector<Ent> entities) {
+    for (Ent e: entities) {
+        setEntity(e, line);
+    }
     return;
 }
 
@@ -54,5 +56,13 @@ void WritePKB::setProcedure(Proc p, StmtNum line) {
 
 void WritePKB::setConstant(Const c, StmtNum line) {
     pkbInstance->constantStorage->writeConstant(c, line);
+    return;
+}
+
+void WritePKB::setConstant(StmtNum line, std::vector<Const> constants) {
+
+    for (Const c: constants) {
+        pkbInstance->constantStorage->writeConstant(c, line);
+    }
     return;
 }
