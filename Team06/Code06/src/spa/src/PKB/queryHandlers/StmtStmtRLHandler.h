@@ -4,5 +4,5 @@
 
 class StmtStmtRLHandler {
 public:
-	std::vector<std::pair<std::string, std::string>> handle(StmtStmtRLStorage *storage, std::string param1, std::string param2);
+	std::vector<std::vector<std::string>> handle(StmtStmtRLStorage *storage, std::string param1, std::string param2);
 };

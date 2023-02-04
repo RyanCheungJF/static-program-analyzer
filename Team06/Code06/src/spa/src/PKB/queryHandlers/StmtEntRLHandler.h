@@ -3,5 +3,5 @@
 
 class StmtEntRLHandler {
 public:
-	std::vector<std::pair<std::string, std::string>> handle(StmtEntRLStorage* storage);
+	std::vector<std::vector<std::string>> handle(StmtEntRLStorage* storage);
 };

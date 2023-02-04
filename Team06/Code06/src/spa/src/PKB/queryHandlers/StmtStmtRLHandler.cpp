@@ -1,7 +1,7 @@
 #include "StmtStmtRLHandler.h"
 
-std::vector<std::pair<std::string, std::string>> StmtStmtRLHandler::handle(StmtStmtRLStorage *storage, std::string param1, std::string param2) {
-	std::vector<std::pair<std::string, std::string>> res;
+std::vector<std::vector<std::string>> StmtStmtRLHandler::handle(StmtStmtRLStorage *storage, std::string param1, std::string param2) {
+	std::vector<std::vector<std::string>> res;
 	bool isIntParam1 = Parameter::guessParameterType(param1) == ParameterType::FIXED_INT;
 	bool isIntParam2 = Parameter::guessParameterType(param2) == ParameterType::FIXED_INT;
 	if (isIntParam1) {

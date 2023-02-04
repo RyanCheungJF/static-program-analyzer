@@ -18,7 +18,7 @@ public:
     void setInstancePKB(PKB& pkb);
 
     // Returns a vector of string tuples based on the Relationship object passed
-    std::vector<std::pair<std::string, std::string>> findRelationship(Relationship rs);
+    std::vector<std::vector<std::string>> findRelationship(Relationship rs);
 
     // Returns a vector of strings based on the Parameter object passed
     std::vector<std::string> findDesignEntities(Parameter p);

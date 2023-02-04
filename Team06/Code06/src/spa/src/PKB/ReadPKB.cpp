@@ -9,7 +9,7 @@ void ReadPKB::setInstancePKB(PKB &pkb) {
     return;
 }
 
-std::vector<std::pair<std::string, std::string>> ReadPKB::findRelationship(Relationship rs) {
+std::vector<std::vector<std::string>> ReadPKB::findRelationship(Relationship rs) {
     RelationshipType type = rs.type;
     std::string param1 = rs.params[0].getValue();
     std::string param2 = rs.params[1].getValue();
@@ -23,7 +23,7 @@ std::vector<std::pair<std::string, std::string>> ReadPKB::findRelationship(Relat
         EntEntRLHandler handler;
         return handler.handle(entEntHandlerMap.at(type));
     }
-    return std::vector<std::pair<std::string, std::string>>();
+    return std::vector<std::vector<std::string>>();
 }
 
 //TODO Needs to handle Procedures 
