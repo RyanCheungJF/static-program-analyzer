@@ -6,8 +6,9 @@
 #include <vector>
 #include "AST/Node/Program.h"
 #include "AST/Visitor/FollowsVisitor.h"
-#include "AST//Visitor/ProcedureVisitor.h"
+#include "AST//Visitor/ProcedureExtractorVisitor.h"
 #include "AST/Visitor/StatementExtractorVisitor.h"
+//#include "../../../PKB/WritePKB.h"
 
 class DesignExtractor {
 public:
@@ -18,4 +19,7 @@ public:
 
 	void extractRelationships(Program* program);
 	void extractEntities();
+	void recurseStatementHelper(Statement* statement, StatementExtractorVisitor* visitor);
+	
+	//WritePKB* writeApi;
 };
