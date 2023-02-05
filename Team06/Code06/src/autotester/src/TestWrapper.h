@@ -9,6 +9,7 @@
 #include "AbstractWrapper.h"
 #include "SP.h"
 #include "PKB/PKB.h"
+#include "qps/QPS.h"
 
 class TestWrapper : public AbstractWrapper {
 private:
@@ -19,6 +20,7 @@ private:
 	EntityStorage et;
 	ProcedureStorage ps;
 	StatementAPI st;
+    QPS qps;
 
  public:
   // default constructor
