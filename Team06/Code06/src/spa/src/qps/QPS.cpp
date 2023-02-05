@@ -1,13 +1,15 @@
 #include "QPS.h"
 // The main class used to instantiate and run the QPS
 
-vector<string> QPS::processQueries(string queryString) {
+
+vector<string> processQueries(string queryString) {
     QPSParser parser = QPSParser();
     vector<Query> queryVec = parser.parse(queryString);
-    vector<string> result;
+    vector<string> finalResult;
     for (Query query: queryVec) {
         // Some API call
-        query.process();
+        vector<string> result = query.evaluate();
+        finalResult.insert(finalResult.end(), result.begin(), result.end());
     }
-    return result;
+    return finalResult;
 }

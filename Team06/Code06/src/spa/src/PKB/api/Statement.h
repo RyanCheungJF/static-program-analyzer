@@ -7,9 +7,11 @@
 typedef std::string Stmt;
 typedef int StmtNum;
 
-class Statement {
+class StatementAPI {
 public:
     void writeStatement(Stmt s, std::vector<StmtNum> lines);
+
+    void writeStatement(Stmt s, StmtNum line);
 
     // check if given a statement type and statement line number, whether that statement line number is indeed
     // of that statement type

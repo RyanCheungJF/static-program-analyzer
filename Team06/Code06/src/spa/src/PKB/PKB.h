@@ -10,6 +10,8 @@
 #include "storage/EntityStorage.h"
 #include "storage/ProcedureStorage.h"
 #include "storage/StmtStorage.h"
+#include "storage/PatternStorage.h"
+#include "storage/ConstantStorage.h"
 
 using namespace std;
 typedef short PROC;
@@ -27,9 +29,11 @@ public:
     FollowsT* followsTApi;
     Parent* parentApi;
     FollowsStorage* followsStorage;
+    StmtStorage* statementStorage;
     EntityStorage* entityStorage;
     ProcedureStorage* procedureStorage;
-    StmtStorage* statementStorage;
+    PatternStorage* patternStorage;
+    ConstantStorage* constantStorage;
 
 private:
 };

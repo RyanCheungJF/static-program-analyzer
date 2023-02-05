@@ -28,6 +28,10 @@ vector<Parameter*> Relationship::getAllUncheckedSynonyms()
 	return synonyms;
 }
 
+vector<Parameter>& Relationship::getParameters() {
+    return params;
+}
+
 Relationship::Relationship()
 {
 	type = RelationshipType::UNKNOWN;

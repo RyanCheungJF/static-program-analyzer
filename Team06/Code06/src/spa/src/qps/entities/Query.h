@@ -5,21 +5,27 @@
 #ifndef SPA_QUERY_H
 #define SPA_QUERY_H
 #include <string>
+#include <vector>
 #include "Relationship.h"
 #include "Parameter.h"
+#include "QueryDB.h"
+#include "Table.h"
+#include "Pattern.h"
 
 using namespace std;
 
 
 class Query {
 public:
-    vector<string> process();
+    vector<string> evaluate();
     Query();
     Query(const Query&);
-    Query(const vector<Parameter>&, const vector<Relationship>&);
+    Query(const vector<Parameter>&, const vector<Relationship>&, const vector<Pattern>&);
     vector<Relationship> relations;
     vector<Parameter> selectParameters;
+    vector<Pattern> patterns;
     vector<Parameter*> getAllUncheckedSynonyms();
+    vector<Parameter> getAllSynAssigns();
 };
 
 

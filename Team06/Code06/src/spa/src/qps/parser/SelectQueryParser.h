@@ -3,7 +3,7 @@
 #include "exceptions/Exception.h"
 #include "qps/entities/Relationship.h"
 #include "qps/entities/Query.h"
-#include "parserUtil.h"
+#include "ParserUtil.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -21,7 +21,7 @@ private:
 	vector<int> getClauseEnds(vector<int> clauseStarts, int wordListLength);
 	vector<Parameter> parseSelectClause(vector<string> &wordList, int start, int end);
 	vector<Relationship> parseSuchThatClause(vector<string> &wordList, int start, int end);
-	// vector<Pattern> parsePatternClause(vector<string> &wordList, int start, int end);
+	vector<Pattern> parsePatternClause(vector<string> &wordList, int start, int end);
 };
 
 #endif //SPA_SELECTCLAUSEPARSER_H

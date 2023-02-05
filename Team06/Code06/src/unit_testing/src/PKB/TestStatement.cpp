@@ -74,7 +74,7 @@ TEST_CASE("Check that if a statement does not exist, t returns false") {
     REQUIRE(res);
 }
 
-TEST_CASE("Check that given a statement and their statement numbers, a query for an non-existent statement returns false") {
+TEST_CASE("Check that given a StatementAPI and their StatementAPI numbers, a query for an non-existent StatementAPI returns false") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;

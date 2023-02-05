@@ -1,0 +1,3 @@
+procedure Test {
+   call 3;
+}

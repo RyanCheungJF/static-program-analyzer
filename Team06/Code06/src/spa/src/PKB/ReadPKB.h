@@ -76,6 +76,12 @@ public:
     std::unordered_set<StmtNum> getProcedureStatementNumbers(Proc p);
 
 
+    // check if given a constant, is indeed in the given statement line number
+    bool checkConstant(Const c, StmtNum num);
+
+    // returns all the statement lines that the constant appears in
+    std::unordered_set<StmtNum> getConstantStatementNumbers(Const c);
+
 private:
     PKB* pkbInstance = NULL;
     std::unordered_map <RelationshipType, StmtStmtRLStorage*> stmtStmtHandlerMap = { {RelationshipType::FOLLOWS, NULL} };
