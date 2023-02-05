@@ -7,5 +7,9 @@ class Constant : public Expression {
 public:
 	int value;
 
+	Constant();
+
+	Constant(int value);
+
 	void accept(ASTVisitor* visitor) const override;
 };
