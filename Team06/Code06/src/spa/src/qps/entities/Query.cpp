@@ -32,7 +32,6 @@ vector<string> Query::evaluate() {
             //PKB.getAll(selectParameters[0]);
         }
     }
-    return result;
 }
 
 Query::Query()

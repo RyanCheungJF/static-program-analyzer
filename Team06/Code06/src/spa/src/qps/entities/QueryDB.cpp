@@ -4,6 +4,10 @@ QueryDB::QueryDB() {
     // Creates the QueryDB object
 }
 
+QueryDB::QueryDB(Table table) {
+    tableVector.push_back(table);
+}
+
 void QueryDB::insertTable(Table table) {
     // Check if we have any duplicate parameters
     // if so do an intersection
