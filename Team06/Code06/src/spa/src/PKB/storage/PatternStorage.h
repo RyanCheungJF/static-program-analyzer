@@ -11,9 +11,22 @@
 
 typedef int StmtNum;
 
+struct hashFunction
+{
+    size_t operator()(const std::pair<int ,
+            std::string> &x) const
+    {
+        std::size_t hash = 0;
+        std::size_t h1 = std::hash<std::string>{}(x.second);
+        std::size_t h2 = std::hash<double>{}(x.first);
+
+        return h1 ^ h2;
+    }
+};
+
 class PatternStorage {
 public:
-    virtual void writePatternNode(std::string lhs, std::string rhspostfix);
+    virtual void writePattern(std::string lhs, StmtNum num, std::string stmtNum_rhspostfix);
 
     std::string buildSubtree(std::string rhs);
 
@@ -48,5 +61,5 @@ public:
     virtual std::vector<std::pair<std::string, std::string>> getAllPostfixes();
 
 private:
-    std::unordered_map<std::string, std::unordered_set<std::string>> lhs_rhsPostfix;
+    std::unordered_map<std::string, std::unordered_set<std::pair<int, std::string>, hashFunction>> lhs_stmtNum_rhsPostfix;
 };

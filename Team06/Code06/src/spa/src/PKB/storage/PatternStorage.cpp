@@ -1,8 +1,9 @@
 #include "PatternStorage.h"
+#include <string>
+#include <unordered_map>
 
-
-void PatternStorage::writePatternNode(std::string lhs, std::string rhspostfix) {
-    lhs_rhsPostfix[lhs].insert(rhspostfix);
+void PatternStorage::writePattern(std::string lhs, StmtNum num, std::string stmtNum_rhspostfix) {
+    lhs_stmtNum_rhsPostfix[lhs].insert(std::make_pair(num, stmtNum_rhspostfix));
     return;
 }
 
@@ -41,6 +42,12 @@ std::string PatternStorage::buildSubtree(std::string rhs) {
 }
 
 std::vector<StmtNum> PatternStorage::getMatchingExact(std::string lhs, std::string rhs) {
+    if (lhs_stmtNum_rhsPostfix.find(lhs) == lhs_stmtNum_rhsPostfix.end()) {
+        std::vector<StmtNum> empty;
+        return empty;
+    }
+
+
 }
 
 std::vector<StmtNum> PatternStorage::getMatchingRHSLeftWildcard(std::string lhs, std::string rhs) {}
