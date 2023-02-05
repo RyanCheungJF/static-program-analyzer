@@ -26,7 +26,7 @@ struct hashFunction
 
 class PatternStorage {
 public:
-    virtual void writePattern(std::string lhs, StmtNum num, std::string stmtNum_rhspostfix);
+    virtual void writePattern(std::string lhs, StmtNum num, std::string rhspostfix);
 
     std::string buildSubtree(std::string rhs);
 

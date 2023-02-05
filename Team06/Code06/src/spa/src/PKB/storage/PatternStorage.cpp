@@ -2,8 +2,8 @@
 #include <string>
 #include <unordered_map>
 
-void PatternStorage::writePattern(std::string lhs, StmtNum num, std::string stmtNum_rhspostfix) {
-    lhs_stmtNum_rhsPostfix[lhs].insert(std::make_pair(num, stmtNum_rhspostfix));
+void PatternStorage::writePattern(std::string lhs, StmtNum num, std::string rhspostfix) {
+    lhs_stmtNum_rhsPostfix[lhs].insert(std::make_pair(num, rhspostfix));
     return;
 }
 
@@ -47,7 +47,14 @@ std::vector<StmtNum> PatternStorage::getMatchingExact(std::string lhs, std::stri
         return empty;
     }
 
-
+    std::vector<StmtNum> res;
+    std::unordered_set<std::pair<int, std::string>, hashFunction> set = lhs_stmtNum_rhsPostfix.at(lhs);
+    for (std::pair<int, std::string> p : set) {
+        if (p.second == rhs) {
+            res.push_back(p.first);
+        }
+    }
+    return res;
 }
 
 std::vector<StmtNum> PatternStorage::getMatchingRHSLeftWildcard(std::string lhs, std::string rhs) {}
@@ -68,11 +75,11 @@ std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSRightWildcard(std:
 
 std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSBothWildcard(std::string rhs) {}
 
-
+/*
 std::vector<std::pair<std::string, std::string>> PatternStorage::getAllPostfixes() {
 
     std::vector<std::pair<std::string, std::string>> res;
-    for (auto keyValuePair: lhs_rhsPostfix) {
+    for (auto keyValuePair: lhs_stmtNum_rhsPostfix) {
         std::string lhs = keyValuePair.first;
         std::unordered_set<std::string> postfixStrings = keyValuePair.second;
 
@@ -84,3 +91,4 @@ std::vector<std::pair<std::string, std::string>> PatternStorage::getAllPostfixes
     std::sort(res.begin(), res.end());
     return res;
 }
+*/
