@@ -11,8 +11,10 @@ TEST_CASE("adhoc") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    Follows f;
-    pkb.followsApi = &f;
+    FollowsStorage fs;
+    pkb.followsStorage = &fs;
+    StmtStorage sts;
+    pkb.statementStorage = &sts;
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -20,7 +22,7 @@ TEST_CASE("adhoc") {
 
     string input = "stmt s; Select s such that Follows(1, s)";
     vector<string> expected{ "2" };
-    vector<string> res = qps.processQueries(input);
+    vector<string> res = qps.processQueries(input, readPkb);
     for (string r : res) {
         cout << r << "\n";
     }
