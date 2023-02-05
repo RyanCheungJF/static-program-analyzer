@@ -31,7 +31,7 @@ void TestWrapper::parse(std::string filename) {
 void TestWrapper::evaluate(std::string query, std::list<std::string>& results) {
 	// call your evaluator to evaluate the query here
 	  // ...code to evaluate query..
-      vector<string> res = qps.processQueries(query);
+      vector<string> res = qps.processQueries(query, readPKB);
       for (std::string val :res) {
           results.push_back(val);
       }

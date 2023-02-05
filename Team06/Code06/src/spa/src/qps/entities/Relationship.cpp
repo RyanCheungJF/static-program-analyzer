@@ -22,7 +22,7 @@ vector<Parameter*> Relationship::getAllUncheckedSynonyms()
 	vector<Parameter*> synonyms;
 	for (int i = 0; i < params.size(); i++) {
 		if (params.at(i).isUncheckedSynonym()) {
-			synonyms.push_back(&params.at(0));
+			synonyms.push_back(&params.at(i));
 		}
 	}
 	return synonyms;

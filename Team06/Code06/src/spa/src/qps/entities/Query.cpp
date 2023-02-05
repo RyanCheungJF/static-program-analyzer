@@ -4,7 +4,7 @@
 
 #include "Query.h"
 
-vector<string> Query::evaluate() {
+vector<string> Query::evaluate(ReadPKB& readPKB) {
     // I am going to assume here that since the object has been created it means that the variables are correctly
     // instantiated.
     QueryDB queryDb = QueryDB();
@@ -12,8 +12,7 @@ vector<string> Query::evaluate() {
     for(Relationship relation: relations) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
-        vector<vector<string>> response = {{"1", "2"}};
-                // PKB.getRelation(relation);
+        vector<vector<string>> response = readPKB.findRelationship(relation);
         Table table(relation.getParameters(), response);
         if(response.empty()) {
             isFalseQuery = true;
@@ -28,8 +27,7 @@ vector<string> Query::evaluate() {
         if (isFalseQuery) {
             return {};
         } else {
-            return {"v", "v"};
-            //PKB.getAll(selectParameters[0]);
+            return readPKB.findDesignEntities(selectParameters[0]);
         }
     }
 }
