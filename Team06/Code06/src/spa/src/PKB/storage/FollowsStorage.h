@@ -1,14 +1,14 @@
 #include <unordered_map>
+#include "StmtStmtRLStorage.h"
 
-typedef int StmtNum;
-
-class FollowsStorage {
+class FollowsStorage : public StmtStmtRLStorage {
 public:
-    virtual void writeFollows(StmtNum followee, StmtNum follower);
-    virtual bool checkFollows(StmtNum followee, StmtNum follower);
-    virtual StmtNum getFollower(StmtNum followee);
-    virtual StmtNum getFollowee(StmtNum follower);
+    void write(StmtNum stmtNum1, StmtNum stmtNum2);
+    bool exists(StmtNum stmtNum1, StmtNum stmtNum2);
+    std::vector<StmtNum> getRightWildcard(StmtNum followee);
+    std::vector<StmtNum> getLeftWildcard(StmtNum follower);
+    std::pair<std::vector<StmtNum>, std::vector<StmtNum>> getAllPairs();
 private:
-    std::unordered_map<StmtNum, StmtNum> follower_followee;
-    std::unordered_map<StmtNum, StmtNum> followee_follower;
+    std::unordered_map<StmtNum, StmtNum> followerFolloweeMap;
+    std::unordered_map<StmtNum, StmtNum> followeeFollowerMap;
 };

@@ -5,19 +5,45 @@ void ReadPKB::setInstancePKB(PKB &pkb) {
         return;
     }
     this -> pkbInstance = &pkb;
+    this->stmtStmtHandlerMap[RelationshipType::FOLLOWS] = pkb.followsStorage;
     return;
 }
 
-bool ReadPKB::checkFollows(StmtNum left, StmtNum right) {
-    return pkbInstance -> followsApi->checkFollows(left, right);
+std::vector<std::vector<std::string>> ReadPKB::findRelationship(Relationship rs) {
+    RelationshipType type = rs.type;
+    std::string param1 = rs.params[0].getValue();
+    std::string param2 = rs.params[1].getValue();
+    if (stmtStmtHandlerMap.find(type) != stmtStmtHandlerMap.end()) {
+        StmtStmtRLHandler handler;
+        return handler.handle(stmtStmtHandlerMap.at(type), param1, param2);
+    } else if (stmtEntHandlerMap.find(type) != stmtEntHandlerMap.end()) {
+        StmtEntRLHandler handler;
+        return handler.handle(stmtEntHandlerMap.at(type));
+    } else if (entEntHandlerMap.find(type) != entEntHandlerMap.end()) {
+        EntEntRLHandler handler;
+        return handler.handle(entEntHandlerMap.at(type));
+    }
+    return std::vector<std::vector<std::string>>();
 }
 
-StmtNum ReadPKB::getFollower(StmtNum followee) {
-    return pkbInstance -> followsApi->getFollower(followee);
-}
-
-StmtNum ReadPKB::getFollowee(StmtNum follower) {
-    return pkbInstance -> followsApi->getFollowee(follower);
+//TODO Needs to handle Procedures 
+std::vector<std::string> ReadPKB::findDesignEntities(Parameter p) {
+    std::vector<std::string> res;
+    std::string typeString = p.typeToString(p.getType());
+    if (p.isStatementRef(p)) {
+        std::unordered_set stmtNums = pkbInstance->statementStorage->getStatementNumbers(typeString);
+        for (auto stmtNum : stmtNums) {
+            res.push_back(to_string(stmtNum));
+        }
+    }
+    else if (p.isEntityRef(p)) {
+        std::unordered_set vars = pkbInstance->entityStorage->getEntNames(typeString);
+        for (auto var : vars) {
+            res.push_back(var);
+        }
+    }
+  
+    return res;
 }
 
 bool ReadPKB::checkFollowsT(StmtNum followee, StmtNum follower) {
@@ -45,11 +71,11 @@ StmtNum ReadPKB::getParent(StmtNum child) {
 }
 
 bool ReadPKB::checkStatement(Stmt stmt, StmtNum num){
-    return pkbInstance->statementApi->checkStatement(stmt, num);
+    return pkbInstance->statementStorage->checkStatement(stmt, num);
 }
 
 std::unordered_set<StmtNum> ReadPKB::getStatementNumbers(Stmt stmt) {
-    return pkbInstance->statementApi->getStatementNumbers(stmt);
+    return pkbInstance->statementStorage->getStatementNumbers(stmt);
 }
 
 bool ReadPKB::checkEntity(Ent e, StmtNum num) {
