@@ -427,7 +427,7 @@ std::unique_ptr<Expression> Parser::parseTerm(std::deque<Token>& tokens) {
 	if (tokens.front().type == TokenType::MULTIPLY || tokens.front().type == TokenType::DIVIDE ||
 		tokens.front().type == TokenType::MODULO) {
 		auto mathExpression = std::make_unique<MathExpression>();
-		mathExpression->lhs;
+		mathExpression->lhs = std::move(lhs);
 		mathExpression->mathOperator = tokens.front().value;
 		tokens.pop_front(); // Pop the '*' or '/' or '%'
 		mathExpression->rhs = parseTerm(tokens);

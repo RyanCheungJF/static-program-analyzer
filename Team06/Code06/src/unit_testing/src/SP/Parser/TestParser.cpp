@@ -5,32 +5,37 @@
 #include "../SP/AST/Node/Procedure.h"
 #include "../SP/SPExceptions.h"
 
+// recursive helper functions
+bool checkIfSameExpression(std::unique_ptr<Expression> expectedExpression, std::unique_ptr<Expression> actualExpression);
+bool checkIfSameCondition(std::unique_ptr<ConditionalExpression> expectedExpression, std::unique_ptr<ConditionalExpression> actualExpression);
+bool checkIfSameStatement(std::unique_ptr<Statement> expectedStatement, std::unique_ptr<Statement> actualStatement);
+bool checkIfSameStatementList(std::unique_ptr<StatementList> expectedList, std::unique_ptr<StatementList> actualList);
+bool checkIfSameTree(std::unique_ptr<Program> expectedRoot, std::unique_ptr<Program> actualRoot);
+
 bool checkIfSameExpression(std::unique_ptr<Expression> expectedExpression, std::unique_ptr<Expression> actualExpression) {
 	auto expected = expectedExpression.get();
 	auto actual = actualExpression.get();
 
 	if (dynamic_cast<Constant*>(expected) && dynamic_cast<Constant*>(actual)) {
-		std::cout << "LOG: Comparing constants" << std::endl;
+		std::cout << "LOG: Comparing Constants" << std::endl;
 		auto expectedValue = dynamic_cast<Constant*>(expected)->value;
 		auto actualValue = dynamic_cast<Constant*>(actual)->value;
 		return expectedValue == actualValue;
 	}
 	else if (dynamic_cast<Variable*>(expected) && dynamic_cast<Variable*> (actual)) {
-		std::cout << "LOG: Comparing variables" << std::endl;
+		std::cout << "LOG: Comparing Variables" << std::endl;
 		auto expectedName = dynamic_cast<Variable*>(expected)->name;
 		auto actualName = dynamic_cast<Variable*>(actual)->name;
 		return expectedName == actualName;
 	}
 	else if (dynamic_cast<MathExpression*>(expected) && dynamic_cast<MathExpression*>(actual)) {
 		std::cout << "LOG: Comparing Math Expressions" << std::endl;
-		/*auto expectedExpression = dynamic_cast<MathExpression*>(expected);
-		auto actualCondition = dynamic_cast<MathExpression*>(actual);
-		// put into unique pointers
-		bool isSameLeftExpression=  checkIfSameExpression(, );
-		bool isSameRightExpression =  checkIfSameExpression(, );
-		bool isSameOp = // check ops
-		return (isSameLeftConditional && isSameRightConditional && isSameOp);
-		*/
+		auto expectedExpression = dynamic_cast<MathExpression*>(expected);
+		auto actualExpression = dynamic_cast<MathExpression*>(actual);
+		bool isSameLeftExpression=  checkIfSameExpression(std::move(expectedExpression->lhs), std::move(actualExpression->lhs));
+		bool isSameRightExpression = checkIfSameExpression(std::move(expectedExpression->rhs), std::move(actualExpression->rhs));
+		bool isSameOp = (expectedExpression->mathOperator == actualExpression->mathOperator);
+		return (isSameLeftExpression && isSameRightExpression && isSameOp);
 	}
 	else {
 		std::cout << "LOG: Not a valid Expression Type!" << std::endl;
@@ -44,33 +49,28 @@ bool checkIfSameCondition(std::unique_ptr<ConditionalExpression> expectedExpress
 
 	if (dynamic_cast<NotConditionalExpression*>(expected) && dynamic_cast<NotConditionalExpression*>(actual)) {
 		std::cout << "LOG: Comparing Not Conditionals" << std::endl;
-		/*auto expectedCondition = dynamic_cast<NotConditionalExpression*>(expected)->condExpr;
-		auto actualCondition = dynamic_cast<NotConditionalExpression*>(actual)->condExpr;
-		// put into unique pointers
-		return checkIfSameCondition(, );
-		*/
+		auto expectedCondition = std::move(dynamic_cast<NotConditionalExpression*>(expected)->condExpr);
+		auto actualCondition = std::move(dynamic_cast<NotConditionalExpression*>(actual)->condExpr);
+		return checkIfSameCondition(std::move(expectedCondition), std::move(actualCondition));
 	}
 	else if (dynamic_cast<BinaryConditionalExpression*>(expected) && dynamic_cast<BinaryConditionalExpression*>(actual)) {
 		std::cout << "LOG: Comparing Binary Conditionals" << std::endl;
-		/*auto expectedCondition = dynamic_cast<BinaryConditionalExpression*>(expected);
-		auto actualCondition = dynamic_cast<BinaryConditionalExpressiont*>(actual);
-		// put into unique pointers
-		bool isSameLeftConditional =  checkIfSameCondition(, );
-		bool isSameRightConditional =  checkIfSameCondition(, );
-		bool isSameOp = // check ops
+		auto expectedCondition = dynamic_cast<BinaryConditionalExpression*>(expected);
+		auto actualCondition = dynamic_cast<BinaryConditionalExpression*>(actual);
+		bool isSameLeftConditional =  checkIfSameCondition(std::move(expectedCondition->lhs), std::move(actualCondition->lhs));
+		bool isSameRightConditional = checkIfSameCondition(std::move(expectedCondition->rhs), std::move(actualCondition->rhs));
+		bool isSameOp = (expectedCondition->condOperator == actualCondition->condOperator);
 		return (isSameLeftConditional && isSameRightConditional && isSameOp);
-		*/
+		
 	}
 	else if (dynamic_cast<RelationalExpression*>(expected) && dynamic_cast<RelationalExpression*>(actual)) {
 		std::cout << "LOG: Comparing Relational Expressions" << std::endl;
-		/*auto expectedCondition = dynamic_cast<RelationalExpression*>(expected);
-		auto actualCondition = dynamic_cast<RelationalExpressiont*>(actual);
-		// put into unique pointers
-		bool isSameLeftExpression =  checkIfSameExpression(, );
-		bool isSameRightExpression =  checkIfSameExpression(, );
-		bool isSameOp = // check ops
-		return (isSameLeftConditional && isSameRightConditional && isSameOp);
-		*/
+		auto expectedCondition = dynamic_cast<RelationalExpression*>(expected);
+		auto actualCondition = dynamic_cast<RelationalExpression*>(actual);
+		bool isSameLeftExpression =  checkIfSameExpression(std::move(expectedCondition->lhs), std::move(actualCondition->lhs));
+		bool isSameRightExpression = checkIfSameExpression(std::move(expectedCondition->rhs), std::move(actualCondition->rhs));
+		bool isSameOp = (expectedCondition->relationalOperator == actualCondition->relationalOperator);
+		return (isSameLeftExpression && isSameRightExpression && isSameOp);
 	}
 	else {
 		std::cout << "LOG: Not a valid Conditional Type!" << std::endl;
@@ -84,41 +84,62 @@ bool checkIfSameStatement(std::unique_ptr<Statement> expectedStatement, std::uni
 	
 	if (dynamic_cast<PrintStatement*>(expected) && dynamic_cast<PrintStatement*>(actual)) {
 		std::cout << "LOG: Comparing Print Statements" << std::endl;
-		/*auto expectedVar = dynamic_cast<PrintStatement*>(expected)->varName;
-		auto actualVar = dynamic_cast<PrintStatement*>(actual)->varName;
-		std::cout << "Expected: " << expectedVar << std::endl;
-		std::cout << "Actual: " << actualVar << std::endl;
-		return expectedVar == actualVar;*/
-		return false;
+		return dynamic_cast<PrintStatement*>(expected)->varName == dynamic_cast<PrintStatement*>(actual)->varName;
 	}
 	else if (dynamic_cast<ReadStatement*>(expected) && dynamic_cast<ReadStatement*>(actual)) {
 		std::cout << "LOG: Comparing Read Statements" << std::endl;
-		return static_cast<ReadStatement*>(expected)->varName == static_cast<ReadStatement*>(actual)->varName;
+		return dynamic_cast<ReadStatement*>(expected)->varName == dynamic_cast<ReadStatement*>(actual)->varName;
 	}
 	else if (dynamic_cast<CallStatement*>(expected) && dynamic_cast<CallStatement*>(actual)) {
 		std::cout << "LOG: Comparing Call Statements" << std::endl;
-		return static_cast<CallStatement*>(expected)->procName == static_cast<CallStatement*>(actual)->procName;
+		return dynamic_cast<CallStatement*>(expected)->procName == dynamic_cast<CallStatement*>(actual)->procName;
 	}
 	else if (dynamic_cast<AssignStatement*>(expected) && dynamic_cast<AssignStatement*>(actual)) {
 		std::cout << "LOG: Comparing Assign Statements" << std::endl;
-		return (static_cast<AssignStatement*>(expected)->varName == static_cast<AssignStatement*>(actual)->varName);
+		auto expectedAssignStatement = dynamic_cast<AssignStatement*>(expected);
+		auto actualAssignStatement = dynamic_cast<AssignStatement*>(actual);
+		bool isSameVariable = (expectedAssignStatement->varName == actualAssignStatement->varName);
+		bool isSameExpression = checkIfSameExpression(std::move(expectedAssignStatement->expr), std::move(actualAssignStatement->expr));
+		std::cout << "LOG: Comparing Assign Statements Same expr " << isSameExpression << std::endl;
+		return isSameVariable && isSameExpression;
 	}
 	else if (dynamic_cast<IfStatement*>(expected) && dynamic_cast<IfStatement*>(actual)) {
 		std::cout << "LOG: Comparing If Statements" << std::endl;
-		auto expectedIfObject = static_cast<IfStatement*>(expected);
-		auto actualIfObject = static_cast<IfStatement*>(actual);
-		//bool isSameCondition = checkIfSameCondition(, );
+		auto expectedIfObject = dynamic_cast<IfStatement*>(expected);
+		auto actualIfObject = dynamic_cast<IfStatement*>(actual);
+		bool isSameCondition = checkIfSameCondition(std::move(expectedIfObject->condExpr), std::move(actualIfObject->condExpr));
+		bool isSameThenStatements = checkIfSameStatementList(std::move(expectedIfObject->thenStmtList), std::move(actualIfObject->thenStmtList));
+		bool isSameElseStatements = checkIfSameStatementList(std::move(expectedIfObject->elseStmtList), std::move(actualIfObject->elseStmtList));
+		return isSameCondition && isSameThenStatements && isSameElseStatements;
 	}
 	else if (dynamic_cast<WhileStatement*>(expected) && dynamic_cast<WhileStatement*>(actual)) {
 		std::cout << "LOG: Comparing While Statements" << std::endl;
-		auto expectedIfObject = static_cast<IfStatement*>(expected);
-		auto actualIfObject = static_cast<IfStatement*>(actual);
-		//bool isSameCondition = checkIfSameCondition(, );
+		auto expectedWhileObject = dynamic_cast<WhileStatement*>(expected);
+		auto actualWhileObject = dynamic_cast<WhileStatement*>(actual);
+		bool isSameCondition = checkIfSameCondition(std::move(expectedWhileObject->condExpr), std::move(actualWhileObject->condExpr));
+		bool isSameStatements = checkIfSameStatementList(std::move(expectedWhileObject->stmtList), std::move(actualWhileObject->stmtList));
+		return isSameCondition && isSameStatements;
 	}
 	else {
 		std::cout << "LOG: Not a valid Statement Type!" << std::endl;
 		return false;
 	}
+}
+
+bool checkIfSameStatementList(std::unique_ptr<StatementList> expectedList, std::unique_ptr<StatementList> actualList) {
+	// preliminary check for statement list
+	if (expectedList->statements.size() != actualList->statements.size()) {
+		std::cout << "LOG: Trees differ in number of statements" << std::endl;
+		return false;
+	}
+
+	for (int i = 0; i < expectedList->statements.size(); i++) {
+		if (!checkIfSameStatement(std::move(expectedList->statements[i]), std::move(actualList->statements[i]))) {
+			std::cout << "LOG: Mismatch in statements!" << std::endl;
+			return false;
+		}
+	}
+	return true;
 }
 
 bool checkIfSameTree(std::unique_ptr<Program> expectedRoot, std::unique_ptr<Program> actualRoot) {
@@ -133,24 +154,13 @@ bool checkIfSameTree(std::unique_ptr<Program> expectedRoot, std::unique_ptr<Prog
 
 	// loop thru procedures
 	for (int i = 0; i < expectedProcedures.size(); i++) {
-		auto expectedStatements = std::move(expectedProcedures[i]->statementList->statements);
-		auto actualStatements = std::move(actualProcedures[i]->statementList->statements);
-
-	// preliminary check for statementlist
-		if (expectedStatements.size() != actualStatements.size()) {
-			std::cout << "LOG: Trees differ in number of statements" << std::endl;
+		auto expectedStatements = std::move(expectedProcedures[i]->statementList);
+		auto actualStatements = std::move(actualProcedures[i]->statementList);
+		std::cout << "LOG: Checking Procedure " << expectedProcedures[i]->procedureName << std::endl;
+		if (!checkIfSameStatementList(std::move(expectedStatements), std::move(actualStatements))) {
 			return false;
 		}
-
-	// recurse each statement tree to check if they are the same
-		for (int j = 0; j < expectedStatements.size(); j++) {
-			if (!checkIfSameStatement(std::move(expectedStatements[j]), std::move(actualStatements[j]))) {
-				std::cout << "LOG: Mismatch in statements!" << std::endl;
-				return false;
-			}
-		}
 	}
-
 	return true;
 }
 
@@ -182,10 +192,7 @@ TEST_CASE("Valid Source Program") {
 		procedures.push_back(std::move(procedureNode));
 		auto programNode = std::make_unique<Program>(std::move(procedures));
 
-		//REQUIRE(checkIfSameTree(std::move(rootNode), std::move(programNode)));
-		REQUIRE(rootNode->procedureList.size() == 1);
-		REQUIRE(rootNode->procedureList.front()->procedureName == "A");
-		REQUIRE(rootNode->procedureList.front()->statementList->statements.size() == 2);
+		REQUIRE(checkIfSameTree(std::move(rootNode), std::move(programNode)));
 	}
 
 	SECTION("Valid Program With Multiple Procedures") {
@@ -196,14 +203,44 @@ TEST_CASE("Valid Source Program") {
 		auto rootNode = testParser.parseProgram(tokenQueue);
 
 		// creating actual tree
+		// proc A
+		std::unique_ptr<Expression> mathNodeA = std::make_unique<MathExpression>("+", std::make_unique<Variable>("x"), std::make_unique<Constant>(1));
+		std::unique_ptr<Statement> assignNodeA = std::make_unique<AssignStatement>("x", std::move(mathNodeA));
+		std::vector<std::unique_ptr<Statement>> statementsA;
+		statementsA.push_back(std::move(assignNodeA));
+		auto statementListNodeA = std::make_unique<StatementList>(std::move(statementsA));
+		auto procedureNodeA = std::make_unique<Procedure>("A", std::move(statementListNodeA));
 
-		
-		REQUIRE(rootNode->procedureList.size() == 3);
-		// check proc A
-		REQUIRE(rootNode->procedureList[0]->procedureName == "A");
-		REQUIRE(rootNode->procedureList[0]->statementList->statements.size() == 1);
-		// check proc C
-		REQUIRE(rootNode->procedureList[2]->statementList->statements.size() == 3);
+		// proc B
+		std::unique_ptr<Expression> mathNodeB = std::make_unique<MathExpression>("*", std::make_unique<Variable>("y"), std::make_unique<Constant>(2));
+		std::unique_ptr<Statement> assignNodeB = std::make_unique<AssignStatement>("y", std::move(mathNodeB));
+		std::unique_ptr<Statement> readNodeB = std::make_unique<ReadStatement>("y");
+		std::vector<std::unique_ptr<Statement>> statementsB;    
+		statementsB.push_back(std::move(assignNodeB));
+		statementsB.push_back(std::move(readNodeB));
+		auto statementListNodeB = std::make_unique<StatementList>(std::move(statementsB));
+		auto procedureNodeB = std::make_unique<Procedure>("B", std::move(statementListNodeB));
+
+		// proc C
+		std::unique_ptr<Expression> mathNodeC = std::make_unique<MathExpression>("-", std::make_unique<Variable>("z"), std::make_unique<Constant>(3));
+		std::unique_ptr<Statement> assignNodeC = std::make_unique<AssignStatement>("z", std::move(mathNodeC));
+		std::unique_ptr<Statement> printNodeC = std::make_unique<PrintStatement>("z");
+		std::unique_ptr<Statement> callNodeC = std::make_unique<CallStatement>("B");
+		std::vector<std::unique_ptr<Statement>> statementsC;
+		statementsC.push_back(std::move(printNodeC));
+		statementsC.push_back(std::move(callNodeC));
+		statementsC.push_back(std::move(assignNodeC));
+		auto statementListNodeC = std::make_unique<StatementList>(std::move(statementsC));
+		auto procedureNodeC = std::make_unique<Procedure>("C", std::move(statementListNodeC));
+
+		// program
+		std::vector<std::unique_ptr<Procedure>> procedures;
+		procedures.push_back(std::move(procedureNodeA));
+		procedures.push_back(std::move(procedureNodeB));
+		procedures.push_back(std::move(procedureNodeC));
+		auto programNode = std::make_unique<Program>(std::move(procedures));
+
+		REQUIRE(checkIfSameTree(std::move(rootNode), std::move(programNode)));
 	}
 
 	SECTION("Valid Program With Conditionals") {
@@ -214,6 +251,10 @@ TEST_CASE("Valid Source Program") {
 		auto rootNode = testParser.parseProgram(tokenQueue);
 
 		// creating actual tree
+		std::unique_ptr<Statement> assignNodeX = std::make_unique<AssignStatement>("x", std::make_unique<Constant>(6));
+		std::unique_ptr<Statement> assignNodeY = std::make_unique<AssignStatement>("y", std::make_unique<Constant>(1));
+		std::unique_ptr<Statement> assignNodeZ = std::make_unique<AssignStatement>("z", std::make_unique<Variable>("y"));
+
 
 		// outer scope
 		REQUIRE(rootNode->procedureList[0]->statementList->statements.size() == 5);
