@@ -11,33 +11,11 @@
 
 typedef int StmtNum;
 
-// this is a stub
-class Node {
-public:
-    Node* left;
-    Node* right;
-    std::string value;
-    StmtNum line;
-
-    Node(std::string str, StmtNum line) {
-        this->value = str;
-        this->line = line;
-    }
-};
-
 class PatternStorage {
 public:
-    //TODO: change this to pointer and table to pointer later. figure out logic first
-    virtual void writePatternNode(Node &assignNode);
     virtual void writePatternNode(std::string lhs, std::string rhspostfix);
-    // A = b + c
-    //pattern("A", _"b + ")
 
-    // TODO: get the subtree builder algorithm (KIV: enhancement is to change it to string after demo1)
     std::string buildSubtree(std::string rhs);
-
-    // pattern(_, _)
-    virtual std::vector<StmtNum> getAllAssignStatements();
 
     // pattern("a", "v")
     virtual std::vector<StmtNum> getMatchingExact(std::string lhs, std::string rhs);
@@ -66,15 +44,9 @@ public:
     // pattern(_, _"v"_)
     virtual std::vector<StmtNum> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
 
-private:
-    std::unordered_map<std::string, std::unordered_set<Node*>> rhsVariable_Nodes;
-    std::unordered_map<std::string, std::unordered_set<Node*>> lhsVariableAppearence_StmtNum;
+    // utility function for debugging
+    virtual std::vector<std::pair<std::string, std::string>> getAllPostfixes();
 
-    //TODO: what does pattern side take in from query? because if they give us pattern(_, _"x / y * a"_), how do I know which root to search?
-    // i need to know how the order of operations occur right? Take the parser from SP side?
-    /* this looks like the below btw:
-     *          *
-     *       /     a
-     *    x   y
-     */
+private:
+    std::unordered_map<std::string, std::unordered_set<std::string>> lhs_rhsPostfix;
 };
