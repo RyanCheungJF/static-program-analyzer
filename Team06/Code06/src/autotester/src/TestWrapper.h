@@ -9,12 +9,14 @@
 #include "AbstractWrapper.h"
 #include "SP.h"
 #include "PKB/PKB.h"
+#include "PKB/ReadPKB.h"
 #include "qps/QPS.h"
 
 class TestWrapper : public AbstractWrapper {
 private:
 	SP sourceProcessor;
 	WritePKB writePKB;
+    ReadPKB readPKB;
 	PKB pkb;
 	Follows f;
 	EntityStorage et;

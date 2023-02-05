@@ -29,7 +29,7 @@ std::vector<std::vector<std::string>> ReadPKB::findRelationship(Relationship rs)
 //TODO Needs to handle Procedures 
 std::vector<std::string> ReadPKB::findDesignEntities(Parameter p) {
     std::vector<std::string> res;
-    std::string typeString = p.typeToString(p.getType());
+    std::string typeString = p.getTypeString();
     if (p.isStatementRef(p)) {
         std::unordered_set stmtNums = pkbInstance->statementStorage->getStatementNumbers(typeString);
         for (auto stmtNum : stmtNums) {

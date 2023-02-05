@@ -11,13 +11,14 @@
 #include "QueryDB.h"
 #include "Table.h"
 #include "Pattern.h"
+#include "/PKB/ReadPKB.h"
 
 using namespace std;
 
 
 class Query {
 public:
-    vector<string> evaluate();
+    vector<string> evaluate(ReadPKB&);
     Query();
     Query(const Query&);
     Query(const vector<Parameter>&, const vector<Relationship>&, const vector<Pattern>&);
