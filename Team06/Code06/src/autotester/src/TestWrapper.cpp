@@ -15,8 +15,8 @@ TestWrapper::TestWrapper() {
 	// as well as any initialization required for your spa program
 	pkb.entityStorage = &et;
 	pkb.procedureStorage = &ps;
-	pkb.statementApi = &st;
-	pkb.followsApi = &f;
+	pkb.statementStorage = &sts;
+	pkb.followsStorage = &fs;
 	writePKB.setInstancePKB(pkb);
 }
 

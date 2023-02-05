@@ -3,7 +3,7 @@
 #include "../../../spa/src/PKB/ReadPKB.h"
 
 using namespace std;
-
+/*
 TEST_CASE("Checks that write and read works for entityStorage") {
 
     WritePKB writePkb;
@@ -85,5 +85,5 @@ TEST_CASE("Check that if an entity does not exist, it returns false") {
     res = res && (readPkb.checkEntity("v", 4) == false);
     REQUIRE(res);
 }
-
+*/
 

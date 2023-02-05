@@ -16,10 +16,10 @@ private:
 	SP sourceProcessor;
 	WritePKB writePKB;
 	PKB pkb;
-	Follows f;
+	FollowsStorage fs;
 	EntityStorage et;
 	ProcedureStorage ps;
-	StatementAPI st;
+	StmtStorage sts;
     QPS qps;
 
  public:

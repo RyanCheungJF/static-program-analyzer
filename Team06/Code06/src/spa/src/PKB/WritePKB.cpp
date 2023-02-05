@@ -33,7 +33,7 @@ void WritePKB::setProcedure(Proc p, std::vector<StmtNum> lines) {
 }
 
 void WritePKB::setStatement(Stmt s, StmtNum line) {
-    pkbInstance->statementApi->writeStatement(s, line);
+    pkbInstance->statementStorage->writeStatement(s, line);
     return;
 }
 
