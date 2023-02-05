@@ -126,7 +126,9 @@ TEST_CASE("Check that all of the followees of each follower is accurate, even wi
  * Given a PQL query of `if i; Select i such that Follows*(1, i)`
  * We want to find all if-statements that follows* line 1
  */
-TEST_CASE("Check that we can find an if StatementAPI from a Follows relationship") {
+
+// UPDATE: THIS SHOULD NOT BE NEEDED ANYMORE SINCE QPS HANDLES THE INTERSECTING NOW
+/*TEST_CASE("Check that we can find an if statement from a Follows relationship") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -183,7 +185,8 @@ TEST_CASE("Check that we can find an if StatementAPI from a Follows relationship
 
     bool res = std::equal(commonStatementNums.begin(), commonStatementNums.begin(), correct.begin());
     REQUIRE(res);
-    /*
+    
+    
     // prints out followersStatementNums
     std::copy(followersStatementNums.begin(),
               followersStatementNums.end(),
@@ -200,6 +203,6 @@ TEST_CASE("Check that we can find an if StatementAPI from a Follows relationship
     std::copy(commonStatementNums.begin(),
               commonStatementNums.end(),
               std::ostream_iterator<int>(std::cout, " "));
-    */
+    
 }
-
+*/

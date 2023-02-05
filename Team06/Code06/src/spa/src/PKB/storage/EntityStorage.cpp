@@ -28,3 +28,11 @@ std::unordered_set<StmtNum> EntityStorage::getEntityStmtNums(Ent e) {
     }
     return ent_stmtNum.at(e);
 }
+
+std::unordered_set<std::string> EntityStorage::getEntNames(Ent e) {
+    if (entToNameMap.find(e) == entToNameMap.end()) {
+        std::unordered_set<std::string> emptySet;
+        return emptySet;
+    }
+    return entToNameMap.at(e);
+}

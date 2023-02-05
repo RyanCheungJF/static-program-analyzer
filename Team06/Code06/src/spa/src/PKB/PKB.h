@@ -4,12 +4,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "api/Follows.h"
 #include "api/FollowsT.h"
 #include "api/Parent.h"
-#include "api/Statement.h"
+#include "storage/FollowsStorage.h"
 #include "storage/EntityStorage.h"
 #include "storage/ProcedureStorage.h"
+#include "storage/StmtStorage.h"
 #include "storage/PatternStorage.h"
 #include "storage/ConstantStorage.h"
 
@@ -26,10 +26,10 @@ public:
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST (PROC p);
 
-    Follows* followsApi;
     FollowsT* followsTApi;
     Parent* parentApi;
-    StatementAPI* statementApi;
+    FollowsStorage* followsStorage;
+    StmtStorage* statementStorage;
     EntityStorage* entityStorage;
     ProcedureStorage* procedureStorage;
     PatternStorage* patternStorage;

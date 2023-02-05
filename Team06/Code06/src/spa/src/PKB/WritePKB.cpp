@@ -9,7 +9,7 @@ void WritePKB::setInstancePKB(PKB &pkb) {
 }
 
 void WritePKB::setFollows(StmtNum followee, StmtNum follower) {
-    pkbInstance->followsApi->setFollows(followee, follower);
+    pkbInstance->followsStorage->write(followee, follower);
     return;
 }
 
@@ -23,7 +23,7 @@ void WritePKB::setParent(StmtNum parent, StmtNum children) {
 }
 
 void WritePKB::setStatement(Stmt s, std::vector<StmtNum> lines) {
-    pkbInstance->statementApi->writeStatement(s, lines);
+    pkbInstance->statementStorage->writeStatement(s, lines);
     return;
 }
 
