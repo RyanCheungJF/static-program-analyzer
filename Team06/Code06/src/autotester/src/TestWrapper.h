@@ -17,6 +17,7 @@ private:
 	PKB pkb;
 	Follows f;
 	EntityStorage et;
+	ConstantStorage c;
 	ProcedureStorage ps;
 	StatementAPI st;
 

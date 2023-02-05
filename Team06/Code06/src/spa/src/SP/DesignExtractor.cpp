@@ -23,6 +23,7 @@ void DesignExtractor::extractRelationships() {
 void DesignExtractor::extractEntities() {
 	StatementExtractorVisitor statementVisitor(writePkb);
 	ProcedureExtractorVisitor procedureVisitor(writePkb);
+	EntRefExtractorVisitor entRefVisitor(writePkb);
 
 	//std::vector<ASTVisitor> { statementVisitor, procedureVisitor };
 
@@ -31,36 +32,39 @@ void DesignExtractor::extractEntities() {
 		procedure->accept(&procedureVisitor);
 		for (const auto& statement : procedure->statementList->statements) {
 			statement->accept(&statementVisitor);
+			statement->accept(&entRefVisitor);
 			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
 				recurseStatementHelper(statement.get(), &statementVisitor);
+				recurseStatementHelper(statement.get(), &entRefVisitor);
 			}
 		}
 	}
 }
 
-void DesignExtractor::recurseStatementHelper(Statement* recurseStmt, ASTVisitor* statementVisitor) {
+
+void DesignExtractor::recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
 	if (auto i = dynamic_cast<IfStatement*>(recurseStmt)) {
-		i->thenStmtList->accept(statementVisitor);
+		i->thenStmtList->accept(visitor);
 		for (const auto& statement : i->thenStmtList->statements) {
-			statement->accept(statementVisitor);
+			statement->accept(visitor);
 			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
-				recurseStatementHelper(statement.get(), statementVisitor);
+				recurseStatementHelper(statement.get(), visitor);
 			}
 		}
-		i->elseStmtList->accept(statementVisitor);
+		i->elseStmtList->accept(visitor);
 		for (const auto& statement : i->elseStmtList->statements) {
-			statement->accept(statementVisitor);
+			statement->accept(visitor);
 			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
-				recurseStatementHelper(statement.get(), statementVisitor);
+				recurseStatementHelper(statement.get(), visitor);
 			}
 		}
 	}
 	else if (auto i = dynamic_cast<WhileStatement*>(recurseStmt)) {
-		i->stmtList->accept(statementVisitor);
+		i->stmtList->accept(visitor);
 		for (const auto& statement : i->stmtList->statements) {
-			statement->accept(statementVisitor);
+			statement->accept(visitor);
 			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
-				recurseStatementHelper(statement.get(), statementVisitor);
+				recurseStatementHelper(statement.get(), visitor);
 			}
 		}
 	}

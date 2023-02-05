@@ -8,6 +8,7 @@
 #include "AST/Visitor/FollowsExtractor.h"
 #include "AST/Visitor/ProcedureExtractorVisitor.h"
 #include "AST/Visitor/StatementExtractorVisitor.h"
+#include "AST/Visitor/EntRefExtractorVisitor.h"
 #include "../PKB/WritePKB.h"
 
 class DesignExtractor {
