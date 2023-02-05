@@ -27,7 +27,8 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
         if (isFalseQuery) {
             return {};
         } else {
-            return readPKB.findDesignEntities(selectParameters[0]);
+            vector<string> res = readPKB.findDesignEntities(selectParameters[0]);
+            return res;
         }
     }
 }
