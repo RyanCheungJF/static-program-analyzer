@@ -104,3 +104,4 @@ TEST_CASE("extractParameters / one clause with not proper format / throws error"
 	string input = "asd,\"x*y\"";
 	REQUIRE_THROWS(extractParameters(input));
 }
+
