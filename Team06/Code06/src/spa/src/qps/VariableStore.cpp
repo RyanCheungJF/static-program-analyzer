@@ -40,7 +40,7 @@ bool VariableStore::updateSynonym(Parameter* synP)
 string VariableStore::toString() {
     string s;
     for(const pair<const string, Parameter> elem : store) {
-        s += "value: " + elem.first + ", type: " + elem.second.typeToString(elem.second.getType()) + "\n";
+        s += "value: " + elem.first + ", type: " + elem.second.getTypeString() + "\n";
     }
     return s;
 }

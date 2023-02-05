@@ -3,7 +3,7 @@
 #include "exceptions/Exception.h"
 #include "qps/entities/Relationship.h"
 #include "qps/entities/Query.h"
-#include "parserUtil.h"
+#include "ParserUtil.h"
 #include <string>
 #include <vector>
 #include <map>
