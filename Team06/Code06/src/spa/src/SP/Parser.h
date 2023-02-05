@@ -38,11 +38,11 @@ private:
 	std::unique_ptr<AssignStatement> parseAssignStatement(std::deque<Token>& tokens);
 	std::unique_ptr<ConditionalExpression> parseConditionalExpression(std::deque<Token>& tokens);
 	std::unique_ptr<ConditionalExpression> parseRelationalExpression(std::deque<Token>& tokens);
-	std::unique_ptr<Expression> parseExpression(std::deque<Token>& tokens);
 	std::unique_ptr<Expression> parseRelationalFactor(std::deque<Token>& tokens);
 	std::unique_ptr<Expression> parseTerm(std::deque<Token>& tokens);
 	std::unique_ptr<Expression> parseFactor(std::deque<Token>& tokens);
 
 public:
 	std::unique_ptr<Program> parseProgram(std::deque<Token> tokens);
+    std::unique_ptr<Expression> parseExpression(std::deque<Token>& tokens);
 };

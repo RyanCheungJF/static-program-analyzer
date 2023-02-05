@@ -48,6 +48,9 @@ public:
 
     void setConstant(StmtNum line, std::vector<Const> constants);
 
+
+    std::string buildSubtree(std::string rhs);
+
 private:
     PKB* pkbInstance = NULL;
 };

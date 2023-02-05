@@ -4,6 +4,10 @@
 #include <vector>
 #include <string>
 #include "../../SP/AST/Node/AssignStatement.h"
+#include "../../SP/Tokenizer.h"
+#include "../../SP/Parser.h"
+#include <stdio.h>
+#include <iostream>
 
 typedef int StmtNum;
 
@@ -25,9 +29,12 @@ class PatternStorage {
 public:
     //TODO: change this to pointer and table to pointer later. figure out logic first
     virtual void writePatternNode(Node &assignNode);
+    virtual void writePatternNode(std::string lhs, std::string rhspostfix);
+    // A = b + c
+    //pattern("A", _"b + ")
 
     // TODO: get the subtree builder algorithm (KIV: enhancement is to change it to string after demo1)
-    AssignStatement buildSubtree();
+    std::string buildSubtree(std::string rhs);
 
     // pattern(_, _)
     virtual std::vector<StmtNum> getAllAssignStatements();

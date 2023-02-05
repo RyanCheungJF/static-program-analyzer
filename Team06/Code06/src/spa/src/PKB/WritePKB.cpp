@@ -66,3 +66,7 @@ void WritePKB::setConstant(StmtNum line, std::vector<Const> constants) {
     }
     return;
 }
+
+std::string WritePKB::buildSubtree(std::string rhs) {
+    return pkbInstance->patternStorage->buildSubtree(rhs);
+}
