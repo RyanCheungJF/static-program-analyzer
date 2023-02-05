@@ -1,0 +1,15 @@
+#ifndef SPA_QPS_H
+#define SPA_QPS_H
+#include "entities/Query.h"
+
+
+#include "qps/parser/QPSParser.h"
+
+class QPS {
+public:
+    vector<string> processQueries(string);
+
+};
+
+
+#endif //SPA_QPS_H
