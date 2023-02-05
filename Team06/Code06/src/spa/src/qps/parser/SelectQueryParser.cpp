@@ -9,9 +9,9 @@ Query SelectQueryParser::parse(string selectQuery) {
 
 	vector<Parameter> selectParams = parseSelectClause(wordList, clauseStarts[0], clauseEnds[0]);
 	vector<Relationship> suchThatRelations = parseSuchThatClause(wordList, clauseStarts[1], clauseEnds[1]);
-	//patternInfo = parsePatternClause(wordList, clauseStarts[2], clauseStarts[2]);
+	vector<Pattern> patterns = parsePatternClause(wordList, clauseStarts[2], clauseEnds[2]);
 
-	Query query(selectParams, suchThatRelations);
+	Query query(selectParams, suchThatRelations, patterns);
 	//SelectQueryInfo queryInfo(selectClauseInfo, suchThatInfo, patternInfo);
 	return query;
 }
@@ -150,63 +150,47 @@ vector<Relationship> SelectQueryParser::parseSuchThatClause(vector<string>& word
 }
 
 
-////TODO fix bug with patternclause
-//PatternInfo SelectQueryParser::parsePatternClause(vector<string>& wordList, int start, int end)
-//{
-//
-//	if (start == -1 && end == -1) {
-//		return PatternInfo();
-//	}
-//	if (end <= start) {
-//		throw Exception();
-//	}
-//	if (end - start < 3) {
-//		throw Exception();
-//	}
-//
-//	stringstream ss;
-//	int condStart = start + 1;
-//	for (int i = condStart; i < end; i++) {
-//		ss << wordList[i];
-//	}
-//	string condString = ss.str();
-//
-//	string assignSyn;
-//	string entRef;
-//	string pattern;
-//	string delimiter = "(";
-//	size_t itemStart = 0;
-//	size_t itemEnd;
-//
-//	try {
-//		tie(assignSyn, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-//		itemStart = itemEnd;
-//		delimiter = ",";
-//		tie(entRef, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-//		itemStart = itemEnd;
-//		delimiter = ")";
-//		tie(pattern, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-//	}
-//	catch (Exception e) {
-//		//do nothing for now
-//	}
-//
-//	if (!isSynonym(assignSyn)) {
-//		throw Exception();
-//	}
-//
-//	if (!isEntRef(entRef)) {
-//		throw Exception();
-//	}
-//
-//	if (!isExprSpec(pattern)) {
-//		throw Exception();
-//	}
-//
-//	if (itemEnd != condString.size()) {
-//		throw Exception();
-//	}
-//
-//	return PatternInfo(assignSyn, entRef, pattern);
-//}
+//TODO fix bug with patternclause
+vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, int start, int end)
+{
+	vector<Pattern> res;
+	if (start == -1 && end == -1) {
+		return res;
+	}
+	if (end <= start) {
+		throw Exception();
+	}
+	if (end - start < 2) {
+		throw Exception();
+	}
+
+	stringstream ss;
+	int condStart = start + 1;
+	for (int i = condStart; i < end; i++) {
+		ss << wordList[i];
+	}
+	string condString = ss.str();
+	vector<tuple<string, string, string>> patternParams = extractParameters(condString);
+	for (tuple<string, string, string> t : patternParams) {
+		string synAssignString, entRefString, patternString;
+		tie(synAssignString, entRefString, patternString) = t;
+		if (!isSynonym(synAssignString)) {
+			throw Exception();
+		}
+
+		if (!isEntRef(entRefString)) {
+			throw Exception();
+		}
+
+		if (!isExprSpec(patternString)) {
+			throw Exception();
+		}
+		Parameter synAssign(synAssignString, ParameterType::ASSIGN);
+		Parameter entRef(entRefString, Parameter::guessParameterType(entRefString));
+		Pattern p(synAssign, entRef, patternString);
+		res.push_back(p);
+	}
+
+	return res;
+}
 
