@@ -2,7 +2,7 @@
 // The main class used to instantiate and run the QPS
 
 
-vector<string> processQueries(string queryString, ReadPKB& readPKB) {
+vector<string> QPS::processQueries(string queryString, ReadPKB& readPKB) {
     QPSParser parser = QPSParser();
     vector<Query> queryVec = parser.parse(queryString);
     vector<string> finalResult;
