@@ -4,42 +4,32 @@
 #include <vector>
 #include <string>
 #include "../../SP/AST/Node/AssignStatement.h"
+#include "../../SP/Tokenizer.h"
+#include "../../SP/Parser.h"
+#include <stdio.h>
+#include <iostream>
 
 typedef int StmtNum;
 
-// this is a stub
-class Node {
-public:
-    Node* left;
-    Node* right;
-    std::string value;
-    StmtNum line;
+struct hashFunction
+{
+    size_t operator()(const std::pair<int, std::unique_ptr<Expression>> &x) const
+    {
+//        std::size_t h1 = std::hash<std::string>{}(x.second);
+        std::size_t h2 = std::hash<double>{}(x.first);
 
-    Node(std::string str, StmtNum line) {
-        this->value = str;
-        this->line = line;
+        return h2;
     }
 };
 
 class PatternStorage {
 public:
-    //TODO: change this to pointer and table to pointer later. figure out logic first
-    virtual void writePatternNode(Node &assignNode);
+    virtual void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
-    // TODO: get the subtree builder algorithm (KIV: enhancement is to change it to string after demo1)
-    AssignStatement buildSubtree();
-
-    // pattern(_, _)
-    virtual std::vector<StmtNum> getAllAssignStatements();
+    std::unique_ptr<Expression> buildSubtree(std::string rhs);
 
     // pattern("a", "v")
     virtual std::vector<StmtNum> getMatchingExact(std::string lhs, std::string rhs);
-
-    // pattern("a", _"v")
-    virtual std::vector<StmtNum> getMatchingRHSLeftWildcard(std::string lhs, std::string rhs);
-
-    // pattern("a", "v"_)
-    virtual std::vector<StmtNum> getMatchingRHSRightWildcard(std::string lhs, std::string rhs);
 
     // pattern("a", _"v"_)
     virtual std::vector<StmtNum> getMatchingRHSBothWildcard(std::string lhs, std::string rhs);
@@ -50,24 +40,12 @@ public:
     // pattern(_, "v")
     virtual std::vector<StmtNum> getMatchingLHSWildcardRHSNoWildcard(std::string rhs);
 
-    // pattern(_, _"v")
-    virtual std::vector<StmtNum> getMatchingLHSWildcardRHSLeftWildcard(std::string rhs);
-
-    // pattern(_, "v"_)
-    virtual std::vector<StmtNum> getMatchingLHSWildcardRHSRightWildcard(std::string rhs);
-
     // pattern(_, _"v"_)
     virtual std::vector<StmtNum> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
 
-private:
-    std::unordered_map<std::string, std::unordered_set<Node*>> rhsVariable_Nodes;
-    std::unordered_map<std::string, std::unordered_set<Node*>> lhsVariableAppearence_StmtNum;
+    // utility function for debugging
+    virtual std::vector<std::pair<std::string, std::string>> getAllPostfixes();
 
-    //TODO: what does pattern side take in from query? because if they give us pattern(_, _"x / y * a"_), how do I know which root to search?
-    // i need to know how the order of operations occur right? Take the parser from SP side?
-    /* this looks like the below btw:
-     *          *
-     *       /     a
-     *    x   y
-     */
+private:
+    std::unordered_map<std::string, std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>> lhs_stmtNum_rhsPostfix;
 };

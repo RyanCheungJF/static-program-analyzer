@@ -17,6 +17,7 @@ TestWrapper::TestWrapper() {
 	pkb.procedureStorage = &ps;
 	pkb.statementStorage = &sts;
 	pkb.followsStorage = &fs;
+	pkb.constantStorage = &c;
 	writePKB.setInstancePKB(pkb);
 	readPKB.setInstancePKB(pkb);
 }

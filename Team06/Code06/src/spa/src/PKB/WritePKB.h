@@ -48,6 +48,8 @@ public:
 
     void setConstant(StmtNum line, std::vector<Const> constants);
 
+    void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
+
 private:
     PKB* pkbInstance = NULL;
 };

@@ -60,9 +60,13 @@ void WritePKB::setConstant(Const c, StmtNum line) {
 }
 
 void WritePKB::setConstant(StmtNum line, std::vector<Const> constants) {
-
     for (Const c: constants) {
         pkbInstance->constantStorage->writeConstant(c, line);
     }
+    return;
+}
+
+void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer) {
+    pkbInstance->patternStorage->writePattern(lhs, num, std::move(pointer));
     return;
 }

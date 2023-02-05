@@ -20,6 +20,7 @@ private:
 	PKB pkb;
 	FollowsStorage fs;
 	EntityStorage et;
+	ConstantStorage c;
 	ProcedureStorage ps;
 	StmtStorage sts;
     QPS qps;
