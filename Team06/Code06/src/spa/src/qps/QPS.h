@@ -8,7 +8,7 @@
 
 class QPS {
 public:
-    vector<string> processQueries(string);
+    vector<string> processQueries(string, ReadPKB&);
 
 };
 
