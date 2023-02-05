@@ -48,8 +48,7 @@ public:
 
     void setConstant(StmtNum line, std::vector<Const> constants);
 
-
-    std::string buildSubtree(std::string rhs);
+    void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
 private:
     PKB* pkbInstance = NULL;
