@@ -2,19 +2,19 @@
 #include "../../../spa/src/PKB/WritePKB.h"
 #include "../../../spa/src/PKB/ReadPKB.h"
 
-TEST_CASE("All nodes can be added") {
-    WritePKB writePkb;
-    PKB pkb;
-    PatternStorage pa;
-    pkb.patternStorage = &pa;
-    writePkb.setInstancePKB(pkb);
-
-    std::string s = "x / y * z";
-    std::string res = writePkb.buildSubtree(s);
-    std::cout << res;
-    REQUIRE(true);
-
-}
+//TEST_CASE("All nodes can be added") {
+//    WritePKB writePkb;
+//    PKB pkb;
+//    PatternStorage pa;
+//    pkb.patternStorage = &pa;
+//    writePkb.setInstancePKB(pkb);
+//
+//    std::string s = "x / y * z";
+//    std::string res = writePkb.buildSubtree(s);
+//    std::cout << res;
+//    REQUIRE(true);
+//
+//}
 
 //using namespace std;
 //

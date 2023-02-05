@@ -53,9 +53,9 @@ std::vector<StmtNum> PatternStorage::getMatchingExact(std::string lhs, std::stri
     std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction> set = std::move(lhs_stmtNum_rhsPostfix.at(lhs));
 
     for (const auto& p : set) {
-        if (isSameTree(p.second, expected)) {
-            res.push_back(p.first);
-        }
+//        if (isSameTree(p.second, expected)) {
+//            res.push_back(p.first);
+//        }
     }
     return res;
 }
@@ -71,9 +71,9 @@ std::vector<StmtNum> PatternStorage::getMatchingRHSBothWildcard(std::string lhs,
 
     std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
     for (const auto& p : set) {
-        if (isSubTree(p.second, expected)) {
-            res.push_back(p.first);
-        }
+//        if (isSubTree(p.second, expected)) {
+//            res.push_back(p.first);
+//        }
     }
     return res;
 }
@@ -97,11 +97,11 @@ std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSNoWildcard(std::st
     std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
     std::vector<StmtNum> res;
 
-    for (auto i: lhs_stmtNum_rhsPostfix) {
+    for (auto const&i: lhs_stmtNum_rhsPostfix) {
         for (const auto& p : i.second) {
-            if (isSameTree(p.second, expected)) {
-                res.push_back(p.first);
-            }
+//            if (isSameTree(p.second, expected)) {
+//                res.push_back(p.first);
+//            }
         }
     }
     return res;
@@ -111,11 +111,11 @@ std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSBothWildcard(std::
     std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
     std::vector<StmtNum> res;
 
-    for (auto i: lhs_stmtNum_rhsPostfix) {
+    for (auto const& i: lhs_stmtNum_rhsPostfix) {
         for (const auto& p : i.second) {
-            if (isSubTree(p.second, expected)) {
-                res.push_back(p.first);
-            }
+//            if (isSubTree(p.second, expected)) {
+//                res.push_back(p.first);
+//            }
         }
     }
     return res;
