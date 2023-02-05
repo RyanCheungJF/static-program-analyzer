@@ -3,7 +3,7 @@
 #include "../../../spa/src/PKB/ReadPKB.h"
 
 using namespace std;
-/*
+
 TEST_CASE("Checks that write and read works for entityStorage") {
 
     WritePKB writePkb;
@@ -19,7 +19,9 @@ TEST_CASE("Checks that write and read works for entityStorage") {
     lines.push_back(3);
     lines.push_back(6);
     lines.push_back(9);
-    writePkb.setEntity(e, lines);
+    for (int line: lines) {
+        writePkb.setEntity(e, line);
+    }
     std::unordered_set<StmtNum> statementNums = readPkb.getEntityStatementNumbers(e);
 
     bool res = true;
@@ -30,6 +32,7 @@ TEST_CASE("Checks that write and read works for entityStorage") {
     res = res && statementNums.find(12) == statementNums.end(); //12 is not present
     REQUIRE(res);
 }
+
 
 TEST_CASE("Check that if an entity does not appear in the source code, it should return an empty set") {
     WritePKB writePkb;
@@ -42,7 +45,10 @@ TEST_CASE("Check that if an entity does not appear in the source code, it should
 
     Ent e = "v";
     std::vector<StmtNum> lines;
-    writePkb.setEntity(e, lines);
+
+    for (int line: lines) {
+        writePkb.setEntity(e, line);
+    }
     std::unordered_set<StmtNum> statementNums = readPkb.getEntityStatementNumbers(e);
 
     bool res = true;
@@ -64,7 +70,9 @@ TEST_CASE("Check that given query for an entity and a statementNumber that it ap
     Ent e = "v";
     std::vector<StmtNum> lines;
     lines.push_back(3);
-    writePkb.setEntity(e, lines);
+    for (int line: lines) {
+        writePkb.setEntity(e, line);
+    }
 
     bool res = true;
     res = res && (readPkb.checkEntity(e, 3) == true);
@@ -85,5 +93,4 @@ TEST_CASE("Check that if an entity does not exist, it returns false") {
     res = res && (readPkb.checkEntity("v", 4) == false);
     REQUIRE(res);
 }
-*/
 
