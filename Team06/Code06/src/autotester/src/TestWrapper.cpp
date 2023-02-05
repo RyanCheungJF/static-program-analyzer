@@ -18,6 +18,7 @@ TestWrapper::TestWrapper() {
 	pkb.statementStorage = &sts;
 	pkb.followsStorage = &fs;
 	writePKB.setInstancePKB(pkb);
+	readPKB.setInstancePKB(pkb);
 }
 
 // method for parsing the SIMPLE source

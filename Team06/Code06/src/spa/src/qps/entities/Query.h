@@ -11,7 +11,7 @@
 #include "QueryDB.h"
 #include "Table.h"
 #include "Pattern.h"
-#include "/PKB/ReadPKB.h"
+#include "../PKB/ReadPKB.h"
 
 using namespace std;
 
