@@ -7,10 +7,13 @@
 #include "AST/Node/Statement.h"
 #include "AST/Node/StatementList.h"
 #include "AST/Node/WhileStatement.h"
+#include "../../../PKB/WritePKB.h"
 
 class FollowsExtractor : public ASTVisitor {
 public:
-	FollowsExtractor();
+	WritePKB* writeApi;
+
+	FollowsExtractor(WritePKB* writePKB);
 
 	void visitProgram(const Program *program) override;
 	void visitProcedure(const Procedure* procedure) override;

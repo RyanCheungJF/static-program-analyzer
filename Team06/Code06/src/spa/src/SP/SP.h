@@ -16,5 +16,5 @@ private:
 	DesignExtractor designExtractor;
 
 public:
-	void processFile(std::string filepath);
+	void processFile(std::string filepath, WritePKB* writePKB);
 };
