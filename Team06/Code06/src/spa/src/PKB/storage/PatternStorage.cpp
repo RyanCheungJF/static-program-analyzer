@@ -48,10 +48,10 @@ std::vector<StmtNum> PatternStorage::getMatchingExact(std::string lhs, std::stri
         return empty;
     }
 
+    std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
     std::vector<StmtNum> res;
     std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction> set = std::move(lhs_stmtNum_rhsPostfix.at(lhs));
 
-    std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
     for (const auto& p : set) {
         if (isSameTree(p.second, expected)) {
             res.push_back(p.first);
@@ -93,9 +93,33 @@ std::vector<StmtNum> PatternStorage::getMatchingLHS(std::string lhs) {
     return res;
 }
 
-std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSNoWildcard(std::string rhs) {}
+std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSNoWildcard(std::string rhs) {
+    std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
+    std::vector<StmtNum> res;
 
-std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSBothWildcard(std::string rhs) {}
+    for (auto i: lhs_stmtNum_rhsPostfix) {
+        for (const auto& p : i.second) {
+            if (isSameTree(p.second, expected)) {
+                res.push_back(p.first);
+            }
+        }
+    }
+    return res;
+}
+
+std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSBothWildcard(std::string rhs) {
+    std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
+    std::vector<StmtNum> res;
+
+    for (auto i: lhs_stmtNum_rhsPostfix) {
+        for (const auto& p : i.second) {
+            if (isSubTree(p.second, expected)) {
+                res.push_back(p.first);
+            }
+        }
+    }
+    return res;
+}
 
 /*
 std::vector<std::pair<std::string, std::string>> PatternStorage::getAllPostfixes() {
