@@ -8,7 +8,7 @@ class WritePKB {
 public:
 
     // Sets the pointer to the PKB instance if it is not set yet
-    void setInstancePKB(PKB &pkb);
+    void setInstancePKB(PKB& pkb);
 
     // Sets Follows relation in PKB
     void setFollows(StmtNum left, StmtNum right);

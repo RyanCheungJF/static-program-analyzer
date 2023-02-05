@@ -5,5 +5,5 @@
 // interface for ASTNodes 
 class ASTNode {
 public:
-	virtual void accept(ASTVisitor* visitor) const = 0;
+	virtual void accept(ASTVisitor* visitor) = 0;
 };

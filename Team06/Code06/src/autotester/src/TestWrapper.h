@@ -19,6 +19,7 @@ private:
 	EntityStorage et;
 	ConstantStorage c;
 	ProcedureStorage ps;
+	PatternStorage pts;
 	StatementAPI st;
 
  public:

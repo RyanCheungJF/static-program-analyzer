@@ -6,6 +6,6 @@ ReadStatement::ReadStatement(std::string varName) {
 	this->varName = varName;
 }
 
-void ReadStatement::accept(ASTVisitor* visitor) const {
+void ReadStatement::accept(ASTVisitor* visitor) {
 	visitor->visitReadStatement(this);
 }

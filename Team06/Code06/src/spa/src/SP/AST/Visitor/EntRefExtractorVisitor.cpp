@@ -4,25 +4,25 @@ EntRefExtractorVisitor::EntRefExtractorVisitor(WritePKB* writePKB) {
 	writeApi = writePKB;
 }
 
-void EntRefExtractorVisitor::visitProgram(const Program* program) {}
+void EntRefExtractorVisitor::visitProgram(Program* program) {}
 
-void EntRefExtractorVisitor::visitProcedure(const Procedure* procedure) {}
+void EntRefExtractorVisitor::visitProcedure(Procedure* procedure) {}
 
-void EntRefExtractorVisitor::visitStatementList(const StatementList* statementList) {}
+void EntRefExtractorVisitor::visitStatementList(StatementList* statementList) {}
 
-void EntRefExtractorVisitor::visitStatement(const Statement* statement) {}
+void EntRefExtractorVisitor::visitStatement(Statement* statement) {}
 
-void EntRefExtractorVisitor::visitReadStatement(const ReadStatement* readStatement) {
+void EntRefExtractorVisitor::visitReadStatement(ReadStatement* readStatement) {
 	std::vector<Ent> variables = { readStatement->varName };
 	writeApi->setEntity(readStatement->statementNumber, variables);
 }
 
-void EntRefExtractorVisitor::visitPrintStatement(const PrintStatement* printStatement) {
+void EntRefExtractorVisitor::visitPrintStatement(PrintStatement* printStatement) {
 	std::vector<Ent> variables = { printStatement->varName };
 	writeApi->setEntity(printStatement->statementNumber, variables);
 }
 
-void EntRefExtractorVisitor::visitAssignStatement(const AssignStatement* assignStatement) {
+void EntRefExtractorVisitor::visitAssignStatement(AssignStatement* assignStatement) {
 	std::unordered_set<std::string> variables;
 	std::unordered_set<int> constants;
 
@@ -33,11 +33,22 @@ void EntRefExtractorVisitor::visitAssignStatement(const AssignStatement* assignS
 	std::vector<int> outputConstants(constants.begin(), constants.end());
 	writeApi->setEntity(assignStatement->statementNumber, outputVariables);
 	writeApi->setConstant(assignStatement->statementNumber, outputConstants);
+	std::unique_ptr<Expression> expr;
+	if (auto i = dynamic_cast<MathExpression*>(assignStatement->expr.get())) {
+		expr = std::make_unique<MathExpression>(std::move(*i));
+	}
+	else if (auto i = dynamic_cast<Constant*>(assignStatement->expr.get())) {
+		expr = std::make_unique<Constant>(std::move(*i));
+	}
+	else if (auto i = dynamic_cast<Variable*>(assignStatement->expr.get())) {
+		expr = std::make_unique<Variable>(std::move(*i));
+	}
+	writeApi->writePattern(assignStatement->varName, assignStatement->statementNumber, std::move(expr));
 }
 
-void EntRefExtractorVisitor::visitCallStatement(const CallStatement* callStatement) {}
+void EntRefExtractorVisitor::visitCallStatement(CallStatement* callStatement) {}
 
-void EntRefExtractorVisitor::visitIfStatement(const IfStatement* ifStatement) {
+void EntRefExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
 	std::unordered_set<std::string> variables;
 	std::unordered_set<int> constants;
 
@@ -50,7 +61,7 @@ void EntRefExtractorVisitor::visitIfStatement(const IfStatement* ifStatement) {
 	writeApi->setConstant(ifStatement->statementNumber, outputConstants);
 }
 
-void EntRefExtractorVisitor::visitWhileStatement(const WhileStatement* whileStatement) {
+void EntRefExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement) {
 	std::unordered_set<std::string> variables;
 	std::unordered_set<int> constants;
 
@@ -63,9 +74,9 @@ void EntRefExtractorVisitor::visitWhileStatement(const WhileStatement* whileStat
 	writeApi->setConstant(whileStatement->statementNumber, outputConstants);
 }
 
-void EntRefExtractorVisitor::visitExpression(const Expression* variable) {};
+void EntRefExtractorVisitor::visitExpression(Expression* variable) {};
 
-void EntRefExtractorVisitor::visitConditionalExpression(const ConditionalExpression* conditionalExpression) {};
+void EntRefExtractorVisitor::visitConditionalExpression(ConditionalExpression* conditionalExpression) {};
 
 void EntRefExtractorVisitor::visitCondExprHelper(ConditionalExpression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants) {
 	if (auto i = dynamic_cast<NotConditionalExpression*>(e)) {

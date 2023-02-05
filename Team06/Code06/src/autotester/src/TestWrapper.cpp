@@ -18,6 +18,7 @@ TestWrapper::TestWrapper() {
 	pkb.statementApi = &st;
 	pkb.followsApi = &f;
 	pkb.constantStorage = &c;
+	pkb.patternStorage = &pts;
 	writePKB.setInstancePKB(pkb);
 }
 

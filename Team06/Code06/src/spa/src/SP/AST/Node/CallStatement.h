@@ -11,5 +11,5 @@ public:
 
 	CallStatement(std::string procName);
 
-	void accept(ASTVisitor* visitor) const override;
+	void accept(ASTVisitor* visitor) override;
 };

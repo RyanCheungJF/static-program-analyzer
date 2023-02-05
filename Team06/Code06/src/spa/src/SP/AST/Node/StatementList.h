@@ -14,5 +14,5 @@ public:
 
 	StatementList(std::vector<std::unique_ptr<Statement>> statements);
 
-	void accept(ASTVisitor* visitor) const override;
+	void accept(ASTVisitor* visitor) override;
 };
