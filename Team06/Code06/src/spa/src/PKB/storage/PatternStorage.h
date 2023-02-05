@@ -13,31 +13,23 @@ typedef int StmtNum;
 
 struct hashFunction
 {
-    size_t operator()(const std::pair<int ,
-            std::string> &x) const
+    size_t operator()(const std::pair<int, std::unique_ptr<Expression>> &x) const
     {
-        std::size_t hash = 0;
-        std::size_t h1 = std::hash<std::string>{}(x.second);
+//        std::size_t h1 = std::hash<std::string>{}(x.second);
         std::size_t h2 = std::hash<double>{}(x.first);
 
-        return h1 ^ h2;
+        return h2;
     }
 };
 
 class PatternStorage {
 public:
-    virtual void writePattern(std::string lhs, StmtNum num, std::string rhspostfix);
+    virtual void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
-    std::string buildSubtree(std::string rhs);
+    std::unique_ptr<Expression> buildSubtree(std::string rhs);
 
     // pattern("a", "v")
     virtual std::vector<StmtNum> getMatchingExact(std::string lhs, std::string rhs);
-
-    // pattern("a", _"v")
-    virtual std::vector<StmtNum> getMatchingRHSLeftWildcard(std::string lhs, std::string rhs);
-
-    // pattern("a", "v"_)
-    virtual std::vector<StmtNum> getMatchingRHSRightWildcard(std::string lhs, std::string rhs);
 
     // pattern("a", _"v"_)
     virtual std::vector<StmtNum> getMatchingRHSBothWildcard(std::string lhs, std::string rhs);
@@ -48,12 +40,6 @@ public:
     // pattern(_, "v")
     virtual std::vector<StmtNum> getMatchingLHSWildcardRHSNoWildcard(std::string rhs);
 
-    // pattern(_, _"v")
-    virtual std::vector<StmtNum> getMatchingLHSWildcardRHSLeftWildcard(std::string rhs);
-
-    // pattern(_, "v"_)
-    virtual std::vector<StmtNum> getMatchingLHSWildcardRHSRightWildcard(std::string rhs);
-
     // pattern(_, _"v"_)
     virtual std::vector<StmtNum> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
 
@@ -61,5 +47,5 @@ public:
     virtual std::vector<std::pair<std::string, std::string>> getAllPostfixes();
 
 private:
-    std::unordered_map<std::string, std::unordered_set<std::pair<int, std::string>, hashFunction>> lhs_stmtNum_rhsPostfix;
+    std::unordered_map<std::string, std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>> lhs_stmtNum_rhsPostfix;
 };
