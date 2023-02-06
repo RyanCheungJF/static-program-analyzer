@@ -2,8 +2,14 @@
 #include <string>
 #include <unordered_map>
 
+class QueryStub {
+public:
+    Parameter synAssign;
+    Parameter entRef;
+    string pattern;
+};
 
-std::vector<StmtNum> PatternStorage::interpretQuery(PatternQuery pq) {
+std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
     std::string lhs = pq.entRef.getValue();
     std::string pattern = pq.pattern;
     std::vector<StmtNum> res;
