@@ -38,7 +38,7 @@ public:
     std::unique_ptr<Expression> buildSubtree(std::string rhs);
 
     // utility function for debugging
-    virtual std::vector<std::pair<std::string, std::vector<std::string>>> getAll();
+//    virtual std::vector<std::pair<std::string, std::vector<std::string>>> getAll();
 
 private:
     std::unordered_map<std::string, std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>> lhs_stmtNum_rhsPostfix;

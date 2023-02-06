@@ -72,5 +72,5 @@ void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expres
 }
 
 std::unique_ptr<Expression> WritePKB::buildSubtree(std::string rhs) {
-    std::move(pkbInstance->patternStorage->buildSubtree(rhs));
+    return std::move(pkbInstance->patternStorage->buildSubtree(rhs));
 }

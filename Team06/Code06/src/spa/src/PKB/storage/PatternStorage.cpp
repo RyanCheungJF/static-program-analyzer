@@ -78,16 +78,21 @@ std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
     std::string rhs = ss.str();
     if (lhs == "_") {
         if (leftWildcard && rightWildcard) {
+            std::cout << "hitting pattern(_, _\"v\"_) for " << lhs << " = " << rhs << "\n";
             return getMatchingLHSWildcardRHSBothWildcard(rhs);
         } else {
+            std::cout << "hitting pattern(_, \"v\") for " << lhs << " = " << rhs << "\n";
             return getMatchingLHSWildcardRHSNoWildcard(rhs);
         }
     } else {
         if (pattern == "_") {
+            std::cout << "hitting pattern(\"a\", _) for " << lhs << " = " << rhs << "\n";
             return getMatchingLHS(lhs);
         } else if (leftWildcard && rightWildcard) {
+            std::cout << "hitting pattern(\"a\", _\"v\"_) for " << lhs << " = " << rhs << "\n";
             return getMatchingRHSBothWildcard(lhs, rhs);
         } else {
+            std::cout << "hitting pattern(\"a\", \"v\") for " << lhs << " = " << rhs << "\n";
             return getMatchingExact(lhs, rhs);
         }
     }
@@ -209,8 +214,44 @@ std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSBothWildcard(std::
 }
 
 
-std::vector<std::pair<std::string, std::vector<std::string>>> PatternStorage::getAll() {
-    std::vector<std::pair<std::string, std::string>> res;
+
+
+
+
+//std::string getPostfixString(std::string rhs) {
+//    std::stringstream ss;
+//    std::deque<Token> tokens;
+//    Tokenizer tk; Parser pr;
+//
+//    ss << "dontCare = " + rhs;
+//    tokens = tk.tokenize(ss);
+//    std::unique_ptr<Expression> root = pr.parseExpression(tokens);
+////    unique_ptr<MathExpression> derived(static_cast<MathExpression*>(root.release()));
+//
+//    std::string res = "";
+//    std::deque<std::unique_ptr<Expression>> queue;
+//    queue.push_back(std::move(root));
+//
+//    while (!queue.empty()) {
+//        std::unique_ptr<Expression> node = std::move(queue.front());
+//        queue.pop_front();
+//
+//        if (auto i = dynamic_cast<MathExpression*>(node.get())) {
+//            queue.push_back(std::move(i -> lhs));
+//            queue.push_back(std::move(i -> rhs));
+//        }
+//        else if (auto i = dynamic_cast<Constant*>(node.get())) {
+//            res += std::to_string(i -> value);
+//        }
+//        else { // Variable
+//            res += std::to_string(dynamic_cast<Constant *>(node.get())->value);
+//        }
+//    }
+//    return res;
+//}
+
+//std::vector<std::pair<std::string, std::vector<std::string>>> PatternStorage::getAll() {
+//    std::vector<std::pair<std::string, std::vector<std::string>>> res;
 //    for (auto keyValuePair: lhs_stmtNum_rhsPostfix) {
 //        std::string lhs = keyValuePair.first;
 //        std::unordered_set<std::string> postfixStrings = keyValuePair.second;
@@ -219,5 +260,5 @@ std::vector<std::pair<std::string, std::vector<std::string>>> PatternStorage::ge
 //        }
 //    }
 //    std::sort(res.begin(), res.end());
-    return res;
-}
+//    return res;
+//}

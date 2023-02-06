@@ -4,21 +4,39 @@
 
 TEST_CASE("AST Nodes can be written") {
     WritePKB writePkb;
+    ReadPKB readPkb;
     PKB pkb;
     PatternStorage pa;
     pkb.patternStorage = &pa;
     writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
 
     //line 1: z = a + b / c
     //line 2: z = z * 5
 
     std::string lhs = "z";
-    std::unique_ptr<Expression> line1rhs = writePkb.buildSubtree("a + b / c");
-    std::unique_ptr<Expression> line2rhs = writePkb.buildSubtree("z * 5");
+    std::unique_ptr<Expression> line1rhs = std::move(writePkb.buildSubtree("a + b / c"));
+    std::unique_ptr<Expression> line2rhs = std::move(writePkb.buildSubtree("z * 5"));
 
     writePkb.writePattern(lhs, 1, std::move(line1rhs));
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
+    QueryStub qs1;
+    qs1.lhs = "z";
+    qs1.pattern = "a + b / c";
+
+    QueryStub qs2;
+    qs2.lhs = "z";
+    qs2.pattern = "z * 5";
+
+    std::vector<StmtNum> lines_qs1 = readPkb.interpretQuery(qs1);
+    std::vector<StmtNum> lines_qs2 = readPkb.interpretQuery(qs2);
+
+    bool res = true;
+    res = res && lines_qs1.size() == 1;
+    res = res && lines_qs2.size() == 1;
+
+    std::cout << "COMPLETE";
     REQUIRE(true);
 
 }
