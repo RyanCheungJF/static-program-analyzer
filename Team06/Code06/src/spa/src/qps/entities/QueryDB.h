@@ -18,6 +18,8 @@ public:
     vector<string> fetch(Parameter);
 private:
     vector<Table> tableVector;
+    vector<pair<int, int>> getAllIntersectingParams(Table, Table);
+    pair<vector<int>, vector<int>> getAllNonIntersectingParams(Table, Table);
 };
 
 

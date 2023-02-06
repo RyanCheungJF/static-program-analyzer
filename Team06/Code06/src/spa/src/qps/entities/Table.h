@@ -15,7 +15,7 @@ class Table {
 public:
     Table(vector<Parameter>&, vector<vector<string>>&);
     vector<Parameter> getHeaders();
-    void intersect(Table);
+    vector<vector<string>> getContent();
     Table selectColumns(vector<int>&);
     vector<string> extractColumn(int);
     Table extractDesignEntities();

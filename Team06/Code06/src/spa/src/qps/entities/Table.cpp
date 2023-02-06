@@ -9,13 +9,13 @@ Table::Table(vector<Parameter>& headers, vector<vector<string>>& content) {
     this->content = content;
 }
 
-void Table::intersect(Table otherTable) {
-    // do some shit
-    // table x otherTable;
-};
 
 vector<Parameter> Table::getHeaders() {
     return headers;
+}
+
+vector<vector<string>> Table::getContent() {
+    return content;
 }
 
 Table Table::selectColumns(vector<int>& indexes) {

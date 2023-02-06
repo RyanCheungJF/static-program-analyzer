@@ -30,7 +30,7 @@ TEST_CASE("adhoc") {
     readPKB.setInstancePKB(pkb);
     sourceProcessor.processFile(filename, &writePKB);
 //    string input = "stmt ifs; Select ifs such that Follows(5, ifs)";
-    string input = "assign v; Select v;";
+    string input = "variable v; Select v;";
     vector<string> expected{ "2" };
     vector<string> res = qps.processQueries(input, readPKB);
     for (string r : res) {
