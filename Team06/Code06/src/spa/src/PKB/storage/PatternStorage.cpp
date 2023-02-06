@@ -2,13 +2,6 @@
 #include <string>
 #include <unordered_map>
 
-class QueryStub {
-public:
-    Parameter synAssign;
-    Parameter entRef;
-    string pattern;
-};
-
 std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
     std::string lhs = pq.entRef.getValue();
     std::string pattern = pq.pattern;
@@ -27,14 +20,8 @@ std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
 
     std::string rhs = ss.str();
     if (lhs == "_") {
-        if (pattern == "_") {
-            return getAllAssignStatements();
-        } else if (leftWildcard && rightWildcard) {
+        if (leftWildcard && rightWildcard) {
             return getMatchingLHSWildcardRHSBothWildcard(rhs);
-        } else if (leftWildcard) {
-            return getMatchingLHSWildcardRHSLeftWildcard(rhs);
-        } else if (rightWildcard) {
-            return getMatchingLHSWildcardRHSRightWildcard(rhs);
         } else {
             return getMatchingLHSWildcardRHSNoWildcard(rhs);
         }
@@ -43,10 +30,6 @@ std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
             return getMatchingLHS(lhs);
         } else if (leftWildcard && rightWildcard) {
             return getMatchingRHSBothWildcard(lhs, rhs);
-        } else if (leftWildcard) {
-            return getMatchingRHSLeftWildcard(lhs, rhs);
-        } else if (rightWildcard) {
-            return getMatchingRHSRightWildcard(lhs, rhs);
         } else {
             return getMatchingExact(lhs, rhs);
         }

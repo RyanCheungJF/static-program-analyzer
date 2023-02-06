@@ -10,6 +10,17 @@
 #include <iostream>
 
 typedef int StmtNum;
+class ParameterStub {
+public:
+    std::string getValue();
+};
+
+class QueryStub {
+public:
+    ParameterStub synAssign;
+    ParameterStub entRef;
+    std::string pattern;
+};
 
 struct hashFunction
 {
@@ -24,6 +35,9 @@ struct hashFunction
 
 class PatternStorage {
 public:
+
+    std::vector<StmtNum> interpretQuery(QueryStub);
+
     virtual void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
     std::unique_ptr<Expression> buildSubtree(std::string rhs);
