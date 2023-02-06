@@ -3,8 +3,8 @@
 #include <unordered_map>
 
 
-bool isSameTree(std::unique_ptr<Expression> expectedExpression, Expression* actual) {
-    auto expected = expectedExpression.get();
+bool isSameTree(Expression* expected, Expression* actual) {
+//    auto expected = expectedExpression.get();
 //    auto actual = actualExpression->get();
 
     // if they are both constants, check they have the same value
@@ -26,33 +26,33 @@ bool isSameTree(std::unique_ptr<Expression> expectedExpression, Expression* actu
 //        bool isSameLeftExpression = isSameTree(std::move(expectedExpression->lhs), std::move(actualExpression->lhs));
 //        bool isSameRightExpression = isSameTree(std::move(expectedExpression->rhs), std::move(actualExpression->rhs));
 
-        bool isSameLeftExpression = isSameTree(std::move(expectedExpression->lhs), actualExpression->lhs.get());
-        bool isSameRightExpression = isSameTree(std::move(expectedExpression->rhs), actualExpression->rhs.get());
+        bool isSameLeftExpression = isSameTree(expectedExpression->lhs.get(), actualExpression->lhs.get());
+        bool isSameRightExpression = isSameTree(expectedExpression->rhs.get(), actualExpression->rhs.get());
         bool isSameOp = (expectedExpression->mathOperator == actualExpression->mathOperator);
         return (isSameLeftExpression && isSameRightExpression && isSameOp);
     }
     return false;
 }
 
-bool isSubTree(std::unique_ptr<Expression> subTreeExpression, std::unique_ptr<Expression> treeExpression) {
-    // check if they are the same tree first 
-    if (isSameTree(std::move(subTreeExpression), treeExpression.get())) {
-        return true;
-    }
-
-    auto tree = treeExpression.get();
-
-    if (dynamic_cast<MathExpression*>(tree)) {
-        auto t = dynamic_cast<MathExpression*>(tree);
-        bool isLeftSubtree = isSubTree(std::move(subTreeExpression), std::move(t->lhs));
-        bool isRightSubtree = isSubTree(std::move(subTreeExpression), std::move(t->rhs));
-        return isLeftSubtree || isRightSubtree;
-    }
-    // if my actual tree node is not a math node,
-    // this means my actual tree node is a variable or a constant, and hence has no children
-    // if they are not the same tree (checked above), that means it is not a subtree
-    return false;
-}
+//bool isSubTree(std::unique_ptr<Expression> subTreeExpression, std::unique_ptr<Expression> treeExpression) {
+//    // check if they are the same tree first
+//    if (isSameTree(std::move(subTreeExpression), treeExpression.get())) {
+//        return true;
+//    }
+//
+//    auto tree = treeExpression.get();
+//
+//    if (dynamic_cast<MathExpression*>(tree)) {
+//        auto t = dynamic_cast<MathExpression*>(tree);
+//        bool isLeftSubtree = isSubTree(std::move(subTreeExpression), std::move(t->lhs));
+//        bool isRightSubtree = isSubTree(std::move(subTreeExpression), std::move(t->rhs));
+//        return isLeftSubtree || isRightSubtree;
+//    }
+//    // if my actual tree node is not a math node,
+//    // this means my actual tree node is a variable or a constant, and hence has no children
+//    // if they are not the same tree (checked above), that means it is not a subtree
+//    return false;
+//}
 
 void PatternStorage::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> ptr) {
     lhs_stmtNum_rhsPostfix[lhs].insert(std::make_pair(num, std::move(ptr)));
@@ -78,21 +78,21 @@ std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
     std::string rhs = ss.str();
     if (lhs == "_") {
         if (leftWildcard && rightWildcard) {
-            std::cout << "hitting pattern(_, _\"v\"_) for " << lhs << " = " << rhs << "\n";
+            std::cout << "hitting getMatchingLHSWildcardRHSBothWildcard ie pattern(_, _\"v\"_) for " << lhs << " = " << rhs << "\n";
             return getMatchingLHSWildcardRHSBothWildcard(rhs);
         } else {
-            std::cout << "hitting pattern(_, \"v\") for " << lhs << " = " << rhs << "\n";
+            std::cout << "hitting getMatchingLHSWildcardRHSNoWildcard ie pattern(_, \"v\") for " << lhs << " = " << rhs << "\n";
             return getMatchingLHSWildcardRHSNoWildcard(rhs);
         }
     } else {
         if (pattern == "_") {
-            std::cout << "hitting pattern(\"a\", _) for " << lhs << " = " << rhs << "\n";
+            std::cout << "hitting getMatchingLHS ie pattern(\"a\", _) for " << lhs << " = " << rhs << "\n";
             return getMatchingLHS(lhs);
         } else if (leftWildcard && rightWildcard) {
-            std::cout << "hitting pattern(\"a\", _\"v\"_) for " << lhs << " = " << rhs << "\n";
+            std::cout << "hitting getMatchingRHSBothWildcard ie pattern(\"a\", _\"v\"_) for " << lhs << " = " << rhs << "\n";
             return getMatchingRHSBothWildcard(lhs, rhs);
         } else {
-            std::cout << "hitting pattern(\"a\", \"v\") for " << lhs << " = " << rhs << "\n";
+            std::cout << "hitting getMatchingExact ie pattern(\"a\", \"v\") for " << lhs << " = " << rhs << "\n";
             return getMatchingExact(lhs, rhs);
         }
     }
@@ -108,29 +108,6 @@ std::unique_ptr<Expression> PatternStorage::buildSubtree(std::string rhs) {
     tokens = tk.tokenize(ss);
     std::unique_ptr<Expression> root = std::move(pr.parseExpression(tokens));
     return root;
-
-    //    std::string res;
-    //    std::deque<std::unique_ptr<Expression>> queue;
-    //    queue.push_back(std::move(root));
-    //
-    //    while (!queue.empty()) {
-    //        std::unique_ptr<Expression> node = std::move(queue.front());
-    //        queue.pop_front();
-    //
-    //        if (auto i = dynamic_cast<MathExpression*>(node.get())) {
-    //            queue.push_back(std::move(i -> lhs));
-    //            queue.push_back(std::move(i -> rhs));
-    //            res += i->mathOperator;
-    //        }
-    //        else if (auto i = dynamic_cast<Constant*>(node.get())) {
-    //            res += std::to_string(i -> value);
-    //        }
-    //        else if (auto i = dynamic_cast<Variable*>(node.get())) {// Variable
-    //            res += i->name;
-    //        }
-    //    }
-    //    return res;
-
 }
 
 std::vector<StmtNum> PatternStorage::getMatchingExact(std::string lhs, std::string rhs) {
@@ -138,15 +115,13 @@ std::vector<StmtNum> PatternStorage::getMatchingExact(std::string lhs, std::stri
         std::vector<StmtNum> empty;
         return empty;
     }
-
-    std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
+    std::unique_ptr<Expression> expected = buildSubtree(rhs);
     std::vector<StmtNum> res;
-    std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction> set = std::move(lhs_stmtNum_rhsPostfix.at(lhs));
-
-    for (const auto& p : set) {
-        //        if (isSameTree(p.second, expected)) {
-        //            res.push_back(p.first);
-        //        }
+    for (const auto& p : lhs_stmtNum_rhsPostfix.at(lhs)) {
+        Expression* actual = p.second.get();
+        if (isSameTree(expected.get(), actual)) {
+            res.push_back(p.first);
+        }
     }
     return res;
 }
@@ -191,9 +166,9 @@ std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSNoWildcard(std::st
     for (auto const& i : lhs_stmtNum_rhsPostfix) {
         for (const auto& p : i.second) {
             Expression* actual = p.second.get();
-            if (isSameTree(std::move(expected), actual)) {
-                res.push_back(p.first);
-            }
+//            if (isSameTree(std::move(expected), actual)) {
+//                res.push_back(p.first);
+//            }
         }
     }
     return res;

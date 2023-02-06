@@ -15,8 +15,8 @@ TEST_CASE("AST Nodes can be written") {
     //line 2: z = z * 5
 
     std::string lhs = "z";
-    std::unique_ptr<Expression> line1rhs = std::move(writePkb.buildSubtree("a + b / c"));
-    std::unique_ptr<Expression> line2rhs = std::move(writePkb.buildSubtree("z * 5"));
+    std::unique_ptr<Expression> line1rhs = writePkb.buildSubtree("a + b / c");
+    std::unique_ptr<Expression> line2rhs = writePkb.buildSubtree("z * 5");
 
     writePkb.writePattern(lhs, 1, std::move(line1rhs));
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
@@ -37,7 +37,7 @@ TEST_CASE("AST Nodes can be written") {
     res = res && lines_qs2.size() == 1;
 
     std::cout << "COMPLETE";
-    REQUIRE(true);
+    REQUIRE(res);
 
 }
 
