@@ -2,6 +2,52 @@
 #include <string>
 #include <unordered_map>
 
+
+std::vector<StmtNum> PatternStorage::interpretQuery(PatternQuery pq) {
+    std::string lhs = pq.entRef.getValue();
+    std::string pattern = pq.pattern;
+    std::vector<StmtNum> res;
+
+    bool leftWildcard = pattern[0] == '_';
+    bool rightWildcard = pattern[pattern.length() - 1] == '_';
+
+    std::stringstream ss;
+    for (int i = 0; i < pattern.length(); i++) {
+        char curr = pattern[i];
+        if (curr != '_') {
+            ss << curr;
+        }
+    }
+
+    std::string rhs = ss.str();
+    if (lhs == "_") {
+        if (pattern == "_") {
+            return getAllAssignStatements();
+        } else if (leftWildcard && rightWildcard) {
+            return getMatchingLHSWildcardRHSBothWildcard(rhs);
+        } else if (leftWildcard) {
+            return getMatchingLHSWildcardRHSLeftWildcard(rhs);
+        } else if (rightWildcard) {
+            return getMatchingLHSWildcardRHSRightWildcard(rhs);
+        } else {
+            return getMatchingLHSWildcardRHSNoWildcard(rhs);
+        }
+    } else {
+        if (pattern == "_") {
+            return getMatchingLHS(lhs);
+        } else if (leftWildcard && rightWildcard) {
+            return getMatchingRHSBothWildcard(lhs, rhs);
+        } else if (leftWildcard) {
+            return getMatchingRHSLeftWildcard(lhs, rhs);
+        } else if (rightWildcard) {
+            return getMatchingRHSRightWildcard(lhs, rhs);
+        } else {
+            return getMatchingExact(lhs, rhs);
+        }
+    }
+}
+
+
 bool isSameTree(std::unique_ptr<Expression> expectedExpression, Expression* actual) {
     auto expected = expectedExpression.get();
 //    auto actual = actualExpression->get();
