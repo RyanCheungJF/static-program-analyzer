@@ -2,9 +2,9 @@
 #include <string>
 #include <unordered_map>
 
-bool isSameTree(std::unique_ptr<Expression> expectedExpression, std::unique_ptr<Expression> actualExpression) {
+bool isSameTree(std::unique_ptr<Expression> expectedExpression, Expression* actual) {
     auto expected = expectedExpression.get();
-    auto actual = actualExpression.get();
+//    auto actual = actualExpression->get();
 
     // if they are both constants, check they have the same value
     if (dynamic_cast<Constant*>(expected) && dynamic_cast<Constant*>(actual)) {
@@ -22,8 +22,11 @@ bool isSameTree(std::unique_ptr<Expression> expectedExpression, std::unique_ptr<
     else if (dynamic_cast<MathExpression*>(expected) && dynamic_cast<MathExpression*>(actual)) {
         auto expectedExpression = dynamic_cast<MathExpression*>(expected);
         auto actualExpression = dynamic_cast<MathExpression*>(actual);
-        bool isSameLeftExpression = isSameTree(std::move(expectedExpression->lhs), std::move(actualExpression->lhs));
-        bool isSameRightExpression = isSameTree(std::move(expectedExpression->rhs), std::move(actualExpression->rhs));
+//        bool isSameLeftExpression = isSameTree(std::move(expectedExpression->lhs), std::move(actualExpression->lhs));
+//        bool isSameRightExpression = isSameTree(std::move(expectedExpression->rhs), std::move(actualExpression->rhs));
+
+        bool isSameLeftExpression = isSameTree(std::move(expectedExpression->lhs), actualExpression->lhs.get());
+        bool isSameRightExpression = isSameTree(std::move(expectedExpression->rhs), actualExpression->rhs.get());
         bool isSameOp = (expectedExpression->mathOperator == actualExpression->mathOperator);
         return (isSameLeftExpression && isSameRightExpression && isSameOp);
     }
@@ -32,7 +35,7 @@ bool isSameTree(std::unique_ptr<Expression> expectedExpression, std::unique_ptr<
 
 bool isSubTree(std::unique_ptr<Expression> subTreeExpression, std::unique_ptr<Expression> treeExpression) {
     // check if they are the same tree first 
-    if (isSameTree(std::move(subTreeExpression), std::move(treeExpression))) {
+    if (isSameTree(std::move(subTreeExpression), treeExpression.get())) {
         return true;
     }
 
@@ -147,9 +150,10 @@ std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSNoWildcard(std::st
 
     for (auto const& i : lhs_stmtNum_rhsPostfix) {
         for (const auto& p : i.second) {
-            //            if (isSameTree(p.second, expected)) {
-            //                res.push_back(p.first);
-            //            }
+            Expression* actual = p.second.get();
+            if (isSameTree(std::move(expected), actual)) {
+                res.push_back(p.first);
+            }
         }
     }
     return res;
