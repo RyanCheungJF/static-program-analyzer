@@ -2,12 +2,37 @@
 #include "../../../spa/src/PKB/WritePKB.h"
 #include "../../../spa/src/PKB/ReadPKB.h"
 
-//TEST_CASE("All nodes can be added") {
+TEST_CASE("AST Nodes can be written") {
+    WritePKB writePkb;
+    PKB pkb;
+    PatternStorage pa;
+    pkb.patternStorage = &pa;
+    writePkb.setInstancePKB(pkb);
+
+    //line 1: z = a + b / c
+    //line 2: z = z * 5
+
+    std::string lhs = "z";
+    std::unique_ptr<Expression> line1rhs = writePkb.buildSubtree("a + b / c");
+    std::unique_ptr<Expression> line2rhs = writePkb.buildSubtree("z * 5");
+
+    writePkb.writePattern(lhs, 1, std::move(line1rhs));
+    writePkb.writePattern(lhs, 2, std::move(line2rhs));
+
+    REQUIRE(true);
+
+}
+
+//TEST_CASE("nodes can be added") {
 //    WritePKB writePkb;
 //    PKB pkb;
 //    PatternStorage pa;
 //    pkb.patternStorage = &pa;
 //    writePkb.setInstancePKB(pkb);
+//
+//    QueryStub qs;
+//    qs.lhs = "v";
+//    qs.pattern = "x / y * z";
 //
 //    std::string s = "x / y * z";
 //    std::string res = writePkb.buildSubtree(s);

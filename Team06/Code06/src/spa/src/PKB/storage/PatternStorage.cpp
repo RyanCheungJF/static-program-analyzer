@@ -209,15 +209,15 @@ std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSBothWildcard(std::
 }
 
 
-std::vector<std::pair<std::string, std::string>> PatternStorage::getAllPostfixes() {
+std::vector<std::pair<std::string, std::vector<std::string>>> PatternStorage::getAll() {
     std::vector<std::pair<std::string, std::string>> res;
-    /*for (auto keyValuePair: lhs_stmtNum_rhsPostfix) {
-        std::string lhs = keyValuePair.first;
-        std::unordered_set<std::string> postfixStrings = keyValuePair.second;
-        for (std::string s: postfixStrings) {
-            res.push_back(std::pair<std::string, std::string>({lhs, s}));
-        }
-    }
-    std::sort(res.begin(), res.end());*/
+//    for (auto keyValuePair: lhs_stmtNum_rhsPostfix) {
+//        std::string lhs = keyValuePair.first;
+//        std::unordered_set<std::string> postfixStrings = keyValuePair.second;
+//        for (std::string s: postfixStrings) {
+//            res.push_back(std::pair<std::string, std::string>({lhs, s}));
+//        }
+//    }
+//    std::sort(res.begin(), res.end());
     return res;
 }
