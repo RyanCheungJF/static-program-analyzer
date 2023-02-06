@@ -2,40 +2,6 @@
 #include <string>
 #include <unordered_map>
 
-std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
-    std::string lhs = pq.entRef.getValue();
-    std::string pattern = pq.pattern;
-    std::vector<StmtNum> res;
-
-    bool leftWildcard = pattern[0] == '_';
-    bool rightWildcard = pattern[pattern.length() - 1] == '_';
-
-    std::stringstream ss;
-    for (int i = 0; i < pattern.length(); i++) {
-        char curr = pattern[i];
-        if (curr != '_') {
-            ss << curr;
-        }
-    }
-
-    std::string rhs = ss.str();
-    if (lhs == "_") {
-        if (leftWildcard && rightWildcard) {
-            return getMatchingLHSWildcardRHSBothWildcard(rhs);
-        } else {
-            return getMatchingLHSWildcardRHSNoWildcard(rhs);
-        }
-    } else {
-        if (pattern == "_") {
-            return getMatchingLHS(lhs);
-        } else if (leftWildcard && rightWildcard) {
-            return getMatchingRHSBothWildcard(lhs, rhs);
-        } else {
-            return getMatchingExact(lhs, rhs);
-        }
-    }
-}
-
 
 bool isSameTree(std::unique_ptr<Expression> expectedExpression, Expression* actual) {
     auto expected = expectedExpression.get();
@@ -91,6 +57,40 @@ bool isSubTree(std::unique_ptr<Expression> subTreeExpression, std::unique_ptr<Ex
 void PatternStorage::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> ptr) {
     lhs_stmtNum_rhsPostfix[lhs].insert(std::make_pair(num, std::move(ptr)));
     return;
+}
+
+std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
+    std::string lhs = pq.entRef.getValue();
+    std::string pattern = pq.pattern;
+    std::vector<StmtNum> res;
+
+    bool leftWildcard = pattern[0] == '_';
+    bool rightWildcard = pattern[pattern.length() - 1] == '_';
+
+    std::stringstream ss;
+    for (int i = 0; i < pattern.length(); i++) {
+        char curr = pattern[i];
+        if (curr != '_') {
+            ss << curr;
+        }
+    }
+
+    std::string rhs = ss.str();
+    if (lhs == "_") {
+        if (leftWildcard && rightWildcard) {
+            return getMatchingLHSWildcardRHSBothWildcard(rhs);
+        } else {
+            return getMatchingLHSWildcardRHSNoWildcard(rhs);
+        }
+    } else {
+        if (pattern == "_") {
+            return getMatchingLHS(lhs);
+        } else if (leftWildcard && rightWildcard) {
+            return getMatchingRHSBothWildcard(lhs, rhs);
+        } else {
+            return getMatchingExact(lhs, rhs);
+        }
+    }
 }
 
 std::unique_ptr<Expression> PatternStorage::buildSubtree(std::string rhs) {

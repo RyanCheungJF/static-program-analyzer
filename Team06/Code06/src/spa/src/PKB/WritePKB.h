@@ -50,6 +50,8 @@ public:
 
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
+    std::unique_ptr<Expression> buildSubtree(std::string rhs);
+
 private:
     PKB* pkbInstance = NULL;
 };

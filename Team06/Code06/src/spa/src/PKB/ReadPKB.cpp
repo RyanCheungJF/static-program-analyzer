@@ -76,3 +76,7 @@ bool ReadPKB::checkConstant(Const c, StmtNum num) {
 std::unordered_set<StmtNum> ReadPKB::getConstantStatementNumbers(Const c) {
     return pkbInstance->constantStorage->getConstantStmtNums(c);
 }
+
+std::vector<StmtNum> ReadPKB::interpretQuery(QueryStub qs) {
+    return pkbInstance->patternStorage->interpretQuery(qs);
+}

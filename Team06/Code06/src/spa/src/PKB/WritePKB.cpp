@@ -70,3 +70,7 @@ void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expres
     pkbInstance->patternStorage->writePattern(lhs, num, std::move(pointer));
     return;
 }
+
+std::unique_ptr<Expression> WritePKB::buildSubtree(std::string rhs) {
+    std::move(pkbInstance->patternStorage->buildSubtree(rhs));
+}

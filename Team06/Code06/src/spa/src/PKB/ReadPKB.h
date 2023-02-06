@@ -72,6 +72,10 @@ public:
     // returns all the statement lines that the constant appears in
     std::unordered_set<StmtNum> getConstantStatementNumbers(Const c);
 
+
+    // returns an array containing the matching pattern
+    std::vector<StmtNum> interpretQuery(QueryStub);
+
 private:
     PKB* pkbInstance = NULL;
 };

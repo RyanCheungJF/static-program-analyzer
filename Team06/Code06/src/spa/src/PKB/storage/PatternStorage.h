@@ -42,6 +42,12 @@ public:
 
     std::unique_ptr<Expression> buildSubtree(std::string rhs);
 
+    // utility function for debugging
+    virtual std::vector<std::pair<std::string, std::string>> getAllPostfixes();
+
+private:
+    std::unordered_map<std::string, std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>> lhs_stmtNum_rhsPostfix;
+
     // pattern("a", "v")
     virtual std::vector<StmtNum> getMatchingExact(std::string lhs, std::string rhs);
 
@@ -56,10 +62,4 @@ public:
 
     // pattern(_, _"v"_)
     virtual std::vector<StmtNum> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
-
-    // utility function for debugging
-    virtual std::vector<std::pair<std::string, std::string>> getAllPostfixes();
-
-private:
-    std::unordered_map<std::string, std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>> lhs_stmtNum_rhsPostfix;
 };
