@@ -34,25 +34,25 @@ bool isSameTree(Expression* expected, Expression* actual) {
     return false;
 }
 
-//bool isSubTree(std::unique_ptr<Expression> subTreeExpression, std::unique_ptr<Expression> treeExpression) {
-//    // check if they are the same tree first
-//    if (isSameTree(std::move(subTreeExpression), treeExpression.get())) {
-//        return true;
-//    }
-//
-//    auto tree = treeExpression.get();
-//
-//    if (dynamic_cast<MathExpression*>(tree)) {
-//        auto t = dynamic_cast<MathExpression*>(tree);
-//        bool isLeftSubtree = isSubTree(std::move(subTreeExpression), std::move(t->lhs));
-//        bool isRightSubtree = isSubTree(std::move(subTreeExpression), std::move(t->rhs));
-//        return isLeftSubtree || isRightSubtree;
-//    }
-//    // if my actual tree node is not a math node,
-//    // this means my actual tree node is a variable or a constant, and hence has no children
-//    // if they are not the same tree (checked above), that means it is not a subtree
-//    return false;
-//}
+bool isSubTree(Expression* subTreeExpression, Expression* treeExpression) {
+    // check if they are the same tree first
+    if (isSameTree(subTreeExpression, treeExpression)) {
+        return true;
+    }
+
+    auto tree = treeExpression;
+
+    if (dynamic_cast<MathExpression*>(tree)) {
+        auto t = dynamic_cast<MathExpression*>(tree);
+        bool isLeftSubtree = isSubTree(subTreeExpression, t->lhs.get());
+        bool isRightSubtree = isSubTree(std::move(subTreeExpression), t->rhs.get());
+        return isLeftSubtree || isRightSubtree;
+    }
+    // if my actual tree node is not a math node,
+    // this means my actual tree node is a variable or a constant, and hence has no children
+    // if they are not the same tree (checked above), that means it is not a subtree
+    return false;
+}
 
 void PatternStorage::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> ptr) {
     lhs_stmtNum_rhsPostfix[lhs].insert(std::make_pair(num, std::move(ptr)));
@@ -132,14 +132,13 @@ std::vector<StmtNum> PatternStorage::getMatchingRHSBothWildcard(std::string lhs,
         return empty;
     }
 
+    std::unique_ptr<Expression> expected = buildSubtree(rhs);
     std::vector<StmtNum> res;
-    std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction> set = std::move(lhs_stmtNum_rhsPostfix.at(lhs));
-
-    std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
-    for (const auto& p : set) {
-        //        if (isSubTree(p.second, expected)) {
-        //            res.push_back(p.first);
-        //        }
+    for (const auto& p : lhs_stmtNum_rhsPostfix.at(lhs)) {
+        Expression* actual = p.second.get();
+        if (isSubTree(expected.get(), actual)) {
+            res.push_back(p.first);
+        }
     }
     return res;
 }
@@ -152,8 +151,7 @@ std::vector<StmtNum> PatternStorage::getMatchingLHS(std::string lhs) {
     }
 
     std::vector<StmtNum> res;
-    std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction> set = std::move(lhs_stmtNum_rhsPostfix.at(lhs));
-    for (const auto& p : set) {
+    for (const auto& p : lhs_stmtNum_rhsPostfix.at(lhs)) {
         res.push_back(p.first);
     }
     return res;
