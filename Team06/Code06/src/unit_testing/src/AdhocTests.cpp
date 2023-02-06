@@ -13,7 +13,10 @@ using namespace std;
 
 TEST_CASE("adhoc") {
     string filename = "/Users/faruq/Desktop/Books/Y3-S2/CS3203/team_project/22s2-cp-spa-team-06/Team06/Code06/tests/Sample_source.txt";
+//    string filename = "/Users/admin/Downloads/this sem/cs3203project/Team06/Code06/tests/Sample_source.txt";
+//    string filename = "../../../tests/Sample_source.txt";
     SP sourceProcessor;
+    QPS qps;
     WritePKB writePKB;
     ReadPKB readPKB;
     PKB pkb;
@@ -21,11 +24,14 @@ TEST_CASE("adhoc") {
     EntityStorage et;
     ProcedureStorage ps;
     StmtStorage sts;
-    QPS qps;
+    ConstantStorage cs;
+    PatternStorage pt;
     pkb.entityStorage = &et;
     pkb.procedureStorage = &ps;
     pkb.statementStorage = &sts;
     pkb.followsStorage = &fs;
+    pkb.constantStorage = &cs;
+    pkb.patternStorage = &pt;
     writePKB.setInstancePKB(pkb);
     readPKB.setInstancePKB(pkb);
     sourceProcessor.processFile(filename, &writePKB);

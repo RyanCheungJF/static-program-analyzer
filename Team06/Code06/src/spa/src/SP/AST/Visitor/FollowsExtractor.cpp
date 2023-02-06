@@ -4,10 +4,10 @@ FollowsExtractor::FollowsExtractor(WritePKB* writePKB) {
 	writeApi = writePKB;
 }
 
-void FollowsExtractor::visitProgram(const Program *program) {}
-void FollowsExtractor::visitProcedure(const Procedure* procedure) {}
+void FollowsExtractor::visitProgram(Program *program) {}
+void FollowsExtractor::visitProcedure(Procedure* procedure) {}
 
-void FollowsExtractor::visitStatementList(const StatementList *statementList) {
+void FollowsExtractor::visitStatementList(StatementList *statementList) {
 	std::vector<std::pair<int, int>> followsVector;
 	for (int i = 0; i < statementList->statements.size() - 1; i++) {
 		//auto followsPair = std::make_pair(statementList->statements[i]->statementNumber, statementList->statements[i + 1]->statementNumber);
@@ -17,12 +17,12 @@ void FollowsExtractor::visitStatementList(const StatementList *statementList) {
 	//writeApi->setFollowsT(followsVector);
 }
 
-void FollowsExtractor::visitStatement(const Statement *statement) {}
-void FollowsExtractor::visitReadStatement(const ReadStatement *readStatement) {}
-void FollowsExtractor::visitPrintStatement(const PrintStatement *printStatement) {}
-void FollowsExtractor::visitAssignStatement(const AssignStatement *assignStatement) {}
-void FollowsExtractor::visitCallStatement(const CallStatement *callStatement) {}
-void FollowsExtractor::visitIfStatement(const IfStatement *ifStatement) {}
-void FollowsExtractor::visitWhileStatement(const WhileStatement *whileStatement) {}
-void FollowsExtractor::visitExpression(const Expression *variable) {}
-void FollowsExtractor::visitConditionalExpression(const ConditionalExpression *conditionalExpression) {}
+void FollowsExtractor::visitStatement(Statement *statement) {}
+void FollowsExtractor::visitReadStatement(ReadStatement *readStatement) {}
+void FollowsExtractor::visitPrintStatement(PrintStatement *printStatement) {}
+void FollowsExtractor::visitAssignStatement(AssignStatement *assignStatement) {}
+void FollowsExtractor::visitCallStatement(CallStatement *callStatement) {}
+void FollowsExtractor::visitIfStatement(IfStatement *ifStatement) {}
+void FollowsExtractor::visitWhileStatement(WhileStatement *whileStatement) {}
+void FollowsExtractor::visitExpression(Expression *variable) {}
+void FollowsExtractor::visitConditionalExpression(ConditionalExpression *conditionalExpression) {}

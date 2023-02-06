@@ -14,5 +14,5 @@ public:
 
 	Procedure(std::string procedureName, std::unique_ptr<StatementList> statementList);
 
-	void accept(ASTVisitor* visitor) const override;
+	void accept(ASTVisitor* visitor) override;
 };

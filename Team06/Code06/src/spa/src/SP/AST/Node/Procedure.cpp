@@ -7,6 +7,6 @@ Procedure::Procedure(std::string procedureName, std::unique_ptr<StatementList> s
 	this->statementList = std::move(statementList);
 }
 
-void Procedure::accept(ASTVisitor* visitor) const {
+void Procedure::accept(ASTVisitor* visitor) {
 	visitor->visitProcedure(this);
 }

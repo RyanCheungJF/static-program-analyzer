@@ -4,31 +4,31 @@ StatementExtractorVisitor::StatementExtractorVisitor(WritePKB* writePKB) {
 	writeApi = writePKB;
 }
 
-void StatementExtractorVisitor::visitProgram(const Program* program) {}
+void StatementExtractorVisitor::visitProgram(Program* program) {}
 
-void StatementExtractorVisitor::visitProcedure(const Procedure* procedure) {}
+void StatementExtractorVisitor::visitProcedure(Procedure* procedure) {}
 
-void StatementExtractorVisitor::visitStatementList(const StatementList* statementList) {}
+void StatementExtractorVisitor::visitStatementList(StatementList* statementList) {}
 
-void StatementExtractorVisitor::visitStatement(const Statement* statement) {}
+void StatementExtractorVisitor::visitStatement(Statement* statement) {}
 
-void StatementExtractorVisitor::visitReadStatement(const ReadStatement* readStatement) {
+void StatementExtractorVisitor::visitReadStatement(ReadStatement* readStatement) {
 	writeApi->setStatement("read", readStatement->statementNumber);
 }
 
-void StatementExtractorVisitor::visitPrintStatement(const PrintStatement* printStatement) {
+void StatementExtractorVisitor::visitPrintStatement(PrintStatement* printStatement) {
 	writeApi->setStatement("print", printStatement->statementNumber);
 }
 
-void StatementExtractorVisitor::visitAssignStatement(const AssignStatement* assignStatement) {
+void StatementExtractorVisitor::visitAssignStatement(AssignStatement* assignStatement) {
 	writeApi->setStatement("assign", assignStatement->statementNumber);
 }
 
-void StatementExtractorVisitor::visitCallStatement(const CallStatement* callStatement) {
+void StatementExtractorVisitor::visitCallStatement(CallStatement* callStatement) {
 	writeApi->setStatement("call", callStatement->statementNumber);
 }
 
-void StatementExtractorVisitor::visitIfStatement(const IfStatement* ifStatement) {
+void StatementExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
 	std::vector<int> statementNumbers;
 	int start = ifStatement->statementNumber;
 	int end = ifStatement->elseStmtList->statements.back()->statementNumber;
@@ -40,7 +40,7 @@ void StatementExtractorVisitor::visitIfStatement(const IfStatement* ifStatement)
 	writeApi->setStatement("if", statementNumbers);
 }
 
-void StatementExtractorVisitor::visitWhileStatement(const WhileStatement* whileStatement) {
+void StatementExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement) {
 	std::vector<int> statementNumbers;
 	int start = whileStatement->statementNumber;
 	int end = whileStatement->stmtList->statements.back()->statementNumber;
@@ -52,6 +52,6 @@ void StatementExtractorVisitor::visitWhileStatement(const WhileStatement* whileS
 	writeApi->setStatement("while", statementNumbers);
 }
 
-void StatementExtractorVisitor::visitExpression(const Expression* variable) {};
+void StatementExtractorVisitor::visitExpression(Expression* variable) {};
 
-void StatementExtractorVisitor::visitConditionalExpression(const ConditionalExpression* conditionalExpression) {};
+void StatementExtractorVisitor::visitConditionalExpression(ConditionalExpression* conditionalExpression) {};
