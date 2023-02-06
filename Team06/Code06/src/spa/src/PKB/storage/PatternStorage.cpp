@@ -164,9 +164,9 @@ std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSNoWildcard(std::st
     for (auto const& i : lhs_stmtNum_rhsPostfix) {
         for (const auto& p : i.second) {
             Expression* actual = p.second.get();
-//            if (isSameTree(std::move(expected), actual)) {
-//                res.push_back(p.first);
-//            }
+            if (isSameTree(expected.get(), actual)) {
+                res.push_back(p.first);
+            }
         }
     }
     return res;
@@ -178,9 +178,10 @@ std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSBothWildcard(std::
 
     for (auto const& i : lhs_stmtNum_rhsPostfix) {
         for (const auto& p : i.second) {
-            //            if (isSubTree(p.second, expected)) {
-            //                res.push_back(p.first);
-            //            }
+            Expression* actual = p.second.get();
+            if (isSubTree(expected.get(), actual)) {
+                res.push_back(p.first);
+            }
         }
     }
     return res;
