@@ -1,5 +1,5 @@
 #include "NotConditionalExpression.h"
 
-void NotConditionalExpression::accept(ASTVisitor* visitor) const {
+void NotConditionalExpression::accept(ASTVisitor* visitor) {
 	visitor->visitConditionalExpression(this);
 }

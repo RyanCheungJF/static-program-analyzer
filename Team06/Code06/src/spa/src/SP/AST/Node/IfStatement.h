@@ -9,5 +9,5 @@ public:
 	std::unique_ptr<StatementList> thenStmtList;
 	std::unique_ptr<StatementList> elseStmtList;
 
-	void accept(ASTVisitor* visitor) const override;
+	void accept(ASTVisitor* visitor) override;
 };

@@ -17,21 +17,21 @@ public:
 
 	ProcedureExtractorVisitor(WritePKB* writePKB);
 
-	int visitIfStatementHelper(const IfStatement* ifStatement);
-	int visitWhileStatementHelper(const WhileStatement* whileStatement);
+	int visitIfStatementHelper(IfStatement* ifStatement);
+	int visitWhileStatementHelper(WhileStatement* whileStatement);
 
-	void visitProgram(const Program* program) override;
-	void visitProcedure(const Procedure* procedure) override;
-	void visitStatementList(const StatementList* statement) override;
+	void visitProgram(Program* program) override;
+	void visitProcedure(Procedure* procedure) override;
+	void visitStatementList(StatementList* statement) override;
 
-	void visitStatement(const Statement* statement) override;
-	void visitReadStatement(const ReadStatement* readStatement) override;
-	void visitPrintStatement(const PrintStatement* printStatement) override;
-	void visitAssignStatement(const AssignStatement* assignStatement) override;
-	void visitCallStatement(const CallStatement* callStatement) override;
-	void visitIfStatement(const IfStatement* ifStatement) override;
-	void visitWhileStatement(const WhileStatement* whileStatement) override;
+	void visitStatement(Statement* statement) override;
+	void visitReadStatement(ReadStatement* readStatement) override;
+	void visitPrintStatement(PrintStatement* printStatement) override;
+	void visitAssignStatement(AssignStatement* assignStatement) override;
+	void visitCallStatement(CallStatement* callStatement) override;
+	void visitIfStatement(IfStatement* ifStatement) override;
+	void visitWhileStatement(WhileStatement* whileStatement) override;
 
-	void visitExpression(const Expression* expression) override;
-	void visitConditionalExpression(const ConditionalExpression* conditionalExpression) override;
+	void visitExpression(Expression* expression) override;
+	void visitConditionalExpression(ConditionalExpression* conditionalExpression) override;
 };

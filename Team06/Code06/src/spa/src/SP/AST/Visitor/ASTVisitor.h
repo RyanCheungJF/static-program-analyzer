@@ -21,19 +21,19 @@ class ConditionalExpression;
 class ASTVisitor {
 public:
 	// general entry point of programs
-	virtual void visitProgram(const Program *program) = 0;
-	virtual void visitProcedure(const Procedure *procedure) = 0;
-	virtual void visitStatementList(const StatementList *statementList) = 0;
+	virtual void visitProgram(Program *program) = 0;
+	virtual void visitProcedure(Procedure *procedure) = 0;
+	virtual void visitStatementList(StatementList *statementList) = 0;
 
 	// statements
-	virtual void visitStatement(const Statement *statement) = 0;
-	virtual void visitReadStatement(const ReadStatement *readStatement) = 0;
-	virtual void visitPrintStatement(const PrintStatement *printStatement) = 0;
-	virtual void visitAssignStatement(const AssignStatement *assignStatement) = 0;
-	virtual void visitCallStatement(const CallStatement *callStatement) = 0;
-	virtual void visitIfStatement(const IfStatement *IfStatement) = 0;
-	virtual void visitWhileStatement(const WhileStatement *whileStatement) = 0;
+	virtual void visitStatement(Statement *statement) = 0;
+	virtual void visitReadStatement(ReadStatement *readStatement) = 0;
+	virtual void visitPrintStatement(PrintStatement *printStatement) = 0;
+	virtual void visitAssignStatement(AssignStatement *assignStatement) = 0;
+	virtual void visitCallStatement(CallStatement *callStatement) = 0;
+	virtual void visitIfStatement(IfStatement *IfStatement) = 0;
+	virtual void visitWhileStatement(WhileStatement *whileStatement) = 0;
 
-	virtual void visitExpression(const Expression *variable) = 0;
-	virtual void visitConditionalExpression(const ConditionalExpression *conditionalExpression) = 0;
+	virtual void visitExpression(Expression *variable) = 0;
+	virtual void visitConditionalExpression(ConditionalExpression *conditionalExpression) = 0;
 };

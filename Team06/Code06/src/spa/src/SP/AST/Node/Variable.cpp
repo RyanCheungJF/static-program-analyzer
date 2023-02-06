@@ -6,6 +6,6 @@ Variable::Variable(std::string name) {
 	this->name = name;
 }
 
-void Variable::accept(ASTVisitor* visitor) const {
+void Variable::accept(ASTVisitor* visitor) {
 	visitor->visitExpression(this);
 };
