@@ -10,15 +10,10 @@
 #include <iostream>
 
 typedef int StmtNum;
-class ParameterStub {
-public:
-    std::string getValue();
-};
 
 class QueryStub {
 public:
-    ParameterStub synAssign;
-    ParameterStub entRef;
+    std::string lhs;
     std::string pattern;
 };
 

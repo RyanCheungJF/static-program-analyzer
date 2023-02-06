@@ -60,7 +60,7 @@ void PatternStorage::writePattern(std::string lhs, StmtNum num, std::unique_ptr<
 }
 
 std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
-    std::string lhs = pq.entRef.getValue();
+    std::string lhs = pq.lhs;
     std::string pattern = pq.pattern;
     std::vector<StmtNum> res;
 
