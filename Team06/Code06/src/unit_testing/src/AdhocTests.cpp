@@ -50,7 +50,7 @@ TEST_CASE("adhoc2") {
 //    string filename = "/Users/faruq/Desktop/Books/Y3-S2/CS3203/team_project/22s2-cp-spa-team-06/Team06/Code06/tests/Sample_source.txt";
     string filename = "/Users/admin/Downloads/this sem/cs3203project/Team06/Code06/tests/Sample_source.txt";
 //    string filename = "../../../tests/Sample_source.txt";
-    string filename = "C:/CS3203_Project/Team06/Code06/tests/Sample_source.txt";
+//    string filename = "C:/CS3203_Project/Team06/Code06/tests/Sample_source.txt";
     SP sourceProcessor;
     QPS qps;
     WritePKB writePKB;
