@@ -96,6 +96,12 @@ public:
     // Select v pattern a (v, _"v"_)
     std::vector<std::vector<std::string>> getLHSAndStmtNumRHSBothWildcard(std::string rhs);
 
+    //  assign a; Select a pattern a (_, "v")
+    virtual std::vector<std::vector<std::string>> getMatchingLHSWildcardRHSNoWildcard(std::string rhs);
+
+    //  assign a; Select a pattern a (_, _"v"_)
+    virtual std::vector<std::vector<std::string>> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
+
 private:
     PKB* pkbInstance = NULL;
     std::unordered_map <RelationshipType, StmtStmtRLStorage*> stmtStmtHandlerMap = { {RelationshipType::FOLLOWS, NULL} };

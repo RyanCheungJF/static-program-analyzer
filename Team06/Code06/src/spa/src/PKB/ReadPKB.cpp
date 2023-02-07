@@ -135,3 +135,16 @@ std::vector<std::vector<std::string>> ReadPKB::getLHSAndStmtNumRHSBothWildcard(s
     return pkbInstance->patternStorage->getLHSAndStmtNumRHSBothWildcard(rhs);
 }
 
+
+//  assign a; Select a pattern a (_, "v")
+std::vector<std::vector<std::string>> ReadPKB::getMatchingLHSWildcardRHSNoWildcard(std::string rhs) {
+    return pkbInstance->patternStorage->getMatchingLHSWildcardRHSNoWildcard(rhs);
+
+}
+
+//  assign a; Select a pattern a (_, _"v"_)
+std::vector<std::vector<std::string>> ReadPKB::getMatchingLHSWildcardRHSBothWildcard(std::string rhs) {
+    return pkbInstance->patternStorage->getMatchingLHSWildcardRHSBothWildcard(rhs);
+
+}
+

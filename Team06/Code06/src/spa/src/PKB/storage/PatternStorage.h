@@ -47,6 +47,12 @@ public:
     // Select v pattern a (v, _"v"_)
     virtual std::vector<std::vector<std::string>> getLHSAndStmtNumRHSBothWildcard(std::string rhs);
 
+    //  assign a; Select a pattern a (_, "v")
+    virtual std::vector<std::vector<std::string>> getMatchingLHSWildcardRHSNoWildcard(std::string rhs);
+
+    //  assign a; Select a pattern a (_, _"v"_)
+    virtual std::vector<std::vector<std::string>> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
+
     // utility function for debugging
 //    virtual std::vector<std::pair<std::string, std::vector<std::string>>> getAll();
 
@@ -65,9 +71,4 @@ private:
     //  assign a; Select a pattern a (_, v)
 //    virtual std::vector<std::vector<std::string>>  getRHSAndStmtNum();
 
-    //  assign a; Select a pattern a (_, "v")
-    virtual std::vector<StmtNum> getMatchingLHSWildcardRHSNoWildcard(std::string rhs);
-
-    //  assign a; Select a pattern a (_, _"v"_)
-    virtual std::vector<StmtNum> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
 };

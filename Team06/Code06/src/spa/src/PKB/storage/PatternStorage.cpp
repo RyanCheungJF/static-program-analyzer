@@ -76,25 +76,15 @@ std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
     }
 
     std::string rhs = ss.str();
-    if (lhs == "_") {
-        if (leftWildcard && rightWildcard) {
-            std::cout << "hitting getMatchingLHSWildcardRHSBothWildcard ie pattern(_, _\"v\"_) for " << lhs << " = " << rhs << "\n";
-            return getMatchingLHSWildcardRHSBothWildcard(rhs);
-        } else {
-            std::cout << "hitting getMatchingLHSWildcardRHSNoWildcard ie pattern(_, \"v\") for " << lhs << " = " << rhs << "\n";
-            return getMatchingLHSWildcardRHSNoWildcard(rhs);
-        }
+    if (pattern == "_") {
+        std::cout << "hitting getMatchingLHS ie pattern(\"a\", _) for " << lhs << " = " << rhs << "\n";
+        return getMatchingLHS(lhs);
+    } else if (leftWildcard && rightWildcard) {
+        std::cout << "hitting getMatchingRHSBothWildcard ie pattern(\"a\", _\"v\"_) for " << lhs << " = " << rhs << "\n";
+        return getMatchingRHSBothWildcard(lhs, rhs);
     } else {
-        if (pattern == "_") {
-            std::cout << "hitting getMatchingLHS ie pattern(\"a\", _) for " << lhs << " = " << rhs << "\n";
-            return getMatchingLHS(lhs);
-        } else if (leftWildcard && rightWildcard) {
-            std::cout << "hitting getMatchingRHSBothWildcard ie pattern(\"a\", _\"v\"_) for " << lhs << " = " << rhs << "\n";
-            return getMatchingRHSBothWildcard(lhs, rhs);
-        } else {
-            std::cout << "hitting getMatchingExact ie pattern(\"a\", \"v\") for " << lhs << " = " << rhs << "\n";
-            return getMatchingExact(lhs, rhs);
-        }
+        std::cout << "hitting getMatchingExact ie pattern(\"a\", \"v\") for " << lhs << " = " << rhs << "\n";
+        return getMatchingExact(lhs, rhs);
     }
 }
 
@@ -210,30 +200,36 @@ std::vector<StmtNum> PatternStorage::getMatchingLHS(std::string lhs) {
     return res;
 }
 
-std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSNoWildcard(std::string rhs) {
+std::vector<std::vector<std::string>> PatternStorage::getMatchingLHSWildcardRHSNoWildcard(std::string rhs) {
     std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
-    std::vector<StmtNum> res;
+    std::vector<std::vector<std::string>> res;
 
     for (auto const& i : lhs_stmtNum_rhsPostfix) {
         for (const auto& p : i.second) {
             Expression* actual = p.second.get();
+            std::vector<std::string> curr;
             if (isSameTree(expected.get(), actual)) {
-                res.push_back(p.first);
+                curr.push_back(i.first);
+                curr.push_back(std::to_string(p.first));
+                res.push_back(curr);
             }
         }
     }
     return res;
 }
 
-std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSBothWildcard(std::string rhs) {
+std::vector<std::vector<std::string>> PatternStorage::getMatchingLHSWildcardRHSBothWildcard(std::string rhs) {
     std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
-    std::vector<StmtNum> res;
+    std::vector<std::vector<std::string>> res;
 
     for (auto const& i : lhs_stmtNum_rhsPostfix) {
         for (const auto& p : i.second) {
             Expression* actual = p.second.get();
+            std::vector<std::string> curr;
             if (isSubTree(expected.get(), actual)) {
-                res.push_back(p.first);
+                curr.push_back(i.first);
+                curr.push_back(std::to_string(p.first));
+                res.push_back(curr);
             }
         }
     }
