@@ -37,24 +37,37 @@ public:
 
     std::unique_ptr<Expression> buildSubtree(std::string rhs);
 
+
+    // pattern a (v, _)
+    virtual std::vector<std::vector<std::string>>  getLHSAndStmtNum();
+
+    // Select v pattern a (v, "v")
+    std::vector<std::vector<std::string>> getLHSAndStmtNumRHSNoWildcard(std::string rhs);
+
+    // Select v pattern a (v, _"v"_)
+    std::vector<std::vector<std::string>> getLHSAndStmtNumRHSBothWildcard(std::string rhs);
+
     // utility function for debugging
 //    virtual std::vector<std::pair<std::string, std::vector<std::string>>> getAll();
 
 private:
     std::unordered_map<std::string, std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>> lhs_stmtNum_rhsPostfix;
 
-    // pattern("a", "v")
+    // assign a; Select a pattern a ("a", "v")
     virtual std::vector<StmtNum> getMatchingExact(std::string lhs, std::string rhs);
 
-    // pattern("a", _"v"_)
+    //  assign a; Select a pattern a ("a", _"v"_)
     virtual std::vector<StmtNum> getMatchingRHSBothWildcard(std::string lhs, std::string rhs);
 
-    // pattern("a", _)
+    //  assign a; Select a pattern a ("a", _)
     virtual std::vector<StmtNum> getMatchingLHS(std::string lhs);
 
-    // pattern(_, "v")
+    //  assign a; Select a pattern a (_, v)
+    virtual std::vector<std::vector<std::string>>  getRHSAndStmtNum();
+
+    //  assign a; Select a pattern a (_, "v")
     virtual std::vector<StmtNum> getMatchingLHSWildcardRHSNoWildcard(std::string rhs);
 
-    // pattern(_, _"v"_)
+    //  assign a; Select a pattern a (_, _"v"_)
     virtual std::vector<StmtNum> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
 };

@@ -29,27 +29,27 @@ void StatementExtractorVisitor::visitCallStatement(CallStatement* callStatement)
 }
 
 void StatementExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
-	std::vector<int> statementNumbers;
-	int start = ifStatement->statementNumber;
-	int end = ifStatement->elseStmtList->statements.back()->statementNumber;
+	//std::vector<int> statementNumbers;
+	//int start = ifStatement->statementNumber;
+	//int end = ifStatement->elseStmtList->statements.back()->statementNumber;
 
-	for (int i = start; i <= end; i++) {
-		statementNumbers.push_back(i);
-	}
+	//for (int i = start; i <= end; i++) {
+	//	statementNumbers.push_back(i);
+	//}
 
-	writeApi->setStatement("if", statementNumbers);
+	writeApi->setStatement("if", ifStatement->statementNumber);
 }
 
 void StatementExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement) {
-	std::vector<int> statementNumbers;
-	int start = whileStatement->statementNumber;
-	int end = whileStatement->stmtList->statements.back()->statementNumber;
+	//std::vector<int> statementNumbers;
+	//int start = whileStatement->statementNumber;
+	//int end = whileStatement->stmtList->statements.back()->statementNumber;
 
-	for (int i = start; i <= end; i++) {
-		statementNumbers.push_back(i);
-	}
+	//for (int i = start; i <= end; i++) {
+	//	statementNumbers.push_back(i);
+	//}
 
-	writeApi->setStatement("while", statementNumbers);
+	writeApi->setStatement("while", whileStatement->statementNumber);
 }
 
 void StatementExtractorVisitor::visitExpression(Expression* variable) {};

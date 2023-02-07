@@ -11,11 +11,11 @@ void ReadPKB::setInstancePKB(PKB &pkb) {
 
 std::vector<std::vector<std::string>> ReadPKB::findRelationship(Relationship rs) {
     RelationshipType type = rs.type;
-    std::string param1 = rs.params[0].getValue();
-    std::string param2 = rs.params[1].getValue();
+    Parameter param1 = rs.params[0];
+    Parameter param2 = rs.params[1];
     if (stmtStmtHandlerMap.find(type) != stmtStmtHandlerMap.end()) {
         StmtStmtRLHandler handler;
-        return handler.handle(stmtStmtHandlerMap.at(type), param1, param2);
+        return handler.handle(stmtStmtHandlerMap.at(type), pkbInstance->statementStorage, param1, param2);
     } else if (stmtEntHandlerMap.find(type) != stmtEntHandlerMap.end()) {
         StmtEntRLHandler handler;
         return handler.handle(stmtEntHandlerMap.at(type));
@@ -119,3 +119,19 @@ std::unordered_set<StmtNum> ReadPKB::getConstantStatementNumbers(Const c) {
 std::vector<StmtNum> ReadPKB::interpretQuery(QueryStub qs) {
     return pkbInstance->patternStorage->interpretQuery(qs);
 }
+
+std::vector<std::vector<std::string>> ReadPKB::getLHSAndStmtNum() {
+    return pkbInstance->patternStorage->getLHSAndStmtNum();
+}
+
+
+// Select v pattern a (v, "v")
+std::vector<std::vector<std::string>> ReadPKB::getLHSAndStmtNumRHSNoWildcard(std::string rhs) {
+    return pkbInstance->patternStorage->getLHSAndStmtNumRHSNoWildcard(rhs);
+}
+
+// Select v pattern a (v, _"v"_)
+std::vector<std::vector<std::string>> ReadPKB::getLHSAndStmtNumRHSBothWildcard(std::string rhs) {
+    return pkbInstance->patternStorage->getLHSAndStmtNumRHSBothWildcard(rhs);
+}
+
