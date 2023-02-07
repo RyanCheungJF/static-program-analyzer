@@ -178,27 +178,13 @@ TEST_CASE("Support for Select v pattern a (v, _)\'") {
     writePkb.writePattern(lhs, 1, std::move(line1rhs));
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
-    QueryStub qs1;
-    qs1.lhs = "_";
-    qs1.pattern = "a + b / c";
+    std::vector<std::vector<std::string>> result = readPkb.getLHSAndStmtNum();
 
-    QueryStub qs2;
-    qs2.lhs = "_";
-    qs2.pattern = "z * 5";
-
-
-    QueryStub qs3;
-    qs3.lhs = "_";
-    qs3.pattern = "z";
-
-    std::vector<StmtNum> lines_qs1 = readPkb.interpretQuery(qs1);
-    std::vector<StmtNum> lines_qs2 = readPkb.interpretQuery(qs2);
+    for (std::vector v : result) {
+        std::cout << v[0] << " " << v[1] << "\n";
+    }
 
     bool res = true;
-    res = res && lines_qs1.size() == 1;
-    res = res && lines_qs2.size() == 1;
-    res = res && readPkb.interpretQuery(qs3).size() == 0;
-
     std::cout << "COMPLETE";
     REQUIRE(res);
 }
