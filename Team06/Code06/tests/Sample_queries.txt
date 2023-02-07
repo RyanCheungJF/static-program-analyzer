@@ -4,7 +4,7 @@ Select w such that Parent(w, 7)
 none
 5000
 2 - comment
-stmt ifs;
+if ifs; 
 Select ifs such that Follows(5, ifs)
 6
 5000
