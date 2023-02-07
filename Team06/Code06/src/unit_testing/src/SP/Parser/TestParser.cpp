@@ -5,165 +5,14 @@
 #include "../SP/AST/Node/Procedure.h"
 #include "../SP/SPExceptions.h"
 
-// recursive helper functions
+#define CAST_TO(ASTNodeType, value) dynamic_cast<ASTNodeType*>(value)
+
+// Helper functions
 bool checkIfSameExpression(std::unique_ptr<Expression> expectedExpression, std::unique_ptr<Expression> actualExpression);
 bool checkIfSameCondition(std::unique_ptr<ConditionalExpression> expectedExpression, std::unique_ptr<ConditionalExpression> actualExpression);
 bool checkIfSameStatement(std::unique_ptr<Statement> expectedStatement, std::unique_ptr<Statement> actualStatement);
 bool checkIfSameStatementList(std::unique_ptr<StatementList> expectedList, std::unique_ptr<StatementList> actualList);
 bool checkIfSameTree(std::unique_ptr<Program> expectedRoot, std::unique_ptr<Program> actualRoot);
-
-bool checkIfSameExpression(std::unique_ptr<Expression> expectedExpression, std::unique_ptr<Expression> actualExpression) {
-	auto expected = expectedExpression.get();
-	auto actual = actualExpression.get();
-
-	if (dynamic_cast<Constant*>(expected) && dynamic_cast<Constant*>(actual)) {
-		std::cout << "LOG: Comparing Constants" << std::endl;
-		auto expectedValue = dynamic_cast<Constant*>(expected)->value;
-		auto actualValue = dynamic_cast<Constant*>(actual)->value;
-		return expectedValue == actualValue;
-	}
-	else if (dynamic_cast<Variable*>(expected) && dynamic_cast<Variable*> (actual)) {
-		std::cout << "LOG: Comparing Variables" << std::endl;
-		auto expectedName = dynamic_cast<Variable*>(expected)->name;
-		auto actualName = dynamic_cast<Variable*>(actual)->name;
-		return expectedName == actualName;
-	}
-	else if (dynamic_cast<MathExpression*>(expected) && dynamic_cast<MathExpression*>(actual)) {
-		std::cout << "LOG: Comparing Math Expressions" << std::endl;
-		auto expectedExpression = dynamic_cast<MathExpression*>(expected);
-		auto actualExpression = dynamic_cast<MathExpression*>(actual);
-		bool isSameLeftExpression=  checkIfSameExpression(std::move(expectedExpression->lhs), std::move(actualExpression->lhs));
-		bool isSameRightExpression = checkIfSameExpression(std::move(expectedExpression->rhs), std::move(actualExpression->rhs));
-		bool isSameOp = (expectedExpression->mathOperator == actualExpression->mathOperator);
-		return (isSameLeftExpression && isSameRightExpression && isSameOp);
-	}
-	else {
-		std::cout << "LOG: Not a valid Expression Type!" << std::endl;
-	}
-	return false;
-}
-
-bool checkIfSameCondition(std::unique_ptr<ConditionalExpression> expectedExpression, std::unique_ptr<ConditionalExpression> actualExpression) {
-	auto expected = expectedExpression.get();
-	auto actual = actualExpression.get();
-
-	if (dynamic_cast<NotConditionalExpression*>(expected) && dynamic_cast<NotConditionalExpression*>(actual)) {
-		std::cout << "LOG: Comparing Not Conditionals" << std::endl;
-		auto expectedCondition = std::move(dynamic_cast<NotConditionalExpression*>(expected)->condExpr);
-		auto actualCondition = std::move(dynamic_cast<NotConditionalExpression*>(actual)->condExpr);
-		return checkIfSameCondition(std::move(expectedCondition), std::move(actualCondition));
-	}
-	else if (dynamic_cast<BinaryConditionalExpression*>(expected) && dynamic_cast<BinaryConditionalExpression*>(actual)) {
-		std::cout << "LOG: Comparing Binary Conditionals" << std::endl;
-		auto expectedCondition = dynamic_cast<BinaryConditionalExpression*>(expected);
-		auto actualCondition = dynamic_cast<BinaryConditionalExpression*>(actual);
-		bool isSameLeftConditional =  checkIfSameCondition(std::move(expectedCondition->lhs), std::move(actualCondition->lhs));
-		bool isSameRightConditional = checkIfSameCondition(std::move(expectedCondition->rhs), std::move(actualCondition->rhs));
-		bool isSameOp = (expectedCondition->condOperator == actualCondition->condOperator);
-		return (isSameLeftConditional && isSameRightConditional && isSameOp);
-		
-	}
-	else if (dynamic_cast<RelationalExpression*>(expected) && dynamic_cast<RelationalExpression*>(actual)) {
-		std::cout << "LOG: Comparing Relational Expressions" << std::endl;
-		auto expectedCondition = dynamic_cast<RelationalExpression*>(expected);
-		auto actualCondition = dynamic_cast<RelationalExpression*>(actual);
-		bool isSameLeftExpression =  checkIfSameExpression(std::move(expectedCondition->lhs), std::move(actualCondition->lhs));
-		bool isSameRightExpression = checkIfSameExpression(std::move(expectedCondition->rhs), std::move(actualCondition->rhs));
-		bool isSameOp = (expectedCondition->relationalOperator == actualCondition->relationalOperator);
-		return (isSameLeftExpression && isSameRightExpression && isSameOp);
-	}
-	else {
-		std::cout << "LOG: Not a valid Conditional Type!" << std::endl;
-	}
-	return false;
-}
-
-bool checkIfSameStatement(std::unique_ptr<Statement> expectedStatement, std::unique_ptr<Statement> actualStatement) {
-	auto expected = expectedStatement.get();
-	auto actual = actualStatement.get();
-	
-	if (dynamic_cast<PrintStatement*>(expected) && dynamic_cast<PrintStatement*>(actual)) {
-		std::cout << "LOG: Comparing Print Statements" << std::endl;
-		return dynamic_cast<PrintStatement*>(expected)->varName == dynamic_cast<PrintStatement*>(actual)->varName;
-	}
-	else if (dynamic_cast<ReadStatement*>(expected) && dynamic_cast<ReadStatement*>(actual)) {
-		std::cout << "LOG: Comparing Read Statements" << std::endl;
-		return dynamic_cast<ReadStatement*>(expected)->varName == dynamic_cast<ReadStatement*>(actual)->varName;
-	}
-	else if (dynamic_cast<CallStatement*>(expected) && dynamic_cast<CallStatement*>(actual)) {
-		std::cout << "LOG: Comparing Call Statements" << std::endl;
-		return dynamic_cast<CallStatement*>(expected)->procName == dynamic_cast<CallStatement*>(actual)->procName;
-	}
-	else if (dynamic_cast<AssignStatement*>(expected) && dynamic_cast<AssignStatement*>(actual)) {
-		std::cout << "LOG: Comparing Assign Statements" << std::endl;
-		auto expectedAssignStatement = dynamic_cast<AssignStatement*>(expected);
-		auto actualAssignStatement = dynamic_cast<AssignStatement*>(actual);
-		bool isSameVariable = (expectedAssignStatement->varName == actualAssignStatement->varName);
-		bool isSameExpression = checkIfSameExpression(std::move(expectedAssignStatement->expr), std::move(actualAssignStatement->expr));
-		std::cout << "LOG: Comparing Assign Statements Same expr " << isSameExpression << std::endl;
-		return isSameVariable && isSameExpression;
-	}
-	else if (dynamic_cast<IfStatement*>(expected) && dynamic_cast<IfStatement*>(actual)) {
-		std::cout << "LOG: Comparing If Statements" << std::endl;
-		auto expectedIfObject = dynamic_cast<IfStatement*>(expected);
-		auto actualIfObject = dynamic_cast<IfStatement*>(actual);
-		bool isSameCondition = checkIfSameCondition(std::move(expectedIfObject->condExpr), std::move(actualIfObject->condExpr));
-		bool isSameThenStatements = checkIfSameStatementList(std::move(expectedIfObject->thenStmtList), std::move(actualIfObject->thenStmtList));
-		bool isSameElseStatements = checkIfSameStatementList(std::move(expectedIfObject->elseStmtList), std::move(actualIfObject->elseStmtList));
-		return isSameCondition && isSameThenStatements && isSameElseStatements;
-	}
-	else if (dynamic_cast<WhileStatement*>(expected) && dynamic_cast<WhileStatement*>(actual)) {
-		std::cout << "LOG: Comparing While Statements" << std::endl;
-		auto expectedWhileObject = dynamic_cast<WhileStatement*>(expected);
-		auto actualWhileObject = dynamic_cast<WhileStatement*>(actual);
-		bool isSameCondition = checkIfSameCondition(std::move(expectedWhileObject->condExpr), std::move(actualWhileObject->condExpr));
-		bool isSameStatements = checkIfSameStatementList(std::move(expectedWhileObject->stmtList), std::move(actualWhileObject->stmtList));
-		return isSameCondition && isSameStatements;
-	}
-	else {
-		std::cout << "LOG: Not a valid Statement Type!" << std::endl;
-		return false;
-	}
-}
-
-bool checkIfSameStatementList(std::unique_ptr<StatementList> expectedList, std::unique_ptr<StatementList> actualList) {
-	// preliminary check for statement list
-	if (expectedList->statements.size() != actualList->statements.size()) {
-		std::cout << "LOG: Trees differ in number of statements" << std::endl;
-		return false;
-	}
-
-	for (int i = 0; i < expectedList->statements.size(); i++) {
-		if (!checkIfSameStatement(std::move(expectedList->statements[i]), std::move(actualList->statements[i]))) {
-			std::cout << "LOG: Mismatch in statements!" << std::endl;
-			return false;
-		}
-	}
-	return true;
-}
-
-bool checkIfSameTree(std::unique_ptr<Program> expectedRoot, std::unique_ptr<Program> actualRoot) {
-	auto actualProcedures = std::move(actualRoot->procedureList);
-	auto expectedProcedures = std::move(expectedRoot->procedureList);
-
-	// preliminary check for procedurelist
-	if (expectedProcedures.size() != actualProcedures.size()) {
-		std::cout << "LOG: Trees differ in number of procedures" << std::endl;
-		return false;
-	}
-
-	// loop thru procedures
-	for (int i = 0; i < expectedProcedures.size(); i++) {
-		auto expectedStatements = std::move(expectedProcedures[i]->statementList);
-		auto actualStatements = std::move(actualProcedures[i]->statementList);
-		std::cout << "LOG: Checking Procedure " << expectedProcedures[i]->procedureName << std::endl;
-		if (!checkIfSameStatementList(std::move(expectedStatements), std::move(actualStatements))) {
-			return false;
-		}
-	}
-	return true;
-}
-
 
 TEST_CASE("Valid Source Program") {
 	std::stringstream strStream;
@@ -180,16 +29,19 @@ TEST_CASE("Valid Source Program") {
 		auto rootNode = testParser.parseProgram(tokenQueue);
 		
 		// creating expected tree
-		std::unique_ptr<Statement> printNode = std::make_unique<PrintStatement>("z");
-		std::unique_ptr<Expression> expressionNode = std::make_unique<Constant>(1);
-		std::unique_ptr<Statement> assignNode = std::make_unique<AssignStatement>("x", std::move(expressionNode));
+		auto printNode = std::make_unique<PrintStatement>("z");
+		auto expressionNode = std::make_unique<Constant>(1);
+		auto assignNode = std::make_unique<AssignStatement>("x", std::move(expressionNode));
+
 		std::vector<std::unique_ptr<Statement>> statements;
 		statements.push_back(std::move(assignNode));
 		statements.push_back(std::move(printNode));
+
 		auto statementListNode = std::make_unique<StatementList>(std::move(statements));
 		auto procedureNode = std::make_unique<Procedure>("A", std::move(statementListNode));
 		std::vector<std::unique_ptr<Procedure>> procedures;
 		procedures.push_back(std::move(procedureNode));
+
 		auto programNode = std::make_unique<Program>(std::move(procedures));
 
 		REQUIRE(checkIfSameTree(std::move(rootNode), std::move(programNode)));
@@ -204,17 +56,17 @@ TEST_CASE("Valid Source Program") {
 
 		// creating actual tree
 		// proc A
-		std::unique_ptr<Expression> mathNodeA = std::make_unique<MathExpression>("+", std::make_unique<Variable>("x"), std::make_unique<Constant>(1));
-		std::unique_ptr<Statement> assignNodeA = std::make_unique<AssignStatement>("x", std::move(mathNodeA));
+		auto mathNodeA = std::make_unique<MathExpression>("+", std::make_unique<Variable>("x"), std::make_unique<Constant>(1));
+		auto assignNodeA = std::make_unique<AssignStatement>("x", std::move(mathNodeA));
 		std::vector<std::unique_ptr<Statement>> statementsA;
 		statementsA.push_back(std::move(assignNodeA));
 		auto statementListNodeA = std::make_unique<StatementList>(std::move(statementsA));
 		auto procedureNodeA = std::make_unique<Procedure>("A", std::move(statementListNodeA));
 
 		// proc B
-		std::unique_ptr<Expression> mathNodeB = std::make_unique<MathExpression>("*", std::make_unique<Variable>("y"), std::make_unique<Constant>(2));
-		std::unique_ptr<Statement> assignNodeB = std::make_unique<AssignStatement>("y", std::move(mathNodeB));
-		std::unique_ptr<Statement> readNodeB = std::make_unique<ReadStatement>("y");
+		auto mathNodeB = std::make_unique<MathExpression>("*", std::make_unique<Variable>("y"), std::make_unique<Constant>(2));
+		auto assignNodeB = std::make_unique<AssignStatement>("y", std::move(mathNodeB));
+		auto readNodeB = std::make_unique<ReadStatement>("y");
 		std::vector<std::unique_ptr<Statement>> statementsB;    
 		statementsB.push_back(std::move(assignNodeB));
 		statementsB.push_back(std::move(readNodeB));
@@ -222,10 +74,10 @@ TEST_CASE("Valid Source Program") {
 		auto procedureNodeB = std::make_unique<Procedure>("B", std::move(statementListNodeB));
 
 		// proc C
-		std::unique_ptr<Expression> mathNodeC = std::make_unique<MathExpression>("-", std::make_unique<Variable>("z"), std::make_unique<Constant>(3));
-		std::unique_ptr<Statement> assignNodeC = std::make_unique<AssignStatement>("z", std::move(mathNodeC));
-		std::unique_ptr<Statement> printNodeC = std::make_unique<PrintStatement>("z");
-		std::unique_ptr<Statement> callNodeC = std::make_unique<CallStatement>("B");
+		auto mathNodeC = std::make_unique<MathExpression>("-", std::make_unique<Variable>("z"), std::make_unique<Constant>(3));
+		auto assignNodeC = std::make_unique<AssignStatement>("z", std::move(mathNodeC));
+		auto printNodeC = std::make_unique<PrintStatement>("z");
+		auto callNodeC = std::make_unique<CallStatement>("B");
 		std::vector<std::unique_ptr<Statement>> statementsC;
 		statementsC.push_back(std::move(printNodeC));
 		statementsC.push_back(std::move(callNodeC));
@@ -251,14 +103,38 @@ TEST_CASE("Valid Source Program") {
 		auto rootNode = testParser.parseProgram(tokenQueue);
 
 		// creating actual tree
-		std::unique_ptr<Statement> assignNodeX = std::make_unique<AssignStatement>("x", std::make_unique<Constant>(6));
-		std::unique_ptr<Statement> assignNodeY = std::make_unique<AssignStatement>("y", std::make_unique<Constant>(1));
-		std::unique_ptr<Statement> assignNodeZ = std::make_unique<AssignStatement>("z", std::make_unique<Variable>("y"));
-
+		auto assignNodeX = std::make_unique<AssignStatement>("x", std::make_unique<Constant>(6));
+		auto assignNodeY = std::make_unique<AssignStatement>("y", std::make_unique<Constant>(1));
+		auto assignNodeZ = std::make_unique<AssignStatement>("z", std::make_unique<Variable>("y"));
+		auto whileStatement = std::make_unique<WhileStatement>();
 
 		// outer scope
 		REQUIRE(rootNode->procedureList[0]->statementList->statements.size() == 5);
 	}
+
+	SECTION("Valid Program using keywords as names") {
+		std::ifstream testFile(testDirectory + "valid4.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		auto rootNode = testParser.parseProgram(tokenQueue);
+
+		// creating expected tree
+		auto printNode = std::make_unique<PrintStatement>("procedure");
+		std::vector<std::unique_ptr<Statement>> statements;
+		statements.push_back(std::move(printNode));
+
+		auto statementListNode = std::make_unique<StatementList>(std::move(statements));
+		auto procedureNode = std::make_unique<Procedure>("procedure", std::move(statementListNode));
+
+		std::vector<std::unique_ptr<Procedure>> procedures;
+		procedures.push_back(std::move(procedureNode));
+
+		auto programNode = std::make_unique<Program>(std::move(procedures));
+
+		REQUIRE(checkIfSameTree(std::move(rootNode), std::move(programNode)));
+	}
+
 }
 
 TEST_CASE("Invalid Source Program") {
@@ -388,4 +264,137 @@ TEST_CASE("Invalid Source Program") {
 
 		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
 	}
+}
+
+bool checkIfSameExpression(std::unique_ptr<Expression> expectedExpression, std::unique_ptr<Expression> actualExpression) {
+	auto expected = expectedExpression.get();
+	auto actual = actualExpression.get();
+
+	if (CAST_TO(Constant, expected) && CAST_TO(Constant, actual)) {
+		return CAST_TO(Constant, expected)->value == CAST_TO(Constant, actual)->value;
+	}
+	else if (CAST_TO(Variable, expected) && CAST_TO(Variable, actual)) {
+		return CAST_TO(Variable, expected)->name == CAST_TO(Variable, actual)->name;
+	}
+	else if (CAST_TO(MathExpression, expected) && CAST_TO(MathExpression, actual)) {
+		auto expectedExpression = CAST_TO(MathExpression, expected);
+		auto actualExpression = CAST_TO(MathExpression, actual);
+		bool isSameLeftExpression = checkIfSameExpression(std::move(expectedExpression->lhs), std::move(actualExpression->lhs));
+		bool isSameRightExpression = checkIfSameExpression(std::move(expectedExpression->rhs), std::move(actualExpression->rhs));
+		bool isSameOp = (expectedExpression->mathOperator == actualExpression->mathOperator);
+		return (isSameLeftExpression && isSameRightExpression && isSameOp);
+	}
+	else {
+		return false; // Invalid expression type
+	}
+}
+
+bool checkIfSameCondition(std::unique_ptr<ConditionalExpression> expectedExpression, std::unique_ptr<ConditionalExpression> actualExpression) {
+	auto expected = expectedExpression.get();
+	auto actual = actualExpression.get();
+
+	if (CAST_TO(NotConditionalExpression, expected) && CAST_TO(NotConditionalExpression, actual)) {
+		return checkIfSameCondition(std::move(CAST_TO(NotConditionalExpression, expected)->condExpr),
+			std::move(CAST_TO(NotConditionalExpression, actual)->condExpr));
+	}
+	else if (CAST_TO(BinaryConditionalExpression, expected) && CAST_TO(BinaryConditionalExpression, actual)) {
+		auto expectedCondition = CAST_TO(BinaryConditionalExpression, expected);
+		auto actualCondition = CAST_TO(BinaryConditionalExpression, actual);
+		bool isSameLeftConditional = checkIfSameCondition(std::move(expectedCondition->lhs), std::move(actualCondition->lhs));
+		bool isSameRightConditional = checkIfSameCondition(std::move(expectedCondition->rhs), std::move(actualCondition->rhs));
+		bool isSameOp = (expectedCondition->condOperator == actualCondition->condOperator);
+		return (isSameLeftConditional && isSameRightConditional && isSameOp);
+	}
+	else if (CAST_TO(RelationalExpression, expected) && CAST_TO(RelationalExpression, actual)) {
+		auto expectedCondition = CAST_TO(RelationalExpression, expected);
+		auto actualCondition = CAST_TO(RelationalExpression, actual);
+		bool isSameLeftExpression = checkIfSameExpression(std::move(expectedCondition->lhs), std::move(actualCondition->lhs));
+		bool isSameRightExpression = checkIfSameExpression(std::move(expectedCondition->rhs), std::move(actualCondition->rhs));
+		bool isSameOp = (expectedCondition->relationalOperator == actualCondition->relationalOperator);
+		return (isSameLeftExpression && isSameRightExpression && isSameOp);
+	}
+	else {
+		return false;
+	}
+}
+
+bool checkIfSameStatement(std::unique_ptr<Statement> expectedStatement, std::unique_ptr<Statement> actualStatement) {
+	auto expected = expectedStatement.get();
+	auto actual = actualStatement.get();
+
+	if (CAST_TO(PrintStatement, expected) && CAST_TO(PrintStatement, actual)) {
+		return CAST_TO(PrintStatement, expected)->varName == CAST_TO(PrintStatement, actual)->varName;
+	}
+	else if (CAST_TO(ReadStatement, expected) && CAST_TO(ReadStatement, actual)) {
+		return CAST_TO(ReadStatement, expected)->varName == CAST_TO(ReadStatement, actual)->varName;
+	}
+	else if (CAST_TO(CallStatement, expected) && CAST_TO(CallStatement, actual)) {
+		return CAST_TO(CallStatement, expected)->procName == CAST_TO(CallStatement, actual)->procName;
+	}
+	else if (CAST_TO(AssignStatement, expected) && CAST_TO(AssignStatement, actual)) {
+		auto expectedAssignStatement = CAST_TO(AssignStatement, expected);
+		auto actualAssignStatement = CAST_TO(AssignStatement, actual);
+		bool isSameVariable = (expectedAssignStatement->varName == actualAssignStatement->varName);
+		bool isSameExpression = checkIfSameExpression(std::move(expectedAssignStatement->expr), std::move(actualAssignStatement->expr));
+		return isSameVariable && isSameExpression;
+	}
+	else if (CAST_TO(IfStatement, expected) && CAST_TO(IfStatement, actual)) {
+		auto expectedIfObject = CAST_TO(IfStatement, expected);
+		auto actualIfObject = CAST_TO(IfStatement, actual);
+		bool isSameCondition = checkIfSameCondition(std::move(expectedIfObject->condExpr), std::move(actualIfObject->condExpr));
+		bool isSameThenStatements = checkIfSameStatementList(std::move(expectedIfObject->thenStmtList), std::move(actualIfObject->thenStmtList));
+		bool isSameElseStatements = checkIfSameStatementList(std::move(expectedIfObject->elseStmtList), std::move(actualIfObject->elseStmtList));
+		return isSameCondition && isSameThenStatements && isSameElseStatements;
+	}
+	else if (CAST_TO(WhileStatement, expected) && CAST_TO(WhileStatement, actual)) {
+		auto expectedWhileObject = CAST_TO(WhileStatement, expected);
+		auto actualWhileObject = CAST_TO(WhileStatement, actual);
+		bool isSameCondition = checkIfSameCondition(std::move(expectedWhileObject->condExpr), std::move(actualWhileObject->condExpr));
+		bool isSameStatements = checkIfSameStatementList(std::move(expectedWhileObject->stmtList), std::move(actualWhileObject->stmtList));
+		return isSameCondition && isSameStatements;
+	}
+	else {
+		return false;
+	}
+}
+
+bool checkIfSameStatementList(std::unique_ptr<StatementList> expectedList, std::unique_ptr<StatementList> actualList) {
+	// preliminary check for statement list
+	if (expectedList->statements.size() != actualList->statements.size()) {
+		std::cout << "LOG: Trees differ in number of statements" << std::endl;
+		return false;
+	}
+
+	for (int i = 0; i < expectedList->statements.size(); i++) {
+		if (!checkIfSameStatement(std::move(expectedList->statements[i]), std::move(actualList->statements[i]))) {
+			std::cout << "LOG: Mismatch in statements!" << std::endl;
+			return false;
+		}
+	}
+	return true;
+}
+
+bool checkIfSameTree(std::unique_ptr<Program> expectedRoot, std::unique_ptr<Program> actualRoot) {
+	auto actualProcedures = std::move(actualRoot->procedureList);
+	auto expectedProcedures = std::move(expectedRoot->procedureList);
+
+	// preliminary check for procedurelist
+	if (expectedProcedures.size() != actualProcedures.size()) {
+		std::cout << "LOG: Trees differ in number of procedures" << std::endl;
+		return false;
+	}
+
+	// loop thru procedures
+	for (int i = 0; i < expectedProcedures.size(); i++) {
+		auto expectedStatements = std::move(expectedProcedures[i]->statementList);
+		auto actualStatements = std::move(actualProcedures[i]->statementList);
+		std::cout << "LOG: Checking Procedure " << expectedProcedures[i]->procedureName << std::endl;
+		if (expectedProcedures[i]->procedureName != actualProcedures[i]->procedureName) {
+			return false;
+		}
+		if (!checkIfSameStatementList(std::move(expectedStatements), std::move(actualStatements))) {
+			return false;
+		}
+	}
+	return true;
 }
