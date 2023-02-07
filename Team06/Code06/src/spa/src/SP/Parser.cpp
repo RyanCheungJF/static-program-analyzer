@@ -1,4 +1,5 @@
 #include "Parser.h"
+#define NOT_CORREC
 
 int currStatementNumber = 1;
 
@@ -6,24 +7,22 @@ std::unique_ptr<Program> Parser::parseProgram(std::deque<Token> tokens) {
 	// Rule: procedure+
 	std::cout << "Parsing Program" << std::endl;
 
-	auto program = std::make_unique<Program>();
+	std::vector<std::unique_ptr<Procedure>> procedureList;
 
 	while (tokens.front().type != TokenType::ENDOFFILE) {
-		program->procedureList.push_back(parseProcedure(tokens));
+		procedureList.push_back(parseProcedure(tokens));
 	}
 
-	if (program->procedureList.size() == 0) {
+	if (procedureList.size() == 0) {
 		throw SyntaxErrorException("Program should contain at least one procedure");
 	}
 
-	return program;
+	return std::make_unique<Program>(std::move(procedureList));
 }
 
 std::unique_ptr<Procedure> Parser::parseProcedure(std::deque<Token>& tokens) {
 	// Rule: 'procedure' proc_name '{' stmtLst '}'
 	std::cout << "Parsing Procedure" << std::endl;
-
-	auto procedure = std::make_unique<Procedure>();
 
 	if (tokens.front().type != TokenType::NAME || tokens.front().value != "procedure") {
 		throw SyntaxErrorException("Expected 'procedure' keyword, but got -> " + tokens.front().value);
@@ -33,7 +32,7 @@ std::unique_ptr<Procedure> Parser::parseProcedure(std::deque<Token>& tokens) {
 	if (tokens.front().type != TokenType::NAME) {
 		throw SyntaxErrorException("Expected 'proc_name', but got -> " + tokens.front().value);
 	}
-	procedure->procedureName = tokens.front().value;
+	std::string procedureName = tokens.front().value;
 	tokens.pop_front();
 
 	if (tokens.front().type != TokenType::LEFT_BRACE) {
@@ -41,31 +40,32 @@ std::unique_ptr<Procedure> Parser::parseProcedure(std::deque<Token>& tokens) {
 	}
 	tokens.pop_front();
 
-	procedure->statementList = parseStatementList(tokens);
+	std::unique_ptr<StatementList> statementList;
+	statementList = std::move(parseStatementList(tokens));
 
 	if (tokens.front().type != TokenType::RIGHT_BRACE) {
 		throw SyntaxErrorException("Expected '}', but got -> " + tokens.front().value);
 	}
 	tokens.pop_front();
 
-	return procedure;
+	return std::make_unique<Procedure>(procedureName, std::move(statementList));
 }
 
 std::unique_ptr<StatementList> Parser::parseStatementList(std::deque<Token>& tokens) {
 	// Rule: stmt+
 	std::cout << "Parsing Statement List" << std::endl;
 
-	auto statementList = std::make_unique<StatementList>();
+	std::vector<std::unique_ptr<Statement>> statements;
 
 	while (tokens.front().type != TokenType::RIGHT_BRACE) { // Reached end of statementList
-		statementList->statements.push_back(parseStatement(tokens));
+		statements.push_back(parseStatement(tokens));
 	}
 
-	if (statementList->statements.size() == 0) {
+	if (statements.size() == 0) {
 		throw SyntaxErrorException("Statement List should contain at least one statement");
 	}
 
-	return statementList;
+	return std::make_unique<StatementList>(std::move(statements));
 }
 
 std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
