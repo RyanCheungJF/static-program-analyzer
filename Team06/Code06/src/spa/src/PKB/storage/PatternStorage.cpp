@@ -54,29 +54,6 @@ bool isSubTree(Expression* subTreeExpression, Expression* treeExpression) {
     return false;
 }
 
-
-std::string inorderTraversal(Expression* node, std::string current) {
-
-    // if they are both constants, check they have the same value
-    if (auto leaf = dynamic_cast<Constant*>(node)) {
-        int actualValue = leaf->value;
-        std::string s = std::to_string(actualValue);
-        return s;
-    }
-    else if (auto leaf = dynamic_cast<Variable*> (node)) {
-        std::string s = leaf->name;
-        return s;
-    }
-    else if (auto leaf = dynamic_cast<MathExpression*>(node)) {
-        std::string temp = current;
-        std::string leftString = inorderTraversal(leaf->lhs.get(), current);
-        std::string rightString = inorderTraversal(leaf->rhs.get(), current);
-        return leftString + temp + rightString;
-    }
-    return current;
-
-}
-
 void PatternStorage::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> ptr) {
     lhs_stmtNum_rhsPostfix[lhs].insert(std::make_pair(num, std::move(ptr)));
     return;
@@ -97,7 +74,7 @@ std::vector<std::vector<std::string>> PatternStorage::getLHSAndStmtNum() {
     return res;
 }
 
-std::vector<std::vector<std::string, std::string>> PatternStorage::getRHSAndStmtNum() {
+std::vector<std::vector<std::string>> PatternStorage::getRHSAndStmtNum() {
 
 };
 
@@ -277,4 +254,27 @@ std::vector<StmtNum> PatternStorage::getMatchingLHSWildcardRHSBothWildcard(std::
 //    }
 //    std::sort(res.begin(), res.end());
 //    return res;
+//}
+
+
+//std::string inorderTraversal(Expression* node, std::string current) {
+//
+//    // if they are both constants, check they have the same value
+//    if (auto leaf = dynamic_cast<Constant*>(node)) {
+//        int actualValue = leaf->value;
+//        std::string s = std::to_string(actualValue);
+//        return s;
+//    }
+//    else if (auto leaf = dynamic_cast<Variable*> (node)) {
+//        std::string s = leaf->name;
+//        return s;
+//    }
+//    else if (auto leaf = dynamic_cast<MathExpression*>(node)) {
+//        std::string temp = current;
+//        std::string leftString = inorderTraversal(leaf->lhs.get(), current);
+//        std::string rightString = inorderTraversal(leaf->rhs.get(), current);
+//        return leftString + temp + rightString;
+//    }
+//    return current;
+//
 //}

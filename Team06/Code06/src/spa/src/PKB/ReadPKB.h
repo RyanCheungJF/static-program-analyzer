@@ -86,6 +86,8 @@ public:
     // returns an array containing the matching pattern
     std::vector<StmtNum> interpretQuery(QueryStub);
 
+    std::vector<std::vector<std::string>> getLHSAndStmtNum();
+
 private:
     PKB* pkbInstance = NULL;
     std::unordered_map <RelationshipType, StmtStmtRLStorage*> stmtStmtHandlerMap = { {RelationshipType::FOLLOWS, NULL} };

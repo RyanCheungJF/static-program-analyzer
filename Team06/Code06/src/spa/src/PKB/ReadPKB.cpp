@@ -119,3 +119,8 @@ std::unordered_set<StmtNum> ReadPKB::getConstantStatementNumbers(Const c) {
 std::vector<StmtNum> ReadPKB::interpretQuery(QueryStub qs) {
     return pkbInstance->patternStorage->interpretQuery(qs);
 }
+
+std::vector<std::vector<std::string>> ReadPKB::getLHSAndStmtNum() {
+    return pkbInstance->patternStorage->getLHSAndStmtNum();
+}
+

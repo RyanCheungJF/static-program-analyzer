@@ -37,6 +37,10 @@ public:
 
     std::unique_ptr<Expression> buildSubtree(std::string rhs);
 
+
+    // pattern a (v, _)
+    virtual std::vector<std::vector<std::string>>  getLHSAndStmtNum();
+
     // utility function for debugging
 //    virtual std::vector<std::pair<std::string, std::vector<std::string>>> getAll();
 
@@ -52,10 +56,7 @@ private:
     // pattern("a", _)
     virtual std::vector<StmtNum> getMatchingLHS(std::string lhs);
 
-    // pattern a (v, _)
-    virtual std::vector<std::vector<std::string>>  getLHSAndStmtNum();
-
-    // select v pattern a (_, v)
+    // select v pattern a (_, v) "x+y"
     virtual std::vector<std::vector<std::string>>  getRHSAndStmtNum();
 
     // pattern(_, "v")
