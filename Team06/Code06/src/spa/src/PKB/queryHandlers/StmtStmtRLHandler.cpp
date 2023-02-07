@@ -52,6 +52,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handle(StmtStmtRLStorag
 		}
 		// e.g. FollowsT(a, while)
 		else if (isSynonymParam2) {
+			if (paramString1 == paramString2) return res;
 			std::unordered_set<StmtNum> typedStmtNums1 = stmtStorage->getStatementNumbers(param1.getTypeString());
 			std::unordered_set<StmtNum> typedStmtNums2 = stmtStorage->getStatementNumbers(param2.getTypeString());
 			for (auto stmtNum : typedStmtNums1) {
