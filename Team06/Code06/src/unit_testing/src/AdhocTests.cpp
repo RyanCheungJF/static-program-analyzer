@@ -72,9 +72,9 @@ TEST_CASE("adhoc2") {
     readPKB.setInstancePKB(pkb);
     sourceProcessor.processFile(filename, &writePKB);
 //    string input = "stmt ifs; Select ifs such that Follows(5, ifs)";
-    string input = "variable a; stmt s1; Select s1 such that Follows(2, 3);";
+    string input = "variable a; stmt s1; Select s1 such that Follows(2, s1);";
 //    string input = "variable a; Select a";
-    vector<string> expected{ "x", "z", "y", "i" };
+    vector<string> expected{ "3" };
     vector<string> res = qps.processQueries(input, readPKB);
     for (string r : res) {
         cout << r << "\n";
