@@ -2,7 +2,7 @@
 #include <string>
 #include <unordered_map>
 
-
+/* HELPER FUNCTIONS */
 bool isSameTree(Expression* expected, Expression* actual) {
 //    auto expected = expectedExpression.get();
 //    auto actual = actualExpression->get();
@@ -54,25 +54,50 @@ bool isSubTree(Expression* subTreeExpression, Expression* treeExpression) {
     return false;
 }
 
+
+std::string inorderTraversal(Expression* node, std::string current) {
+
+    // if they are both constants, check they have the same value
+    if (auto leaf = dynamic_cast<Constant*>(node)) {
+        int actualValue = leaf->value;
+        std::string s = std::to_string(actualValue);
+        return s;
+    }
+    else if (auto leaf = dynamic_cast<Variable*> (node)) {
+        std::string s = leaf->name;
+        return s;
+    }
+    else if (auto leaf = dynamic_cast<MathExpression*>(node)) {
+        std::string temp = current;
+        std::string leftString = inorderTraversal(leaf->lhs.get(), current);
+        std::string rightString = inorderTraversal(leaf->rhs.get(), current);
+        return leftString + temp + rightString;
+    }
+    return current;
+
+}
+
 void PatternStorage::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> ptr) {
     lhs_stmtNum_rhsPostfix[lhs].insert(std::make_pair(num, std::move(ptr)));
     return;
 }
 
-std::vector<std::pair<std::string, int>> PatternStorage::getLHSAndStmtNum() {
-    std::vector<std::pair<std::string, int>> res;
+std::vector<std::vector<std::string>> PatternStorage::getLHSAndStmtNum() {
+    std::vector<std::vector<std::string>> res;
 
     for (auto const& i : lhs_stmtNum_rhsPostfix) {
         for (const auto& p : i.second) {
             Expression* actual = p.second.get();
-            std::pair<std::string, int> curr = std::make_pair(i.first, p.first);
+            std::vector<std::string> curr;
+            curr.push_back(i.first);
+            curr.push_back(std::to_string(p.first));
             res.push_back(curr);
         }
     }
     return res;
 }
 
-std::vector<std::pair<std::string, int>> PatternStorage::getRHSAndStmtNum() {
+std::vector<std::vector<std::string, std::string>> PatternStorage::getRHSAndStmtNum() {
 
 };
 
