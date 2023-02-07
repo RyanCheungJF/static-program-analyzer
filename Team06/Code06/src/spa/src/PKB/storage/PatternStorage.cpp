@@ -72,6 +72,10 @@ std::vector<std::pair<std::string, int>> PatternStorage::getLHSAndStmtNum() {
     return res;
 }
 
+std::vector<std::pair<std::string, int>> PatternStorage::getRHSAndStmtNum() {
+
+};
+
 std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
     std::string lhs = pq.lhs;
     std::string pattern = pq.pattern;
