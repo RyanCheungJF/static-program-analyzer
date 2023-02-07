@@ -124,3 +124,14 @@ std::vector<std::vector<std::string>> ReadPKB::getLHSAndStmtNum() {
     return pkbInstance->patternStorage->getLHSAndStmtNum();
 }
 
+
+// Select v pattern a (v, "v")
+std::vector<std::vector<std::string>> ReadPKB::getLHSAndStmtNumRHSNoWildcard(std::string rhs) {
+    return pkbInstance->patternStorage->getLHSAndStmtNumRHSNoWildcard(rhs);
+}
+
+// Select v pattern a (v, _"v"_)
+std::vector<std::vector<std::string>> ReadPKB::getLHSAndStmtNumRHSBothWildcard(std::string rhs) {
+    return pkbInstance->patternStorage->getLHSAndStmtNumRHSBothWildcard(rhs);
+}
+
