@@ -31,8 +31,6 @@ struct hashFunction
 class PatternStorage {
 public:
 
-    std::vector<StmtNum> interpretQuery(QueryStub);
-
     virtual void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
     std::unique_ptr<Expression> buildSubtree(std::string rhs);
@@ -53,20 +51,20 @@ public:
     //  assign a; Select a pattern a (_, _"v"_)
     virtual std::vector<std::vector<std::string>> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
 
+    // assign a; Select a pattern a ("a", "v")
+    virtual std::vector<std::vector<std::string>> getMatchingExact(std::string lhs, std::string rhs);
+
+    //  assign a; Select a pattern a ("a", _"v"_)
+    virtual std::vector<std::vector<std::string>> getMatchingRHSBothWildcard(std::string lhs, std::string rhs);
+
+    //  assign a; Select a pattern a ("a", _)
+    virtual std::vector<std::vector<std::string>> getMatchingLHS(std::string lhs);
+
     // utility function for debugging
 //    virtual std::vector<std::pair<std::string, std::vector<std::string>>> getAll();
 
 private:
     std::unordered_map<std::string, std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>> lhs_stmtNum_rhsPostfix;
-
-    // assign a; Select a pattern a ("a", "v")
-    virtual std::vector<StmtNum> getMatchingExact(std::string lhs, std::string rhs);
-
-    //  assign a; Select a pattern a ("a", _"v"_)
-    virtual std::vector<StmtNum> getMatchingRHSBothWildcard(std::string lhs, std::string rhs);
-
-    //  assign a; Select a pattern a ("a", _)
-    virtual std::vector<StmtNum> getMatchingLHS(std::string lhs);
 
     //  assign a; Select a pattern a (_, v)
 //    virtual std::vector<std::vector<std::string>>  getRHSAndStmtNum();

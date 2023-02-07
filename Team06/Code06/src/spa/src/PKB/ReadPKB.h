@@ -4,6 +4,7 @@
 #include "queryHandlers/StmtEntRLHandler.h"
 #include "queryHandlers/EntEntRLHandler.h"
 #include "../qps/entities/Relationship.h"
+#include "../qps/entities/Pattern.h"
 
 //#ifndef SPA_READPKB_H
 //#define SPA_READPKB_H
@@ -22,6 +23,8 @@ public:
 
     // Returns a vector of strings based on the Parameter object passed
     std::vector<std::string> findDesignEntities(Parameter p);
+
+    std::vector<std::vector<std::string>> findPattern(Pattern p);
 
     // Gets a Follows relation in PKB
     bool checkFollows(StmtNum left, StmtNum right);

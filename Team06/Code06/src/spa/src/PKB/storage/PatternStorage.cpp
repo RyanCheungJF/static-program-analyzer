@@ -59,35 +59,6 @@ void PatternStorage::writePattern(std::string lhs, StmtNum num, std::unique_ptr<
     return;
 }
 
-std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
-    std::string lhs = pq.lhs;
-    std::string pattern = pq.pattern;
-    std::vector<StmtNum> res;
-
-    bool leftWildcard = pattern[0] == '_';
-    bool rightWildcard = pattern[pattern.length() - 1] == '_';
-
-    std::stringstream ss;
-    for (int i = 0; i < pattern.length(); i++) {
-        char curr = pattern[i];
-        if (curr != '_') {
-            ss << curr;
-        }
-    }
-
-    std::string rhs = ss.str();
-    if (pattern == "_") {
-        std::cout << "hitting getMatchingLHS ie pattern(\"a\", _) for " << lhs << " = " << rhs << "\n";
-        return getMatchingLHS(lhs);
-    } else if (leftWildcard && rightWildcard) {
-        std::cout << "hitting getMatchingRHSBothWildcard ie pattern(\"a\", _\"v\"_) for " << lhs << " = " << rhs << "\n";
-        return getMatchingRHSBothWildcard(lhs, rhs);
-    } else {
-        std::cout << "hitting getMatchingExact ie pattern(\"a\", \"v\") for " << lhs << " = " << rhs << "\n";
-        return getMatchingExact(lhs, rhs);
-    }
-}
-
 std::unique_ptr<Expression> PatternStorage::buildSubtree(std::string rhs) {
     std::stringstream ss;
     std::deque<Token> tokens;
@@ -153,49 +124,52 @@ std::vector<std::vector<std::string>> PatternStorage::getLHSAndStmtNumRHSBothWil
 }
 
 
-std::vector<StmtNum> PatternStorage::getMatchingExact(std::string lhs, std::string rhs) {
+std::vector<std::vector<std::string>> PatternStorage::getMatchingExact(std::string lhs, std::string rhs) {
     if (lhs_stmtNum_rhsPostfix.find(lhs) == lhs_stmtNum_rhsPostfix.end()) {
-        std::vector<StmtNum> empty;
+        std::vector<std::vector<std::string>> empty;
         return empty;
     }
+
     std::unique_ptr<Expression> expected = buildSubtree(rhs);
-    std::vector<StmtNum> res;
+    std::vector<std::vector<std::string>> res;
     for (const auto& p : lhs_stmtNum_rhsPostfix.at(lhs)) {
         Expression* actual = p.second.get();
         if (isSameTree(expected.get(), actual)) {
-            res.push_back(p.first);
+            res.push_back({ lhs, std::to_string(p.first) });
         }
     }
     return res;
 }
 
-std::vector<StmtNum> PatternStorage::getMatchingRHSBothWildcard(std::string lhs, std::string rhs) {
+std::vector<std::vector<std::string>> PatternStorage::getMatchingRHSBothWildcard(std::string lhs, std::string rhs) {
+    
     if (lhs_stmtNum_rhsPostfix.find(lhs) == lhs_stmtNum_rhsPostfix.end()) {
-        std::vector<StmtNum> empty;
+        std::vector<std::vector<std::string>> empty;
         return empty;
     }
 
     std::unique_ptr<Expression> expected = buildSubtree(rhs);
-    std::vector<StmtNum> res;
+    std::vector<std::vector<std::string>> res;
     for (const auto& p : lhs_stmtNum_rhsPostfix.at(lhs)) {
         Expression* actual = p.second.get();
         if (isSubTree(expected.get(), actual)) {
-            res.push_back(p.first);
+            res.push_back({ lhs, std::to_string(p.first) });
         }
     }
     return res;
 }
 
 
-std::vector<StmtNum> PatternStorage::getMatchingLHS(std::string lhs) {
+std::vector<std::vector<std::string>> PatternStorage::getMatchingLHS(std::string lhs) {
+    
     if (lhs_stmtNum_rhsPostfix.find(lhs) == lhs_stmtNum_rhsPostfix.end()) {
-        std::vector<StmtNum> empty;
+        std::vector<std::vector<std::string>> empty;
         return empty;
     }
 
-    std::vector<StmtNum> res;
+    std::vector<std::vector<std::string>> res;
     for (const auto& p : lhs_stmtNum_rhsPostfix.at(lhs)) {
-        res.push_back(p.first);
+        res.push_back({ lhs, std::to_string(p.first) });
     }
     return res;
 }
