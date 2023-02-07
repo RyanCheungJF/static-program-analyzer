@@ -104,12 +104,49 @@ TEST_CASE("Valid Source Program") {
 
 		// creating actual tree
 		auto assignNodeX = std::make_unique<AssignStatement>("x", std::make_unique<Constant>(6));
-		auto assignNodeY = std::make_unique<AssignStatement>("y", std::make_unique<Constant>(1));
-		auto assignNodeZ = std::make_unique<AssignStatement>("z", std::make_unique<Variable>("y"));
-		auto whileStatement = std::make_unique<WhileStatement>();
+		auto assignNodeZ = std::make_unique<AssignStatement>("z", std::make_unique<Variable>("x"));
+		auto printNodeZ = std::make_unique<PrintStatement>("z");
+
+		std::vector<std::unique_ptr<Statement>> thenStatements;
+		auto thenStmtNode = std::make_unique<AssignStatement>("z", std::make_unique<Constant>(2));
+		thenStatements.push_back(std::move(thenStmtNode));
+		auto thenStmtList = std::make_unique<StatementList>(std::move(thenStatements));
+
+		std::vector<std::unique_ptr<Statement>> elseStatements;
+		auto elseStmtNode = std::make_unique<AssignStatement>("z", std::make_unique<Constant>(3));
+		elseStatements.push_back(std::move(elseStmtNode));
+		auto elseStmtList = std::make_unique<StatementList>(std::move(elseStatements));
+
+		auto lhsIfExpr = std::make_unique<MathExpression>("%", std::make_unique<Variable>("z"), std::make_unique<Constant>(2));
+		auto rhsIfExpr = std::make_unique<Constant>(0);
+		auto ifRelExprNode = std::make_unique<RelationalExpression>("==", std::move(lhsIfExpr), std::move(rhsIfExpr));
+		auto ifStatementNode = std::make_unique<IfStatement>(std::move(ifRelExprNode), std::move(thenStmtList), std::move(elseStmtList));
+		
+		auto leftRelExpr = std::make_unique<RelationalExpression>("<", std::make_unique<Variable>("x"), std::make_unique<Constant>(7));
+		auto leftCondExpr = std::make_unique<NotConditionalExpression>(std::move(leftRelExpr));
+		auto rightCondExpr = std::make_unique<RelationalExpression>("<=", std::make_unique<Variable>("z"), std::make_unique<Constant>(12));
+		auto binaryCondNode = std::make_unique<BinaryConditionalExpression>("&&", std::move(leftCondExpr), std::move(rightCondExpr));
+		
+		std::vector<std::unique_ptr<Statement>> whileStatements;
+		whileStatements.push_back(std::move(ifStatementNode));
+		auto whileStmtList = std::make_unique<StatementList>(std::move(whileStatements));
+		auto whileNode = std::make_unique<WhileStatement>(std::move(binaryCondNode), std::move(whileStmtList));
+
+		std::vector<std::unique_ptr<Statement>> statementsA;
+		statementsA.push_back(std::move(assignNodeX));
+		statementsA.push_back(std::move(assignNodeZ));
+		statementsA.push_back(std::move(whileNode));
+		statementsA.push_back(std::move(printNodeZ));
+
+		auto statementListNodeA = std::make_unique<StatementList>(std::move(statementsA));
+		auto procedureNodeA = std::make_unique<Procedure>("A", std::move(statementListNodeA));	
+		std::vector<std::unique_ptr<Procedure>> procedures;
+		procedures.push_back(std::move(procedureNodeA));
+
+		auto programNode = std::make_unique<Program>(std::move(procedures));
 
 		// outer scope
-		REQUIRE(rootNode->procedureList[0]->statementList->statements.size() == 5);
+		REQUIRE(checkIfSameTree(std::move(rootNode), std::move(programNode)));
 	}
 
 	SECTION("Valid Program using keywords as names") {
@@ -129,6 +166,35 @@ TEST_CASE("Valid Source Program") {
 
 		std::vector<std::unique_ptr<Procedure>> procedures;
 		procedures.push_back(std::move(procedureNode));
+
+		auto programNode = std::make_unique<Program>(std::move(procedures));
+
+		REQUIRE(checkIfSameTree(std::move(rootNode), std::move(programNode)));
+	}
+
+	SECTION("Valid Program to test distinguish between relExpr & condExpr") {
+		std::ifstream testFile(testDirectory + "valid5.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		auto rootNode = testParser.parseProgram(tokenQueue);
+
+		// creating expected tree
+		auto assignNodeX = std::make_unique<AssignStatement>("x", std::make_unique<Constant>(1));
+		std::vector<std::unique_ptr<Statement>> whileStatements;
+		whileStatements.push_back(std::move(assignNodeX));
+		auto whileStmtList = std::make_unique<StatementList>(std::move(whileStatements));
+		auto lhsExpr = std::make_unique<MathExpression>("+", std::make_unique<Constant>(1), std::make_unique<Constant>(2));
+		auto relExpr = std::make_unique<RelationalExpression>("<", std::move(lhsExpr), std::make_unique<Constant>(2));
+		auto whileNode = std::make_unique<WhileStatement>(std::move(relExpr), std::move(whileStmtList));
+
+		std::vector<std::unique_ptr<Statement>> statementsA;
+		statementsA.push_back(std::move(whileNode));
+
+		auto statementListNodeA = std::make_unique<StatementList>(std::move(statementsA));
+		auto procedureNodeA = std::make_unique<Procedure>("A", std::move(statementListNodeA));
+		std::vector<std::unique_ptr<Procedure>> procedures;
+		procedures.push_back(std::move(procedureNodeA));
 
 		auto programNode = std::make_unique<Program>(std::move(procedures));
 

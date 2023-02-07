@@ -1,5 +1,4 @@
 #include "Parser.h"
-#define NOT_CORREC
 
 int currStatementNumber = 1;
 
@@ -72,28 +71,22 @@ std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
 	// Rule: read | print | call | while | if | assign
 	if (tokens.front().type == TokenType::NAME) {
 		if (tokens.front().value == "read") {
-			auto readStatement = parseReadStatement(tokens);
-			return readStatement;
+			return parseReadStatement(tokens);
 		}
 		else if (tokens.front().value == "print") {
-			auto printStatement = parsePrintStatement(tokens);
-			return printStatement;
+			return parsePrintStatement(tokens);
 		}
 		else if (tokens.front().value == "call") {
-			auto callStatement = parseCallStatement(tokens);
-			return callStatement;
+			return parseCallStatement(tokens);
 		}
 		else if (tokens.front().value == "while") {
-			auto whileStatement = parseWhileStatement(tokens);
-			return whileStatement;
+			return parseWhileStatement(tokens);
 		}
 		else if (tokens.front().value == "if") {
-			auto ifStatement = parseIfStatement(tokens);
-			return ifStatement;
+			return parseIfStatement(tokens);
 		}
 		else { // Else, it must be an assign statement
-			auto assignStatement = parseAssignStatement(tokens);
-			return assignStatement;
+			return parseAssignStatement(tokens);
 		}
 	}
 	else {
@@ -114,7 +107,6 @@ std::unique_ptr<ReadStatement> Parser::parseReadStatement(std::deque<Token>& tok
 	if (tokens.front().type != TokenType::NAME) {
 		throw SyntaxErrorException("Expected var_name in read statement, but got -> " + tokens.front().value);
 	}
-
 	readStatement->varName = tokens.front().value;
 	tokens.pop_front(); // Pop var_name
 
@@ -139,7 +131,6 @@ std::unique_ptr<PrintStatement> Parser::parsePrintStatement(std::deque<Token>& t
 	if (tokens.front().type != TokenType::NAME) {
 		throw SyntaxErrorException("Expected var_name in print statement, but got -> " + tokens.front().value);
 	}
-
 	printStatement->varName = tokens.front().value;
 	tokens.pop_front(); // Pop var_name
 
@@ -164,7 +155,6 @@ std::unique_ptr<CallStatement> Parser::parseCallStatement(std::deque<Token>& tok
 	if (tokens.front().type != TokenType::NAME) {
 		throw SyntaxErrorException("Expected proc_name in call statement, but got -> " + tokens.front().value);
 	}
-
 	callStatement->procName = tokens.front().value;
 	tokens.pop_front(); // Pop proc_name
 

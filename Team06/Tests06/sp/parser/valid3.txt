@@ -1,14 +1,12 @@
 procedure A {
 	x = 6;
-	y = 1;
-	z = y;
-	while ((x < 7) && (z <= 12)) {
+	z = x;
+	while ((!(x < 7)) && (z <= 12)) {
 		if (z % 2 == 0) then {
-			z = z + 2;
+			z = 2;
 		} else {
-			z = z + 3;
+			z = 3;
 		}
-		x = x + 1;
 	}
 	print z;
 }
