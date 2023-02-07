@@ -21,6 +21,23 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
         table = table.extractDesignEntities();
         queryDb.insertTable(table);
     }
+
+//    for(Pattern pattern: patterns) {
+//        // Run an PKB API call for each relationship.
+//        // Taking the example of select s1 follows(s1, s2)
+//        vector<vector<string>> response = readPKB.findPattern(pattern);
+//        Parameter synAssign = pattern.getSynAssign();
+//        Parameter *entRef = pattern.getEntRef();
+//
+//        Table table({synAssign, entRef}, response);
+//        if(response.empty()) {
+//            isFalseQuery = true;
+//        }
+//        // This will remove wild cards and FIXED INT from the table.
+//        table = table.extractDesignEntities();
+//        queryDb.insertTable(table);
+//    }
+
     if (queryDb.hasParameter(selectParameters[0])) {
         return queryDb.fetch(selectParameters[0]);
     } else {
