@@ -59,25 +59,6 @@ void PatternStorage::writePattern(std::string lhs, StmtNum num, std::unique_ptr<
     return;
 }
 
-std::vector<std::vector<std::string>> PatternStorage::getLHSAndStmtNum() {
-    std::vector<std::vector<std::string>> res;
-
-    for (auto const& i : lhs_stmtNum_rhsPostfix) {
-        for (const auto& p : i.second) {
-            Expression* actual = p.second.get();
-            std::vector<std::string> curr;
-            curr.push_back(i.first);
-            curr.push_back(std::to_string(p.first));
-            res.push_back(curr);
-        }
-    }
-    return res;
-}
-
-std::vector<std::vector<std::string>> PatternStorage::getRHSAndStmtNum() {
-
-};
-
 std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
     std::string lhs = pq.lhs;
     std::string pattern = pq.pattern;
@@ -128,6 +109,59 @@ std::unique_ptr<Expression> PatternStorage::buildSubtree(std::string rhs) {
     std::unique_ptr<Expression> root = std::move(pr.parseExpression(tokens));
     return root;
 }
+
+
+std::vector<std::vector<std::string>> PatternStorage::getLHSAndStmtNum() {
+    std::vector<std::vector<std::string>> res;
+
+    for (auto const& i : lhs_stmtNum_rhsPostfix) {
+        for (const auto& p : i.second) {
+            Expression* actual = p.second.get();
+            std::vector<std::string> curr;
+            curr.push_back(i.first);
+            curr.push_back(std::to_string(p.first));
+            res.push_back(curr);
+        }
+    }
+    return res;
+}
+
+
+std::vector<std::vector<std::string>> PatternStorage::getLHSAndStmtNumRHSNoWildcard(std::string rhs) {
+    std::vector<std::vector<std::string>> res;
+    std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
+    for (auto const& i : lhs_stmtNum_rhsPostfix) {
+        for (const auto& p : i.second) {
+            Expression* actual = p.second.get();
+            std::vector<std::string> curr;
+            if (isSameTree(expected.get(), actual)) {
+                curr.push_back(i.first);
+                curr.push_back(std::to_string(p.first));
+                res.push_back(curr);
+            }
+        }
+    }
+    return res;
+}
+
+std::vector<std::vector<std::string>> PatternStorage::getLHSAndStmtNumRHSBothWildcard(std::string rhs) {
+    std::vector<std::vector<std::string>> res;
+    std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
+    for (auto const& i : lhs_stmtNum_rhsPostfix) {
+        for (const auto& p : i.second) {
+            Expression* actual = p.second.get();
+            std::vector<std::string> curr;
+            if (isSubTree(expected.get(), actual)) {
+                curr.push_back(i.first);
+                curr.push_back(std::to_string(p.first));
+                res.push_back(curr);
+            }
+        }
+    }
+    return res;
+
+}
+
 
 std::vector<StmtNum> PatternStorage::getMatchingExact(std::string lhs, std::string rhs) {
     if (lhs_stmtNum_rhsPostfix.find(lhs) == lhs_stmtNum_rhsPostfix.end()) {
