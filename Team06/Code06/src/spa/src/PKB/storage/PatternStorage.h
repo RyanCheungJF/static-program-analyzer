@@ -52,6 +52,9 @@ private:
     // pattern("a", _)
     virtual std::vector<StmtNum> getMatchingLHS(std::string lhs);
 
+    // pattern a (v, _)
+    virtual std::vector<std::pair<std::string, int>> getLHSAndStmtNum();
+
     // pattern(_, "v")
     virtual std::vector<StmtNum> getMatchingLHSWildcardRHSNoWildcard(std::string rhs);
 

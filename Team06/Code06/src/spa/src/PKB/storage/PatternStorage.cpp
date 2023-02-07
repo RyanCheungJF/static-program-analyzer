@@ -59,6 +59,19 @@ void PatternStorage::writePattern(std::string lhs, StmtNum num, std::unique_ptr<
     return;
 }
 
+std::vector<std::pair<std::string, int>> PatternStorage::getLHSAndStmtNum() {
+    std::vector<std::pair<std::string, int>> res;
+
+    for (auto const& i : lhs_stmtNum_rhsPostfix) {
+        for (const auto& p : i.second) {
+            Expression* actual = p.second.get();
+            std::pair<std::string, int> curr = std::make_pair(i.first, p.first);
+            res.push_back(curr);
+        }
+    }
+    return res;
+}
+
 std::vector<StmtNum> PatternStorage::interpretQuery(QueryStub pq) {
     std::string lhs = pq.lhs;
     std::string pattern = pq.pattern;
