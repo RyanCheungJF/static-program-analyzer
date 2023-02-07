@@ -83,9 +83,11 @@ public:
     std::unordered_set<StmtNum> getConstantStatementNumbers(Const c);
 
 
+    //This assumes it is Select a pattern a(..., ...)
     // returns an array containing the matching pattern
     std::vector<StmtNum> interpretQuery(QueryStub);
 
+    // Select v pattern a (v, _)
     std::vector<std::vector<std::string>> getLHSAndStmtNum();
 
 private:

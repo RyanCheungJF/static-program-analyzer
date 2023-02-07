@@ -159,7 +159,7 @@ TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
     REQUIRE(res);
 }
 
-TEST_CASE("Support for Select v pattern a (v, _)") {
+TEST_CASE("Support for Select v pattern a (v, _)\'") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
