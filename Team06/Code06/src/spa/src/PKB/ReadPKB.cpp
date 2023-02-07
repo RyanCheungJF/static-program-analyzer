@@ -74,8 +74,8 @@ std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
         }
     }*/
 
-
-    rhs = rhs.substr(1, rhs.length() - 2);
+    if (leftWildcard && rightWildcard) rhs = rhs.substr(1, rhs.length() - 2);
+    
 
     if (lhsType == ParameterType::FIXED_STRING) {
         if (rhs == "_") {
