@@ -10,10 +10,10 @@ typedef std::string StmtType;
 typedef std::string ProcedureName;
 typedef int StmtNum;
 
-class StmtStorage {
+class UsesStorage {
 public:
-    virtual void writeUses(ProcedureName, StmtType, StmtNum, Ent);
-    virtual bool checkUses(StmtNum, StmtNum);
+    virtual void writeUses(ProcedureName name, StmtType lhs, StmtNum num, Ent ent);
+    virtual bool checkUses(StmtNum, Ent); // Ent is either "x" or _
 
     // Select s such that Uses(s, v)
     virtual std::vector<std::vector<std::string>> getUsesAll();
@@ -39,26 +39,28 @@ public:
     // Select cs such that Uses(cs, "x")
     virtual std::vector<std::vector<std::string>> getUsesContainerGivenVariable(std::string rhs);
 
-    // Select p such that Uses(p, v)
-    virtual std::vector<std::vector<std::string>> getUsesProcedureAll();
-
-    // Select p such that Uses(p, "x")
-    virtual std::vector<std::vector<std::string>> getUsesProcedureGivenVariable(std::string rhs);
-
     // Select c such that Uses(c, v)
     virtual std::vector<std::vector<std::string>> getUsesCallAll();
 
     // Select c such that Uses(c, "x")
     virtual std::vector<std::vector<std::string>> getUsesCallGivenVariable(std::string rhs);
 
-private:
-    std::unordered_map<Ent, std::unordered_set<StmtNum>> print;
-    std::unordered_map<Ent, std::unordered_set<StmtNum>> assignment;
-    std::unordered_map<Ent, std::unordered_set<StmtNum>> container;
-    std::unordered_map<Ent, std::unordered_set<StmtNum>> procedure;
-    std::unordered_map<Ent, std::unordered_set<StmtNum>> call;
+    // Select p such that Uses(p, v)
+    virtual std::vector<std::vector<std::string>> getUsesProcedureAll();
 
-    std::unordered_map<StmtNum, std::unordered_set<StmtNum>> stmtNum_stmtNum;
+    // Select p such that Uses(p, "x")
+    virtual std::vector<std::vector<std::string>> getUsesProcedureGivenVariable(std::string rhs);
+
+private:
+    std::unordered_map<StmtNum, Ent> print;
+    std::unordered_map<StmtNum, std::unordered_set<Ent>> assignment;
+    std::unordered_map<StmtNum, std::unordered_set<Ent>> container;
+    std::unordered_map<ProcedureName, std::unordered_set<Ent>> procedureVariables;
+    std::unordered_map<StmtNum, std::unordered_set<Ent>> call;
+
+//    std::unordered_map<StmtNum, std::unordered_set<StmtNum>> stmtNum_stmtNum;
+    std::unordered_map<StmtNum, std::pair<ProcedureName, StmtType>> stmtNum_procName_stmtType;
+    std::unordered_map<ProcedureName, std::unordered_map<StmtType, std::unordered_set<StmtNum>>> procName_stmtType_stmtNum;
 
     //TODO: inverse table if we got time. Milestone 3?
 
@@ -77,6 +79,7 @@ private:
      * Examples:
      * Select a such that Uses(a, "x")
      * Select a such that Uses(a, v)
+     * Select v such that Uses(a, v)
      * Select pn such that Uses(pn, "x")
      * Select pn such that Uses(pn, v)
      * Select s such that Uses(s, "x")
@@ -85,6 +88,8 @@ private:
      * Select p such that Uses(p, v)
      * Select c such that Uses(c, "x")
      * Select c such that Uses(c, v)
+     *
+     * Select a such that Uses("procedure1", v) // and other variants ie pn, stmt, etc
      *
      * Select v such that Uses(1, 2) // where Uses(1, 2) is true
      *
