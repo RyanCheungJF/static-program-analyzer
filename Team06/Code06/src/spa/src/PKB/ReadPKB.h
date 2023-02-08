@@ -18,33 +18,14 @@ public:
     // Sets the pointer to the PKB instance if it is not set yet
     void setInstancePKB(PKB& pkb);
 
-    // Returns a vector of string tuples based on the Relationship object passed
+    // Returns relavant statement number strings based on the Relationship object passed
     std::vector<std::vector<std::string>> findRelationship(Relationship rs);
 
     // Returns a vector of strings based on the Parameter object passed
     std::vector<std::string> findDesignEntities(Parameter p);
 
+    // Returns relevant strings based on Pattern object passed
     std::vector<std::vector<std::string>> findPattern(Pattern p);
-
-    // Gets a Follows relation in PKB
-    bool checkFollows(StmtNum left, StmtNum right);
-
-    // Find the follower of a followee
-    StmtNum getFollower(StmtNum followee);
-
-    // Find the followee of a follower
-    StmtNum getFollowee(StmtNum follower);
-
-
-    // checks if a follower is in a transitive follows relationship with a followee
-    bool checkFollowsT(StmtNum followee, StmtNum follower);
-
-    // Gets followers of a followee, transitive relationship
-    std::unordered_set<StmtNum> getFollowersT(StmtNum followee);
-
-    // Gets followees of a follower, transitive relationship
-    std::unordered_set<StmtNum> getFolloweesT(StmtNum follower);
-
 
     // Checks if a statement is a parent of another given their statement numbers
     bool checkParent(StmtNum parent, StmtNum child);
