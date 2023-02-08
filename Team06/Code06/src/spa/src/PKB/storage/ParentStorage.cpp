@@ -38,3 +38,13 @@ std::unordered_set<StmtNum> ParentStorage::getLeftWildcard(StmtNum child) {
 	return std::unordered_set<StmtNum>{ iter->second };
 }
 
+std::pair<std::vector<StmtNum>, std::vector<StmtNum>> ParentStorage::getAllPairs() {
+	std::vector<StmtNum> parent;
+	std::vector<StmtNum> children;
+	for (auto childParentPair : childParentMap) {
+		parent.push_back(childParentPair.second);
+		children.push_back(childParentPair.first);
+	}
+	return { parent, children };
+}
+
