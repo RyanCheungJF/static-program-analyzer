@@ -101,7 +101,7 @@ TEST_CASE("Check that all of the followees of each follower is accurate, even wi
     REQUIRE(res);
 }
 
-// Test cases should be done. Waiting on Relationship object to support FollowsT
+// Test cases should be done. Waiting on Relationship object to support FollowsT Relationship
 /*
 TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
 
