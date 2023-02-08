@@ -74,7 +74,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
     REQUIRE(readPkb.findPattern(pattern2).size() == 1);
 }
 
-/*
+
 TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -92,18 +92,17 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
 
     writePkb.writePattern(lhs, 1, std::move(line1rhs));
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
+   
+    Parameter param1;
+    Parameter param2 = Parameter("z", "fixed_string");
+    Pattern pattern1 = Pattern(param1, param2, "_");
 
-    QueryStub qs1;
-    qs1.lhs = "z";
-    qs1.pattern = "_";
+    std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern1);
 
-    std::vector<StmtNum> lines_qs1 = readPkb.interpretQuery(qs1);
-
-    bool res = true;
-    res = res && lines_qs1.size() == 2;
+    std::vector<std::vector<std::string>> check = { {"z", "1"}, {"z", "2"} };
 
     std::cout << "COMPLETE";
-    REQUIRE(res);
+    REQUIRE(res == check);
 }
 
 TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
@@ -125,29 +124,25 @@ TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
     writePkb.writePattern(lhs, 1, std::move(line1rhs));
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
-    QueryStub qs1;
-    qs1.lhs = "_";
-    qs1.pattern = "a + b / c";
+    Parameter param1;
+    Parameter param2 = Parameter("_", "wildcard");
+    Pattern pattern1 = Pattern(param1, param2, "a + b / c");
+    Pattern pattern2 = Pattern(param1, param2, "z * 5");
+    Pattern pattern3 = Pattern(param1, param2, "z");
 
-    QueryStub qs2;
-    qs2.lhs = "_";
-    qs2.pattern = "z * 5";
+    std::vector<std::vector<std::string>> res1 = readPkb.findPattern(pattern1);
+    std::vector<std::vector<std::string>> res2 = readPkb.findPattern(pattern2);
+    std::vector<std::vector<std::string>> res3 = readPkb.findPattern(pattern3);
 
 
-    QueryStub qs3;
-    qs3.lhs = "_";
-    qs3.pattern = "z";
-
-    std::vector<StmtNum> lines_qs1 = readPkb.interpretQuery(qs1);
-    std::vector<StmtNum> lines_qs2 = readPkb.interpretQuery(qs2);
-
-    bool res = true;
-    res = res && lines_qs1.size() == 1;
-    res = res && lines_qs2.size() == 1;
-    res = res && readPkb.interpretQuery(qs3).size() == 0;
+    std::vector<std::vector<std::string>> check1 = { {"z", "1"} };
+    std::vector<std::vector<std::string>> check2 = { {"z", "2"} };
+    std::vector<std::vector<std::string>> check3 = {};
 
     std::cout << "COMPLETE";
-    REQUIRE(res);
+    REQUIRE(res1 == check1);
+    REQUIRE(res2 == check2);
+    REQUIRE(res3 == check3);
 }
 
 TEST_CASE("Support for Select v pattern a (v, _)\'") {
@@ -169,15 +164,16 @@ TEST_CASE("Support for Select v pattern a (v, _)\'") {
     writePkb.writePattern(lhs, 1, std::move(line1rhs));
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
-    std::vector<std::vector<std::string>> result = readPkb.getLHSAndStmtNum();
+    Parameter param1;
+    Parameter param2 = Parameter("v", "variable");
+    Pattern pattern = Pattern(param1, param2, "_");
 
-    for (std::vector v : result) {
-        std::cout << v[0] << " " << v[1] << "\n";
-    }
+    std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern);
+    std::vector<std::vector<std::string>> check = { {"z", "1"}, {"z", "2"} };
 
-    bool res = true;
     std::cout << "COMPLETE";
-    REQUIRE(res);
+
+    REQUIRE(res == check);
 }
 
 //TEST_CASE("Support for pattern's inorder traversal") {
@@ -211,6 +207,6 @@ TEST_CASE("Support for Select v pattern a (v, _)\'") {
 //    std::cout << "COMPLETE";
 //    REQUIRE(res);
 //}
-*/
+
 
 
