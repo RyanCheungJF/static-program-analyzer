@@ -11,11 +11,11 @@ void ProcedureExtractorVisitor::visitProcedure(Procedure *procedure) {
 	int lastStatementNumber = procedure->statementList->statements.back()->statementNumber;
 
 	// if its an if or while statement, we recurse down further
-	if (dynamic_cast<IfStatement*>(procedure->statementList->statements.back().get())) {
-		lastStatementNumber = visitIfStatementHelper(dynamic_cast<IfStatement*>(procedure->statementList->statements.back().get()));
+	if (CAST_TO(IfStatement, procedure->statementList->statements.back().get())) {
+		lastStatementNumber = visitIfStatementHelper(CAST_TO(IfStatement, procedure->statementList->statements.back().get()));
 	}
-	if (dynamic_cast<WhileStatement*>(procedure->statementList->statements.back().get())) {
-		lastStatementNumber = visitWhileStatementHelper(dynamic_cast<WhileStatement*>(procedure->statementList->statements.back().get()));
+	if (CAST_TO(WhileStatement, procedure->statementList->statements.back().get())) {
+		lastStatementNumber = visitWhileStatementHelper(CAST_TO(WhileStatement, procedure->statementList->statements.back().get()));
 	}
 	std::vector<int> statementNumbers;
 	for (int i = firstStatementNumber; i <= lastStatementNumber; i++) {
@@ -32,30 +32,3 @@ void ProcedureExtractorVisitor::visitIfStatement(IfStatement *ifStatement) {}
 void ProcedureExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement) {}
 void ProcedureExtractorVisitor::visitExpression(Expression* variable) {}
 void ProcedureExtractorVisitor::visitConditionalExpression(ConditionalExpression* conditionalExpression) {}
-
-int ProcedureExtractorVisitor::visitIfStatementHelper(IfStatement* ifStatement) {
-	auto statementList = ifStatement->elseStmtList.get();
-
-	if (dynamic_cast<IfStatement*>(statementList->statements.back().get())) {
-		return visitIfStatementHelper(dynamic_cast<IfStatement*>(statementList->statements.back().get()));
-	}
-	else if (dynamic_cast<WhileStatement*>(statementList->statements.back().get())) {
-		return visitWhileStatementHelper(dynamic_cast<WhileStatement*>(statementList->statements.back().get()));
-	}
-	else {
-		return statementList->statements.back().get()->statementNumber;
-	}
-}
-
-int ProcedureExtractorVisitor::visitWhileStatementHelper(WhileStatement* whileStatement) {
-	auto statementList = whileStatement->stmtList.get();
-	if (dynamic_cast<IfStatement*>(statementList->statements.back().get())) {
-		return visitIfStatementHelper(dynamic_cast<IfStatement*>(statementList->statements.back().get()));
-	}
-	else if (dynamic_cast<WhileStatement*>(statementList->statements.back().get())) {
-		return visitWhileStatementHelper(dynamic_cast<WhileStatement*>(statementList->statements.back().get()));
-	}
-	else {
-		return statementList->statements.back().get()->statementNumber;
-	}
-}

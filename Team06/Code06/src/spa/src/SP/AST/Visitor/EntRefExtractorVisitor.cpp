@@ -19,24 +19,24 @@ void EntRefExtractorVisitor::visitPrintStatement(PrintStatement* printStatement)
 }
 
 void EntRefExtractorVisitor::visitAssignStatement(AssignStatement* assignStatement) {
-	std::unordered_set<std::string> variables;
+	std::unordered_set<Ent> variables;
 	std::unordered_set<int> constants;
 
 	variables.insert(assignStatement->varName);
 	visitExprHelper(assignStatement->expr.get(), variables, constants);
 
-	std::vector<std::string> outputVariables(variables.begin(), variables.end());
+	std::vector<Ent> outputVariables(variables.begin(), variables.end());
 	std::vector<int> outputConstants(constants.begin(), constants.end());
 	writeApi->setEntity(assignStatement->statementNumber, outputVariables);
 	writeApi->setConstant(assignStatement->statementNumber, outputConstants);
 	std::unique_ptr<Expression> expr;
-	if (auto i = dynamic_cast<MathExpression*>(assignStatement->expr.get())) {
+	if (auto i = CAST_TO(MathExpression, assignStatement->expr.get())) {
 		expr = std::make_unique<MathExpression>(std::move(*i));
 	}
-	else if (auto i = dynamic_cast<Constant*>(assignStatement->expr.get())) {
+	else if (auto i = CAST_TO(Constant, assignStatement->expr.get())) {
 		expr = std::make_unique<Constant>(std::move(*i));
 	}
-	else if (auto i = dynamic_cast<Variable*>(assignStatement->expr.get())) {
+	else if (auto i = CAST_TO(Variable, assignStatement->expr.get())) {
 		expr = std::make_unique<Variable>(std::move(*i));
 	}
 	writeApi->writePattern(assignStatement->varName, assignStatement->statementNumber, std::move(expr));
@@ -45,12 +45,12 @@ void EntRefExtractorVisitor::visitAssignStatement(AssignStatement* assignStateme
 void EntRefExtractorVisitor::visitCallStatement(CallStatement* callStatement) {}
 
 void EntRefExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
-	std::unordered_set<std::string> variables;
+	std::unordered_set<Ent> variables;
 	std::unordered_set<int> constants;
 
 	visitCondExprHelper(ifStatement->condExpr.get(), variables, constants);
 
-	std::vector<std::string> outputVariables(variables.begin(), variables.end());
+	std::vector<Ent> outputVariables(variables.begin(), variables.end());
 	std::vector<int> outputConstants(constants.begin(), constants.end());
 
 	writeApi->setEntity(ifStatement->statementNumber, outputVariables);
@@ -58,12 +58,12 @@ void EntRefExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
 }
 
 void EntRefExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement) {
-	std::unordered_set<std::string> variables;
+	std::unordered_set<Ent> variables;
 	std::unordered_set<int> constants;
 
 	visitCondExprHelper(whileStatement->condExpr.get(), variables, constants);
 
-	std::vector<std::string> outputVariables(variables.begin(), variables.end());
+	std::vector<Ent> outputVariables(variables.begin(), variables.end());
 	std::vector<int> outputConstants(constants.begin(), constants.end());
 
 	writeApi->setEntity(whileStatement->statementNumber, outputVariables);
@@ -74,27 +74,27 @@ void EntRefExtractorVisitor::visitExpression(Expression* variable) {};
 void EntRefExtractorVisitor::visitConditionalExpression(ConditionalExpression* conditionalExpression) {};
 
 void EntRefExtractorVisitor::visitCondExprHelper(ConditionalExpression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants) {
-	if (auto i = dynamic_cast<NotConditionalExpression*>(e)) {
+	if (auto i = CAST_TO(NotConditionalExpression, e)) {
 		visitCondExprHelper(i->condExpr.get(), variables, constants);
 	}
-	else if (auto i = dynamic_cast<BinaryConditionalExpression*>(e)) {
+	else if (auto i = CAST_TO(BinaryConditionalExpression, e)) {
 		visitCondExprHelper(i->lhs.get(), variables, constants);
 		visitCondExprHelper(i->rhs.get(), variables, constants);
 	}
-	else if (auto i = dynamic_cast<RelationalExpression*>(e)) {
+	else if (auto i = CAST_TO(RelationalExpression, e)) {
 		visitExprHelper(i->lhs.get(), variables, constants);
 		visitExprHelper(i->rhs.get(), variables, constants);
 	}
 }
 
 void EntRefExtractorVisitor::visitExprHelper(Expression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants) {
-	if (auto i = dynamic_cast<MathExpression*>(e)) {
+	if (auto i = CAST_TO(MathExpression, e)) {
 		 visitExprHelper(i->lhs.get(), variables, constants);
 		 visitExprHelper(i->rhs.get(), variables, constants);
 	}
-	else if (auto i = dynamic_cast<Constant*>(e)) {
+	else if (auto i = CAST_TO(Constant, e)) {
 		 constants.insert(i->value);
-	} else if (auto i = dynamic_cast<Variable*>(e)) {
+	} else if (auto i = CAST_TO(Variable, e)) {
 		 variables.insert(i->name);
 	}
 }

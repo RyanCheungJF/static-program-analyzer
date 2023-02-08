@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <memory>
 #include "ASTVisitor.h"
 #include "AST/Node/Program.h"
 #include "AST/Node/Procedure.h"
@@ -12,11 +10,11 @@
 #include "../../../PKB/WritePKB.h"
 #include "ASTVisitorUtils.h"
 
-class ProcedureExtractorVisitor : public ASTVisitor {
+class ParentExtractorVisitor : public ASTVisitor {
 public:
 	WritePKB* writeApi;
 
-	ProcedureExtractorVisitor(WritePKB* writePKB);
+	ParentExtractorVisitor(WritePKB* writePKB);
 
 	void visitProgram(Program* program) override;
 	void visitProcedure(Procedure* procedure) override;

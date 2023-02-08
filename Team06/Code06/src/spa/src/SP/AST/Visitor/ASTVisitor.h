@@ -16,6 +16,8 @@ class WhileStatement;
 class Expression;
 class ConditionalExpression;
 
+#define CAST_TO(ASTNodeType, value) dynamic_cast<ASTNodeType*>(value)
+
 // interface for visitor design pattern 
 class ASTVisitor {
 public:

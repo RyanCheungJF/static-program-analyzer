@@ -9,11 +9,11 @@
 #include "AST/Node/WhileStatement.h"
 #include "../../../PKB/WritePKB.h"
 
-class FollowsExtractor : public ASTVisitor {
+class FollowsExtractorVisitor : public ASTVisitor {
 public:
 	WritePKB* writeApi;
 
-	FollowsExtractor(WritePKB* writePKB);
+	FollowsExtractorVisitor(WritePKB* writePKB);
 
 	void visitProgram(Program *program) override;
 	void visitProcedure(Procedure* procedure) override;

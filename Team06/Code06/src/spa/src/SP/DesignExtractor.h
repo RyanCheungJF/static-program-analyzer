@@ -5,13 +5,16 @@
 #include <string>
 #include <vector>
 #include "AST/Node/Program.h"
-#include "AST/Visitor/FollowsExtractor.h"
+#include "AST/Visitor/FollowsExtractorVisitor.h"
 #include "AST/Visitor/ProcedureExtractorVisitor.h"
 #include "AST/Visitor/StatementExtractorVisitor.h"
 #include "AST/Visitor/EntRefExtractorVisitor.h"
+#include "AST/Visitor/ParentExtractorVisitor.h"
 #include "../PKB/WritePKB.h"
 
 class DesignExtractor {
+private:
+	void recurseStatementHelper(Statement* statement, ASTVisitor* visitor);
 public:
 	std::unique_ptr<Program> ASTroot;
 	WritePKB* writePkb;
@@ -21,5 +24,4 @@ public:
 
 	void extractRelationships();
 	void extractEntities();
-	void recurseStatementHelper(Statement* statement, ASTVisitor* visitor);
 };
