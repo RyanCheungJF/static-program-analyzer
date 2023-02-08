@@ -62,10 +62,14 @@ std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
     std::string rhs = p.pattern;
     std::string lhsString = lhs->getValue();
     ParameterType lhsType = lhs->getType();
+    bool leftWildcard = false;
+    bool rightWildcard = false;
 
-    bool leftWildcard = rhs[0] == '_';
-    bool rightWildcard = rhs[rhs.length() - 1] == '_';
-
+    if (rhs != "_") {
+        leftWildcard = rhs[0] == '_';
+        rightWildcard = rhs[rhs.length() - 1] == '_';
+    }
+    
     /*std::stringstream ss;
     for (int i = 0; i < rhs.length(); i++) {
         char curr = rhs[i];
