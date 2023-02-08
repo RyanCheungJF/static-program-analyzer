@@ -19,7 +19,7 @@ vector<vector<string>> Table::getContent() {
 }
 
 Table Table::selectColumns(vector<int>& indexes) {
-    vector<vector<string>> newTable;
+    vector<vector<string>> newContent;
     vector<Parameter> newHeader;
     for(int index: indexes) {
         newHeader.push_back(headers[index]);
@@ -29,16 +29,21 @@ Table Table::selectColumns(vector<int>& indexes) {
         for(int index: indexes) {
             newEntry.push_back(entry[index]);
         }
-        newTable.push_back(newEntry);
+        if (find(newContent.begin(), newContent.end(), newEntry) == newContent.end()) {
+            newContent.push_back(newEntry);
+        }
     }
     // No fucking clue what the fuck is braced initialization.
-    return Table{newHeader, newTable};
+    return Table{newHeader, newContent};
 }
+
 
 vector<string> Table::extractColumn(int index) {
     vector<string> colVal;
     for(vector<string> entry: content) {
-        colVal.push_back(entry[index]);
+        if(find(colVal.begin(), colVal.end(), entry[index]) == colVal.end()) {
+            colVal.push_back(entry[index]);
+        }
     }
     return colVal;
 }

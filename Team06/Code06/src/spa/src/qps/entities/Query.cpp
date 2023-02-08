@@ -28,7 +28,7 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
         vector<vector<string>> response = readPKB.findPattern(pattern);
         Parameter synAssign = pattern.getSynAssign();
         Parameter *entRef = pattern.getEntRef();
-        vector<Parameter> headers{ &synAssign, entRef };
+        vector<Parameter> headers{ synAssign, *entRef };
         Table table(headers, response);
         if(response.empty()) {
             isFalseQuery = true;
