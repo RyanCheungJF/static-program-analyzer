@@ -194,3 +194,38 @@ TEST_CASE("if i;") {
         REQUIRE(res == expected);
     }
 }
+
+TEST_CASE("patterns clause") {
+    string filename = "/Users/faruq/Desktop/Books/Y3-S2/CS3203/team_project/22s2-cp-spa-team-06/Team06/Code06/tests/Sample_source.txt";
+    SP sourceProcessor;
+    QPS qps;
+    WritePKB writePKB;
+    ReadPKB readPKB;
+    PKB pkb;
+    FollowsStorage fs;
+    EntityStorage et;
+    ProcedureStorage ps;
+    StmtStorage sts;
+    ConstantStorage cs;
+    PatternStorage pt;
+    pkb.entityStorage = &et;
+    pkb.procedureStorage = &ps;
+    pkb.statementStorage = &sts;
+    pkb.followsStorage = &fs;
+    pkb.constantStorage = &cs;
+    pkb.patternStorage = &pt;
+    writePKB.setInstancePKB(pkb);
+    readPKB.setInstancePKB(pkb);
+    sourceProcessor.processFile(filename, &writePKB);
+//    string input = "stmt ifs; Select ifs such that Follows(5, ifs)";
+    string input = "assign a; variable v; stmt s; Select a pattern a(v, _)";
+    vector<string> expected{ "6", "13", "22"};
+//    string input = "assign a; Select a pattern a(_, _\"x + 1\"_)";
+//    string input = "variable v; Select v";
+//    vector<string> expected{ "2" };
+    vector<string> res = qps.processQueries(input, readPKB);
+    for (string r : res) {
+        cout << r << "\n";
+    }
+    REQUIRE(res == expected);
+}
