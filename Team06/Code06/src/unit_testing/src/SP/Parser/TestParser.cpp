@@ -183,8 +183,9 @@ TEST_CASE("Valid Source Program") {
 		auto assignNodeX = std::make_unique<AssignStatement>("x", std::make_unique<Constant>(1));
 		std::vector<std::unique_ptr<Statement>> whileStatements;
 		whileStatements.push_back(std::move(assignNodeX));
+
 		auto whileStmtList = std::make_unique<StatementList>(std::move(whileStatements));
-		auto lhsExpr = std::make_unique<MathExpression>("+", std::make_unique<Constant>(1), std::make_unique<Constant>(2));
+		auto lhsExpr = std::make_unique<MathExpression>("+", std::make_unique<Constant>(1), std::make_unique<Constant>(3));
 		auto relExpr = std::make_unique<RelationalExpression>("<", std::move(lhsExpr), std::make_unique<Constant>(2));
 		auto whileNode = std::make_unique<WhileStatement>(std::move(relExpr), std::move(whileStmtList));
 
