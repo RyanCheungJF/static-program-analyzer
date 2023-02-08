@@ -27,8 +27,8 @@ TEST_CASE("Checks FollowsStorage such that follower is correct given a followee"
     FollowsStorage fs;
 
     fs.write(1, 2);
-    std::vector<StmtNum> res = fs.getRightWildcard(1);
-    std::vector<StmtNum> check = { 2 };
+    std::unordered_set<StmtNum> res = fs.getRightWildcard(1);
+    std::unordered_set<StmtNum> check = { 2 };
     REQUIRE(res == check);
 }
 
@@ -37,8 +37,8 @@ TEST_CASE("Checks FollowsStorage such that followee is correct given a follower"
     FollowsStorage fs;
 
     fs.write(1, 2);
-    std::vector<StmtNum> res = fs.getLeftWildcard(2);
-    std::vector<StmtNum> check = { 1 };
+    std::unordered_set<StmtNum> res = fs.getLeftWildcard(2);
+    std::unordered_set<StmtNum> check = { 1 };
     REQUIRE(res == check);
 }
 
@@ -47,8 +47,8 @@ TEST_CASE("Checks FollowsStorage such that given a followee, if it does not have
     FollowsStorage fs;
 
     fs.write(1, 2);
-    std::vector<StmtNum> res = fs.getRightWildcard(3);
-    std::vector<StmtNum> check;
+    std::unordered_set<StmtNum> res = fs.getRightWildcard(3);
+    std::unordered_set<StmtNum> check;
     REQUIRE(res == check);
 }
 
@@ -57,8 +57,8 @@ TEST_CASE("Checks FollowsStorage such that given a follower, if it does not have
     FollowsStorage fs;
 
     fs.write(1, 2);
-    std::vector<StmtNum> res = fs.getLeftWildcard(3);
-    std::vector<StmtNum> check;
+    std::unordered_set<StmtNum> res = fs.getLeftWildcard(3);
+    std::unordered_set<StmtNum> check;
     REQUIRE(res == check);
 }
 
