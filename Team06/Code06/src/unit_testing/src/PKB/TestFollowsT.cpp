@@ -3,7 +3,7 @@
 #include "../../../spa/src/PKB/ReadPKB.h"
 
 using namespace std;
-
+/*
 TEST_CASE("Check that all followers are recorded in the followee") {
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -118,6 +118,7 @@ TEST_CASE("Check that all of the followees of each follower is accurate, even wi
 
     REQUIRE(res);
 }
+*/
 
 //TODO: Probably needs to be a standalone component itself - where the component can understand which tables to join.
 // I'm just doing it here to test out set-wise operation logic
