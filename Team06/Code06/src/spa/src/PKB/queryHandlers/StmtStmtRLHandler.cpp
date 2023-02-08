@@ -16,7 +16,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleIntInt(Parameter 
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleIntStmt(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> StmtStmtRLHandler::handleIntSyn(Parameter param1, Parameter param2) {
 	std::string paramString1 = param1.getValue();
 	std::vector<std::vector<std::string>> res;
 
@@ -43,7 +43,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleIntWildcard(Param
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleStmtInt(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> StmtStmtRLHandler::handleSynInt(Parameter param1, Parameter param2) {
 	std::string paramString2 = param2.getValue();
 	std::vector<std::vector<std::string>> res;
 
@@ -58,7 +58,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleStmtInt(Parameter
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleStmtStmt(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> StmtStmtRLHandler::handleSynSyn(Parameter param1, Parameter param2) {
 	std::string paramString1 = param1.getValue();
 	std::string paramString2 = param2.getValue();
 	std::vector<std::vector<std::string>> res;
@@ -80,7 +80,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleStmtStmt(Paramete
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleStmtWildcard(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> StmtStmtRLHandler::handleSynWildcard(Parameter param1, Parameter param2) {
 	std::string paramString1 = param1.getValue();
 	std::string paramString2 = param2.getValue();
 	std::vector<std::vector<std::string>> res;
@@ -109,16 +109,16 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleWildcardInt(Param
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleWildcardStmt(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> StmtStmtRLHandler::handleWildcardSyn(Parameter param1, Parameter param2) {
 	std::string paramString2 = param2.getValue();
 	std::vector<std::vector<std::string>> res;
-
+ 
 	std::unordered_set<StmtNum> typedStmtNums = stmtStorage->getStatementNumbers(param2.getTypeString());
 	for (auto typedStmtNum : typedStmtNums) {
 		std::vector<StmtNum> followees = rlStorage->getLeftWildcard(typedStmtNum);
 		for (auto followee : followees) {
-			std::string stmtNumString1 = to_string(typedStmtNum);
-			std::string stmtNumString2 = to_string(followee);
+			std::string stmtNumString1 = to_string(followee);
+			std::string stmtNumString2 = to_string(typedStmtNum);
 			res.push_back({ stmtNumString1, stmtNumString2 });
 		}
 	}
@@ -153,7 +153,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handle(Parameter param1
 			return handleIntInt(param1, param2);
 		}
 		else if (isSynonymParam2) {
-			return handleIntStmt(param1, param2);
+			return handleIntSyn(param1, param2);
 		}
 		else {
 			return handleIntWildcard(param1, param2);
@@ -162,20 +162,20 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handle(Parameter param1
 	else if (isSynonymParam1) {
 		
 		if (isIntParam2) {
-			return handleStmtInt(param1, param2);
+			return handleSynInt(param1, param2);
 		}
 		else if (isSynonymParam2) {
-			return handleStmtStmt(param1, param2);
+			return handleSynSyn(param1, param2);
 		}
 		else {
-			return handleStmtWildcard(param1, param2);
+			return handleSynWildcard(param1, param2);
 		}
 	} else {
 		if (isIntParam2) {
 			return handleWildcardInt(param1, param2);
 		}
 		else if (isSynonymParam2) {
-			return handleWildcardStmt(param1, param2);
+			return handleWildcardSyn(param1, param2);
 		}
 		else {
 			return handleWildcardWildcard(param1, param2);
