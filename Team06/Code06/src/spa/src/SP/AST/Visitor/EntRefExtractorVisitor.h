@@ -23,6 +23,9 @@
 #include "../../../PKB/WritePKB.h"
 
 class EntRefExtractorVisitor : public ASTVisitor {
+private:
+	void visitCondExprHelper(ConditionalExpression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants);
+	void visitExprHelper(Expression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants);
 public:
 	WritePKB* writeApi;
 
@@ -32,7 +35,6 @@ public:
 	void visitProcedure(Procedure* procedure) override;
 	void visitStatementList(StatementList* statement) override;
 
-	void visitStatement(Statement* statement) override;
 	void visitReadStatement(ReadStatement* readStatement) override;
 	void visitPrintStatement(PrintStatement* printStatement) override;
 	void visitAssignStatement(AssignStatement* assignStatement) override;
@@ -42,6 +44,4 @@ public:
 
 	void visitExpression(Expression* expression) override;
 	void visitConditionalExpression(ConditionalExpression* conditionalExpression) override;
-	void visitCondExprHelper(ConditionalExpression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants);
-	void visitExprHelper(Expression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants);
 };

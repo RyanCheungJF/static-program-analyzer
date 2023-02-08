@@ -12,19 +12,19 @@
 #include "../../../PKB/WritePKB.h"
 
 class ProcedureExtractorVisitor : public ASTVisitor {
+private:
+	int visitIfStatementHelper(IfStatement* ifStatement);
+	int visitWhileStatementHelper(WhileStatement* whileStatement);
+
 public:
 	WritePKB* writeApi;
 
 	ProcedureExtractorVisitor(WritePKB* writePKB);
 
-	int visitIfStatementHelper(IfStatement* ifStatement);
-	int visitWhileStatementHelper(WhileStatement* whileStatement);
-
 	void visitProgram(Program* program) override;
 	void visitProcedure(Procedure* procedure) override;
 	void visitStatementList(StatementList* statement) override;
 
-	void visitStatement(Statement* statement) override;
 	void visitReadStatement(ReadStatement* readStatement) override;
 	void visitPrintStatement(PrintStatement* printStatement) override;
 	void visitAssignStatement(AssignStatement* assignStatement) override;

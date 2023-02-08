@@ -25,7 +25,6 @@ public:
 	void visitProcedure(Procedure* procedure) override;
 	void visitStatementList(StatementList* statement) override;
 
-	void visitStatement(Statement* statement) override;
 	void visitReadStatement(ReadStatement *readStatement) override;
 	void visitPrintStatement(PrintStatement* printStatement) override;
 	void visitAssignStatement(AssignStatement* assignStatement) override;

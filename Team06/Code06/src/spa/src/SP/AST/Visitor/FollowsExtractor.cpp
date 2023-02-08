@@ -17,7 +17,6 @@ void FollowsExtractor::visitStatementList(StatementList *statementList) {
 	//writeApi->setFollowsT(followsVector);
 }
 
-void FollowsExtractor::visitStatement(Statement *statement) {}
 void FollowsExtractor::visitReadStatement(ReadStatement *readStatement) {}
 void FollowsExtractor::visitPrintStatement(PrintStatement *printStatement) {}
 void FollowsExtractor::visitAssignStatement(AssignStatement *assignStatement) {}

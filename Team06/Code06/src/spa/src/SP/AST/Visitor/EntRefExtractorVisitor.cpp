@@ -5,12 +5,8 @@ EntRefExtractorVisitor::EntRefExtractorVisitor(WritePKB* writePKB) {
 }
 
 void EntRefExtractorVisitor::visitProgram(Program* program) {}
-
 void EntRefExtractorVisitor::visitProcedure(Procedure* procedure) {}
-
 void EntRefExtractorVisitor::visitStatementList(StatementList* statementList) {}
-
-void EntRefExtractorVisitor::visitStatement(Statement* statement) {}
 
 void EntRefExtractorVisitor::visitReadStatement(ReadStatement* readStatement) {
 	std::vector<Ent> variables = { readStatement->varName };
@@ -75,7 +71,6 @@ void EntRefExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement)
 }
 
 void EntRefExtractorVisitor::visitExpression(Expression* variable) {};
-
 void EntRefExtractorVisitor::visitConditionalExpression(ConditionalExpression* conditionalExpression) {};
 
 void EntRefExtractorVisitor::visitCondExprHelper(ConditionalExpression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants) {
