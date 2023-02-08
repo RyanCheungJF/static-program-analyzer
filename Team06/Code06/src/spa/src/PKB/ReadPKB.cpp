@@ -14,8 +14,8 @@ std::vector<std::vector<std::string>> ReadPKB::findRelationship(Relationship rs)
     Parameter param1 = rs.params[0];
     Parameter param2 = rs.params[1];
     if (stmtStmtHandlerMap.find(type) != stmtStmtHandlerMap.end()) {
-        StmtStmtRLHandler handler;
-        return handler.handle(stmtStmtHandlerMap.at(type), pkbInstance->statementStorage, param1, param2);
+        StmtStmtRLHandler handler(stmtStmtHandlerMap.at(type), pkbInstance->statementStorage);
+        return handler.handle(param1, param2);
     } else if (stmtEntHandlerMap.find(type) != stmtEntHandlerMap.end()) {
         StmtEntRLHandler handler;
         return handler.handle(stmtEntHandlerMap.at(type));
