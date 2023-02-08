@@ -14,12 +14,12 @@ void WritePKB::setFollows(StmtNum followee, StmtNum follower) {
 }
 
 void WritePKB::setFollowsT(std::vector<std::pair<StmtNum, StmtNum>> followee_follower) {
-    pkbInstance->followsTApi->writeFollowsT(followee_follower);
+    pkbInstance->followsTStorage->write(followee_follower);
     return;
 }
 
 void WritePKB::setParent(StmtNum parent, StmtNum children) {
-    pkbInstance->parentApi->setParent(parent, children);
+    pkbInstance->parentStorage->write(parent, children);
 }
 
 void WritePKB::setStatement(Stmt s, std::vector<StmtNum> lines) {
