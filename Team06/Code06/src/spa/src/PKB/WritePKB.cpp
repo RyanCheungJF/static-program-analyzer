@@ -19,7 +19,7 @@ void WritePKB::setFollowsT(std::vector<std::pair<StmtNum, StmtNum>> followee_fol
 }
 
 void WritePKB::setParent(StmtNum parent, StmtNum children) {
-    pkbInstance->parentApi->setParent(parent, children);
+    pkbInstance->parentStorage->write(parent, children);
 }
 
 void WritePKB::setStatement(Stmt s, std::vector<StmtNum> lines) {

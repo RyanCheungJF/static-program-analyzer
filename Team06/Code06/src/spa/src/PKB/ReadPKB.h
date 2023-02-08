@@ -27,16 +27,6 @@ public:
     // Returns relevant strings based on Pattern object passed
     std::vector<std::vector<std::string>> findPattern(Pattern p);
 
-    // Checks if a statement is a parent of another given their statement numbers
-    bool checkParent(StmtNum parent, StmtNum child);
-
-    // Finds all children of a statement given its statement number
-    // Returns a vector of child statement numbers
-    std::vector<StmtNum> getChildren(StmtNum parent);
-
-    // Finds parent of a statement given its statement number
-    StmtNum getParent(StmtNum child);
-
 
     // check if given a statement type and statement line number, whether that statement line number is indeed
     // of that statement type
@@ -65,26 +55,6 @@ public:
 
     // returns all the statement lines that the constant appears in
     std::unordered_set<StmtNum> getConstantStatementNumbers(Const c);
-
-
-    //This assumes it is Select a pattern a(..., ...)
-    // returns an array containing the matching pattern
-    std::vector<StmtNum> interpretQuery(QueryStub);
-
-    // Select v pattern a (v, _)
-    std::vector<std::vector<std::string>> getLHSAndStmtNum();
-
-    // Select v pattern a (v, "v")
-    std::vector<std::vector<std::string>> getLHSAndStmtNumRHSNoWildcard(std::string rhs);
-
-    // Select v pattern a (v, _"v"_)
-    std::vector<std::vector<std::string>> getLHSAndStmtNumRHSBothWildcard(std::string rhs);
-
-    //  assign a; Select a pattern a (_, "v")
-    virtual std::vector<std::vector<std::string>> getMatchingLHSWildcardRHSNoWildcard(std::string rhs);
-
-    //  assign a; Select a pattern a (_, _"v"_)
-    virtual std::vector<std::vector<std::string>> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
 
 private:
     PKB* pkbInstance = NULL;

@@ -4,9 +4,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "api/Parent.h"
 #include "storage/FollowsStorage.h"
 #include "storage/FollowsTStorage.h"
+#include "storage/ParentStorage.h"
 #include "storage/EntityStorage.h"
 #include "storage/ProcedureStorage.h"
 #include "storage/StmtStorage.h"
@@ -26,9 +26,9 @@ public:
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST (PROC p);
 
-    Parent* parentApi;
     FollowsStorage* followsStorage;
     FollowsTStorage* followsTStorage;
+    ParentStorage* parentStorage;
     StmtStorage* statementStorage;
     EntityStorage* entityStorage;
     ProcedureStorage* procedureStorage;

@@ -125,19 +125,6 @@ std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
     }
 }
 
-
-bool ReadPKB::checkParent(StmtNum parent, StmtNum child) {
-    return pkbInstance->parentApi->checkParent(parent, child);
-}
-
-std::vector<StmtNum> ReadPKB::getChildren(StmtNum parent) {
-    return pkbInstance->parentApi->getChildren(parent);
-}
-
-StmtNum ReadPKB::getParent(StmtNum child) {
-    return pkbInstance->parentApi->getParent(child);
-}
-
 bool ReadPKB::checkStatement(Stmt stmt, StmtNum num){
     return pkbInstance->statementStorage->checkStatement(stmt, num);
 }
@@ -169,33 +156,5 @@ bool ReadPKB::checkConstant(Const c, StmtNum num) {
 
 std::unordered_set<StmtNum> ReadPKB::getConstantStatementNumbers(Const c) {
     return pkbInstance->constantStorage->getConstantStmtNums(c);
-}
-
-std::vector<std::vector<std::string>> ReadPKB::getLHSAndStmtNum() {
-    return pkbInstance->patternStorage->getLHSAndStmtNum();
-}
-
-
-// Select v pattern a (v, "v")
-std::vector<std::vector<std::string>> ReadPKB::getLHSAndStmtNumRHSNoWildcard(std::string rhs) {
-    return pkbInstance->patternStorage->getLHSAndStmtNumRHSNoWildcard(rhs);
-}
-
-// Select v pattern a (v, _"v"_)
-std::vector<std::vector<std::string>> ReadPKB::getLHSAndStmtNumRHSBothWildcard(std::string rhs) {
-    return pkbInstance->patternStorage->getLHSAndStmtNumRHSBothWildcard(rhs);
-}
-
-
-//  assign a; Select a pattern a (_, "v")
-std::vector<std::vector<std::string>> ReadPKB::getMatchingLHSWildcardRHSNoWildcard(std::string rhs) {
-    return pkbInstance->patternStorage->getMatchingLHSWildcardRHSNoWildcard(rhs);
-
-}
-
-//  assign a; Select a pattern a (_, _"v"_)
-std::vector<std::vector<std::string>> ReadPKB::getMatchingLHSWildcardRHSBothWildcard(std::string rhs) {
-    return pkbInstance->patternStorage->getMatchingLHSWildcardRHSBothWildcard(rhs);
-
 }
 
