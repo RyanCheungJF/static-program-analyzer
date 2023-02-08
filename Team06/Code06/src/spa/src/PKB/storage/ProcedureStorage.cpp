@@ -4,11 +4,13 @@ void ProcedureStorage::writeProcedure(Proc p, std::vector<StmtNum> lines) {
     for (StmtNum line: lines) {
         proc_stmtNum[p].insert(line);
     }
+    procNames.insert(p);
     return;
 }
 
 void ProcedureStorage::writeProcedure(Proc p, StmtNum line) {
     proc_stmtNum[p].insert(line);
+    procNames.insert(p);
 }
 
 bool ProcedureStorage::checkProcedure(Proc p, StmtNum num) {
@@ -26,4 +28,8 @@ std::unordered_set<StmtNum> ProcedureStorage::getProcedureStatementNumbers(Proc 
         return emptySet;
     }
     return proc_stmtNum.at(p);
+}
+
+std::unordered_set<Proc> ProcedureStorage::getProcNames() {
+    return procNames;
 }

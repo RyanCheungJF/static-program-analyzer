@@ -10,7 +10,7 @@ RelationalExpression::RelationalExpression(std::string relationalOperator,
 	this->rhs = std::move(rhs);
 }
 
-void RelationalExpression::accept(ASTVisitor* visitor) const {
+void RelationalExpression::accept(ASTVisitor* visitor) {
 	visitor->visitConditionalExpression(this);
 }
 

@@ -10,6 +10,6 @@ BinaryConditionalExpression::BinaryConditionalExpression(std::string condOperato
 	this->rhs = std::move(rhs);
 }
 
-void BinaryConditionalExpression::accept(ASTVisitor* visitor) const {
+void BinaryConditionalExpression::accept(ASTVisitor* visitor) {
 	visitor->visitConditionalExpression(this);
 }

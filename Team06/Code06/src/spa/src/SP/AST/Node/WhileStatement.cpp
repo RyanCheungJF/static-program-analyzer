@@ -7,6 +7,6 @@ WhileStatement::WhileStatement(std::unique_ptr<ConditionalExpression> condExpr, 
 	this->stmtList = std::move(stmtList);
 }
 
-void WhileStatement::accept(ASTVisitor* visitor) const {
+void WhileStatement::accept(ASTVisitor* visitor) {
 	visitor->visitWhileStatement(this);
 }

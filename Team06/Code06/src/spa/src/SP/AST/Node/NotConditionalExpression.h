@@ -13,5 +13,5 @@ public:
 	NotConditionalExpression();
 	NotConditionalExpression(std::unique_ptr<ConditionalExpression> condExpr);
 
-	void accept(ASTVisitor* visitor) const override;
+	void accept(ASTVisitor* visitor) override;
 };

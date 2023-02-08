@@ -23,6 +23,16 @@ bool StmtStorage::checkStatement(Stmt stmt, StmtNum num) {
 }
 
 std::unordered_set<StmtNum> StmtStorage::getStatementNumbers(Stmt s) {
+    std::unordered_set<StmtNum> res;
+    if (s == "stmt") {
+        for (auto i: stmt_stmtNum) {
+            auto p = stmt_stmtNum.at(i.first);
+            for (auto v: p) {
+                res.insert(v);
+            }
+        }
+        return res;
+    }
     if (stmt_stmtNum.find(s) == stmt_stmtNum.end()) {
         std::unordered_set<StmtNum> emptySet;
         return emptySet;

@@ -7,6 +7,6 @@ AssignStatement::AssignStatement(std::string varName, std::unique_ptr<Expression
 	this->expr = std::move(expr);
 }
 
-void AssignStatement::accept(ASTVisitor* visitor) const {
+void AssignStatement::accept(ASTVisitor* visitor) {
 	visitor->visitAssignStatement(this);
 }

@@ -6,6 +6,6 @@ Constant::Constant(int value) {
 	this->value = value;
 }
 
-void Constant::accept(ASTVisitor* visitor) const {
+void Constant::accept(ASTVisitor* visitor) {
 	visitor->visitExpression(this);
 }

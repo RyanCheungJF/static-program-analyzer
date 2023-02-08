@@ -7,10 +7,10 @@ class WhileStatement : public Statement {
 public:
 	std::unique_ptr<ConditionalExpression> condExpr;
 	std::unique_ptr<StatementList> stmtList;
-	//int lineNumber;
 
 	WhileStatement();
-	WhileStatement(std::unique_ptr<ConditionalExpression> condExpr, std::unique_ptr<StatementList> stmtList);
+	WhileStatement(std::unique_ptr<ConditionalExpression> condExpr, 
+				   std::unique_ptr<StatementList> stmtList);
 
-	void accept(ASTVisitor* visitor) const override;
+	void accept(ASTVisitor* visitor) override;
 };

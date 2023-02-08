@@ -10,6 +10,6 @@ IfStatement::IfStatement(std::unique_ptr<ConditionalExpression> condExpr,
 	this->elseStmtList = std::move(elseStmtList);
 }
 
-void IfStatement::accept(ASTVisitor* visitor) const {
+void IfStatement::accept(ASTVisitor* visitor) {
 	visitor->visitIfStatement(this);
 }

@@ -8,8 +8,7 @@ public:
 	std::string varName;
 
 	PrintStatement();
-
 	PrintStatement(std::string varName);
 
-	void accept(ASTVisitor* visitor) const override;
+	void accept(ASTVisitor* visitor) override;
 };
