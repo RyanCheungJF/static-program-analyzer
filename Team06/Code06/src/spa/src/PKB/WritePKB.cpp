@@ -14,7 +14,7 @@ void WritePKB::setFollows(StmtNum followee, StmtNum follower) {
 }
 
 void WritePKB::setFollowsT(std::vector<std::pair<StmtNum, StmtNum>> followee_follower) {
-    pkbInstance->followsTApi->writeFollowsT(followee_follower);
+    pkbInstance->followsTStorage->write(followee_follower);
     return;
 }
 

@@ -125,17 +125,6 @@ std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
     }
 }
 
-bool ReadPKB::checkFollowsT(StmtNum followee, StmtNum follower) {
-    return pkbInstance -> followsTApi->checkFollowsT(followee, follower);
-}
-
-std::unordered_set<StmtNum> ReadPKB::getFollowersT(StmtNum followee) {
-    return pkbInstance -> followsTApi->getFollowersT(followee);
-}
-
-std::unordered_set<StmtNum> ReadPKB::getFolloweesT(StmtNum follower) {
-    return pkbInstance -> followsTApi->getFolloweesT(follower);
-}
 
 bool ReadPKB::checkParent(StmtNum parent, StmtNum child) {
     return pkbInstance->parentApi->checkParent(parent, child);
