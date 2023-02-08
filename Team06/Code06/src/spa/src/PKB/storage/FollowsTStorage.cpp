@@ -19,25 +19,24 @@ bool FollowsTStorage::exists(StmtNum followee, StmtNum follower) {
     return followeeFollowersMap[followee].find(follower) != followeeFollowersMap[followee].end();
 }
 
-std::unordered_set<StmtNum> FollowsTStorage::getRightWildcard(StmtNum follower) {
-
-    // follower does not exist
-    if (followerFolloweesMap.find(follower) == followerFolloweesMap.end()) {
-        std::unordered_set<StmtNum> emptySet;
-        return emptySet;
-    }
-    return followerFolloweesMap[follower];
-
-}
-
-std::unordered_set<StmtNum> FollowsTStorage::getLeftWildcard(StmtNum followee) {
-
+std::unordered_set<StmtNum> FollowsTStorage::getRightWildcard(StmtNum followee) {
     // followee does not exist
     if (followeeFollowersMap.find(followee) == followeeFollowersMap.end()) {
         std::unordered_set<StmtNum> emptySet;
         return emptySet;
     }
     return followeeFollowersMap[followee];
+    
+
+}
+
+std::unordered_set<StmtNum> FollowsTStorage::getLeftWildcard(StmtNum follower) {
+    // follower does not exist
+    if (followerFolloweesMap.find(follower) == followerFolloweesMap.end()) {
+        std::unordered_set<StmtNum> emptySet;
+        return emptySet;
+    }
+    return followerFolloweesMap[follower];
 }
 
 std::pair<std::vector<StmtNum>, std::vector<StmtNum>> FollowsTStorage::getAllPairs() {

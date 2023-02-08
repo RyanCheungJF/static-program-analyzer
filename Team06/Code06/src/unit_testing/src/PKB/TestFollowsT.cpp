@@ -52,6 +52,8 @@ TEST_CASE("Check that all of the followers of each followee is accurate, even wi
     res = res && followers1.find(3) != followers1.end();
     res = res && followers1.find(4) != followers1.end();
 
+    REQUIRE(res);
+
     std::unordered_set<StmtNum> followers2 = fts.getRightWildcard(2);
     res = res && followers2.size() == 2;
     res = res && followers2.find(3) != followers2.end();
@@ -81,10 +83,14 @@ TEST_CASE("Check that all of the followees of each follower is accurate, even wi
     res = res && followees2.size() == 1;
     res = res && followees2.find(1) != followees2.end();
 
+    REQUIRE(res);
+
     std::unordered_set<StmtNum> followees3 = fts.getLeftWildcard(3);
     res = res && followees3.size() == 2;
     res = res && followees3.find(1) != followees3.end();
     res = res && followees3.find(2) != followees3.end();
+
+    REQUIRE(res);
 
     std::unordered_set<StmtNum> followees4 = fts.getLeftWildcard(4);
     res = res && followees4.size() == 3;
