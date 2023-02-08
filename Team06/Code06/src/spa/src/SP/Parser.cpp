@@ -382,7 +382,17 @@ std::unique_ptr<ConditionalExpression> Parser::parseRelationalExpression(std::de
 std::unique_ptr<Expression> Parser::parseRelationalFactor(std::deque<Token>& tokens) {
 	// Rule: var_name | const_value | expr
 	// std::cout << "Parsing Relational Factor" << std::endl;
-	return parseExpression(tokens);
+	// From this, we know that we can parse tokens.front() as either a constant or variable.
+	if (isRelationalOperator(tokens.at(1).type) || tokens.at(1).type == TokenType::RIGHT_PARENTHESIS) {
+		if (tokens.front().type == TokenType::INTEGER) {
+			return parseConstant(tokens);
+		}
+		else if (tokens.front().type == TokenType::NAME) {
+			return parseVariable(tokens);
+		}
+	} else {
+		return parseExpression(tokens);
+	}
 }
 
 std::unique_ptr<Expression> Parser::parseExpression(std::deque<Token>& tokens) {
@@ -434,18 +444,10 @@ std::unique_ptr<Expression> Parser::parseFactor(std::deque<Token>& tokens) {
 	// Rule: var_name | const_value | '(' expr ')'
 	// std::cout << "Parsing Factor" << std::endl;
 	if (tokens.front().type == TokenType::INTEGER) {
-		// std::cout << "Parsing Constant" << std::endl;
-		auto constant = std::make_unique<Constant>();
-		constant->value = stoi(tokens.front().value);
-		tokens.pop_front();
-		return constant;
+		return parseConstant(tokens);
 	}
 	else if (tokens.front().type == TokenType::NAME) {
-		// std::cout << "Parsing Variable" << std::endl;
-		auto variable = std::make_unique<Variable>();
-		variable->name = tokens.front().value;
-		tokens.pop_front();
-		return variable;
+		return parseVariable(tokens);
 	}
 	else if (tokens.front().type == TokenType::LEFT_PARENTHESIS) {
 		std::unique_ptr<Expression> expression;
@@ -463,6 +465,24 @@ std::unique_ptr<Expression> Parser::parseFactor(std::deque<Token>& tokens) {
 	else {
 		throw SyntaxErrorException("Parsing factor failed, got -> " + tokens.front().value);
 	}
+}
+
+std::unique_ptr<Expression> Parser::parseConstant(std::deque<Token>& tokens) {
+	// Rule: INTEGER
+	// std::cout << "Parsing Constant" << std::endl;
+	auto constant = std::make_unique<Constant>();
+	constant->value = stoi(tokens.front().value);
+	tokens.pop_front();
+	return constant;
+}
+
+std::unique_ptr<Expression> Parser::parseVariable(std::deque<Token>& tokens) {
+	// Rule: NAME
+	// std::cout << "Parsing Variable" << std::endl;
+	auto variable = std::make_unique<Variable>();
+	variable->name = tokens.front().value;
+	tokens.pop_front();
+	return variable;
 }
 
 bool Parser::isRelationalOperator(TokenType tt) {

@@ -41,6 +41,8 @@ private:
 	std::unique_ptr<Expression> parseRelationalFactor(std::deque<Token>& tokens);
 	std::unique_ptr<Expression> parseTerm(std::deque<Token>& tokens);
 	std::unique_ptr<Expression> parseFactor(std::deque<Token>& tokens);
+	std::unique_ptr<Expression> Parser::parseConstant(std::deque<Token>& tokens);
+	std::unique_ptr<Expression> Parser::parseVariable(std::deque<Token>& tokens);
 	bool Parser::isRelationalOperator(TokenType tt);
 
 public:
