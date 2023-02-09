@@ -100,11 +100,15 @@ public:
 
     /*
     // Select p such that Uses(p, v)
-    virtual std::vector<std::vector<std::string>> getUsesProcedureAll();
+    virtual std::vector<std::vector<std::string>> getUsesAllProcedures();
+
+    // Select p such that Uses("proc1", v) or Select pn such that Uses("proc1", _)
+    virtual std::vector<std::vector<std::string>> getUsesAllProceduresGivenProcedure(ProcedureName name);
 
     // Select p such that Uses(p, "x")
-    virtual std::vector<std::vector<std::string>> getUsesProcedureGivenVariable(std::string rhs);
-     */
+    virtual std::vector<std::vector<std::string>> getUsesAllProceduresGivenEntity(Ent e);
+    */
+
 
 private:
 //    std::unordered_map<StmtNum, Ent> print_ent;

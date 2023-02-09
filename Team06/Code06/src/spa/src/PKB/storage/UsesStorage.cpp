@@ -403,3 +403,17 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllStatementsGivenEnti
     }
     return res;
 }
+
+/*
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllProcedures() {
+
+}
+
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllProceduresGivenProcedure(ProcedureName name) {
+
+}
+
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllProceduresGivenEntity(Ent e) {
+
+}
+*/
