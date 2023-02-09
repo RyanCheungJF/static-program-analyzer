@@ -30,7 +30,7 @@ public:
     // Select pn such that Uses(pn, v) or Select v such that Uses(pn, v)
     virtual std::vector<std::vector<std::string>> getUsesAllPrintStatements();
 
-    // Select pn such that Uses(pn, "x")
+    // Select pn such that Uses("proc1", v) or Select pn such that Uses("proc1", _)
     virtual std::vector<std::vector<std::string>> getUsesAllPrintStatementsGivenProcedure(ProcedureName name);
 
     // Select pn such that Uses(pn, "x")
@@ -39,7 +39,7 @@ public:
     // Select a such that Uses(a, v)
     virtual std::vector<std::vector<std::string>> getUsesAllAssignStatements();
 
-    // Select a such that Uses(a, "x")
+    // Select a such that Uses("proc1", v) or Select pn such that Uses("proc1", _)
     virtual std::vector<std::vector<std::string>> getUsesAllAssignStatementsGivenProcedure(ProcedureName name);
 
     // Select a such that Uses(a, "x")
@@ -48,20 +48,22 @@ public:
     // Select if such that Uses(if, v)
     virtual std::vector<std::vector<std::string>> getUsesAllIfStatements();
 
-    // Select if such that Uses(if, "x")
+    // Select if such that Uses("proc1", v) or Select pn such that Uses("proc1", _)
     virtual std::vector<std::vector<std::string>> getUsesAllIfStatementsGivenProcedure(ProcedureName name);
 
     // Select if such that Uses(if, "x")
     virtual std::vector<std::vector<std::string>> getUsesAllIfStatementsGivenEntity(Ent entity);
 
-
-    /*
     // Select w such that Uses(w, v)
-    virtual std::vector<std::vector<std::string>> getUsesWhileAll();
+    virtual std::vector<std::vector<std::string>> getUsesAllWhileStatements();
+
+    // Select w such that Uses("proc1", v) or Select pn such that Uses("proc1", _)
+    virtual std::vector<std::vector<std::string>> getUsesAllWhileStatementsGivenProcedure(ProcedureName name);
 
     // Select w such that Uses(w, "x")
-    virtual std::vector<std::vector<std::string>> getUsesWhileGivenVariable(std::string rhs);
+    virtual std::vector<std::vector<std::string>> getUsesAllWhileStatementsGivenEntity(Ent entity);
 
+    /*
     // Select c such that Uses(c, v)
     virtual std::vector<std::vector<std::string>> getUsesCallAll();
 

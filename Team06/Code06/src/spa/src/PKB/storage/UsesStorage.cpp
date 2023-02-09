@@ -154,6 +154,18 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllIfStatementsGivenEn
     return getUsesAllStatementsGivenEntity("if", entity);
 }
 
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllWhileStatements() {
+    return getUsesAllStatements("while");
+}
+
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllWhileStatementsGivenProcedure(ProcedureName name) {
+    return getUsesAllStatementsGivenProcedure("while", name);
+}
+
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllWhileStatementsGivenEntity(Ent entity) {
+    return getUsesAllStatementsGivenEntity("while", entity);
+}
+
 /*
 std::vector<std::vector<std::string>> UsesStorage::getUsesStatementAll() {
     std::vector<std::vector<std::string>> res; // {stmtNum, var}
