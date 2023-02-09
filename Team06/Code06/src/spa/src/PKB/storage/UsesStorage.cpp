@@ -75,31 +75,47 @@ bool UsesStorage::checkUses(ProcedureName name, Ent e) {
 }
 
 
-//std::vector<std::vector<std::string>> UsesStorage::getUsesPrintAll() {
-//    std::vector<std::vector<std::string>> res; // {stmtNum, var}
-//
-//    for (auto i : procName_stmtType_stmtNum) {
-//        for (auto j : i.second["print"]) {
-//            std::string stmtType = j.first;
-//
-//            for (StmtNum num: j.second) {
-//                if (stmtType == "call") {
-//
-//
-//                } else if (stmtType == "print") {
-//
-//                } else if (stmtType == "assign") {
-//
-//                } else if (stmtType == "if") {
-//
-//                } else if (stmtType == "while") {
-//
-//                }
-//            }
-//        }
-//    }
-//    return res;
-//}
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllPrintStatements() {
+    std::vector<std::vector<std::string>> res; // {stmtNum, var}
+
+    for (auto i : procName_stmtType_stmtNum) {
+        for (auto stmtNum : i.second["print"]) {
+            for (Ent e : stmtNum_ent[stmtNum]) {
+                std::vector<std::string> curr = {std::to_string(stmtNum), e};
+                res.push_back(curr);
+            }
+        }
+    }
+    return res;
+}
+
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllPrintStatementsGivenProcedure(ProcedureName name) {
+    std::vector<std::vector<std::string>> res; // {stmtNum, var}
+
+    for (auto stmtNum : procName_stmtType_stmtNum[name]["print"]) {
+        for (Ent e : stmtNum_ent[stmtNum]) {
+            std::vector<std::string> curr = {std::to_string(stmtNum), e};
+            res.push_back(curr);
+        }
+    }
+    return res;
+}
+
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllPrintStatementsGivenEntity(Ent entity) {
+    std::vector<std::vector<std::string>> res; // {stmtNum, var}
+
+    for (auto i : procName_stmtType_stmtNum) {
+        for (auto stmtNum : i.second["print"]) {
+            for (Ent e : stmtNum_ent[stmtNum]) {
+                if (e == entity) {
+                    std::vector<std::string> curr = {std::to_string(stmtNum), e};
+                    res.push_back(curr);
+                }
+            }
+        }
+    }
+    return res;
+}
 
 /*
 std::vector<std::vector<std::string>> UsesStorage::getUsesStatementAll() {

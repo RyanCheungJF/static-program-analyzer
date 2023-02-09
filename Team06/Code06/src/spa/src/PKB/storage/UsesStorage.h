@@ -24,20 +24,26 @@ public:
 
     virtual bool checkUses(ProcedureName name, Ent e);
 
-    // Select pn such that Uses(pn, v)
-    virtual std::vector<std::vector<std::string>> getUsesPrintAll();
+    //TODO: given a line, check what statement is it.
+    // For queries like: Select v such that Uses(1, v)
+
+    // Select pn such that Uses(pn, v) or Select v such that Uses(pn, v)
+    virtual std::vector<std::vector<std::string>> getUsesAllPrintStatements();
 
     // Select pn such that Uses(pn, "x")
-    virtual std::vector<std::vector<std::string>> getUsesPrintGivenProcedure(std::string rhs);
+    virtual std::vector<std::vector<std::string>> getUsesAllPrintStatementsGivenProcedure(ProcedureName name);
 
     // Select pn such that Uses(pn, "x")
-    virtual std::vector<std::vector<std::string>> getUsesPrintGivenVariable(std::string rhs);
+    virtual std::vector<std::vector<std::string>> getUsesAllPrintStatementsGivenEntity(Ent entity);
 
     // Select a such that Uses(a, v)
-    virtual std::vector<std::vector<std::string>> getUsesAssignAll();
+    virtual std::vector<std::vector<std::string>> getUsesAllAssignStatements();
+
+    // Select pn such that Uses(pn, "x")
+    virtual std::vector<std::vector<std::string>> getUsesAllAssignStatementsGivenProcedure(ProcedureName name);
 
     // Select a such that Uses(a, "x")
-    virtual std::vector<std::vector<std::string>> getUsesAssignGivenVariable(std::string rhs);
+    virtual std::vector<std::vector<std::string>> getUsesAllAssignStatementsGivenEntity(std::string rhs);
 
     // Select if such that Uses(if, v)
     virtual std::vector<std::vector<std::string>> getUsesIfAll();
