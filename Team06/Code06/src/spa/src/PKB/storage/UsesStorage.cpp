@@ -252,7 +252,6 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGiven
 
 // return {StmtNum, entity}
 std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGivenEntity_format1(Ent entity) {
-
     std::vector<std::vector<std::string>> res;
     for (auto i : call_callee) {
         std::unordered_set<std::string> entities = getAllEntitiesUsed(i.second);
@@ -261,11 +260,11 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGiven
             res.push_back(result);
         }
     }
+    return res;
 }
 
 // return {StmtNum, procedureName}
 std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGivenEntity_format2(Ent entity) {
-
     std::vector<std::vector<std::string>> res;
     for (auto i : call_callee) {
         std::unordered_set<std::string> entities = getAllEntitiesUsed(i.second);
@@ -274,10 +273,8 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGiven
             res.push_back(result);
         }
     }
+    return res;
 }
-
-
-
 
 /*
 std::vector<std::vector<std::string>> UsesStorage::getUsesStatementAll() {
