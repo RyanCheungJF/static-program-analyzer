@@ -63,14 +63,21 @@ public:
     // Select w such that Uses(w, "x")
     virtual std::vector<std::vector<std::string>> getUsesAllWhileStatementsGivenEntity(Ent entity);
 
-    /*
     // Select c such that Uses(c, v)
-    virtual std::vector<std::vector<std::string>> getUsesCallAll();
+    // return {StmtNum, entity} or {StmtNum, procedureName} ?
+    virtual std::vector<std::vector<std::string>> getUsesAllCallStatements_format1();
+    virtual std::vector<std::vector<std::string>> getUsesAllCallStatements_format2();
+
+    // Select c such that Uses("proc1", v) or Select pn such that Uses("proc1", _)
+    // return {StmtNum, entity} or {StmtNum, procedureName} ?
+    virtual std::vector<std::vector<std::string>> getUsesAllCallStatementsGivenProcedure(ProcedureName name);
 
     // Select c such that Uses(c, "x")
-    virtual std::vector<std::vector<std::string>> getUsesCallGivenVariable(std::string rhs);
+    // return {StmtNum, entity} or {StmtNum, procedureName} ?
+    virtual std::vector<std::vector<std::string>> getUsesAllCallStatementsGivenEntity(Ent entity);
     //TODO: need to pre-process nested procedure calls at compile time
 
+    /*
     // Select s such that Uses(s, v)
     virtual std::vector<std::vector<std::string>> getUsesStatementAll();
 
@@ -101,7 +108,6 @@ private:
     //    std::unordered_map<ProcedureName, std::unordered_set<Ent>> procedure_entities; //good to have but can be derived
 //    std::unordered_map<ProcedureName, std::unordered_set<ProcedureName>> caller_callee;
 
-    //TODO: inverse table if we got time. Milestone 3?
 
     virtual std::vector<std::vector<std::string>> getUsesAllStatements(StmtType type);
     virtual std::vector<std::vector<std::string>> getUsesAllStatementsGivenProcedure(StmtType type, ProcedureName name);

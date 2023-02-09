@@ -166,6 +166,36 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllWhileStatementsGive
     return getUsesAllStatementsGivenEntity("while", entity);
 }
 
+//format: {StmtNum, entity}
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatements_format1() {
+    std::vector<std::vector<std::string>> res;
+    for (auto i : call_callee) {
+        StmtNum num = i.first;
+    }
+    return res;
+}
+
+//format: {StmtNum, procedureName}
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatements_format2() {
+    std::vector<std::vector<std::string>> res;
+
+    for (auto i : call_callee) {
+        StmtNum num = i.first;
+    }
+    return res;
+}
+
+//std::vector<std::vector<std::string>> UsesStorage::getUsesAllWhileStatementsGivenProcedure(ProcedureName name) {
+//    return getUsesAllStatementsGivenProcedure("while", name);
+//}
+//
+//std::vector<std::vector<std::string>> UsesStorage::getUsesAllWhileStatementsGivenEntity(Ent entity) {
+//    return getUsesAllStatementsGivenEntity("while", entity);
+//}
+
+
+
+
 /*
 std::vector<std::vector<std::string>> UsesStorage::getUsesStatementAll() {
     std::vector<std::vector<std::string>> res; // {stmtNum, var}
