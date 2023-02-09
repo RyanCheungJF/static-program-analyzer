@@ -46,6 +46,7 @@ public:
     // Select a such that Uses(a, "x")
     virtual std::vector<std::vector<std::string>> getUsesAllAssignStatementsGivenEntity(std::string rhs);
 
+
     // Select if such that Uses(if, v)
     virtual std::vector<std::vector<std::string>> getUsesIfAll();
 
