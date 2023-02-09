@@ -36,7 +36,6 @@ public:
     // Select pn such that Uses(pn, "x")
     virtual std::vector<std::vector<std::string>> getUsesAllPrintStatementsGivenEntity(Ent entity);
 
-    /*
     // Select a such that Uses(a, v)
     virtual std::vector<std::vector<std::string>> getUsesAllAssignStatements();
 
@@ -47,6 +46,7 @@ public:
     virtual std::vector<std::vector<std::string>> getUsesAllAssignStatementsGivenEntity(std::string rhs);
 
 
+    /*
     // Select if such that Uses(if, v)
     virtual std::vector<std::vector<std::string>> getUsesIfAll();
 
