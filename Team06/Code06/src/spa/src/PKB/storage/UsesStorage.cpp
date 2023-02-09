@@ -5,16 +5,7 @@ void UsesStorage::writeUses(ProcedureName name, StmtType type, StmtNum num, Ent 
     procName_stmtType_stmtNum[name][type].insert(num);
     stmtNum_procName_stmtType[num] = std::make_pair(name, type);
 //    procedure_entities[name].insert(ent);
-
-    if (type == "assign") {
-        assign_ent[num].insert(ent);
-    } else if (type == "if") {
-        if_ent[num].insert(ent);
-    } else if (type == "while") {
-        while_ent[num].insert(ent);
-    } else if (type == "print") {
-        print_ent[num] = ent;
-    }
+    stmtNum_ent[num].insert(ent);
 }
 
 void UsesStorage::writeUsesCall(ProcedureName caller, ProcedureName callee, StmtNum num) {
@@ -45,17 +36,11 @@ std::unordered_set<std::string> UsesStorage::getAllEntitiesUsed(ProcedureName na
             for (int num : nums) {
                 if (type == "call") {
                     queue.push_back(call_callee[num]);
-                } else if (type == "print") {
-                    res.insert(print_ent[num]);
-                } else if (type == "assign") {
-//                    for (Ent e: assign_ent[num]) {
+                } else {
+//                    for (Ent e: stmtNum_ent[num]) {
 //                        res.insert(e);
 //                    }
-                    res.insert(assign_ent[num].begin(), assign_ent[num].end());
-                } else if (type == "if") {
-                    res.insert(if_ent[num].begin(), if_ent[num].end());
-                } else if (type == "while") {
-                    res.insert(while_ent[num].begin(), while_ent[num].end());
+                    res.insert(stmtNum_ent[num].begin(), stmtNum_ent[num].end());
                 }
             }
         }
@@ -75,18 +60,7 @@ bool UsesStorage::checkUses(StmtNum num, Ent e) {
         std::unordered_set<std::string> res = getAllEntitiesUsed(callee);
         return res.find(e) != res.end();
     } else {
-        StmtType type = stmtNum_procName_stmtType[num].second;
-        if (type == "print") {
-            return print_ent[num] == e;
-        } else if (type == "if") {
-            return if_ent[num].find(e)  != if_ent[num].end();
-        } else if (type == "while") {
-            return while_ent[num].find(e)  != while_ent[num].end();
-        } else if (type == "assign") {
-            return assign_ent[num].find(e)  != assign_ent[num].end();
-        }
-        std::cout << "SHOULD NOT HIT.";
-        return false; // should not hit
+        return stmtNum_ent[num].find(e)  != stmtNum_ent[num].end();
     }
 }
 
@@ -99,3 +73,58 @@ bool UsesStorage::checkUses(ProcedureName name, Ent e) {
     std::unordered_set<std::string> allEntities = getAllEntitiesUsed(name);
     return allEntities.find(e) != allEntities.end();
 }
+
+
+//std::vector<std::vector<std::string>> UsesStorage::getUsesPrintAll() {
+//    std::vector<std::vector<std::string>> res; // {stmtNum, var}
+//
+//    for (auto i : procName_stmtType_stmtNum) {
+//        for (auto j : i.second["print"]) {
+//            std::string stmtType = j.first;
+//
+//            for (StmtNum num: j.second) {
+//                if (stmtType == "call") {
+//
+//
+//                } else if (stmtType == "print") {
+//
+//                } else if (stmtType == "assign") {
+//
+//                } else if (stmtType == "if") {
+//
+//                } else if (stmtType == "while") {
+//
+//                }
+//            }
+//        }
+//    }
+//    return res;
+//}
+
+/*
+std::vector<std::vector<std::string>> UsesStorage::getUsesStatementAll() {
+    std::vector<std::vector<std::string>> res; // {stmtNum, var}
+
+    for (auto i : procName_stmtType_stmtNum) {
+        for (auto j : i.second) {
+            std::string stmtType = j.first;
+
+            for (StmtNum num: j.second) {
+                if (stmtType == "call") {
+
+
+                } else if (stmtType == "print") {
+
+                } else if (stmtType == "assign") {
+
+                } else if (stmtType == "if") {
+
+                } else if (stmtType == "while") {
+
+                }
+            }
+        }
+    }
+    return res;
+}
+*/

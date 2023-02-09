@@ -24,15 +24,11 @@ public:
 
     virtual bool checkUses(ProcedureName name, Ent e);
 
-
-    // Select s such that Uses(s, v)
-    virtual std::vector<std::vector<std::string>> getUsesAll();
-
-    // Select s such that Uses(s, "x")
-    virtual std::vector<std::vector<std::string>> getUsesAllGivenVariable(std::string rhs);
-
     // Select pn such that Uses(pn, v)
     virtual std::vector<std::vector<std::string>> getUsesPrintAll();
+
+    // Select pn such that Uses(pn, "x")
+    virtual std::vector<std::vector<std::string>> getUsesPrintGivenProcedure(std::string rhs);
 
     // Select pn such that Uses(pn, "x")
     virtual std::vector<std::vector<std::string>> getUsesPrintGivenVariable(std::string rhs);
@@ -43,11 +39,17 @@ public:
     // Select a such that Uses(a, "x")
     virtual std::vector<std::vector<std::string>> getUsesAssignGivenVariable(std::string rhs);
 
-    // Select cs such that Uses(cs, v)
-    virtual std::vector<std::vector<std::string>> getUsesContainerAll();
+    // Select if such that Uses(if, v)
+    virtual std::vector<std::vector<std::string>> getUsesIfAll();
 
-    // Select cs such that Uses(cs, "x")
-    virtual std::vector<std::vector<std::string>> getUsesContainerGivenVariable(std::string rhs);
+    // Select if such that Uses(if, "x")
+    virtual std::vector<std::vector<std::string>> getUsesIfGivenVariable(std::string rhs);
+
+    // Select w such that Uses(w, v)
+    virtual std::vector<std::vector<std::string>> getUsesWhileAll();
+
+    // Select w such that Uses(w, "x")
+    virtual std::vector<std::vector<std::string>> getUsesWhileGivenVariable(std::string rhs);
 
     // Select c such that Uses(c, v)
     virtual std::vector<std::vector<std::string>> getUsesCallAll();
@@ -56,6 +58,12 @@ public:
     virtual std::vector<std::vector<std::string>> getUsesCallGivenVariable(std::string rhs);
     //TODO: need to pre-process nested procedure calls at compile time
 
+    // Select s such that Uses(s, v)
+    virtual std::vector<std::vector<std::string>> getUsesStatementAll();
+
+    // Select s such that Uses(s, "x")
+    virtual std::vector<std::vector<std::string>> getUsesStatementAllGivenVariable(std::string rhs);
+
     // Select p such that Uses(p, v)
     virtual std::vector<std::vector<std::string>> getUsesProcedureAll();
 
@@ -63,11 +71,13 @@ public:
     virtual std::vector<std::vector<std::string>> getUsesProcedureGivenVariable(std::string rhs);
 
 private:
-    std::unordered_map<StmtNum, Ent> print_ent;
-    std::unordered_map<StmtNum, std::unordered_set<Ent>> assign_ent;
-    std::unordered_map<StmtNum, std::unordered_set<Ent>> if_ent;
-    std::unordered_map<StmtNum, std::unordered_set<Ent>> while_ent;
+//    std::unordered_map<StmtNum, Ent> print_ent;
+//    std::unordered_map<StmtNum, std::unordered_set<Ent>> assign_ent;
+//    std::unordered_map<StmtNum, std::unordered_set<Ent>> if_ent;
+//    std::unordered_map<StmtNum, std::unordered_set<Ent>> while_ent;
     std::unordered_map<StmtNum, ProcedureName> call_callee;
+
+    std::unordered_map<StmtNum, std::unordered_set<Ent>> stmtNum_ent;
 
 
     std::unordered_map<StmtNum, std::pair<ProcedureName, StmtType>> stmtNum_procName_stmtType;
@@ -85,11 +95,11 @@ private:
      *
      * Uses(int, int) => True / False
      * Uses(int, concreteVariable) => True / False
-     * Uses(int, variable) => vector of vectors of {lhs, stmtNum}
+     * Uses(int, variable) => vector of vectors of {stmtNum, var}
      *
      * Uses(stmtRef, int) => True / False
      * Uses(stmtRef, concreteVariable) => True / False
-     * Uses(stmtRef, variable) => vector of vectors of {lhs, stmtNum}
+     * Uses(stmtRef, variable) => vector of vectors of {stmtNum, var}
      *
      * Examples:
      * Select a such that Uses(a, "x")
