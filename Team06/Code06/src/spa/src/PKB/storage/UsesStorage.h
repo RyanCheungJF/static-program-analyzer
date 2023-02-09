@@ -89,13 +89,16 @@ public:
     virtual std::vector<std::vector<std::string>> getUsesAllCallStatementsGivenEntity_format1(Ent entity);
     virtual std::vector<std::vector<std::string>> getUsesAllCallStatementsGivenEntity_format2(Ent entity);
 
-    /*
     // Select s such that Uses(s, v)
-    virtual std::vector<std::vector<std::string>> getUsesStatementAll();
+    virtual std::vector<std::vector<std::string>> getUsesAllStatements();
+
+    // Select s such that Uses("proc1", v) or Select pn such that Uses("proc1", _)
+    virtual std::vector<std::vector<std::string>> getUsesAllStatementsGivenProcedure(ProcedureName name);
 
     // Select s such that Uses(s, "x")
-    virtual std::vector<std::vector<std::string>> getUsesStatementAllGivenVariable(std::string rhs);
+    virtual std::vector<std::vector<std::string>> getUsesAllStatementsGivenEntity(Ent entity);
 
+    /*
     // Select p such that Uses(p, v)
     virtual std::vector<std::vector<std::string>> getUsesProcedureAll();
 

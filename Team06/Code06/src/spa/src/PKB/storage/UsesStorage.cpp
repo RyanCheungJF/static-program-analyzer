@@ -249,7 +249,6 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGiven
     return res;
 }
 
-
 // return {StmtNum, entity}
 std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGivenEntity_format1(Ent entity) {
     std::vector<std::vector<std::string>> res;
@@ -276,30 +275,131 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGiven
     return res;
 }
 
-/*
-std::vector<std::vector<std::string>> UsesStorage::getUsesStatementAll() {
-    std::vector<std::vector<std::string>> res; // {stmtNum, var}
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllStatements() {
+    std::vector<std::vector<std::string>> printStatements = getUsesAllPrintStatements();
+    std::vector<std::vector<std::string>> assignStatements = getUsesAllAssignStatements();
+    std::vector<std::vector<std::string>> ifStatements = getUsesAllIfStatements();
+    std::vector<std::vector<std::string>> whileStatements = getUsesAllWhileStatements();
+    std::vector<std::vector<std::string>> callStatements = getUsesAllCallStatements_format1();
 
-    for (auto i : procName_stmtType_stmtNum) {
-        for (auto j : i.second) {
-            std::string stmtType = j.first;
+    std::unordered_set<std::pair<std::string, int>, usesCallsHashFunction> seen; //TODO: check with QPS that there is no cyclic issues
 
-            for (StmtNum num: j.second) {
-                if (stmtType == "call") {
+    for (auto i : printStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+    for (auto i : assignStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+    for (auto i : ifStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+    for (auto i : whileStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+    for (auto i : callStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
 
-
-                } else if (stmtType == "print") {
-
-                } else if (stmtType == "assign") {
-
-                } else if (stmtType == "if") {
-
-                } else if (stmtType == "while") {
-
-                }
-            }
-        }
+    std::vector<std::vector<std::string>> res;
+    for (auto j : seen) {
+        std::vector<std::string> curr = {std::to_string(j.second), j.first};
+        res.push_back(curr);
     }
     return res;
 }
-*/
+
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllStatementsGivenProcedure(ProcedureName name) {
+    std::vector<std::vector<std::string>> printStatements = getUsesAllPrintStatementsGivenProcedure(name);
+    std::vector<std::vector<std::string>> assignStatements = getUsesAllAssignStatementsGivenProcedure(name);
+    std::vector<std::vector<std::string>> ifStatements = getUsesAllIfStatementsGivenProcedure(name);
+    std::vector<std::vector<std::string>> whileStatements = getUsesAllWhileStatementsGivenProcedure(name);
+    std::vector<std::vector<std::string>> callStatements = getUsesAllCallStatementsGivenProcedure_format1(name);
+
+    std::unordered_set<std::pair<std::string, int>, usesCallsHashFunction> seen; //TODO: check with QPS that there is no cyclic issues
+
+    for (auto i : printStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+    for (auto i : assignStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+    for (auto i : ifStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+    for (auto i : whileStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+    for (auto i : callStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+
+    std::vector<std::vector<std::string>> res;
+    for (auto j : seen) {
+        std::vector<std::string> curr = {std::to_string(j.second), j.first};
+        res.push_back(curr);
+    }
+    return res;
+}
+
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllStatementsGivenEntity(Ent entity) {
+    std::vector<std::vector<std::string>> printStatements = getUsesAllPrintStatementsGivenEntity(entity);
+    std::vector<std::vector<std::string>> assignStatements = getUsesAllAssignStatementsGivenEntity(entity);
+    std::vector<std::vector<std::string>> ifStatements = getUsesAllIfStatementsGivenEntity(entity);
+    std::vector<std::vector<std::string>> whileStatements = getUsesAllWhileStatementsGivenEntity(entity);
+    std::vector<std::vector<std::string>> callStatements = getUsesAllCallStatementsGivenEntity_format1(entity);
+
+    std::unordered_set<std::pair<std::string, int>, usesCallsHashFunction> seen; //TODO: check with QPS that there is no cyclic issues
+
+    for (auto i : printStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+    for (auto i : assignStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+    for (auto i : ifStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+    for (auto i : whileStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+    for (auto i : callStatements) {
+        int num = std::stoi(i[0]);
+        std::pair<std::string, int> p = std::make_pair(i[1], num);
+        seen.insert(p);
+    }
+
+    std::vector<std::vector<std::string>> res;
+    for (auto j : seen) {
+        std::vector<std::string> curr = {std::to_string(j.second), j.first};
+        res.push_back(curr);
+    }
+    return res;
+
