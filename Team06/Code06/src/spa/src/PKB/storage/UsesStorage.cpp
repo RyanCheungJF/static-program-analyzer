@@ -238,7 +238,6 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGiven
 
         std::string procedureCalled = curr.first;
         int referenceLine = curr.second;
-
         std::vector<std::string> result = {std::to_string(referenceLine), procedureCalled};
         res.push_back(result);
 
@@ -248,6 +247,33 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGiven
         }
     }
     return res;
+}
+
+
+// return {StmtNum, entity}
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGivenEntity_format1(Ent entity) {
+
+    std::vector<std::vector<std::string>> res;
+    for (auto i : call_callee) {
+        std::unordered_set<std::string> entities = getAllEntitiesUsed(i.second);
+        if (entities.find(entity) != entities.end()) {
+            std::vector<std::string> result = {std::to_string(i.first), entity};
+            res.push_back(result);
+        }
+    }
+}
+
+// return {StmtNum, procedureName}
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGivenEntity_format2(Ent entity) {
+
+    std::vector<std::vector<std::string>> res;
+    for (auto i : call_callee) {
+        std::unordered_set<std::string> entities = getAllEntitiesUsed(i.second);
+        if (entities.find(entity) != entities.end()) {
+            std::vector<std::string> result = {std::to_string(i.first), i.second};
+            res.push_back(result);
+        }
+    }
 }
 
 

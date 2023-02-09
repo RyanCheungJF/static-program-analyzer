@@ -86,7 +86,8 @@ public:
 
     // Select c such that Uses(c, "x")
     // return {StmtNum, entity} or {StmtNum, procedureName} ?
-    virtual std::vector<std::vector<std::string>> getUsesAllCallStatementsGivenEntity(Ent entity);
+    virtual std::vector<std::vector<std::string>> getUsesAllCallStatementsGivenEntity_format1(Ent entity);
+    virtual std::vector<std::vector<std::string>> getUsesAllCallStatementsGivenEntity_format2(Ent entity);
     //TODO: need to pre-process nested procedure calls at compile time
 
     /*
