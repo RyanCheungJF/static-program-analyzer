@@ -38,4 +38,8 @@ jobs:
           cmake --build . --target unit_testing --config Release
           cmake --build . --target integration_testing --config Release
           cmake --build . --target autotester --config Release
-          cd ../..
+          cd ../../..
+      
+      - name: Run Unit Tests
+        run: |
+          Team06/Code06/build/src/unit_testing/Release/unit_testing
