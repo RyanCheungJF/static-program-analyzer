@@ -47,13 +47,11 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllStatementsGivenEnti
 void UsesStorage::writeUses(ProcedureName name, StmtType type, StmtNum num, Ent ent) {
     procName_stmtType_stmtNum[name][type].insert(num);
     stmtNum_procName_stmtType[num] = std::make_pair(name, type);
-//    procedure_entities[name].insert(ent);
     stmtNum_ent[num].insert(ent);
 }
 
 void UsesStorage::writeUsesCall(ProcedureName caller, ProcedureName callee, StmtNum num) {
     procName_stmtType_stmtNum[caller]["call"].insert(num);
-//    caller_callee[caller].insert(callee);
     call_callee[num] = callee;
     return;
 }
@@ -80,9 +78,6 @@ std::unordered_set<std::string> UsesStorage::getAllEntitiesUsed(ProcedureName na
                 if (type == "call") {
                     queue.push_back(call_callee[num]);
                 } else {
-//                    for (Ent e: stmtNum_ent[num]) {
-//                        res.insert(e);
-//                    }
                     res.insert(stmtNum_ent[num].begin(), stmtNum_ent[num].end());
                 }
             }

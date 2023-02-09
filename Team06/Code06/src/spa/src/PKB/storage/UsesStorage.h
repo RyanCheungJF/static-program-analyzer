@@ -111,58 +111,13 @@ public:
 
 
 private:
-//    std::unordered_map<StmtNum, Ent> print_ent;
-//    std::unordered_map<StmtNum, std::unordered_set<Ent>> assign_ent;
-//    std::unordered_map<StmtNum, std::unordered_set<Ent>> if_ent;
-//    std::unordered_map<StmtNum, std::unordered_set<Ent>> while_ent;
     std::unordered_map<StmtNum, ProcedureName> call_callee;
-
     std::unordered_map<StmtNum, std::unordered_set<Ent>> stmtNum_ent;
-
-
-    std::unordered_map<StmtNum, std::pair<ProcedureName, StmtType>> stmtNum_procName_stmtType;
+    std::unordered_map<StmtNum, std::pair<ProcedureName, StmtType>> stmtNum_procName_stmtType; // actually only ever used once or twice. can consider removing it maybe
     std::unordered_map<ProcedureName, std::unordered_map<StmtType, std::unordered_set<StmtNum>>> procName_stmtType_stmtNum;
-
-//    std::unordered_map<ProcedureName, std::unordered_set<ProcedureName>> caller_callee; //for what
-    //    std::unordered_map<ProcedureName, std::unordered_set<Ent>> procedure_entities; //good to have but can be derived
-//    std::unordered_map<ProcedureName, std::unordered_set<ProcedureName>> caller_callee;
-
 
     virtual std::vector<std::vector<std::string>> getUsesAllStatements(StmtType type);
     virtual std::vector<std::vector<std::string>> getUsesAllStatementsGivenProcedure(StmtType type, ProcedureName name);
     virtual std::vector<std::vector<std::string>> getUsesAllStatementsGivenEntity(StmtType type, Ent entity);
-
-    /*
-     * return type that are vectors needs to be of format: vector of {stmtNum, var}
-     * assign a; print pn; stmt s (container statement); procedure p; call c (procedure call);
-     *
-     * Uses(int, int) => True / False
-     * Uses(int, concreteVariable) => True / False
-     * Uses(int, variable) => vector of vectors of {stmtNum, var}
-     *
-     * Uses(stmtRef, int) => True / False
-     * Uses(stmtRef, concreteVariable) => True / False
-     * Uses(stmtRef, variable) => vector of vectors of {stmtNum, var}
-     *
-     * Examples:
-     * Select a such that Uses(a, "x")
-     * Select a such that Uses(a, v)
-     * Select v such that Uses(a, v)
-     * Select pn such that Uses(pn, "x")
-     * Select pn such that Uses(pn, v)
-     * Select s such that Uses(s, "x")
-     * Select s such that Uses(s, v)
-     * Select p such that Uses(p, "x")
-     * Select p such that Uses(p, v)
-     * Select c such that Uses(c, "x")
-     * Select c such that Uses(c, v)
-     *
-     * Select a such that Uses("procedure1", v) // and other variants ie pn, stmt, etc
-     *
-     * Select v such that Uses(1, 2) // where Uses(1, 2) is true
-     *
-     * Invalids:
-     * ... Uses(_, _) => semantic error
-     */
 
 };
