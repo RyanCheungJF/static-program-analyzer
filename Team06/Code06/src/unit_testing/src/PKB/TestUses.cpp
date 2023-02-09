@@ -101,3 +101,52 @@ TEST_CASE("UsesStorage: getUsesAllAssignStatementsGivenEntity") {
     bool res = result1.size() == 2 && result2.size() == 0 && result3.size() == 1 && result4.size() == 2;
     REQUIRE(res);
 }
+
+TEST_CASE("UsesStorage: getUsesAllIfStatements") {
+    UsesStorage store;
+    store.writeUses("proc1", "print", 1, "input1");
+    store.writeUses("proc1", "print", 2, "input2");
+    store.writeUses("proc1", "assign", 3, "v");
+    store.writeUses("proc1", "assign", 3, "x");
+    store.writeUses("proc1", "assign", 3, "5");
+
+    std::vector<std::vector<std::string>> result = store.getUsesAllIfStatements();
+    bool res = result.size() == 0;
+    REQUIRE(res);
+}
+
+TEST_CASE("UsesStorage: getUsesAllIfStatementsGivenProcedure") {
+    UsesStorage store;
+    store.writeUses("proc1", "assign", 3, "v");
+    store.writeUses("proc1", "assign", 3, "x");
+    store.writeUses("proc1", "assign", 3, "5");
+
+    store.writeUses("proc2", "assign", 5, "input1");
+    store.writeUses("proc2", "assign", 5, "input2");
+    store.writeUses("proc2", "print", 7, "input2");
+    store.writeUses("proc2", "if", 10, "v");
+    store.writeUses("proc2", "while", 13, "x");
+
+    std::vector<std::vector<std::string>> result1 = store.getUsesAllIfStatementsGivenProcedure("proc1");
+    std::vector<std::vector<std::string>> result2 = store.getUsesAllIfStatementsGivenProcedure("proc2");
+    bool res = result1.size() == 0 && result2.size() == 1;
+    REQUIRE(res);
+}
+
+TEST_CASE("UsesStorage: getUsesAllIfStatementsGivenEntity") {
+    UsesStorage store;
+    store.writeUses("proc1", "print", 1, "input1");
+    store.writeUses("proc1", "if", 3, "v");
+    store.writeUses("proc1", "if", 3, "5");
+
+    store.writeUses("proc2", "if", 6, "input1");
+    store.writeUses("proc2", "if", 6, "5");
+
+
+    std::vector<std::vector<std::string>> result1 = store.getUsesAllIfStatementsGivenEntity("input1");
+    std::vector<std::vector<std::string>> result2 = store.getUsesAllIfStatementsGivenEntity("input2");
+    std::vector<std::vector<std::string>> result3 = store.getUsesAllIfStatementsGivenEntity("v");
+    std::vector<std::vector<std::string>> result4 = store.getUsesAllIfStatementsGivenEntity("5");
+    bool res = result1.size() == 1 && result2.size() == 0 && result3.size() == 1 && result4.size() == 2;
+    REQUIRE(res);
+}

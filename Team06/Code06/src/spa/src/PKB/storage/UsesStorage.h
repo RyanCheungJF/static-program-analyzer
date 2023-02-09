@@ -43,16 +43,19 @@ public:
     virtual std::vector<std::vector<std::string>> getUsesAllAssignStatementsGivenProcedure(ProcedureName name);
 
     // Select a such that Uses(a, "x")
-    virtual std::vector<std::vector<std::string>> getUsesAllAssignStatementsGivenEntity(std::string rhs);
+    virtual std::vector<std::vector<std::string>> getUsesAllAssignStatementsGivenEntity(Ent entity);
+
+    // Select if such that Uses(if, v)
+    virtual std::vector<std::vector<std::string>> getUsesAllIfStatements();
+
+    // Select if such that Uses(if, "x")
+    virtual std::vector<std::vector<std::string>> getUsesAllIfStatementsGivenProcedure(ProcedureName name);
+
+    // Select if such that Uses(if, "x")
+    virtual std::vector<std::vector<std::string>> getUsesAllIfStatementsGivenEntity(Ent entity);
 
 
     /*
-    // Select if such that Uses(if, v)
-    virtual std::vector<std::vector<std::string>> getUsesIfAll();
-
-    // Select if such that Uses(if, "x")
-    virtual std::vector<std::vector<std::string>> getUsesIfGivenVariable(std::string rhs);
-
     // Select w such that Uses(w, v)
     virtual std::vector<std::vector<std::string>> getUsesWhileAll();
 
@@ -97,6 +100,10 @@ private:
 //    std::unordered_map<ProcedureName, std::unordered_set<ProcedureName>> caller_callee;
 
     //TODO: inverse table if we got time. Milestone 3?
+
+    virtual std::vector<std::vector<std::string>> getUsesAllStatements(StmtType type);
+    virtual std::vector<std::vector<std::string>> getUsesAllStatementsGivenProcedure(StmtType type, ProcedureName name);
+    virtual std::vector<std::vector<std::string>> getUsesAllStatementsGivenEntity(StmtType type, Ent entity);
 
     /*
      * return type that are vectors needs to be of format: vector of {stmtNum, var}

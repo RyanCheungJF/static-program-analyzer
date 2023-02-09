@@ -1,5 +1,48 @@
 #include "UsesStorage.h"
 
+/* Helper Functions */
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllStatements(StmtType type) {
+    std::vector<std::vector<std::string>> res; // {stmtNum, var}
+
+    for (auto i : procName_stmtType_stmtNum) {
+        for (auto stmtNum : i.second[type]) {
+            for (Ent e : stmtNum_ent[stmtNum]) {
+                std::vector<std::string> curr = {std::to_string(stmtNum), e};
+                res.push_back(curr);
+            }
+        }
+    }
+    return res;
+}
+
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllStatementsGivenProcedure(StmtType type, ProcedureName name) {
+    std::vector<std::vector<std::string>> res; // {stmtNum, var}
+
+    for (auto stmtNum : procName_stmtType_stmtNum[name][type]) {
+        for (Ent e : stmtNum_ent[stmtNum]) {
+            std::vector<std::string> curr = {std::to_string(stmtNum), e};
+            res.push_back(curr);
+        }
+    }
+    return res;
+}
+
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllStatementsGivenEntity(StmtType type, Ent entity) {
+    std::vector<std::vector<std::string>> res; // {stmtNum, var}
+
+    for (auto i : procName_stmtType_stmtNum) {
+        for (auto stmtNum : i.second[type]) {
+            for (Ent e : stmtNum_ent[stmtNum]) {
+                if (e == entity) {
+                    std::vector<std::string> curr = {std::to_string(stmtNum), e};
+                    res.push_back(curr);
+                }
+            }
+        }
+    }
+    return res;
+}
+
 //TODO: make global constants for assign, if, while, print, call, etc. standardise with SP side
 void UsesStorage::writeUses(ProcedureName name, StmtType type, StmtNum num, Ent ent) {
     procName_stmtType_stmtNum[name][type].insert(num);
@@ -76,87 +119,39 @@ bool UsesStorage::checkUses(ProcedureName name, Ent e) {
 
 
 std::vector<std::vector<std::string>> UsesStorage::getUsesAllPrintStatements() {
-    std::vector<std::vector<std::string>> res; // {stmtNum, var}
-
-    for (auto i : procName_stmtType_stmtNum) {
-        for (auto stmtNum : i.second["print"]) {
-            for (Ent e : stmtNum_ent[stmtNum]) {
-                std::vector<std::string> curr = {std::to_string(stmtNum), e};
-                res.push_back(curr);
-            }
-        }
-    }
-    return res;
+    return getUsesAllStatements("print");
 }
 
 std::vector<std::vector<std::string>> UsesStorage::getUsesAllPrintStatementsGivenProcedure(ProcedureName name) {
-    std::vector<std::vector<std::string>> res; // {stmtNum, var}
-
-    for (auto stmtNum : procName_stmtType_stmtNum[name]["print"]) {
-        for (Ent e : stmtNum_ent[stmtNum]) {
-            std::vector<std::string> curr = {std::to_string(stmtNum), e};
-            res.push_back(curr);
-        }
-    }
-    return res;
+    return getUsesAllStatementsGivenProcedure("print", name);
 }
 
 std::vector<std::vector<std::string>> UsesStorage::getUsesAllPrintStatementsGivenEntity(Ent entity) {
-    std::vector<std::vector<std::string>> res; // {stmtNum, var}
-
-    for (auto i : procName_stmtType_stmtNum) {
-        for (auto stmtNum : i.second["print"]) {
-            for (Ent e : stmtNum_ent[stmtNum]) {
-                if (e == entity) {
-                    std::vector<std::string> curr = {std::to_string(stmtNum), e};
-                    res.push_back(curr);
-                }
-            }
-        }
-    }
-    return res;
+    return getUsesAllStatementsGivenEntity("print", entity);
 }
 
 std::vector<std::vector<std::string>> UsesStorage::getUsesAllAssignStatements() {
-    std::vector<std::vector<std::string>> res; // {stmtNum, var}
-
-    for (auto i : procName_stmtType_stmtNum) {
-        for (auto stmtNum : i.second["assign"]) {
-            for (Ent e : stmtNum_ent[stmtNum]) {
-                std::vector<std::string> curr = {std::to_string(stmtNum), e};
-                res.push_back(curr);
-            }
-        }
-    }
-    return res;
+    return getUsesAllStatements("assign");
 }
 
 std::vector<std::vector<std::string>> UsesStorage::getUsesAllAssignStatementsGivenProcedure(ProcedureName name) {
-    std::vector<std::vector<std::string>> res; // {stmtNum, var}
-
-    for (auto stmtNum : procName_stmtType_stmtNum[name]["assign"]) {
-        for (Ent e : stmtNum_ent[stmtNum]) {
-            std::vector<std::string> curr = {std::to_string(stmtNum), e};
-            res.push_back(curr);
-        }
-    }
-    return res;
+    return getUsesAllStatementsGivenProcedure("assign", name);
 }
 
 std::vector<std::vector<std::string>> UsesStorage::getUsesAllAssignStatementsGivenEntity(Ent entity) {
-    std::vector<std::vector<std::string>> res; // {stmtNum, var}
+    return getUsesAllStatementsGivenEntity("assign", entity);
+}
 
-    for (auto i : procName_stmtType_stmtNum) {
-        for (auto stmtNum : i.second["assign"]) {
-            for (Ent e : stmtNum_ent[stmtNum]) {
-                if (e == entity) {
-                    std::vector<std::string> curr = {std::to_string(stmtNum), e};
-                    res.push_back(curr);
-                }
-            }
-        }
-    }
-    return res;
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllIfStatements() {
+    return getUsesAllStatements("if");
+}
+
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllIfStatementsGivenProcedure(ProcedureName name) {
+    return getUsesAllStatementsGivenProcedure("if", name);
+}
+
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllIfStatementsGivenEntity(Ent entity) {
+    return getUsesAllStatementsGivenEntity("if", entity);
 }
 
 /*
