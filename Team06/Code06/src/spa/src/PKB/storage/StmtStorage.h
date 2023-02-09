@@ -18,7 +18,7 @@ private:
     /*
      * Structure of table
      *  stmt | statementNumbers
-     *  "if" | [1, 3, ...]
+     *  "if" | [1, 15, ...]
      *  "while" | [7, 11, ...]
      */
     std::unordered_map<Stmt, std::unordered_set<StmtNum>> stmt_stmtNum;

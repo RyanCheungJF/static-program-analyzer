@@ -4,6 +4,7 @@
 #include <unordered_set>
 #include <vector>
 #include <string>
+#include <iostream>
 
 typedef std::string Ent;
 typedef std::string StmtType;
@@ -12,8 +13,13 @@ typedef int StmtNum;
 
 class UsesStorage {
 public:
-    virtual void writeUses(ProcedureName name, StmtType lhs, StmtNum num, Ent ent);
-    virtual bool checkUses(StmtNum, Ent); // Ent is either "x" or _
+    virtual void writeUses(ProcedureName name, StmtType type, StmtNum num, Ent ent);
+
+    virtual void writeUsesCall(ProcedureName caller, ProcedureName callee, StmtNum num);
+
+    virtual bool checkUses(StmtNum num, Ent e); // Ent is either "x" or _
+
+    virtual bool checkUses(ProcedureName name, Ent e);
 
     // Select s such that Uses(s, v)
     virtual std::vector<std::vector<std::string>> getUsesAll();
@@ -44,6 +50,7 @@ public:
 
     // Select c such that Uses(c, "x")
     virtual std::vector<std::vector<std::string>> getUsesCallGivenVariable(std::string rhs);
+    //TODO: need to pre-process nested procedure calls at compile time
 
     // Select p such that Uses(p, v)
     virtual std::vector<std::vector<std::string>> getUsesProcedureAll();
@@ -52,15 +59,19 @@ public:
     virtual std::vector<std::vector<std::string>> getUsesProcedureGivenVariable(std::string rhs);
 
 private:
-    std::unordered_map<StmtNum, Ent> print;
-    std::unordered_map<StmtNum, std::unordered_set<Ent>> assignment;
-    std::unordered_map<StmtNum, std::unordered_set<Ent>> container;
-    std::unordered_map<ProcedureName, std::unordered_set<Ent>> procedureVariables;
-    std::unordered_map<StmtNum, std::unordered_set<Ent>> call;
+    std::unordered_map<StmtNum, Ent> print_ent;
+    std::unordered_map<StmtNum, std::unordered_set<Ent>> assign_ent;
+    std::unordered_map<StmtNum, std::unordered_set<Ent>> if_ent;
+    std::unordered_map<StmtNum, std::unordered_set<Ent>> while_ent;
+    std::unordered_map<StmtNum, std::unordered_set<ProcedureName>> call_callee;
 
-//    std::unordered_map<StmtNum, std::unordered_set<StmtNum>> stmtNum_stmtNum;
+
     std::unordered_map<StmtNum, std::pair<ProcedureName, StmtType>> stmtNum_procName_stmtType;
     std::unordered_map<ProcedureName, std::unordered_map<StmtType, std::unordered_set<StmtNum>>> procName_stmtType_stmtNum;
+
+//    std::unordered_map<ProcedureName, std::unordered_set<ProcedureName>> caller_callee; //for what
+    //    std::unordered_map<ProcedureName, std::unordered_set<Ent>> procedure_entities; //good to have but can be derived
+//    std::unordered_map<ProcedureName, std::unordered_set<ProcedureName>> caller_callee;
 
     //TODO: inverse table if we got time. Milestone 3?
 
