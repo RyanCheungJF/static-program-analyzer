@@ -2,15 +2,16 @@
 #include "../../qps/entities/Parameter.h"
 #include "../storage/StmtStorage.h"
 #include <algorithm>
+#include <memory>
 
 
 class StmtStmtRLHandler {
 public:
-	StmtStmtRLHandler(StmtStmtRLStorage* rlStorage, StmtStorage* stmtStorage);
+	StmtStmtRLHandler(std::shared_ptr<StmtStmtRLStorage> rlStorage, std::shared_ptr<StmtStorage> stmtStorage);
 	std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
 private:
-	StmtStmtRLStorage* rlStorage = NULL;
-	StmtStorage* stmtStorage = NULL;
+	std::shared_ptr<StmtStmtRLStorage> rlStorage;
+	std::shared_ptr<StmtStorage> stmtStorage;
 
 	// e.g. FollowsT(1, 2)
 	std::vector<std::vector<std::string>> handleIntInt(Parameter param1, Parameter param2);

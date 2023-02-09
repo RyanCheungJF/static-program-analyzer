@@ -44,8 +44,7 @@ TEST_CASE("Check that given query for a statement and a statementNumber that it 
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    StmtStorage st;
-    pkb.statementStorage = &st;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -65,8 +64,7 @@ TEST_CASE("Check that if a statement does not exist, t returns false") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    StmtStorage st;
-    pkb.statementStorage = &st;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -78,8 +76,7 @@ TEST_CASE("Check that given a StatementAPI and their StatementAPI numbers, a que
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    StmtStorage st;
-    pkb.statementStorage = &st;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -96,8 +93,7 @@ TEST_CASE("Check that ReadPKB returns all statement numbers of a given statement
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    StmtStorage st;
-    pkb.statementStorage = &st;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -119,8 +115,7 @@ TEST_CASE("Check that a statement does not appear in the source code, ReadPKB sh
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    StmtStorage st;
-    pkb.statementStorage = &st;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
