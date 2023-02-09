@@ -117,6 +117,48 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllPrintStatementsGive
     return res;
 }
 
+//std::vector<std::vector<std::string>> UsesStorage::getUsesAllAssignStatements() {
+//    std::vector<std::vector<std::string>> res; // {stmtNum, var}
+//
+//    for (auto i : procName_stmtType_stmtNum) {
+//        for (auto stmtNum : i.second["assign"]) {
+//            for (Ent e : stmtNum_ent[stmtNum]) {
+//                std::vector<std::string> curr = {std::to_string(stmtNum), e};
+//                res.push_back(curr);
+//            }
+//        }
+//    }
+//    return res;
+//}
+//
+//std::vector<std::vector<std::string>> UsesStorage::getUsesAllAssignStatementsGivenProcedure(ProcedureName name) {
+//    std::vector<std::vector<std::string>> res; // {stmtNum, var}
+//
+//    for (auto stmtNum : procName_stmtType_stmtNum[name]["assign"]) {
+//        for (Ent e : stmtNum_ent[stmtNum]) {
+//            std::vector<std::string> curr = {std::to_string(stmtNum), e};
+//            res.push_back(curr);
+//        }
+//    }
+//    return res;
+//}
+//
+//std::vector<std::vector<std::string>> UsesStorage::getUsesAllAssignStatementsGivenEntity(Ent entity) {
+//    std::vector<std::vector<std::string>> res; // {stmtNum, var}
+//
+//    for (auto i : procName_stmtType_stmtNum) {
+//        for (auto stmtNum : i.second["assign"]) {
+//            for (Ent e : stmtNum_ent[stmtNum]) {
+//                if (e == entity) {
+//                    std::vector<std::string> curr = {std::to_string(stmtNum), e};
+//                    res.push_back(curr);
+//                }
+//            }
+//        }
+//    }
+//    return res;
+//}
+
 /*
 std::vector<std::vector<std::string>> UsesStorage::getUsesStatementAll() {
     std::vector<std::vector<std::string>> res; // {stmtNum, var}

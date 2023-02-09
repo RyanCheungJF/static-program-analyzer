@@ -36,10 +36,11 @@ public:
     // Select pn such that Uses(pn, "x")
     virtual std::vector<std::vector<std::string>> getUsesAllPrintStatementsGivenEntity(Ent entity);
 
+    /*
     // Select a such that Uses(a, v)
     virtual std::vector<std::vector<std::string>> getUsesAllAssignStatements();
 
-    // Select pn such that Uses(pn, "x")
+    // Select a such that Uses(a, "x")
     virtual std::vector<std::vector<std::string>> getUsesAllAssignStatementsGivenProcedure(ProcedureName name);
 
     // Select a such that Uses(a, "x")
@@ -75,6 +76,7 @@ public:
 
     // Select p such that Uses(p, "x")
     virtual std::vector<std::vector<std::string>> getUsesProcedureGivenVariable(std::string rhs);
+     */
 
 private:
 //    std::unordered_map<StmtNum, Ent> print_ent;
