@@ -9,8 +9,7 @@ TEST_CASE("Checks that write and read works for constantStorage") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ConstantStorage cs;
-    pkb.constantStorage = &cs;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -33,8 +32,7 @@ TEST_CASE("Check that if a constant does not appear in the source code, it shoul
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ConstantStorage cs;
-    pkb.constantStorage = &cs;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -52,8 +50,7 @@ TEST_CASE("Check that given query for a constant and a statementNumber that it a
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ConstantStorage cs;
-    pkb.constantStorage = &cs;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -70,8 +67,7 @@ TEST_CASE("Check that if a constant does not exist, it returns false") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ConstantStorage cs;
-    pkb.constantStorage = &cs;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 

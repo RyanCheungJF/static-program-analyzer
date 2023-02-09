@@ -1,5 +1,5 @@
 #include "StmtEntRLHandler.h"
 
-std::vector<std::vector<std::string>> StmtEntRLHandler::handle(StmtEntRLStorage* storage) {
+std::vector<std::vector<std::string>> StmtEntRLHandler::handle(std::shared_ptr<StmtEntRLStorage> storage) {
 	return std::vector<std::vector<std::string>>();
 }

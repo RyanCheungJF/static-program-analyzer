@@ -9,8 +9,7 @@ TEST_CASE("Checks that write and read works for entityStorage") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    EntityStorage es;
-    pkb.entityStorage = &es;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -38,8 +37,7 @@ TEST_CASE("Check that if an entity does not appear in the source code, it should
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    EntityStorage et;
-    pkb.entityStorage = &et;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -62,8 +60,7 @@ TEST_CASE("Check that given query for an entity and a statementNumber that it ap
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    EntityStorage et;
-    pkb.entityStorage = &et;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -84,8 +81,7 @@ TEST_CASE("Check that if an entity does not exist, it returns false") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    EntityStorage et;
-    pkb.entityStorage = &et;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 

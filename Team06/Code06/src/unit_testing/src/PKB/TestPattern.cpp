@@ -6,8 +6,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    PatternStorage pa;
-    pkb.patternStorage = &pa;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -32,7 +31,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
     std::vector<std::vector<std::string>> check1 = { {"z", "1"} };
     std::vector<std::vector<std::string>> check2 = { {"z", "2"} };
 
-    std::cout << "COMPLETE";
+    std::cout << "COMPLETE" << "\n";
     REQUIRE(res1 == check1); 
     REQUIRE(res2 == check2);
 }
@@ -42,8 +41,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    PatternStorage pa;
-    pkb.patternStorage = &pa;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -79,8 +77,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    PatternStorage pa;
-    pkb.patternStorage = &pa;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -109,8 +106,7 @@ TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    PatternStorage pa;
-    pkb.patternStorage = &pa;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -149,8 +145,7 @@ TEST_CASE("Support for Select v pattern a (v, _)\'") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    PatternStorage pa;
-    pkb.patternStorage = &pa;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 

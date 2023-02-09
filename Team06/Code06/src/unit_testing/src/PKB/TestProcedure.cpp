@@ -8,8 +8,7 @@ TEST_CASE("All statement numbers are recorded in their respective procedures") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ProcedureStorage pr;
-    pkb.procedureStorage = &pr;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -34,8 +33,7 @@ TEST_CASE("If a procedure does not appear in the source code, getProcedureStatem
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ProcedureStorage pr;
-    pkb.procedureStorage = &pr;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -51,8 +49,7 @@ TEST_CASE("Given a query for a procedure and a statementNumber that is not neste
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ProcedureStorage pr;
-    pkb.procedureStorage = &pr;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -70,8 +67,7 @@ TEST_CASE("If a procedure does not exist, checkProcedure() returns false") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ProcedureStorage pr;
-    pkb.procedureStorage = &pr;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
