@@ -162,7 +162,6 @@ TEST_CASE("UsesStorage: getUsesAllWhileStatements") {
     REQUIRE(res);
 }
 
-
 TEST_CASE("UsesStorage: getUsesAllWhileStatementsGivenProcedure") {
     UsesStorage store;
     store.writeUses("proc1", "assign", 2, "v");
@@ -180,7 +179,6 @@ TEST_CASE("UsesStorage: getUsesAllWhileStatementsGivenProcedure") {
     bool res = result1.size() == 2 && result2.size() == 1;
     REQUIRE(res);
 }
-
 
 TEST_CASE("UsesStorage: getUsesAllWhileStatementsGivenEntity") {
     UsesStorage store;
@@ -508,43 +506,154 @@ TEST_CASE("UsesStorage: getUsesAllCallStatementsGivenEntity_format2 with loop") 
     REQUIRE(res);
 }
 
-/*
-TEST_CASE("UsesStorage: getUsesAllWhileStatementsGivenProcedure") {
+TEST_CASE("UsesStorage: getUsesAllStatements no loop") {
     UsesStorage store;
-    store.writeUses("proc1", "assign", 2, "v");
-    store.writeUses("proc1", "while", 3, "x");
-    store.writeUses("proc1", "while", 3, "5");
+    store.writeUses("proc1", "print", 1, "a");
+    store.writeUsesCall("proc1", "proc2", 2);
 
-    store.writeUses("proc2", "assign", 5, "input1");
-    store.writeUses("proc2", "assign", 5, "input2");
-    store.writeUses("proc2", "print", 7, "input2");
-    store.writeUses("proc2", "if", 10, "v");
-    store.writeUses("proc2", "while", 13, "x");
+    store.writeUses("proc2", "assign", 3, "1");
+    store.writeUses("proc2", "while", 6, "v");
+    store.writeUses("proc2", "while", 6, "41");
+    store.writeUses("proc2", "assign", 7, "b");
+    store.writeUsesCall("proc2", "proc3", 8);
 
-    std::vector<std::vector<std::string>> result1 = store.getUsesAllWhileStatementsGivenProcedure("proc1");
-    std::vector<std::vector<std::string>> result2 = store.getUsesAllWhileStatementsGivenProcedure("proc2");
-    bool res = result1.size() == 2 && result2.size() == 1;
+    store.writeUses("proc3", "assign", 9, "x");
+    store.writeUses("proc3", "assign", 10, "a");
+//    store.writeUsesCall("proc3", "proc1", 11);
+
+    std::vector<std::vector<std::string>> result = store.getUsesAllStatements();
+    std::cout << "PRINTING\n";
+    //Expected: [10, a], [9, x], [8, a], [8, x], [7, b], [6, v], [6, 41], [3, 1],
+    // [2, a], [2, x], [2, b], [2, v], [2, 41], [2, 1], [1, a]
+//    for (auto i : result) {
+//        std::cout << i[0] << " " << i[1] << "\n";
+//    }
+    bool res = result.size() == 15;
     REQUIRE(res);
 }
 
-
-TEST_CASE("UsesStorage: getUsesAllWhileStatementsGivenEntity") {
+TEST_CASE("UsesStorage: getUsesAllStatements with loop") {
     UsesStorage store;
-    store.writeUses("proc1", "print", 1, "input1");
-    store.writeUses("proc1", "if", 3, "v");
-    store.writeUses("proc1", "while", 4, "5");
-    store.writeUses("proc1", "while", 4, "v");
+    store.writeUses("proc1", "print", 1, "a");
+    store.writeUsesCall("proc1", "proc2", 2);
 
-    store.writeUses("proc2", "while", 6, "input1");
-    store.writeUses("proc2", "while", 6, "5");
+    store.writeUses("proc2", "assign", 3, "1");
+    store.writeUses("proc2", "while", 6, "v");
+    store.writeUses("proc2", "while", 6, "41");
+    store.writeUses("proc2", "assign", 7, "b");
+    store.writeUsesCall("proc2", "proc3", 8);
 
+    store.writeUses("proc3", "assign", 9, "x");
+    store.writeUses("proc3", "assign", 10, "a");
+    store.writeUsesCall("proc3", "proc1", 11);
 
-    std::vector<std::vector<std::string>> result1 = store.getUsesAllWhileStatementsGivenEntity("input1");
-    std::vector<std::vector<std::string>> result2 = store.getUsesAllWhileStatementsGivenEntity("input2");
-    std::vector<std::vector<std::string>> result3 = store.getUsesAllWhileStatementsGivenEntity("v");
-    std::vector<std::vector<std::string>> result4 = store.getUsesAllWhileStatementsGivenEntity("5");
-    bool res = result1.size() == 1 && result2.size() == 0 && result3.size() == 1 && result4.size() == 2;
+    std::vector<std::vector<std::string>> result = store.getUsesAllStatements();
+    std::cout << "PRINTING\n";
+    //Expected: [1, a], [3, 1], [6, v], [6, 41], [7, b], [9, x], [10, a]
+    // then for each of the call (ie * 3): [2, a], [2, 1], [2, v], [2, 41], [2, b], [2, x]
+//    for (auto i : result) {
+//        std::cout << i[0] << " " << i[1] << "\n";
+//    }
+    bool res = result.size() == (7 + (6 * 3));
     REQUIRE(res);
 }
-*/
 
+TEST_CASE("UsesStorage: getUsesAllStatementsGivenProcedure no loop") {
+    UsesStorage store;
+    store.writeUses("proc1", "print", 1, "a");
+    store.writeUsesCall("proc1", "proc2", 2);
+
+    store.writeUses("proc2", "assign", 3, "1");
+    store.writeUses("proc2", "while", 6, "v");
+    store.writeUses("proc2", "while", 6, "41");
+    store.writeUses("proc2", "assign", 7, "b");
+//    store.writeUsesCall("proc2", "proc3", 8);
+
+    store.writeUses("proc3", "assign", 9, "x");
+    store.writeUses("proc3", "assign", 10, "a");
+    store.writeUsesCall("proc3", "proc1", 11);
+
+    std::vector<std::vector<std::string>> result = store.getUsesAllStatementsGivenProcedure("proc3");
+    std::cout << "PRINTING\n";
+    //Expected: [9, x], [10, a], [11, a], [11, 1], [11, v], [11, 41], [11, b]
+    for (auto i : result) {
+        std::cout << i[0] << " " << i[1] << "\n";
+    }
+    bool res = result.size() == 7;
+    REQUIRE(res);
+}
+
+TEST_CASE("UsesStorage: getUsesAllStatementsGivenProcedure with loop") {
+    UsesStorage store;
+    store.writeUses("proc1", "print", 1, "a");
+    store.writeUsesCall("proc1", "proc2", 2);
+
+    store.writeUses("proc2", "assign", 3, "1");
+    store.writeUses("proc2", "while", 6, "v");
+    store.writeUses("proc2", "while", 6, "41");
+    store.writeUses("proc2", "assign", 7, "b");
+    store.writeUsesCall("proc2", "proc3", 8);
+
+    store.writeUses("proc3", "assign", 9, "x");
+    store.writeUses("proc3", "assign", 10, "a");
+    store.writeUsesCall("proc3", "proc1", 11);
+
+    std::vector<std::vector<std::string>> result = store.getUsesAllStatementsGivenProcedure("proc3");
+    std::cout << "PRINTING\n";
+    //Expected: [9, x], [10, a], [11, a], [11, 1], [11, v], [11, 41], [11, b], [11, x]
+    for (auto i : result) {
+        std::cout << i[0] << " " << i[1] << "\n";
+    }
+    bool res = result.size() == 8;
+    REQUIRE(res);
+}
+
+TEST_CASE("UsesStorage: getUsesAllStatementsGivenEntity no loop") {
+    UsesStorage store;
+    store.writeUses("proc1", "print", 1, "a");
+    store.writeUsesCall("proc1", "proc2", 2);
+
+    store.writeUses("proc2", "assign", 3, "1");
+    store.writeUses("proc2", "while", 6, "v");
+    store.writeUses("proc2", "while", 6, "41");
+    store.writeUses("proc2", "assign", 7, "b");
+    store.writeUsesCall("proc2", "proc3", 8);
+
+    store.writeUses("proc3", "assign", 9, "x");
+    store.writeUses("proc3", "assign", 10, "a");
+//    store.writeUsesCall("proc3", "proc1", 11);
+
+    std::vector<std::vector<std::string>> result = store.getUsesAllStatementsGivenEntity("a");
+    std::cout << "PRINTING\n";
+    //Expected: [10, a], [8, a], [2, a], [1, a]
+//    for (auto i : result) {
+//        std::cout << i[0] << " " << i[1] << "\n";
+//    }
+    bool res = result.size() == 4;
+    REQUIRE(res);
+}
+
+TEST_CASE("UsesStorage: getUsesAllStatementsGivenEntity with loop") {
+    UsesStorage store;
+    store.writeUses("proc1", "print", 1, "a");
+    store.writeUsesCall("proc1", "proc2", 2);
+
+    store.writeUses("proc2", "assign", 3, "1");
+    store.writeUses("proc2", "while", 6, "v");
+    store.writeUses("proc2", "while", 6, "41");
+    store.writeUses("proc2", "assign", 7, "b");
+    store.writeUsesCall("proc2", "proc3", 8);
+
+    store.writeUses("proc3", "assign", 9, "x");
+    store.writeUses("proc3", "assign", 10, "a");
+    store.writeUsesCall("proc3", "proc1", 11);
+
+    std::vector<std::vector<std::string>> result = store.getUsesAllStatementsGivenEntity("a");
+    std::cout << "PRINTING\n";
+    //Expected: [11, a] [10, a], [8, a], [2, a], [1, a]
+//    for (auto i : result) {
+//        std::cout << i[0] << " " << i[1] << "\n";
+//    }
+    bool res = result.size() == 5;
+    REQUIRE(res);
+}

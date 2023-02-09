@@ -370,36 +370,36 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllStatementsGivenEnti
 
     std::unordered_set<std::pair<std::string, int>, usesCallsHashFunction> seen; //TODO: check with QPS that there is no cyclic issues
 
-    for (auto i : printStatements) {
+    for (auto i: printStatements) {
         int num = std::stoi(i[0]);
         std::pair<std::string, int> p = std::make_pair(i[1], num);
         seen.insert(p);
     }
-    for (auto i : assignStatements) {
+    for (auto i: assignStatements) {
         int num = std::stoi(i[0]);
         std::pair<std::string, int> p = std::make_pair(i[1], num);
         seen.insert(p);
     }
-    for (auto i : ifStatements) {
+    for (auto i: ifStatements) {
         int num = std::stoi(i[0]);
         std::pair<std::string, int> p = std::make_pair(i[1], num);
         seen.insert(p);
     }
-    for (auto i : whileStatements) {
+    for (auto i: whileStatements) {
         int num = std::stoi(i[0]);
         std::pair<std::string, int> p = std::make_pair(i[1], num);
         seen.insert(p);
     }
-    for (auto i : callStatements) {
+    for (auto i: callStatements) {
         int num = std::stoi(i[0]);
         std::pair<std::string, int> p = std::make_pair(i[1], num);
         seen.insert(p);
     }
 
     std::vector<std::vector<std::string>> res;
-    for (auto j : seen) {
+    for (auto j: seen) {
         std::vector<std::string> curr = {std::to_string(j.second), j.first};
         res.push_back(curr);
     }
     return res;
-
+}
