@@ -170,7 +170,11 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllWhileStatementsGive
 std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatements_format1() {
     std::vector<std::vector<std::string>> res;
     for (auto i : call_callee) {
-        StmtNum num = i.first;
+        std::unordered_set<std::string> entities = getAllEntitiesUsed(i.second);
+        for (Ent e: entities) {
+            std::vector<std::string> curr = {std::to_string(i.first), e};
+            res.push_back(curr);
+        }
     }
     return res;
 }
@@ -178,20 +182,73 @@ std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatements_form
 //format: {StmtNum, procedureName}
 std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatements_format2() {
     std::vector<std::vector<std::string>> res;
-
     for (auto i : call_callee) {
-        StmtNum num = i.first;
+        std::vector<std::string> curr = {std::to_string(i.first), i.second};
+        res.push_back(curr);
     }
     return res;
 }
 
-//std::vector<std::vector<std::string>> UsesStorage::getUsesAllWhileStatementsGivenProcedure(ProcedureName name) {
-//    return getUsesAllStatementsGivenProcedure("while", name);
-//}
-//
-//std::vector<std::vector<std::string>> UsesStorage::getUsesAllWhileStatementsGivenEntity(Ent entity) {
-//    return getUsesAllStatementsGivenEntity("while", entity);
-//}
+//format: {StmtNum, entity}
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGivenProcedure_format1(ProcedureName name) {
+    std::vector<std::vector<std::string>> res;
+    for (auto i : procName_stmtType_stmtNum[name]["call"]) {
+        std::string callee = call_callee[i];
+        std::unordered_set<std::string> entities = getAllEntitiesUsed(callee);
+
+        for (Ent e : entities) {
+            std::vector<std::string> curr = {std::to_string(i), e};
+            res.push_back(curr);
+        }
+    }
+    return res;
+}
+
+//format: {StmtNum, calleeName}
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGivenProcedure_format2(ProcedureName name) {
+    std::vector<std::vector<std::string>> res;
+    for (auto i : procName_stmtType_stmtNum[name]["call"]) {
+        std::string callee = call_callee[i];
+        std::vector<std::string> curr = {std::to_string(i), callee};
+        res.push_back(curr);
+    }
+    return res;
+}
+
+//format: {StmtNum, names of all procedure calls inside called procedure (recursive)}
+std::vector<std::vector<std::string>> UsesStorage::getUsesAllCallStatementsGivenProcedure_format3(ProcedureName name) {
+    std::unordered_set<std::pair<std::string, int>, usesCallsHashFunction> seen; //TODO: check with QPS that there is no cyclic issues
+    std::vector<std::vector<std::string>> res;
+
+    std::deque<std::pair<std::string, int>> queue;
+
+    for (auto i : procName_stmtType_stmtNum[name]["call"]) {
+        std::string callee = call_callee[i];
+        queue.push_back(std::make_pair(callee, i));
+    }
+
+    while (!queue.empty()) {
+        std::pair<std::string, int> curr = queue.front();
+        queue.pop_front();
+
+        if (seen.find(curr) != seen.end()) {
+            continue;
+        }
+        seen.insert(curr);
+
+        std::string procedureCalled = curr.first;
+        int referenceLine = curr.second;
+
+        std::vector<std::string> result = {std::to_string(referenceLine), procedureCalled};
+        res.push_back(result);
+
+        for (auto i : procName_stmtType_stmtNum[procedureCalled]["call"]) {
+            std::string callee = call_callee[i];
+            queue.push_back(std::make_pair(callee, referenceLine));
+        }
+    }
+    return res;
+}
 
 
 

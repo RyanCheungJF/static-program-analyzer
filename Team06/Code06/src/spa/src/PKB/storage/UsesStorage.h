@@ -12,6 +12,16 @@ typedef std::string StmtType;
 typedef std::string ProcedureName;
 typedef int StmtNum;
 
+struct usesCallsHashFunction
+{
+    size_t operator()(const std::pair<std::string, int>& x) const
+    {
+        std::size_t h1 = std::hash<std::string>{}(x.first);
+        std::size_t h2 = std::hash<double>{}(x.second);
+        return h1 ^ h2;
+    }
+};
+
 class UsesStorage {
 public:
     virtual void writeUses(ProcedureName name, StmtType type, StmtNum num, Ent ent);
@@ -69,8 +79,10 @@ public:
     virtual std::vector<std::vector<std::string>> getUsesAllCallStatements_format2();
 
     // Select c such that Uses("proc1", v) or Select pn such that Uses("proc1", _)
-    // return {StmtNum, entity} or {StmtNum, procedureName} ?
-    virtual std::vector<std::vector<std::string>> getUsesAllCallStatementsGivenProcedure(ProcedureName name);
+    // return {StmtNum, entity} or {StmtNum, calleeName} or {StmtNum, names of all procedure calls inside called procedure (recursive)} ?
+    virtual std::vector<std::vector<std::string>> getUsesAllCallStatementsGivenProcedure_format1(ProcedureName name);
+    virtual std::vector<std::vector<std::string>> getUsesAllCallStatementsGivenProcedure_format2(ProcedureName name);
+    virtual std::vector<std::vector<std::string>> getUsesAllCallStatementsGivenProcedure_format3(ProcedureName name);
 
     // Select c such that Uses(c, "x")
     // return {StmtNum, entity} or {StmtNum, procedureName} ?
