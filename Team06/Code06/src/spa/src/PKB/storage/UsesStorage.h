@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <deque>
 
 typedef std::string Ent;
 typedef std::string StmtType;
@@ -17,9 +18,12 @@ public:
 
     virtual void writeUsesCall(ProcedureName caller, ProcedureName callee, StmtNum num);
 
+    virtual std::unordered_set<std::string> getAllEntitiesUsed(ProcedureName name);
+
     virtual bool checkUses(StmtNum num, Ent e); // Ent is either "x" or _
 
     virtual bool checkUses(ProcedureName name, Ent e);
+
 
     // Select s such that Uses(s, v)
     virtual std::vector<std::vector<std::string>> getUsesAll();
@@ -63,7 +67,7 @@ private:
     std::unordered_map<StmtNum, std::unordered_set<Ent>> assign_ent;
     std::unordered_map<StmtNum, std::unordered_set<Ent>> if_ent;
     std::unordered_map<StmtNum, std::unordered_set<Ent>> while_ent;
-    std::unordered_map<StmtNum, std::unordered_set<ProcedureName>> call_callee;
+    std::unordered_map<StmtNum, ProcedureName> call_callee;
 
 
     std::unordered_map<StmtNum, std::pair<ProcedureName, StmtType>> stmtNum_procName_stmtType;
