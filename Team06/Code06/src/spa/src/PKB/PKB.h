@@ -7,6 +7,7 @@
 #include "storage/FollowsStorage.h"
 #include "storage/FollowsTStorage.h"
 #include "storage/ParentStorage.h"
+#include "storage/ParentTStorage.h"
 #include "storage/EntityStorage.h"
 #include "storage/ProcedureStorage.h"
 #include "storage/StmtStorage.h"
@@ -29,6 +30,7 @@ public:
     FollowsStorage* followsStorage;
     FollowsTStorage* followsTStorage;
     ParentStorage* parentStorage;
+    std::shared_ptr<ParentTStorage> parentTStorage;
     StmtStorage* statementStorage;
     EntityStorage* entityStorage;
     ProcedureStorage* procedureStorage;
