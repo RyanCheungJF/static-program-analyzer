@@ -5,6 +5,7 @@ int currStatementNumber = 1;
 std::unique_ptr<Program> Parser::parseProgram(std::deque<Token> tokens) {
 	// Rule: procedure+
 	// std::cout << "Parsing Program" << std::endl;
+	currStatementNumber = 1;
 	std::vector<std::unique_ptr<Procedure>> procedureList;
 
 	while (tokens.front().type != TokenType::ENDOFFILE) {

@@ -9,12 +9,9 @@ void SP::processFile(std::string filePath, WritePKB* writePKB) {
 	std::stringstream strStream;
 	strStream << sourceFile.rdbuf();
 
-	std::deque<Token> tokens;
-	std::unique_ptr<Program> root;
-
 	try {
-		tokens = tokenizer.tokenize(strStream);
-		root = parser.parseProgram(tokens);
+		std::deque<Token> tokens = tokenizer.tokenize(strStream);
+		std::unique_ptr<Program> root = parser.parseProgram(tokens);
 		designExtractor = DesignExtractor(std::move(root), writePKB);
 		designExtractor.extractEntities();
 		designExtractor.extractRelationships();
