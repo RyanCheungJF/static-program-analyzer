@@ -8,6 +8,11 @@ using namespace std;
 
 enum class RelationshipType {
 	FOLLOWS,
+	FOLLOWST,
+	PARENT,
+	PARENTT,
+	USES,
+	MODIFIES,
 	RELATIONSHIP,
 	UNKNOWN
 };
