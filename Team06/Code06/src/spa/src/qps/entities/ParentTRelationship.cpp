@@ -1,4 +1,4 @@
-#include "ParentRelationship.h"
+#include "ParentTRelationship.h"
 
 bool ParentTRelationship::validateParams(vector<Parameter>& ps)
 {
