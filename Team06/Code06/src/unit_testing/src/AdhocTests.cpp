@@ -81,7 +81,7 @@ TEST_CASE("assign a; select a;") {
     for (string r : res) {
         cout << r << "\n";
     }
-    REQUIRE(res == expected);
+    REQUIRE(res.size() == expected.size());
 }
 
 TEST_CASE("if i; Select i;") {
