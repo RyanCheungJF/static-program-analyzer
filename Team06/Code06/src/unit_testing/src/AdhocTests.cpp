@@ -13,8 +13,6 @@ using namespace std;
 
 TEST_CASE("adhoc") {
     string filename = "../../../tests/Sample_source.txt";
-//    string filename = "/Users/admin/Downloads/this sem/cs3203project/Team06/Code06/tests/Sample_source.txt";
-//    string filename = "../../../tests/Sample_source.txt";
     SP sourceProcessor;
     QPS qps;
     WritePKB writePKB;
@@ -37,9 +35,6 @@ TEST_CASE("adhoc") {
 
 TEST_CASE("adhoc2") {
     string filename = "../../../tests/Sample_source.txt";
-//    string filename = "/Users/admin/Downloads/this sem/cs3203project/Team06/Code06/tests/Sample_source.txt";
-//    string filename = "../../../tests/Sample_source.txt";
-//    string filename = "C:/CS3203_Project/Team06/Code06/tests/Sample_source.txt";
     SP sourceProcessor;
     QPS qps;
     WritePKB writePKB;
