@@ -1,5 +1,11 @@
 #include "ReadStatement.h"
 
-void ReadStatement::accept(ASTVisitor* visitor) const {
+ReadStatement::ReadStatement() {}
+
+ReadStatement::ReadStatement(std::string varName) {
+	this->varName = varName;
+}
+
+void ReadStatement::accept(ASTVisitor* visitor) {
 	visitor->visitReadStatement(this);
 }

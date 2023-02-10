@@ -7,5 +7,9 @@ class PrintStatement : public Statement {
 public:
 	std::string varName;
 
-	void accept(ASTVisitor* visitor) const override;
+	PrintStatement();
+
+	PrintStatement(std::string varName);
+
+	void accept(ASTVisitor* visitor) override;
 };

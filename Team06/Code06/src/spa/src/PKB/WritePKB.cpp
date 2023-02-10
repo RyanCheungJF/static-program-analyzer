@@ -9,7 +9,7 @@ void WritePKB::setInstancePKB(PKB &pkb) {
 }
 
 void WritePKB::setFollows(StmtNum followee, StmtNum follower) {
-    pkbInstance->followsApi->setFollows(followee, follower);
+    pkbInstance->followsStorage->write(followee, follower);
     return;
 }
 
@@ -23,7 +23,7 @@ void WritePKB::setParent(StmtNum parent, StmtNum children) {
 }
 
 void WritePKB::setStatement(Stmt s, std::vector<StmtNum> lines) {
-    pkbInstance->statementApi->writeStatement(s, lines);
+    pkbInstance->statementStorage->writeStatement(s, lines);
     return;
 }
 
@@ -33,7 +33,7 @@ void WritePKB::setProcedure(Proc p, std::vector<StmtNum> lines) {
 }
 
 void WritePKB::setStatement(Stmt s, StmtNum line) {
-    pkbInstance->statementApi->writeStatement(s, line);
+    pkbInstance->statementStorage->writeStatement(s, line);
     return;
 }
 
@@ -60,9 +60,17 @@ void WritePKB::setConstant(Const c, StmtNum line) {
 }
 
 void WritePKB::setConstant(StmtNum line, std::vector<Const> constants) {
-
     for (Const c: constants) {
         pkbInstance->constantStorage->writeConstant(c, line);
     }
     return;
+}
+
+void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer) {
+    pkbInstance->patternStorage->writePattern(lhs, num, std::move(pointer));
+    return;
+}
+
+std::unique_ptr<Expression> WritePKB::buildSubtree(std::string rhs) {
+    return std::move(pkbInstance->patternStorage->buildSubtree(rhs));
 }

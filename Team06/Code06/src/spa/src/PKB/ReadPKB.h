@@ -1,5 +1,10 @@
 #pragma once
 #include "PKB.h"
+#include "queryHandlers/StmtStmtRLHandler.h"
+#include "queryHandlers/StmtEntRLHandler.h"
+#include "queryHandlers/EntEntRLHandler.h"
+#include "../qps/entities/Relationship.h"
+#include "../qps/entities/Pattern.h"
 
 //#ifndef SPA_READPKB_H
 //#define SPA_READPKB_H
@@ -11,7 +16,15 @@ class ReadPKB {
 public:
 
     // Sets the pointer to the PKB instance if it is not set yet
-    void setInstancePKB(PKB &pkb);
+    void setInstancePKB(PKB& pkb);
+
+    // Returns a vector of string tuples based on the Relationship object passed
+    std::vector<std::vector<std::string>> findRelationship(Relationship rs);
+
+    // Returns a vector of strings based on the Parameter object passed
+    std::vector<std::string> findDesignEntities(Parameter p);
+
+    std::vector<std::vector<std::string>> findPattern(Pattern p);
 
     // Gets a Follows relation in PKB
     bool checkFollows(StmtNum left, StmtNum right);
@@ -72,8 +85,32 @@ public:
     // returns all the statement lines that the constant appears in
     std::unordered_set<StmtNum> getConstantStatementNumbers(Const c);
 
+
+    //This assumes it is Select a pattern a(..., ...)
+    // returns an array containing the matching pattern
+    std::vector<StmtNum> interpretQuery(QueryStub);
+
+    // Select v pattern a (v, _)
+    std::vector<std::vector<std::string>> getLHSAndStmtNum();
+
+    // Select v pattern a (v, "v")
+    std::vector<std::vector<std::string>> getLHSAndStmtNumRHSNoWildcard(std::string rhs);
+
+    // Select v pattern a (v, _"v"_)
+    std::vector<std::vector<std::string>> getLHSAndStmtNumRHSBothWildcard(std::string rhs);
+
+    //  assign a; Select a pattern a (_, "v")
+    virtual std::vector<std::vector<std::string>> getMatchingLHSWildcardRHSNoWildcard(std::string rhs);
+
+    //  assign a; Select a pattern a (_, _"v"_)
+    virtual std::vector<std::vector<std::string>> getMatchingLHSWildcardRHSBothWildcard(std::string rhs);
+
 private:
     PKB* pkbInstance = NULL;
+    std::unordered_map <RelationshipType, StmtStmtRLStorage*> stmtStmtHandlerMap = { {RelationshipType::FOLLOWS, NULL} };
+    std::unordered_map <RelationshipType, StmtEntRLStorage*> stmtEntHandlerMap = {};
+    std::unordered_map <RelationshipType, EntEntRLStorage*> entEntHandlerMap = {};
+        
 };
 
 

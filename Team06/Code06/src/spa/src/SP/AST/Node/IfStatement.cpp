@@ -1,5 +1,5 @@
 #include "IfStatement.h"
 
-void IfStatement::accept(ASTVisitor* visitor) const {
+void IfStatement::accept(ASTVisitor* visitor) {
 	visitor->visitIfStatement(this);
 }

@@ -2,6 +2,7 @@
 
 void ConstantStorage::writeConstant(Const c, StmtNum line) {
     constant_stmtNum[c].insert(line);
+    constNames.insert(c);
     return;
 }
 
@@ -20,4 +21,8 @@ std::unordered_set<StmtNum> ConstantStorage::getConstantStmtNums(Const c) {
         return emptySet;
     }
     return constant_stmtNum.at(c);
+}
+
+std::unordered_set<Const> ConstantStorage::getConstNames() {
+    return constNames;
 }

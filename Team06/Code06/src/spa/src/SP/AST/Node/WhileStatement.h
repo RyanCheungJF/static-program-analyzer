@@ -9,5 +9,5 @@ public:
 	std::unique_ptr<StatementList> stmtList;
 	//int lineNumber;
 
-	void accept(ASTVisitor* visitor) const override;
+	void accept(ASTVisitor* visitor) override;
 };

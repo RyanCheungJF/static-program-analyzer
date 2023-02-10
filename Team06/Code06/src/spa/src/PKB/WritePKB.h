@@ -8,7 +8,7 @@ class WritePKB {
 public:
 
     // Sets the pointer to the PKB instance if it is not set yet
-    void setInstancePKB(PKB &pkb);
+    void setInstancePKB(PKB& pkb);
 
     // Sets Follows relation in PKB
     void setFollows(StmtNum left, StmtNum right);
@@ -47,6 +47,10 @@ public:
     void setConstant(Const c, StmtNum line);
 
     void setConstant(StmtNum line, std::vector<Const> constants);
+
+    void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
+
+    std::unique_ptr<Expression> buildSubtree(std::string rhs);
 
 private:
     PKB* pkbInstance = NULL;

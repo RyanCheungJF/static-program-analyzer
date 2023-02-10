@@ -40,7 +40,7 @@ bool Parameter::isStatementRef(Parameter& p)
 }
 
 bool Parameter::isDsgEntity(Parameter& p) {
-    return isDesignEntity(p.getValue());
+    return isDesignEntity(p.getTypeString());
 }
 
 bool Parameter::isUncheckedSynonym()

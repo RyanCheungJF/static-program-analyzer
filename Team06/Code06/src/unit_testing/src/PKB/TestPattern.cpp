@@ -1,10 +1,182 @@
-//#include "catch.hpp"
-//#include "../../../spa/src/PKB/WritePKB.h"
-//#include "../../../spa/src/PKB/ReadPKB.h"
-//
-//using namespace std;
-//
-//TEST_CASE("All nodes can be added") {
+#include "catch.hpp"
+#include "../../../spa/src/PKB/WritePKB.h"
+#include "../../../spa/src/PKB/ReadPKB.h"
+
+TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    PatternStorage pa;
+    pkb.patternStorage = &pa;
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    //line 1: z = a + b / c
+    //line 2: z = z * 5
+
+    std::string lhs = "z";
+    std::unique_ptr<Expression> line1rhs = writePkb.buildSubtree("a + b / c");
+    std::unique_ptr<Expression> line2rhs = writePkb.buildSubtree("z * 5");
+
+    writePkb.writePattern(lhs, 1, std::move(line1rhs));
+    writePkb.writePattern(lhs, 2, std::move(line2rhs));
+
+    Parameter param1;
+    Parameter param2 = Parameter("z", "fixed_string");
+    Pattern pattern1 = Pattern(param1, param2, "a + b / c");
+    Pattern pattern2 = Pattern(param1, param2, "z * 5");
+
+    std::vector<std::vector<std::string>> res1 = readPkb.findPattern(pattern1);
+    std::vector<std::vector<std::string>> res2 = readPkb.findPattern(pattern2);
+
+    std::vector<std::vector<std::string>> check1 = { {"z", "1"} };
+    std::vector<std::vector<std::string>> check2 = { {"z", "2"} };
+
+    std::cout << "COMPLETE";
+    REQUIRE(res1 == check1); 
+    REQUIRE(res2 == check2);
+}
+
+
+TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    PatternStorage pa;
+    pkb.patternStorage = &pa;
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    //line 1: z = a + b / c
+    //line 2: z = z * 5
+
+    std::string lhs = "z";
+    std::unique_ptr<Expression> line1rhs = writePkb.buildSubtree("a + b / c");
+    std::unique_ptr<Expression> line2rhs = writePkb.buildSubtree("z * 5");
+
+    writePkb.writePattern(lhs, 1, std::move(line1rhs));
+    writePkb.writePattern(lhs, 2, std::move(line2rhs));
+
+    Parameter param1;
+    Parameter param2 = Parameter("z", "fixed_string");
+    Pattern pattern1 = Pattern(param1, param2, "_b / c_");
+    Pattern pattern2 = Pattern(param1, param2, "_5_");
+
+    std::vector<std::vector<std::string>> res1 = readPkb.findPattern(pattern1);
+    std::vector<std::vector<std::string>> res2 = readPkb.findPattern(pattern2);
+
+    std::vector<std::vector<std::string>> check1 = { {"z", "1"} };
+    std::vector<std::vector<std::string>> check2 = { {"z", "2"} };
+
+    std::cout << "COMPLETE";
+    REQUIRE(res1 == check1);
+    REQUIRE(res2 == check2);
+    REQUIRE(readPkb.findPattern(pattern2).size() == 1);
+}
+
+
+TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    PatternStorage pa;
+    pkb.patternStorage = &pa;
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    //line 1: z = a + b / c
+    //line 2: z = z * 5
+    std::string lhs = "z";
+    std::unique_ptr<Expression> line1rhs = writePkb.buildSubtree("a + b / c");
+    std::unique_ptr<Expression> line2rhs = writePkb.buildSubtree("z * 5");
+
+    writePkb.writePattern(lhs, 1, std::move(line1rhs));
+    writePkb.writePattern(lhs, 2, std::move(line2rhs));
+   
+    Parameter param1;
+    Parameter param2 = Parameter("z", "fixed_string");
+    Pattern pattern1 = Pattern(param1, param2, "_");
+
+    std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern1);
+
+    std::vector<std::vector<std::string>> check = { {"z", "1"}, {"z", "2"} };
+
+    std::cout << "COMPLETE";
+    REQUIRE(res == check);
+}
+
+TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    PatternStorage pa;
+    pkb.patternStorage = &pa;
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    //line 1: z = a + b / c
+    //line 2: z = z * 5
+
+    std::string lhs = "z";
+    std::unique_ptr<Expression> line1rhs = writePkb.buildSubtree("a + b / c");
+    std::unique_ptr<Expression> line2rhs = writePkb.buildSubtree("z * 5");
+
+    writePkb.writePattern(lhs, 1, std::move(line1rhs));
+    writePkb.writePattern(lhs, 2, std::move(line2rhs));
+
+    Parameter param1;
+    Parameter param2 = Parameter("_", "wildcard");
+    Pattern pattern1 = Pattern(param1, param2, "a + b / c");
+    Pattern pattern2 = Pattern(param1, param2, "z * 5");
+    Pattern pattern3 = Pattern(param1, param2, "z");
+
+    std::vector<std::vector<std::string>> res1 = readPkb.findPattern(pattern1);
+    std::vector<std::vector<std::string>> res2 = readPkb.findPattern(pattern2);
+    std::vector<std::vector<std::string>> res3 = readPkb.findPattern(pattern3);
+
+
+    std::vector<std::vector<std::string>> check1 = { {"z", "1"} };
+    std::vector<std::vector<std::string>> check2 = { {"z", "2"} };
+    std::vector<std::vector<std::string>> check3 = {};
+
+    std::cout << "COMPLETE";
+    REQUIRE(res1 == check1);
+    REQUIRE(res2 == check2);
+    REQUIRE(res3 == check3);
+}
+
+TEST_CASE("Support for Select v pattern a (v, _)\'") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    PatternStorage pa;
+    pkb.patternStorage = &pa;
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    //line 1: z = a + b / c
+    //line 2: z = z * 5
+
+    std::string lhs = "z";
+    std::unique_ptr<Expression> line1rhs = writePkb.buildSubtree("a + b / c");
+    std::unique_ptr<Expression> line2rhs = writePkb.buildSubtree("z * 5");
+
+    writePkb.writePattern(lhs, 1, std::move(line1rhs));
+    writePkb.writePattern(lhs, 2, std::move(line2rhs));
+
+    Parameter param1;
+    Parameter param2 = Parameter("v", "variable");
+    Pattern pattern = Pattern(param1, param2, "_");
+
+    std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern);
+    std::vector<std::vector<std::string>> check = { {"z", "1"}, {"z", "2"} };
+
+    std::cout << "COMPLETE";
+
+    REQUIRE(res == check);
+}
+
+//TEST_CASE("Support for pattern's inorder traversal") {
 //    WritePKB writePkb;
 //    ReadPKB readPkb;
 //    PKB pkb;
@@ -13,162 +185,28 @@
 //    writePkb.setInstancePKB(pkb);
 //    readPkb.setInstancePKB(pkb);
 //
-//    // c = 5 + 2 * c
-//    /* Looks something like this:
-//     *      assign
-//     *    c        +
-//     *          5     *
-//     *              2   c
-//     */
-//    Node root = Node("assign", 1);
-//    Node lhs = Node("c", 1);
-//    Node n1 = Node("5", 1);
-//    Node n2 = Node("+", 1);
-//    Node n3 = Node("2", 1);
-//    Node n4 = Node("*", 1);
-//    Node n5 = Node("c", 1);
-//    root.left = &lhs;
-//    root.right = &n2;
-//    n2.left = &n1;
-//    n2.right = &n4;
-//    n4.left = &n3;
-//    n4.right = &n5;
-//    pa.writePatternNode(root);
+//    //line 1: z = a + b / c
+//    //line 2: z = z * 5
 //
-//    // a = b / c
-//    /* Looks something like this:
-//     *      assign
-//     *    a        /
-//     *          b     c
-//     */
-//    Node root2 = Node("assign", 5);
-//    Node n6 = Node("a", 5);
-//    Node n7 = Node("b", 5);
-//    Node n8 = Node("/", 5);
-//    Node n9 = Node("c", 5);
-//    root2.left = &n6;
-//    root2.right = &n8;
-//    n8.left = &n7;
-//    n8.right = &n9;
-//    pa.writePatternNode(root2);
+//    std::string lhs = "z";
+//    std::unique_ptr<Expression> line1rhs = writePkb.buildSubtree("a + b / c");
+//    std::unique_ptr<Expression> line2rhs = writePkb.buildSubtree("z * 5");
+//    std::unique_ptr<Expression> line3rhs = writePkb.buildSubtree("x * 5");
 //
-//    // a = d * 5
-//    /* Looks something like this:
-//     *      assign
-//     *    a        *
-//     *          d     5
-//     */
-//    Node root3 = Node("assign", 8);
-//    Node n10 = Node("a", 8);
-//    Node n11 = Node("d", 8);
-//    Node n12 = Node("*", 8);
-//    Node n13 = Node("5", 8);
-//    root3.left = &n10;
-//    root3.right = &n12;
-//    n12.left = &n11;
-//    n12.right = &n13;
-//    pa.writePatternNode(root3);
+//    writePkb.writePattern(lhs, 1, std::move(line1rhs));
+//    writePkb.writePattern(lhs, 2, std::move(line2rhs));
+//    writePkb.writePattern(lhs, 3, std::move(line3rhs));
+//
+//    std::vector<StmtNum> lines_qs1 = readPkb.interpretQuery(qs1);
+//    std::vector<StmtNum> lines_qs2 = readPkb.interpretQuery(qs2);
 //
 //    bool res = true;
-//    std::vector<StmtNum> allAssignStatements = pa.getAllAssignStatements();
-//    res = res && allAssignStatements.size() == 3;
+//    res = res && lines_qs1.size() == 1;
+//    res = res && lines_qs2.size() == 0;
 //
-//    /*
-//    std::sort(allAssignStatements.begin(), allAssignStatements.end());
-//    // prints out allAssignStatements
-//    std::copy(allAssignStatements.begin(),
-//              allAssignStatements.end(),
-//              std::ostream_iterator<int>(std::cout, " "));
-//    std::cout << "\n";
-//     */
-//
+//    std::cout << "COMPLETE";
 //    REQUIRE(res);
 //}
-//
-//TEST_CASE("Nodes added with LHS are retrieved correctly") {
-//    WritePKB writePkb;
-//    ReadPKB readPkb;
-//    PKB pkb;
-//    PatternStorage pa;
-//    pkb.patternStorage = &pa;
-//    writePkb.setInstancePKB(pkb);
-//    readPkb.setInstancePKB(pkb);
-//
-//    // c = 5 + 2 * c
-//    /* Looks something like this:
-//     *      assign
-//     *    c        +
-//     *          5     *
-//     *              2   c
-//     */
-//    Node root = Node("assign", 1);
-//    Node lhs = Node("c", 1);
-//    Node n1 = Node("5", 1);
-//    Node n2 = Node("+", 1);
-//    Node n3 = Node("2", 1);
-//    Node n4 = Node("*", 1);
-//    Node n5 = Node("c", 1);
-//    root.left = &lhs;
-//    root.right = &n2;
-//    n2.left = &n1;
-//    n2.right = &n4;
-//    n4.left = &n3;
-//    n4.right = &n5;
-//    pa.writePatternNode(root);
-//
-//    // a = b / c
-//    /* Looks something like this:
-//     *      assign
-//     *    a        /
-//     *          b     c
-//     */
-//    Node root2 = Node("assign", 5);
-//    Node n6 = Node("a", 5);
-//    Node n7 = Node("b", 5);
-//    Node n8 = Node("/", 5);
-//    Node n9 = Node("c", 5);
-//    root2.left = &n6;
-//    root2.right = &n8;
-//    n8.left = &n7;
-//    n8.right = &n9;
-//    pa.writePatternNode(root2);
-//
-//    // a = d * 5
-//    /* Looks something like this:
-//     *      assign
-//     *    a        *
-//     *          d     5
-//     */
-//    Node root3 = Node("assign", 8);
-//    Node n10 = Node("a", 8);
-//    Node n11 = Node("d", 8);
-//    Node n12 = Node("*", 8);
-//    Node n13 = Node("5", 8);
-//    root3.left = &n10;
-//    root3.right = &n12;
-//    n12.left = &n11;
-//    n12.right = &n13;
-//    pa.writePatternNode(root3);
-//
-//    bool res = true;
-//    std::vector<StmtNum> aAssignStatements = pa.getMatchingLHS("a");
-//    std::vector<StmtNum> cAssignStatements = pa.getMatchingLHS("c");
-//    res = res && aAssignStatements.size() == 2;
-//    res = res && cAssignStatements.size() == 1;
-//
-//    /*
-//    // prints out aAssignStatements
-//    std::copy(aAssignStatements.begin(),
-//              aAssignStatements.end(),
-//              std::ostream_iterator<int>(std::cout, " "));
-//    std::cout << "\n";
-//    // prints out cAssignStatements
-//    std::copy(cAssignStatements.begin(),
-//              cAssignStatements.end(),
-//              std::ostream_iterator<int>(std::cout, " "));
-//    std::cout << "\n";
-//    */
-//
-//    REQUIRE(res);
-//}
-//
+
+
+

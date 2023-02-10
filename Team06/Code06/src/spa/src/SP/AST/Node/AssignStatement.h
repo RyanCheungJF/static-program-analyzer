@@ -10,5 +10,9 @@ public:
 	std::string varName;
 	std::unique_ptr<Expression> expr;
 
-	void accept(ASTVisitor* visitor) const override;
+	AssignStatement();
+
+	AssignStatement(std::string varName, std::unique_ptr<Expression> expr);
+
+	void accept(ASTVisitor* visitor) override;
 };

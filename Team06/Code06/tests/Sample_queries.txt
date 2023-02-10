@@ -4,8 +4,8 @@ Select w such that Parent(w, 7)
 none
 5000
 2 - comment
-if ifs;
-Select ifs such that Follows(5, ifs)
+if ifs; assign a;
+Select ifs such that Follows(a, ifs)
 6
 5000
 3 - comment

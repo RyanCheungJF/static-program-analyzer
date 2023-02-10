@@ -6,4 +6,5 @@ target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 # Add subdirectories
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/SP")
 # Links libraries
+
 target_link_libraries(spa sp)

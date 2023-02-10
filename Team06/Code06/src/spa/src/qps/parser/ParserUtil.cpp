@@ -106,6 +106,7 @@ string removeCharFromString(string s, char c) {
 	s.erase(remove(s.begin(), s.end(), c), s.end());
 	return s;
 }
+
 tuple<string, size_t> extractSubStringUntilDelimiter(const string& original, int start, string delimiter)
 {
 	size_t end = original.find(delimiter, start);

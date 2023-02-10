@@ -4,10 +4,11 @@
 
 
 #include "qps/parser/QPSParser.h"
+#include "PKB/ReadPKB.h"
 
 class QPS {
 public:
-    vector<string> processQueries(string);
+    vector<string> processQueries(string, ReadPKB&);
 
 };
 

@@ -7,5 +7,9 @@ class CallStatement : public Statement {
 public:
 	std::string procName;
 
-	void accept(ASTVisitor* visitor) const override;
+	CallStatement();
+
+	CallStatement(std::string procName);
+
+	void accept(ASTVisitor* visitor) override;
 };
