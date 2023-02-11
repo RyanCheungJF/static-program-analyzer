@@ -11,13 +11,13 @@ typedef std::string Ent;
 typedef std::string ProcedureName;
 typedef int StmtNum;
 
-class UsesStorage {
+class ModifiesStorage {
 public:
-    virtual void writeUsesProcedure(ProcedureName name, std::vector<Ent> entities);
-    virtual void writeUsesStmtnum(StmtNum num, std::vector<Ent> entities);
+    virtual void writeModifiesProcedure(ProcedureName name, std::vector<Ent> entities);
+    virtual void writeModifiesStmtnum(StmtNum num, std::vector<Ent> entities);
 
-    virtual std::unordered_set<Ent> getUsesProcedureEntities(ProcedureName name);
-    virtual std::unordered_set<Ent> getUsesStmtnumEntities(StmtNum num);
+    virtual std::unordered_set<Ent> getModifiesProcedureEntities(ProcedureName name);
+    virtual std::unordered_set<Ent> getModifiesStmtnumEntities(StmtNum num);
 
 private:
     std::unordered_map<ProcedureName, std::unordered_set<Ent>> procName_ent;
