@@ -111,8 +111,8 @@ std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
     }
     else {
         if (rhs == "_") {
-            std::cout << "hitting getMatchingLHS ie pattern(_, \"x\") for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getMatchingLHSWildcardRHSNoWildcard(rhs);
+            std::cout << "hitting getMatchingLHS ie pattern(_, _) for " << lhsString << " = " << rhs << "\n";
+            return pkbInstance->patternStorage->getLHSAndStmtNum();
         }
         else if (leftWildcard && rightWildcard) {
             std::cout << "hitting getMatchingRHSBothWildcard ie pattern(_, _\"x\"_) for " << lhsString << " = " << rhs << "\n";
@@ -120,7 +120,7 @@ std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
         }
         else {
             std::cout << "hitting getMatchingExact ie pattern(_, \"x\") for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getLHSAndStmtNumRHSNoWildcard(rhs);
+            return pkbInstance->patternStorage->getMatchingLHSWildcardRHSNoWildcard(rhs);
         }
     }
 }

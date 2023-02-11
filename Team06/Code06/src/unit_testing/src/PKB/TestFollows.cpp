@@ -67,8 +67,7 @@ TEST_CASE("Checks that writing and reading from ReadPKB works for Follows") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    FollowsStorage fs;
-    pkb.followsStorage = &fs;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -90,10 +89,7 @@ TEST_CASE("Checks that a non-existent Follows relationship returns an empty vect
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    FollowsStorage fs;
-    pkb.followsStorage = &fs;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -115,10 +111,7 @@ TEST_CASE("Checks that given a followee and a synonym, ReadPKB returns relevant 
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    FollowsStorage fs;
-    pkb.followsStorage = &fs;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -142,10 +135,7 @@ TEST_CASE("Checks that given a followee and a wildcard, ReadPKB returns all foll
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    FollowsStorage fs;
-    pkb.followsStorage = &fs;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -167,10 +157,7 @@ TEST_CASE("Checks that given a synonym and a follower, ReadPKB returns relevant 
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    FollowsStorage fs;
-    pkb.followsStorage = &fs;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -195,9 +182,7 @@ TEST_CASE("Checks that given a synonym and a synonym, ReadPKB returns relevant f
     ReadPKB readPkb;
     PKB pkb;
     FollowsStorage fs;
-    pkb.followsStorage = &fs;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -223,9 +208,7 @@ TEST_CASE("Checks that given a synonym and a wildcard, ReadPKB returns relevant 
     ReadPKB readPkb;
     PKB pkb;
     FollowsStorage fs;
-    pkb.followsStorage = &fs;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -252,9 +235,7 @@ TEST_CASE("Checks that given a wildcard and a follower, ReadPKB returns relevant
     ReadPKB readPkb;
     PKB pkb;
     FollowsStorage fs;
-    pkb.followsStorage = &fs;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -278,9 +259,7 @@ TEST_CASE("Checks that given a wildcard and a synonym, ReadPKB returns relevant 
     ReadPKB readPkb;
     PKB pkb;
     FollowsStorage fs;
-    pkb.followsStorage = &fs;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -305,9 +284,7 @@ TEST_CASE("Checks that given a wildcard and a wildcard, ReadPKB returns relevant
     ReadPKB readPkb;
     PKB pkb;
     FollowsStorage fs;
-    pkb.followsStorage = &fs;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -331,9 +308,7 @@ TEST_CASE("Checks that given a followee, if it does not have a certain follower,
     ReadPKB readPkb;
     PKB pkb;
     FollowsStorage fs;
-    pkb.followsStorage = &fs;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -356,9 +331,7 @@ TEST_CASE("Checks that given a follower, if it does not have a certain followee,
     ReadPKB readPkb;
     PKB pkb;
     FollowsStorage fs;
-    pkb.followsStorage = &fs;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -381,9 +354,7 @@ TEST_CASE("Checks that PKB pointer in WritePKB and ReadPKB is set to first pkb i
     ReadPKB readPkb;
     PKB pkb1;
     FollowsStorage fs;
-    pkb1.followsStorage = &fs;
-    StmtStorage sts;
-    pkb1.statementStorage = &sts;
+    pkb1.initializePkb();
     writePkb.setInstancePKB(pkb1);
     readPkb.setInstancePKB(pkb1);
 
@@ -391,7 +362,7 @@ TEST_CASE("Checks that PKB pointer in WritePKB and ReadPKB is set to first pkb i
 
     PKB pkb2;
     FollowsStorage fs2;
-    pkb2.followsStorage = &fs2;
+    pkb2.initializePkb();
     writePkb.setInstancePKB(pkb2);
 
     Parameter param1 = Parameter("1", "fixed_int");
@@ -410,7 +381,7 @@ TEST_CASE("Checks that PKB pointer in WritePKB and ReadPKB is set to first pkb i
     res = readPkb.findRelationship(rs);
     REQUIRE(check == res);
 }
-
+/*
 TEST_CASE("Checks that different PKB running instances can point to the same API") {
 
     WritePKB writePkb;
@@ -440,3 +411,4 @@ TEST_CASE("Checks that different PKB running instances can point to the same API
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(check == res);
 }
+*/

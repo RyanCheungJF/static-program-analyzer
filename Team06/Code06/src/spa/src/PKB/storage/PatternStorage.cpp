@@ -79,8 +79,8 @@ std::vector<std::vector<std::string>> PatternStorage::getLHSAndStmtNum() {
         for (const auto& p : i.second) {
             Expression* actual = p.second.get();
             std::vector<std::string> curr;
-            curr.push_back(i.first);
             curr.push_back(std::to_string(p.first));
+            curr.push_back(i.first);
             res.push_back(curr);
         }
     }
@@ -96,8 +96,8 @@ std::vector<std::vector<std::string>> PatternStorage::getLHSAndStmtNumRHSNoWildc
             Expression* actual = p.second.get();
             std::vector<std::string> curr;
             if (isSameTree(expected.get(), actual)) {
-                curr.push_back(i.first);
                 curr.push_back(std::to_string(p.first));
+                curr.push_back(i.first);
                 res.push_back(curr);
             }
         }
@@ -113,8 +113,8 @@ std::vector<std::vector<std::string>> PatternStorage::getLHSAndStmtNumRHSBothWil
             Expression* actual = p.second.get();
             std::vector<std::string> curr;
             if (isSubTree(expected.get(), actual)) {
-                curr.push_back(i.first);
                 curr.push_back(std::to_string(p.first));
+                curr.push_back(i.first);
                 res.push_back(curr);
             }
         }
@@ -135,7 +135,7 @@ std::vector<std::vector<std::string>> PatternStorage::getMatchingExact(std::stri
     for (const auto& p : lhs_stmtNum_rhsPostfix.at(lhs)) {
         Expression* actual = p.second.get();
         if (isSameTree(expected.get(), actual)) {
-            res.push_back({ lhs, std::to_string(p.first) });
+            res.push_back({ std::to_string(p.first), lhs });
         }
     }
     return res;
@@ -153,7 +153,7 @@ std::vector<std::vector<std::string>> PatternStorage::getMatchingRHSBothWildcard
     for (const auto& p : lhs_stmtNum_rhsPostfix.at(lhs)) {
         Expression* actual = p.second.get();
         if (isSubTree(expected.get(), actual)) {
-            res.push_back({ lhs, std::to_string(p.first) });
+            res.push_back({ std::to_string(p.first), lhs });
         }
     }
     return res;
@@ -169,7 +169,7 @@ std::vector<std::vector<std::string>> PatternStorage::getMatchingLHS(std::string
 
     std::vector<std::vector<std::string>> res;
     for (const auto& p : lhs_stmtNum_rhsPostfix.at(lhs)) {
-        res.push_back({ lhs, std::to_string(p.first) });
+        res.push_back({ std::to_string(p.first), lhs });
     }
     return res;
 }
@@ -183,8 +183,8 @@ std::vector<std::vector<std::string>> PatternStorage::getMatchingLHSWildcardRHSN
             Expression* actual = p.second.get();
             std::vector<std::string> curr;
             if (isSameTree(expected.get(), actual)) {
-                curr.push_back(i.first);
                 curr.push_back(std::to_string(p.first));
+                curr.push_back(i.first);
                 res.push_back(curr);
             }
         }
@@ -201,8 +201,8 @@ std::vector<std::vector<std::string>> PatternStorage::getMatchingLHSWildcardRHSB
             Expression* actual = p.second.get();
             std::vector<std::string> curr;
             if (isSubTree(expected.get(), actual)) {
-                curr.push_back(i.first);
                 curr.push_back(std::to_string(p.first));
+                curr.push_back(i.first);
                 res.push_back(curr);
             }
         }
