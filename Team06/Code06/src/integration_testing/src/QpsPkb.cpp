@@ -108,7 +108,7 @@ PKB buildPkb() {
 
 	lhs = "y";
 	patternTree = writePkb.buildSubtree("x + 2");
-	writePkb.writePattern(lhs, 4, smove(patternTree));
+	writePkb.writePattern(lhs, 4, move(patternTree));
 
 	lhs = "x";
 	patternTree = writePkb.buildSubtree("x + 2");
@@ -204,7 +204,7 @@ TEST_CASE("Single Select Query") {
 
 		result = qps.processQueries(query, readPkb);
 		REQUIRE(result.size() == 1);
-		REQUIRE(exists(results, "9"));
+		REQUIRE(exists(result, "9"));
 	}
 
 	SECTION("Select assign") {
@@ -320,7 +320,7 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
 		
 		SECTION("syn, syn") {
 			string query = R"(
-			stmt s1; stmt s2;
+			stmt s1, s2;
 			Select s2 such that Parent(s1, s2))";
 
 			result = qps.processQueries(query, readPkb);
@@ -345,7 +345,7 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
 
 		SECTION("syn, syn") {
 			string query = R"(
-			stmt s1; stmt s2;
+			stmt s1, s2;
 			Select s1 such that Parent*(s1, s2))";
 
 			result = qps.processQueries(query, readPkb);
@@ -414,7 +414,7 @@ TEST_CASE("Select synonym from single assign pattern clause, synonym is in claus
 		Select a pattern a("y", _))";
 
 		result = qps.processQueries(query, readPkb);
-		REQUIRE(results.size() == 2);
+		REQUIRE(result.size() == 2);
 		REQUIRE(exists(result, "4"));
 		REQUIRE(exists(result, "8"));
 	}
@@ -430,25 +430,110 @@ TEST_CASE("Select synonym from single assign pattern clause, synonym is in claus
 	}
 }
 
-TEST_CASE("Select synonym from multi clause, synonym is in clause") {
+TEST_CASE("Select synonym from multi clause, synonym is in both clauses") {
 	PKB pkb = buildPkb();
 	ReadPKB readPkb;
 	readPkb.setInstancePKB(pkb);
 	QPS qps;
 	vector<string> result;
 
-	SECTION("syn", "partial wildcard") {
+	SECTION("select assign from Follows*, pattern") {
 		string query = R"(
 		assign a; variable v;
-		Select a such that Follows*(a, 6) pattern a(v, _"x"_))";
+		Select a such that Follows*(1, a) pattern a(v, _"x"_))";
 
 		result = qps.processQueries(query, readPkb);
-		REQUIRE(result.size() == 4);
-		REQUIRE(exists(result, "4"));
+		REQUIRE(result.size() == 1);
 		REQUIRE(exists(result, "6"));
-		REQUIRE(exists(result, "8"));
+	}
+
+	SECTION("Check that changing order of clauses does not affect results") {
+		string query1 = R"(
+		assign a; variable v;
+		Select a such that Follows*(1, a) pattern a(v, _"x"_))";
+
+		result = qps.processQueries(query1, readPkb);
+
+		string query2 = R"(
+		assign a; variable v;
+		Select a pattern a(v, _"x"_) such that Follows*(1, a))";
+
+		vector<string> result2 = qps.processQueries(query2, readPkb);
+
+		REQUIRE(result == result2);
+	}
+
+	SECTION("select assign from pattern, Parent") {
+		string query = R"(
+		assign a; variable v; while w;
+		Select a pattern a(v, _"x"_) such that Parent(w, a))";
+
+		result = qps.processQueries(query, readPkb);
+		REQUIRE(result.size() == 1);
 		REQUIRE(exists(result, "11"));
+	}
+
+	SECTION("select variable from Parent*, pattern") {
+		string query = R"(
+		assign a; variable v; stmt s;
+		Select v pattern a(v, _"x"_) such that Parent(s, a))";
+
+		result = qps.processQueries(query, readPkb);
+		REQUIRE(result.size() == 0);
 	}
 }
 
+TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
+	PKB pkb = buildPkb();
+	ReadPKB readPkb;
+	readPkb.setInstancePKB(pkb);
+	QPS qps;
+	vector<string> result;
+	SECTION("synonym in ONE clause") {
+		SECTION("Both clauses are non-empty/true") {
+			string query = R"(
+			assign a; variable v;
+			Select a such that Follows*(1, 2) pattern a(v, _"x"_))";
 
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 5);
+			REQUIRE(exists(result, "1"));
+			REQUIRE(exists(result, "4"));
+			REQUIRE(exists(result, "6"));
+			REQUIRE(exists(result, "8"));
+			REQUIRE(exists(result, "11"));
+		}
+
+		SECTION("One clause is empty/false") {
+			string query = R"(
+			assign a; variable v;
+			Select a such that Parent(1, 2) pattern a(v, _"x"_))";
+
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 0);
+		}
+
+		SECTION("Both clauses are empty/false") {
+			string query = R"(
+			assign a; variable v;
+			Select a such that Parent(1, 2) pattern a(v, "x"))";
+
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 0);
+		}
+	}
+
+	SECTION("synonym in none of the clauses") {
+		SECTION("Both clauses are non-empty/true") {
+			string query = R"(
+			assign a; variable v; constant c;
+			Select c such that Follows*(1, 2) pattern a(v, _"x"_))";
+
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 3);
+			REQUIRE(exists(result, "0"));
+			REQUIRE(exists(result, "1"));
+			REQUIRE(exists(result, "2"));
+		}
+	}
+}
