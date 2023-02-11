@@ -8,14 +8,7 @@ TEST_CASE("findDesignEntities() Tests") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ConstantStorage cs;
-    pkb.constantStorage = &cs;
-    ProcedureStorage ps;
-    pkb.procedureStorage = &ps;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
-    EntityStorage es;
-    pkb.entityStorage = &es;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 

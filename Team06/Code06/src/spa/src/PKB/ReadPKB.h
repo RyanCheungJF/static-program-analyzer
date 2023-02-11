@@ -58,9 +58,9 @@ public:
 
 private:
     PKB* pkbInstance = NULL;
-    std::unordered_map <RelationshipType, StmtStmtRLStorage*> stmtStmtHandlerMap = { {RelationshipType::FOLLOWS, NULL} };
-    std::unordered_map <RelationshipType, StmtEntRLStorage*> stmtEntHandlerMap = {};
-    std::unordered_map <RelationshipType, EntEntRLStorage*> entEntHandlerMap = {};
+    std::unordered_map <RelationshipType, std::shared_ptr<StmtStmtRLStorage>> stmtStmtHandlerMap = { {RelationshipType::FOLLOWS, NULL} };
+    std::unordered_map <RelationshipType, std::shared_ptr<StmtEntRLStorage>> stmtEntHandlerMap = {};
+    std::unordered_map <RelationshipType, std::shared_ptr<EntEntRLStorage>> entEntHandlerMap = {};
         
 };
 

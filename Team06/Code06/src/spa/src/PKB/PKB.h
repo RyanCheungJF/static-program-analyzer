@@ -27,15 +27,19 @@ public:
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST (PROC p);
 
-    FollowsStorage* followsStorage;
-    FollowsTStorage* followsTStorage;
-    ParentStorage* parentStorage;
-    std::shared_ptr<ParentTStorage> parentTStorage;
-    StmtStorage* statementStorage;
-    EntityStorage* entityStorage;
-    ProcedureStorage* procedureStorage;
-    PatternStorage* patternStorage;
-    ConstantStorage* constantStorage;
+    void initializePkb();
+    
+    friend class ReadPKB;
+    friend class WritePKB;
 
 private:
+    std::shared_ptr<FollowsStorage> followsStorage;
+    std::shared_ptr<FollowsTStorage> followsTStorage;
+    std::shared_ptr<ParentStorage> parentStorage;
+    std::shared_ptr<ParentTStorage> parentTStorage;
+    std::shared_ptr<StmtStorage> statementStorage;
+    std::shared_ptr<EntityStorage> entityStorage;
+    std::shared_ptr<ProcedureStorage> procedureStorage;
+    std::shared_ptr<ConstantStorage> constantStorage;
+    std::shared_ptr<PatternStorage> patternStorage;
 };
