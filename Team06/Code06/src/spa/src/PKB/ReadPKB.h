@@ -57,11 +57,34 @@ public:
     std::unordered_set<StmtNum> getConstantStatementNumbers(Const c);
 
 
+    std::unordered_set<StmtNum> getRightWildcard(StmtNum parent);
+    std::unordered_set<StmtNum> getLeftWildcard(StmtNum child);
+    std::pair<std::vector<StmtNum>, std::vector<StmtNum>> getAllPairs();
+
     std::unordered_set<Ent> getUsesProcedure(ProcedureName name);
+
     std::unordered_set<Ent> getUsesStmtnum(StmtNum num);
 
     std::unordered_set<Ent> getModifiesProcedure(ProcedureName name);
+
     std::unordered_set<Ent> getModifiesStmtnum(StmtNum num);
+
+
+    std::unordered_set<StmtNum> getFollowsRightWildcard(StmtNum followee);
+    std::unordered_set<StmtNum> getFollowsLeftWildcard(StmtNum follower);
+    std::pair<std::vector<StmtNum>, std::vector<StmtNum>> getFollowsAllPairs();
+
+    std::unordered_set<StmtNum> getFollowsTRightWildcard(StmtNum followee);
+    std::unordered_set<StmtNum> getFollowsTLeftWildcard(StmtNum follower);
+    std::pair<std::vector<StmtNum>, std::vector<StmtNum>> getFollowsTAllPairs();
+
+    std::unordered_set<StmtNum> getParentRightWildcard(StmtNum parent);
+    std::unordered_set<StmtNum> getParentLeftWildcard(StmtNum child);
+    std::pair<std::vector<StmtNum>, std::vector<StmtNum>> getParentAllPairs();
+
+    std::unordered_set<StmtNum> getParentTRightWildcard(StmtNum parent);
+    std::unordered_set<StmtNum> getParentTLeftWildcard(StmtNum child);
+    std::pair<std::vector<StmtNum>, std::vector<StmtNum>> getParentTAllPairs();
 
 private:
     PKB* pkbInstance = NULL;
