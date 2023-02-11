@@ -27,6 +27,9 @@ public:
     virtual void writeUsesProcedure(ProcedureName name, std::vector<Ent> entities);
     virtual void writeUsesStmtnum(StmtNum num, std::vector<Ent> entities);
 
+    virtual std::unordered_set<Ent> getUsesProcedureEntities(ProcedureName name);
+    virtual std::unordered_set<Ent> getUsesStmtnumEntities(StmtNum num);
+
 private:
     std::unordered_map<ProcedureName, std::unordered_set<Ent>> procName_ent;
     std::unordered_map<StmtNum, std::unordered_set<Ent>> stmtNum_ent;
