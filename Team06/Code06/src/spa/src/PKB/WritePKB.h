@@ -13,14 +13,14 @@ public:
     // Sets Follows relation in PKB
     void setFollows(StmtNum left, StmtNum right);
 
-
     // Sets FollowsT relation in PKB
     void setFollowsT(std::vector<std::pair<StmtNum, StmtNum>> followee_follower);
-
 
     // Sets Parent relation in PKB
     void setParent(StmtNum parent, StmtNum child);
 
+    // Sets ParentT relation in PKB
+    void setParentT(std::vector<std::pair<StmtNum, StmtNum>> parentChildrPairs);
 
     // Sets the statement along with the statement lines that they appear in
     void setStatement(Stmt s, std::vector<StmtNum> lines);
@@ -48,9 +48,19 @@ public:
 
     void setConstant(StmtNum line, std::vector<Const> constants);
 
+
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
     std::unique_ptr<Expression> buildSubtree(std::string rhs);
+
+
+    // Sets Uses relation in PKB
+    void setUsesProcedure(std::string name, std::vector<Ent> entities);
+    void setUsesStmtnum(StmtNum num, std::vector<Ent> entities);
+
+    // Sets Modifies relation in PKB
+    void setModifiesProcedure(std::string name, std::vector<Ent> entities);
+    void setModifiesStmtnum(StmtNum num, std::vector<Ent> entities);
 
 private:
     PKB* pkbInstance = NULL;

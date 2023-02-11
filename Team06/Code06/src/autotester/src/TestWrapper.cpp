@@ -13,13 +13,7 @@ volatile bool AbstractWrapper::GlobalStop = false;
 TestWrapper::TestWrapper() {
 	// create any objects here as instance variables of this class
 	// as well as any initialization required for your spa program
-	pkb.entityStorage = &et;
-	pkb.procedureStorage = &ps;
-	pkb.statementStorage = &sts;
-	pkb.followsStorage = &fs;
-	pkb.followsTApi = &ft;
-	pkb.constantStorage = &c;
-	pkb.patternStorage = &pt;
+	pkb.initializePkb();
 	writePKB.setInstancePKB(pkb);
 	readPKB.setInstancePKB(pkb);
 }

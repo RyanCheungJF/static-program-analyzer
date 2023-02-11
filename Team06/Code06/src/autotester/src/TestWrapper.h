@@ -19,7 +19,7 @@ private:
     ReadPKB readPKB;
 	PKB pkb;
 	FollowsStorage fs;
-	FollowsT ft;
+	FollowsTStorage ft;
 	EntityStorage et;
     ConstantStorage c;
     PatternStorage pt;
