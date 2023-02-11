@@ -16,8 +16,8 @@ public:
     virtual void writeModifiesProcedure(ProcedureName name, std::vector<Ent> entities);
     virtual void writeModifiesStmtnum(StmtNum num, std::vector<Ent> entities);
 
-    virtual std::unordered_set<Ent> getModifiesProcedureEntities(ProcedureName name);
-    virtual std::unordered_set<Ent> getModifiesStmtnumEntities(StmtNum num);
+    virtual std::unordered_set<Ent> getModifiesProcedure(ProcedureName name);
+    virtual std::unordered_set<Ent> getModifiesStmtnum(StmtNum num);
 
 private:
     std::unordered_map<ProcedureName, std::unordered_set<Ent>> procName_ent;
