@@ -7,6 +7,11 @@ DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writeP
 	writePkb = writePKB;
 }
 
+void DesignExtractor::populatePKB() {
+	extractEntities();
+	extractRelationships();
+}
+
 void DesignExtractor::extractRelationships() {
 	FollowsExtractorVisitor followsExtractor(writePkb);
 	ParentExtractorVisitor parentExtractor(writePkb);
@@ -29,7 +34,7 @@ void DesignExtractor::extractEntities() {
 	ProcedureExtractorVisitor procedureVisitor(writePkb);
 	EntRefExtractorVisitor entRefVisitor(writePkb);
 
-	//std::vector<ASTVisitor> { statementVisitor, procedureVisitor };
+	//std::vector<ASTVisitor*> { &statementVisitor, &procedureVisitor };
 
 	for (const auto& procedure : ASTroot->procedureList) {
 		procedure->accept(&procedureVisitor);
@@ -45,27 +50,27 @@ void DesignExtractor::extractEntities() {
 }
 
 void DesignExtractor::recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
-	if (auto i = dynamic_cast<IfStatement*>(recurseStmt)) {
+	if (auto i = CAST_TO(IfStatement, recurseStmt)) {
 		i->thenStmtList->accept(visitor);
 		for (const auto& statement : i->thenStmtList->statements) {
 			statement->accept(visitor);
-			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
+			if (auto i = CAST_TO(IfStatement, statement.get()) || CAST_TO(WhileStatement, statement.get())) {
 				recurseStatementHelper(statement.get(), visitor);
 			}
 		}
 		i->elseStmtList->accept(visitor);
 		for (const auto& statement : i->elseStmtList->statements) {
 			statement->accept(visitor);
-			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
+			if (auto i = CAST_TO(IfStatement, statement.get()) || CAST_TO(WhileStatement, statement.get())) {
 				recurseStatementHelper(statement.get(), visitor);
 			}
 		}
 	}
-	else if (auto i = dynamic_cast<WhileStatement*>(recurseStmt)) {
+	else if (auto i = CAST_TO(WhileStatement, recurseStmt)) {
 		i->stmtList->accept(visitor);
 		for (const auto& statement : i->stmtList->statements) {
 			statement->accept(visitor);
-			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
+			if (auto i = CAST_TO(IfStatement, statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
 				recurseStatementHelper(statement.get(), visitor);
 			}
 		}

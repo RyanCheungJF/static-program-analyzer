@@ -12,7 +12,9 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 			std::string tokenValue;
 			tokenValue += (char)(file.get());
 			/* Between two alphanumeric tokens, there must be at least one whitespace
-			   in between them, so something like 123ab should throw an error */
+			   in between them, so something like 123ab should throw an error. So we simply
+			   fetch all the alphanumeric characters & rely on isInteger() to check if it's 
+			   a valid integer.*/
 			while (std::isalnum(file.peek())) {
 				tokenValue += (char)(file.get());
 			}
@@ -136,10 +138,6 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 		}
 	}
 	tokens.push_back(Token(TokenType::ENDOFFILE, "End of File"));
-
-	//for (int i = 0; i < tokens.size(); i++) {
-	//	std::cout << tokens[i].toString() << std::endl;
-	//}
 
 	return tokens;
 }

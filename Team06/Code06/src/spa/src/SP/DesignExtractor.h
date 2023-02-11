@@ -14,14 +14,15 @@
 
 class DesignExtractor {
 private:
-	void recurseStatementHelper(Statement* statement, ASTVisitor* visitor);
-public:
 	std::unique_ptr<Program> ASTroot;
 	WritePKB* writePkb;
 
+	void recurseStatementHelper(Statement* statement, ASTVisitor* visitor);
+	void extractRelationships();
+	void extractEntities();
+public:
 	DesignExtractor();
 	DesignExtractor(std::unique_ptr<Program>, WritePKB* writePKB);
 
-	void extractRelationships();
-	void extractEntities();
+	void populatePKB();
 };

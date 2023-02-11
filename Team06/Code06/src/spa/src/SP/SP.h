@@ -1,9 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
 #include <SPExceptions.h>
 #include <Tokenizer.h>
 #include <Parser.h>

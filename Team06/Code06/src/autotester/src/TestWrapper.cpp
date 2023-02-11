@@ -17,6 +17,7 @@ TestWrapper::TestWrapper() {
 	pkb.procedureStorage = &ps;
 	pkb.statementStorage = &sts;
 	pkb.followsStorage = &fs;
+	pkb.followsTApi = &ft;
 	pkb.constantStorage = &c;
 	pkb.patternStorage = &pt;
 	writePKB.setInstancePKB(pkb);
@@ -25,8 +26,6 @@ TestWrapper::TestWrapper() {
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
-	// call your parser to do the parsing
-  // ...rest of your code...
 	sourceProcessor.processFile(filename, &writePKB);
 }
 

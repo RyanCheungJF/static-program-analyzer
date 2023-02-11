@@ -1,5 +1,7 @@
 #pragma once
 
+#define CAST_TO(ASTNodeType, value) dynamic_cast<ASTNodeType*>(value)
+
 // general entry point of programs
 class Program;
 class Procedure;
@@ -15,8 +17,6 @@ class WhileStatement;
 
 class Expression;
 class ConditionalExpression;
-
-#define CAST_TO(ASTNodeType, value) dynamic_cast<ASTNodeType*>(value)
 
 // interface for visitor design pattern 
 class ASTVisitor {

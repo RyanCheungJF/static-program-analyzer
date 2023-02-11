@@ -1,10 +1,8 @@
 #pragma once
 
-#include <iostream>
 #include <sstream>
 #include <fstream>
 #include <deque>
-#include <string>
 #include <regex>
 #include <Token.h>
 #include <SPExceptions.h>
