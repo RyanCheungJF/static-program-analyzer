@@ -158,3 +158,19 @@ std::unordered_set<StmtNum> ReadPKB::getConstantStatementNumbers(Const c) {
     return pkbInstance->constantStorage->getConstantStmtNums(c);
 }
 
+std::unordered_set<Ent> ReadPKB::getUsesProcedure(ProcedureName name) {
+    return pkbInstance->usesStorage->getUsesProcedure(name);
+}
+
+std::unordered_set<Ent> ReadPKB::getUsesStmtnum(StmtNum num) {
+    return pkbInstance->usesStorage->getUsesStmtnum(num);
+}
+
+std::unordered_set<Ent> ReadPKB::getModifiesProcedure(ProcedureName name) {
+    return pkbInstance->modifiesStorage->getModifiesProcedure(name);
+}
+
+std::unordered_set<Ent> ReadPKB::getModifiesStmtnum(StmtNum num) {
+    return pkbInstance->modifiesStorage->getModifiesStmtnum(num);
+}
+

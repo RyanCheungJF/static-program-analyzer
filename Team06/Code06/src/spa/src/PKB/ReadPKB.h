@@ -56,6 +56,13 @@ public:
     // returns all the statement lines that the constant appears in
     std::unordered_set<StmtNum> getConstantStatementNumbers(Const c);
 
+
+    std::unordered_set<Ent> getUsesProcedure(ProcedureName name);
+    std::unordered_set<Ent> getUsesStmtnum(StmtNum num);
+
+    std::unordered_set<Ent> getModifiesProcedure(ProcedureName name);
+    std::unordered_set<Ent> getModifiesStmtnum(StmtNum num);
+
 private:
     PKB* pkbInstance = NULL;
     std::unordered_map <RelationshipType, std::shared_ptr<StmtStmtRLStorage>> stmtStmtHandlerMap = { {RelationshipType::FOLLOWS, NULL} };

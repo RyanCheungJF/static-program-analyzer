@@ -78,3 +78,22 @@ void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expres
 std::unique_ptr<Expression> WritePKB::buildSubtree(std::string rhs) {
     return std::move(pkbInstance->patternStorage->buildSubtree(rhs));
 }
+
+
+void WritePKB::setUsesProcedure(std::string name, std::vector<Ent> entities) {
+    pkbInstance->usesStorage->writeUsesProcedure(name, entities);
+    return;
+}
+void WritePKB::setUsesStmtnum(StmtNum num, std::vector<Ent> entities) {
+    pkbInstance->usesStorage->writeUsesStmtnum(num, entities);
+    return;
+}
+
+void WritePKB::setModifiesProcedure(std::string name, std::vector<Ent> entities) {
+    pkbInstance->modifiesStorage->writeModifiesProcedure(name, entities);
+    return;
+}
+void WritePKB::setModifiesStmtnum(StmtNum num, std::vector<Ent> entities) {
+    pkbInstance->modifiesStorage->writeModifiesStmtnum(num, entities);
+    return;
+}
