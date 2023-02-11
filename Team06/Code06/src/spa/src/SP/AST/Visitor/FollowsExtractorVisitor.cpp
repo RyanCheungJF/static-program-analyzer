@@ -8,11 +8,11 @@ void FollowsExtractorVisitor::visitProgram(Program *program) {}
 void FollowsExtractorVisitor::visitProcedure(Procedure* procedure) {}
 
 void FollowsExtractorVisitor::visitStatementList(StatementList *statementList) {
-	// for follows
+	// For Follows
 	for (StmtNum i = 0; i < statementList->statements.size() - 1; i++) {
 		writeApi->setFollows(statementList->statements[i]->statementNumber, statementList->statements[i + 1]->statementNumber);
 	}
-	// for follows transitive
+	// For FollowsT
 	std::vector<std::pair<StmtNum, StmtNum>> followsTransitiveVector;
 	for (StmtNum i = 0; i < statementList->statements.size(); i++) {
 		for (StmtNum j = i + 1; j < statementList->statements.size(); j++) {

@@ -2,23 +2,13 @@
 
 #include <iostream>
 #include "ASTVisitor.h"
-#include "AST/Node/Program.h"
-#include "AST/Node/Procedure.h"
-#include "AST/Node/IfStatement.h"
-#include "AST/Node/ReadStatement.h"
-#include "AST/Node/CallStatement.h"
-#include "AST/Node/AssignStatement.h"
-#include "AST/Node/WhileStatement.h"
-#include "AST/Node/PrintStatement.h"
-#include "AST/Node/Statement.h"
-#include "AST/Node/StatementList.h"
-#include "AST/Node/WhileStatement.h"
+#include "ASTVisitorUtils.h"
 #include "../../../PKB/WritePKB.h"
 
 class StatementExtractorVisitor : public ASTVisitor {
-public:
+private:
 	WritePKB* writeApi;
-
+public:
 	StatementExtractorVisitor(WritePKB* writePKB);
 
 	void visitProgram(Program* program) override;

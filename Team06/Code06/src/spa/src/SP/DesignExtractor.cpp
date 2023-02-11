@@ -21,7 +21,7 @@ void DesignExtractor::extractRelationships() {
 		for (const auto& statement : procedure->statementList->statements) {
 			statement->accept(&followsExtractor);
 			statement->accept(&parentExtractor);
-			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
+			if (auto i = CAST_TO(IfStatement, statement.get()) || CAST_TO(WhileStatement, statement.get())) {
 				recurseStatementHelper(statement.get(), &followsExtractor);
 				recurseStatementHelper(statement.get(), &parentExtractor);
 			}
@@ -30,20 +30,18 @@ void DesignExtractor::extractRelationships() {
 }
 
 void DesignExtractor::extractEntities() {
-	StatementExtractorVisitor statementVisitor(writePkb);
-	ProcedureExtractorVisitor procedureVisitor(writePkb);
-	EntRefExtractorVisitor entRefVisitor(writePkb);
+	std::vector<ASTVisitor*> visitors{ &StatementExtractorVisitor(writePkb), 
+									   &ProcedureExtractorVisitor(writePkb), 
+									   &EntRefExtractorVisitor(writePkb) };
 
-	//std::vector<ASTVisitor*> { &statementVisitor, &procedureVisitor };
-
-	for (const auto& procedure : ASTroot->procedureList) {
-		procedure->accept(&procedureVisitor);
-		for (const auto& statement : procedure->statementList->statements) {
-			statement->accept(&statementVisitor);
-			statement->accept(&entRefVisitor);
-			if (auto i = dynamic_cast<IfStatement*>(statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
-				recurseStatementHelper(statement.get(), &statementVisitor);
-				recurseStatementHelper(statement.get(), &entRefVisitor);
+	for (auto& visitor : visitors) {
+		for (const auto& procedure : ASTroot->procedureList) {
+			procedure->accept(visitor);
+			for (const auto& statement : procedure->statementList->statements) {
+				statement->accept(visitor);
+				if (auto i = CAST_TO(IfStatement, statement.get()) || CAST_TO(WhileStatement, statement.get())) {
+					recurseStatementHelper(statement.get(), visitor);
+				}
 			}
 		}
 	}
@@ -51,14 +49,12 @@ void DesignExtractor::extractEntities() {
 
 void DesignExtractor::recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
 	if (auto i = CAST_TO(IfStatement, recurseStmt)) {
-		i->thenStmtList->accept(visitor);
 		for (const auto& statement : i->thenStmtList->statements) {
 			statement->accept(visitor);
 			if (auto i = CAST_TO(IfStatement, statement.get()) || CAST_TO(WhileStatement, statement.get())) {
 				recurseStatementHelper(statement.get(), visitor);
 			}
 		}
-		i->elseStmtList->accept(visitor);
 		for (const auto& statement : i->elseStmtList->statements) {
 			statement->accept(visitor);
 			if (auto i = CAST_TO(IfStatement, statement.get()) || CAST_TO(WhileStatement, statement.get())) {
@@ -67,7 +63,6 @@ void DesignExtractor::recurseStatementHelper(Statement* recurseStmt, ASTVisitor*
 		}
 	}
 	else if (auto i = CAST_TO(WhileStatement, recurseStmt)) {
-		i->stmtList->accept(visitor);
 		for (const auto& statement : i->stmtList->statements) {
 			statement->accept(visitor);
 			if (auto i = CAST_TO(IfStatement, statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {

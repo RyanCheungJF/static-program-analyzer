@@ -13,6 +13,7 @@ void ParentExtractorVisitor::visitAssignStatement(AssignStatement* assignStateme
 void ParentExtractorVisitor::visitCallStatement(CallStatement* callStatement) {}
 
 void ParentExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
+	// For Parent
 	std::vector<StmtNum> parentVector;
 	for (auto const& i : ifStatement->thenStmtList->statements) {
 		parentVector.push_back(i->statementNumber);
@@ -20,10 +21,11 @@ void ParentExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
 	for (auto const& i : ifStatement->elseStmtList->statements) {
 		parentVector.push_back(i->statementNumber);
 	}
+	// For ParentT
 	std::vector<StmtNum> parentTVector;
-	int start = ifStatement->statementNumber + 1;
-	int end = visitIfStatementHelper(ifStatement);
-	for (int i = start; i <= end; i++) {
+	StmtNum start = ifStatement->statementNumber + 1;
+	StmtNum end = visitIfStatementHelper(ifStatement);
+	for (StmtNum i = start; i <= end; i++) {
 		parentTVector.push_back(i);
 	}
 
@@ -32,15 +34,16 @@ void ParentExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
 }
 
 void ParentExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement) {
+	// For Parent
 	std::vector<StmtNum> parentVector;
 	for (auto const& i : whileStatement->stmtList->statements) {
 		parentVector.push_back(i->statementNumber);
 	}
-
+	// For ParentT
 	std::vector<StmtNum> parentTVector;
-	int start = whileStatement->statementNumber + 1;
-	int end = visitWhileStatementHelper(whileStatement);
-	for (int i = start; i <= end; i++) {
+	StmtNum start = whileStatement->statementNumber + 1;
+	StmtNum end = visitWhileStatementHelper(whileStatement);
+	for (StmtNum i = start; i <= end; i++) {
 		parentTVector.push_back(i);
 	}
 
