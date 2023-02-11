@@ -22,6 +22,10 @@ void WritePKB::setParent(StmtNum parent, StmtNum children) {
     pkbInstance->parentStorage->write(parent, children);
 }
 
+void WritePKB::setParentT(std::vector<std::pair<StmtNum, StmtNum>> parentChildrPairs) {
+    pkbInstance->parentTStorage->write(parentChildrPairs);
+}
+
 void WritePKB::setStatement(Stmt s, std::vector<StmtNum> lines) {
     pkbInstance->statementStorage->writeStatement(s, lines);
     return;
