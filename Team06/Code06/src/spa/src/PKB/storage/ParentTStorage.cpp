@@ -37,18 +37,18 @@ std::unordered_set<StmtNum> ParentTStorage::getLeftWildcard(StmtNum child) {
 }
 
 std::pair<std::vector<StmtNum>, std::vector<StmtNum>> ParentTStorage::getAllPairs() {
-	std::vector<StmtNum> parent;
+	std::vector<StmtNum> parents;
 	std::vector<StmtNum> children;
 
 	for (auto parentChildrenPair : parentChildrenMap) {
 		StmtNum parent = parentChildrenPair.first;
-		std::unordered_set<StmtNum> children = parentChildrenPair.second;
+		std::unordered_set<StmtNum> childrenSet = parentChildrenPair.second;
 
-		for (auto child : children) {
-			parent.push_back(parent);
+		for (auto child : childrenSet) {
+			parents.push_back(parent);
 			children.push_back(child);
 		}
 	}
-	return { parent, children };
+	return { parents, children };
 }
 
