@@ -123,7 +123,7 @@ TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("FollowsT", params);
+    Relationship rs = Relationship::makeRelationship("Follows*", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -151,7 +151,7 @@ TEST_CASE("Checks that a non-existent FollowsT relationship returns an empty vec
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("FollowsT", params);
+    Relationship rs = Relationship::makeRelationship("Follows*", params);
 
     std::vector<std::vector<std::string>> check;
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -184,7 +184,7 @@ TEST_CASE("Checks for cases e.g. Follows*(1, assign)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("FollowsT", params);
+    Relationship rs = Relationship::makeRelationship("Follows*", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"}, {"1", "3"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -217,7 +217,7 @@ TEST_CASE("Checks for cases e.g. Follows*(1, _)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("FollowsT", params);
+    Relationship rs = Relationship::makeRelationship("Follows*", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"}, {"1", "3"}, {"1", "4"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -249,7 +249,7 @@ TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("FollowsT", params);
+    Relationship rs = Relationship::makeRelationship("Follows*", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "3"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -282,7 +282,7 @@ TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("FollowsT", params);
+    Relationship rs = Relationship::makeRelationship("Follows*", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"}, {"1", "3"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -315,7 +315,7 @@ TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("FollowsT", params);
+    Relationship rs = Relationship::makeRelationship("Follows*", params);
 
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -350,7 +350,7 @@ TEST_CASE("Checks for cases e.g. Follows*(_, 3)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("FollowsT", params);
+    Relationship rs = Relationship::makeRelationship("Follows*", params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     std::unordered_set< std::vector<std::string>> check;
@@ -385,7 +385,7 @@ TEST_CASE("Checks for cases e.g. Follows*(_, call)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("FollowsT", params);
+    Relationship rs = Relationship::makeRelationship("Follows*", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -415,7 +415,7 @@ TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("FollowsT", params);
+    Relationship rs = Relationship::makeRelationship("Follows*", params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     std::unordered_set< std::vector<std::string>> check;
