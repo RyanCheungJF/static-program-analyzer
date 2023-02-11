@@ -23,5 +23,6 @@
 
 int visitIfStatementHelper(IfStatement* ifStatement);
 int visitWhileStatementHelper(WhileStatement* whileStatement);
+void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor);
 void visitCondExprHelper(ConditionalExpression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants);
 void visitExprHelper(Expression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants);

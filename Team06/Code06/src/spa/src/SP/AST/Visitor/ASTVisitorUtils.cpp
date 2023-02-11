@@ -53,3 +53,28 @@ void visitExprHelper(Expression* e, std::unordered_set<std::string>& variables, 
 		variables.insert(i->name);
 	}
 }
+
+void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
+	if (auto i = CAST_TO(IfStatement, recurseStmt)) {
+		for (const auto& statement : i->thenStmtList->statements) {
+			statement->accept(visitor);
+			if (auto i = CAST_TO(IfStatement, statement.get()) || CAST_TO(WhileStatement, statement.get())) {
+				recurseStatementHelper(statement.get(), visitor);
+			}
+		}
+		for (const auto& statement : i->elseStmtList->statements) {
+			statement->accept(visitor);
+			if (auto i = CAST_TO(IfStatement, statement.get()) || CAST_TO(WhileStatement, statement.get())) {
+				recurseStatementHelper(statement.get(), visitor);
+			}
+		}
+	}
+	else if (auto i = CAST_TO(WhileStatement, recurseStmt)) {
+		for (const auto& statement : i->stmtList->statements) {
+			statement->accept(visitor);
+			if (auto i = CAST_TO(IfStatement, statement.get()) || dynamic_cast<WhileStatement*>(statement.get())) {
+				recurseStatementHelper(statement.get(), visitor);
+			}
+		}
+	}
+}
