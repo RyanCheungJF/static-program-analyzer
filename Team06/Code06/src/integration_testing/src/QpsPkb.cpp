@@ -67,11 +67,11 @@ PKB buildPkb() {
 	writePkb.setEntity(9, { "count" });
 	writePkb.setEntity(11, { "z" });
 
-	writePkb.setConstant(1, { 1 });
-	writePkb.setConstant(4, { 2 });
-	writePkb.setConstant(6, { 2 });
-	writePkb.setConstant(8, { 2 });
-	writePkb.setConstant(9, { 0 });
+	writePkb.setConstant(1, vector<int>{ 1 });
+	writePkb.setConstant(4, vector<int>{ 2 });
+	writePkb.setConstant(6, vector<int>{ 2 });
+	writePkb.setConstant(8, vector<int>{ 2 });
+	writePkb.setConstant(9, vector<int>{ 0 });
 
 	writePkb.setFollows(1, 2);
 	writePkb.setFollows(2, 3);
@@ -97,10 +97,11 @@ PKB buildPkb() {
 	writePkb.setParent(9, 10);
 	writePkb.setParent(9, 11);
 
-	writePkb.setParentT(3, 4);
-	writePkb.setParentT(3, 5);
-	writePkb.setParentT(9, 10);
-	writePkb.setParentT(9, 11);
+	vector<pair<int, int>> parentChildPars;
+	followeeFollowerPairs.push_back({ 3, 4 });
+	followeeFollowerPairs.push_back({ 3, 5 });
+	followeeFollowerPairs.push_back({ 9, 10 });
+	followeeFollowerPairs.push_back({ 9, 11 });
 
 	string lhs = "x";
 	unique_ptr<Expression> patternTree = writePkb.buildSubtree("1");
