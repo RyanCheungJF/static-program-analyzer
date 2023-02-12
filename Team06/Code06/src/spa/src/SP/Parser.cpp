@@ -73,43 +73,31 @@ std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
 	if (tokens.front().type == TokenType::NAME) {
 		auto firstToken = tokens.front();
 		tokens.pop_front(); // Pop the keyword
-		if (firstToken.value == "read") {
+		// We can use the name of the keyword as a variable, so we need to check for that
+		if (firstToken.value == "read" && tokens.front().value != "=") {
 			auto readStatement = parseReadStatement(tokens);
 			return readStatement;
 		}
-		else if (firstToken.value == "print") {
+		else if (firstToken.value == "print" && tokens.front().value != "=") {
 			auto printStatement = parsePrintStatement(tokens);
 			return printStatement;
 		}
-		else if (firstToken.value == "call") {
+		else if (firstToken.value == "call" && tokens.front().value != "=") {
 			auto callStatement = parseCallStatement(tokens);
 			return callStatement;
 		}
-		else if (firstToken.value == "while") {
-			// Since we can use while as a variable name, we check if it is an assign
-			if (tokens.front().value != "(") {
-				tokens.push_front(firstToken);
-				auto assignStatement = parseAssignStatement(tokens);
-				return assignStatement;
-			}
+		else if (firstToken.value == "while" && tokens.front().value == "(") {
 			auto whileStatement = parseWhileStatement(tokens);
 			return whileStatement;
 		}
-		else if (firstToken.value == "if") {
-			// Since we can use while as a variable name, we check if it is an assign
-			if (tokens.front().value != "(") {
-				tokens.push_front(firstToken);
-				auto assignStatement = parseAssignStatement(tokens);
-				return assignStatement;
-			}
+		else if (firstToken.value == "if" && tokens.front().value == "(") {
 			auto ifStatement = parseIfStatement(tokens);
 			return ifStatement;
 		}
-		else { // Else, it must be an assign statement
-			tokens.push_front(firstToken);
-			auto assignStatement = parseAssignStatement(tokens);
-			return assignStatement;
-		}
+		// Else, it must be an assign statement
+		tokens.push_front(firstToken);
+		auto assignStatement = parseAssignStatement(tokens);
+		return assignStatement;
 	}
 	else {
 		throw SyntaxErrorException("Unexpected token when parsing statement -> " + tokens.front().value);
