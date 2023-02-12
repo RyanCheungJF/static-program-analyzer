@@ -41,6 +41,8 @@ public:
     // returns all statement numbers for while statement
     std::unordered_set<StmtNum> getWhileStatementNumbers();
 
+    // returns nested statement numbers of all if and while statements
+    std::unordered_set<StmtNum> getContainedStatements(StmtNum containerNum);
 
     // Returns relevant strings based on Pattern object passed
     std::vector<std::vector<std::string>> findPattern(Pattern p);

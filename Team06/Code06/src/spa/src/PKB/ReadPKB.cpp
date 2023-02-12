@@ -105,4 +105,8 @@ std::unordered_set<StmtNum> ReadPKB::getWhileStatementNumbers() {
     return pkbInstance->statementStorage->getStatementNumbers("while");
 }
 
+std::unordered_set<StmtNum> ReadPKB::getContainedStatements(StmtNum containerNum) {
+    return pkbInstance->parentTStorage->getRightWildcard(containerNum);
+}
+
 
