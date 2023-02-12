@@ -26,7 +26,8 @@ public:
     vector<Parameter> selectParameters;
     vector<Pattern> patterns;
     vector<Parameter*> getAllUncheckedSynonyms();
-    vector<Parameter> getAllSynAssigns();
+    vector<Parameter*> getAllSynAssigns();
+    bool validateAllParameters();
 };
 
 

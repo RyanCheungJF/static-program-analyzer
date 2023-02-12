@@ -20,6 +20,7 @@ enum class RelationshipType {
 class Relationship {
 public:
 	static Relationship makeRelationship(string type, vector<Parameter> params);
+	//virtual bool validateParams() = 0;
 	RelationshipType type;
 	vector<Parameter> params;
 	Relationship();

@@ -184,7 +184,7 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
 		if (!isExprSpec(patternString)) {
 			throw Exception();
 		}
-		Parameter synAssign(synAssignString, ParameterType::ASSIGN);
+		Parameter synAssign(synAssignString, ParameterType::SYNONYM);
 		Parameter entRef(removeCharFromString(entRefString, '\"'), Parameter::guessParameterType(entRefString));
 		Pattern p(synAssign, entRef, removeCharFromString(patternString, '\"'));
 		res.push_back(p);

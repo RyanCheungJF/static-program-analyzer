@@ -53,13 +53,16 @@ void QPSParser::checkSynonyms(Query* query, VariableStore varStore)
             throw Exception();
         }
     }
-    vector<Parameter> synAssigns = query->getAllSynAssigns();
-    for (Parameter p : synAssigns) {
-        if (!varStore.hasVariable(p)) {
-            throw Exception();
-        }
-        if (!(varStore.getType(p) == ParameterType::ASSIGN)) {
-            throw Exception();
-        }
+    if (!query->validateAllParameters()) {
+        throw Exception();
     }
+    //vector<Parameter> synAssigns = query->getAllSynAssigns();
+    //for (Parameter p : synAssigns) {
+    //    if (!varStore.hasVariable(p)) {
+    //        throw Exception();
+    //    }
+    //    if (!(varStore.getType(p) == ParameterType::ASSIGN)) {
+    //        throw Exception();
+    //    }
+    //}
 }

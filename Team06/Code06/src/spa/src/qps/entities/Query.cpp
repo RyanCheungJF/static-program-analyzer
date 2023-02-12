@@ -26,9 +26,9 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findPattern(pattern);
-        Parameter synAssign = pattern.getSynAssign();
+        Parameter *synAssign = pattern.getSynAssign();
         Parameter *entRef = pattern.getEntRef();
-        vector<Parameter> headers{ synAssign, *entRef };
+        vector<Parameter> headers{ *synAssign, *entRef };
         Table table(headers, response);
         if(response.empty()) {
             isFalseQuery = true;
@@ -84,19 +84,38 @@ vector<Parameter*> Query::getAllUncheckedSynonyms()
     }
     for (int i = 0; i < patterns.size(); i++) {
         Parameter* entRef = patterns.at(i).getEntRef();
-        if (entRef->getType() != ParameterType::SYNONYM) {
-            continue;
+        Parameter* synAssign = patterns.at(i).getSynAssign();
+        if (entRef->getType() == ParameterType::SYNONYM) {
+            synonyms.push_back(entRef);
         }
-        synonyms.push_back(entRef);
+        if (synAssign->getType() == ParameterType::SYNONYM) {
+            synonyms.push_back(synAssign);
+        }
     }
     return synonyms;
 }
 
-vector<Parameter> Query::getAllSynAssigns()
+vector<Parameter*> Query::getAllSynAssigns()
 {
-    vector<Parameter> synAssigns;
+    vector<Parameter*> synAssigns;
     for (int i = 0; i < patterns.size(); i++) {
         synAssigns.push_back(patterns.at(i).getSynAssign());
     }
     return synAssigns;
+}
+
+bool Query::validateAllParameters()
+{
+    for (Pattern p : patterns) {
+        if (!p.validateParams()) {
+            return false;
+        }
+    }
+
+    for (Relationship r : relations) {
+        if (!r.validateParams()) {
+            return false;
+        }
+    }
+    return true;
 }
