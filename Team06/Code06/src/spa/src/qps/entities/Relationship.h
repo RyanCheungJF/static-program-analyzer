@@ -26,6 +26,7 @@ public:
 	Relationship(const Relationship&);
 	vector<Parameter*> getAllUncheckedSynonyms();
     vector<Parameter>& getParameters();
+	bool operator==(const Relationship&) const;
 private:
 	static const unordered_map<string, RelationshipType> stringToTypeMap;
 	static RelationshipType stringToType(string);

@@ -1,6 +1,10 @@
 #include "catch.hpp"
 #include <iostream>
 #include "qps/entities/Relationship.h"
+#include "qps/entities/FollowsRelationship.h"
+#include "qps/entities/FollowsTRelationship.h"
+#include "qps/entities/ParentRelationship.h"
+#include "qps/entities/ParentTRelationship.h"
 
 TEST_CASE("makeRelationship / empty relationship type string / throws error") {
 	string typeInput = "";
@@ -25,20 +29,17 @@ TEST_CASE("makeRelationship / follows relationship, with correct params / return
 	Parameter p3("_", "wildcard");
 	vector<Parameter> inputParameters{p1, p2};
 	vector<Parameter> inputParameters2{p2, p3};
-	vector<Parameter> inputParameters3{ p3, p1 };
-	RelationshipType expectedType = RelationshipType::FOLLOWS;
-	vector<Parameter> expectedParameters = inputParameters;
+	vector<Parameter> inputParameters3{p3, p1};
 
 	Relationship output = Relationship::makeRelationship(typeInput, inputParameters);
-	vector<Parameter> outputParameters = output.getParameters();
-	CHECK(expectedType == output.type);
-	CHECK(inputParameters[0] == outputParameters[0]);
+	FollowsRelationship expected(inputParameters);
+	CHECK(expected == output);
 	Relationship output2 = Relationship::makeRelationship(typeInput, inputParameters2);
-	CHECK(expectedType == output2.type);
-	//CHECK(inputParameters2 == output2.getParameters());
-	Relationship output3 = Relationship::makeRelationship(typeInput, inputParameters);
-	CHECK(expectedType == output3.type);
-	//CHECK(inputParameters3 == output3.getParameters());
+	FollowsRelationship expected2(inputParameters2);
+	CHECK(expected2 == output2);
+	Relationship output3 = Relationship::makeRelationship(typeInput, inputParameters3);
+	FollowsRelationship expected3(inputParameters3);
+	CHECK(expected3 == output3);
 }
 
 TEST_CASE("makeRelationship / follows relationship, with wrong second param / throws error") {
@@ -46,7 +47,6 @@ TEST_CASE("makeRelationship / follows relationship, with wrong second param / th
 	Parameter p1("a", "synonym");
 	Parameter p2("fixed_string", "fixed_string");
 	vector<Parameter> inputParameters{ p1, p2 };
-	RelationshipType expectedType = RelationshipType::FOLLOWS;
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
@@ -56,7 +56,6 @@ TEST_CASE("makeRelationship / follows relationship, with wrong first param / thr
 	Parameter p1("fixed_string", "fixed_string");
 	Parameter p2("a", "synonym");
 	vector<Parameter> inputParameters{ p1, p2 };
-	RelationshipType expectedType = RelationshipType::FOLLOWS;
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
@@ -67,7 +66,6 @@ TEST_CASE("makeRelationship / follows relationship, more than 2 parameter / thro
 	Parameter p2("b", "synonym");
 	Parameter p3("c", "synonym");
 	vector<Parameter> inputParameters{ p1, p2, p3 };
-	RelationshipType expectedType = RelationshipType::FOLLOWS;
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
@@ -76,21 +74,29 @@ TEST_CASE("makeRelationship / follows relationship, less than 2 parameter / thro
 	string typeInput = "Follows";
 	Parameter p1("a", "synonym");
 	vector<Parameter> inputParameters{ p1 };
-	RelationshipType expectedType = RelationshipType::FOLLOWS;
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 
-TEST_CASE("makeRelationship / followsT relationship / return relationship object") {
+TEST_CASE("makeRelationship / FollowsT relationship / return relationship object") {
 	string typeInput = "Follows*";
 	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
+	Parameter p2("1", "fixed_int");
+	Parameter p3("_", "wildcard");
 	vector<Parameter> inputParameters{ p1, p2 };
-	RelationshipType expectedType = RelationshipType::FOLLOWST;
+	vector<Parameter> inputParameters2{ p2, p3 };
+	vector<Parameter> inputParameters3{ p3, p1 };
 
 	Relationship output = Relationship::makeRelationship(typeInput, inputParameters);
-	CHECK(expectedType == output.type);
+	FollowsTRelationship expected(inputParameters);
+	CHECK(expected == output);
+	Relationship output2 = Relationship::makeRelationship(typeInput, inputParameters2);
+	FollowsTRelationship expected2(inputParameters2);
+	CHECK(expected2 == output2);
+	Relationship output3 = Relationship::makeRelationship(typeInput, inputParameters3);
+	FollowsTRelationship expected3(inputParameters3);
+	CHECK(expected3 == output3);
 }
 
 TEST_CASE("makeRelationship / FollowsT, wrong 2nd param / throws error") {
@@ -101,32 +107,146 @@ TEST_CASE("makeRelationship / FollowsT, wrong 2nd param / throws error") {
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
+TEST_CASE("makeRelationship / FollowsT, wrong 1st param / throws error") {
+	string typeInput = "Follows*";
+	Parameter p1("entity_ref", "fixed_string");
+	Parameter p2("a", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / FollowsT relationship, more than 2 parameter / throws error") {
+	string typeInput = "Follows*";
+	Parameter p1("a", "synonym");
+	Parameter p2("b", "synonym");
+	Parameter p3("c", "synonym");
+	vector<Parameter> inputParameters{ p1, p2, p3 };
+
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / FollowsT relationship, less than 2 parameter / throws error") {
+	string typeInput = "Follows*";
+	Parameter p1("a", "synonym");
+	vector<Parameter> inputParameters{ p1 };
+
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
 TEST_CASE("makeRelationship / Parent relationship / return relationship object") {
 	string typeInput = "Parent";
 	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
+	Parameter p2("1", "fixed_int");
+	Parameter p3("_", "wildcard");
 	vector<Parameter> inputParameters{ p1, p2 };
-	RelationshipType expectedType = RelationshipType::PARENT;
+	vector<Parameter> inputParameters2{ p2, p3 };
+	vector<Parameter> inputParameters3{ p3, p1 };
 
 	Relationship output = Relationship::makeRelationship(typeInput, inputParameters);
-	CHECK(expectedType == output.type);
+	ParentRelationship expected(inputParameters);
+	CHECK(expected == output);
+	Relationship output2 = Relationship::makeRelationship(typeInput, inputParameters2);
+	ParentRelationship expected2(inputParameters2);
+	CHECK(expected2 == output2);
+	Relationship output3 = Relationship::makeRelationship(typeInput, inputParameters3);
+	ParentRelationship expected3(inputParameters3);
+	CHECK(expected3 == output3);
+}
+
+TEST_CASE("makeRelationship / Parent, wrong 2nd param / throws error") {
+	string typeInput = "Parent";
+	Parameter p1("a", "synonym");
+	Parameter p2("entity_ref", "fixed_string");
+	vector<Parameter> inputParameters{ p1, p2 };
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / Parent, wrong 1st param / throws error") {
+	string typeInput = "Parent";
+	Parameter p1("entity_ref", "fixed_string");
+	Parameter p2("a", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / Parent relationship, more than 2 parameter / throws error") {
+	string typeInput = "Parent";
+	Parameter p1("a", "synonym");
+	Parameter p2("b", "synonym");
+	Parameter p3("c", "synonym");
+	vector<Parameter> inputParameters{ p1, p2, p3 };
+
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / Parent relationship, less than 2 parameter / throws error") {
+	string typeInput = "Parent";
+	Parameter p1("a", "synonym");
+	vector<Parameter> inputParameters{ p1 };
+
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / ParentT relationship / return relationship object") {
 	string typeInput = "Parent*";
 	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
+	Parameter p2("1", "fixed_int");
+	Parameter p3("_", "wildcard");
 	vector<Parameter> inputParameters{ p1, p2 };
-	RelationshipType expectedType = RelationshipType::PARENTT;
+	vector<Parameter> inputParameters2{ p2, p3 };
+	vector<Parameter> inputParameters3{ p3, p1 };
 
 	Relationship output = Relationship::makeRelationship(typeInput, inputParameters);
-	CHECK(expectedType == output.type);
+	ParentTRelationship expected(inputParameters);
+	CHECK(expected == output);
+	Relationship output2 = Relationship::makeRelationship(typeInput, inputParameters2);
+	ParentTRelationship expected2(inputParameters2);
+	CHECK(expected2 == output2);
+	Relationship output3 = Relationship::makeRelationship(typeInput, inputParameters3);
+	ParentTRelationship expected3(inputParameters3);
+	CHECK(expected3 == output3);
+}
+
+TEST_CASE("makeRelationship / ParentT, wrong 2nd param / throws error") {
+	string typeInput = "Parent*";
+	Parameter p1("a", "synonym");
+	Parameter p2("entity_ref", "fixed_string");
+	vector<Parameter> inputParameters{ p1, p2 };
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / ParentT, wrong 1st param / throws error") {
+	string typeInput = "Parent*";
+	Parameter p1("entity_ref", "fixed_string");
+	Parameter p2("a", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / ParentT relationship, more than 2 parameter / throws error") {
+	string typeInput = "Parent*";
+	Parameter p1("a", "synonym");
+	Parameter p2("b", "synonym");
+	Parameter p3("c", "synonym");
+	vector<Parameter> inputParameters{ p1, p2, p3 };
+
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / ParentT relationship, less than 2 parameter / throws error") {
+	string typeInput = "Parent*";
+	Parameter p1("a", "synonym");
+	vector<Parameter> inputParameters{ p1 };
+
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Uses relationship / return relationship object") {
 	string typeInput = "Uses";
 	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
+	Parameter p2("_", "wildcard");
+	Parameter p3("ent_ref", "fixed_string");
+	Parameter p4("1", "fixed_int");
 	vector<Parameter> inputParameters{ p1, p2 };
 	RelationshipType expectedType = RelationshipType::USES;
 
