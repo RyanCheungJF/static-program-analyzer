@@ -97,4 +97,12 @@ std::unordered_set<Ent> ReadPKB::getUsesS(StmtNum num) {
     return pkbInstance->usesStorage->getUsesS(num);
 }
 
+std::unordered_set<StmtNum> ReadPKB::getIfStatementNumbers() {
+    return pkbInstance->statementStorage->getStatementNumbers("if");
+}
+
+std::unordered_set<StmtNum> ReadPKB::getWhileStatementNumbers() {
+    return pkbInstance->statementStorage->getStatementNumbers("while");
+}
+
 

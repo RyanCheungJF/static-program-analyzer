@@ -35,7 +35,11 @@ public:
     // returns the entire row of all Entities involved in the Uses(num, v) relationship
     std::unordered_set<Ent> getUsesS(StmtNum num);
 
+    // returns all statement numbers for if statement
+    std::unordered_set<StmtNum> getIfStatementNumbers();
 
+    // returns all statement numbers for while statement
+    std::unordered_set<StmtNum> getWhileStatementNumbers();
 
 
     // Returns relevant strings based on Pattern object passed
