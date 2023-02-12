@@ -15,7 +15,7 @@ with proper indentation and line numbering
 
 E.g: To run `systemtest1`,
 
-1. Open a terminal in the `systemtest1` folder or `cd` into it.
+1. Open a terminal in the `systemtest1` folder or `cd` into it. Remember to set your permissions to allow for execution of your OS's respective files below. eg for MacOS: `chmod u+x run.sh`
 2. For Windows Users, run: 
 
     `.\run.bat`
