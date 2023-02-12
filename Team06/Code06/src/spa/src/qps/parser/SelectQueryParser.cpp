@@ -186,7 +186,7 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
 		}
 		Parameter synAssign(synAssignString, ParameterType::ASSIGN);
 		Parameter entRef(removeCharFromString(entRefString, '\"'), Parameter::guessParameterType(entRefString));
-		Pattern p(synAssign, entRef, patternString);
+		Pattern p(synAssign, entRef, removeCharFromString(patternString, '\"'));
 		res.push_back(p);
 	}
 

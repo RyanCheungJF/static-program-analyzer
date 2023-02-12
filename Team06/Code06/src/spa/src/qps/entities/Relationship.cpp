@@ -47,6 +47,11 @@ vector<Parameter>& Relationship::getParameters() {
     return params;
 }
 
+bool Relationship::operator==(const Relationship& r) const
+{
+	return type == r.type && params == r.params;
+}
+
 Relationship::Relationship()
 {
 	type = RelationshipType::UNKNOWN;
