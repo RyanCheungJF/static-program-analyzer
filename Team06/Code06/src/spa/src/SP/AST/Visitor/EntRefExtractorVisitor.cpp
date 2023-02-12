@@ -50,7 +50,9 @@ void EntRefExtractorVisitor::visitAssignStatement(AssignStatement* assignStateme
 	writeApi->writePattern(assignStatement->varName, assignStatement->statementNumber, std::move(expr));
 }
 
-void EntRefExtractorVisitor::visitCallStatement(CallStatement* callStatement) {}
+void EntRefExtractorVisitor::visitCallStatement(CallStatement* callStatement) {
+	//writeApi->setCall(callStatement->statementNumber, callStatement->procName);
+}
 
 void EntRefExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
 	std::unordered_set<Ent> variables;

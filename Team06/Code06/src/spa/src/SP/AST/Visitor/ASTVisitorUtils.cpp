@@ -27,7 +27,7 @@ int visitWhileStatementHelper(WhileStatement* whileStatement) {
 	}
 }
 
-void visitCondExprHelper(ConditionalExpression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants) {
+void visitCondExprHelper(ConditionalExpression* e, std::unordered_set<Ent>& variables, std::unordered_set<int>& constants) {
 	if (auto i = CAST_TO(NotConditionalExpression, e)) {
 		visitCondExprHelper(i->condExpr.get(), variables, constants);
 	}
@@ -41,7 +41,7 @@ void visitCondExprHelper(ConditionalExpression* e, std::unordered_set<std::strin
 	}
 }
 
-void visitExprHelper(Expression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants) {
+void visitExprHelper(Expression* e, std::unordered_set<Ent>& variables, std::unordered_set<int>& constants) {
 	if (auto i = CAST_TO(MathExpression, e)) {
 		visitExprHelper(i->lhs.get(), variables, constants);
 		visitExprHelper(i->rhs.get(), variables, constants);
@@ -79,6 +79,69 @@ void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
 	}
 }
 
-void populateRemainingTables(WritePKB* writePKB, ReadPKB* readPKB) {
-
-}
+//void populateRemainingTables(WritePKB* writePKB, ReadPKB* readPKB) {
+//	populateUsesModifies(writePKB, readPKB);
+//}
+//
+//void populateUsesModifies(WritePKB* writePKB, ReadPKB* readPKB) {
+//	// First handle the call statements
+//	auto callStatements = readPKB->getCallStatements();
+//	for (auto i : callStatements) {
+//		/* Could be possible I handled the call statement in the recursion, so I check if there's anything.
+//		   If one of them is empty, it means I handled it in the recursion. Only if both are empty, means I might not
+//		   have handled it.*/
+//		if (readPKB->getUsesS(i->first).empty() && readPKB->getModifiesS(i->first).empty()) {
+//			handleCallStmt(writePKB, readPKB, i);
+//		}
+//	}
+//
+//	// Now handle the container statement (if & while)
+//	auto containerStatements = readPKB->getWhileStatementNumbers();
+//	containerStatements.merge(readPKB->getIfStatementNumbers());
+//	for (StmtNum i : containerStatements) {
+//		auto usesVariables = readPKB->getUsesS(i);
+//		auto modifiesVariables = readPKB->getModifiesS(i);
+//		auto containedStatements = readPKB->getContainedStatements(i);
+//		for (StmtNum j : containedStatements) {
+//			usesVariables.merge(readPKB->getUsesS(j));
+//			modifiesVariables.merge(readPKB->getModifiesS(j));
+//		}
+//		writePKB->setUsesS(i, usesVariables);
+//		writePKB->setModifiesS(i, modifiesVariables);
+//	}
+//
+//	// Lastly handle the procedures
+//	auto procedureNames = readPKB->getAllProcedureNames();
+//	for (ProcName p : procedureNames) {
+//		auto procedureStmtNum = readPKB->getProcedureStatementNumbers(p);
+//		std::unordered_set<Ent> usesVariables;
+//		std::unordered_set<Ent> modifiesVariables;
+//		for (StmtNum s : procedureStmtNum) {
+//			usesVariables.merge(readPKB->getUsesS(j));
+//			modifiesVariables.merge(readPKB->getModifiesS(j));
+//		}
+//		writePKB->setUsesP(p, usesVariables);
+//		writePKB->setModifiesP(p, modifiesVariables);
+//	}
+//}
+//
+//std::vector<std::unordered_set<Ent>> handleCallStmt(WritePKB* writePKB, ReadPKB* readPKB, std::pair<StmtNum, ProcName> callStmt) {
+//	auto procedureStmtNum = readPKB->getProcedureStatementNumbers(callStmt->second);
+//	std::unordered_set<Ent> currUsesVariables;
+//	std::unordered_set<Ent> currModifiesVariables;
+//	for (StmtNum sn : procedureStmtNum) {
+//		if (readPKB->checkStatement("call", sn)) {
+//			auto moreUsesVariables = handleCallStmt(writePKB, readPKB, readPKB->getCallStmt(callStmt->first))[0];
+//			currUsesVariables.merge(moreUsesVariables);
+//			auto moreModifiesVariables = handleCallStmt(writePKB, readPKB, readPKB->getCallStmt(callStmt->first))[1];
+//			currModifiesVariables.merge(moreModifiesVariables);
+//		}
+//		else {
+//			currUsesVariables.merge(readPKB->getUsesS(sn));
+//			currModifiesVariables.merge(readPKB->getModifiesS(sn));
+//		}
+//	}
+//	writePKB->setUsesS(callStmt->first, currUsesVariables);
+//	writePKB->setModifiesS(callStmt->first, currModifiesVariables);
+//	return std::vector{ currUsesVariables, currModifiesVariables };
+//}
