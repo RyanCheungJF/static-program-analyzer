@@ -4,6 +4,7 @@
 
 #include "QPSGrammarUtils.h"
 #include <iostream>
+#include <algorithm>
 #include <string>
 #include <regex>
 
@@ -91,9 +92,127 @@ bool isEntRef(string entRef) {
 //bool QPSGrammarUtils::isModifies(string)
 
 //TODO: Implement this
-bool isExprSpec(string)
+bool isExprSpec(string s)
 {
-    return true;
+    s = trim(s);
+    if (s.empty()) {
+        return false;
+    }
+    if (s == "_") {
+        return true;
+    }
+    // removes all whitespace from s.
+    s.erase(remove_if(s.begin(), s.end(), ::isspace), s.end());
+    bool startsWith_ = regex_search(s, regex("^_\""));
+    bool endsWith_ = regex_search(s, regex("\"_$"));
+    if (startsWith_ && endsWith_) {
+        if (s.size() < 5) {
+            return false;
+        }
+        // This will get rid of _" and "_
+        // If s = _"X+Y"_ then expr = X+Y
+        string expr = s.substr(2, s.size() - 4);
+        return isExpr(expr);
+    }
+    bool startsWithQuotation = regex_search(s, regex("^\""));
+    bool endsWithQuotation = regex_search(s, regex("\"$"));
+    if(startsWithQuotation && endsWithQuotation) {
+        if (s.size() < 3) {
+            return false;
+        }
+        // This will get rid of _" and "_
+        // If s = _"X+Y"_ then expr = X+Y
+        string expr = s.substr(1, s.size() - 2);
+        // this aaa is for debugging purposes
+        bool aaa = isExpr(expr);
+        return aaa;
+    }
+    return false;
+}
+
+bool isExpr(string s) {
+    if (s.empty()) {
+        return false;
+    }
+    int index = -1;
+    int bracketsCounter = 0;
+    // finds the first + or - from the back where there are no brackets encapsulating them.
+    for(int i = s.size() - 1; i >= 0; i--) {
+        if ((s[i] == '+' || s[i] == '-') && bracketsCounter == 0) {
+            index = i;
+            break;
+        }
+        if (s[i] == '(') {
+            bracketsCounter--;
+        } else if (s[i] == ')') {
+            bracketsCounter++;
+        }
+    }
+//    int index = s.size() - 1 - m.position();
+    if (index == -1) {
+        // regex search not found
+        return isTerm(s);
+    }
+    if (index == s.size()-1 || index == 0) {
+        // cannot have + or - at start or end of string
+        return false;
+    }
+    string first = trim(s.substr(0, index));
+    string second = trim(s.substr(index+1, s.size()-1-index));
+    // this aaa bbb is for debugging purposes
+    bool aaa = isExpr(first);
+    bool bbb = isTerm(second);
+    return aaa && bbb;
+}
+
+bool isTerm(string s) {
+    if (s.empty()) {
+        return false;
+    }
+    // finds the first */% from the back where there are no brackets encapsulating them.
+    int index = -1;
+    int bracketsCounter = 0;
+    for(int i = s.size() - 1; i >= 0; i--) {
+        if ((s[i] == '*' || s[i] == '/' || s[i] == '%') && bracketsCounter == 0) {
+            index = i;
+            break;
+        }
+        if (s[i] == '(') {
+            bracketsCounter--;
+        } else if (s[i] == ')') {
+            bracketsCounter++;
+        }
+    }
+    if (index == -1) {
+        // None match found
+        return isFactor(s);
+    }
+    if (index == s.size()-1 || index == 0) {
+        // operator cannot be at start and end of string
+        return false;
+    }
+    string first = trim(s.substr(0, index));
+    string second = trim(s.substr(index+1, s.size()-1-index));
+    // this aaa bbb is for debugging purposes
+    bool aaa = isTerm(first);
+    bool bbb = isFactor(second);
+    return aaa && bbb;
+}
+
+bool isFactor(string s) {
+    if (s.empty()) {
+        return false;
+    }
+    // recursively remove brackets
+    bool hasBrackets = false;
+    if (s[0] == '(' && s[s.size()-1] == ')') {
+        hasBrackets = true;
+        s = s.substr(1, s.size()-2);
+    }
+    if (hasBrackets){
+        return isExpr(s);
+    }
+    return isName(s) || isInteger(s);
 }
 
 bool isFollows(string s) {
