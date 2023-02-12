@@ -1,0 +1,40 @@
+1 - normal follows
+stmt s;
+Select s such that Follows(1, s)
+2
+5000
+2 - read follows
+read r;
+Select r such that Follows(1, r)
+2
+5000
+3 - call follows
+call c;
+Select c such that Follows(3, c)
+4
+5000
+4 - call follows on end of line
+stmt s;
+Select s such that Follows(16, s)
+none
+5000
+5 - normal follows
+stmt s;
+Select s such that Follows(25, s)
+43
+5000
+6 - read follows
+read r;
+Select r such that Follows(25, s)
+none
+5000
+7 - normal follows
+stmt s;
+Select s such that Follows(27, s)
+42
+5000
+8 - normal follows
+stmt s;
+Select s such that Follows(31, s)
+38
+5000

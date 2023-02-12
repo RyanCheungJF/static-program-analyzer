@@ -1,0 +1,60 @@
+// DO NOT USE THIS FILE TO TEST!
+// this file is purely for visualization/ debugging purposes without whitespaces
+// to make your life easier :-)
+
+procedure arithmetic {
+	read a;									// 1
+	read b;									// 2
+	read c;									// 3
+	call conditionalSpam;					// 4
+	z = a + b;								// 5
+	y = a * c;								// 6
+	x = a % (b + c) * (c - (y - z)) + z;	// 7
+	w = a % (b + c) * (c - (y - z)) + z;	// 8
+	w = w / 1;								// 9
+	w = 2 * w;								// 10
+	o = 2 + 0;								// 11
+	a = 1;									// 12
+	b = 0;									// 13
+	k = 2 * 0;								// 14
+	j = b + 7;								// 15
+	i = w * a + j;							// 16
+}
+
+procedure conditionalSpam {
+	i = 0;													// 17
+	a = 1;													// 18
+	A = 2;													// 19
+	b = 3;													// 20
+	B = 3;													// 21
+	c = 0;													// 22
+	N = 10;													// 23
+	thisIsAVeryLongNameAndILikeApples = 42;					// 24
+	while (i < thisIsAVeryLongNameAndILikeApples) {			// 25
+		a = a + a;											// 26
+		while (c < 10) {									// 27
+			while = 1;										// 28
+			if = 2;											// 29
+			while (while <= 10) {							// 30
+				if (a == A) then {							// 31
+					print A;								// 32
+				} else {									// 33
+					if ((((if * 5 / 1 + 3)) != N)) then {	// 34
+						while (b == B) {					// 35
+							b = b + while;					// 36
+						}									
+					} else {
+						print B;							// 37
+					}
+				}
+				else = 145;									// 38
+				while = (else % 5) + 1 + while;				// 39
+			}
+			if = while;										// 40
+			c = c + 3;										// 41
+		}
+		i = i + 1;											// 42
+	}
+	print while;											// 43
+}
+

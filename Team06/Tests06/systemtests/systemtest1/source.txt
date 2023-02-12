@@ -1,0 +1,53 @@
+procedure arithmetic {
+	read a;
+		read b;
+	  read c;
+			call conditionalSpam;
+	z = a + b;
+	y =a * c;
+	x = a % (b + c) * (c - (y - z)) + z;
+	w=a%(b+c)*(c-(y-z))+z;
+	w= w / 1;
+	w = 2*w;
+	o = 2+0;
+	a=1;
+	b=0;
+	 k = 2       *                    0;                   
+	   j =                             b                + 7                   ;
+	     i       =  w  *     a  +         j;
+}
+
+procedure conditionalSpam {
+	i = 0;
+	a = 1;
+	A = 2;
+	b = 3;
+	B = 3;
+	c = 0;
+	N = 10;
+	thisIsAVeryLongNameAndILikeApples = 42;
+	while (i < thisIsAVeryLongNameAndILikeApples) {
+		a = a + a;
+		while (c < 10) {
+			while = 1;
+			if = 2;
+			while (      while<=10) {
+				if(a==A)   then  {
+	print A;
+				}else{
+			if ((((if * 5 / 1 + 3)) != N)) then {
+									while (b == B) {
+									b = b + while;}
+									}
+									else {print B;}
+								}
+			else = 145;
+			while = (else % 5) + 1 + while; 
+			}
+			if = while;
+				c = c + 3;
+		}
+	i = i + 1;
+	}
+	print while;
+}
