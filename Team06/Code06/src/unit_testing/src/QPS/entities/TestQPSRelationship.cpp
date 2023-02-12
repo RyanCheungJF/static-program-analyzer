@@ -30,11 +30,15 @@ TEST_CASE("makeRelationship / follows relationship, with correct params / return
 	vector<Parameter> expectedParameters = inputParameters;
 
 	Relationship output = Relationship::makeRelationship(typeInput, inputParameters);
+	vector<Parameter> outputParameters = output.getParameters();
 	CHECK(expectedType == output.type);
+	CHECK(inputParameters[0] == outputParameters[0]);
 	Relationship output2 = Relationship::makeRelationship(typeInput, inputParameters2);
 	CHECK(expectedType == output2.type);
+	//CHECK(inputParameters2 == output2.getParameters());
 	Relationship output3 = Relationship::makeRelationship(typeInput, inputParameters);
 	CHECK(expectedType == output3.type);
+	//CHECK(inputParameters3 == output3.getParameters());
 }
 
 TEST_CASE("makeRelationship / follows relationship, with wrong second param / throws error") {

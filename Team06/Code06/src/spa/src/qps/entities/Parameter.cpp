@@ -101,9 +101,9 @@ bool Parameter::isEqualTo(Parameter p) {
     return p.getValue() == this->getValue();
 }
 
-bool Parameter::operator==(Parameter& p)
+bool Parameter::operator==(const Parameter& p) const
 {
-	return this->getType() == p.getType() && this->getValue() == p.getValue();
+	return type == p.type && value == p.value;
 }
 
 const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {

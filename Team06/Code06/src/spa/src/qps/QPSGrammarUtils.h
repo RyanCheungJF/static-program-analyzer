@@ -5,7 +5,7 @@
 #ifndef SPA_QPSGRAMMARUTILS_H
 #define SPA_QPSGRAMMARUTILS_H
 #include <string>
-#include "parser/ParserUtil.h";
+#include "qps/parser/ParserUtil.h"
 using namespace std;
 
 //No need to package it into a class
