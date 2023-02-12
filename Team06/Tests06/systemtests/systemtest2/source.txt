@@ -1,0 +1,41 @@
+procedure wEiRdNAmeS123 {
+			read p0licemAN;
+		read p0liceWahMan;
+	read pOl3icEwOM5N;
+	if (p0licemAN == p0liceWahMan) then {
+		read read;
+			read = read + 1;
+		read rEaD;
+			rEEE = rEaD + read;
+	} else {
+		call noindent;
+		print print;
+	}
+	call call;
+	m0ArWeirdNaMe5AnDtH7sIsVer9Lon6AnDILov3Ch3rr1E2=8;
+}
+
+procedure noindent {
+call call;
+call call;
+call call;
+i = 5;
+N = 50;
+while (i <= N) {
+call call;
+i = i + 1;
+print i;
+}
+x=1+2;
+y=2+3;
+if(x!=y)then{
+x=y;
+}else{
+y=x;}
+print x;
+print y;
+}
+
+procedure call {
+	a = 2 + 3;
+}
