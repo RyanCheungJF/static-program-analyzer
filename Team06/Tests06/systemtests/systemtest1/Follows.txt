@@ -1,40 +1,55 @@
-1 - normal follows
+1 - comment
 stmt s;
 Select s such that Follows(1, s)
 2
 5000
-2 - read follows
+2 - comment
 read r;
 Select r such that Follows(1, r)
 2
 5000
-3 - call follows
+3 - comment
 call c;
 Select c such that Follows(3, c)
 4
 5000
-4 - call follows on end of line
+4 - comment
 stmt s;
 Select s such that Follows(16, s)
 none
 5000
-5 - normal follows
+5 - comment
 stmt s;
 Select s such that Follows(25, s)
 42
 5000
-6 - read follows
+6 - comment
 read r;
-Select r such that Follows(25, s)
+Select r such that Follows(25, r)
 none
 5000
-7 - normal follows
+7 - comment
 stmt s;
 Select s such that Follows(27, s)
 41
 5000
-8 - normal follows
+8 - comment
 stmt s;
 Select s such that Follows(31, s)
 37
+5000
+9 - comment
+stmt s;
+Select s such that Follows(s, 27)
+26
+5000
+10 - comment
+stmt s;
+Select s such that Follows(s, 17)
+none
+5000
+11 - comment
+while w;
+Select w such that Follows(w, 25)
+none
 5000

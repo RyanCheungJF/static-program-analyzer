@@ -1,0 +1,35 @@
+1 - comment
+stmt s;
+Select s such that Parent(1, s)
+none
+5000
+2 - comment
+stmt s;
+Select s such that Parent(s, 1)
+none
+5000
+3 - comment
+stmt s;
+Select s such that Parent(17, s)
+none
+5000
+4 - comment
+stmt s;
+Select s such that Parent(25, s)
+26, 27, 41
+5000
+5 - comment
+stmt s;
+Select s such that Parent(33, s)
+34, 36
+5000
+6 - comment
+while w;
+Select w such that Parent(33, w)
+34
+5000
+7 - comment
+stmt s;
+Select s such that Parent(s, 37)
+30
+5000
