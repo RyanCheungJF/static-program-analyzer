@@ -13,17 +13,16 @@ void WritePKB::setFollows(StmtNum followee, StmtNum follower) {
     return;
 }
 
-void WritePKB::setFollowsT(std::vector<std::pair<StmtNum, StmtNum>> followee_follower) {
-    pkbInstance->followsTStorage->write(followee_follower);
-    return;
+void WritePKB::setFollowsT(StmtNum followee, std::vector<StmtNum> followers) {
+    pkbInstance->followsTStorage->write(followee, followers);
 }
 
 void WritePKB::setParent(StmtNum parent, StmtNum children) {
     pkbInstance->parentStorage->write(parent, children);
 }
 
-void WritePKB::setParentT(std::vector<std::pair<StmtNum, StmtNum>> parentChildrPairs) {
-    pkbInstance->parentTStorage->write(parentChildrPairs);
+void WritePKB::setParentT(StmtNum parent, std::vector<StmtNum> children) {
+    pkbInstance->parentTStorage->write(parent, children);
 }
 
 void WritePKB::setStatement(Stmt s, std::vector<StmtNum> lines) {
@@ -70,6 +69,14 @@ void WritePKB::setConstant(StmtNum line, std::vector<Const> constants) {
     return;
 }
 
+void WritePKB::setCall(StmtNum callLine, Proc procedure_being_called) {
+    pkbInstance->callStorage->writeCall(callLine, procedure_being_called);
+}
+
+void WritePKB::setUses(StmtNum num, std::vector<Ent> entities) {
+    pkbInstance->usesStorage->write(num, entities);
+}
+
 void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer) {
     pkbInstance->patternStorage->writePattern(lhs, num, std::move(pointer));
     return;
@@ -78,3 +85,4 @@ void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expres
 std::unique_ptr<Expression> WritePKB::buildSubtree(std::string rhs) {
     return std::move(pkbInstance->patternStorage->buildSubtree(rhs));
 }
+

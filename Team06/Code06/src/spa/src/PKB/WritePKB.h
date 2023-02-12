@@ -14,13 +14,13 @@ public:
     void setFollows(StmtNum left, StmtNum right);
 
     // Sets FollowsT relation in PKB
-    void setFollowsT(std::vector<std::pair<StmtNum, StmtNum>> followee_follower);
+    void setFollowsT(StmtNum followee, std::vector<StmtNum> followers);
 
     // Sets Parent relation in PKB
     void setParent(StmtNum parent, StmtNum child);
 
     // Sets ParentT relation in PKB
-    void setParentT(std::vector<std::pair<StmtNum, StmtNum>> parentChildrPairs);
+    void setParentT(StmtNum parent, std::vector<StmtNum> children);
 
     // Sets the statement along with the statement lines that they appear in
     void setStatement(Stmt s, std::vector<StmtNum> lines);
@@ -47,6 +47,10 @@ public:
     void setConstant(Const c, StmtNum line);
 
     void setConstant(StmtNum line, std::vector<Const> constants);
+
+    void setCall(StmtNum callLine, Proc procedure_being_called);
+
+    void setUses(StmtNum num, std::vector<Ent> entities);
 
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
