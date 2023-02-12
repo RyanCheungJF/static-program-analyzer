@@ -53,7 +53,7 @@ std::unique_ptr<Procedure> Parser::parseProcedure(std::deque<Token>& tokens) {
 
 std::unique_ptr<StatementList> Parser::parseStatementList(std::deque<Token>& tokens) {
 	// Rule: stmt+
-	std::cout << "Parsing Statement List" << std::endl;
+	std::cout << "Parsing Statement List " << tokens.front().value << std::endl;
 
 	auto statementList = std::make_unique<StatementList>();
 
@@ -71,27 +71,42 @@ std::unique_ptr<StatementList> Parser::parseStatementList(std::deque<Token>& tok
 std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
 	// Rule: read | print | call | while | if | assign
 	if (tokens.front().type == TokenType::NAME) {
-		if (tokens.front().value == "read") {
+		auto firstToken = tokens.front();
+		tokens.pop_front(); // Pop the keyword
+		if (firstToken.value == "read") {
 			auto readStatement = parseReadStatement(tokens);
 			return readStatement;
 		}
-		else if (tokens.front().value == "print") {
+		else if (firstToken.value == "print") {
 			auto printStatement = parsePrintStatement(tokens);
 			return printStatement;
 		}
-		else if (tokens.front().value == "call") {
+		else if (firstToken.value == "call") {
 			auto callStatement = parseCallStatement(tokens);
 			return callStatement;
 		}
-		else if (tokens.front().value == "while") {
+		else if (firstToken.value == "while") {
+			// Since we can use while as a variable name, we check if it is an assign
+			if (tokens.front().value != "(") {
+				tokens.push_front(firstToken);
+				auto assignStatement = parseAssignStatement(tokens);
+				return assignStatement;
+			}
 			auto whileStatement = parseWhileStatement(tokens);
 			return whileStatement;
 		}
-		else if (tokens.front().value == "if") {
+		else if (firstToken.value == "if") {
+			// Since we can use while as a variable name, we check if it is an assign
+			if (tokens.front().value != "(") {
+				tokens.push_front(firstToken);
+				auto assignStatement = parseAssignStatement(tokens);
+				return assignStatement;
+			}
 			auto ifStatement = parseIfStatement(tokens);
 			return ifStatement;
 		}
 		else { // Else, it must be an assign statement
+			tokens.push_front(firstToken);
 			auto assignStatement = parseAssignStatement(tokens);
 			return assignStatement;
 		}
@@ -103,13 +118,11 @@ std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
 
 std::unique_ptr<ReadStatement> Parser::parseReadStatement(std::deque<Token>& tokens) {
 	// Rule: 'read' var_name';'
-	std::cout << "Parsing Read Statement" << std::endl;
+	std::cout << "Parsing Read Statement " << tokens.front().value << std::endl;
 
 	auto readStatement = std::make_unique<ReadStatement>();
 	readStatement->statementNumber = currStatementNumber;
 	currStatementNumber++;
-
-	tokens.pop_front(); // Pop 'read'
 
 	if (tokens.front().type != TokenType::NAME) {
 		throw SyntaxErrorException("Expected var_name in read statement, but got -> " + tokens.front().value);
@@ -128,13 +141,11 @@ std::unique_ptr<ReadStatement> Parser::parseReadStatement(std::deque<Token>& tok
 
 std::unique_ptr<PrintStatement> Parser::parsePrintStatement(std::deque<Token>& tokens) {
 	// Rule: 'print' var_name';'
-	std::cout << "Parsing Print Statement" << std::endl;
+	std::cout << "Parsing Print Statement " << tokens.front().value << std::endl;
 
 	auto printStatement = std::make_unique<PrintStatement>();
 	printStatement->statementNumber = currStatementNumber;
 	currStatementNumber++;
-
-	tokens.pop_front(); // Pop 'print'
 
 	if (tokens.front().type != TokenType::NAME) {
 		throw SyntaxErrorException("Expected var_name in print statement, but got -> " + tokens.front().value);
@@ -153,13 +164,11 @@ std::unique_ptr<PrintStatement> Parser::parsePrintStatement(std::deque<Token>& t
 
 std::unique_ptr<CallStatement> Parser::parseCallStatement(std::deque<Token>& tokens) {
 	// Rule: 'call' proc_name';'
-	std::cout << "Parsing Call Statement" << std::endl;
+	std::cout << "Parsing Call Statement " << tokens.front().value << std::endl;
 
 	auto callStatement = std::make_unique<CallStatement>();
 	callStatement->statementNumber = currStatementNumber;
 	currStatementNumber++;
-
-	tokens.pop_front(); // Pop 'call'
 
 	if (tokens.front().type != TokenType::NAME) {
 		throw SyntaxErrorException("Expected proc_name in call statement, but got -> " + tokens.front().value);
@@ -178,13 +187,11 @@ std::unique_ptr<CallStatement> Parser::parseCallStatement(std::deque<Token>& tok
 
 std::unique_ptr<WhileStatement> Parser::parseWhileStatement(std::deque<Token>& tokens) {
 	// Rule: 'while' '(' cond_expr ')' '{' stmtLst '}'
-	std::cout << "Parsing While Statement" << std::endl;
+	std::cout << "Parsing While Statement " << tokens.front().value << std::endl;
 
 	auto whileStatement = std::make_unique<WhileStatement>();
 	whileStatement->statementNumber = currStatementNumber;
 	currStatementNumber++;
-
-	tokens.pop_front(); // Pop 'while'
 
 	if (tokens.front().type != TokenType::LEFT_PARENTHESIS) {
 		throw SyntaxErrorException("Expected '(' in while statement, but got -> " + tokens.front().value);
@@ -217,13 +224,11 @@ std::unique_ptr<WhileStatement> Parser::parseWhileStatement(std::deque<Token>& t
 
 std::unique_ptr<IfStatement> Parser::parseIfStatement(std::deque<Token>& tokens) {
 	// Rule: 'if' '(' cond_expr ')' 'then' '{' stmtLst '}' 'else' '{' stmtLst '}'
-	std::cout << "Parsing If Statement" << std::endl;
+	std::cout << "Parsing If Statement " << tokens.front().value <<  std::endl;
 
 	auto ifStatement = std::make_unique<IfStatement>();
 	ifStatement->statementNumber = currStatementNumber;
 	currStatementNumber++;
-
-	tokens.pop_front(); // Pop 'if'
 
 	if (tokens.front().type != TokenType::LEFT_PARENTHESIS) {
 		throw SyntaxErrorException("Expected '(' in if statement, but got -> " + tokens.front().value);
@@ -279,7 +284,7 @@ std::unique_ptr<IfStatement> Parser::parseIfStatement(std::deque<Token>& tokens)
 
 std::unique_ptr<AssignStatement> Parser::parseAssignStatement(std::deque<Token>& tokens) {
 	// Rule: var_name '=' expr ';'
-	std::cout << "Parsing Assign Statement" << std::endl;
+	std::cout << "Parsing Assign Statement " << tokens.front().value << std::endl;
 
 	auto assignStatement = std::make_unique<AssignStatement>();
 	assignStatement->statementNumber = currStatementNumber;
@@ -306,7 +311,7 @@ std::unique_ptr<AssignStatement> Parser::parseAssignStatement(std::deque<Token>&
 std::unique_ptr<ConditionalExpression> Parser::parseConditionalExpression(std::deque<Token>& tokens) {
 	// Rule: rel_expr | '!' '(' cond_expr ')' | '(' cond_expr ')' '&&' '(' cond_expr ')' | '(' cond_expr ')' '||' '(' cond_expr ')'
 	// Need to handle distinguishment between parsing a rel_expr & expr.
-	std::cout << "Parsing Conditional Expression" << std::endl;
+	std::cout << "Parsing Conditional Expression " << tokens.front().value << std::endl;
 
 	if (tokens.front().type == TokenType::NOT) { // '!' '(' path
 		auto notConditionalExpression = std::make_unique<NotConditionalExpression>();
@@ -366,7 +371,7 @@ std::unique_ptr<ConditionalExpression> Parser::parseRelationalExpression(std::de
 	/* Rule: rel_factor '>' rel_factor | rel_factor '>=' rel_factor |
 			 rel_factor '<' rel_factor | rel_factor '<=' rel_factor |
 			 rel_factor '==' rel_factor | rel_factor '!=' rel_factor */
-	std::cout << "Parsing Relational Expression" << std::endl;
+	std::cout << "Parsing Relational Expression " << tokens.front().value << std::endl;
 
 	auto relationalExpression = std::make_unique<RelationalExpression>();
 	relationalExpression->lhs = parseRelationalFactor(tokens);
@@ -386,7 +391,7 @@ std::unique_ptr<ConditionalExpression> Parser::parseRelationalExpression(std::de
 std::unique_ptr<Expression> Parser::parseRelationalFactor(std::deque<Token>& tokens) {
 	// Rule: var_name | const_value | expr
 	// Not quite sure how to distinguish which path to take, for now just parse it as an expression.
-	std::cout << "Parsing Relational Factor" << std::endl;
+	std::cout << "Parsing Relational Factor " << tokens.front().value << std::endl;
 
 	return parseExpression(tokens);
 }
@@ -397,7 +402,7 @@ std::unique_ptr<Expression> Parser::parseExpression(std::deque<Token>& tokens) {
 	*    expr: term(expr')
 	*    expr': '+' term(expr') | '-' term(expr') | epsilon
 	*/
-	std::cout << "Parsing Expression" << std::endl;
+	std::cout << "Parsing Expression " << tokens.front().value << std::endl;
 
 	std::unique_ptr<Expression> lhs = parseTerm(tokens);
 
@@ -420,7 +425,7 @@ std::unique_ptr<Expression> Parser::parseTerm(std::deque<Token>& tokens) {
 	*    term: factor(term')
 	*    term': '*' factor(term') | '/' factor(term') | '%' factor(term') | epsilon
 	*/
-	std::cout << "Parsing Term" << std::endl;
+	std::cout << "Parsing Term " << tokens.front().value << std::endl;
 
 	std::unique_ptr<Expression> lhs = parseFactor(tokens);
 
@@ -440,10 +445,10 @@ std::unique_ptr<Expression> Parser::parseTerm(std::deque<Token>& tokens) {
 
 std::unique_ptr<Expression> Parser::parseFactor(std::deque<Token>& tokens) {
 	// Rule: var_name | const_value | '(' expr ')'
-	std::cout << "Parsing Factor" << std::endl;
+	std::cout << "Parsing Factor " << tokens.front().value << std::endl;
 
 	if (tokens.front().type == TokenType::INTEGER) {
-		std::cout << "Parsing Constant" << std::endl;
+		std::cout << "Parsing Constant " << tokens.front().value << std::endl;
 
 		auto constant = std::make_unique<Constant>();
 		constant->value = stoi(tokens.front().value);
@@ -451,7 +456,7 @@ std::unique_ptr<Expression> Parser::parseFactor(std::deque<Token>& tokens) {
 		return constant;
 	}
 	else if (tokens.front().type == TokenType::NAME) {
-		std::cout << "Parsing Variable" << std::endl;
+		std::cout << "Parsing Variable " << tokens.front().value << std::endl;
 
 		auto variable = std::make_unique<Variable>();
 		variable->name = tokens.front().value;

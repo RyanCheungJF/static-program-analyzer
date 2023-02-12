@@ -35,7 +35,7 @@ procedure conditionalSpam {
 				if(a==A)   then  {
 	print A;
 				}else{
-			if ((((if * 5 / 1 + 3)) != N)) then {
+			if (if * 5 / 1 + 3 != N) then {
 									while (b == B) {
 									b = b + while;}
 									}

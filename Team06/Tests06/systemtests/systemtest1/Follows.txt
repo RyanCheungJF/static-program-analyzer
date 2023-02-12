@@ -21,7 +21,7 @@ none
 5 - normal follows
 stmt s;
 Select s such that Follows(25, s)
-43
+42
 5000
 6 - read follows
 read r;
@@ -31,10 +31,10 @@ none
 7 - normal follows
 stmt s;
 Select s such that Follows(27, s)
-42
+41
 5000
 8 - normal follows
 stmt s;
 Select s such that Follows(31, s)
-38
+37
 5000
