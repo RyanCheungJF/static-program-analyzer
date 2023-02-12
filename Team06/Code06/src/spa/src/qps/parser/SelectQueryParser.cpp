@@ -12,7 +12,6 @@ Query SelectQueryParser::parse(string selectQuery) {
 	vector<Pattern> patterns = parsePatternClause(wordList, clauseStarts[2], clauseEnds[2]);
 
 	Query query(selectParams, suchThatRelations, patterns);
-	//SelectQueryInfo queryInfo(selectClauseInfo, suchThatInfo, patternInfo);
 	return query;
 }
 
@@ -138,8 +137,8 @@ vector<Relationship> SelectQueryParser::parseSuchThatClause(vector<string>& word
 	if (itemEnd != condString.size()) {
 		throw Exception();
 	}
-	Parameter p1(param1, Parameter::guessParameterType(param1));
-	Parameter p2(param2, Parameter::guessParameterType(param2));
+	Parameter p1(removeCharFromString(param1, '\"'), Parameter::guessParameterType(param1));
+	Parameter p2(removeCharFromString(param2, '\"'), Parameter::guessParameterType(param2));
 	vector<Parameter> params{ p1, p2 };
 	//need to parse params first
 	Relationship relationship = Relationship::makeRelationship(rel, params);
@@ -186,7 +185,7 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
 			throw Exception();
 		}
 		Parameter synAssign(synAssignString, ParameterType::ASSIGN);
-		Parameter entRef(entRefString, Parameter::guessParameterType(entRefString));
+		Parameter entRef(removeCharFromString(entRefString, '\"'), Parameter::guessParameterType(entRefString));
 		Pattern p(synAssign, entRef, patternString);
 		res.push_back(p);
 	}
