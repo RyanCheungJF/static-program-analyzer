@@ -39,7 +39,7 @@ public:
 	void updateSynonymType(ParameterType);
     string getTypeString() const;
     bool isEqualTo(Parameter);
-	bool operator== (Parameter&, Parameter&);
+	bool operator== (Parameter&);
     static ParameterType guessParameterType(string);
 private:
 	const static unordered_map<string, ParameterType> stringToTypeMap;
