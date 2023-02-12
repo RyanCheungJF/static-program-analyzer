@@ -11,6 +11,7 @@
 #include "AST/Visitor/ParentExtractorVisitor.h"
 #include "AST/Visitor/ASTVisitorUtils.h"
 #include "../PKB/WritePKB.h"
+#include "../PKB/ReadPKB.h"
 
 class DesignExtractor {
 private:

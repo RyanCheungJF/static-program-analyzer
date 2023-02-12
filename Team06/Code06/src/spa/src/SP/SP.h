@@ -1,9 +1,9 @@
 #pragma once
 
-#include <SPExceptions.h>
-#include <Tokenizer.h>
-#include <Parser.h>
-#include <DesignExtractor.h>
+#include "SPExceptions.h"
+#include "Tokenizer.h"
+#include "Parser.h"
+#include "DesignExtractor.h"
 
 class SP {
 private:

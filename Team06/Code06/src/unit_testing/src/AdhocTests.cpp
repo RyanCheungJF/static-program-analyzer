@@ -3,12 +3,12 @@
 #include "PKB/PKB.h"
 #include "PKB/ReadPKB.h"
 #include "PKB/WritePKB.h"
-#include "SP.h"
+#include "SP/SP.h"
 #include "qps/QPS.h"
-#include "../SP/Tokenizer.h"
-#include "../SP/Parser.h"
-#include "../SP/AST/Node/Procedure.h"
-#include "../SP/SPExceptions.h"
+#include "SP/Tokenizer.h"
+#include "SP/Parser.h"
+#include "SP/AST/Node/Procedure.h"
+#include "SP/SPExceptions.h"
 using namespace std;
 
 TEST_CASE("adhoc") {

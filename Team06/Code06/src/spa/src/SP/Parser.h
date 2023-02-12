@@ -1,7 +1,7 @@
 #pragma once
 
 #include <deque>
-#include <Token.h>
+#include "Token.h"
 #include "SPExceptions.h"
 #include "./AST/Node/Program.h"
 #include "./AST/Node/Procedure.h"

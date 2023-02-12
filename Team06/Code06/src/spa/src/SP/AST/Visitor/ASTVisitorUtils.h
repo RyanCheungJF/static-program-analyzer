@@ -1,28 +1,31 @@
 #pragma once
 
 #include <unordered_set>
-#include "AST/Node/Program.h"
-#include "AST/Node/Procedure.h"
-#include "AST/Node/IfStatement.h"
-#include "AST/Node/ReadStatement.h"
-#include "AST/Node/CallStatement.h"
-#include "AST/Node/AssignStatement.h"
-#include "AST/Node/WhileStatement.h"
-#include "AST/Node/PrintStatement.h"
-#include "AST/Node/Statement.h"
-#include "AST/Node/StatementList.h"
-#include "AST/Node/WhileStatement.h"
-#include "AST/Node/MathExpression.h"
-#include "AST/Node/Constant.h"
-#include "AST/Node/Variable.h"
-#include "AST/Node/NotConditionalExpression.h"
-#include "AST/Node/BinaryConditionalExpression.h"
-#include "AST/Node/RelationalExpression.h"
-#include "AST/Node/IfStatement.h"
-#include "AST/Node/WhileStatement.h"
+#include "SP/AST/Node/Program.h"
+#include "SP/AST/Node/Procedure.h"
+#include "SP/AST/Node/IfStatement.h"
+#include "SP/AST/Node/ReadStatement.h"
+#include "SP/AST/Node/CallStatement.h"
+#include "SP/AST/Node/AssignStatement.h"
+#include "SP/AST/Node/WhileStatement.h"
+#include "SP/AST/Node/PrintStatement.h"
+#include "SP/AST/Node/Statement.h"
+#include "SP/AST/Node/StatementList.h"
+#include "SP/AST/Node/WhileStatement.h"
+#include "SP/AST/Node/MathExpression.h"
+#include "SP/AST/Node/Constant.h"
+#include "SP/AST/Node/Variable.h"
+#include "SP/AST/Node/NotConditionalExpression.h"
+#include "SP/AST/Node/BinaryConditionalExpression.h"
+#include "SP/AST/Node/RelationalExpression.h"
+#include "SP/AST/Node/IfStatement.h"
+#include "SP/AST/Node/WhileStatement.h"
+#include "PKB/WritePKB.h"
+#include "PKB/ReadPKB.h"
 
 int visitIfStatementHelper(IfStatement* ifStatement);
 int visitWhileStatementHelper(WhileStatement* whileStatement);
 void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor);
 void visitCondExprHelper(ConditionalExpression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants);
 void visitExprHelper(Expression* e, std::unordered_set<std::string>& variables, std::unordered_set<int>& constants);
+void populateRemainingTables(WritePKB* writePKB, ReadPKB* readPKB);

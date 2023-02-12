@@ -4,8 +4,8 @@
 #include <fstream>
 #include <deque>
 #include <regex>
-#include <Token.h>
-#include <SPExceptions.h>
+#include "Token.h"
+#include "SPExceptions.h"
 
 class Tokenizer {
 public:

@@ -10,6 +10,7 @@ DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writeP
 void DesignExtractor::populatePKB() {
 	extractEntities();
 	extractRelationships();
+	// populateRemainingTables(writePKB, readPKB);
 }
 
 void DesignExtractor::extractRelationships() {

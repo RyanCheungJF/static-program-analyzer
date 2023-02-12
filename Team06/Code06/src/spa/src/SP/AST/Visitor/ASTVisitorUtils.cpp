@@ -78,3 +78,7 @@ void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
 		}
 	}
 }
+
+void populateRemainingTables(WritePKB* writePKB, ReadPKB* readPKB) {
+
+}
