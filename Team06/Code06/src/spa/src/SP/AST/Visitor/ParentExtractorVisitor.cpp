@@ -14,12 +14,11 @@ void ParentExtractorVisitor::visitCallStatement(CallStatement* callStatement) {}
 
 void ParentExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
 	// For Parent
-	std::vector<StmtNum> parentVector;
 	for (auto const& i : ifStatement->thenStmtList->statements) {
-		parentVector.push_back(i->statementNumber);
+		writeApi->setParent(ifStatement->statementNumber, i->statementNumber);
 	}
 	for (auto const& i : ifStatement->elseStmtList->statements) {
-		parentVector.push_back(i->statementNumber);
+		writeApi->setParent(ifStatement->statementNumber, i->statementNumber);
 	}
 	// For ParentT
 	std::vector<StmtNum> parentTVector;
@@ -29,15 +28,13 @@ void ParentExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
 		parentTVector.push_back(i);
 	}
 
-	//writeApi->setParent(ifStatement->statementNumber, parentVector);
 	//writeApi->setParentT(ifStatement->statementNumber, parentTVector);
 }
 
 void ParentExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement) {
 	// For Parent
-	std::vector<StmtNum> parentVector;
 	for (auto const& i : whileStatement->stmtList->statements) {
-		parentVector.push_back(i->statementNumber);
+		writeApi->setParent(whileStatement->statementNumber, i->statementNumber);
 	}
 	// For ParentT
 	std::vector<StmtNum> parentTVector;
@@ -47,7 +44,6 @@ void ParentExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement)
 		parentTVector.push_back(i);
 	}
 
-	//writeApi->setParent(whileStatement->statementNumber, parentVector);
 	//writeApi->setParentT(whileStatement->statementNumber, parentTVector);
 }
 

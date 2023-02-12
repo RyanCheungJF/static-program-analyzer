@@ -32,5 +32,5 @@ void StatementExtractorVisitor::visitWhileStatement(WhileStatement* whileStateme
 	writeApi->setStatement("while", whileStatement->statementNumber);
 }
 
-void StatementExtractorVisitor::visitExpression(Expression* variable) {};
-void StatementExtractorVisitor::visitConditionalExpression(ConditionalExpression* conditionalExpression) {};
+void StatementExtractorVisitor::visitExpression(Expression* variable) {}
+void StatementExtractorVisitor::visitConditionalExpression(ConditionalExpression* conditionalExpression) {}
