@@ -1,9 +1,7 @@
 #include <iostream>
 #include "catch.hpp"
-#include "../SP/Tokenizer.h"
-#include "../SP/Parser.h"
-#include "../SP/AST/Node/Procedure.h"
-#include "../SP/SPExceptions.h"
+#include "../../spa/src/SP/Tokenizer.h"
+#include "../../spa/src/SP/Parser.h"
 
 #define CAST_TO(ASTNodeType, value) dynamic_cast<ASTNodeType*>(value)
 
@@ -55,7 +53,6 @@ TEST_CASE("Valid Source Program") {
 		auto rootNode = testParser.parseProgram(tokenQueue);
 
 		// creating actual tree
-		// proc A
 		auto mathNodeA = std::make_unique<MathExpression>("+", std::make_unique<Variable>("x"), std::make_unique<Constant>(1));
 		auto assignNodeA = std::make_unique<AssignStatement>("x", std::move(mathNodeA));
 		std::vector<std::unique_ptr<Statement>> statementsA;
@@ -63,7 +60,6 @@ TEST_CASE("Valid Source Program") {
 		auto statementListNodeA = std::make_unique<StatementList>(std::move(statementsA));
 		auto procedureNodeA = std::make_unique<Procedure>("A", std::move(statementListNodeA));
 
-		// proc B
 		auto mathNodeB = std::make_unique<MathExpression>("*", std::make_unique<Variable>("y"), std::make_unique<Constant>(2));
 		auto assignNodeB = std::make_unique<AssignStatement>("y", std::move(mathNodeB));
 		auto readNodeB = std::make_unique<ReadStatement>("y");
@@ -73,7 +69,6 @@ TEST_CASE("Valid Source Program") {
 		auto statementListNodeB = std::make_unique<StatementList>(std::move(statementsB));
 		auto procedureNodeB = std::make_unique<Procedure>("B", std::move(statementListNodeB));
 
-		// proc C
 		auto mathNodeC = std::make_unique<MathExpression>("-", std::make_unique<Variable>("z"), std::make_unique<Constant>(3));
 		auto assignNodeC = std::make_unique<AssignStatement>("z", std::move(mathNodeC));
 		auto printNodeC = std::make_unique<PrintStatement>("z");
@@ -85,7 +80,6 @@ TEST_CASE("Valid Source Program") {
 		auto statementListNodeC = std::make_unique<StatementList>(std::move(statementsC));
 		auto procedureNodeC = std::make_unique<Procedure>("C", std::move(statementListNodeC));
 
-		// program
 		std::vector<std::unique_ptr<Procedure>> procedures;
 		procedures.push_back(std::move(procedureNodeA));
 		procedures.push_back(std::move(procedureNodeB));
@@ -142,10 +136,8 @@ TEST_CASE("Valid Source Program") {
 		auto procedureNodeA = std::make_unique<Procedure>("A", std::move(statementListNodeA));	
 		std::vector<std::unique_ptr<Procedure>> procedures;
 		procedures.push_back(std::move(procedureNodeA));
-
 		auto programNode = std::make_unique<Program>(std::move(procedures));
 
-		// outer scope
 		REQUIRE(checkIfSameTree(std::move(rootNode), std::move(programNode)));
 	}
 
