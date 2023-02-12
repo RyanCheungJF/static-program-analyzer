@@ -6,25 +6,15 @@
 #include <string>
 #include <iostream>
 
-typedef std::string Stmt;
+typedef std::string ProcName;
 typedef int StmtNum;
 
 class CallStorage {
 public:
-//    virtual void writeCall(Stmt caller, Stmt callee);
-    virtual void writeCall(StmtNum callLine, Stmt callee);
+    virtual void writeCall(StmtNum callLine, ProcName callee);
+    virtual std::vector<std::pair<StmtNum, ProcName>> getCallStatements();
     
 private:
-    /*
-     * Structure of table example below
-     *  caller | callee
-     *  "proc1" | {"proc2", "proc3"}
-     *  "proc2" | {"proc3"}
-     */
-//    std::unordered_map<Stmt, std::unordered_set<Stmt>> caller_callee;
-
-
-
     /*
      * Structure of table example below
      *  call | callee
