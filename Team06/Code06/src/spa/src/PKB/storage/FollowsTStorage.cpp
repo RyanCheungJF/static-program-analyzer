@@ -1,13 +1,11 @@
 #include "FollowsTStorage.h"
 
-void FollowsTStorage::write(std::vector<std::pair<StmtNum, StmtNum>> followee_follower) {
-    for (std::pair<StmtNum, StmtNum> p: followee_follower) {
-        StmtNum followee = p.first;
-        StmtNum follower = p.second;
-        followeeFollowersMap[followee].insert(follower);
-        followerFolloweesMap[follower].insert(followee);
+
+void FollowsTStorage::write(StmtNum followee, std::vector<StmtNum> followers) {
+    followeeFollowersMap[followee].insert(followers.begin(), followers.end());
+    for (StmtNum n: followers) {
+        followerFolloweesMap[n].insert(followee);
     }
-    return;
 }
 
 bool FollowsTStorage::exists(StmtNum followee, StmtNum follower) {
