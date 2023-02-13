@@ -19,7 +19,8 @@ std::vector<std::vector<std::string>> ReadPKB::findRelationship(Relationship rs)
     if (stmtStmtHandlerMap.find(type) != stmtStmtHandlerMap.end()) {
         StmtStmtRLHandler handler(stmtStmtHandlerMap.at(type), pkbInstance->statementStorage);
         return handler.handle(param1, param2);
-    } else if (1 == 1) {
+    // NEEDS TO HANDLE MODIFIES AS WELL
+    } else if (type == RelationshipType::MODIFIES || type == RelationshipType::USES) {
         ModifiesUsesHandler handler(pkbInstance->usesStorage, pkbInstance->statementStorage);
         return handler.handle(param1, param2);
     } 

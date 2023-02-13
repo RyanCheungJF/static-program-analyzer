@@ -15,7 +15,7 @@ PKB buildPkb() {
 
 	//  procedure main {
 	//1     x = 1; 
-	//2     call proc1;
+	//2     call sub;
 	//3	    while (y == x) {
 	//4         y = x + 2;
 	//5		    read y;
@@ -33,11 +33,13 @@ PKB buildPkb() {
 	//       }
 	//   }
 
-	vector<int> mainProcNums = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	unordered_set<int> mainProcNums = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	writePkb.setProcedure("main", mainProcNums);
 
-	vector<int> subProcNums = { 10, 11, 12, 13, 14 };
+	unordered_set<int> subProcNums = { 10, 11, 12, 13, 14 };
 	writePkb.setProcedure("sub", subProcNums);
+
+	writePkb.setCall(2, "sub");
 
 	writePkb.setStatement("assign", 1);
 	writePkb.setStatement("assign", 4);
@@ -67,11 +69,11 @@ PKB buildPkb() {
 	writePkb.setEntity(9, { "count" });
 	writePkb.setEntity(11, { "z" });
 
-	writePkb.setConstant(1, vector<int>{ 1 });
-	writePkb.setConstant(4, vector<int>{ 2 });
-	writePkb.setConstant(6, vector<int>{ 2 });
-	writePkb.setConstant(8, vector<int>{ 2 });
-	writePkb.setConstant(9, vector<int>{ 0 });
+	writePkb.setConstant(1, unordered_set<int>{ 1 });
+	writePkb.setConstant(4, unordered_set<int>{ 2 });
+	writePkb.setConstant(6, unordered_set<int>{ 2 });
+	writePkb.setConstant(8, unordered_set<int>{ 2 });
+	writePkb.setConstant(9, unordered_set<int>{ 0 });
 
 	writePkb.setFollows(1, 2);
 	writePkb.setFollows(2, 3);
@@ -79,30 +81,43 @@ PKB buildPkb() {
 	writePkb.setFollows(7, 8);
 	writePkb.setFollows(8, 9);
 
-	vector<pair<int, int>> followeeFollowerPairs;
-	followeeFollowerPairs.push_back({ 1, 2 });
-	followeeFollowerPairs.push_back({ 1, 3 });
-	followeeFollowerPairs.push_back({ 1, 6 });
-	followeeFollowerPairs.push_back({ 2, 3 });
-	followeeFollowerPairs.push_back({ 2, 6 });
-	followeeFollowerPairs.push_back({ 3, 6 });
-	followeeFollowerPairs.push_back({ 4, 5 });
-	followeeFollowerPairs.push_back({ 7, 8 });
-	followeeFollowerPairs.push_back({ 7, 9 });
-	followeeFollowerPairs.push_back({ 8, 9 });
-	writePkb.setFollowsT(followeeFollowerPairs);
+	writePkb.setFollowsT(1, unordered_set<int>{ 2, 3, 6 });
+	writePkb.setFollowsT(2, unordered_set<int>{ 3, 6 });
+	writePkb.setFollowsT(3, unordered_set<int>{ 6 });
+	writePkb.setFollowsT(4, unordered_set<int>{ 5 });
+	writePkb.setFollowsT(7, unordered_set<int>{ 8, 9 });
+	writePkb.setFollowsT(8, unordered_set<int>{ 9 });
 
 	writePkb.setParent(3, 4);
 	writePkb.setParent(3, 5);
 	writePkb.setParent(9, 10);
 	writePkb.setParent(9, 11);
 
-	vector<pair<int, int>> parentChildPairs;
-	parentChildPairs.push_back({ 3, 4 });
-	parentChildPairs.push_back({ 3, 5 });
-	parentChildPairs.push_back({ 9, 10 });
-	parentChildPairs.push_back({ 9, 11 });
-	writePkb.setParentT(parentChildPairs);
+	writePkb.setParentT(3, { 3, 4 });
+	writePkb.setParentT(9, { 10, 11 });
+
+	writePkb.setUsesS(2, { "x", "y", "count" });
+	writePkb.setUsesS(3, { "x", "y" });
+	writePkb.setUsesS(4, { "x" });
+	writePkb.setUsesS(6, { "x" });
+	writePkb.setUsesS(7, { "x" });
+	writePkb.setUsesS(8, { "x" });
+	writePkb.setUsesS(9, { "x", "y", "count" });
+	writePkb.setUsesS(11, { "x", "y" });
+	writePkb.setUsesP("main", { "x", "y", "count" });
+	writePkb.setUsesP("sub", { "x", "y", "count" });
+
+	writePkb.setModifiesS(1, { "x" });
+	writePkb.setModifiesS(2, { "x", "y", "z" });
+	writePkb.setModifiesS(4, { "y" });
+	writePkb.setModifiesS(5, { "y" });
+	writePkb.setModifiesS(6, { "x" });
+	writePkb.setModifiesS(8, { "y" });
+	writePkb.setModifiesS(10, { "x" });
+	writePkb.setModifiesS(11, { "z" });
+	writePkb.setModifiesP("main", { "x", "y", "z" });
+	writePkb.setModifiesP("sub", { "x", "y", "z" });
+	
 
 	string lhs = "x";
 	unique_ptr<Expression> patternTree = writePkb.buildSubtree("1");
@@ -355,7 +370,53 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
 			REQUIRE(exists(result, "3"));
 			REQUIRE(exists(result, "9"));
 		}
-		
+	}
+
+	SECTION("Uses") {
+		SECTION("int, syn") {
+			string query = R"(
+			variable v;
+			Select v such that Uses(2, v))";
+
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 3);
+			REQUIRE(exists(result, "x"));
+			REQUIRE(exists(result, "y"));
+			REQUIRE(exists(result, "count"));
+		}
+
+		SECTION("stmtSyn, syn") {
+			string query = R"(
+			print pn; variable v;
+			Select pn such that Uses(pn, v))";
+
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 1);
+			REQUIRE(exists(result, "7"));
+		}
+
+		SECTION("procSyn, var") {
+			string query = R"(
+			procedure p;
+			Select p such that Uses(p, "count"))";
+
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 2);
+			REQUIRE(exists(result, "main"));
+			REQUIRE(exists(result, "sub"));
+		}
+
+		SECTION("wildcard, syn") {
+			string query = R"(
+			variable v;
+			Select v such that Uses(_, v))";
+
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 3);
+			REQUIRE(exists(result, "x"));
+			REQUIRE(exists(result, "y"));
+			REQUIRE(exists(result, "count"));
+		}
 	}
 }
 
