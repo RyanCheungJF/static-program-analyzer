@@ -50,7 +50,13 @@ public:
 
     void setCall(StmtNum callLine, Proc procedure_being_called);
 
-    void setUses(StmtNum num, std::vector<Ent> entities);
+    void setUsesS(StmtNum num, std::vector<Ent> entities);
+
+    void setUsesP(ProcName, std::vector<Ent> entities);
+
+    void setModifiesS(StmtNum num, std::vector<Ent> entities);
+
+    void setModifiesP(ProcName, std::vector<Ent> entities);
 
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 

@@ -15,13 +15,18 @@ typedef int StmtNum;
 
 class UsesStorage {
 public:
-    void write(StmtNum num, std::vector<Ent> entities);
+    void writeUsesS(StmtNum num, std::vector<Ent> entities);
+    void writeUsesP(ProcName name, std::vector<Ent> entities);
 
     std::unordered_set<Ent> getUsesS(StmtNum num);
+    std::unordered_set<Ent> getUsesP(ProcName name);
 
 private:
     std::unordered_map<StmtNum, std::unordered_set<Ent>> stmtNum_entities;
     std::unordered_map<Ent, std::unordered_set<StmtNum>> entities_stmtNum;
+
+    std::unordered_map<ProcName, std::unordered_set<Ent>> procName_entities;
+    std::unordered_map<Ent, std::unordered_set<ProcName>> entities_procName;
 
 
 };
