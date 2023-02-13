@@ -5,23 +5,13 @@
 using namespace std;
 
 TEST_CASE("Checks that write and read works for entityStorage") {
-
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    pkb.initializePkb();
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
-    Ent e = "v";
-    std::vector<StmtNum> lines;
-    lines.push_back(3);
-    lines.push_back(6);
-    lines.push_back(9);
-    for (int line: lines) {
-        writePkb.setEntity(e, line);
-    }
-    std::unordered_set<StmtNum> statementNums = readPkb.getEntityStatementNumbers(e);
+    EntityStorage es;
+    Ent e = "v"
+    std::vector<StmtNum> lines = {3, 6, 9};
+    es.writeEntity(3, {e});
+    es.writeEntity(6, {e});
+    es.writeEntity(9, {e});
+    std::unordered_set<StmtNum> statementNums = es.getEntityStmtNums(e);
 
     bool res = true;
     res = res && statementNums.size() == 3;
@@ -34,20 +24,9 @@ TEST_CASE("Checks that write and read works for entityStorage") {
 
 
 TEST_CASE("Check that if an entity does not appear in the source code, it should return an empty set") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    pkb.initializePkb();
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
+    EntityStorage es;
     Ent e = "v";
-    std::vector<StmtNum> lines;
-
-    for (int line: lines) {
-        writePkb.setEntity(e, line);
-    }
-    std::unordered_set<StmtNum> statementNums = readPkb.getEntityStatementNumbers(e);
+    std::unordered_set<StmtNum> statementNums = es.getEntityStmtNums(e);
 
     bool res = true;
     res = res && statementNums.size() == 0;
@@ -57,36 +36,20 @@ TEST_CASE("Check that if an entity does not appear in the source code, it should
 }
 
 TEST_CASE("Check that given query for an entity and a statementNumber that it appears in, it returns true") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    pkb.initializePkb();
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
+    EntityStorage es;
     Ent e = "v";
-    std::vector<StmtNum> lines;
-    lines.push_back(3);
-    for (int line: lines) {
-        writePkb.setEntity(e, line);
-    }
+    es.writeEntity(3, {e});
 
     bool res = true;
-    res = res && (readPkb.checkEntity(e, 3) == true);
-    res = res && (readPkb.checkEntity(e, 4) == false);
+    res = res && (es.checkEntity(e, 3) == true);
+    res = res && (es.checkEntity(e, 4) == false);
     REQUIRE(res);
 }
 
 TEST_CASE("Check that if an entity does not exist, it returns false") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    pkb.initializePkb();
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
+    EntityStorage es;
     bool res = true;
-    res = res && (readPkb.checkEntity("v", 4) == false);
+    res = res && (es.checkEntity("v", 4) == false);
     REQUIRE(res);
 }
 

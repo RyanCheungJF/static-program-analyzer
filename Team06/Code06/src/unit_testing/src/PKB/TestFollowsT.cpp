@@ -7,25 +7,20 @@ using namespace std;
 TEST_CASE("Check that all followers are recorded in the followee") {
     FollowsTStorage fts;
 
-    std::vector<std::pair<StmtNum, StmtNum>> followee_follower;
-    followee_follower.push_back({1, 2});
-    followee_follower.push_back({1, 3});
-    followee_follower.push_back({1, 4});
-    fts.write(followee_follower);
+    std::unordered_set<StmtNum> followers = {2, 3, 4};
+    fts.write(1, followers);
 
     bool res = true;
-    for (std::pair<StmtNum, StmtNum> p: followee_follower) {
-        res = res && fts.exists(p.first, p.second);
-    }
+    res = res && fts.exists(1, 2) && fts.exists(1, 3) && fts.exists(1, 4);
+    res = res && !fts.exists(1, 5);
     REQUIRE(res);
 }
 
 TEST_CASE("Check that a follower is not recorded as a followee") {
     FollowsTStorage fts;
 
-    std::vector<std::pair<StmtNum, StmtNum>> followee_follower;
-    followee_follower.push_back({1, 2});
-    fts.write(followee_follower);
+    std::unordered_set<StmtNum> followers = {2};
+    fts.write(1, followers);
 
     bool res = fts.exists(1, 3);
     REQUIRE(res == false);
@@ -33,17 +28,10 @@ TEST_CASE("Check that a follower is not recorded as a followee") {
 
 TEST_CASE("Check that all of the followers of each followee is accurate, even with duplicate entries") {
     FollowsTStorage fts;
-
-    std::vector<std::pair<StmtNum, StmtNum>> followee_follower;
-    followee_follower.push_back({1, 2});
-    followee_follower.push_back({1, 3});
-    followee_follower.push_back({1, 4});
-    followee_follower.push_back({1, 4});
-    followee_follower.push_back({1, 4});
-    followee_follower.push_back({2, 3});
-    followee_follower.push_back({2, 4});
-    followee_follower.push_back({2, 4});
-    fts.write(followee_follower);
+    std::unordered_set<StmtNum> followers_1 = {2, 3, 4, 4, 3, 4};
+    std::unordered_set<StmtNum> followers_2 = {3, 4, 4, 3, 4};
+    fts.write(1, followers_1);
+    fts.write(2, followers_2);
 
     bool res = true;
     std::unordered_set<StmtNum> followers1 = fts.getRightWildcard(1);
@@ -64,19 +52,12 @@ TEST_CASE("Check that all of the followers of each followee is accurate, even wi
 
 TEST_CASE("Check that all of the followees of each follower is accurate, even with duplicate entries") {
     FollowsTStorage fts;
-
-    std::vector<std::pair<StmtNum, StmtNum>> followee_follower;
-    followee_follower.push_back({1, 2});
-    followee_follower.push_back({1, 3});
-    followee_follower.push_back({1, 4});
-    followee_follower.push_back({1, 4});
-    followee_follower.push_back({1, 4});
-    followee_follower.push_back({2, 3});
-    followee_follower.push_back({2, 4});
-    followee_follower.push_back({2, 4});
-    followee_follower.push_back({3, 4});
-    followee_follower.push_back({3, 4});
-    fts.write(followee_follower);
+    std::unordered_set<StmtNum> followers1 = {2, 3, 3, 4};
+    std::unordered_set<StmtNum> followers2 = {3, 4};
+    std::unordered_set<StmtNum> followers3 = {4};
+    fts.write(1, followers1);
+    fts.write(2, followers2);
+    fts.write(3, followers3);
 
     bool res = true;
     std::unordered_set<StmtNum> followees2 = fts.getLeftWildcard(2);
@@ -117,7 +98,7 @@ TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
     followee_follower.push_back({ 1, 2 });
     writePkb.setFollowsT(followee_follower);
 
-    
+
     Parameter param1 = Parameter("1", "fixed_int");
     Parameter param2 = Parameter("2", "fixed_int");
     std::vector<Parameter> params;
@@ -491,8 +472,8 @@ TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
 
     bool res = std::equal(commonStatementNums.begin(), commonStatementNums.begin(), correct.begin());
     REQUIRE(res);
-    
-    
+
+
     // prints out followersStatementNums
     std::copy(followersStatementNums.begin(),
               followersStatementNums.end(),
@@ -509,6 +490,6 @@ TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
     std::copy(commonStatementNums.begin(),
               commonStatementNums.end(),
               std::ostream_iterator<int>(std::cout, " "));
-    
+
 }
 */

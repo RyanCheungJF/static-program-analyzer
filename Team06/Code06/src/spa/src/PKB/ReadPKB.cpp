@@ -19,13 +19,10 @@ std::vector<std::vector<std::string>> ReadPKB::findRelationship(Relationship rs)
     if (stmtStmtHandlerMap.find(type) != stmtStmtHandlerMap.end()) {
         StmtStmtRLHandler handler(stmtStmtHandlerMap.at(type), pkbInstance->statementStorage);
         return handler.handle(param1, param2);
-    } else if (stmtEntHandlerMap.find(type) != stmtEntHandlerMap.end()) {
-        StmtEntRLHandler handler;
-        return handler.handle(stmtEntHandlerMap.at(type));
-    } else if (entEntHandlerMap.find(type) != entEntHandlerMap.end()) {
-        EntEntRLHandler handler;
-        return handler.handle(entEntHandlerMap.at(type));
-    }
+    } else if (1 == 1) {
+        ModifiesUsesHandler handler(pkbInstance->usesStorage, pkbInstance->statementStorage);
+        return handler.handle(param1, param2);
+    } 
     return std::vector<std::vector<std::string>>();
 }
 
@@ -56,7 +53,7 @@ std::vector<std::string> ReadPKB::findDesignEntities(Parameter p) {
             res.push_back(to_string(stmtNum));
         }
     }
-  
+
     return res;
 }
 
@@ -132,32 +129,46 @@ bool ReadPKB::checkStatement(Stmt stmt, StmtNum num){
     return pkbInstance->statementStorage->checkStatement(stmt, num);
 }
 
-std::unordered_set<StmtNum> ReadPKB::getStatementNumbers(Stmt stmt) {
-    return pkbInstance->statementStorage->getStatementNumbers(stmt);
-}
-
-bool ReadPKB::checkEntity(Ent e, StmtNum num) {
-    return pkbInstance->entityStorage->checkEntity(e, num);
-}
-
-std::unordered_set<StmtNum> ReadPKB::getEntityStatementNumbers(Ent e) {
-    return pkbInstance->entityStorage->getEntityStmtNums(e);
-}
-
-bool ReadPKB::checkProcedure(Proc p, StmtNum num) {
-    return pkbInstance->procedureStorage->checkProcedure(p, num);
-}
-
 std::unordered_set<StmtNum> ReadPKB::getProcedureStatementNumbers(Proc p) {
     return pkbInstance->procedureStorage->getProcedureStatementNumbers(p);
 }
 
-
-bool ReadPKB::checkConstant(Const c, StmtNum num) {
-    return pkbInstance->constantStorage->checkConstant(c, num);
+std::vector<std::pair<StmtNum, ProcName>> ReadPKB::getCallStatements() {
+    return pkbInstance->callStorage->getCallStatements();
 }
 
-std::unordered_set<StmtNum> ReadPKB::getConstantStatementNumbers(Const c) {
-    return pkbInstance->constantStorage->getConstantStmtNums(c);
+std::unordered_set<ProcName> ReadPKB::getAllProcedureNames() {
+    return pkbInstance->procedureStorage->getProcNames();
 }
 
+std::unordered_set<Ent> ReadPKB::getUsesS(StmtNum num) {
+    return pkbInstance->usesStorage->getEnt(num);
+}
+
+std::unordered_set<Ent> ReadPKB::getUsesP(ProcName name) {
+    return pkbInstance->usesStorage->getEnt(name);
+}
+
+std::unordered_set<Ent> ReadPKB::getModifiesS(StmtNum num) {
+    return pkbInstance->modifiesStorage->getModifiesS(num);
+}
+
+std::unordered_set<Ent> ReadPKB::getModifiesP(ProcName name) {
+    return pkbInstance->modifiesStorage->getModifiesP(name);
+}
+
+std::unordered_set<StmtNum> ReadPKB::getIfStatementNumbers() {
+    return pkbInstance->statementStorage->getStatementNumbers("if");
+}
+
+std::unordered_set<StmtNum> ReadPKB::getWhileStatementNumbers() {
+    return pkbInstance->statementStorage->getStatementNumbers("while");
+}
+
+std::unordered_set<StmtNum> ReadPKB::getContainedStatements(StmtNum containerNum) {
+    return pkbInstance->parentTStorage->getRightWildcard(containerNum);
+}
+
+std::pair<StmtNum, ProcName> ReadPKB::getCallStmt(StmtNum s) {
+    return pkbInstance->callStorage->getCallStmt(s);
+}

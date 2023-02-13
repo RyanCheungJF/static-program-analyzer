@@ -13,6 +13,9 @@
 #include "storage/StmtStorage.h"
 #include "storage/PatternStorage.h"
 #include "storage/ConstantStorage.h"
+#include "storage/CallStorage.h"
+#include "storage/UsesStorage.h"
+#include "storage/ModifiesStorage.h"
 
 using namespace std;
 typedef short PROC;
@@ -23,7 +26,7 @@ class VarTable;  // no need to #include "VarTable.h" as all I need is pointer
 
 class PKB {
 public:
-	static VarTable* varTable; 
+	static VarTable* varTable;
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST (PROC p);
 
@@ -42,4 +45,7 @@ private:
     std::shared_ptr<ProcedureStorage> procedureStorage;
     std::shared_ptr<ConstantStorage> constantStorage;
     std::shared_ptr<PatternStorage> patternStorage;
+    std::shared_ptr<CallStorage> callStorage;
+    std::shared_ptr<UsesStorage> usesStorage;
+    std::shared_ptr<ModifiesStorage> modifiesStorage;
 };

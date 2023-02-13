@@ -1,14 +1,22 @@
 #include "ParentTStorage.h"
 
-void ParentTStorage::write(std::vector<std::pair<StmtNum, StmtNum>> parentChildPairs) {
-	for (std::pair<StmtNum, StmtNum> p : parentChildPairs) {
-		StmtNum parent = p.first;
-		StmtNum child = p.second;
-		parentChildrenMap[parent].insert(child);
-		childParentsMap[child].insert(parent);
-	}
-	return;
+//void ParentTStorage::write(std::vector<std::pair<StmtNum, StmtNum>> parentChildPairs) {
+//	for (std::pair<StmtNum, StmtNum> p : parentChildPairs) {
+//		StmtNum parent = p.first;
+//		StmtNum child = p.second;
+//		parentChildrenMap[parent].insert(child);
+//		childParentsMap[child].insert(parent);
+//	}
+//	return;
+//}
+
+void ParentTStorage::write(StmtNum parent, std::unordered_set<StmtNum> children) {
+    parentChildrenMap[parent].insert(children.begin(), children.end());
+    for (StmtNum child: children) {
+        childParentsMap[child].insert(parent);
+    }
 }
+
 
 bool ParentTStorage::exists(StmtNum parent, StmtNum child) {
 	std::unordered_map<StmtNum, std::unordered_set<StmtNum>>::const_iterator iter = childParentsMap.find(child);
