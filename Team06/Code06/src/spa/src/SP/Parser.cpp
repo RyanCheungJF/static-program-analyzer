@@ -70,7 +70,7 @@ std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
 	/* Variable names can be keywords/terminals. Thus, we handle the assign statements first,
 	   if there is an equal operator, we know to parse it as an assign statement. E.g. read = read + 1;*/
 	if (tokens.front().type == TokenType::NAME) {
-		if (tokens.at(1).type == TokenType::EQUAL) { // Assign Statement
+		if (tokens.at(1).type == TokenType::ASSIGN) { // Assign Statement
 			return parseAssignStatement(tokens);
 		}
 		else if (tokens.front().value == "read") {
@@ -373,9 +373,7 @@ std::unique_ptr<ConditionalExpression> Parser::parseRelationalExpression(std::de
 	auto relationalExpression = std::make_unique<RelationalExpression>();
 	relationalExpression->lhs = parseRelationalFactor(tokens);
 
-	if (tokens.front().type != TokenType::GREATER && tokens.front().type != TokenType::GREATER_EQUAL &&
-		tokens.front().type != TokenType::LESS && tokens.front().type != TokenType::LESS_EQUAL &&
-		tokens.front().type != TokenType::EQUAL && tokens.front().type != TokenType::NOT_EQUAL) {
+	if (!isRelationalOperator(tokens.front().type)) {
 		throw SyntaxErrorException("Expected a comparator in relational expression, but got -> " + tokens.front().value);
 	}
 	relationalExpression->relationalOperator = tokens.front().value;
@@ -494,6 +492,6 @@ std::unique_ptr<Expression> Parser::parseVariable(std::deque<Token>& tokens) {
 
 bool Parser::isRelationalOperator(TokenType tt) {
 	return tt == TokenType::GREATER || tt == TokenType::GREATER_EQUAL ||
-		tt == TokenType::LESS || tt == TokenType::LESS_EQUAL ||
-		tt == TokenType::EQUAL || tt == TokenType::NOT_EQUAL;
+		   tt == TokenType::LESS || tt == TokenType::LESS_EQUAL ||
+		   tt == TokenType::EQUAL || tt == TokenType::NOT_EQUAL;
 }
