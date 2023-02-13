@@ -4,23 +4,18 @@
 #include <iostream>
 #include "VariableStore.h"
 
-VariableStore::VariableStore() {
-    // Some constructor method.
-
-}
+VariableStore::VariableStore() = default;
 
 ParameterType VariableStore::getType(Parameter synonym) {
     return store[synonym.getValue()].getType();
 }
 
-int VariableStore::insertVariable(Parameter p) {
+void VariableStore::insertVariable(Parameter p) {
     if (!hasVariable(p)) {
         store[p.getValue()] = p;
-        return 1;
     } else {
-        //TODO: throw some error
+        throw Exception("VariableStore: multiple variables with same name");
     }
-    return 0;
 }
 
 bool VariableStore::hasVariable(Parameter p) {
@@ -39,7 +34,7 @@ bool VariableStore::updateSynonym(Parameter* synP)
 
 string VariableStore::toString() {
     string s;
-    for(const pair<const string, Parameter> elem : store) {
+    for(const pair<const string, Parameter > & elem : store) {
         s += "value: " + elem.first + ", type: " + elem.second.getTypeString() + "\n";
     }
     return s;

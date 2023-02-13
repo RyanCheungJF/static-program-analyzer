@@ -24,16 +24,16 @@ bool isInteger(string integer) {
     return regex_match(integer, regex("^0$|^[1-9][0-9]*$"));
 }
 
-//bool isSelectClause(string selectClause) {
-//    return regex_match(selectClause, regex("^Select"));
-//}
-//
+bool isSelectClause(string selectClause) {
+    return regex_search(selectClause, regex("^Select"));
+}
+
 //bool isSuchThatClause(string suchThatClause) {
 //    return regex_match(suchThatClause, regex("^such that"));
 //}
 
 bool isSelect(string s) {
-    return regex_match(s, regex("^Select$"));
+    return regex_search(s, regex("^Select$"));
 }
 
 bool isPattern(string s) {
