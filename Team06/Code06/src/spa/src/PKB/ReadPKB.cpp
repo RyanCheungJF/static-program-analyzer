@@ -169,4 +169,6 @@ std::unordered_set<StmtNum> ReadPKB::getContainedStatements(StmtNum containerNum
     return pkbInstance->parentTStorage->getRightWildcard(containerNum);
 }
 
-
+std::pair<StmtNum, ProcName> ReadPKB::getCallStmt(StmtNum s) {
+    return pkbInstance->callStorage->getCallStmt(s);
+}

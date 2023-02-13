@@ -13,6 +13,7 @@ class CallStorage {
 public:
     virtual void writeCall(StmtNum callLine, ProcName callee);
     virtual std::vector<std::pair<StmtNum, ProcName>> getCallStatements();
+    virtual std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
     
 private:
     /*

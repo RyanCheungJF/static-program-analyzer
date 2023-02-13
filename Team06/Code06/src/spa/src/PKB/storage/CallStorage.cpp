@@ -12,3 +12,12 @@ std::vector<std::pair<StmtNum, ProcName>> CallStorage::getCallStatements() {
     }
     return res;
 }
+
+std::pair<StmtNum, ProcName> CallStorage::getCallStmt(StmtNum s) {
+    // SHOULD NOT HIT.
+    if (callLine_callee.find(s) == callLine_callee.end()) {
+        std::pair<StmtNum, ProcName> emptyPair;
+        return emptyPair;
+    }
+    return std::make_pair(s, callLine_callee[s]);
+}
