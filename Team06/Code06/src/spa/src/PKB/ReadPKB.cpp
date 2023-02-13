@@ -6,6 +6,9 @@ void ReadPKB::setInstancePKB(PKB &pkb) {
     }
     this -> pkbInstance = &pkb;
     this->stmtStmtHandlerMap[RelationshipType::FOLLOWS] = pkb.followsStorage;
+    this->stmtStmtHandlerMap[RelationshipType::FOLLOWST] = pkb.followsTStorage;
+    this->stmtStmtHandlerMap[RelationshipType::PARENT] = pkb.parentStorage;
+    this->stmtStmtHandlerMap[RelationshipType::PARENTT] = pkb.parentTStorage;
     return;
 }
 

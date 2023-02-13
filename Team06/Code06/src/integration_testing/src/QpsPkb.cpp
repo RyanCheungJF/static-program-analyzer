@@ -97,11 +97,12 @@ PKB buildPkb() {
 	writePkb.setParent(9, 10);
 	writePkb.setParent(9, 11);
 
-	vector<pair<int, int>> parentChildPars;
-	followeeFollowerPairs.push_back({ 3, 4 });
-	followeeFollowerPairs.push_back({ 3, 5 });
-	followeeFollowerPairs.push_back({ 9, 10 });
-	followeeFollowerPairs.push_back({ 9, 11 });
+	vector<pair<int, int>> parentChildPairs;
+	parentChildPairs.push_back({ 3, 4 });
+	parentChildPairs.push_back({ 3, 5 });
+	parentChildPairs.push_back({ 9, 10 });
+	parentChildPairs.push_back({ 9, 11 });
+	writePkb.setParentT(parentChildPairs);
 
 	string lhs = "x";
 	unique_ptr<Expression> patternTree = writePkb.buildSubtree("1");
@@ -471,16 +472,20 @@ TEST_CASE("Select synonym from multi clause, synonym is in both clauses") {
 
 		result = qps.processQueries(query, readPkb);
 		REQUIRE(result.size() == 1);
-		REQUIRE(exists(result, "11"));
+		REQUIRE(exists(result, "4"));
 	}
 
 	SECTION("select variable from Parent*, pattern") {
 		string query = R"(
 		assign a; variable v; stmt s;
-		Select v pattern a(v, _"x"_) such that Parent(s, a))";
+		Select v such that Parent*(s, a) pattern a(v, _"x"_))";
 
 		result = qps.processQueries(query, readPkb);
-		REQUIRE(result.size() == 0);
+		REQUIRE(result.size() == 4);
+		REQUIRE(exists(result, "x"));
+		REQUIRE(exists(result, "y"));
+		REQUIRE(exists(result, "z"));
+		REQUIRE(exists(result, "count"));
 	}
 }
 
