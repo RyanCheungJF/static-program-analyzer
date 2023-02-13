@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "catch.hpp"
 #include <string>
 #include "PKB/PKB.h"

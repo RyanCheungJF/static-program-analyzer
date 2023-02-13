@@ -5,6 +5,7 @@
 #ifndef SPA_QPSGRAMMARUTILS_H
 #define SPA_QPSGRAMMARUTILS_H
 #include <string>
+#include "qps/parser/ParserUtil.h"
 using namespace std;
 
 //No need to package it into a class
@@ -27,6 +28,9 @@ bool isStmtRef(string);
 bool isFixedString(string);
 bool isEntRef(string);
 bool isExprSpec(string);
+bool isTerm(string);
+bool isExpr(string);
+bool isFactor(string);
 bool isFollows(string);
 bool isParent(string);
 bool isUses(string);

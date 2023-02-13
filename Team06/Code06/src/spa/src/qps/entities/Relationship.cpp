@@ -1,5 +1,10 @@
 #include "Relationship.h"
 #include "FollowsRelationship.h"
+#include "FollowsTRelationship.h"
+#include "ParentRelationship.h"
+#include "ParentTRelationship.h"
+#include "UsesRelationship.h"
+#include "ModifiesRelationship.h"
 
 Relationship Relationship::makeRelationship(string type, vector<Parameter> params)
 {
@@ -7,6 +12,16 @@ Relationship Relationship::makeRelationship(string type, vector<Parameter> param
 	switch (rType) {
 	case RelationshipType::FOLLOWS:
 		return FollowsRelationship(params);
+	case RelationshipType::FOLLOWST:
+		return FollowsTRelationship(params);
+	case RelationshipType::PARENT:
+		return ParentRelationship(params);
+	case RelationshipType::PARENTT:
+		return ParentTRelationship(params);
+	case RelationshipType::USES:
+		return UsesRelationship(params);
+	case RelationshipType::MODIFIES:
+		return ModifiesRelationship(params);
 	}
 	throw - 1;
 }
@@ -32,6 +47,11 @@ vector<Parameter>& Relationship::getParameters() {
     return params;
 }
 
+bool Relationship::operator==(const Relationship& r) const
+{
+	return type == r.type && params == r.params;
+}
+
 Relationship::Relationship()
 {
 	type = RelationshipType::UNKNOWN;
@@ -48,5 +68,10 @@ RelationshipType Relationship::stringToType(string s)
 }
 
 const unordered_map<string, RelationshipType> Relationship::stringToTypeMap = {
-	{"Follows" , RelationshipType::FOLLOWS}
+	{"Follows" , RelationshipType::FOLLOWS},
+	{"Follows*", RelationshipType::FOLLOWST},
+	{"Parent", RelationshipType::PARENT},
+	{"Parent*", RelationshipType::PARENTT},
+	{"Uses", RelationshipType::USES},
+	{"Modifies", RelationshipType::MODIFIES}
 };

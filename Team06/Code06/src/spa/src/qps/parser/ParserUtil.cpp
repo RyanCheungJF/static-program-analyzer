@@ -94,8 +94,6 @@ vector<tuple<string, string, string>> extractParameters(string s)
 		if (param1 == "" || param2 == "" || param3 == "" || curChar != ')') {
 			throw - 1;
 		}
-		//validate param3 first
-		param3 = removeCharFromString(param3, '\"');
 		res.push_back(tuple<string, string, string>(param1, param2, param3));
 		curIndex++;
 	}
