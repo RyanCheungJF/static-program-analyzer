@@ -1,10 +1,10 @@
 #include "ReadPKB.h"
 
-void ReadPKB::setInstancePKB(PKB &pkb) {
-    if (this -> pkbInstance != NULL) {
+void ReadPKB::setInstancePKB(PKB& pkb) {
+    if (this->pkbInstance != NULL) {
         return;
     }
-    this -> pkbInstance = &pkb;
+    this->pkbInstance = &pkb;
     this->stmtStmtHandlerMap[RelationshipType::FOLLOWS] = pkb.followsStorage;
     return;
 }
@@ -16,10 +16,12 @@ std::vector<std::vector<std::string>> ReadPKB::findRelationship(Relationship rs)
     if (stmtStmtHandlerMap.find(type) != stmtStmtHandlerMap.end()) {
         StmtStmtRLHandler handler(stmtStmtHandlerMap.at(type), pkbInstance->statementStorage);
         return handler.handle(param1, param2);
-    } else if (stmtEntHandlerMap.find(type) != stmtEntHandlerMap.end()) {
+    }
+    else if (stmtEntHandlerMap.find(type) != stmtEntHandlerMap.end()) {
         StmtEntRLHandler handler;
         return handler.handle(stmtEntHandlerMap.at(type));
-    } else if (entEntHandlerMap.find(type) != entEntHandlerMap.end()) {
+    }
+    else if (entEntHandlerMap.find(type) != entEntHandlerMap.end()) {
         EntEntRLHandler handler;
         return handler.handle(entEntHandlerMap.at(type));
     }
@@ -53,7 +55,7 @@ std::vector<std::string> ReadPKB::findDesignEntities(Parameter p) {
             res.push_back(to_string(stmtNum));
         }
     }
-  
+
     return res;
 }
 
@@ -70,7 +72,16 @@ std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
         rightWildcard = rhs[rhs.length() - 1] == '_';
     }
 
+    /*std::stringstream ss;
+    for (int i = 0; i < rhs.length(); i++) {
+        char curr = rhs[i];
+        if (curr != '_') {
+            ss << curr;
+        }
+    }*/
+
     if (leftWildcard && rightWildcard) rhs = rhs.substr(1, rhs.length() - 2);
+
 
     if (lhsType == ParameterType::FIXED_STRING) {
         if (rhs == "_") {
@@ -116,101 +127,50 @@ std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
     }
 }
 
-bool ReadPKB::checkStatement(Stmt stmt, StmtNum num){
+bool ReadPKB::checkStatement(Stmt stmt, StmtNum num) {
     return pkbInstance->statementStorage->checkStatement(stmt, num);
-}
-
-std::unordered_set<StmtNum> ReadPKB::getStatementNumbers(Stmt stmt) {
-    return pkbInstance->statementStorage->getStatementNumbers(stmt);
-}
-
-bool ReadPKB::checkEntity(Ent e, StmtNum num) {
-    return pkbInstance->entityStorage->checkEntity(e, num);
-}
-
-std::unordered_set<StmtNum> ReadPKB::getEntityStatementNumbers(Ent e) {
-    return pkbInstance->entityStorage->getEntityStmtNums(e);
-}
-
-bool ReadPKB::checkProcedure(Proc p, StmtNum num) {
-    return pkbInstance->procedureStorage->checkProcedure(p, num);
 }
 
 std::unordered_set<StmtNum> ReadPKB::getProcedureStatementNumbers(Proc p) {
     return pkbInstance->procedureStorage->getProcedureStatementNumbers(p);
 }
 
-
-bool ReadPKB::checkConstant(Const c, StmtNum num) {
-    return pkbInstance->constantStorage->checkConstant(c, num);
+std::vector<std::pair<StmtNum, ProcName>> ReadPKB::getCallStatements() {
+    return pkbInstance->callStorage->getCallStatements();
 }
 
-std::unordered_set<StmtNum> ReadPKB::getConstantStatementNumbers(Const c) {
-    return pkbInstance->constantStorage->getConstantStmtNums(c);
+std::unordered_set<ProcName> ReadPKB::getAllProcedureNames() {
+    return pkbInstance->procedureStorage->getProcNames();
 }
 
-std::unordered_set<Ent> ReadPKB::getUsesProcedure(ProcedureName name) {
-    return pkbInstance->usesStorage->getUsesProcedure(name);
+std::unordered_set<Ent> ReadPKB::getUsesS(StmtNum num) {
+    return pkbInstance->usesStorage->getUsesS(num);
 }
 
-std::unordered_set<Ent> ReadPKB::getUsesStmtnum(StmtNum num) {
-    return pkbInstance->usesStorage->getUsesStmtnum(num);
+std::unordered_set<Ent> ReadPKB::getUsesP(ProcName name) {
+    return pkbInstance->usesStorage->getUsesP(name);
 }
 
-std::unordered_set<Ent> ReadPKB::getModifiesProcedure(ProcedureName name) {
-    return pkbInstance->modifiesStorage->getModifiesProcedure(name);
+std::unordered_set<Ent> ReadPKB::getModifiesS(StmtNum num) {
+    return pkbInstance->modifiesStorage->getModifiesS(num);
 }
 
-std::unordered_set<Ent> ReadPKB::getModifiesStmtnum(StmtNum num) {
-    return pkbInstance->modifiesStorage->getModifiesStmtnum(num);
+std::unordered_set<Ent> ReadPKB::getModifiesP(ProcName name) {
+    return pkbInstance->modifiesStorage->getModifiesP(name);
 }
 
-std::unordered_set<StmtNum> ReadPKB::getFollowsRightWildcard(StmtNum followee) {
-    return pkbInstance->followsStorage->getRightWildcard(followee);
+std::unordered_set<StmtNum> ReadPKB::getIfStatementNumbers() {
+    return pkbInstance->statementStorage->getStatementNumbers("if");
 }
 
-std::unordered_set<StmtNum> ReadPKB::getFollowsLeftWildcard(StmtNum follower) {
-    return pkbInstance->followsStorage->getLeftWildcard(follower);
+std::unordered_set<StmtNum> ReadPKB::getWhileStatementNumbers() {
+    return pkbInstance->statementStorage->getStatementNumbers("while");
 }
 
-std::pair<std::vector<StmtNum>, std::vector<StmtNum>> ReadPKB::getFollowsAllPairs() {
-    return pkbInstance->followsStorage->getAllPairs();
+std::unordered_set<StmtNum> ReadPKB::getContainedStatements(StmtNum containerNum) {
+    return pkbInstance->parentTStorage->getRightWildcard(containerNum);
 }
 
-std::unordered_set<StmtNum> ReadPKB::getFollowsTRightWildcard(StmtNum followee) {
-    return pkbInstance->followsTStorage->getRightWildcard(followee);
+std::pair<StmtNum, ProcName> ReadPKB::getCallStmt(StmtNum s) {
+    return pkbInstance->callStorage->getCallStmt(s);
 }
-
-std::unordered_set<StmtNum> ReadPKB::getFollowsTLeftWildcard(StmtNum follower) {
-    return pkbInstance->followsTStorage->getLeftWildcard(follower);
-}
-
-std::pair<std::vector<StmtNum>, std::vector<StmtNum>> ReadPKB::getFollowsTAllPairs() {
-    return pkbInstance->followsTStorage->getAllPairs();
-
-}
-
-std::unordered_set<StmtNum> ReadPKB::getParentRightWildcard(StmtNum parent) {
-    return pkbInstance->parentStorage->getRightWildcard(parent);
-}
-
-std::unordered_set<StmtNum> ReadPKB::getParentLeftWildcard(StmtNum child) {
-    return pkbInstance->parentStorage->getLeftWildcard(child);
-}
-
-std::pair<std::vector<StmtNum>, std::vector<StmtNum>> ReadPKB::getParentAllPairs() {
-    return pkbInstance->parentStorage->getAllPairs();
-}
-
-std::unordered_set<StmtNum> ReadPKB::getParentTRightWildcard(StmtNum parent) {
-    return pkbInstance->parentTStorage->getRightWildcard(parent);
-}
-
-std::unordered_set<StmtNum> ReadPKB::getParentTLeftWildcard(StmtNum child) {
-    return pkbInstance->parentTStorage->getLeftWildcard(child);
-}
-
-std::pair<std::vector<StmtNum>, std::vector<StmtNum>> ReadPKB::getParentTAllPairs() {
-    return pkbInstance->parentTStorage->getAllPairs();
-}
-

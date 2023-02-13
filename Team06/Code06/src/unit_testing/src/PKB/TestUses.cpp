@@ -1,5 +1,6 @@
 #include "catch.hpp"
 #include "../../../spa/src/PKB/storage/UsesStorage.h"
+<<<<<<< HEAD
 
 TEST_CASE("UsesStorage: writeUsesProcedure, getUsesProcedure") {
     UsesStorage us;
@@ -23,3 +24,5 @@ TEST_CASE("UsesStorage: writeUsesStmtnum, getUsesStmtnum") {
     bool res = (entities1.size() == 3) && (entities2.size() == 1) && (entities3.size() == 0) && (entities4.size() == 0);
     REQUIRE(res);
 }
+=======
+>>>>>>> pkb-uses-2

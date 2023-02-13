@@ -12,13 +12,10 @@ TEST_CASE("findDesignEntities() Tests") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    std::vector<StmtNum> lines;
-    lines.push_back(3);
-    lines.push_back(6);
-    lines.push_back(9);
+    std::unordered_set<StmtNum> lines = {3, 6, 9};
 
     Const c = 123;
-    writePkb.setConstant(c, 1);
+    writePkb.setConstant(c, {1});
 
     Proc p = "Main";
     writePkb.setProcedure(p, lines);

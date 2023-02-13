@@ -13,14 +13,13 @@ void FollowsExtractorVisitor::visitStatementList(StatementList *statementList) {
 		writeApi->setFollows(statementList->statements[i]->statementNumber, statementList->statements[i + 1]->statementNumber);
 	}
 	// For FollowsT
-	std::vector<std::pair<StmtNum, StmtNum>> followsTransitiveVector;
+	std::unordered_set<StmtNum> followsTSet;
 	for (StmtNum i = 0; i < statementList->statements.size(); i++) {
 		for (StmtNum j = i + 1; j < statementList->statements.size(); j++) {
-			auto followsTransitivePair = std::make_pair(statementList->statements[i]->statementNumber, statementList->statements[j]->statementNumber);
-			followsTransitiveVector.push_back(followsTransitivePair);
+			followsTSet.insert(statementList->statements[j]->statementNumber);
 		}
+		writeApi->setFollowsT(statementList->statements[i]->statementNumber, followsTSet);
 	}
-	writeApi->setFollowsT(followsTransitiveVector);
 }
 
 void FollowsExtractorVisitor::visitReadStatement(ReadStatement *readStatement) {}

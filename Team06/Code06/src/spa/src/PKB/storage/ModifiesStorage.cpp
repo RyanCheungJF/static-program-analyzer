@@ -1,26 +1,31 @@
 #include "ModifiesStorage.h"
 
-void ModifiesStorage::writeModifiesProcedure(ProcedureName name, std::vector<Ent> entities) {
-    procName_ent[name].insert(entities.begin(), entities.end());
+void ModifiesStorage::writeModifiesS(StmtNum num, std::unordered_set<Ent> entities) {
+    stmtNum_entities[num].insert(entities.begin(), entities.end());
+    for (Ent e : entities) {
+        entities_stmtNum[e].insert(num);
+    }
 }
 
-void ModifiesStorage::writeModifiesStmtnum(StmtNum num, std::vector<Ent> entities) {
-    stmtNum_ent[num].insert(entities.begin(), entities.end());
+void ModifiesStorage::writeModifiesP(ProcName name, std::unordered_set<Ent> entities) {
+    procName_entities[name].insert(entities.begin(), entities.end());
+    for (Ent e : entities) {
+        entities_procName[e].insert(name);
+    }
 }
 
-std::unordered_set<Ent> ModifiesStorage::getModifiesProcedure(ProcedureName name) {
-    // source code does not even contain this procedure
-    if (procName_ent.find(name) == procName_ent.end()) {
+std::unordered_set<Ent> ModifiesStorage::getModifiesS(StmtNum num) {
+    if (stmtNum_entities.find(num) == stmtNum_entities.end()) {
         std::unordered_set<Ent> emptySet;
         return emptySet;
     }
-    return procName_ent[name];
+    return stmtNum_entities[num];
 }
-std::unordered_set<Ent> ModifiesStorage::getModifiesStmtnum(StmtNum num) {
-    // source code does not even contain this statement number
-    if (stmtNum_ent.find(num) == stmtNum_ent.end()) {
+
+std::unordered_set<Ent> ModifiesStorage::getModifiesP(ProcName name) {
+    if (procName_entities.find(name) == procName_entities.end()) {
         std::unordered_set<Ent> emptySet;
         return emptySet;
     }
-    return stmtNum_ent[num];
+    return procName_entities[name];
 }
