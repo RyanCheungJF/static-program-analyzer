@@ -10,7 +10,7 @@ typedef int StmtNum;
 
 class StmtStorage {
 public:
-    virtual void writeStatement(Stmt s, std::vector<StmtNum> lines);
+    virtual void writeStatement(Stmt s, std::unordered_set<StmtNum> lines);
     virtual void writeStatement(Stmt s, StmtNum line);
     virtual bool checkStatement(Stmt stmt, StmtNum num);
     virtual std::unordered_set<StmtNum> getStatementNumbers(Stmt s);

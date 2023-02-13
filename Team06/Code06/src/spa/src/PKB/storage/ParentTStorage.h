@@ -7,7 +7,7 @@ typedef int StmtNum;
 
 class ParentTStorage : public StmtStmtRLStorage {
 public:
-    void write(StmtNum parent, std::vector<StmtNum> children);
+    void write(StmtNum parent, std::unordered_set<StmtNum> children);
     bool exists(StmtNum parent, StmtNum child);
     std::unordered_set<StmtNum> getRightWildcard(StmtNum parent);
     std::unordered_set<StmtNum> getLeftWildcard(StmtNum child);

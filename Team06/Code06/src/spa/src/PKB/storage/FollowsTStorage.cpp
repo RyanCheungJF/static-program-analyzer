@@ -1,7 +1,7 @@
 #include "FollowsTStorage.h"
 
 
-void FollowsTStorage::write(StmtNum followee, std::vector<StmtNum> followers) {
+void FollowsTStorage::write(StmtNum followee, std::unordered_set<StmtNum> followers) {
     followeeFollowersMap[followee].insert(followers.begin(), followers.end());
     for (StmtNum n: followers) {
         followerFolloweesMap[n].insert(followee);

@@ -10,7 +10,7 @@
 //	return;
 //}
 
-void ParentTStorage::write(StmtNum parent, std::vector<StmtNum> children) {
+void ParentTStorage::write(StmtNum parent, std::unordered_set<StmtNum> children) {
     parentChildrenMap[parent].insert(children.begin(), children.end());
     for (StmtNum child: children) {
         childParentsMap[child].insert(parent);

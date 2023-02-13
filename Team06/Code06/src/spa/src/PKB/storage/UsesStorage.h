@@ -15,8 +15,8 @@ typedef int StmtNum;
 
 class UsesStorage {
 public:
-    void writeUsesS(StmtNum num, std::vector<Ent> entities);
-    void writeUsesP(ProcName name, std::vector<Ent> entities);
+    void writeUsesS(StmtNum num, std::unordered_set<Ent> entities);
+    void writeUsesP(ProcName name, std::unordered_set<Ent> entities);
 
     std::unordered_set<Ent> getUsesS(StmtNum num);
     std::unordered_set<Ent> getUsesP(ProcName name);

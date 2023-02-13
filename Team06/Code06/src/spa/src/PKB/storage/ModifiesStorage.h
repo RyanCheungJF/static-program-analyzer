@@ -15,8 +15,8 @@ typedef int StmtNum;
 
 class ModifiesStorage {
 public:
-    void writeModifiesS(StmtNum num, std::vector<Ent> entities);
-    void writeModifiesP(ProcName name, std::vector<Ent> entities);
+    void writeModifiesS(StmtNum num, std::unordered_set<Ent> entities);
+    void writeModifiesP(ProcName name, std::unordered_set<Ent> entities);
 
     std::unordered_set<Ent> getModifiesS(StmtNum num);
     std::unordered_set<Ent> getModifiesP(ProcName name);

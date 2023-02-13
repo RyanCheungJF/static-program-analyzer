@@ -8,7 +8,7 @@ typedef int StmtNum;
 
 class FollowsTStorage : public StmtStmtRLStorage {
 public:
-    void write(StmtNum followee, std::vector<StmtNum> followers);
+    void write(StmtNum followee, std::unordered_set<StmtNum> followers);
     bool exists(StmtNum followee, StmtNum follower);
     std::unordered_set<StmtNum> getRightWildcard(StmtNum followee);
     std::unordered_set<StmtNum> getLeftWildcard(StmtNum follower);

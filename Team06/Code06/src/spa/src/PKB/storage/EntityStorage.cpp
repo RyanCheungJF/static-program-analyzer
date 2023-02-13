@@ -1,17 +1,10 @@
 #include "EntityStorage.h"
 
-void EntityStorage::writeEntity(Ent e, std::vector<StmtNum> lines) {
-    for (StmtNum line: lines) {
-        ent_stmtNum[e].insert(line);
+void EntityStorage::writeEntity(StmtNum num, std::unordered_set<Ent> entities) {
+    stmtNum_ent[num].insert(entities.begin(), entities.end());
+    for (Ent e : entities) {
+        ent_stmtNum[e].insert(num);
     }
-    entNames.insert(e);
-    return;
-}
-
-void EntityStorage::writeEntity(Ent e, StmtNum line) {
-    ent_stmtNum[e].insert(line);
-    entNames.insert(e);
-    return;
 }
 
 bool EntityStorage::checkEntity(Ent e, StmtNum num) {

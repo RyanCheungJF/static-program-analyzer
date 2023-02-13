@@ -6,14 +6,14 @@
 //    return;
 //}
 
-void UsesStorage::writeUsesS(StmtNum num, std::vector<Ent> entities) {
+void UsesStorage::writeUsesS(StmtNum num, std::unordered_set<Ent> entities) {
     stmtNum_entities[num].insert(entities.begin(), entities.end());
     for (Ent e: entities) {
         entities_stmtNum[e].insert(num);
     }
 }
 
-void UsesStorage::writeUsesP(ProcName name, std::vector<Ent> entities) {
+void UsesStorage::writeUsesP(ProcName name, std::unordered_set<Ent> entities) {
     procName_entities[name].insert(entities.begin(), entities.end());
     for (Ent e: entities) {
         entities_procName[e].insert(name);
