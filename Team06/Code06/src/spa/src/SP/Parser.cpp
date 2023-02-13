@@ -67,8 +67,13 @@ std::unique_ptr<StatementList> Parser::parseStatementList(std::deque<Token>& tok
 
 std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
 	// Rule: read | print | call | while | if | assign
+	/* Variable names can be keywords/terminals. Thus, we handle the assign statements first,
+	   if there is an equal operator, we know to parse it as an assign statement. E.g. read = read + 1;*/
 	if (tokens.front().type == TokenType::NAME) {
-		if (tokens.front().value == "read") {
+		if (tokens.at(1).type == TokenType::EQUAL) { // Assign Statement
+			return parseAssignStatement(tokens);
+		}
+		else if (tokens.front().value == "read") {
 			return parseReadStatement(tokens);
 		}
 		else if (tokens.front().value == "print") {
@@ -83,8 +88,8 @@ std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
 		else if (tokens.front().value == "if") {
 			return parseIfStatement(tokens);
 		}
-		else { // Else, it must be an assign statement
-			return parseAssignStatement(tokens);
+		else {
+			throw SyntaxErrorException("Unexpected token when parsing statement -> " + tokens.front().value);
 		}
 	}
 	else {
@@ -362,7 +367,7 @@ std::unique_ptr<ConditionalExpression> Parser::parseConditionalExpression(std::d
 std::unique_ptr<ConditionalExpression> Parser::parseRelationalExpression(std::deque<Token>& tokens) {
 	/* Rule: rel_factor '>' rel_factor | rel_factor '>=' rel_factor |
 			 rel_factor '<' rel_factor | rel_factor '<=' rel_factor |
-			 rel_factor '==' rel_factor | rel_factor '!=' rel_factor 
+			 rel_factor '==' rel_factor | rel_factor '!=' rel_factor
 	*/
 	// std::cout << "Parsing Relational Expression" << std::endl;
 	auto relationalExpression = std::make_unique<RelationalExpression>();
@@ -391,7 +396,8 @@ std::unique_ptr<Expression> Parser::parseRelationalFactor(std::deque<Token>& tok
 		else if (tokens.front().type == TokenType::NAME) {
 			return parseVariable(tokens);
 		}
-	} else {
+	}
+	else {
 		return parseExpression(tokens);
 	}
 }
@@ -488,6 +494,6 @@ std::unique_ptr<Expression> Parser::parseVariable(std::deque<Token>& tokens) {
 
 bool Parser::isRelationalOperator(TokenType tt) {
 	return tt == TokenType::GREATER || tt == TokenType::GREATER_EQUAL ||
-		   tt == TokenType::LESS || tt == TokenType::LESS_EQUAL ||
-		   tt == TokenType::EQUAL || tt == TokenType::NOT_EQUAL;
+		tt == TokenType::LESS || tt == TokenType::LESS_EQUAL ||
+		tt == TokenType::EQUAL || tt == TokenType::NOT_EQUAL;
 }

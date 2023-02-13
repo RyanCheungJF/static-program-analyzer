@@ -1,0 +1,50 @@
+1 - comment
+stmt s;
+Select s such that Follows*(1, s)
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+5000
+2 - comment
+read r;
+Select r such that Follows*(1, r)
+2, 3
+5000
+3 - comment
+call c;
+Select c such that Follows*(2, c)
+4
+5000
+4 - comment
+print p;
+Select p such that Follows*(1, p)
+none
+5000
+5 - comment
+stmt s;
+Select s such that Follows*(22, s)
+23, 24, 25, 42
+5000
+6 - comment
+while w;
+Select w such that Follows*(22, w)
+25
+5000
+7 - comment
+stmt s;
+Select s such that Follows*(28, s)
+29, 30, 39, 40
+5000
+8 - comment
+stmt s;
+Select s such that Follows*(31, s)
+37, 38
+5000
+9 - comment
+while w;
+Select w such that Follows*(31, w)
+none
+5000
+10 - comment
+stmt s;
+Select s such that Follows*(36, s)
+none
+5000
