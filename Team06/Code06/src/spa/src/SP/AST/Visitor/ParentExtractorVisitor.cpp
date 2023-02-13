@@ -21,14 +21,14 @@ void ParentExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
 		writeApi->setParent(ifStatement->statementNumber, i->statementNumber);
 	}
 	// For ParentT
-	std::vector<StmtNum> parentTVector;
+	std::unordered_set<StmtNum> parentTSet;
 	StmtNum start = ifStatement->statementNumber + 1;
 	StmtNum end = visitIfStatementHelper(ifStatement);
 	for (StmtNum i = start; i <= end; i++) {
-		parentTVector.push_back(i);
+		parentTSet.insert(i);
 	}
 
-	//writeApi->setParentT(ifStatement->statementNumber, parentTVector);
+	writeApi->setParentT(ifStatement->statementNumber, parentTSet);
 }
 
 void ParentExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement) {
@@ -37,14 +37,14 @@ void ParentExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement)
 		writeApi->setParent(whileStatement->statementNumber, i->statementNumber);
 	}
 	// For ParentT
-	std::vector<StmtNum> parentTVector;
+	std::unordered_set<StmtNum> parentTSet;
 	StmtNum start = whileStatement->statementNumber + 1;
 	StmtNum end = visitWhileStatementHelper(whileStatement);
 	for (StmtNum i = start; i <= end; i++) {
-		parentTVector.push_back(i);
+		parentTSet.insert(i);
 	}
 
-	//writeApi->setParentT(whileStatement->statementNumber, parentTVector);
+	writeApi->setParentT(whileStatement->statementNumber, parentTSet);
 }
 
 void ParentExtractorVisitor::visitExpression(Expression* variable) {}
