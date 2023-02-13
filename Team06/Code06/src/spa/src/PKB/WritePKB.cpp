@@ -39,13 +39,13 @@ void WritePKB::setEntity(StmtNum num, std::unordered_set<Ent> entities) {
     pkbInstance->entityStorage->writeEntity(num, entities);
 }
 
-void WritePKB::setEntity(Ent e, StmtNum line) {
-    pkbInstance->entityStorage->writeEntity(e, line);
-}
+//void WritePKB::setEntity(Ent e, StmtNum line) {
+//    pkbInstance->entityStorage->writeEntity(e, line);
+//}
 
-void WritePKB::setProcedure(Proc p, StmtNum line) {
-    pkbInstance->procedureStorage->writeProcedure(p, line);
-}
+//void WritePKB::setProcedure(Proc p, StmtNum num) {
+//    pkbInstance->procedureStorage->writeProcedure(p, num);
+//}
 
 void WritePKB::setConstant(StmtNum num, std::unordered_set<Const> constants) {
     pkbInstance->constantStorage->writeConstant(num, constants);

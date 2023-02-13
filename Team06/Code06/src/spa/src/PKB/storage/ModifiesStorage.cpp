@@ -1,11 +1,5 @@
 #include "ModifiesStorage.h"
 
-//void ModifiesStorage::write(StmtNum num, Ent ent) {
-//    stmtNum_entities[num].insert(ent);
-//    entities_stmtNum[ent].insert(num);
-//    return;
-//}
-
 void ModifiesStorage::writeModifiesS(StmtNum num, std::unordered_set<Ent> entities) {
     stmtNum_entities[num].insert(entities.begin(), entities.end());
     for (Ent e: entities) {

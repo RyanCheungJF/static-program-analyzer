@@ -1,11 +1,5 @@
 #include "UsesStorage.h"
 
-//void UsesStorage::write(StmtNum num, Ent ent) {
-//    stmtNum_entities[num].insert(ent);
-//    entities_stmtNum[ent].insert(num);
-//    return;
-//}
-
 void UsesStorage::writeUsesS(StmtNum num, std::unordered_set<Ent> entities) {
     stmtNum_entities[num].insert(entities.begin(), entities.end());
     for (Ent e: entities) {

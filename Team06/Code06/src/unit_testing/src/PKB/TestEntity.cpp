@@ -6,11 +6,11 @@ using namespace std;
 
 TEST_CASE("Checks that write and read works for entityStorage") {
     EntityStorage es;
-    Ent e = "v";
+    Ent e = "v"
     std::vector<StmtNum> lines = {3, 6, 9};
-    for (int line: lines) {
-        es.writeEntity(e, line);
-    }
+    es.writeEntity(3, {e});
+    es.writeEntity(6, {e});
+    es.writeEntity(9, {e});
     std::unordered_set<StmtNum> statementNums = es.getEntityStmtNums(e);
 
     bool res = true;
@@ -38,10 +38,7 @@ TEST_CASE("Check that if an entity does not appear in the source code, it should
 TEST_CASE("Check that given query for an entity and a statementNumber that it appears in, it returns true") {
     EntityStorage es;
     Ent e = "v";
-    std::vector<StmtNum> lines = {3};
-    for (int line: lines) {
-        es.writeEntity(e, line);
-    }
+    es.writeEntity(3, {e});
 
     bool res = true;
     res = res && (es.checkEntity(e, 3) == true);

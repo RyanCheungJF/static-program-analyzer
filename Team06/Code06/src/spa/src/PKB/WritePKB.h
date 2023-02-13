@@ -37,6 +37,9 @@ public:
 
 
     // Sets the procedure along with the statement lines that are in that procedure appears in
+//    void setProcedure(Proc p, StmtNum num);
+
+    // Sets the procedure along with the statement lines that are in that procedure appears in
     void setProcedure(Proc p, std::unordered_set<StmtNum> lines);
 
     // Sets the constants along with the statement line that the constants appears in

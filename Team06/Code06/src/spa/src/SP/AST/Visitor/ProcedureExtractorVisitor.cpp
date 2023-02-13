@@ -44,9 +44,9 @@ void ProcedureExtractorVisitor::visitProcedure(Procedure *procedure) {
 	if (dynamic_cast<WhileStatement*>(procedure->statementList->statements.back().get())) {
 		lastStatementNumber = visitWhileStatementHelper(dynamic_cast<WhileStatement*>(procedure->statementList->statements.back().get()));
 	}
-	std::vector<int> statementNumbers;
+	std::unordered_set<int> statementNumbers;
 	for (int i = firstStatementNumber; i <= lastStatementNumber; i++) {
-		statementNumbers.push_back(i);
+		statementNumbers.insert(i);
 	}
 	writeApi->setProcedure(procedure->procedureName, statementNumbers);
 }

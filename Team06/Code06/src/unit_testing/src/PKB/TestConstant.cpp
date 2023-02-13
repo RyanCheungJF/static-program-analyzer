@@ -7,9 +7,8 @@ using namespace std;
 TEST_CASE("Checks that write and read works for constantStorage") {
     ConstantStorage cs;
     Const c = 5;
-    cs.writeConstant(c, 4);
-    cs.writeConstant(c, 8);
-    cs.writeConstant(c, 9);
+    std::unordered_set<Const> set = {4, 8, 9};
+    cs.writeConstant(c, set);
     std::unordered_set<StmtNum> statementNums = cs.getConstantStmtNums(c);
 
     bool res = true;
@@ -36,7 +35,8 @@ TEST_CASE("Check that if a constant does not appear in the source code, it shoul
 TEST_CASE("Check that given query for a constant and a statementNumber that it appears in, it returns true") {
     ConstantStorage cs;
     Const c = 8;
-    cs.writeConstant(c, 3);
+    std::unordered_set<Const> set = {3};
+    cs.writeConstant(c, set);
 
     bool res = true;
     res = res && (cs.checkConstant(c, 3) == true);
