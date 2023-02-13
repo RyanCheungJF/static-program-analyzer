@@ -73,8 +73,20 @@ void WritePKB::setCall(StmtNum callLine, Proc procedure_being_called) {
     pkbInstance->callStorage->writeCall(callLine, procedure_being_called);
 }
 
-void WritePKB::setUses(StmtNum num, std::vector<Ent> entities) {
-    pkbInstance->usesStorage->write(num, entities);
+void WritePKB::setUsesS(StmtNum num, std::vector<Ent> entities) {
+    pkbInstance->usesStorage->writeUsesS(num, entities);
+}
+
+void WritePKB::setUsesP(ProcName name, std::vector<Ent> entities) {
+    pkbInstance->usesStorage->writeUsesP(name, entities);
+}
+
+void WritePKB::setModifiesS(StmtNum num, std::vector<Ent> entities) {
+    pkbInstance->modifiesStorage->writeModifiesS(num, entities);
+}
+
+void WritePKB::setModifiesP(ProcName name, std::vector<Ent> entities) {
+    pkbInstance->modifiesStorage->writeModifiesP(name, entities);
 }
 
 void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer) {

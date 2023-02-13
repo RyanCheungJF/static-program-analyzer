@@ -42,7 +42,14 @@ public:
     // returns the entire row of all Entities involved in the Modifies(StmtNum, v) relationship
     std::unordered_set<Ent> getModifiesS(StmtNum num);
 
-    // returns a pair of the StatementNumber of
+
+    // returns the entire row of all Entities involved in the Uses(ProcName, v) relationship
+    std::unordered_set<Ent> getUsesP(ProcName name);
+
+    // returns the entire row of all Entities involved in the Modifies(ProcName, v) relationship
+    std::unordered_set<Ent> getModifiesP(ProcName name);
+
+    //TODO: returns a pair of the StatementNumber of ???
     std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
 
     // returns all statement numbers for if statement

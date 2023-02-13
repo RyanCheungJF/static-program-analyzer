@@ -145,6 +145,18 @@ std::unordered_set<Ent> ReadPKB::getUsesS(StmtNum num) {
     return pkbInstance->usesStorage->getUsesS(num);
 }
 
+std::unordered_set<Ent> ReadPKB::getUsesP(ProcName name) {
+    return pkbInstance->usesStorage->getUsesP(name);
+}
+
+std::unordered_set<Ent> ReadPKB::getModifiesS(StmtNum num) {
+    return pkbInstance->modifiesStorage->getModifiesS(num);
+}
+
+std::unordered_set<Ent> ReadPKB::getModifiesP(ProcName name) {
+    return pkbInstance->modifiesStorage->getModifiesP(name);
+}
+
 std::unordered_set<StmtNum> ReadPKB::getIfStatementNumbers() {
     return pkbInstance->statementStorage->getStatementNumbers("if");
 }
