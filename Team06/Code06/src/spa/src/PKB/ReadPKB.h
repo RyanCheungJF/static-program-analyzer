@@ -36,8 +36,14 @@ public:
     // returns all the procedure names present in the source code
     std::unordered_set<ProcName> getAllProcedureNames();
 
-    // returns the entire row of all Entities involved in the Uses(num, v) relationship
+    // returns the entire row of all Entities involved in the Uses(StmtNum, v) relationship
     std::unordered_set<Ent> getUsesS(StmtNum num);
+
+    // returns the entire row of all Entities involved in the Modifies(StmtNum, v) relationship
+    std::unordered_set<Ent> getModifiesS(StmtNum num);
+
+    // returns a pair of the StatementNumber of
+    std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
 
     // returns all statement numbers for if statement
     std::unordered_set<StmtNum> getIfStatementNumbers();
@@ -50,6 +56,7 @@ public:
 
     // Returns relevant strings based on Pattern object passed
     std::vector<std::vector<std::string>> findPattern(Pattern p);
+
 
 
 
