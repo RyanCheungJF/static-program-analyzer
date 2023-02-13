@@ -11,13 +11,13 @@ void EntRefExtractorVisitor::visitStatementList(StatementList* statementList) {}
 void EntRefExtractorVisitor::visitReadStatement(ReadStatement* readStatement) {
 	std::unordered_set<Ent> variables = { readStatement->varName };
 	writeApi->setEntity(readStatement->statementNumber, variables);
-	//writeApi->setModifiesS(readStatement->statementNumber, variables);
+	writeApi->setModifiesS(readStatement->statementNumber, variables);
 }
 
 void EntRefExtractorVisitor::visitPrintStatement(PrintStatement* printStatement) {
 	std::unordered_set<Ent> variables = { printStatement->varName };
 	writeApi->setEntity(printStatement->statementNumber, variables);
-	//writeApi->setUsesS(printStatement->statementNumber, variables);
+	writeApi->setUsesS(printStatement->statementNumber, variables);
 }
 
 void EntRefExtractorVisitor::visitAssignStatement(AssignStatement* assignStatement) {
@@ -61,6 +61,7 @@ void EntRefExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
 
 	writeApi->setEntity(ifStatement->statementNumber, variables);
 	writeApi->setConstant(ifStatement->statementNumber, constants);
+	writeApi->setUsesS(ifStatement->statementNumber, variables);
 }
 
 void EntRefExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement) {
@@ -71,8 +72,8 @@ void EntRefExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement)
 
 	writeApi->setEntity(whileStatement->statementNumber, variables);
 	writeApi->setConstant(whileStatement->statementNumber, constants);
+	writeApi->setUsesS(whileStatement->statementNumber, variables);
 }
 
 void EntRefExtractorVisitor::visitExpression(Expression* variable) {};
 void EntRefExtractorVisitor::visitConditionalExpression(ConditionalExpression* conditionalExpression) {};
-

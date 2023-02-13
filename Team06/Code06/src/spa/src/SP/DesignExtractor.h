@@ -17,12 +17,12 @@ class DesignExtractor {
 private:
 	std::unique_ptr<Program> ASTroot;
 	WritePKB* writePkb;
+	ReadPKB* readPkb;
 
-	void extractRelationships();
-	void extractEntities();
+	void extractInfo();
 public:
 	DesignExtractor();
-	DesignExtractor(std::unique_ptr<Program>, WritePKB* writePKB);
+	DesignExtractor(std::unique_ptr<Program>, WritePKB* writePKB, ReadPKB* readPKB);
 
 	void populatePKB();
 };

@@ -28,4 +28,7 @@ int visitWhileStatementHelper(WhileStatement* whileStatement);
 void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor);
 void visitCondExprHelper(ConditionalExpression* e, std::unordered_set<Ent>& variables, std::unordered_set<int>& constants);
 void visitExprHelper(Expression* e, std::unordered_set<Ent>& variables, std::unordered_set<int>& constants);
-//void populateRemainingTables(WritePKB* writePKB, ReadPKB* readPKB);
+void populateRemainingTables(WritePKB* writePKB, ReadPKB* readPKB);
+void populateUsesModifies(WritePKB* writePKB, ReadPKB* readPKB);
+std::vector<std::unordered_set<Ent>> handleCallStmt(WritePKB* writePKB, ReadPKB* readPKB, std::pair<StmtNum, ProcName> callStmt);
+bool isContainerStatement(Statement* statement);
