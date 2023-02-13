@@ -16,13 +16,10 @@ std::vector<std::vector<std::string>> ReadPKB::findRelationship(Relationship rs)
     if (stmtStmtHandlerMap.find(type) != stmtStmtHandlerMap.end()) {
         StmtStmtRLHandler handler(stmtStmtHandlerMap.at(type), pkbInstance->statementStorage);
         return handler.handle(param1, param2);
-    } else if (stmtEntHandlerMap.find(type) != stmtEntHandlerMap.end()) {
-        StmtEntRLHandler handler;
-        return handler.handle(stmtEntHandlerMap.at(type));
-    } else if (entEntHandlerMap.find(type) != entEntHandlerMap.end()) {
-        EntEntRLHandler handler;
-        return handler.handle(entEntHandlerMap.at(type));
-    }
+    } else if (1 == 1) {
+        ModifiesUsesHandler handler(pkbInstance->usesStorage, pkbInstance->statementStorage);
+        return handler.handle(param1, param2);
+    } 
     return std::vector<std::vector<std::string>>();
 }
 
@@ -142,11 +139,11 @@ std::unordered_set<ProcName> ReadPKB::getAllProcedureNames() {
 }
 
 std::unordered_set<Ent> ReadPKB::getUsesS(StmtNum num) {
-    return pkbInstance->usesStorage->getUsesS(num);
+    return pkbInstance->usesStorage->getEnt(num);
 }
 
 std::unordered_set<Ent> ReadPKB::getUsesP(ProcName name) {
-    return pkbInstance->usesStorage->getUsesP(name);
+    return pkbInstance->usesStorage->getEnt(name);
 }
 
 std::unordered_set<Ent> ReadPKB::getModifiesS(StmtNum num) {

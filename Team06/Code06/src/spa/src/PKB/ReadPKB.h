@@ -1,7 +1,7 @@
 #pragma once
 #include "PKB.h"
 #include "queryHandlers/StmtStmtRLHandler.h"
-#include "queryHandlers/StmtEntRLHandler.h"
+#include "queryHandlers/ModifiesUsesHandler.h"
 #include "queryHandlers/EntEntRLHandler.h"
 #include "../qps/entities/Relationship.h"
 #include "../qps/entities/Pattern.h"
@@ -68,8 +68,6 @@ public:
 private:
     PKB* pkbInstance = NULL;
     std::unordered_map <RelationshipType, std::shared_ptr<StmtStmtRLStorage>> stmtStmtHandlerMap = { {RelationshipType::FOLLOWS, NULL} };
-    std::unordered_map <RelationshipType, std::shared_ptr<StmtEntRLStorage>> stmtEntHandlerMap = {};
-    std::unordered_map <RelationshipType, std::shared_ptr<EntEntRLStorage>> entEntHandlerMap = {};
         
 };
 
