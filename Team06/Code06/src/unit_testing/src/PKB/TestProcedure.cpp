@@ -46,31 +46,19 @@ TEST_CASE("If a procedure does not appear in the source code, getProcedureStatem
 }
 
 TEST_CASE("Given a query for a procedure and a statementNumber that is not nested in the procedure, checkProcedure() returns false") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    pkb.initializePkb();
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
+    ProcedureStorage store;
     Proc p = "computeCentroid";
     std::vector<StmtNum> lines;
     lines.push_back(2);
-    writePkb.setProcedure(p, lines);
+    store.writeProcedure(p, lines);
 
     bool res = true;
-    res = res && (readPkb.checkProcedure(p, 4) == false);
+    res = res && (store.checkProcedure(p, 4) == false);
     REQUIRE(res);
 }
 
 TEST_CASE("If a procedure does not exist, checkProcedure() returns false") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    pkb.initializePkb();
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
-    bool res = (readPkb.checkProcedure("procedureThatDoesNotExist", 4) == false);
+    ProcedureStorage store;
+    bool res = (store.checkProcedure("procedureThatDoesNotExist", 4) == false);
     REQUIRE(res);
 }

@@ -5,68 +5,57 @@
 using namespace std;
 
 TEST_CASE("Check writes and reads to/from ParentTStorage") {
-    ParentTStorage par;
+    ParentTStorage pts;
+    std::vector<StmtNum> children = {2, 3, 4};
+    pts.write(1, children);
 
-    std::vector<std::pair<StmtNum, StmtNum>> parentChild;
-    parentChild.push_back({ 1, 2 });
-    parentChild.push_back({ 1, 3 });
-    parentChild.push_back({ 1, 4 });
-    par.write(parentChild);
-
-    bool res = par.exists(1, 2);
+    bool res = pts.exists(1, 2);
     REQUIRE(res);
 
-    res = par.exists(1, 4);
+    res = pts.exists(1, 4);
     REQUIRE(res);
 
-    res = par.exists(1, 5);
+    res = pts.exists(1, 5);
     REQUIRE(!res);
 
-    res = par.exists(3, 2);
+    res = pts.exists(3, 2);
     REQUIRE(!res);
 }
 
 TEST_CASE("Tests for getting children for ParentTStorage") {
-    ParentTStorage par;
+    ParentTStorage pts;
+    std::vector<StmtNum> children = {2, 3, 4};
+    pts.write(1, children);
 
-    std::vector<std::pair<StmtNum, StmtNum>> parentChild;
-    parentChild.push_back({ 1, 2 });
-    parentChild.push_back({ 1, 3 });
-    parentChild.push_back({ 1, 4 });
-    par.write(parentChild);
-
-    std::unordered_set<StmtNum> res = par.getRightWildcard(1);
+    std::unordered_set<StmtNum> res = pts.getRightWildcard(1);
     std::unordered_set<StmtNum> check{ 2, 3, 4 };
     REQUIRE(res == check);
 
-    res = par.getRightWildcard(2);
+    res = pts.getRightWildcard(2);
     check = {};
     REQUIRE(res == check);
 
-    res = par.getRightWildcard(3);
+    res = pts.getRightWildcard(3);
     check = {};
     REQUIRE(res == check);
 }
 
 TEST_CASE("Tests for getting parent for ParentTStorage") {
-    ParentTStorage par;
+    ParentTStorage pts;
+    std::vector<StmtNum> children1 = {2, 3, 4};
+    std::vector<StmtNum> children2 = {3};
+    pts.write(1, children1);
+    pts.write(2, children2);
 
-    std::vector<std::pair<StmtNum, StmtNum>> parentChild;
-    parentChild.push_back({ 1, 2 });
-    parentChild.push_back({ 2, 3 });
-    parentChild.push_back({ 1, 3 });
-    parentChild.push_back({ 1, 4 });
-    par.write(parentChild);
-
-    std::unordered_set<StmtNum> res = par.getLeftWildcard(3);
+    std::unordered_set<StmtNum> res = pts.getLeftWildcard(3);
     std::unordered_set<StmtNum> check{ 1, 2 };
     REQUIRE(res == check);
 
-    res = par.getLeftWildcard(1);
+    res = pts.getLeftWildcard(1);
     check = {};
     REQUIRE(res == check);
 
-    res = par.getLeftWildcard(5);
+    res = pts.getLeftWildcard(5);
     check = {};
     REQUIRE(res == check);
 }

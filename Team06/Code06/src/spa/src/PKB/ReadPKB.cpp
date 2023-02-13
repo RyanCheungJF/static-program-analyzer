@@ -9,6 +9,54 @@ void ReadPKB::setInstancePKB(PKB &pkb) {
     return;
 }
 
+std::vector<std::vector<std::string>> ReadPKB::findRelationship(Relationship rs) {
+    RelationshipType type = rs.type;
+    Parameter param1 = rs.params[0];
+    Parameter param2 = rs.params[1];
+    if (stmtStmtHandlerMap.find(type) != stmtStmtHandlerMap.end()) {
+        StmtStmtRLHandler handler(stmtStmtHandlerMap.at(type), pkbInstance->statementStorage);
+        return handler.handle(param1, param2);
+    } else if (stmtEntHandlerMap.find(type) != stmtEntHandlerMap.end()) {
+        StmtEntRLHandler handler;
+        return handler.handle(stmtEntHandlerMap.at(type));
+    } else if (entEntHandlerMap.find(type) != entEntHandlerMap.end()) {
+        EntEntRLHandler handler;
+        return handler.handle(entEntHandlerMap.at(type));
+    }
+    return std::vector<std::vector<std::string>>();
+}
+
+std::vector<std::string> ReadPKB::findDesignEntities(Parameter p) {
+    std::vector<std::string> res;
+    std::string typeString = p.getTypeString();
+    if (p.getType() == ParameterType::PROCEDURE) {
+        std::unordered_set<Proc> procs = pkbInstance->procedureStorage->getProcNames();
+        for (auto proc : procs) {
+            res.push_back(proc);
+        }
+    }
+    else if (p.getType() == ParameterType::CONSTANT) {
+        std::unordered_set<Const> constants = pkbInstance->constantStorage->getConstNames();
+        for (auto constant : constants) {
+            res.push_back(to_string(constant));
+        }
+    }
+    else if (p.getType() == ParameterType::VARIABLE) {
+        std::unordered_set<Ent> vars = pkbInstance->entityStorage->getEntNames();
+        for (auto var : vars) {
+            res.push_back(var);
+        }
+    }
+    else if (p.isStatementRef(p)) {
+        std::unordered_set<StmtNum> stmtNums = pkbInstance->statementStorage->getStatementNumbers(typeString);
+        for (auto stmtNum : stmtNums) {
+            res.push_back(to_string(stmtNum));
+        }
+    }
+
+    return res;
+}
+
 std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
     Parameter* lhs = p.getEntRef();
     std::string rhs = p.pattern;

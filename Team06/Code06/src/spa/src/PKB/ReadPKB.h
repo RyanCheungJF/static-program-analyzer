@@ -19,6 +19,10 @@ public:
     // Sets the pointer to the PKB instance if it is not set yet
     void setInstancePKB(PKB& pkb);
 
+    std::vector<std::vector<std::string>> findRelationship(Relationship rs);
+
+    std::vector<std::string> findDesignEntities(Parameter p);
+
     // check if given a statement type and statement line number, whether that statement line number is indeed
     // of that statement type
     bool checkStatement(Stmt stmt, StmtNum num);

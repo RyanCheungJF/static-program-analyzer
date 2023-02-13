@@ -5,19 +5,12 @@
 using namespace std;
 
 TEST_CASE("Checks that write and read works for constantStorage") {
-
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    pkb.initializePkb();
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
+    ConstantStorage cs;
     Const c = 5;
-    writePkb.setConstant(c, 4);
-    writePkb.setConstant(c, 8);
-    writePkb.setConstant(c, 9);
-    std::unordered_set<StmtNum> statementNums = readPkb.getConstantStatementNumbers(c);
+    cs.writeConstant(c, 4);
+    cs.writeConstant(c, 8);
+    cs.writeConstant(c, 9);
+    std::unordered_set<StmtNum> statementNums = cs.getConstantStmtNums(c);
 
     bool res = true;
     res = res && statementNums.size() == 3;
@@ -29,15 +22,9 @@ TEST_CASE("Checks that write and read works for constantStorage") {
 }
 
 TEST_CASE("Check that if a constant does not appear in the source code, it should return an empty set") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    pkb.initializePkb();
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
+    ConstantStorage cs;
     Const c = 7;
-    std::unordered_set<StmtNum> statementNums = readPkb.getConstantStatementNumbers(c);
+    std::unordered_set<StmtNum> statementNums = cs.getConstantStmtNums(c);
 
     bool res = true;
     res = res && statementNums.size() == 0;
@@ -47,32 +34,20 @@ TEST_CASE("Check that if a constant does not appear in the source code, it shoul
 }
 
 TEST_CASE("Check that given query for a constant and a statementNumber that it appears in, it returns true") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    pkb.initializePkb();
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
+    ConstantStorage cs;
     Const c = 8;
-    writePkb.setConstant(c, 3);
+    cs.writeConstant(c, 3);
 
     bool res = true;
-    res = res && (readPkb.checkConstant(c, 3) == true);
-    res = res && (readPkb.checkConstant(c, 4) == false);
+    res = res && (cs.checkConstant(c, 3) == true);
+    res = res && (cs.checkConstant(c, 4) == false);
     REQUIRE(res);
 }
 
 TEST_CASE("Check that if a constant does not exist, it returns false") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    pkb.initializePkb();
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
+    ConstantStorage cs;
     bool res = true;
-    res = res && (readPkb.checkConstant(3, 4) == false);
+    res = res && (cs.checkConstant(3, 4) == false);
     REQUIRE(res);
 }
 
