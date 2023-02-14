@@ -14,11 +14,16 @@ void DesignExtractor::populatePKB() {
 }
 
 void DesignExtractor::extractInfo() {
-	std::vector<ASTVisitor*> visitors{ &FollowsExtractorVisitor(writePkb),
-									   &ParentExtractorVisitor(writePkb),
-									   &StatementExtractorVisitor(writePkb),
-									   &ProcedureExtractorVisitor(writePkb),
-									   &EntRefExtractorVisitor(writePkb) };
+    FollowsExtractorVisitor followsExtractor = FollowsExtractorVisitor(writePkb);
+    ParentExtractorVisitor parentExtractor = ParentExtractorVisitor(writePkb);
+    StatementExtractorVisitor statementExtractor = StatementExtractorVisitor(writePkb);
+    ProcedureExtractorVisitor procedureExtractor = ProcedureExtractorVisitor(writePkb);
+    EntRefExtractorVisitor entRefExtractor = EntRefExtractorVisitor(writePkb);
+	std::vector<ASTVisitor*> visitors{ &followsExtractor,
+									   &parentExtractor,
+									   &statementExtractor,
+									   &procedureExtractor,
+									   &entRefExtractor };
 
 	for (auto& visitor : visitors) {
 		for (const auto& procedure : ASTroot->procedureList) {
