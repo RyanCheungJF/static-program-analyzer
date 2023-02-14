@@ -39,6 +39,7 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
     }
     if (isFalseQuery) {
         return {};
+    }
     if (queryDb.hasParameter(selectParameters[0])) {
         return queryDb.fetch(selectParameters[0]);
     } else {
