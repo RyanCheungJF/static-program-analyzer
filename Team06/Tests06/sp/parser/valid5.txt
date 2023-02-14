@@ -1,0 +1,5 @@
+procedure A {
+	while ((1 + 3) < 2) {
+             x = 1;
+	}
+}

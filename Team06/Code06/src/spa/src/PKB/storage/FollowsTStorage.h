@@ -2,17 +2,18 @@
 #include <unordered_set>
 #include <vector>
 #include <utility>
+#include "StmtStmtRLStorage.h"
 
 typedef int StmtNum;
 
-class FollowsTStorage {
+class FollowsTStorage : public StmtStmtRLStorage {
 public:
-    virtual void writeFollowsT(std::vector<std::pair<StmtNum, StmtNum>> followee_follower);
-    virtual bool checkFollowsT(StmtNum followee, StmtNum follower);
-    virtual std::unordered_set<StmtNum> getFollowers(StmtNum followee);
-    virtual std::unordered_set<StmtNum> getFollowees(StmtNum follower);
+    void write(StmtNum followee, std::unordered_set<StmtNum> followers);
+    bool exists(StmtNum followee, StmtNum follower);
+    std::unordered_set<StmtNum> getRightWildcard(StmtNum followee);
+    std::unordered_set<StmtNum> getLeftWildcard(StmtNum follower);
+    std::pair<std::vector<StmtNum>, std::vector<StmtNum>> getAllPairs();
 private:
-
-    std::unordered_map<StmtNum, std::unordered_set<StmtNum>> follower_followees;
-    std::unordered_map<StmtNum, std::unordered_set<StmtNum>> followee_followers;
+    std::unordered_map<StmtNum, std::unordered_set<StmtNum>> followerFolloweesMap;
+    std::unordered_map<StmtNum, std::unordered_set<StmtNum>> followeeFollowersMap;
 };

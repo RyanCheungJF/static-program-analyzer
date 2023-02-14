@@ -1,7 +1,7 @@
 //
 // Created by Faruq on 31/1/23.
 //
-
+#include "../QPSGrammarUtils.h"
 #include "QPSParser.h"
 
 QPSParser::QPSParser() {
@@ -15,13 +15,18 @@ vector<Query> QPSParser::parse(string qpsQuery) {
     vector<Query> queryVec;
     VariableStore vStore;
     vector<string> declarations;
+    bool hasSelectClause = false;
     for (string queryStatement:queryStatements) {
         if (isDeclaration(queryStatement)) {
             declarations.push_back(queryStatement);
         } else {
+            hasSelectClause = true;
             Query query = selectQueryParser.parse(queryStatement);
             queryVec.push_back(query);
         }
+    }
+    if(!hasSelectClause) {
+        throw Exception("missing select clause");
     }
     vStore = parseDeclarations(declarations);
     // need to do it this way cuz dealing with pointer
@@ -33,6 +38,12 @@ vector<Query> QPSParser::parse(string qpsQuery) {
 }
 
 vector<string> QPSParser::splitQuery(string qpsQuery) {
+    qpsQuery = trim(qpsQuery);
+    // Check if the last term is a semicolon.
+    bool endsWithSemicolon = false;
+    if (qpsQuery.back() == ';') {
+        endsWithSemicolon = true;
+    }
     string delimiter = ";";
     vector<string> clauses;
     int start = 0;
@@ -41,6 +52,9 @@ vector<string> QPSParser::splitQuery(string qpsQuery) {
         tie(clause, start) = extractSubStringUntilDelimiter(qpsQuery, start, delimiter);
         clause = trim(clause);
         clauses.push_back(clause);
+    }
+    if (endsWithSemicolon && isSelectClause(clauses.back())) {
+        throw Exception("Select clause should not end with ';'");
     }
     return clauses;
 }

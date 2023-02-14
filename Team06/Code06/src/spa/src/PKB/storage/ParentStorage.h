@@ -1,14 +1,17 @@
 #include <unordered_map>
 #include <unordered_set>
+#include <iostream>
+#include "StmtStmtRLStorage.h"
 
 typedef int StmtNum;
 
-class ParentStorage {
+class ParentStorage : public StmtStmtRLStorage {
 public:
-    void writeParent(StmtNum parent, StmtNum child);
-    bool checkParent(StmtNum parent, StmtNum child);
-    std::unordered_set<StmtNum> getChildren(StmtNum parent);
-    StmtNum getParent(StmtNum child);
+    void write(StmtNum parent, StmtNum child);
+    bool exists(StmtNum parent, StmtNum child);
+    std::unordered_set<StmtNum> getRightWildcard(StmtNum parent);
+    std::unordered_set<StmtNum> getLeftWildcard(StmtNum child);
+    std::pair<std::vector<StmtNum>, std::vector<StmtNum>> getAllPairs();
 private:
     //Each parent has a set of all their children
     std::unordered_map<StmtNum, std::unordered_set<StmtNum>> parentChildMap;

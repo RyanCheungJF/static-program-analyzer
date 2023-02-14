@@ -10,5 +10,8 @@ public:
 	std::string op = "!";
 	std::unique_ptr<ConditionalExpression> condExpr;
 
+	NotConditionalExpression();
+	NotConditionalExpression(std::unique_ptr<ConditionalExpression> condExpr);
+
 	void accept(ASTVisitor* visitor) override;
 };

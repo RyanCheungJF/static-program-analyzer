@@ -10,7 +10,6 @@ public:
 	std::unique_ptr<Expression> rhs;
 
 	MathExpression();
-
 	MathExpression(std::string mathOperator, std::unique_ptr<Expression> lhs, std::unique_ptr<Expression> rhs);
 
 	void accept(ASTVisitor* visitor) override;

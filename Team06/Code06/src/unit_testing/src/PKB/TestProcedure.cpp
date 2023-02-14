@@ -8,16 +8,12 @@ TEST_CASE("All statement numbers are recorded in their respective procedures") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ProcedureStorage pr;
-    pkb.procedureStorage = &pr;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
     Proc p = "calculateEuclidean";
-    std::vector<StmtNum> lines;
-    lines.push_back(2);
-    lines.push_back(3);
-    lines.push_back(4);
+    std::unordered_set<StmtNum> lines = {2, 3, 4};
     writePkb.setProcedure(p, lines);
     std::unordered_set<StmtNum> statementNums = readPkb.getProcedureStatementNumbers(p);
 
@@ -34,8 +30,7 @@ TEST_CASE("If a procedure does not appear in the source code, getProcedureStatem
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ProcedureStorage pr;
-    pkb.procedureStorage = &pr;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -48,33 +43,18 @@ TEST_CASE("If a procedure does not appear in the source code, getProcedureStatem
 }
 
 TEST_CASE("Given a query for a procedure and a statementNumber that is not nested in the procedure, checkProcedure() returns false") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    ProcedureStorage pr;
-    pkb.procedureStorage = &pr;
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
+    ProcedureStorage store;
     Proc p = "computeCentroid";
-    std::vector<StmtNum> lines;
-    lines.push_back(2);
-    writePkb.setProcedure(p, lines);
+    std::unordered_set<StmtNum> lines = {2};
+    store.writeProcedure(p, lines);
 
     bool res = true;
-    res = res && (readPkb.checkProcedure(p, 4) == false);
+    res = res && (store.checkProcedure(p, 4) == false);
     REQUIRE(res);
 }
 
 TEST_CASE("If a procedure does not exist, checkProcedure() returns false") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    ProcedureStorage pr;
-    pkb.procedureStorage = &pr;
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
-    bool res = (readPkb.checkProcedure("procedureThatDoesNotExist", 4) == false);
+    ProcedureStorage store;
+    bool res = (store.checkProcedure("procedureThatDoesNotExist", 4) == false);
     REQUIRE(res);
 }

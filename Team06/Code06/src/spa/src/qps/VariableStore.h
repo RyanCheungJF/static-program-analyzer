@@ -13,16 +13,12 @@ class VariableStore {
 public:
     VariableStore();
     ParameterType getType(Parameter);
-    int insertVariable(Parameter);
+    void insertVariable(Parameter);
     bool hasVariable(Parameter);
     bool updateSynonym(Parameter*);
     string toString();
 //private:
     unordered_map<string, Parameter> store;
-//    const static unordered_map<string, ParameterType> stringToTypeMap;
-//    static ParameterType stringToType(string);
-//    string value;
-//    ParameterType type;
 };
 
 

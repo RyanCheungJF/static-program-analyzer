@@ -8,10 +8,7 @@ TEST_CASE("Check that all statements are recorded in StmtStorage") {
     StmtStorage sts;
 
     Stmt s = "if";
-    std::vector<StmtNum> lines;
-    lines.push_back(3);
-    lines.push_back(6);
-    lines.push_back(9);
+    std::unordered_set<StmtNum> lines = {3, 6, 9};
     sts.writeStatement(s, lines);
     std::unordered_set<StmtNum> statementNums = sts.getStatementNumbers(s);
 
@@ -28,7 +25,7 @@ TEST_CASE("Check that a statement does not appear in the source code, StmtStorag
     StmtStorage sts;
 
     Stmt s = "if";
-    std::vector<StmtNum> lines;
+    std::unordered_set<StmtNum> lines;
     sts.writeStatement(s, lines);
     std::unordered_set<StmtNum> statementNums = sts.getStatementNumbers(s);
 
@@ -44,14 +41,12 @@ TEST_CASE("Check that given query for a statement and a statementNumber that it 
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    StmtStorage st;
-    pkb.statementStorage = &st;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
     Stmt s = "if";
-    std::vector<StmtNum> lines;
-    lines.push_back(3);
+    std::unordered_set<StmtNum> lines = {3};
     writePkb.setStatement(s, lines);
 
     bool res = true;
@@ -65,8 +60,7 @@ TEST_CASE("Check that if a statement does not exist, t returns false") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    StmtStorage st;
-    pkb.statementStorage = &st;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -78,14 +72,12 @@ TEST_CASE("Check that given a StatementAPI and their StatementAPI numbers, a que
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    StmtStorage st;
-    pkb.statementStorage = &st;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
     Stmt s = "if";
-    std::vector<StmtNum> lines;
-    lines.push_back(3);
+    std::unordered_set<StmtNum> lines = {3};
     writePkb.setStatement(s, lines);
 
     REQUIRE(readPkb.checkStatement("while", 4) == false);
@@ -96,16 +88,12 @@ TEST_CASE("Check that ReadPKB returns all statement numbers of a given statement
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    StmtStorage st;
-    pkb.statementStorage = &st;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
     Stmt s = "if";
-    std::vector<StmtNum> lines;
-    lines.push_back(3);
-    lines.push_back(6);
-    lines.push_back(9);
+    std::unordered_set<StmtNum> lines = {3, 6, 9};
     writePkb.setStatement(s, lines);
 
     Parameter p = Parameter("irrelevant", s);
@@ -119,13 +107,12 @@ TEST_CASE("Check that a statement does not appear in the source code, ReadPKB sh
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    StmtStorage st;
-    pkb.statementStorage = &st;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
     Stmt s = "if";
-    std::vector<StmtNum> lines;
+    std::unordered_set<StmtNum> lines;
     writePkb.setStatement(s, lines);
     Parameter p = Parameter(s, "irrelevant");
     std::vector<std::string> res = readPkb.findDesignEntities(p);
