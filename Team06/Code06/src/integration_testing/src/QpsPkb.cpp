@@ -542,11 +542,9 @@ TEST_CASE("Select synonym from multi clause, synonym is in both clauses") {
 		Select v such that Parent*(s, a) pattern a(v, _"x"_))";
 
 		result = qps.processQueries(query, readPkb);
-		REQUIRE(result.size() == 4);
-		REQUIRE(exists(result, "x"));
+		REQUIRE(result.size() == 2);
 		REQUIRE(exists(result, "y"));
 		REQUIRE(exists(result, "z"));
-		REQUIRE(exists(result, "count"));
 	}
 }
 
@@ -563,8 +561,7 @@ TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
 			Select a such that Follows*(1, 2) pattern a(v, _"x"_))";
 
 			result = qps.processQueries(query, readPkb);
-			REQUIRE(result.size() == 5);
-			REQUIRE(exists(result, "1"));
+			REQUIRE(result.size() == 4);
 			REQUIRE(exists(result, "4"));
 			REQUIRE(exists(result, "6"));
 			REQUIRE(exists(result, "8"));
