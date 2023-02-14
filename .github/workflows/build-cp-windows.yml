@@ -22,7 +22,7 @@ env:
 jobs:
   build:
     runs-on: windows-latest
-    timeout-minutes: 3
+    timeout-minutes: 10
     strategy:
       fail-fast: true
 
@@ -40,6 +40,3 @@ jobs:
           cmake --build . --target autotester --config Release
           cd ../../..
 
-      #- name: Run Unit Tests
-      #  run: |
-      #    Team06/Code06/build/src/unit_testing/Release/unit_testing
