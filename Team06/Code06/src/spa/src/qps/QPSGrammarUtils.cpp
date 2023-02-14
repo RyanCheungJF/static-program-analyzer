@@ -102,7 +102,7 @@ bool isExprSpec(string s)
         return true;
     }
     // removes all whitespace from s.
-    s.erase(remove_if(s.begin(), s.end(), ::isspace), s.end());
+    removeCharFromString(s, ' ');
     bool startsWith_ = regex_search(s, regex("^_\""));
     bool endsWith_ = regex_search(s, regex("\"_$"));
     if (startsWith_ && endsWith_) {
@@ -124,8 +124,7 @@ bool isExprSpec(string s)
         // If s = _"X+Y"_ then expr = X+Y
         string expr = s.substr(1, s.size() - 2);
         // this aaa is for debugging purposes
-        bool aaa = isExpr(expr);
-        return aaa;
+        return isExpr(expr);
     }
     return false;
 }
@@ -160,9 +159,7 @@ bool isExpr(string s) {
     string first = trim(s.substr(0, index));
     string second = trim(s.substr(index+1, s.size()-1-index));
     // this aaa bbb is for debugging purposes
-    bool aaa = isExpr(first);
-    bool bbb = isTerm(second);
-    return aaa && bbb;
+    return isExpr(first) && isTerm(second);
 }
 
 bool isTerm(string s) {
@@ -193,10 +190,7 @@ bool isTerm(string s) {
     }
     string first = trim(s.substr(0, index));
     string second = trim(s.substr(index+1, s.size()-1-index));
-    // this aaa bbb is for debugging purposes
-    bool aaa = isTerm(first);
-    bool bbb = isFactor(second);
-    return aaa && bbb;
+    return isTerm(first) && isFactor(second);
 }
 
 bool isFactor(string s) {
