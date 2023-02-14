@@ -15,17 +15,15 @@ vector<Query> QPSParser::parse(string qpsQuery) {
     vector<Query> queryVec;
     VariableStore vStore;
     vector<string> declarations;
-    bool hasSelectClause = false;
     for (string queryStatement:queryStatements) {
         if (isDeclaration(queryStatement)) {
             declarations.push_back(queryStatement);
         } else {
-            hasSelectClause = true;
             Query query = selectQueryParser.parse(queryStatement);
             queryVec.push_back(query);
         }
     }
-    if(!hasSelectClause) {
+    if(queryVec.empty()) {
         throw Exception("missing select clause");
     }
     vStore = parseDeclarations(declarations);
@@ -53,7 +51,7 @@ vector<string> QPSParser::splitQuery(string qpsQuery) {
         clause = trim(clause);
         clauses.push_back(clause);
     }
-    if (endsWithSemicolon && isSelectClause(clauses.back())) {
+    if (endsWithSemicolon) {
         throw Exception("Select clause should not end with ';'");
     }
     return clauses;

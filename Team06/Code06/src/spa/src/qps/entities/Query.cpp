@@ -37,16 +37,13 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
         table = table.extractDesignEntities();
         queryDb.insertTable(table);
     }
-
+    if (isFalseQuery) {
+        return {};
     if (queryDb.hasParameter(selectParameters[0])) {
         return queryDb.fetch(selectParameters[0]);
     } else {
-        if (isFalseQuery) {
-            return {};
-        } else {
-            vector<string> res = readPKB.findDesignEntities(selectParameters[0]);
-            return res;
-        }
+        vector<string> res = readPKB.findDesignEntities(selectParameters[0]);
+        return res;
     }
 }
 
