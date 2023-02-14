@@ -1,10 +1,10 @@
 #include "ReadPKB.h"
 
-void ReadPKB::setInstancePKB(PKB &pkb) {
-    if (this -> pkbInstance != NULL) {
+void ReadPKB::setInstancePKB(PKB& pkb) {
+    if (this->pkbInstance != NULL) {
         return;
     }
-    this -> pkbInstance = &pkb;
+    this->pkbInstance = &pkb;
     this->stmtStmtHandlerMap[RelationshipType::FOLLOWS] = pkb.followsStorage;
     this->stmtStmtHandlerMap[RelationshipType::FOLLOWST] = pkb.followsTStorage;
     this->stmtStmtHandlerMap[RelationshipType::PARENT] = pkb.parentStorage;
@@ -70,7 +70,7 @@ std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
         leftWildcard = rhs[0] == '_';
         rightWildcard = rhs[rhs.length() - 1] == '_';
     }
-    
+
     /*std::stringstream ss;
     for (int i = 0; i < rhs.length(); i++) {
         char curr = rhs[i];
@@ -80,7 +80,7 @@ std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
     }*/
 
     if (leftWildcard && rightWildcard) rhs = rhs.substr(1, rhs.length() - 2);
-    
+
 
     if (lhsType == ParameterType::FIXED_STRING) {
         if (rhs == "_") {
@@ -126,7 +126,7 @@ std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
     }
 }
 
-bool ReadPKB::checkStatement(Stmt stmt, StmtNum num){
+bool ReadPKB::checkStatement(Stmt stmt, StmtNum num) {
     return pkbInstance->statementStorage->checkStatement(stmt, num);
 }
 

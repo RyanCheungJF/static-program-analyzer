@@ -1,0 +1,6 @@
+procedure A {
+    x =
+          1      +
+  y
+;
+}

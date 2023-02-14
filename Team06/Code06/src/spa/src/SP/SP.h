@@ -1,13 +1,9 @@
 #pragma once
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <SPExceptions.h>
-#include <Tokenizer.h>
-#include <Parser.h>
-#include <DesignExtractor.h>
+#include "SPExceptions.h"
+#include "Tokenizer.h"
+#include "Parser.h"
+#include "DesignExtractor.h"
 
 class SP {
 private:
@@ -16,5 +12,5 @@ private:
 	DesignExtractor designExtractor;
 
 public:
-	void processFile(std::string filepath, WritePKB* writePKB);
+	void processFile(std::string filepath, WritePKB* writePKB, ReadPKB* readPKB);
 };

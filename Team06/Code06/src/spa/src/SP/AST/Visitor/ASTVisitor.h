@@ -1,10 +1,11 @@
 #pragma once
 
+#define CAST_TO(ASTNodeType, value) dynamic_cast<ASTNodeType*>(value)
+
 // general entry point of programs
 class Program;
 class Procedure;
 class StatementList;
-class Statement;
 
 // statements
 class ReadStatement;
@@ -26,7 +27,6 @@ public:
 	virtual void visitStatementList(StatementList *statementList) = 0;
 
 	// statements
-	virtual void visitStatement(Statement *statement) = 0;
 	virtual void visitReadStatement(ReadStatement *readStatement) = 0;
 	virtual void visitPrintStatement(PrintStatement *printStatement) = 0;
 	virtual void visitAssignStatement(AssignStatement *assignStatement) = 0;

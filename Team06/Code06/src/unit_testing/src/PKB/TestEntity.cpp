@@ -6,7 +6,7 @@ using namespace std;
 
 TEST_CASE("Checks that write and read works for entityStorage") {
     EntityStorage es;
-    Ent e = "v"
+    Ent e = "v";
     std::vector<StmtNum> lines = {3, 6, 9};
     es.writeEntity(3, {e});
     es.writeEntity(6, {e});

@@ -1,8 +1,8 @@
 #include "WritePKB.h"
 
-void WritePKB::setInstancePKB(PKB &pkb) {
+void WritePKB::setInstancePKB(PKB& pkb) {
     if (this->pkbInstance != NULL) {
-        
+
     }
     this->pkbInstance = &pkb;
 }
@@ -78,4 +78,3 @@ void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expres
 std::unique_ptr<Expression> WritePKB::buildSubtree(std::string rhs) {
     return std::move(pkbInstance->patternStorage->buildSubtree(rhs));
 }
-

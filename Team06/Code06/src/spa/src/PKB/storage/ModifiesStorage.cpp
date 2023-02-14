@@ -2,14 +2,14 @@
 
 void ModifiesStorage::writeModifiesS(StmtNum num, std::unordered_set<Ent> entities) {
     stmtNum_entities[num].insert(entities.begin(), entities.end());
-    for (Ent e: entities) {
+    for (Ent e : entities) {
         entities_stmtNum[e].insert(num);
     }
 }
 
 void ModifiesStorage::writeModifiesP(ProcName name, std::unordered_set<Ent> entities) {
     procName_entities[name].insert(entities.begin(), entities.end());
-    for (Ent e: entities) {
+    for (Ent e : entities) {
         entities_procName[e].insert(name);
     }
 }

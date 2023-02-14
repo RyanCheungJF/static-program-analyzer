@@ -9,6 +9,7 @@
 #include "AbstractWrapper.h"
 #include "SP.h"
 #include "PKB/WritePKB.h"
+#include "PKB/PKB.h"
 #include "PKB/ReadPKB.h"
 #include "qps/QPS.h"
 
@@ -18,6 +19,13 @@ private:
 	WritePKB writePKB;
     ReadPKB readPKB;
 	PKB pkb;
+	FollowsStorage fs;
+	FollowsTStorage ft;
+	EntityStorage et;
+    ConstantStorage c;
+    PatternStorage pt;
+	ProcedureStorage ps;
+	StmtStorage sts;
     QPS qps;
 
  public:

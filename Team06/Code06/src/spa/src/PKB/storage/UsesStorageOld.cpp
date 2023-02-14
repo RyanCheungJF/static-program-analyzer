@@ -7,7 +7,7 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllStatements(StmtT
     for (auto i : procName_stmtType_stmtNum) {
         for (auto stmtNum : i.second[type]) {
             for (Ent e : stmtNum_ent[stmtNum]) {
-                std::vector<std::string> curr = {std::to_string(stmtNum), e};
+                std::vector<std::string> curr = { std::to_string(stmtNum), e };
                 res.push_back(curr);
             }
         }
@@ -20,7 +20,7 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllStatementsGivenP
 
     for (auto stmtNum : procName_stmtType_stmtNum[name][type]) {
         for (Ent e : stmtNum_ent[stmtNum]) {
-            std::vector<std::string> curr = {std::to_string(stmtNum), e};
+            std::vector<std::string> curr = { std::to_string(stmtNum), e };
             res.push_back(curr);
         }
     }
@@ -34,7 +34,7 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllStatementsGivenE
         for (auto stmtNum : i.second[type]) {
             for (Ent e : stmtNum_ent[stmtNum]) {
                 if (e == entity) {
-                    std::vector<std::string> curr = {std::to_string(stmtNum), e};
+                    std::vector<std::string> curr = { std::to_string(stmtNum), e };
                     res.push_back(curr);
                 }
             }
@@ -77,7 +77,8 @@ std::unordered_set<std::string> UsesStorageOld::getAllEntitiesUsed(ProcedureName
             for (int num : nums) {
                 if (type == "call") {
                     queue.push_back(call_callee[num]);
-                } else {
+                }
+                else {
                     res.insert(stmtNum_ent[num].begin(), stmtNum_ent[num].end());
                 }
             }
@@ -93,12 +94,14 @@ bool UsesStorageOld::checkUses(StmtNum num, Ent e) {
     // stmtNum not in source code
     if (stmtNum_procName_stmtType.find(num) == stmtNum_procName_stmtType.end()) {
         return false;
-    } else if (call_callee.find(num) != call_callee.end()) { // num is a call statement
+    }
+    else if (call_callee.find(num) != call_callee.end()) { // num is a call statement
         std::string callee = call_callee[num];
         std::unordered_set<std::string> res = getAllEntitiesUsed(callee);
         return res.find(e) != res.end();
-    } else {
-        return stmtNum_ent[num].find(e)  != stmtNum_ent[num].end();
+    }
+    else {
+        return stmtNum_ent[num].find(e) != stmtNum_ent[num].end();
     }
 }
 
@@ -166,8 +169,8 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllCallStatements_f
     std::vector<std::vector<std::string>> res;
     for (auto i : call_callee) {
         std::unordered_set<std::string> entities = getAllEntitiesUsed(i.second);
-        for (Ent e: entities) {
-            std::vector<std::string> curr = {std::to_string(i.first), e};
+        for (Ent e : entities) {
+            std::vector<std::string> curr = { std::to_string(i.first), e };
             res.push_back(curr);
         }
     }
@@ -178,7 +181,7 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllCallStatements_f
 std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllCallStatements_format2() {
     std::vector<std::vector<std::string>> res;
     for (auto i : call_callee) {
-        std::vector<std::string> curr = {std::to_string(i.first), i.second};
+        std::vector<std::string> curr = { std::to_string(i.first), i.second };
         res.push_back(curr);
     }
     return res;
@@ -192,7 +195,7 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllCallStatementsGi
         std::unordered_set<std::string> entities = getAllEntitiesUsed(callee);
 
         for (Ent e : entities) {
-            std::vector<std::string> curr = {std::to_string(i), e};
+            std::vector<std::string> curr = { std::to_string(i), e };
             res.push_back(curr);
         }
     }
@@ -204,7 +207,7 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllCallStatementsGi
     std::vector<std::vector<std::string>> res;
     for (auto i : procName_stmtType_stmtNum[name]["call"]) {
         std::string callee = call_callee[i];
-        std::vector<std::string> curr = {std::to_string(i), callee};
+        std::vector<std::string> curr = { std::to_string(i), callee };
         res.push_back(curr);
     }
     return res;
@@ -233,7 +236,7 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllCallStatementsGi
 
         std::string procedureCalled = curr.first;
         int referenceLine = curr.second;
-        std::vector<std::string> result = {std::to_string(referenceLine), procedureCalled};
+        std::vector<std::string> result = { std::to_string(referenceLine), procedureCalled };
         res.push_back(result);
 
         for (auto i : procName_stmtType_stmtNum[procedureCalled]["call"]) {
@@ -250,7 +253,7 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllCallStatementsGi
     for (auto i : call_callee) {
         std::unordered_set<std::string> entities = getAllEntitiesUsed(i.second);
         if (entities.find(entity) != entities.end()) {
-            std::vector<std::string> result = {std::to_string(i.first), entity};
+            std::vector<std::string> result = { std::to_string(i.first), entity };
             res.push_back(result);
         }
     }
@@ -263,7 +266,7 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllCallStatementsGi
     for (auto i : call_callee) {
         std::unordered_set<std::string> entities = getAllEntitiesUsed(i.second);
         if (entities.find(entity) != entities.end()) {
-            std::vector<std::string> result = {std::to_string(i.first), i.second};
+            std::vector<std::string> result = { std::to_string(i.first), i.second };
             res.push_back(result);
         }
     }
@@ -307,7 +310,7 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllStatements() {
 
     std::vector<std::vector<std::string>> res;
     for (auto j : seen) {
-        std::vector<std::string> curr = {std::to_string(j.second), j.first};
+        std::vector<std::string> curr = { std::to_string(j.second), j.first };
         res.push_back(curr);
     }
     return res;
@@ -350,7 +353,7 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllStatementsGivenP
 
     std::vector<std::vector<std::string>> res;
     for (auto j : seen) {
-        std::vector<std::string> curr = {std::to_string(j.second), j.first};
+        std::vector<std::string> curr = { std::to_string(j.second), j.first };
         res.push_back(curr);
     }
     return res;
@@ -365,35 +368,35 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllStatementsGivenE
 
     std::unordered_set<std::pair<std::string, int>, usesCallsHashFunction> seen; //TODO: check with QPS that there is no cyclic issues
 
-    for (auto i: printStatements) {
+    for (auto i : printStatements) {
         int num = std::stoi(i[0]);
         std::pair<std::string, int> p = std::make_pair(i[1], num);
         seen.insert(p);
     }
-    for (auto i: assignStatements) {
+    for (auto i : assignStatements) {
         int num = std::stoi(i[0]);
         std::pair<std::string, int> p = std::make_pair(i[1], num);
         seen.insert(p);
     }
-    for (auto i: ifStatements) {
+    for (auto i : ifStatements) {
         int num = std::stoi(i[0]);
         std::pair<std::string, int> p = std::make_pair(i[1], num);
         seen.insert(p);
     }
-    for (auto i: whileStatements) {
+    for (auto i : whileStatements) {
         int num = std::stoi(i[0]);
         std::pair<std::string, int> p = std::make_pair(i[1], num);
         seen.insert(p);
     }
-    for (auto i: callStatements) {
+    for (auto i : callStatements) {
         int num = std::stoi(i[0]);
         std::pair<std::string, int> p = std::make_pair(i[1], num);
         seen.insert(p);
     }
 
     std::vector<std::vector<std::string>> res;
-    for (auto j: seen) {
-        std::vector<std::string> curr = {std::to_string(j.second), j.first};
+    for (auto j : seen) {
+        std::vector<std::string> curr = { std::to_string(j.second), j.first };
         res.push_back(curr);
     }
     return res;
@@ -401,14 +404,9 @@ std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllStatementsGivenE
 
 /*
 std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllProcedures() {
-
 }
-
 std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllProceduresGivenProcedure(ProcedureName name) {
-
 }
-
 std::vector<std::vector<std::string>> UsesStorageOld::getUsesAllProceduresGivenEntity(Ent e) {
-
 }
 */
