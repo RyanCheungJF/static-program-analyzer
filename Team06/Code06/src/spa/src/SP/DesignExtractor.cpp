@@ -31,10 +31,8 @@ void DesignExtractor::extractInfo() {
 			for (const auto& statement : procedure->statementList->statements) {
 				statement->accept(visitor);
 				if (isContainerStatement(statement.get())) {
-					std::cout << "IS a container " << statement.get()->statementNumber << std::endl;
 					recurseStatementHelper(statement.get(), visitor);
 				}
-				std::cout << "Not a container " << statement.get()->statementNumber << std::endl;
 			}
 		}
 	}

@@ -55,7 +55,6 @@ void visitExprHelper(Expression* e, std::unordered_set<Ent>& variables, std::uno
 }
 
 void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
-	std::cout << "Inside recurse statement helper " << recurseStmt->statementNumber << std::endl;
 	if (auto i = CAST_TO(IfStatement, recurseStmt)) {
 		i->thenStmtList->accept(visitor);
 		for (const auto& statement : i->thenStmtList->statements) {
