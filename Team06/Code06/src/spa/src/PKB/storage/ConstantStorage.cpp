@@ -5,6 +5,9 @@ void ConstantStorage::writeConstant(StmtNum num, std::unordered_set<Const> const
     for (Const c : constants) {
         constant_stmtNum[c].insert(num);
     }
+    for (Const c : constants) {
+        constNames.insert(c);
+    }
 }
 
 bool ConstantStorage::checkConstant(Const c, StmtNum num) {
