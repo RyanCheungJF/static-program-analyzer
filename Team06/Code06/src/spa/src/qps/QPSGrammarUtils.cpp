@@ -102,7 +102,7 @@ bool isExprSpec(string s)
         return true;
     }
     // removes all whitespace from s.
-    removeCharFromString(s, ' ');
+    s = removeCharFromString(s, ' ');
     bool startsWith_ = regex_search(s, regex("^_\""));
     bool endsWith_ = regex_search(s, regex("\"_$"));
     if (startsWith_ && endsWith_) {
