@@ -420,13 +420,11 @@ bool checkIfSameStatement(std::unique_ptr<Statement> expectedStatement, std::uni
 bool checkIfSameStatementList(std::unique_ptr<StatementList> expectedList, std::unique_ptr<StatementList> actualList) {
 	// preliminary check for statement list
 	if (expectedList->statements.size() != actualList->statements.size()) {
-		std::cout << "LOG: Trees differ in number of statements" << std::endl;
 		return false;
 	}
 
 	for (int i = 0; i < expectedList->statements.size(); i++) {
 		if (!checkIfSameStatement(std::move(expectedList->statements[i]), std::move(actualList->statements[i]))) {
-			std::cout << "LOG: Mismatch in statements!" << std::endl;
 			return false;
 		}
 	}
@@ -439,7 +437,6 @@ bool checkIfSameTree(std::unique_ptr<Program> expectedRoot, std::unique_ptr<Prog
 
 	// preliminary check for procedurelist
 	if (expectedProcedures.size() != actualProcedures.size()) {
-		std::cout << "LOG: Trees differ in number of procedures" << std::endl;
 		return false;
 	}
 
@@ -447,7 +444,6 @@ bool checkIfSameTree(std::unique_ptr<Program> expectedRoot, std::unique_ptr<Prog
 	for (int i = 0; i < expectedProcedures.size(); i++) {
 		auto expectedStatements = std::move(expectedProcedures[i]->statementList);
 		auto actualStatements = std::move(actualProcedures[i]->statementList);
-		std::cout << "LOG: Checking Procedure " << expectedProcedures[i]->procedureName << std::endl;
 		if (expectedProcedures[i]->procedureName != actualProcedures[i]->procedureName) {
 			return false;
 		}

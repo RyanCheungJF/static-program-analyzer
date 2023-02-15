@@ -23,3 +23,13 @@ stmt s;
 Select s such that Follows(25, s)
 none
 5000
+6 - comment
+stmt s;
+Select s such that Follows(s, 4)
+3
+5000
+7 - comment
+stmt s; print p;
+Select p such that Follows(p, 4)
+none
+5000
