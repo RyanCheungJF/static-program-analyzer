@@ -151,11 +151,11 @@ std::unordered_set<Ent> ReadPKB::getUsesP(ProcName name) {
 }
 
 std::unordered_set<Ent> ReadPKB::getModifiesS(StmtNum num) {
-    return pkbInstance->modifiesStorage->getModifiesS(num);
+    return pkbInstance->modifiesStorage->getEnt(num);
 }
 
 std::unordered_set<Ent> ReadPKB::getModifiesP(ProcName name) {
-    return pkbInstance->modifiesStorage->getModifiesP(name);
+    return pkbInstance->modifiesStorage->getEnt(name);
 }
 
 std::unordered_set<StmtNum> ReadPKB::getIfStatementNumbers() {

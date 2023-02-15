@@ -56,19 +56,19 @@ void WritePKB::setCall(StmtNum callLine, Proc procedure_being_called) {
 }
 
 void WritePKB::setUsesS(StmtNum num, std::unordered_set<Ent> entities) {
-    pkbInstance->usesStorage->writeUsesS(num, entities);
+    pkbInstance->usesStorage->writeS(num, entities);
 }
 
 void WritePKB::setUsesP(ProcName name, std::unordered_set<Ent> entities) {
-    pkbInstance->usesStorage->writeUsesP(name, entities);
+    pkbInstance->usesStorage->writeP(name, entities);
 }
 
 void WritePKB::setModifiesS(StmtNum num, std::unordered_set<Ent> entities) {
-    pkbInstance->modifiesStorage->writeModifiesS(num, entities);
+    pkbInstance->modifiesStorage->writeS(num, entities);
 }
 
 void WritePKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {
-    pkbInstance->modifiesStorage->writeModifiesP(name, entities);
+    pkbInstance->modifiesStorage->writeP(name, entities);
 }
 
 void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer) {

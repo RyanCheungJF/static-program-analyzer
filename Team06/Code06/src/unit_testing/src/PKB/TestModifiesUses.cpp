@@ -1,23 +1,23 @@
 #include "catch.hpp"
-#include "../../../spa/src/PKB/storage/UsesStorage.h"
+#include "../../../spa/src/PKB/storage/ModifiesUsesStorage.h"
 
 
-TEST_CASE("UsesStorage: writeUsesS") {
-    UsesStorage us;
+TEST_CASE("ModifiesUsesStorage: writeS") {
+    ModifiesUsesStorage us;
 
     StmtNum num1 = 11;
     std::unordered_set<Ent> input1 = {"a"};
     std::unordered_set<Ent> input1_1 = {"a", "b", "c"};
-    us.writeUsesS(num1, input1);
-    us.writeUsesS(num1, input1_1);
+    us.writeS(num1, input1);
+    us.writeS(num1, input1_1);
 
     StmtNum num2 = 20;
     std::unordered_set<Ent> input2 = {"a"};
     std::unordered_set<Ent> input2_1 = {"a", "x", "d"};
-    us.writeUsesS(num2, input2);
-    us.writeUsesS(num2, input2_1);
+    us.writeS(num2, input2);
+    us.writeS(num2, input2_1);
 
-    SECTION("UsesStorage: getEnt(StmtNum num)") {
+    SECTION("ModifiesUsesStorage: getEnt(StmtNum num)") {
         std::unordered_set<Ent> res1 = us.getEnt(num1);
         REQUIRE(res1.size() == input1_1.size());
 
@@ -28,7 +28,7 @@ TEST_CASE("UsesStorage: writeUsesS") {
         REQUIRE(res3.size() == 0);
     }
 
-    SECTION("UsesStorage: exists(StmtNum num, Ent var)") {
+    SECTION("ModifiesUsesStorage: exists(StmtNum num, Ent var)") {
         REQUIRE(us.exists(num1, "a"));
         REQUIRE(!us.exists(num1, "d"));
 
@@ -36,7 +36,7 @@ TEST_CASE("UsesStorage: writeUsesS") {
         REQUIRE(!us.exists(num2, "b"));
     }
 
-    SECTION("UsesStorage: getStmtsFromEnt(Ent var)") {
+    SECTION("ModifiesUsesStorage: getStmtsFromEnt(Ent var)") {
         std::unordered_set<StmtNum> res1 = us.getStmtsFromEnt("a");
         REQUIRE(res1.size() == 2);
 
@@ -50,7 +50,7 @@ TEST_CASE("UsesStorage: writeUsesS") {
         REQUIRE(res4.size() == 0);
     }
 
-    SECTION("UsesStorage: getAllStmtEntPairs()") {
+    SECTION("ModifiesUsesStorage: getAllStmtEntPairs()") {
         std::pair<std::vector<StmtNum>, std::vector<std::string>> res = us.getAllStmtEntPairs();
 //        for (auto i : res.first) {
 //            std::cout << i << " ";
@@ -71,22 +71,22 @@ TEST_CASE("UsesStorage: writeUsesS") {
     }
 }
 
-TEST_CASE("UsesStorage: writeUsesP") {
-    UsesStorage us;
+TEST_CASE("ModifiesUsesStorage: writeP") {
+    ModifiesUsesStorage us;
 
     ProcName proc1 = "proc1";
     std::unordered_set<Ent> input1 = {"a"};
     std::unordered_set<Ent> input1_1 = {"a", "b", "c"};
-    us.writeUsesP(proc1, input1);
-    us.writeUsesP(proc1, input1_1);
+    us.writeP(proc1, input1);
+    us.writeP(proc1, input1_1);
 
     ProcName proc2 = "proc2";
     std::unordered_set<Ent> input2 = {"a"};
     std::unordered_set<Ent> input2_1 = {"a", "x", "d"};
-    us.writeUsesP(proc2, input2);
-    us.writeUsesP(proc2, input2_1);
+    us.writeP(proc2, input2);
+    us.writeP(proc2, input2_1);
 
-    SECTION("UsesStorage: getEnt(ProcName proc)") {
+    SECTION("ModifiesUsesStorage: getEnt(ProcName proc)") {
         std::unordered_set<Ent> res1 = us.getEnt(proc1);
         REQUIRE(res1.size() == input1_1.size());
 
@@ -97,7 +97,7 @@ TEST_CASE("UsesStorage: writeUsesP") {
         REQUIRE(res3.size() == 0);
     }
 
-    SECTION("UsesStorage: exists(ProcName proc, Ent var)") {
+    SECTION("ModifiesUsesStorage: exists(ProcName proc, Ent var)") {
         REQUIRE(us.exists(proc1, "a"));
         REQUIRE(!us.exists(proc1, "d"));
 
@@ -105,7 +105,7 @@ TEST_CASE("UsesStorage: writeUsesP") {
         REQUIRE(!us.exists(proc2, "b"));
     }
 
-    SECTION("UsesStorage: getProcsFromEnt(Ent var)") {
+    SECTION("ModifiesUsesStorage: getProcsFromEnt(Ent var)") {
         std::unordered_set<ProcName> res1 = us.getProcsFromEnt("a");
         REQUIRE(res1.size() == 2);
 
@@ -119,7 +119,7 @@ TEST_CASE("UsesStorage: writeUsesP") {
         REQUIRE(res4.size() == 0);
     }
 
-    SECTION("UsesStorage: getAllProcEntPairs()") {
+    SECTION("ModifiesUsesStorage: getAllProcEntPairs()") {
         std::pair<std::vector<ProcName>, std::vector<std::string>> res = us.getAllProcEntPairs();
 //        for (auto i : res.first) {
 //            std::cout << i << " ";
