@@ -171,6 +171,7 @@ TEST_CASE("Support for Select v pattern a (v, _)\'") {
     REQUIRE(res.size() == check.size());
 }
 
+// Upcoming feature when we optimise it from a tree to a storage of postfix strings
 //TEST_CASE("Support for pattern's inorder traversal") {
 //    WritePKB writePkb;
 //    ReadPKB readPkb;

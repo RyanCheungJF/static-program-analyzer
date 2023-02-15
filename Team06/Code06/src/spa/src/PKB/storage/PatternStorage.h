@@ -10,13 +10,6 @@
 #include <iostream>
 
 typedef int StmtNum;
-
-class QueryStub {
-public:
-    std::string lhs;
-    std::string pattern;
-};
-
 struct hashFunction
 {
     size_t operator()(const std::pair<int, std::unique_ptr<Expression>>& x) const

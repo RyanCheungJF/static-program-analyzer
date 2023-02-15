@@ -8,12 +8,21 @@ TEST_CASE("ModifiesUsesStorage: writeS") {
     StmtNum num1 = 11;
     std::unordered_set<Ent> input1 = {"a"};
     std::unordered_set<Ent> input1_1 = {"a", "b", "c"};
-    us.writeS(num1, input1);
-    us.writeS(num1, input1_1);
 
     StmtNum num2 = 20;
     std::unordered_set<Ent> input2 = {"a"};
     std::unordered_set<Ent> input2_1 = {"a", "x", "d"};
+
+    SECTION("ModifiesUsesStorage: exists(StmtNum num, Ent var) on empty tables") {
+        REQUIRE(!us.exists(num1, "a"));
+        REQUIRE(!us.exists(num1, "d"));
+
+        REQUIRE(!us.exists(num2, "a"));
+        REQUIRE(!us.exists(num2, "b"));
+    }
+
+    us.writeS(num1, input1);
+    us.writeS(num1, input1_1);
     us.writeS(num2, input2);
     us.writeS(num2, input2_1);
 
@@ -52,13 +61,7 @@ TEST_CASE("ModifiesUsesStorage: writeS") {
 
     SECTION("ModifiesUsesStorage: getAllStmtEntPairs()") {
         std::pair<std::vector<StmtNum>, std::vector<std::string>> res = us.getAllStmtEntPairs();
-//        for (auto i : res.first) {
-//            std::cout << i << " ";
-//        }
-//        std::cout << "\n";
-//        for (auto i : res.second) {
-//            std::cout << i << " ";
-//        }
+
         REQUIRE(res.first.size() == res.second.size());
         REQUIRE(res.first.size() == (input1_1.size() + input2_1.size()));
         REQUIRE(find(res.first.begin(), res.first.end(), num1) != res.first.end());
@@ -77,12 +80,21 @@ TEST_CASE("ModifiesUsesStorage: writeP") {
     ProcName proc1 = "proc1";
     std::unordered_set<Ent> input1 = {"a"};
     std::unordered_set<Ent> input1_1 = {"a", "b", "c"};
-    us.writeP(proc1, input1);
-    us.writeP(proc1, input1_1);
 
     ProcName proc2 = "proc2";
     std::unordered_set<Ent> input2 = {"a"};
     std::unordered_set<Ent> input2_1 = {"a", "x", "d"};
+
+    SECTION("ModifiesUsesStorage: exists(ProcName proc, Ent var) on empty tables") {
+        REQUIRE(!us.exists(proc1, "a"));
+        REQUIRE(!us.exists(proc1, "d"));
+
+        REQUIRE(!us.exists(proc2, "a"));
+        REQUIRE(!us.exists(proc2, "b"));
+    }
+
+    us.writeP(proc1, input1);
+    us.writeP(proc1, input1_1);
     us.writeP(proc2, input2);
     us.writeP(proc2, input2_1);
 
@@ -121,13 +133,7 @@ TEST_CASE("ModifiesUsesStorage: writeP") {
 
     SECTION("ModifiesUsesStorage: getAllProcEntPairs()") {
         std::pair<std::vector<ProcName>, std::vector<std::string>> res = us.getAllProcEntPairs();
-//        for (auto i : res.first) {
-//            std::cout << i << " ";
-//        }
-//        std::cout << "\n";
-//        for (auto i : res.second) {
-//            std::cout << i << " ";
-//        }
+
         REQUIRE(res.first.size() == res.second.size());
         REQUIRE(res.first.size() == (input1_1.size() + input2_1.size()));
         REQUIRE(find(res.first.begin(), res.first.end(), proc1) != res.first.end());
