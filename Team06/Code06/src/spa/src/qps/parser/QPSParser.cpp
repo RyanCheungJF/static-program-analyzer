@@ -1,7 +1,7 @@
 //
 // Created by Faruq on 31/1/23.
 //
-
+#include "../QPSGrammarUtils.h"
 #include "QPSParser.h"
 
 QPSParser::QPSParser() {
@@ -23,6 +23,9 @@ vector<Query> QPSParser::parse(string qpsQuery) {
             queryVec.push_back(query);
         }
     }
+    if(queryVec.empty()) {
+        throw Exception("missing select clause");
+    }
     vStore = parseDeclarations(declarations);
     // need to do it this way cuz dealing with pointer
     for (int i = 0; i < queryVec.size(); i++) {
@@ -33,6 +36,12 @@ vector<Query> QPSParser::parse(string qpsQuery) {
 }
 
 vector<string> QPSParser::splitQuery(string qpsQuery) {
+    qpsQuery = trim(qpsQuery);
+    // Check if the last term is a semicolon.
+    bool endsWithSemicolon = false;
+    if (qpsQuery.back() == ';') {
+        endsWithSemicolon = true;
+    }
     string delimiter = ";";
     vector<string> clauses;
     int start = 0;
@@ -41,6 +50,9 @@ vector<string> QPSParser::splitQuery(string qpsQuery) {
         tie(clause, start) = extractSubStringUntilDelimiter(qpsQuery, start, delimiter);
         clause = trim(clause);
         clauses.push_back(clause);
+    }
+    if (endsWithSemicolon) {
+        throw Exception("Select clause should not end with ';'");
     }
     return clauses;
 }

@@ -63,7 +63,7 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
 {
 	vector<Parameter> params;
 	if (end - start != 2) {
-		throw Exception();
+		throw Exception("select clause does not exist");
 	}
 	if (!isSelect(wordList[start])) {
 		throw Exception();

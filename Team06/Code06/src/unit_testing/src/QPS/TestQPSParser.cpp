@@ -23,3 +23,16 @@ TEST_CASE("parse / given valid string with such that and pattern clause / parse 
 	vector<Query> queries = qp.parse(test);
 	REQUIRE(true);
 }
+
+TEST_CASE("parse / missing select clause / throw error") {
+    string test = "variable v;stmt s;";
+    QPSParser qp;
+    CHECK_THROWS(qp.parse(test));
+}
+
+TEST_CASE("splitQuery / splitting variable v; Select v; should give error / catch error") {
+    string test = "variable v; Select v ; ";
+    QPSParser qp;
+    CHECK_THROWS(qp.splitQuery(test));
+}
+
