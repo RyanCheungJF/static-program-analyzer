@@ -5,6 +5,8 @@
 #include "qps/entities/FollowsTRelationship.h"
 #include "qps/entities/ParentRelationship.h"
 #include "qps/entities/ParentTRelationship.h"
+#include "qps/entities/UsesRelationship.h"
+#include "qps/entities/ModifiesRelationship.h"
 
 TEST_CASE("makeRelationship / empty relationship type string / throws error") {
 	string typeInput = "";
@@ -248,24 +250,112 @@ TEST_CASE("makeRelationship / Uses relationship / return relationship object") {
 	Parameter p3("ent_ref", "fixed_string");
 	Parameter p4("1", "fixed_int");
 	vector<Parameter> inputParameters{ p1, p2 };
+	vector<Parameter> inputParameters2{ p4, p3 };
+	vector<Parameter> inputParameters3{ p2, p3 };
 	RelationshipType expectedType = RelationshipType::USES;
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
-	//CHECK(expectedType == output.type);
+	UsesRelationship expected(inputParameters);
+	CHECK(expected == *output);
+	shared_ptr<Relationship> output2 = Relationship::makeRelationship(typeInput, inputParameters2);
+	UsesRelationship expected2(inputParameters2);
+	CHECK(expected2 == *output2);
+	shared_ptr<Relationship> output3 = Relationship::makeRelationship(typeInput, inputParameters3);
+	UsesRelationship expected3(inputParameters3);
+	CHECK(expected3 == *output3);
+}
+
+TEST_CASE("makeRelationship / Uses, wrong 2nd param / throws error") {
+	string typeInput = "Uses";
+	Parameter p1("ent_ref", "fixed_string");
+	Parameter p2("a", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / Uses, wrong 1st param / throws error") {
+	string typeInput = "Uses";
+	Parameter p1("a", "synonym");
+	Parameter p2("stmt_ref", "fixed_int");
+	vector<Parameter> inputParameters{ p1, p2 };
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / Uses relationship, more than 2 parameter / throws error") {
+	string typeInput = "Uses";
+	Parameter p1("a", "synonym");
+	Parameter p2("b", "synonym");
+	Parameter p3("c", "synonym");
+	vector<Parameter> inputParameters{ p1, p2, p3 };
+
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / Uses relationship, less than 2 parameter / throws error") {
+	string typeInput = "Uses";
+	Parameter p1("a", "synonym");
+	vector<Parameter> inputParameters{ p1 };
+
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Modifies relationship / return relationship object") {
 	string typeInput = "Modifies";
 	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
+	Parameter p2("_", "wildcard");
+	Parameter p3("ent_ref", "fixed_string");
+	Parameter p4("1", "fixed_int");
 	vector<Parameter> inputParameters{ p1, p2 };
-	RelationshipType expectedType = RelationshipType::MODIFIES;
+	vector<Parameter> inputParameters2{ p4, p3 };
+	vector<Parameter> inputParameters3{ p2, p3 };
+	RelationshipType expectedType = RelationshipType::USES;
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
-	//CHECK(expectedType == output.type);
+	ModifiesRelationship expected(inputParameters);
+	CHECK(expected == *output);
+	shared_ptr<Relationship> output2 = Relationship::makeRelationship(typeInput, inputParameters2);
+	ModifiesRelationship expected2(inputParameters2);
+	CHECK(expected2 == *output2);
+	shared_ptr<Relationship> output3 = Relationship::makeRelationship(typeInput, inputParameters3);
+	ModifiesRelationship expected3(inputParameters3);
+	CHECK(expected3 == *output3);
 }
 
-TEST_CASE("test validate params invalid params") {
+TEST_CASE("makeRelationship / Modifies, wrong 2nd param / throws error") {
+	string typeInput = "Modifies";
+	Parameter p1("ent_ref", "fixed_string");
+	Parameter p2("a", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / Modifies, wrong 1st param / throws error") {
+	string typeInput = "Modifies";
+	Parameter p1("a", "synonym");
+	Parameter p2("stmt_ref", "fixed_int");
+	vector<Parameter> inputParameters{ p1, p2 };
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / Modifies relationship, more than 2 parameter / throws error") {
+	string typeInput = "Modifies";
+	Parameter p1("a", "synonym");
+	Parameter p2("b", "synonym");
+	Parameter p3("c", "synonym");
+	vector<Parameter> inputParameters{ p1, p2, p3 };
+
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / Modifies relationship, less than 2 parameter / throws error") {
+	string typeInput = "Modifies";
+	Parameter p1("a", "synonym");
+	vector<Parameter> inputParameters{ p1 };
+
+	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("FollowsRelationship.validateParams / invalid 1st param / return false") {
 	string typeInput = "Follows";
 	Parameter p1("a", "synonym");
 	Parameter p2("1", "fixed_int");
@@ -276,7 +366,18 @@ TEST_CASE("test validate params invalid params") {
 	CHECK(output->validateParams() == false);
 }
 
-TEST_CASE("test validate params valid params") {
+TEST_CASE("FollowsRelationship.validateParams / invalid 2nd params / return false") {
+	string typeInput = "Follows";
+	Parameter p1("1", "fixed_int");
+	Parameter p2("a", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(1).updateSynonymType(ParameterType::VARIABLE);
+	CHECK(output->validateParams() == false);
+}
+
+TEST_CASE("FollowsRelationship.validateParams / valid params / return true") {
 	string typeInput = "Follows";
 	Parameter p1("a", "synonym");
 	Parameter p2("1", "fixed_int");
@@ -284,5 +385,193 @@ TEST_CASE("test validate params valid params") {
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(0).updateSynonymType(ParameterType::ASSIGN);
+	CHECK(output->validateParams());
+}
+
+TEST_CASE("FollowsTRelationship.validateParams / invalid 1st params / return false") {
+	string typeInput = "Follows*";
+	Parameter p1("a", "synonym");
+	Parameter p2("1", "fixed_int");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(0).updateSynonymType(ParameterType::VARIABLE);
+	CHECK(output->validateParams() == false);
+}
+
+TEST_CASE("FollowsTRelationship.validateParams / invalid 2nd params / return false") {
+	string typeInput = "Follows*";
+	Parameter p1("1", "fixed_int");
+	Parameter p2("a", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(1).updateSynonymType(ParameterType::VARIABLE);
+	CHECK(output->validateParams() == false);
+}
+
+
+TEST_CASE("FollowsTRelationship.validateParams / valid params / return true") {
+	string typeInput = "Follows*";
+	Parameter p1("a", "synonym");
+	Parameter p2("1", "fixed_int");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(0).updateSynonymType(ParameterType::STMT);
+	CHECK(output->validateParams());
+}
+
+TEST_CASE("ParentRelationship.validateParams / invalid 1st params / return false") {
+	string typeInput = "Parent";
+	Parameter p1("a", "synonym");
+	Parameter p2("1", "fixed_int");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(0).updateSynonymType(ParameterType::VARIABLE);
+	CHECK(output->validateParams() == false);
+}
+
+TEST_CASE("ParentRelationship.validateParams / invalid 2nd params / return false") {
+	string typeInput = "Parent";
+	Parameter p1("1", "fixed_int");
+	Parameter p2("a", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(1).updateSynonymType(ParameterType::VARIABLE);
+	CHECK(output->validateParams() == false);
+}
+
+TEST_CASE("ParentRelationship.validateParams / valid params / return true") {
+	string typeInput = "Parent";
+	Parameter p1("1", "fixed_int");
+	Parameter p2("a", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(1).updateSynonymType(ParameterType::READ);
+	CHECK(output->validateParams());
+}
+
+TEST_CASE("ParentTRelationship.validateParams / invalid 1st params / return false") {
+	string typeInput = "Parent*";
+	Parameter p1("a", "synonym");
+	Parameter p2("1", "fixed_int");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(0).updateSynonymType(ParameterType::VARIABLE);
+	CHECK(output->validateParams() == false);
+}
+
+TEST_CASE("ParentTRelationship.validateParams / invalid 2nd params / return false") {
+	string typeInput = "Parent*";
+	Parameter p1("1", "fixed_int");
+	Parameter p2("a", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(1).updateSynonymType(ParameterType::VARIABLE);
+	CHECK(output->validateParams() == false);
+}
+
+TEST_CASE("ParentTRelationship.validateParams / valid params / return true") {
+	string typeInput = "Parent*";
+	Parameter p1("1", "fixed_int");
+	Parameter p2("a", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(1).updateSynonymType(ParameterType::WHILE);
+	CHECK(output->validateParams());
+}
+
+TEST_CASE("ModifiesRelationship.validateParams / invalid 1st params / return false") {
+	string typeInput = "Modifies";
+	Parameter p1("a", "synonym");
+	Parameter p2("a", "fixed_string");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(0).updateSynonymType(ParameterType::VARIABLE);
+	CHECK(output->validateParams() == false);
+}
+
+TEST_CASE("ModifiesRelationship.validateParams / invalid 2nd params / return false") {
+	string typeInput = "Modifies";
+	Parameter p1("1", "fixed_int");
+	Parameter p2("a", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(1).updateSynonymType(ParameterType::PROCEDURE);
+	CHECK(output->validateParams() == false);
+}
+
+TEST_CASE("ModifiesRelationship.validateParams / 1st param is procedure / return true") {
+	string typeInput = "Modifies";
+	Parameter p1("a", "synonym");
+	Parameter p2("a", "fixed_string");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(0).updateSynonymType(ParameterType::PROCEDURE);
+	CHECK(output->validateParams());
+}
+
+TEST_CASE("ModifiesRelationship.validateParams / 1st param is stmt ref / return true") {
+	string typeInput = "Modifies";
+	Parameter p1("a", "synonym");
+	Parameter p2("a", "fixed_string");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(0).updateSynonymType(ParameterType::CALL);
+	CHECK(output->validateParams());
+}
+
+TEST_CASE("UsesRelationship.validateParams / invalid 1st params / return false") {
+	string typeInput = "Uses";
+	Parameter p1("a", "synonym");
+	Parameter p2("a", "fixed_string");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(0).updateSynonymType(ParameterType::VARIABLE);
+	CHECK(output->validateParams() == false);
+}
+
+TEST_CASE("UsesRelationship.validateParams / invalid 2nd params / return false") {
+	string typeInput = "Modifies";
+	Parameter p1("1", "fixed_int");
+	Parameter p2("a", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(1).updateSynonymType(ParameterType::PROCEDURE);
+	CHECK(output->validateParams() == false);
+}
+
+TEST_CASE("UsesRelationship.validateParams / 1st param is procedure / return true") {
+	string typeInput = "Modifies";
+	Parameter p1("a", "synonym");
+	Parameter p2("a", "fixed_string");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(0).updateSynonymType(ParameterType::PROCEDURE);
+	CHECK(output->validateParams());
+}
+
+TEST_CASE("UsesRelationship.validateParams / 1st param is stmt ref / return true") {
+	string typeInput = "Modifies";
+	Parameter p1("a", "synonym");
+	Parameter p2("a", "fixed_string");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	output->params.at(0).updateSynonymType(ParameterType::CALL);
 	CHECK(output->validateParams());
 }
