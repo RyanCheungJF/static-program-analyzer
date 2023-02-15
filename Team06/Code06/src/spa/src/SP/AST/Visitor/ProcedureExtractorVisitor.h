@@ -3,28 +3,19 @@
 #include <iostream>
 #include <memory>
 #include "ASTVisitor.h"
-#include "AST/Node/Program.h"
-#include "AST/Node/Procedure.h"
-#include "AST/Node/IfStatement.h"
-#include "AST/Node/Statement.h"
-#include "AST/Node/StatementList.h"
-#include "AST/Node/WhileStatement.h"
 #include "../../../PKB/WritePKB.h"
+#include "ASTVisitorUtils.h"
 
 class ProcedureExtractorVisitor : public ASTVisitor {
-public:
+private:
 	WritePKB* writeApi;
-
+public:
 	ProcedureExtractorVisitor(WritePKB* writePKB);
-
-	int visitIfStatementHelper(IfStatement* ifStatement);
-	int visitWhileStatementHelper(WhileStatement* whileStatement);
 
 	void visitProgram(Program* program) override;
 	void visitProcedure(Procedure* procedure) override;
 	void visitStatementList(StatementList* statement) override;
 
-	void visitStatement(Statement* statement) override;
 	void visitReadStatement(ReadStatement* readStatement) override;
 	void visitPrintStatement(PrintStatement* printStatement) override;
 	void visitAssignStatement(AssignStatement* assignStatement) override;

@@ -1,13 +1,16 @@
 #include "ConstantStorage.h"
 
-void ConstantStorage::writeConstant(Const c, StmtNum line) {
-    constant_stmtNum[c].insert(line);
-    constNames.insert(c);
-    return;
+void ConstantStorage::writeConstant(StmtNum num, std::unordered_set<Const> constants) {
+    stmtNum_constant[num].insert(constants.begin(), constants.end());
+    for (Const c : constants) {
+        constant_stmtNum[c].insert(num);
+    }
+    for (Const c : constants) {
+        constNames.insert(c);
+    }
 }
 
 bool ConstantStorage::checkConstant(Const c, StmtNum num) {
-
     // source code does not even contain this constant
     if (constant_stmtNum.find(c) == constant_stmtNum.end()) {
         return false;

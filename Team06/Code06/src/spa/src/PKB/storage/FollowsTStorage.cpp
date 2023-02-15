@@ -1,41 +1,53 @@
 #include "FollowsTStorage.h"
 
-void FollowsTStorage::writeFollowsT(std::vector<std::pair<StmtNum, StmtNum>> followee_follower) {
-    for (std::pair<StmtNum, StmtNum> p: followee_follower) {
-        StmtNum followee = p.first;
-        StmtNum follower = p.second;
-        followee_followers[followee].insert(follower);
-        follower_followees[follower].insert(followee);
+
+void FollowsTStorage::write(StmtNum followee, std::unordered_set<StmtNum> followers) {
+    followeeFollowersMap[followee].insert(followers.begin(), followers.end());
+    for (StmtNum n: followers) {
+        followerFolloweesMap[n].insert(followee);
     }
-    return;
 }
 
-bool FollowsTStorage::checkFollowsT(StmtNum followee, StmtNum follower) {
+bool FollowsTStorage::exists(StmtNum followee, StmtNum follower) {
 
     // meaning the followee does not exist
-    if (followee_followers.find(followee) == followee_followers.end()) {
+    if (followeeFollowersMap.find(followee) == followeeFollowersMap.end()) {
         return false;
     }
-    return followee_followers[followee].find(follower) != followee_followers[followee].end();
+    return followeeFollowersMap[followee].find(follower) != followeeFollowersMap[followee].end();
 }
 
-std::unordered_set<StmtNum> FollowsTStorage::getFollowers(StmtNum followee) {
-
+std::unordered_set<StmtNum> FollowsTStorage::getRightWildcard(StmtNum followee) {
     // followee does not exist
-    if (followee_followers.find(followee) == followee_followers.end()) {
+    if (followeeFollowersMap.find(followee) == followeeFollowersMap.end()) {
         std::unordered_set<StmtNum> emptySet;
         return emptySet;
     }
-    return followee_followers[followee];
+    return followeeFollowersMap[followee];
+    
+
 }
 
-std::unordered_set<StmtNum> FollowsTStorage::getFollowees(StmtNum follower) {
-
+std::unordered_set<StmtNum> FollowsTStorage::getLeftWildcard(StmtNum follower) {
     // follower does not exist
-    if (follower_followees.find(follower) == follower_followees.end()) {
+    if (followerFolloweesMap.find(follower) == followerFolloweesMap.end()) {
         std::unordered_set<StmtNum> emptySet;
         return emptySet;
     }
-    return follower_followees[follower];
-
+    return followerFolloweesMap[follower];
 }
+
+std::pair<std::vector<StmtNum>, std::vector<StmtNum>> FollowsTStorage::getAllPairs() {
+    std::vector<StmtNum> followees;
+    std::vector<StmtNum> followers;
+    for (auto followeeFollowers : followeeFollowersMap) {
+        StmtNum followee = followeeFollowers.first;
+        for (auto follower : followeeFollowers.second) {
+            followees.push_back(followee);
+            followers.push_back(follower);
+        }
+        
+    }
+    return { followees, followers };
+}
+

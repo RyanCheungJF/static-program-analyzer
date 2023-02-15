@@ -1,6 +1,6 @@
 #include "SP.h"
 
-void SP::processFile(std::string filePath, WritePKB* writePKB) {
+void SP::processFile(std::string filePath, WritePKB* writePKB, ReadPKB* readPKB) {
 	std::ifstream sourceFile(filePath);
 	if (!sourceFile) {
 		std::cerr << "File not found" << std::endl;
@@ -9,15 +9,11 @@ void SP::processFile(std::string filePath, WritePKB* writePKB) {
 	std::stringstream strStream;
 	strStream << sourceFile.rdbuf();
 
-	std::deque<Token> tokens;
-	std::unique_ptr<Program> root;
-
 	try {
-		tokens = tokenizer.tokenize(strStream);
-		root = parser.parseProgram(tokens);
-		designExtractor = DesignExtractor(std::move(root), writePKB);
-		designExtractor.extractEntities();
-		designExtractor.extractRelationships();
+		std::deque<Token> tokens = tokenizer.tokenize(strStream);
+		std::unique_ptr<Program> root = parser.parseProgram(tokens);
+		designExtractor = DesignExtractor(std::move(root), writePKB, readPKB);
+		designExtractor.populatePKB();
 	} catch (SyntaxErrorException e) {
 		std::cout << "Syntax Error caught" << std::endl;
 		std::cout << e.what() << std::endl;

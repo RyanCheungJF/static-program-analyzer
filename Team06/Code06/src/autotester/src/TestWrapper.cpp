@@ -13,21 +13,14 @@ volatile bool AbstractWrapper::GlobalStop = false;
 TestWrapper::TestWrapper() {
 	// create any objects here as instance variables of this class
 	// as well as any initialization required for your spa program
-	pkb.entityStorage = &et;
-	pkb.procedureStorage = &ps;
-	pkb.statementStorage = &sts;
-	pkb.followsStorage = &fs;
-	pkb.constantStorage = &c;
-	pkb.patternStorage = &pt;
+	pkb.initializePkb();
 	writePKB.setInstancePKB(pkb);
 	readPKB.setInstancePKB(pkb);
 }
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
-	// call your parser to do the parsing
-  // ...rest of your code...
-	sourceProcessor.processFile(filename, &writePKB);
+	sourceProcessor.processFile(filename, &writePKB, &readPKB);
 }
 
 // method to evaluating a query

@@ -8,24 +8,14 @@ TEST_CASE("findDesignEntities() Tests") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ConstantStorage cs;
-    pkb.constantStorage = &cs;
-    ProcedureStorage ps;
-    pkb.procedureStorage = &ps;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
-    EntityStorage es;
-    pkb.entityStorage = &es;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    std::vector<StmtNum> lines;
-    lines.push_back(3);
-    lines.push_back(6);
-    lines.push_back(9);
+    std::unordered_set<StmtNum> lines = {3, 6, 9};
 
-    Const c = 123;
-    writePkb.setConstant(c, 1);
+    StmtNum stmtNum = 123;
+    writePkb.setConstant(stmtNum, {123});
 
     Proc p = "Main";
     writePkb.setProcedure(p, lines);
