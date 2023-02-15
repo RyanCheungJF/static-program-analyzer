@@ -6,22 +6,22 @@
 #include "UsesRelationship.h"
 #include "ModifiesRelationship.h"
 
-Relationship Relationship::makeRelationship(string type, vector<Parameter> params)
+shared_ptr<Relationship> Relationship::makeRelationship(string type, vector<Parameter> params)
 {
 	RelationshipType rType = stringToType(type);
 	switch (rType) {
 	case RelationshipType::FOLLOWS:
-		return FollowsRelationship(params);
+		return make_shared<FollowsRelationship>(FollowsRelationship(params));
 	case RelationshipType::FOLLOWST:
-		return FollowsTRelationship(params);
+		return make_shared<FollowsTRelationship>(FollowsTRelationship(params));
 	case RelationshipType::PARENT:
-		return ParentRelationship(params);
+		return make_shared<ParentRelationship>(ParentRelationship(params));
 	case RelationshipType::PARENTT:
-		return ParentTRelationship(params);
+		return make_shared<ParentTRelationship>(ParentTRelationship(params));
 	case RelationshipType::USES:
-		return UsesRelationship(params);
+		return make_shared<UsesRelationship>(UsesRelationship(params));
 	case RelationshipType::MODIFIES:
-		return ModifiesRelationship(params);
+		return make_shared<ModifiesRelationship>(ModifiesRelationship(params));
 	}
 	throw - 1;
 }
@@ -43,13 +43,18 @@ vector<Parameter*> Relationship::getAllUncheckedSynonyms()
 	return synonyms;
 }
 
-vector<Parameter>& Relationship::getParameters() {
-    return params;
+vector<Parameter> Relationship::getParameters() {
+	return params;
 }
 
 bool Relationship::operator==(const Relationship& r) const
 {
 	return type == r.type && params == r.params;
+}
+
+RelationshipType Relationship::getType()
+{
+	return type;
 }
 
 Relationship::Relationship()

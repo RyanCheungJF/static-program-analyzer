@@ -19,14 +19,15 @@ enum class RelationshipType {
 
 class Relationship {
 public:
-	static Relationship makeRelationship(string type, vector<Parameter> params);
-	//virtual bool validateParams() = 0;
+	static shared_ptr<Relationship> makeRelationship(string type, vector<Parameter> params);
+	virtual bool validateParams() = 0;
 	RelationshipType type;
 	vector<Parameter> params;
 	Relationship();
 	Relationship(const Relationship&);
 	vector<Parameter*> getAllUncheckedSynonyms();
-    vector<Parameter>& getParameters();
+    vector<Parameter> getParameters();
+	RelationshipType getType();
 	bool operator==(const Relationship&) const;
 private:
 	static const unordered_map<string, RelationshipType> stringToTypeMap;

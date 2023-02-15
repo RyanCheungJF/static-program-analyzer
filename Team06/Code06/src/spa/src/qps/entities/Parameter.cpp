@@ -36,7 +36,7 @@ Parameter::Parameter()
 
 bool Parameter::isSyntacticStatementRef(Parameter& p)
 {
-	return p.type == ParameterType::SYNONYM || p.type == ParameterType::WILDCARD || p.type == ParameterType::FIXED_INT;
+	return p.type == ParameterType::SYNONYM || isStatementRef(p);
 }
 
 bool Parameter::isStatementRef(Parameter& p)
@@ -89,7 +89,7 @@ void Parameter::updateSynonymType(ParameterType pt)
 
 bool Parameter::isSyntacticEntityRef(Parameter& p)
 {
-	return p.type == ParameterType::SYNONYM || p.type == ParameterType::WILDCARD || p.type == ParameterType::FIXED_STRING;
+	return p.type == ParameterType::SYNONYM || isEntityRef(p);
 }
 
 bool Parameter::isEntityRef(Parameter& p)

@@ -8,7 +8,7 @@ Query SelectQueryParser::parse(string selectQuery) {
 	vector<int> clauseEnds = getClauseEnds(clauseStarts, wordList.size());
 
 	vector<Parameter> selectParams = parseSelectClause(wordList, clauseStarts[0], clauseEnds[0]);
-	vector<Relationship> suchThatRelations = parseSuchThatClause(wordList, clauseStarts[1], clauseEnds[1]);
+	vector<shared_ptr<Relationship>> suchThatRelations = parseSuchThatClause(wordList, clauseStarts[1], clauseEnds[1]);
 	vector<Pattern> patterns = parsePatternClause(wordList, clauseStarts[2], clauseEnds[2]);
 
 	Query query(selectParams, suchThatRelations, patterns);
@@ -81,9 +81,9 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
 Currently capable of parsing one condition after such that, with 2 params
 use loops for extensibility
 */
-vector<Relationship> SelectQueryParser::parseSuchThatClause(vector<string>& wordList, int start, int end)
+vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<string>& wordList, int start, int end)
 {
-	vector<Relationship> res;
+	vector<shared_ptr<Relationship>> res;
 	if (start == -1 && end == -1) {
 		return res;
 	}
@@ -141,8 +141,7 @@ vector<Relationship> SelectQueryParser::parseSuchThatClause(vector<string>& word
 	Parameter p2(removeCharFromString(param2, '\"'), Parameter::guessParameterType(param2));
 	vector<Parameter> params{ p1, p2 };
 	//need to parse params first
-	Relationship relationship = Relationship::makeRelationship(rel, params);
-	res.push_back(relationship);
+	res.push_back(Relationship::makeRelationship(rel, params));
 
 
 	return res;

@@ -9,11 +9,11 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
     // instantiated.
     QueryDB queryDb = QueryDB();
     bool isFalseQuery = false;
-    for(Relationship relation: relations) {
+    for(shared_ptr<Relationship> relation: relations) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findRelationship(relation);
-        Table table(relation.getParameters(), response);
+        Table table((*relation).getParameters(), response);
         if(response.empty()) {
             isFalseQuery = true;
         }
@@ -54,12 +54,14 @@ Query::Query()
 
 Query::Query(const Query& q)
 {
+    for (int i = 0; i < q.relations.size(); i++) {
+    }
     relations = q.relations;
     selectParameters = q.selectParameters;
     patterns = q.patterns;
 }
 
-Query::Query(const vector<Parameter>& ss, const vector<Relationship>& rs, const vector<Pattern>& ps)
+Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector<Pattern>& ps)
 {
     selectParameters = ss;
     relations = rs;
@@ -75,9 +77,9 @@ vector<Parameter*> Query::getAllUncheckedSynonyms()
         }
     }
     for (int i = 0; i < relations.size(); i++) {
-        vector<Parameter*> relSyns = relations.at(i).getAllUncheckedSynonyms();
-        for (Parameter* paramP : relSyns) {
-            synonyms.push_back(paramP);
+        vector<Parameter*> relSyns = (*relations.at(i)).getAllUncheckedSynonyms();
+        for (int j = 0; j < relSyns.size(); j++) {
+            synonyms.push_back(relSyns.at(j));
         }
     }
     for (int i = 0; i < patterns.size(); i++) {
@@ -93,15 +95,6 @@ vector<Parameter*> Query::getAllUncheckedSynonyms()
     return synonyms;
 }
 
-vector<Parameter*> Query::getAllSynAssigns()
-{
-    vector<Parameter*> synAssigns;
-    for (int i = 0; i < patterns.size(); i++) {
-        synAssigns.push_back(patterns.at(i).getSynAssign());
-    }
-    return synAssigns;
-}
-
 bool Query::validateAllParameters()
 {
     for (Pattern p : patterns) {
@@ -110,8 +103,8 @@ bool Query::validateAllParameters()
         }
     }
 
-    for (Relationship r : relations) {
-        if (!r.validateParams()) {
+    for (shared_ptr<Relationship> r : relations) {
+        if (!(*r).validateParams()) {
             return false;
         }
     }

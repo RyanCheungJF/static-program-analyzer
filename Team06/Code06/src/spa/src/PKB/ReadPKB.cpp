@@ -9,10 +9,11 @@ void ReadPKB::setInstancePKB(PKB &pkb) {
     return;
 }
 
-std::vector<std::vector<std::string>> ReadPKB::findRelationship(Relationship rs) {
-    RelationshipType type = rs.type;
-    Parameter param1 = rs.params[0];
-    Parameter param2 = rs.params[1];
+std::vector<std::vector<std::string>> ReadPKB::findRelationship(shared_ptr<Relationship> rs) {
+    RelationshipType type = rs->getType();
+    vector<Parameter> params = rs->getParameters();
+    Parameter param1 = params[0];
+    Parameter param2 = params[1];
     if (stmtStmtHandlerMap.find(type) != stmtStmtHandlerMap.end()) {
         StmtStmtRLHandler handler;
         return handler.handle(stmtStmtHandlerMap.at(type), pkbInstance->statementStorage, param1, param2);

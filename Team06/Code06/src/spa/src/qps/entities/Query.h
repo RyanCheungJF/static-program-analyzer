@@ -21,12 +21,11 @@ public:
     vector<string> evaluate(ReadPKB&);
     Query();
     Query(const Query&);
-    Query(const vector<Parameter>&, const vector<Relationship>&, const vector<Pattern>&);
-    vector<Relationship> relations;
+    Query(vector<Parameter>&, vector<shared_ptr<Relationship>>&, vector<Pattern>&);
+    vector<shared_ptr<Relationship>> relations;
     vector<Parameter> selectParameters;
     vector<Pattern> patterns;
     vector<Parameter*> getAllUncheckedSynonyms();
-    vector<Parameter*> getAllSynAssigns();
     bool validateAllParameters();
 };
 
