@@ -12,5 +12,10 @@ public:
 	std::unique_ptr<Expression> lhs;
 	std::unique_ptr<Expression> rhs;
 
+	RelationalExpression();
+	RelationalExpression(std::string relationalOperator,
+						 std::unique_ptr<Expression> lhs,
+						 std::unique_ptr<Expression> rhs);
+
 	void accept(ASTVisitor* visitor) override;
 };

@@ -8,7 +8,7 @@ typedef int StmtNum;
 
 class ConstantStorage {
 public:
-    virtual void writeConstant(Const c, StmtNum line);
+    virtual void writeConstant(StmtNum num, std::unordered_set<Const> constants);
     virtual bool checkConstant(Const c, StmtNum num);
     virtual std::unordered_set<StmtNum> getConstantStmtNums(Const c);
     std::unordered_set<Const> getConstNames();

@@ -35,22 +35,22 @@ bool FollowsStorage::exists(StmtNum followee, StmtNum follower) {
     return followerFolloweeMap.at(follower) == followee && followeeFollowerMap.at(followee) == follower;
 }
 
-std::vector<StmtNum> FollowsStorage::getRightWildcard(StmtNum followee) {
+std::unordered_set<StmtNum> FollowsStorage::getRightWildcard(StmtNum followee) {
 
     // followee does not exist in table
     if (followeeFollowerMap.find(followee) == followeeFollowerMap.end()) {
-        return std::vector<StmtNum>();
+        return std::unordered_set<StmtNum>();
     }
-    return std::vector<StmtNum> {followeeFollowerMap.at(followee)};
+    return std::unordered_set<StmtNum> {followeeFollowerMap.at(followee)};
 }
 
-std::vector<StmtNum> FollowsStorage::getLeftWildcard(StmtNum follower) {
+std::unordered_set<StmtNum> FollowsStorage::getLeftWildcard(StmtNum follower) {
 
     // follower does not exist in table
     if (followerFolloweeMap.find(follower) == followerFolloweeMap.end()) {
-        return std::vector<StmtNum>();
+        return std::unordered_set<StmtNum>();
     }
-    return std::vector<StmtNum> {followerFolloweeMap.at(follower)};
+    return std::unordered_set<StmtNum> {followerFolloweeMap.at(follower)};
 }
 
 std::pair<std::vector<StmtNum>, std::vector<StmtNum>> FollowsStorage::getAllPairs() {

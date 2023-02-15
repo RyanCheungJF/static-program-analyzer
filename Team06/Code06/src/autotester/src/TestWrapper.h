@@ -7,7 +7,8 @@
 
 // include your other headers here
 #include "AbstractWrapper.h"
-#include "SP.h"
+#include "SP/SP.h"
+#include "PKB/WritePKB.h"
 #include "PKB/PKB.h"
 #include "PKB/ReadPKB.h"
 #include "qps/QPS.h"
@@ -19,6 +20,7 @@ private:
     ReadPKB readPKB;
 	PKB pkb;
 	FollowsStorage fs;
+	FollowsTStorage ft;
 	EntityStorage et;
     ConstantStorage c;
     PatternStorage pt;

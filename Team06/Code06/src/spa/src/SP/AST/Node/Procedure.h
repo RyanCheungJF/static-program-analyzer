@@ -11,7 +11,6 @@ public:
 	std::unique_ptr<StatementList> statementList;
 
 	Procedure();
-
 	Procedure(std::string procedureName, std::unique_ptr<StatementList> statementList);
 
 	void accept(ASTVisitor* visitor) override;

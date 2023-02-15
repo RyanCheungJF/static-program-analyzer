@@ -1,19 +1,21 @@
-/*
 #include "catch.hpp"
 #include "../../../../spa/src/SP/Tokenizer.h"
 
-TEST_CASE("Valid Integer") {
-
+TEST_CASE("Valid Integers") {
 	Tokenizer tokenizer;
 
-	SECTION("Checks that an integer number is in the string") {
+	SECTION("Checks for a valid integer") {
 		std::string testString = "23";
+		REQUIRE(tokenizer.isInteger(testString));
+	}
+
+	SECTION("Checks that 0 is valid") {
+		std::string testString = "0";
 		REQUIRE(tokenizer.isInteger(testString));
 	}
 }
 
-TEST_CASE("Invalid Integer") {
-
+TEST_CASE("Invalid Integers") {
 	Tokenizer tokenizer;
 
 	SECTION("Checks that leading zero is not a valid integer") {
@@ -32,8 +34,7 @@ TEST_CASE("Invalid Integer") {
 	}
 }
 
-TEST_CASE("Valid String") {
-
+TEST_CASE("Valid Names") {
 	Tokenizer tokenizer;
 
 	SECTION("Checks for a valid name with alphabets") {
@@ -47,8 +48,7 @@ TEST_CASE("Valid String") {
 	}
 }
 
-TEST_CASE("Invalid String") {
-
+TEST_CASE("Invalid Names") {
 	Tokenizer tokenizer;
 
 	SECTION("Checks that a valid name has to start with an alphabet") {
@@ -56,9 +56,8 @@ TEST_CASE("Invalid String") {
 		REQUIRE(!tokenizer.isName(testString));
 	}
 
-	SECTION("Checks that a valid name must not contain symbols") {
-		std::string testString = "abc&de";
+	SECTION("Checks that a valid name must not contain special characters") {
+		std::string testString = "abc&de$!@";
 		REQUIRE(!tokenizer.isName(testString));
 	}
 }
-*/

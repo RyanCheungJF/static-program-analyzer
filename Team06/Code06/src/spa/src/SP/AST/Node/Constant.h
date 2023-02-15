@@ -8,7 +8,6 @@ public:
 	int value;
 
 	Constant();
-
 	Constant(int value);
 
 	void accept(ASTVisitor* visitor) override;
