@@ -23,6 +23,9 @@ TEST_CASE("UsesStorage: writeUsesS") {
 
         std::unordered_set<Ent> res2 = us.getEnt(num2);
         REQUIRE(res2.size() == input2_1.size());
+
+        std::unordered_set<Ent> res3 = us.getEnt(100000);
+        REQUIRE(res3.size() == 0);
     }
 
     SECTION("UsesStorage: exists(StmtNum num, Ent var)") {
@@ -89,6 +92,9 @@ TEST_CASE("UsesStorage: writeUsesP") {
 
         std::unordered_set<Ent> res2 = us.getEnt(proc2);
         REQUIRE(res2.size() == input2_1.size());
+
+        std::unordered_set<Ent> res3 = us.getEnt("proc3");
+        REQUIRE(res3.size() == 0);
     }
 
     SECTION("UsesStorage: exists(ProcName proc, Ent var)") {
@@ -109,7 +115,7 @@ TEST_CASE("UsesStorage: writeUsesP") {
         std::unordered_set<ProcName> res3 = us.getProcsFromEnt("b");
         REQUIRE(res3.size() == 1);
 
-        std::unordered_set<StmtNum> res4 = us.getStmtsFromEnt("z");
+        std::unordered_set<ProcName> res4 = us.getProcsFromEnt("z");
         REQUIRE(res4.size() == 0);
     }
 
