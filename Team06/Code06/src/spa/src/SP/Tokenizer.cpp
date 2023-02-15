@@ -133,7 +133,7 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 				tokens.push_back(Token(TokenType::MODULO, "%"));
 				break;
 			default:
-				throw SyntaxErrorException("Invalid token -> " + tokenValue);
+				throw SyntaxErrorException("Invalid token");
 			}
 		}
 	}

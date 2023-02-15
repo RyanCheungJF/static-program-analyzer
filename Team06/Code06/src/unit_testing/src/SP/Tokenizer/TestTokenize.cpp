@@ -223,7 +223,15 @@ TEST_CASE("Invalid source program") {
 	SECTION("Invalid tokens") {
 		std::ifstream testFile(testDirectory.string() + "invalid5.txt");
 		strStream << testFile.rdbuf();
+		std::string message = "";
 
-		REQUIRE_THROWS_AS(testTokenizer.tokenize(strStream), SyntaxErrorException);
+		try {
+			testTokenizer.tokenize(strStream);
+		}
+		catch (SyntaxErrorException e) {
+			message = e.what();
+		}
+
+		REQUIRE(message.find("Invalid token") != std::string::npos);
 	}
 }
