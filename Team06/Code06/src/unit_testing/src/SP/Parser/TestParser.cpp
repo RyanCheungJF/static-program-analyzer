@@ -24,9 +24,6 @@ TEST_CASE("Valid Source Program") {
 	}
 	testDirectory /= "Tests06/sp/parser/";
 
-    //MacOS CLion requires full pathname for some reason
-    //std::string testDirectory = "/Users/admin/Downloads/this sem/cs3203project/Team06/Tests06/sp/parser/";
-
 	SECTION("Simple Valid Program") {
 		std::ifstream testFile(testDirectory.string() + "valid1.txt");
 		strStream << testFile.rdbuf();
