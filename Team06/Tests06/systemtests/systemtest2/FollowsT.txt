@@ -18,3 +18,18 @@ stmt s;
 Select s such that Follows*(s, 29)
 none
 5000
+5 - comment
+stmt s; read r; call c;
+Select r such that Follows*(r, 12)
+1, 2, 3
+5000
+6 - comment
+stmt s; read r; call c; if i;
+Select i such that Follows*(i, 27)
+26
+5000
+7 - comment
+stmt s; read r; call c; if i;
+Select i such that Follows*(i, 26)
+none
+5000

@@ -16,5 +16,5 @@ Select a such that Parent(24, a)
 4 - comment
 stmt s;
 Select s such that Parent(18, s)
-none
+19, 20, 21
 5000
