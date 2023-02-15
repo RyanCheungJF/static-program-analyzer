@@ -1,4 +1,5 @@
 #include <iostream>
+#include <filesystem>
 #include "catch.hpp"
 #include "../../spa/src/SP/Tokenizer.h"
 #include "../../spa/src/SP/Parser.h"
@@ -17,10 +18,14 @@ TEST_CASE("Valid Source Program") {
 	Tokenizer testTokenizer;
 	Parser testParser;
 	std::deque<Token> tokenQueue;
-	std::string testDirectory = "../../../../../../Tests06/sp/parser/";
+	auto testDirectory = std::filesystem::path(__FILE__);
+	for (int i = 0; i < 7; i++) {
+		testDirectory = testDirectory.parent_path();
+	}
+	testDirectory /= "Tests06/sp/parser/";
 
 	SECTION("Simple Valid Program") {
-		std::ifstream testFile(testDirectory + "valid1.txt");
+		std::ifstream testFile(testDirectory.string() + "valid1.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -46,7 +51,7 @@ TEST_CASE("Valid Source Program") {
 	}
 
 	SECTION("Valid Program With Multiple Procedures") {
-		std::ifstream testFile(testDirectory + "valid2.txt");
+		std::ifstream testFile(testDirectory.string() + "valid2.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -90,7 +95,7 @@ TEST_CASE("Valid Source Program") {
 	}
 
 	SECTION("Valid Program With Conditionals") {
-		std::ifstream testFile(testDirectory + "valid3.txt");
+		std::ifstream testFile(testDirectory.string() + "valid3.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -142,7 +147,7 @@ TEST_CASE("Valid Source Program") {
 	}
 
 	SECTION("Valid Program using keywords as names") {
-		std::ifstream testFile(testDirectory + "valid4.txt");
+		std::ifstream testFile(testDirectory.string() + "valid4.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -165,7 +170,7 @@ TEST_CASE("Valid Source Program") {
 	}
 
 	SECTION("Valid Program to test distinguish between relExpr & condExpr") {
-		std::ifstream testFile(testDirectory + "valid5.txt");
+		std::ifstream testFile(testDirectory.string() + "valid5.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -201,10 +206,14 @@ TEST_CASE("Invalid Source Program") {
 	Tokenizer testTokenizer;
 	Parser testParser;
 	std::deque<Token> tokenQueue;
-	std::string testDirectory = "../../../../../../Tests06/sp/parser/";
+	auto testDirectory = std::filesystem::path(__FILE__);
+	for (int i = 0; i < 7; i++) {
+		testDirectory = testDirectory.parent_path();
+	}
+	testDirectory /= "Tests06/sp/parser/";
 
 	SECTION("Program has no procedure") {
-		std::ifstream testFile(testDirectory + "invalid1.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid1.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -213,7 +222,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Procedure has invalid syntax") {
-		std::ifstream testFile(testDirectory + "invalid2.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid2.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -221,7 +230,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Statement List has no statement") {
-		std::ifstream testFile(testDirectory + "invalid3.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid3.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -229,7 +238,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Invalid read statement") {
-		std::ifstream testFile(testDirectory + "invalid4.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid4.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -237,7 +246,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Invalid print statement") {
-		std::ifstream testFile(testDirectory + "invalid5.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid5.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -245,7 +254,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Invalid call statement") {
-		std::ifstream testFile(testDirectory + "invalid6.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid6.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -253,7 +262,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Invalid while statement") {
-		std::ifstream testFile(testDirectory + "invalid7.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid7.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -261,7 +270,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Invalid if statement") {
-		std::ifstream testFile(testDirectory + "invalid8.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid8.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -269,7 +278,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Invalid assign statement") {
-		std::ifstream testFile(testDirectory + "invalid9.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid9.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -277,7 +286,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Invalid conditional") {
-		std::ifstream testFile(testDirectory + "invalid10.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid10.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -285,7 +294,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Invalid statement type") {
-		std::ifstream testFile(testDirectory + "invalid11.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid11.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -293,7 +302,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Invalid relational expression") {
-		std::ifstream testFile(testDirectory + "invalid12.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid12.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -301,7 +310,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Invalid expression") {
-		std::ifstream testFile(testDirectory + "invalid13.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid13.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -309,7 +318,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Invalid term") {
-		std::ifstream testFile(testDirectory + "invalid14.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid14.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -317,7 +326,7 @@ TEST_CASE("Invalid Source Program") {
 	}
 
 	SECTION("Invalid factor") {
-		std::ifstream testFile(testDirectory + "invalid15.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid15.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
