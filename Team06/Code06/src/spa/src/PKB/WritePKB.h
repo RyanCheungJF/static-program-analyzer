@@ -35,10 +35,6 @@ public:
     // Sets the entity along with the statement line that it appears in
     void setEntity(Ent e, StmtNum line);
 
-
-    // Sets the procedure along with the statement lines that are in that procedure appears in
-//    void setProcedure(Proc p, StmtNum num);
-
     // Sets the procedure along with the statement lines that are in that procedure appears in
     void setProcedure(Proc p, std::unordered_set<StmtNum> lines);
 
