@@ -15,14 +15,14 @@ void UsesStorage::writeUsesP(ProcName name, std::unordered_set<Ent> entities) {
 }
 
 bool UsesStorage::exists(StmtNum num, Ent var) {
-    if (stmtNum_entities.find(num) != stmtNum_entities.end()) return false;
+    if (stmtNum_entities.find(num) == stmtNum_entities.end()) return false;
 
     std::unordered_set<Ent> entities = stmtNum_entities[num];
     return entities.find(var) != entities.end();
 }
 
 bool UsesStorage::exists(ProcName proc, Ent var) {
-    if (procName_entities.find(proc) != procName_entities.end()) return false;
+    if (procName_entities.find(proc) == procName_entities.end()) return false;
 
     std::unordered_set<Ent> entities = procName_entities[proc];
     return entities.find(var) != entities.end();
