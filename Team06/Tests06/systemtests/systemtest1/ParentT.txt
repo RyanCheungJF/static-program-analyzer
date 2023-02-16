@@ -13,3 +13,13 @@ stmt s;
 Select s such that Parent*(s, 35)
 25, 27, 30, 31, 33, 34
 5000
+4 - comment
+stmt s; if i; while w;
+Select s such that Parent*(31, s)
+32, 33, 34, 35, 36
+5000
+5 - comment
+stmt s; if i; while w;
+Select w such that Parent*(31, s)
+25, 27, 30, 34
+5000

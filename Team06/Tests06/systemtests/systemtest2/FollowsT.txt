@@ -26,10 +26,35 @@ Select r such that Follows*(r, 12)
 6 - comment
 stmt s; read r; call c; if i;
 Select i such that Follows*(i, 27)
-26
+24
 5000
 7 - comment
 stmt s; read r; call c; if i;
 Select i such that Follows*(i, 26)
 none
+5000
+8 - comment
+while w; if i; assign a; stmt s; read r; call c;
+Select s such that Follows*(24, s)
+27, 28
+5000
+9 - comment
+while w; if i; assign a; stmt s; read r; call c;
+Select s such that Follows*(21, s)
+none
+5000
+10 - comment
+while w; if i; assign a; stmt s; read r; call c; print p;
+Select p such that Follows*(19, p)
+21
+5000
+11 - comment
+while w; if i; assign a; stmt s; read r; call c; print p;
+Select r such that Follows*(19, p)
+1, 2, 3, 5, 7
+5000
+12 - comment
+while w; if i; assign a; stmt s; read r; call cAcTus, c901231254124124;
+Select c901231254124124 such that Follows*(cAcTus, 18)
+9, 11, 13, 14, 15, 19
 5000

@@ -4,4 +4,8 @@
 ..\..\..\Code06\out\build\x64-Debug\src\autotester\autotester.exe source.txt Parent.txt out-Parent.xml
 ..\..\..\Code06\out\build\x64-Debug\src\autotester\autotester.exe source.txt ParentT.txt out-ParentT.xml
 
+..\..\..\Code06\out\build\x64-Debug\src\autotester\autotester.exe source.txt Modifies.txt out-Modifies.xml
+
+..\..\..\Code06\out\build\x64-Debug\src\autotester\autotester.exe source.txt Uses.txt out-Uses.xml
+
 ..\..\..\Code06\out\build\x64-Debug\src\autotester\autotester.exe source.txt Pattern.txt out-Pattern.xml
