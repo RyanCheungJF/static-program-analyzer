@@ -54,9 +54,6 @@ public:
 
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
-    std::unique_ptr<Expression> buildSubtree(std::string rhs);
-
-
     // Sets Uses relation in PKB
     void setUsesProcedure(std::string name, std::vector<Ent> entities);
     void setUsesStmtnum(StmtNum num, std::vector<Ent> entities);
