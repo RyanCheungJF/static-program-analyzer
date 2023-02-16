@@ -53,3 +53,8 @@ while w;
 Select w such that Follows(w, 25)
 none
 5000
+12 - comment
+while w; if i;
+Select w such that Follows(i, 32)
+24, 30, 34
+5000
