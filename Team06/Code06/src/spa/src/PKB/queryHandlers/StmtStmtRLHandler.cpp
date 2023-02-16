@@ -1,6 +1,6 @@
 #include "StmtStmtRLHandler.h"
 
-StmtStmtRLHandler::StmtStmtRLHandler(std::shared_ptr<StmtStmtRLStorage> rlStorage, std::shared_ptr<StmtStorage> stmtStorage) {
+StmtStmtRLHandler::StmtStmtRLHandler(std::shared_ptr<FollowsParentStorage> rlStorage, std::shared_ptr<StmtStorage> stmtStorage) {
 	this->rlStorage = rlStorage;
 	this->stmtStorage = stmtStorage;
 }

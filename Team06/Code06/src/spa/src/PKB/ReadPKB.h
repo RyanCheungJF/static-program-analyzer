@@ -67,7 +67,7 @@ public:
 
 private:
     PKB* pkbInstance = NULL;
-    std::unordered_map <RelationshipType, std::shared_ptr<StmtStmtRLStorage>> stmtStmtHandlerMap = { 
+    std::unordered_map <RelationshipType, std::shared_ptr<FollowsParentStorage>> stmtStmtHandlerMap = {
         {RelationshipType::FOLLOWS, NULL}, 
         {RelationshipType::FOLLOWST, NULL}, 
         {RelationshipType::PARENT, NULL}, 

@@ -71,14 +71,6 @@ std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
         rightWildcard = rhs[rhs.length() - 1] == '_';
     }
 
-    /*std::stringstream ss;
-    for (int i = 0; i < rhs.length(); i++) {
-        char curr = rhs[i];
-        if (curr != '_') {
-            ss << curr;
-        }
-    }*/
-
     if (leftWildcard && rightWildcard) rhs = rhs.substr(1, rhs.length() - 2);
 
 
