@@ -12,7 +12,6 @@ void EntRefExtractorVisitor::visitReadStatement(ReadStatement* readStatement) {
 	std::unordered_set<Ent> variables = { readStatement->varName };
 	writeApi->setEntity(readStatement->statementNumber, variables);
 	writeApi->setModifiesS(readStatement->statementNumber, variables);
-	std::cout << "Modifies " << readStatement->statementNumber << " " << readStatement->varName << std::endl;
 }
 
 void EntRefExtractorVisitor::visitPrintStatement(PrintStatement* printStatement) {
@@ -27,7 +26,6 @@ void EntRefExtractorVisitor::visitAssignStatement(AssignStatement* assignStateme
 
 	std::unordered_set<Ent> lhsVariables = { assignStatement->varName };
 	writeApi->setModifiesS(assignStatement->statementNumber, lhsVariables);
-	std::cout << "Modifies " << assignStatement->statementNumber << " " << assignStatement->varName << std::endl;
 
 	visitExprHelper(assignStatement->expr.get(), variables, constants);
 
