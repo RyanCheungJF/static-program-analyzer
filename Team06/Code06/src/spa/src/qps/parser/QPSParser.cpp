@@ -60,18 +60,12 @@ vector<string> QPSParser::splitQuery(string qpsQuery) {
 void QPSParser::checkSynonyms(Query* query, VariableStore varStore)
 {
     vector<Parameter*> synPs = query->getAllUncheckedSynonyms();
-    for (Parameter* synP : synPs) {
-        if (!varStore.updateSynonym(synP)) {
+    for (int i = 0; i < synPs.size(); i++) {
+        if (!varStore.updateSynonym(synPs.at(i))) {
             throw Exception();
         }
     }
-    vector<Parameter> synAssigns = query->getAllSynAssigns();
-    for (Parameter p : synAssigns) {
-        if (!varStore.hasVariable(p)) {
-            throw Exception();
-        }
-        if (!(varStore.getType(p) == ParameterType::ASSIGN)) {
-            throw Exception();
-        }
+    if (!query->validateAllParameters()) {
+        throw Exception();
     }
 }

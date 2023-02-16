@@ -19,7 +19,7 @@ public:
     // Sets the pointer to the PKB instance if it is not set yet
     void setInstancePKB(PKB& pkb);
 
-    std::vector<std::vector<std::string>> findRelationship(Relationship rs);
+    std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship> rs);
 
     std::vector<std::string> findDesignEntities(Parameter p);
 
