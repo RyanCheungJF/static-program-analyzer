@@ -1,0 +1,15 @@
+1 - comment
+stmt s;
+Select s such that Modifies(s, "a")
+1, 4, 12, 18, 25, 26
+5000
+2 - comment
+stmt s;
+Select s such that Modifies(s, "A")
+19
+5000
+3 - comment
+stmt s;
+Select s such that Modifies(s, "b")
+2, 13, 20, 25, 27, 30, 31, 34, 35
+5000

@@ -5,7 +5,7 @@ on:
     branches: 
       - master
       - ci
-      - test-ci
+      - test
   pull_request:
     branches: 
       - master
