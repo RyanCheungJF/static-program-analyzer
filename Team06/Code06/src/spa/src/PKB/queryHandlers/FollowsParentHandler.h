@@ -5,9 +5,9 @@
 #include <memory>
 
 
-class StmtStmtRLHandler {
+class FollowsParentHandler {
 public:
-	StmtStmtRLHandler(std::shared_ptr<FollowsParentStorage> rlStorage, std::shared_ptr<StmtStorage> stmtStorage);
+	FollowsParentHandler(std::shared_ptr<FollowsParentStorage> rlStorage, std::shared_ptr<StmtStorage> stmtStorage);
 	std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
 private:
 	std::shared_ptr<FollowsParentStorage> rlStorage;
