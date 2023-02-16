@@ -131,6 +131,10 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 				tokens.push_back(Token(TokenType::MODULO, "%"));
 				break;
 			default:
+				// Getting the EOF is a bit buggy.
+				if (tokenValue == EOF) {
+					break;
+				}
 				throw SyntaxErrorException("Invalid token");
 			}
 		}
