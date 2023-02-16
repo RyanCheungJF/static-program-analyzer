@@ -5,10 +5,14 @@ void ReadPKB::setInstancePKB(PKB& pkb) {
         return;
     }
     this->pkbInstance = &pkb;
+
     this->followsParentMap[RelationshipType::FOLLOWS] = pkb.followsStorage;
     this->followsParentMap[RelationshipType::FOLLOWST] = pkb.followsTStorage;
     this->followsParentMap[RelationshipType::PARENT] = pkb.parentStorage;
     this->followsParentMap[RelationshipType::PARENTT] = pkb.parentTStorage;
+
+    this->modifiesUsesMap[RelationshipType::MODIFIES] = pkb.modifiesStorage;
+    this->modifiesUsesMap[RelationshipType::USES] = pkb.usesStorage;
     return;
 }
 
@@ -18,10 +22,12 @@ std::vector<std::vector<std::string>> ReadPKB::findRelationship(Relationship rs)
     Parameter param2 = rs.params[1];
     if (followsParentMap.find(type) != followsParentMap.end()) {
         FollowsParentHandler handler(followsParentMap.at(type), pkbInstance->statementStorage);
+
         return handler.handle(param1, param2);
-    // NEEDS TO HANDLE MODIFIES AS WELL
-    } else if (type == RelationshipType::MODIFIES || type == RelationshipType::USES) {
-        ModifiesUsesHandler handler(pkbInstance->usesStorage, pkbInstance->statementStorage);
+
+    } else if (modifiesUsesMap.find(type) != modifiesUsesMap.end()) {
+        ModifiesUsesHandler handler(modifiesUsesMap.at(type), pkbInstance->statementStorage);
+
         return handler.handle(param1, param2);
     } 
     return std::vector<std::vector<std::string>>();
