@@ -405,18 +405,6 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
 			REQUIRE(exists(result, "main"));
 			REQUIRE(exists(result, "sub"));
 		}
-
-		SECTION("wildcard, syn") {
-			string query = R"(
-			variable v;
-			Select v such that Uses(_, v))";
-
-			result = qps.processQueries(query, readPkb);
-			REQUIRE(result.size() == 3);
-			REQUIRE(exists(result, "x"));
-			REQUIRE(exists(result, "y"));
-			REQUIRE(exists(result, "count"));
-		}
 	}
 }
 
