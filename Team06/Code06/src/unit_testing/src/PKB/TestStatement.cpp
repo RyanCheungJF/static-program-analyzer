@@ -100,6 +100,8 @@ TEST_CASE("Check that ReadPKB returns all statement numbers of a given statement
     std::vector<std::string> res = readPkb.findDesignEntities(p);
     std::vector<std::string> check = { "3", "6", "9" };
 
+    std::sort(res.begin(), res.end());
+    std::sort(check.begin(), check.end());
     REQUIRE(res == check);
 }
 
