@@ -18,12 +18,17 @@ Pattern::Pattern(Parameter sa, Parameter er, string p)
 	pattern = p;
 }
 
-Parameter Pattern::getSynAssign()
+Parameter* Pattern::getSynAssign()
 {
-	return synAssign;
+	return &synAssign;
 }
 
 Parameter* Pattern::getEntRef()
 {
 	return &entRef;
+}
+
+bool Pattern::validateParams()
+{
+	return Parameter::isPatternSyn(synAssign) && Parameter::isEntityRef(entRef);
 }

@@ -1,14 +1,14 @@
 #include "FollowsTRelationship.h"
 
-bool FollowsTRelationship::validateParams(vector<Parameter> ps)
+bool FollowsTRelationship::validateSyntax(vector<Parameter> ps)
 {
 	if (ps.size() != 2) {
 		return false;
 	}
-	if (!Parameter::isStatementRef(ps[0])) {
+	if (!Parameter::isSyntacticStatementRef(ps[0])) {
 		return false;
 	}
-	if (!Parameter::isStatementRef(ps[1])) {
+	if (!Parameter::isSyntacticStatementRef(ps[1])) {
 		return false;
 	}
 	return true;
@@ -16,9 +16,20 @@ bool FollowsTRelationship::validateParams(vector<Parameter> ps)
 
 FollowsTRelationship::FollowsTRelationship(vector<Parameter> ps)
 {
-	if (!validateParams(ps)) {
+	if (!validateSyntax(ps)) {
 		throw - 1;
 	}
 	type = RelationshipType::FOLLOWST;
 	params = ps;
+}
+
+bool FollowsTRelationship::validateParams()
+{
+	if (!Parameter::isStatementRef(params[0])) {
+		return false;
+	}
+	if (!Parameter::isStatementRef(params[1])) {
+		return false;
+	}
+	return true;
 }
