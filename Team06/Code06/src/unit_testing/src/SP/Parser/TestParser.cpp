@@ -333,6 +333,9 @@ TEST_CASE("Invalid Source Program") {
 
 		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
 	}
+
+
+
 }
 
 bool checkIfSameExpression(std::unique_ptr<Expression> expectedExpression, std::unique_ptr<Expression> actualExpression) {

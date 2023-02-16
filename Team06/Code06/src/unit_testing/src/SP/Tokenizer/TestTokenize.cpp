@@ -179,6 +179,40 @@ TEST_CASE("Valid source program") {
 		REQUIRE(generatedTokens == expectedTokens);
 	}
 
+	SECTION("Valid sample program with varying whitespaces") {
+		std::ifstream testFile(testDirectory.string() + "valid10.txt");
+		strStream << testFile.rdbuf();
+
+		Token t1(TokenType::NAME, "procedure");
+		Token t2(TokenType::NAME, "A");
+		Token t3(TokenType::LEFT_BRACE, "{");
+		Token t4(TokenType::NAME, "a");
+		Token t5(TokenType::ASSIGN, "=");
+		Token t6(TokenType::NAME, "x");
+		Token t7(TokenType::PLUS, "+");
+		Token t8(TokenType::NAME, "y");
+		Token t9(TokenType::SEMICOLON, ";");
+		Token t10(TokenType::NAME, "a");
+		Token t11(TokenType::ASSIGN, "=");
+		Token t12(TokenType::NAME, "x");
+		Token t13(TokenType::PLUS, "+");
+		Token t14(TokenType::NAME, "y");
+		Token t15(TokenType::SEMICOLON, ";");
+		Token t16(TokenType::NAME, "a");
+		Token t17(TokenType::ASSIGN, "=");
+		Token t18(TokenType::NAME, "x");
+		Token t19(TokenType::PLUS, "+");
+		Token t20(TokenType::NAME, "y");
+		Token t21(TokenType::SEMICOLON, ";");
+		Token t22(TokenType::RIGHT_BRACE, "}");
+		Token t23(TokenType::ENDOFFILE, "End of File");
+
+		expectedTokens = { t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13,
+						   t14, t15, t16, t17, t18, t19, t20, t21, t22, t23};
+		generatedTokens = testTokenizer.tokenize(strStream);
+
+		REQUIRE(generatedTokens == expectedTokens);
+	}
 }
 
 TEST_CASE("Invalid source program") {
