@@ -30,8 +30,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
 
     std::vector<std::vector<std::string>> check1 = { {"1", "z"} };
     std::vector<std::vector<std::string>> check2 = { {"2", "z"} };
-
-    std::cout << "COMPLETE" << "\n";
+;
     REQUIRE(res1 == check1); 
     REQUIRE(res2 == check2);
 }
@@ -66,7 +65,6 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
     std::vector<std::vector<std::string>> check1 = { {"1", "z"} };
     std::vector<std::vector<std::string>> check2 = { {"2", "z"} };
 
-    std::cout << "COMPLETE";
     REQUIRE(res1 == check1);
     REQUIRE(res2 == check2);
     REQUIRE(readPkb.findPattern(pattern2).size() == 1);
@@ -98,7 +96,6 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
 
     std::vector<std::vector<std::string>> check = { {"1", "z"}, {"2", "z"} };
 
-    std::cout << "COMPLETE";
     REQUIRE(res.size() == check.size());
 }
 
@@ -135,7 +132,6 @@ TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
     std::vector<std::vector<std::string>> check2 = { {"2", "z"} };
     std::vector<std::vector<std::string>> check3 = {};
 
-    std::cout << "COMPLETE";
     REQUIRE(res1 == check1);
     REQUIRE(res2 == check2);
     REQUIRE(res3 == check3);
@@ -165,8 +161,6 @@ TEST_CASE("Support for Select v pattern a (v, _)\'") {
 
     std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern);
     std::vector<std::vector<std::string>> check = { {"1", "z"}, {"2", "z"} };
-
-    std::cout << "COMPLETE";
 
     REQUIRE(res.size() == check.size());
 }
