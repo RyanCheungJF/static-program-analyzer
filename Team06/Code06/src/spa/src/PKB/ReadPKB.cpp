@@ -65,63 +65,8 @@ std::vector<std::string> ReadPKB::findDesignEntities(Parameter p) {
 }
 
 std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
-    Parameter* lhs = p.getEntRef();
-    std::string rhs = p.pattern;
-    std::string lhsString = lhs->getValue();
-    ParameterType lhsType = lhs->getType();
-    bool leftWildcard = false;
-    bool rightWildcard = false;
-
-    if (rhs != "_") {
-        leftWildcard = rhs[0] == '_';
-        rightWildcard = rhs[rhs.length() - 1] == '_';
-    }
-
-    if (leftWildcard && rightWildcard) rhs = rhs.substr(1, rhs.length() - 2);
-
-
-    if (lhsType == ParameterType::FIXED_STRING) {
-        if (rhs == "_") {
-            std::cout << "hitting getMatchingLHS ie pattern(\"a\", _) for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getMatchingLHS(lhsString);
-        }
-        else if (leftWildcard && rightWildcard) {
-            std::cout << "hitting getMatchingRHSBothWildcard ie pattern(\"a\", _\"x\"_) for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getMatchingRHSBothWildcard(lhsString, rhs);
-        }
-        else {
-            std::cout << "hitting getMatchingExact ie pattern(\"a\", \"x\") for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getMatchingExact(lhsString, rhs);
-        }
-    }
-    else if (lhsType == ParameterType::VARIABLE) {
-        if (rhs == "_") {
-            std::cout << "hitting getMatchingLHS ie pattern(v, _) for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getLHSAndStmtNum();
-        }
-        else if (leftWildcard && rightWildcard) {
-            std::cout << "hitting getMatchingRHSBothWildcard ie pattern(v, _\"x\"_) for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getLHSAndStmtNumRHSBothWildcard(rhs);
-        }
-        else {
-            std::cout << "hitting getMatchingExact ie pattern(v, \"x\") for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getLHSAndStmtNumRHSNoWildcard(rhs);
-        }
-    }
-    else {
-        if (rhs == "_") {
-            std::cout << "hitting getMatchingLHS ie pattern(_, _) for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getLHSAndStmtNum();
-        }
-        else if (leftWildcard && rightWildcard) {
-            std::cout << "hitting getMatchingRHSBothWildcard ie pattern(_, _\"x\"_) for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getMatchingLHSWildcardRHSBothWildcard(rhs);
-        }
-        else {
-            std::cout << "hitting getMatchingExact ie pattern(_, \"x\") for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getMatchingLHSWildcardRHSNoWildcard(rhs);
-        }
-    }
+    AssignPatternHandler handler(pkbInstance->patternStorage);
+    return handler.handle(p);
 }
 
 bool ReadPKB::checkStatement(Stmt stmt, StmtNum num) {

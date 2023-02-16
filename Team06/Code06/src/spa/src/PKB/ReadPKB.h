@@ -2,6 +2,7 @@
 #include "PKB.h"
 #include "queryHandlers/FollowsParentHandler.h"
 #include "queryHandlers/ModifiesUsesHandler.h"
+#include "queryHandlers/AssignPatternHandler.h"
 #include "../qps/entities/Relationship.h"
 #include "../qps/entities/Pattern.h"
 
