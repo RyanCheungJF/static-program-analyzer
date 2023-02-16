@@ -51,17 +51,7 @@ bool isSubTree(Expression* subTreeExpression, Expression* treeExpression) {
     return false;
 }
 
-std::unique_ptr<Expression> AssignPatternHandler::buildSubtree(std::string rhs) {
-    std::stringstream ss;
-    std::deque<Token> tokens;
-    Tokenizer tk;
-    Parser pr;
 
-    ss << rhs;
-    tokens = tk.tokenize(ss);
-    std::unique_ptr<Expression> root = std::move(pr.parseExpression(tokens));
-    return root;
-}
 
 std::vector<std::vector<std::string>> AssignPatternHandler::handleVarWildcard(std::string lhs) {
     std::vector<std::vector<std::string>> res;
@@ -73,7 +63,7 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handleVarWildcard(st
 }
 
 std::vector<std::vector<std::string>> AssignPatternHandler::handleVarPattern(std::string lhs, std::string rhs, bool (*checkTree)(Expression*, Expression*)) {
-    std::unique_ptr<Expression> expected = buildSubtree(rhs);
+    std::unique_ptr<Expression> expected = pkb_utils::buildSubtree(rhs);
     std::vector<std::vector<std::string>> res;
 
     for (const auto& p : *(patternStorage->getPatternWithLHS(lhs))) {
@@ -102,7 +92,7 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handleWildcardWildca
 
 std::vector<std::vector<std::string>> AssignPatternHandler::handleSynPattern(std::string rhs, bool (*checkTree)(Expression*, Expression*)) {
     std::vector<std::vector<std::string>> res;
-    std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
+    std::unique_ptr<Expression> expected = std::move(pkb_utils::buildSubtree(rhs));
 
     for (auto const& i : *patternStorage->getAll()) {
         for (const auto& p : i.second) {
@@ -119,7 +109,7 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handleSynPattern(std
 }
 
 std::vector<std::vector<std::string>> AssignPatternHandler::handleWildcardPattern(std::string rhs, bool (*checkTree)(Expression*, Expression*)) {
-    std::unique_ptr<Expression> expected = std::move(buildSubtree(rhs));
+    std::unique_ptr<Expression> expected = std::move(pkb_utils::buildSubtree(rhs));
     std::vector<std::vector<std::string>> res;
 
     for (auto const& i : *patternStorage->getAll()) {

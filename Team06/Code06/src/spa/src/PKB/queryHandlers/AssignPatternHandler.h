@@ -1,6 +1,7 @@
 #include "../../qps/entities/Pattern.h"
 #include "../../qps/entities/Parameter.h"
 #include "../storage/PatternStorage.h"
+#include "../utils/utils.h"
 
 
 class AssignPatternHandler {
@@ -11,8 +12,6 @@ public:
 
 private:
     std::shared_ptr<PatternStorage> patternStorage;
-
-    std::unique_ptr<Expression> buildSubtree(std::string rhs);
 
     // pattern a ("a", _)
     std::vector<std::vector<std::string>> handleVarWildcard(std::string lhs);

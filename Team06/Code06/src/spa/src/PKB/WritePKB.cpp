@@ -66,7 +66,3 @@ void WritePKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {
 void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer) {
     pkbInstance->patternStorage->writePattern(lhs, num, std::move(pointer));
 }
-
-std::unique_ptr<Expression> WritePKB::buildSubtree(std::string rhs) {
-    return std::move(pkbInstance->patternStorage->buildSubtree(rhs));
-}
