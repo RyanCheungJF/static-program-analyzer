@@ -27,6 +27,7 @@ void DesignExtractor::extractInfo() {
 
 	for (auto& visitor : visitors) {
 		for (const auto& procedure : ASTroot->procedureList) {
+			procedure->accept(visitor);
 			procedure->statementList->accept(visitor);
 			for (const auto& statement : procedure->statementList->statements) {
 				statement->accept(visitor);
