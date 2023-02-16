@@ -1,8 +1,8 @@
 #pragma once
 #include "PKB.h"
-#include "queryHandlers/FollowsParentHandler.h"
-#include "queryHandlers/ModifiesUsesHandler.h"
-#include "queryHandlers/AssignPatternHandler.h"
+#include "readHandlers/FollowsParentHandler.h"
+#include "readHandlers/ModifiesUsesHandler.h"
+#include "readHandlers/AssignPatternHandler.h"
 #include "../qps/entities/Relationship.h"
 #include "../qps/entities/Pattern.h"
 
