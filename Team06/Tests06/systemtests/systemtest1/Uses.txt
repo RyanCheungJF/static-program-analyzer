@@ -26,7 +26,7 @@ Select w such that Uses(w, "while")
 6 - comment
 stmt s; while w;
 Select s such that Uses(s, "while")
-25, 27, 30, 31, 33, 34, 35, 38, 39, 42
+4, 25, 27, 30, 31, 33, 34, 35, 38, 39, 42
 5000
 7 - comment
 stmt s; while w; if i;
@@ -73,13 +73,18 @@ stmt s; while w; if i; print p; read r; call c;
 Select r such that Uses(r, "a")
 none
 5000
-16 - call not supported for Uses
+16 - comment
 stmt s; while w; if i; print p; read r; call c;
 Select c such that Uses(c, "a")
-none
+4
 5000
 17 - comment
 assign a1, a2;
 Select a2 such that Uses(a1, "a")
 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 28, 29, 35, 37, 38, 39, 40, 41
+5000
+18 - comment
+stmt s; while w;
+Select s such that Uses(s, "a")
+4, 5, 6, 7, 8, 16, 25, 26, 27, 30, 31
 5000

@@ -31,7 +31,7 @@ Select p such that Uses(p, "i")
 7 - comment
 print p; stmt s;
 Select s such that Uses(s, "i")
-18, 20, 21
+4, 9, 18, 20, 21
 5000
 8 - comment
 print p; stmt s;
@@ -51,22 +51,22 @@ none
 11 - comment
 stmt s; while w; if i; print p; read r; call c;
 Select i such that Uses(i, "x")
-24
+4, 24
 5000
 12 - comment
 stmt s; while w; if i; print p; read r; call c;
 Select i such that Uses(i, "y")
-24
+4, 24
 5000
 13 - comment
 stmt s; while w; if i; print p; read r; call c;
 Select s such that Uses(s, "x")
-24, 26, 27
+4, 9, 24, 26, 27
 5000
 14 - comment
 stmt s; while w; if i; print p; read r; call c;
 Select s such that Uses(s, "y")
-24, 25, 28
+4, 9, 24, 25, 28
 5000
 15 - comment
 stmt s1, s2; while w; if i; print p; read r; call c;
