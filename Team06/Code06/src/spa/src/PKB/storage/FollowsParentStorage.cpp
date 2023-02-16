@@ -1,8 +1,6 @@
 #include "FollowsParentStorage.h"
 
-
 bool FollowsParentStorage::exists(StmtNum leftNum, StmtNum rightNum) {
-
     if (leftToRightMap.find(leftNum) == leftToRightMap.end()) {
         return false;
     }
@@ -39,4 +37,3 @@ std::pair<std::vector<StmtNum>, std::vector<StmtNum>> FollowsParentStorage::getA
     }
     return { allLeftNums, allRightNums };
 }
-

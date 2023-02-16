@@ -6,4 +6,3 @@ void FollowsTStorage::write(StmtNum followee, std::unordered_set<StmtNum> follow
         rightToLeftMap[follower].insert(followee);
     }
 }
-

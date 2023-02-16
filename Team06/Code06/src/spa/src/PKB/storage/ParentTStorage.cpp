@@ -6,4 +6,3 @@ void ParentTStorage::write(StmtNum parent, std::unordered_set<StmtNum> children)
         rightToLeftMap[child].insert(parent);
     }
 }
-
