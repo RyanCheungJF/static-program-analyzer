@@ -189,19 +189,34 @@ TEST_CASE("Invalid source program") {
 		testDirectory = testDirectory.parent_path();
 	}
 	testDirectory /= "Tests06/sp/tokenizer/";
+	std::string errorMessage = "";
 
 	SECTION("Invalid Integer") {
 		std::ifstream testFile(testDirectory.string() + "invalid1.txt");
 		strStream << testFile.rdbuf();
 
-		REQUIRE_THROWS_AS(testTokenizer.tokenize(strStream), SyntaxErrorException);
+		try {
+			testTokenizer.tokenize(strStream);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Integer does not follow format") != std::string::npos);
 	}
 
 	SECTION("Invalid integer due to no whitespace between alphanumeric characters") {
 		std::ifstream testFile(testDirectory.string() + "invalid2.txt");
 		strStream << testFile.rdbuf();
 
-		REQUIRE_THROWS_AS(testTokenizer.tokenize(strStream), SyntaxErrorException);
+		try {
+			testTokenizer.tokenize(strStream);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Integer does not follow format") != std::string::npos);
 	}
 
 	/*Upon detecting a '&', another '&' must follow(even though no whitespace between
@@ -210,28 +225,41 @@ TEST_CASE("Invalid source program") {
 		std::ifstream testFile(testDirectory.string() + "invalid3.txt");
 		strStream << testFile.rdbuf();
 
-		REQUIRE_THROWS_AS(testTokenizer.tokenize(strStream), SyntaxErrorException);
+		try {
+			testTokenizer.tokenize(strStream);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected &&") != std::string::npos);
 	}
 
 	SECTION("Invalid or operator, lone |") {
 		std::ifstream testFile(testDirectory.string() + "invalid4.txt");
 		strStream << testFile.rdbuf();
 
-		REQUIRE_THROWS_AS(testTokenizer.tokenize(strStream), SyntaxErrorException);
+		try {
+			testTokenizer.tokenize(strStream);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected ||") != std::string::npos);
 	}
 
 	SECTION("Invalid tokens") {
 		std::ifstream testFile(testDirectory.string() + "invalid5.txt");
 		strStream << testFile.rdbuf();
-		std::string message = "";
 
 		try {
 			testTokenizer.tokenize(strStream);
 		}
 		catch (SyntaxErrorException e) {
-			message = e.what();
+			errorMessage = e.what();
 		}
 
-		REQUIRE(message.find("Invalid token") != std::string::npos);
+		REQUIRE(errorMessage.find("Invalid token") != std::string::npos);
 	}
 }
