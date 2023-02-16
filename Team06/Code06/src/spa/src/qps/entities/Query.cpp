@@ -13,7 +13,8 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findRelationship(relation);
-        Table table((*relation).getParameters(), response);
+        vector<Parameter> params = relation->getParameters();
+        Table table(params, response);
         if(response.empty()) {
             isFalseQuery = true;
         }
