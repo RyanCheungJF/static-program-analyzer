@@ -265,15 +265,15 @@ TEST_CASE("makeRelationship / Uses relationship / return relationship object") {
 	CHECK(expected3 == *output3);
 }
 
-TEST_CASE("makeRelationship / Uses, wrong 2nd param / throws error") {
+TEST_CASE("makeRelationship / Uses, wrong 1st param / throws error") {
 	string typeInput = "Uses";
-	Parameter p1("ent_ref", "fixed_string");
+	Parameter p1("ent_ref", "variable");
 	Parameter p2("a", "synonym");
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
-TEST_CASE("makeRelationship / Uses, wrong 1st param / throws error") {
+TEST_CASE("makeRelationship / Uses, wrong 2nd param / throws error") {
 	string typeInput = "Uses";
 	Parameter p1("a", "synonym");
 	Parameter p2("stmt_ref", "fixed_int");
@@ -321,15 +321,15 @@ TEST_CASE("makeRelationship / Modifies relationship / return relationship object
 	CHECK(expected3 == *output3);
 }
 
-TEST_CASE("makeRelationship / Modifies, wrong 2nd param / throws error") {
+TEST_CASE("makeRelationship / Modifies, wrong 1st param / throws error") {
 	string typeInput = "Modifies";
-	Parameter p1("ent_ref", "fixed_string");
+	Parameter p1("ent_ref", "variable");
 	Parameter p2("a", "synonym");
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
-TEST_CASE("makeRelationship / Modifies, wrong 1st param / throws error") {
+TEST_CASE("makeRelationship / Modifies, wrong 2nd param / throws error") {
 	string typeInput = "Modifies";
 	Parameter p1("a", "synonym");
 	Parameter p2("stmt_ref", "fixed_int");
