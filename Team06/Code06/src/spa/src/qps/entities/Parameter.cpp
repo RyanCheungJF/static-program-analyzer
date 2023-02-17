@@ -67,7 +67,7 @@ bool Parameter::isStatementRef(Parameter& p)
 
 bool Parameter::isProcedure(Parameter& p)
 {
-	return p.type == ParameterType::PROCEDURE;
+	return p.type == ParameterType::PROCEDURE || p.type == ParameterType::FIXED_STRING;
 }
 
 bool Parameter::isDsgEntity(Parameter& p) {
