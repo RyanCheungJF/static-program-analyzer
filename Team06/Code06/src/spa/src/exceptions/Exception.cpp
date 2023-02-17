@@ -8,6 +8,6 @@ Exception::Exception(string message) {
     this->errorMessage = std::move(message);
 }
 
-string Exception::getException() {
+string Exception::getMessage() {
     return this->errorMessage;
 }

@@ -265,15 +265,15 @@ TEST_CASE("makeRelationship / Uses relationship / return relationship object") {
 	CHECK(expected3 == *output3);
 }
 
-TEST_CASE("makeRelationship / Uses, wrong 2nd param / throws error") {
+TEST_CASE("makeRelationship / Uses, wrong 1st param / throws error") {
 	string typeInput = "Uses";
-	Parameter p1("ent_ref", "fixed_string");
+	Parameter p1("ent_ref", "variable");
 	Parameter p2("a", "synonym");
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
-TEST_CASE("makeRelationship / Uses, wrong 1st param / throws error") {
+TEST_CASE("makeRelationship / Uses, wrong 2nd param / throws error") {
 	string typeInput = "Uses";
 	Parameter p1("a", "synonym");
 	Parameter p2("stmt_ref", "fixed_int");
@@ -321,15 +321,15 @@ TEST_CASE("makeRelationship / Modifies relationship / return relationship object
 	CHECK(expected3 == *output3);
 }
 
-TEST_CASE("makeRelationship / Modifies, wrong 2nd param / throws error") {
+TEST_CASE("makeRelationship / Modifies, wrong 1st param / throws error") {
 	string typeInput = "Modifies";
-	Parameter p1("ent_ref", "fixed_string");
+	Parameter p1("ent_ref", "variable");
 	Parameter p2("a", "synonym");
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
-TEST_CASE("makeRelationship / Modifies, wrong 1st param / throws error") {
+TEST_CASE("makeRelationship / Modifies, wrong 2nd param / throws error") {
 	string typeInput = "Modifies";
 	Parameter p1("a", "synonym");
 	Parameter p2("stmt_ref", "fixed_int");
@@ -544,7 +544,7 @@ TEST_CASE("UsesRelationship.validateParams / invalid 1st params / return false")
 }
 
 TEST_CASE("UsesRelationship.validateParams / invalid 2nd params / return false") {
-	string typeInput = "Modifies";
+	string typeInput = "Uses";
 	Parameter p1("1", "fixed_int");
 	Parameter p2("a", "synonym");
 	vector<Parameter> inputParameters{ p1, p2 };
@@ -555,7 +555,7 @@ TEST_CASE("UsesRelationship.validateParams / invalid 2nd params / return false")
 }
 
 TEST_CASE("UsesRelationship.validateParams / 1st param is procedure / return true") {
-	string typeInput = "Modifies";
+	string typeInput = "Uses";
 	Parameter p1("a", "synonym");
 	Parameter p2("a", "fixed_string");
 	vector<Parameter> inputParameters{ p1, p2 };
@@ -566,7 +566,7 @@ TEST_CASE("UsesRelationship.validateParams / 1st param is procedure / return tru
 }
 
 TEST_CASE("UsesRelationship.validateParams / 1st param is stmt ref / return true") {
-	string typeInput = "Modifies";
+	string typeInput = "Uses";
 	Parameter p1("a", "synonym");
 	Parameter p2("a", "fixed_string");
 	vector<Parameter> inputParameters{ p1, p2 };
@@ -574,4 +574,43 @@ TEST_CASE("UsesRelationship.validateParams / 1st param is stmt ref / return true
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(0).updateSynonymType(ParameterType::CALL);
 	CHECK(output->validateParams());
+}
+
+TEST_CASE("getAllUncheckedSynonyms / contains no synonyms / return empty list ") {
+	string typeInput = "Follows";
+	Parameter p1("1", "fixed_int");
+	Parameter p2("2", "fixed_int");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	vector<Parameter*> synonyms = output->getAllUncheckedSynonyms();
+	CHECK(synonyms.empty());
+}
+
+TEST_CASE("getAllUncheckedSynonyms / contains one synonyms / return list with pointer to synonym") {
+	string typeInput = "Follows";
+	Parameter p1("a", "synonym");
+	Parameter p2("2", "fixed_int");
+	Parameter p1After("a", "stmt");
+	vector<Parameter> inputParameters{ p1, p2 };
+	vector<Parameter> afterParameters{ p1After, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	shared_ptr<Relationship> expected = Relationship::makeRelationship(typeInput, afterParameters);
+	vector<Parameter*> synonyms = output->getAllUncheckedSynonyms();
+	REQUIRE(synonyms.size() == 1);
+	Parameter* pp = synonyms.at(0);
+	pp->updateSynonymType(ParameterType::STMT);
+	REQUIRE((*output) == (*expected));
+}
+
+TEST_CASE("getAllUncheckedSynonyms / contains more than one synonym / return list with pointer to the synonyms") {
+	string typeInput = "Follows";
+	Parameter p1("a", "synonym");
+	Parameter p2("b", "synonym");
+	vector<Parameter> inputParameters{ p1, p2 };
+
+	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
+	vector<Parameter*> synonyms = output->getAllUncheckedSynonyms();
+	REQUIRE(synonyms.size() == 2);
 }

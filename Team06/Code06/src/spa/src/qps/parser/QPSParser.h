@@ -8,6 +8,7 @@
 #include "ParserUtil.h"
 #include "SelectQueryParser.h"
 #include "qps/entities/Query.h"
+#include "exceptions/SemanticException.h"
 using namespace std;
 
 class QPSParser {

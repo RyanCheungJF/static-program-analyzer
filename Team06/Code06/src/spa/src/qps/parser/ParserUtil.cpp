@@ -1,5 +1,4 @@
 #include "ParserUtil.h"
-#include <iostream>
 
 /*
 returns index of "such" which is followed immediately by a "that" in the word list
@@ -92,7 +91,7 @@ vector<tuple<string, string, string>> extractParameters(string s)
 			curIndex++;
 		}
 		if (param1 == "" || param2 == "" || param3 == "" || curChar != ')') {
-			throw - 1;
+			throw SyntaxException();
 		}
 		res.push_back(tuple<string, string, string>(param1, param2, param3));
 		curIndex++;
@@ -107,6 +106,12 @@ string removeCharFromString(string s, char c) {
 
 tuple<string, size_t> extractSubStringUntilDelimiter(const string& original, int start, string delimiter)
 {
+	if (delimiter == "") {
+		throw InternalException("Error: ParserUtils.extractSubStringUntilDelimiter bad delimiter");
+	}
+	if (start < 0 || start >= original.size()) {
+		throw InternalException("Error: ParserUtils.extractSubStringUntilDelimiter bad start");
+	}
 	size_t end = original.find(delimiter, start);
 	if (end == string::npos) {
 		return tuple<string, int>(original.substr(start, original.size()), original.size());

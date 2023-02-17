@@ -23,7 +23,7 @@ shared_ptr<Relationship> Relationship::makeRelationship(string type, vector<Para
 	case RelationshipType::MODIFIES:
 		return make_shared<ModifiesRelationship>(ModifiesRelationship(params));
 	}
-	throw - 1;
+	throw SyntaxException();
 }
 
 Relationship::Relationship(const Relationship& r)
