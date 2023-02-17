@@ -1,11 +1,11 @@
-#include "StmtStmtRLHandler.h"
+#include "FollowsParentHandler.h"
 
-StmtStmtRLHandler::StmtStmtRLHandler(std::shared_ptr<StmtStmtRLStorage> rlStorage, std::shared_ptr<StmtStorage> stmtStorage) {
+FollowsParentHandler::FollowsParentHandler(std::shared_ptr<FollowsParentStorage> rlStorage, std::shared_ptr<StmtStorage> stmtStorage) {
 	this->rlStorage = rlStorage;
 	this->stmtStorage = stmtStorage;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleIntInt(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleIntInt(Parameter param1, Parameter param2) {
 	std::string paramString1 = param1.getValue();
 	std::string paramString2 = param2.getValue();
 	std::vector<std::vector<std::string>> res;
@@ -16,7 +16,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleIntInt(Parameter 
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleIntSyn(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleIntSyn(Parameter param1, Parameter param2) {
 	std::string paramString1 = param1.getValue();
 	std::vector<std::vector<std::string>> res;
 
@@ -31,7 +31,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleIntSyn(Parameter 
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleIntWildcard(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleIntWildcard(Parameter param1, Parameter param2) {
 	std::string paramString1 = param1.getValue();
 	std::vector<std::vector<std::string>> res;
 
@@ -43,7 +43,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleIntWildcard(Param
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleSynInt(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleSynInt(Parameter param1, Parameter param2) {
 	std::string paramString2 = param2.getValue();
 	std::vector<std::vector<std::string>> res;
 
@@ -58,7 +58,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleSynInt(Parameter 
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleSynSyn(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleSynSyn(Parameter param1, Parameter param2) {
 	std::string paramString1 = param1.getValue();
 	std::string paramString2 = param2.getValue();
 	std::vector<std::vector<std::string>> res;
@@ -80,7 +80,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleSynSyn(Parameter 
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleSynWildcard(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleSynWildcard(Parameter param1, Parameter param2) {
 	std::string paramString1 = param1.getValue();
 	std::string paramString2 = param2.getValue();
 	std::vector<std::vector<std::string>> res;
@@ -97,7 +97,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleSynWildcard(Param
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleWildcardInt(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardInt(Parameter param1, Parameter param2) {
 	std::string paramString2 = param2.getValue();
 	std::vector<std::vector<std::string>> res;
 
@@ -109,7 +109,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleWildcardInt(Param
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleWildcardSyn(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardSyn(Parameter param1, Parameter param2) {
 	std::string paramString2 = param2.getValue();
 	std::vector<std::vector<std::string>> res;
  
@@ -125,7 +125,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleWildcardSyn(Param
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handleWildcardWildcard(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardWildcard(Parameter param1, Parameter param2) {
 	std::vector<std::vector<std::string>> res;
 
 	std::pair<std::vector<StmtNum>, std::vector<StmtNum>> stmtNumsArrayPair = rlStorage->getAllPairs();
@@ -139,7 +139,7 @@ std::vector<std::vector<std::string>> StmtStmtRLHandler::handleWildcardWildcard(
 	return res;
 }
 
-std::vector<std::vector<std::string>> StmtStmtRLHandler::handle(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handle(Parameter param1, Parameter param2) {
 	
 	std::string paramString1 = param1.getValue();
 	std::string paramString2 = param2.getValue();

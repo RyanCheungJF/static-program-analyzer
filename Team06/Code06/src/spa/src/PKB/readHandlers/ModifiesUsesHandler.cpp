@@ -103,45 +103,6 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcSynWildcard
 	return res;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleWildcardVar(Parameter fixedVarParam) {
-	std::string fixedVar = fixedVarParam.getValue();
-	std::vector<std::vector<std::string>> res;
-
-	std::unordered_set<StmtNum> stmtNums = rlStorage->getStmtsFromEnt(fixedVar);
-	std::unordered_set<ProcName> procs = rlStorage->getProcsFromEnt(fixedVar);
-
-	for (auto stmtNum : stmtNums) {
-		std::string stmtNumString = std::to_string(stmtNum);
-		res.push_back({ stmtNumString, fixedVar });
-	}
-
-	for (auto proc : procs) {
-		res.push_back({ proc, fixedVar });
-	}
-	return res;
-}
-
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleWildcardWildcard() {
-	std::vector<std::vector<std::string>> res;
-
-	std::pair<std::vector<std::string>, std::vector<std::string>> procsEntities = rlStorage->getAllProcEntPairs();
-	std::vector<std::string> procs = procsEntities.first;
-	std::vector<std::string> entities = procsEntities.second;
-
-	for (int i = 0; i < procs.size(); i++) {
-		res.push_back({ procs[i], entities[i] });
-	}
-
-	std::pair<std::vector<StmtNum>, std::vector<std::string>> stmtsEntities = rlStorage->getAllStmtEntPairs();
-	std::vector<StmtNum> stmtNums = stmtsEntities.first;
-	entities = stmtsEntities.second;
-
-	for (int i = 0; i < stmtNums.size(); i++) {
-		res.push_back({ std::to_string(stmtNums[i]), entities[i] });
-	}
-	return res;
-}
-
 std::vector<std::vector<std::string>> ModifiesUsesHandler::handle(Parameter param1, Parameter param2) {
 
 	std::string paramString1 = param1.getValue();
@@ -176,14 +137,6 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handle(Parameter para
 		}
 		else {
 			return handleProcSynWildcard();
-		}
-	}
-	else if (isWildcardParam1) {
-		if (isStringParam2) {
-			return handleWildcardVar(param2);
-		}
-		else {
-			return handleWildcardWildcard();
 		}
 	}
 	else {

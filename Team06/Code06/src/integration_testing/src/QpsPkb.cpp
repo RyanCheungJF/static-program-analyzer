@@ -2,6 +2,7 @@
 #include "../../spa/src/PKB/ReadPKB.cpp"
 #include "../../spa/src/PKB/WritePKB.cpp"
 #include "../../spa/src/qps/QPS.h"
+#include "../../spa/src/PKB/utils/utils.h"
 #include <algorithm>
 
 using namespace std;
@@ -120,23 +121,23 @@ PKB buildPkb() {
 	
 
 	string lhs = "x";
-	unique_ptr<Expression> patternTree = writePkb.buildSubtree("1");
+	unique_ptr<Expression> patternTree = pkb_utils::buildSubtree("1");
 	writePkb.writePattern(lhs, 1, move(patternTree));
 
 	lhs = "y";
-	patternTree = writePkb.buildSubtree("x + 2");
+	patternTree = pkb_utils::buildSubtree("x + 2");
 	writePkb.writePattern(lhs, 4, move(patternTree));
 
 	lhs = "x";
-	patternTree = writePkb.buildSubtree("x + 2");
+	patternTree = pkb_utils::buildSubtree("x + 2");
 	writePkb.writePattern(lhs, 6, move(patternTree));
 
 	lhs = "y";
-	patternTree = writePkb.buildSubtree("x + 2");
+	patternTree = pkb_utils::buildSubtree("x + 2");
 	writePkb.writePattern(lhs, 8, move(patternTree));
 
 	lhs = "z";
-	patternTree = writePkb.buildSubtree("x * y");
+	patternTree = pkb_utils::buildSubtree("x * y");
 	writePkb.writePattern(lhs, 11, move(patternTree));
 
 	return pkb;
@@ -404,18 +405,6 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
 			REQUIRE(result.size() == 2);
 			REQUIRE(exists(result, "main"));
 			REQUIRE(exists(result, "sub"));
-		}
-
-		SECTION("wildcard, syn") {
-			string query = R"(
-			variable v;
-			Select v such that Uses(_, v))";
-
-			result = qps.processQueries(query, readPkb);
-			REQUIRE(result.size() == 3);
-			REQUIRE(exists(result, "x"));
-			REQUIRE(exists(result, "y"));
-			REQUIRE(exists(result, "count"));
 		}
 	}
 }

@@ -179,6 +179,40 @@ TEST_CASE("Valid source program") {
 		REQUIRE(generatedTokens == expectedTokens);
 	}
 
+	SECTION("Valid sample program with varying whitespaces") {
+		std::ifstream testFile(testDirectory.string() + "valid10.txt");
+		strStream << testFile.rdbuf();
+
+		Token t1(TokenType::NAME, "procedure");
+		Token t2(TokenType::NAME, "A");
+		Token t3(TokenType::LEFT_BRACE, "{");
+		Token t4(TokenType::NAME, "a");
+		Token t5(TokenType::ASSIGN, "=");
+		Token t6(TokenType::NAME, "x");
+		Token t7(TokenType::PLUS, "+");
+		Token t8(TokenType::NAME, "y");
+		Token t9(TokenType::SEMICOLON, ";");
+		Token t10(TokenType::NAME, "a");
+		Token t11(TokenType::ASSIGN, "=");
+		Token t12(TokenType::NAME, "x");
+		Token t13(TokenType::PLUS, "+");
+		Token t14(TokenType::NAME, "y");
+		Token t15(TokenType::SEMICOLON, ";");
+		Token t16(TokenType::NAME, "a");
+		Token t17(TokenType::ASSIGN, "=");
+		Token t18(TokenType::NAME, "x");
+		Token t19(TokenType::PLUS, "+");
+		Token t20(TokenType::NAME, "y");
+		Token t21(TokenType::SEMICOLON, ";");
+		Token t22(TokenType::RIGHT_BRACE, "}");
+		Token t23(TokenType::ENDOFFILE, "End of File");
+
+		expectedTokens = { t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13,
+						   t14, t15, t16, t17, t18, t19, t20, t21, t22, t23};
+		generatedTokens = testTokenizer.tokenize(strStream);
+
+		REQUIRE(generatedTokens == expectedTokens);
+	}
 }
 
 TEST_CASE("Invalid source program") {
@@ -189,19 +223,34 @@ TEST_CASE("Invalid source program") {
 		testDirectory = testDirectory.parent_path();
 	}
 	testDirectory /= "Tests06/sp/tokenizer/";
+	std::string errorMessage = "";
 
 	SECTION("Invalid Integer") {
 		std::ifstream testFile(testDirectory.string() + "invalid1.txt");
 		strStream << testFile.rdbuf();
 
-		REQUIRE_THROWS_AS(testTokenizer.tokenize(strStream), SyntaxErrorException);
+		try {
+			testTokenizer.tokenize(strStream);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Integer does not follow format") != std::string::npos);
 	}
 
 	SECTION("Invalid integer due to no whitespace between alphanumeric characters") {
 		std::ifstream testFile(testDirectory.string() + "invalid2.txt");
 		strStream << testFile.rdbuf();
 
-		REQUIRE_THROWS_AS(testTokenizer.tokenize(strStream), SyntaxErrorException);
+		try {
+			testTokenizer.tokenize(strStream);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Integer does not follow format") != std::string::npos);
 	}
 
 	/*Upon detecting a '&', another '&' must follow(even though no whitespace between
@@ -210,28 +259,41 @@ TEST_CASE("Invalid source program") {
 		std::ifstream testFile(testDirectory.string() + "invalid3.txt");
 		strStream << testFile.rdbuf();
 
-		REQUIRE_THROWS_AS(testTokenizer.tokenize(strStream), SyntaxErrorException);
+		try {
+			testTokenizer.tokenize(strStream);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected &&") != std::string::npos);
 	}
 
 	SECTION("Invalid or operator, lone |") {
 		std::ifstream testFile(testDirectory.string() + "invalid4.txt");
 		strStream << testFile.rdbuf();
 
-		REQUIRE_THROWS_AS(testTokenizer.tokenize(strStream), SyntaxErrorException);
+		try {
+			testTokenizer.tokenize(strStream);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected ||") != std::string::npos);
 	}
 
 	SECTION("Invalid tokens") {
 		std::ifstream testFile(testDirectory.string() + "invalid5.txt");
 		strStream << testFile.rdbuf();
-		std::string message = "";
 
 		try {
 			testTokenizer.tokenize(strStream);
 		}
 		catch (SyntaxErrorException e) {
-			message = e.what();
+			errorMessage = e.what();
 		}
 
-		REQUIRE(message.find("Invalid token") != std::string::npos);
+		REQUIRE(errorMessage.find("Invalid token") != std::string::npos);
 	}
 }

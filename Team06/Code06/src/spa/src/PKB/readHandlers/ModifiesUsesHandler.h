@@ -35,10 +35,4 @@ private:
 
 	// .e.g Uses(p, v) OR Uses(p, _)
 	std::vector<std::vector<std::string>> handleProcSynWildcard();
-
-	// e.g. Uses(_, "x")
-	std::vector<std::vector<std::string>> handleWildcardVar(Parameter fixedVarParam);
-
-	// e.g. Uses(_, v) OR Uses(_, _)
-	std::vector<std::vector<std::string>> handleWildcardWildcard();
 };

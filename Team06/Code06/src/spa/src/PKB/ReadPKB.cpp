@@ -5,10 +5,14 @@ void ReadPKB::setInstancePKB(PKB& pkb) {
         return;
     }
     this->pkbInstance = &pkb;
-    this->stmtStmtHandlerMap[RelationshipType::FOLLOWS] = pkb.followsStorage;
-    this->stmtStmtHandlerMap[RelationshipType::FOLLOWST] = pkb.followsTStorage;
-    this->stmtStmtHandlerMap[RelationshipType::PARENT] = pkb.parentStorage;
-    this->stmtStmtHandlerMap[RelationshipType::PARENTT] = pkb.parentTStorage;
+
+    this->followsParentMap[RelationshipType::FOLLOWS] = pkb.followsStorage;
+    this->followsParentMap[RelationshipType::FOLLOWST] = pkb.followsTStorage;
+    this->followsParentMap[RelationshipType::PARENT] = pkb.parentStorage;
+    this->followsParentMap[RelationshipType::PARENTT] = pkb.parentTStorage;
+
+    this->modifiesUsesMap[RelationshipType::MODIFIES] = pkb.modifiesStorage;
+    this->modifiesUsesMap[RelationshipType::USES] = pkb.usesStorage;
     return;
 }
 
@@ -16,12 +20,14 @@ std::vector<std::vector<std::string>> ReadPKB::findRelationship(Relationship rs)
     RelationshipType type = rs.type;
     Parameter param1 = rs.params[0];
     Parameter param2 = rs.params[1];
-    if (stmtStmtHandlerMap.find(type) != stmtStmtHandlerMap.end()) {
-        StmtStmtRLHandler handler(stmtStmtHandlerMap.at(type), pkbInstance->statementStorage);
+    if (followsParentMap.find(type) != followsParentMap.end()) {
+        FollowsParentHandler handler(followsParentMap.at(type), pkbInstance->statementStorage);
+
         return handler.handle(param1, param2);
-    // NEEDS TO HANDLE MODIFIES AS WELL
-    } else if (type == RelationshipType::MODIFIES || type == RelationshipType::USES) {
-        ModifiesUsesHandler handler(pkbInstance->usesStorage, pkbInstance->statementStorage);
+
+    } else if (modifiesUsesMap.find(type) != modifiesUsesMap.end()) {
+        ModifiesUsesHandler handler(modifiesUsesMap.at(type), pkbInstance->statementStorage);
+
         return handler.handle(param1, param2);
     } 
     return std::vector<std::vector<std::string>>();
@@ -59,71 +65,8 @@ std::vector<std::string> ReadPKB::findDesignEntities(Parameter p) {
 }
 
 std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
-    Parameter* lhs = p.getEntRef();
-    std::string rhs = p.pattern;
-    std::string lhsString = lhs->getValue();
-    ParameterType lhsType = lhs->getType();
-    bool leftWildcard = false;
-    bool rightWildcard = false;
-
-    if (rhs != "_") {
-        leftWildcard = rhs[0] == '_';
-        rightWildcard = rhs[rhs.length() - 1] == '_';
-    }
-
-    /*std::stringstream ss;
-    for (int i = 0; i < rhs.length(); i++) {
-        char curr = rhs[i];
-        if (curr != '_') {
-            ss << curr;
-        }
-    }*/
-
-    if (leftWildcard && rightWildcard) rhs = rhs.substr(1, rhs.length() - 2);
-
-
-    if (lhsType == ParameterType::FIXED_STRING) {
-        if (rhs == "_") {
-            std::cout << "hitting getMatchingLHS ie pattern(\"a\", _) for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getMatchingLHS(lhsString);
-        }
-        else if (leftWildcard && rightWildcard) {
-            std::cout << "hitting getMatchingRHSBothWildcard ie pattern(\"a\", _\"x\"_) for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getMatchingRHSBothWildcard(lhsString, rhs);
-        }
-        else {
-            std::cout << "hitting getMatchingExact ie pattern(\"a\", \"x\") for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getMatchingExact(lhsString, rhs);
-        }
-    }
-    else if (lhsType == ParameterType::VARIABLE) {
-        if (rhs == "_") {
-            std::cout << "hitting getMatchingLHS ie pattern(v, _) for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getLHSAndStmtNum();
-        }
-        else if (leftWildcard && rightWildcard) {
-            std::cout << "hitting getMatchingRHSBothWildcard ie pattern(v, _\"x\"_) for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getLHSAndStmtNumRHSBothWildcard(rhs);
-        }
-        else {
-            std::cout << "hitting getMatchingExact ie pattern(v, \"x\") for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getLHSAndStmtNumRHSNoWildcard(rhs);
-        }
-    }
-    else {
-        if (rhs == "_") {
-            std::cout << "hitting getMatchingLHS ie pattern(_, _) for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getLHSAndStmtNum();
-        }
-        else if (leftWildcard && rightWildcard) {
-            std::cout << "hitting getMatchingRHSBothWildcard ie pattern(_, _\"x\"_) for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getMatchingLHSWildcardRHSBothWildcard(rhs);
-        }
-        else {
-            std::cout << "hitting getMatchingExact ie pattern(_, \"x\") for " << lhsString << " = " << rhs << "\n";
-            return pkbInstance->patternStorage->getMatchingLHSWildcardRHSNoWildcard(rhs);
-        }
-    }
+    AssignPatternHandler handler(pkbInstance->patternStorage);
+    return handler.handle(p);
 }
 
 bool ReadPKB::checkStatement(Stmt stmt, StmtNum num) {
@@ -151,11 +94,11 @@ std::unordered_set<Ent> ReadPKB::getUsesP(ProcName name) {
 }
 
 std::unordered_set<Ent> ReadPKB::getModifiesS(StmtNum num) {
-    return pkbInstance->modifiesStorage->getModifiesS(num);
+    return pkbInstance->modifiesStorage->getEnt(num);
 }
 
 std::unordered_set<Ent> ReadPKB::getModifiesP(ProcName name) {
-    return pkbInstance->modifiesStorage->getModifiesP(name);
+    return pkbInstance->modifiesStorage->getEnt(name);
 }
 
 std::unordered_set<StmtNum> ReadPKB::getIfStatementNumbers() {

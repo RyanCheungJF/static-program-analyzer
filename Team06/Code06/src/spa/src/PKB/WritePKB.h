@@ -35,10 +35,6 @@ public:
     // Sets the entity along with the statement line that it appears in
     void setEntity(Ent e, StmtNum line);
 
-
-    // Sets the procedure along with the statement lines that are in that procedure appears in
-//    void setProcedure(Proc p, StmtNum num);
-
     // Sets the procedure along with the statement lines that are in that procedure appears in
     void setProcedure(Proc p, std::unordered_set<StmtNum> lines);
 
@@ -57,9 +53,6 @@ public:
 
 
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
-
-    std::unique_ptr<Expression> buildSubtree(std::string rhs);
-
 
     // Sets Uses relation in PKB
     void setUsesProcedure(std::string name, std::vector<Ent> entities);

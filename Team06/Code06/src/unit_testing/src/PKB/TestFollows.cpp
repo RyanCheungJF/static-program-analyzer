@@ -381,6 +381,20 @@ TEST_CASE("Checks that PKB pointer in WritePKB and ReadPKB is set to first pkb i
     res = readPkb.findRelationship(rs);
     REQUIRE(check == res);
 }
+
+
+TEST_CASE("FollowsStorage: write(StmtNum followee, StmtNum follower)") {
+    FollowsStorage fs;
+    fs.write(1, 2);
+    fs.write(2, 3);
+
+    SECTION("exists(StmtNum followee, StmtNum follower)") {
+        REQUIRE(fs.exists(1, 2));
+        REQUIRE(!fs.exists(1, 3));
+        REQUIRE(!fs.exists(3, 4));
+    }
+}
+
 /*
 TEST_CASE("Checks that different PKB running instances can point to the same API") {
 
