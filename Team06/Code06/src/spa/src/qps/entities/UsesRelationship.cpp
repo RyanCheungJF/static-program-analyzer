@@ -25,10 +25,10 @@ UsesRelationship::UsesRelationship(vector<Parameter>& ps)
 
 bool UsesRelationship::validateParams()
 {
-	if (!Parameter::isEntityRef(params[0]) && !Parameter::isProcedure(params[0])) {
+	if (!Parameter::isStatementRef(params[0]) && !Parameter::isProcedure(params[0])) {
 		return false;
 	}
-	if (!Parameter::isStatementRef(params[1])) {
+	if (!Parameter::isEntityRef(params[1])) {
 		return false;
 	}
 	return true;
