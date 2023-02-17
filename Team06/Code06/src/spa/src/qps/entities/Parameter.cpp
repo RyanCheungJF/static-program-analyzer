@@ -82,7 +82,7 @@ bool Parameter::isUncheckedSynonym()
 void Parameter::updateSynonymType(ParameterType pt)
 {
 	if (type != ParameterType::SYNONYM) {
-		throw - 1;
+		throw InternalException("Error: Parameter.updateSynonymType parameter is not a synonym.");
 	}
 	type = pt;
 }

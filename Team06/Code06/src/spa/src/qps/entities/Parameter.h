@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include "qps/QPSGrammarUtils.h"
+#include "exceptions/InternalException.h"
 using namespace std;
 
 enum class ParameterType {

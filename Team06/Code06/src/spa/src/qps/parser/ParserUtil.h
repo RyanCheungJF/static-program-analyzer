@@ -6,7 +6,8 @@
 #include <sstream>
 #include "../QPSGrammarUtils.h"
 #include "../../exceptions/Exception.h"
-
+#include "exceptions/SyntaxException.h"
+#include "exceptions/InternalException.h"
 using namespace std;
 
 long findSuchThat(const vector<string> &wordList);

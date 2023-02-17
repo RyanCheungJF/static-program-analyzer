@@ -17,7 +17,7 @@ bool UsesRelationship::validateSyntax(vector<Parameter>& ps)
 UsesRelationship::UsesRelationship(vector<Parameter>& ps)
 {
 	if (!validateSyntax(ps)) {
-		throw - 1;
+		throw SyntaxException();
 	}
 	type = RelationshipType::USES;
 	params = ps;
