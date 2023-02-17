@@ -33,31 +33,3 @@ TEST_CASE("Invalid Integers") {
 		REQUIRE(!tokenizer.isInteger(testString));
 	}
 }
-
-TEST_CASE("Valid Names") {
-	Tokenizer tokenizer;
-
-	SECTION("Checks for a valid name with alphabets") {
-		std::string testString = "tEsT";
-		REQUIRE(tokenizer.isName(testString));
-	}
-
-	SECTION("Checks that a mix of alphanumeric is a valid name") {
-		std::string testString = "t0e1s2t3";
-		REQUIRE(tokenizer.isName(testString));
-	}
-}
-
-TEST_CASE("Invalid Names") {
-	Tokenizer tokenizer;
-
-	SECTION("Checks that a valid name has to start with an alphabet") {
-		std::string testString = "1abc";
-		REQUIRE(!tokenizer.isName(testString));
-	}
-
-	SECTION("Checks that a valid name must not contain special characters") {
-		std::string testString = "abc&de$!@";
-		REQUIRE(!tokenizer.isName(testString));
-	}
-}

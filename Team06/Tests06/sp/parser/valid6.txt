@@ -1,0 +1,10 @@
+procedure while {
+  read call;
+  call print;
+  print read;
+  read = 2;
+  call = 3;
+  while = 5;
+  if = 4;
+  print = 8;
+}
