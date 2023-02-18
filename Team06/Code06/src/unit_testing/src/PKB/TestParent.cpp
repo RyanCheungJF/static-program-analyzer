@@ -1,5 +1,4 @@
 #include "catch.hpp"
-//#include "../../../spa/src/PKB/storage/ParentStorage.h"
 #include "../../../spa/src/PKB/WritePKB.h"
 #include "../../../spa/src/PKB/ReadPKB.h"
 #include "../utils/utils.h"
@@ -11,16 +10,13 @@ TEST_CASE("Check writes and reads to/from ParentStorage") {
     ParentStorage par;
 
     par.write(1, 2);
-    bool res = par.exists(1, 2);
-    REQUIRE(res);
+    REQUIRE(par.exists(1, 2));
 
     par.write(1, 2);
-    res = par.exists(1, 3);
-    REQUIRE(!res);
+    REQUIRE(!par.exists(1, 3));
 
     par.write(1, 2);
-    res = par.exists(3, 2);
-    REQUIRE(!res);
+    REQUIRE(!par.exists(3, 2));
 }
 
 TEST_CASE("Tests for getting children") {
@@ -31,15 +27,13 @@ TEST_CASE("Tests for getting children") {
 
     std::unordered_set<StmtNum> res = par.getRightWildcard(1);
     std::unordered_set<StmtNum> check{ 2, 3 };
-    REQUIRE(res == check);
+    REQUIRE(unit_testing_utils::equals(check, res));
 
     res = par.getRightWildcard(2);
-    check = {};
-    REQUIRE(res == check);
+    REQUIRE(res.empty());
 
     res = par.getRightWildcard(3);
-    check = {};
-    REQUIRE(res == check);
+    REQUIRE(res.empty());
 }
 
 TEST_CASE("Tests for getting parent") {
@@ -49,19 +43,18 @@ TEST_CASE("Tests for getting parent") {
 
     std::unordered_set<StmtNum> res = par.getLeftWildcard(2);
     std::unordered_set<StmtNum> check{ 1 };
-    REQUIRE(res == check);
+    REQUIRE(unit_testing_utils::equals(check, res));
 
     res = par.getLeftWildcard(1);
-    check = {};
-    REQUIRE(res == check);
+    REQUIRE(res.empty());
 
     res = par.getLeftWildcard(3);
-    check = {};
-    REQUIRE(res == check);
+    REQUIRE(res.empty());
 }
 
 TEST_CASE("Checks for cases e.g. Parent(1, assign)") {
 
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -71,15 +64,15 @@ TEST_CASE("Checks for cases e.g. Parent(1, assign)") {
 
     writePkb.setParent(1, 2);
     writePkb.setParent(1, 3);
-    writePkb.setStatement("assign", 2);
-    writePkb.setStatement("if", 3);
+    writePkb.setStatement(CONSTANTS.ASSIGN, 2);
+    writePkb.setStatement(CONSTANTS.IF, 3);
 
-    Parameter param1 = Parameter("1", "fixed_int");
-    Parameter param2 = Parameter("a", "assign");
+    Parameter param1 = Parameter("1", CONSTANTS.FIXED_INT);
+    Parameter param2 = Parameter("a", CONSTANTS.ASSIGN);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Parent", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.PARENT, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
@@ -88,6 +81,7 @@ TEST_CASE("Checks for cases e.g. Parent(1, assign)") {
 
 TEST_CASE("Checks for cases e.g. Parent(while, assign)") {
 
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -97,16 +91,16 @@ TEST_CASE("Checks for cases e.g. Parent(while, assign)") {
 
     writePkb.setParent(1, 2);
     writePkb.setParent(1, 3);
-    writePkb.setStatement("while", 1);
-    writePkb.setStatement("assign", 2);
-    writePkb.setStatement("if", 3);
+    writePkb.setStatement(CONSTANTS.WHILE, 1);
+    writePkb.setStatement(CONSTANTS.ASSIGN, 2);
+    writePkb.setStatement(CONSTANTS.IF, 3);
 
-    Parameter param1 = Parameter("w", "while");
-    Parameter param2 = Parameter("if", "if");
+    Parameter param1 = Parameter("w", CONSTANTS.WHILE);
+    Parameter param2 = Parameter(CONSTANTS.IF, CONSTANTS.IF);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Parent", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.PARENT, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
@@ -115,6 +109,7 @@ TEST_CASE("Checks for cases e.g. Parent(while, assign)") {
 
 TEST_CASE("Checks for cases e.g. Parent(_, stmt)") {
 
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -124,15 +119,15 @@ TEST_CASE("Checks for cases e.g. Parent(_, stmt)") {
 
     writePkb.setParent(1, 2);
     writePkb.setParent(1, 3);
-    writePkb.setStatement("call", 2);
-    writePkb.setStatement("assign", 3);
+    writePkb.setStatement(CONSTANTS.CALL, 2);
+    writePkb.setStatement(CONSTANTS.ASSIGN, 3);
 
-    Parameter param1 = Parameter("_", "wildcard");
-    Parameter param2 = Parameter("s", "stmt");
+    Parameter param1 = Parameter("_", CONSTANTS.WILDCARD);
+    Parameter param2 = Parameter("s", CONSTANTS.STMT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Parent", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.PARENT, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 2);

@@ -1,5 +1,4 @@
 #include "catch.hpp"
-//#include "../../../spa/src/PKB/storage/FollowsTStorage.h"
 #include "../../../spa/src/PKB/WritePKB.h"
 #include "../../../spa/src/PKB/ReadPKB.h"
 #include "../utils/utils.h"
@@ -13,10 +12,10 @@ TEST_CASE("Check that all followers are recorded in the followee") {
     std::unordered_set<StmtNum> followers = {2, 3, 4};
     fts.write(1, followers);
 
-    bool res = true;
-    res = res && fts.exists(1, 2) && fts.exists(1, 3) && fts.exists(1, 4);
-    res = res && !fts.exists(1, 5);
-    REQUIRE(res);
+    REQUIRE(fts.exists(1, 2));
+    REQUIRE(fts.exists(1, 3));
+    REQUIRE(fts.exists(1, 4));
+    REQUIRE(!fts.exists(1, 5));
 }
 
 TEST_CASE("Check that a follower is not recorded as a followee") {
@@ -25,8 +24,7 @@ TEST_CASE("Check that a follower is not recorded as a followee") {
     std::unordered_set<StmtNum> followers = {2};
     fts.write(1, followers);
 
-    bool res = fts.exists(1, 3);
-    REQUIRE(res == false);
+    REQUIRE(!fts.exists(1, 3));
 }
 
 TEST_CASE("Check that all of the followers of each followee is accurate, even with duplicate entries") {
@@ -36,21 +34,13 @@ TEST_CASE("Check that all of the followers of each followee is accurate, even wi
     fts.write(1, followers_1);
     fts.write(2, followers_2);
 
-    bool res = true;
-    std::unordered_set<StmtNum> followers1 = fts.getRightWildcard(1);
-    res = res && followers1.size() == 3;
-    res = res && followers1.find(2) != followers1.end();
-    res = res && followers1.find(3) != followers1.end();
-    res = res && followers1.find(4) != followers1.end();
+    std::unordered_set<StmtNum> actual = fts.getRightWildcard(1);
+    std::unordered_set<StmtNum> expected = {2, 4, 3};
+    REQUIRE(unit_testing_utils::equals(expected, actual));
 
-    REQUIRE(res);
-
-    std::unordered_set<StmtNum> followers2 = fts.getRightWildcard(2);
-    res = res && followers2.size() == 2;
-    res = res && followers2.find(3) != followers2.end();
-    res = res && followers2.find(4) != followers2.end();
-
-    REQUIRE(res);
+    std::unordered_set<StmtNum> actual2 = fts.getRightWildcard(2);
+    std::unordered_set<StmtNum> expected2 = {4, 3};
+    REQUIRE(unit_testing_utils::equals(expected2, actual2));
 }
 
 TEST_CASE("Check that all of the followees of each follower is accurate, even with duplicate entries") {
@@ -62,32 +52,22 @@ TEST_CASE("Check that all of the followees of each follower is accurate, even wi
     fts.write(2, followers2);
     fts.write(3, followers3);
 
-    bool res = true;
-    std::unordered_set<StmtNum> followees2 = fts.getLeftWildcard(2);
-    res = res && followees2.size() == 1;
-    res = res && followees2.find(1) != followees2.end();
+    std::unordered_set<StmtNum> actual1 = fts.getLeftWildcard(2);
+    std::unordered_set<StmtNum> expected1 = { 1 };
+    REQUIRE(unit_testing_utils::equals(expected1, actual1));
 
-    REQUIRE(res);
+    std::unordered_set<StmtNum> actual2 = fts.getLeftWildcard(3);
+    std::unordered_set<StmtNum> expected2 = { 1, 2 };
+    REQUIRE(unit_testing_utils::equals(expected2, actual2));
 
-    std::unordered_set<StmtNum> followees3 = fts.getLeftWildcard(3);
-    res = res && followees3.size() == 2;
-    res = res && followees3.find(1) != followees3.end();
-    res = res && followees3.find(2) != followees3.end();
-
-    REQUIRE(res);
-
-    std::unordered_set<StmtNum> followees4 = fts.getLeftWildcard(4);
-    res = res && followees4.size() == 3;
-    res = res && followees4.find(1) != followees4.end();
-    res = res && followees4.find(2) != followees4.end();
-    res = res && followees4.find(3) != followees4.end();
-
-    REQUIRE(res);
+    std::unordered_set<StmtNum> actual3 = fts.getLeftWildcard(4);
+    std::unordered_set<StmtNum> expected3 = { 1, 2, 3};
+    REQUIRE(unit_testing_utils::equals(expected3, actual3));
 }
 
 
 TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
-
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -99,12 +79,12 @@ TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
     followers.insert(2);
     writePkb.setFollowsT(1, followers);
 
-    Parameter param1 = Parameter("1", "fixed_int");
-    Parameter param2 = Parameter("2", "fixed_int");
+    Parameter param1 = Parameter("1", CONSTANTS.FIXED_INT);
+    Parameter param2 = Parameter("2", CONSTANTS.FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
@@ -113,6 +93,7 @@ TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
 
 TEST_CASE("Checks that a non-existent FollowsT relationship returns an empty vector from ReadPKB") {
 
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -124,19 +105,20 @@ TEST_CASE("Checks that a non-existent FollowsT relationship returns an empty vec
     followers.insert(2);
     writePkb.setFollowsT(1, followers);
 
-    Parameter param1 = Parameter("1", "fixed_int");
-    Parameter param2 = Parameter("3", "fixed_int");
+    Parameter param1 = Parameter("1", CONSTANTS.FIXED_INT);
+    Parameter param2 = Parameter("3", CONSTANTS.FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(res.size() == 0);
+    REQUIRE(res.empty());
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(1, assign)") {
 
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -149,16 +131,16 @@ TEST_CASE("Checks for cases e.g. Follows*(1, assign)") {
     followers.insert(3);
     followers.insert(4);
     writePkb.setFollowsT(1, followers);
-    writePkb.setStatement("assign", 2);
-    writePkb.setStatement("assign", 3);
-    writePkb.setStatement("if", 4);
+    writePkb.setStatement(CONSTANTS.ASSIGN, 2);
+    writePkb.setStatement(CONSTANTS.ASSIGN, 3);
+    writePkb.setStatement(CONSTANTS.IF, 4);
 
-    Parameter param1 = Parameter("1", "fixed_int");
-    Parameter param2 = Parameter("a", "assign");
+    Parameter param1 = Parameter("1", CONSTANTS.FIXED_INT);
+    Parameter param2 = Parameter("a", CONSTANTS.ASSIGN);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 2);
@@ -168,6 +150,7 @@ TEST_CASE("Checks for cases e.g. Follows*(1, assign)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(1, _)") {
 
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -180,16 +163,16 @@ TEST_CASE("Checks for cases e.g. Follows*(1, _)") {
     followers.insert(3);
     followers.insert(4);
     writePkb.setFollowsT(1, followers);
-    writePkb.setStatement("assign", 2);
-    writePkb.setStatement("assign", 3);
-    writePkb.setStatement("if", 4);
+    writePkb.setStatement(CONSTANTS.ASSIGN, 2);
+    writePkb.setStatement(CONSTANTS.ASSIGN, 3);
+    writePkb.setStatement(CONSTANTS.IF, 4);
 
-    Parameter param1 = Parameter("1", "fixed_int");
-    Parameter param2 = Parameter("_", "wildcard");
+    Parameter param1 = Parameter("1", CONSTANTS.FIXED_INT);
+    Parameter param2 = Parameter("_", CONSTANTS.WILDCARD);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 3);
@@ -200,6 +183,7 @@ TEST_CASE("Checks for cases e.g. Follows*(1, _)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
 
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -216,11 +200,11 @@ TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
     writePkb.setStatement("while", 2);
 
     Parameter param1 = Parameter("s", "stmt");
-    Parameter param2 = Parameter("3", "fixed_int");
+    Parameter param2 = Parameter("3", CONSTANTS.FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
@@ -229,6 +213,7 @@ TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
 
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -242,15 +227,15 @@ TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
     followers.insert(4);
     writePkb.setFollowsT(1, followers);
     writePkb.setStatement("while", 1);
-    writePkb.setStatement("if", 2);
-    writePkb.setStatement("if", 3);
+    writePkb.setStatement(CONSTANTS.IF, 2);
+    writePkb.setStatement(CONSTANTS.IF, 3);
 
     Parameter param1 = Parameter("w", "while");
-    Parameter param2 = Parameter("if", "if");
+    Parameter param2 = Parameter(CONSTANTS.IF, CONSTANTS.IF);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 2);
@@ -260,6 +245,7 @@ TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
 
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -279,11 +265,11 @@ TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
     writePkb.setStatement("while", 2);
 
     Parameter param1 = Parameter("w", "while");
-    Parameter param2 = Parameter("_", "wildcard");
+    Parameter param2 = Parameter("_", CONSTANTS.WILDCARD);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
 
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -297,6 +283,7 @@ TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(_, 3)") {
 
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -312,12 +299,12 @@ TEST_CASE("Checks for cases e.g. Follows*(_, 3)") {
     writePkb.setFollowsT(1, followers1);
     writePkb.setFollowsT(2, followers2);
 
-    Parameter param1 = Parameter("_", "wildcard");
-    Parameter param2 = Parameter("3", "fixed_int");
+    Parameter param1 = Parameter("_", CONSTANTS.WILDCARD);
+    Parameter param2 = Parameter("3", CONSTANTS.FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 2);
@@ -327,6 +314,7 @@ TEST_CASE("Checks for cases e.g. Follows*(_, 3)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(_, call)") {
 
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -341,15 +329,15 @@ TEST_CASE("Checks for cases e.g. Follows*(_, call)") {
     followers2.insert(3);
     writePkb.setFollowsT(1, followers1);
     writePkb.setFollowsT(2, followers2);
-    writePkb.setStatement("print", 2);
-    writePkb.setStatement("call", 3);
+    writePkb.setStatement(CONSTANTS.PRINT, 2);
+    writePkb.setStatement(CONSTANTS.CALL, 3);
 
-    Parameter param1 = Parameter("_", "wildcard");
-    Parameter param2 = Parameter("p", "print");
+    Parameter param1 = Parameter("_", CONSTANTS.WILDCARD);
+    Parameter param2 = Parameter("p", CONSTANTS.PRINT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
@@ -358,6 +346,7 @@ TEST_CASE("Checks for cases e.g. Follows*(_, call)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
 
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -373,12 +362,12 @@ TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
     writePkb.setFollowsT(1, followers1);
     writePkb.setFollowsT(2, followers2);
 
-    Parameter param1 = Parameter("_", "wildcard");
-    Parameter param2 = Parameter("_", "wildcard");
+    Parameter param1 = Parameter("_", CONSTANTS.WILDCARD);
+    Parameter param2 = Parameter("_", CONSTANTS.WILDCARD);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 3);

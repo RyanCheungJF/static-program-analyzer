@@ -2,6 +2,7 @@
 #define SPA_SYNTAXEXCEPTIONS_H
 #include "Exception.h"
 #include <string>
+
 using namespace std;
 
 class SyntaxException : public Exception {

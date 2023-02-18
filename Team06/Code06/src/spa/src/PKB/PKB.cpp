@@ -1,4 +1,3 @@
-#include <vector>
 #include "PKB.h"
 
 void PKB::initializePkb() {
