@@ -73,7 +73,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynWildcard
 		std::unordered_set<Ent> entities = rlStorage->getEnt(typedStmtNum);
 		for (auto entity : entities) {
 			std::string stmtNumString = to_string(typedStmtNum);
-			res.push_back({ stmtNumString, paramString2 });
+			res.push_back({ stmtNumString, entity });
 		}
 	}
 	return res;
