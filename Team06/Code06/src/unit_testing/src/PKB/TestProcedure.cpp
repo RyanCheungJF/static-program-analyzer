@@ -12,7 +12,7 @@ TEST_CASE("All statement numbers are recorded in their respective procedures") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    Proc p = "calculateEuclidean";
+    ProcName p = "calculateEuclidean";
     std::unordered_set<StmtNum> lines = {2, 3, 4};
     writePkb.setProcedure(p, lines);
     std::unordered_set<StmtNum> statementNums = readPkb.getProcedureStatementNumbers(p);
@@ -34,7 +34,7 @@ TEST_CASE("If a procedure does not appear in the source code, getProcedureStatem
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    Proc p = "calculateEuclidean";
+    ProcName p = "calculateEuclidean";
     std::unordered_set<StmtNum> statementNums = readPkb.getProcedureStatementNumbers(p);
 
     bool res = true;
@@ -44,7 +44,7 @@ TEST_CASE("If a procedure does not appear in the source code, getProcedureStatem
 
 TEST_CASE("Given a query for a procedure and a statementNumber that is not nested in the procedure, checkProcedure() returns false") {
     ProcedureStorage store;
-    Proc p = "computeCentroid";
+    ProcName p = "computeCentroid";
     std::unordered_set<StmtNum> lines = {2};
     store.writeProcedure(p, lines);
 

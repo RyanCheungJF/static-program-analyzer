@@ -17,7 +17,7 @@ TEST_CASE("findDesignEntities() Tests") {
     StmtNum stmtNum = 123;
     writePkb.setConstant(stmtNum, {123});
 
-    Proc p = "Main";
+    ProcName p = "Main";
     writePkb.setProcedure(p, lines);
 
     Stmt s = "if";

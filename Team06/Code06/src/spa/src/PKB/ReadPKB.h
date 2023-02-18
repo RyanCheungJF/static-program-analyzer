@@ -7,9 +7,6 @@
 #include "../qps/entities/Pattern.h"
 #include "../utils/AppConstants.h"
 
-typedef int StmtNum;
-typedef std::string ProcName;
-
 class ReadPKB :AppConstants {
 public:
 

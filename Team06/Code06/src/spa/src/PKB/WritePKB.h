@@ -1,8 +1,7 @@
 #pragma once
 
 #include "PKB.h"
-
-typedef int StmtNum;
+#include "../utils/AppConstants.h"
 
 class WritePKB {
 public:
