@@ -196,10 +196,10 @@ TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
     followers.insert(3);
     followers.insert(4);
     writePkb.setFollowsT(1, followers);
-    writePkb.setStatement("while", 1);
-    writePkb.setStatement("while", 2);
+    writePkb.setStatement(CONSTANTS.WHILE, 1);
+    writePkb.setStatement(CONSTANTS.WHILE, 2);
 
-    Parameter param1 = Parameter("s", "stmt");
+    Parameter param1 = Parameter("s", CONSTANTS.STMT);
     Parameter param2 = Parameter("3", CONSTANTS.FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
@@ -226,11 +226,11 @@ TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
     followers.insert(3);
     followers.insert(4);
     writePkb.setFollowsT(1, followers);
-    writePkb.setStatement("while", 1);
+    writePkb.setStatement(CONSTANTS.WHILE, 1);
     writePkb.setStatement(CONSTANTS.IF, 2);
     writePkb.setStatement(CONSTANTS.IF, 3);
 
-    Parameter param1 = Parameter("w", "while");
+    Parameter param1 = Parameter("w", CONSTANTS.WHILE);
     Parameter param2 = Parameter(CONSTANTS.IF, CONSTANTS.IF);
     std::vector<Parameter> params;
     params.push_back(param1);
@@ -261,10 +261,10 @@ TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
     followers2.insert(3);
     writePkb.setFollowsT(1, followers1);
     writePkb.setFollowsT(2, followers2);
-    writePkb.setStatement("while", 1);
-    writePkb.setStatement("while", 2);
+    writePkb.setStatement(CONSTANTS.WHILE, 1);
+    writePkb.setStatement(CONSTANTS.WHILE, 2);
 
-    Parameter param1 = Parameter("w", "while");
+    Parameter param1 = Parameter("w", CONSTANTS.WHILE);
     Parameter param2 = Parameter("_", CONSTANTS.WILDCARD);
     std::vector<Parameter> params;
     params.push_back(param1);

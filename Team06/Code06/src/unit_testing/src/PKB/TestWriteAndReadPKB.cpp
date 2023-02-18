@@ -257,24 +257,24 @@ TEST_CASE("findDesignEntities() Tests") {
     Ent e = "varName";
     writePkb.setEntity(1, {e});
 
-    Parameter constParam = Parameter("irrelevant", "constant");
+    Parameter constParam = Parameter("irrelevant", CONSTANTS.CONSTANT);
     std::vector<std::string> res = readPkb.findDesignEntities(constParam);
     std::vector<std::string> check = { "123" };
     REQUIRE(res == check);
 
-    Parameter procParam = Parameter("irrelevant", "procedure");
+    Parameter procParam = Parameter("irrelevant", CONSTANTS.PROCEDURE);
     res = readPkb.findDesignEntities(procParam);
     check = { "Main" };
     REQUIRE(res == check);
 
-    Parameter ifParam = Parameter("irrelevant", "if");
+    Parameter ifParam = Parameter("irrelevant", CONSTANTS.IF);
     res = readPkb.findDesignEntities(ifParam);
     check = { "3", "6", "9" };
     std::sort(res.begin(), res.end());
     std::sort(check.begin(), check.end());
     REQUIRE(res == check);
 
-    Parameter entParam = Parameter("irrelevant", "variable");
+    Parameter entParam = Parameter("irrelevant", CONSTANTS.VARIABLE);
     res = readPkb.findDesignEntities(entParam);
     check = {"varName"};
     REQUIRE(res == check);
@@ -353,24 +353,24 @@ TEST_CASE("StmtStorage WritePKB ReadPKB Facade") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    writePkb.setStatement("if", 11);
-    writePkb.setStatement("if", 111);
-    writePkb.setStatement("if", 112);
-    writePkb.setStatement("while", 12);
-    writePkb.setStatement("while", 222);
-    writePkb.setStatement("while", 333);
-    writePkb.setStatement("assign", 13);
-    writePkb.setStatement("print", 20);
-    writePkb.setStatement("read", 2);
-    writePkb.setStatement("call", 7);
-    writePkb.setStatement("call", 10);
+    writePkb.setStatement(CONSTANTS.IF, 11);
+    writePkb.setStatement(CONSTANTS.IF, 111);
+    writePkb.setStatement(CONSTANTS.IF, 112);
+    writePkb.setStatement(CONSTANTS.WHILE, 12);
+    writePkb.setStatement(CONSTANTS.WHILE, 222);
+    writePkb.setStatement(CONSTANTS.WHILE, 333);
+    writePkb.setStatement(CONSTANTS.ASSIGN, 13);
+    writePkb.setStatement(CONSTANTS.PRINT, 20);
+    writePkb.setStatement(CONSTANTS.READ, 2);
+    writePkb.setStatement(CONSTANTS.CALL, 7);
+    writePkb.setStatement(CONSTANTS.CALL, 10);
 
     SECTION("StmtStorage WritePKB ReadPKB Facade: checkStatement(Stmt stmt, StmtNum num)") {
-        REQUIRE(readPkb.checkStatement("if", 11));
-        REQUIRE(readPkb.checkStatement("call", 10));
-        REQUIRE(readPkb.checkStatement("call", 7));
-        REQUIRE(!readPkb.checkStatement("while", 11));
-        REQUIRE(!readPkb.checkStatement("while", 2));
+        REQUIRE(readPkb.checkStatement(CONSTANTS.IF, 11));
+        REQUIRE(readPkb.checkStatement(CONSTANTS.CALL, 10));
+        REQUIRE(readPkb.checkStatement(CONSTANTS.CALL, 7));
+        REQUIRE(!readPkb.checkStatement(CONSTANTS.WHILE, 11));
+        REQUIRE(!readPkb.checkStatement(CONSTANTS.WHILE, 2));
     }
 
     SECTION("StmtStorage WritePKB ReadPKB Facade: getIfStatementNumbers()") {

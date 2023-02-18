@@ -37,11 +37,12 @@ TEST_CASE("splitQuery / splitting variable v; Select v; should give error / catc
 }
 
 TEST_CASE("checkSynonyms / the variable store contains all the required variables in query / no exceptions thrown") {
+    AppConstants CONSTANTS;
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
-    Parameter p1("v", "variable");
-    Parameter p2("s", "stmt");
+    Parameter p1("v", CONSTANTS.VARIABLE);
+    Parameter p2("s", CONSTANTS.STMT);
     vs.insertVariable(p1);
     vs.insertVariable(p2);
     Query q = sqp.parse("Select s such that Modifies(s, v)");
@@ -49,20 +50,22 @@ TEST_CASE("checkSynonyms / the variable store contains all the required variable
 }
 
 TEST_CASE("checkSynonyms / the variable store does not contain stmt / exception is thrown") {
+    AppConstants CONSTANTS;
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
-    Parameter p1("v", "variable");
+    Parameter p1("v", CONSTANTS.VARIABLE);
     vs.insertVariable(p1);
     Query q = sqp.parse("Select s such that Modifies(s, v)");
     REQUIRE_THROWS(qp.checkSynonyms(&q, vs));
 }
 
 TEST_CASE("checkSynonyms / the variable store does not contain variable / exception is thrown") {
+    AppConstants CONSTANTS;
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
-    Parameter p1("s", "stmt");
+    Parameter p1("s", CONSTANTS.STMT);
     vs.insertVariable(p1);
     Query q = sqp.parse("Select s such that Modifies(s, v)");
     REQUIRE_THROWS(qp.checkSynonyms(&q, vs));
@@ -77,17 +80,18 @@ TEST_CASE("checkSynonyms / variable store is empty / exception is thrown") {
 }
 
 TEST_CASE("checkSynonyms / the variable store contains more variable than needed / no exception is thrown") {
+    AppConstants CONSTANTS;
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
-    Parameter p1("s", "stmt");
-    Parameter p2("s2", "stmt");
-    Parameter p3("s3", "stmt");
-    Parameter p4("s4", "stmt");
-    Parameter p5("v", "variable");
-    Parameter p6("v2", "variable");
-    Parameter p7("v3", "variable");
-    Parameter p8("v4", "variable");
+    Parameter p1("s", CONSTANTS.STMT);
+    Parameter p2("s2", CONSTANTS.STMT);
+    Parameter p3("s3", CONSTANTS.STMT);
+    Parameter p4("s4", CONSTANTS.STMT);
+    Parameter p5("v", CONSTANTS.VARIABLE);
+    Parameter p6("v2", CONSTANTS.VARIABLE);
+    Parameter p7("v3", CONSTANTS.VARIABLE);
+    Parameter p8("v4", CONSTANTS.VARIABLE);
     vs.insertVariable(p1);
     vs.insertVariable(p2);
     vs.insertVariable(p3);
@@ -101,15 +105,16 @@ TEST_CASE("checkSynonyms / the variable store contains more variable than needed
 }
 
 TEST_CASE("checkSynonyms / the variable store has correct type but wrong synonym / exception is thrown") {
+    AppConstants CONSTANTS;
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
-    Parameter p2("s2", "stmt");
-    Parameter p3("s3", "stmt");
-    Parameter p4("s4", "stmt");
-    Parameter p6("v2", "variable");
-    Parameter p7("v3", "variable");
-    Parameter p8("v4", "variable");
+    Parameter p2("s2", CONSTANTS.STMT);
+    Parameter p3("s3", CONSTANTS.STMT);
+    Parameter p4("s4", CONSTANTS.STMT);
+    Parameter p6("v2", CONSTANTS.VARIABLE);
+    Parameter p7("v3", CONSTANTS.VARIABLE);
+    Parameter p8("v4", CONSTANTS.VARIABLE);
     vs.insertVariable(p2);
     vs.insertVariable(p3);
     vs.insertVariable(p4);

@@ -5,21 +5,24 @@
 using namespace std;
 
 TEST_CASE("getHeader / returns the correct vector of headers / return true") {
-    vector<Parameter> headers = {Parameter("v", "variable"), Parameter("_", "wildcard")};
+    AppConstants CONSTANTS;
+    vector<Parameter> headers = {Parameter("v", CONSTANTS.VARIABLE), Parameter("_", CONSTANTS.WILDCARD)};
     vector<vector<string>> content = {{"x", "5"}};
     Table table(headers, content);
     REQUIRE(headers == table.getHeaders());
 }
 
 TEST_CASE("getContent / returns the correct vector of contents / return true") {
-    vector<Parameter> headers = {Parameter("v", "variable"), Parameter("_", "wildcard")};
+    AppConstants CONSTANTS;
+    vector<Parameter> headers = {Parameter("v", CONSTANTS.VARIABLE), Parameter("_", CONSTANTS.WILDCARD)};
     vector<vector<string>> content = {{"x", "5"}};
     Table table(headers, content);
     REQUIRE(content == table.getContent());
 }
 
 TEST_CASE("selectColumns / the selection of single column will reduce the table to chosen column / return true") {
-    vector<Parameter> headers = {Parameter("v", "variable"), Parameter("_", "wildcard")};
+    AppConstants CONSTANTS;
+    vector<Parameter> headers = {Parameter("v", CONSTANTS.VARIABLE), Parameter("_", CONSTANTS.WILDCARD)};
     vector<vector<string>> content = {{"x", "5"}};
     Table table(headers, content);
     vector<int> indexes = {0};
@@ -30,7 +33,8 @@ TEST_CASE("selectColumns / the selection of single column will reduce the table 
 }
 
 TEST_CASE("selectColumns / select nothing / return true") {
-    vector<Parameter> headers = {Parameter("v", "variable"), Parameter("_", "wildcard")};
+    AppConstants CONSTANTS;
+    vector<Parameter> headers = {Parameter("v", CONSTANTS.VARIABLE), Parameter("_", CONSTANTS.WILDCARD)};
     vector<vector<string>> content = {{"x", "5"}};
     Table table(headers, content);
     vector<int> indexes = {};
@@ -39,8 +43,9 @@ TEST_CASE("selectColumns / select nothing / return true") {
 }
 
 TEST_CASE("extractDesignEntities / test for variable and wild card / return only variable") {
-    vector<Parameter> headers = {Parameter("v", "variable"),
-                                 Parameter("_", "wildcard")
+    AppConstants CONSTANTS;
+    vector<Parameter> headers = {Parameter("v", CONSTANTS.VARIABLE),
+                                 Parameter("_", CONSTANTS.WILDCARD)
                                  };
     vector<vector<string>> content = {{"x", "5"}};
     Table table(headers, content);
@@ -50,8 +55,9 @@ TEST_CASE("extractDesignEntities / test for variable and wild card / return only
 }
 
 TEST_CASE("extractDesignEntities / test for stmt and fixed_int / return only stmt") {
-    vector<Parameter> headers = {Parameter("s", "stmt"),
-                                 Parameter("321", "fixed_int")
+    AppConstants CONSTANTS;
+    vector<Parameter> headers = {Parameter("s", CONSTANTS.STMT),
+                                 Parameter("321", CONSTANTS.FIXED_INT)
                                 };
     vector<vector<string>> content = {{"4", "321"}};
     Table table(headers, content);
@@ -61,9 +67,10 @@ TEST_CASE("extractDesignEntities / test for stmt and fixed_int / return only stm
 }
 
 TEST_CASE("extractDesignEntities / test for fixed_string, read and stmt / returns read and stmt") {
-    vector<Parameter> headers = {Parameter("abc", "fixed_string"),
-                                 Parameter("rd", "read"),
-                                 Parameter("s", "stmt"),
+    AppConstants CONSTANTS;
+    vector<Parameter> headers = {Parameter("abc", CONSTANTS.FIXED_STRING),
+                                 Parameter("rd", CONSTANTS.READ),
+                                 Parameter("s", CONSTANTS.STMT),
     };
     vector<vector<string>> content = {{"abc", "6", "7"}};
     Table table(headers, content);
@@ -72,8 +79,9 @@ TEST_CASE("extractDesignEntities / test for fixed_string, read and stmt / return
 }
 
 TEST_CASE("extractDesignEntities / test for call and fixed_string / returns call") {
-    vector<Parameter> headers = {Parameter("abc", "fixed_string"),
-                                 Parameter("cl", "call")
+    AppConstants CONSTANTS;
+    vector<Parameter> headers = {Parameter("abc", CONSTANTS.FIXED_STRING),
+                                 Parameter("cl", CONSTANTS.CALL)
     };
     vector<vector<string>> content = {{"abc", "5"}};
     Table table(headers, content);
@@ -83,9 +91,10 @@ TEST_CASE("extractDesignEntities / test for call and fixed_string / returns call
 }
 
 TEST_CASE("extractDesignEntities / test constant, procedure and fixed_string_with_wildcard") {
-    vector<Parameter> headers = {Parameter("c", "constant"),
-                                 Parameter("proc", "procedure"),
-                                 Parameter("_\"a\"_", "fixed_string_with_wildcard")
+    AppConstants CONSTANTS;
+    vector<Parameter> headers = {Parameter("c", CONSTANTS.CONSTANT),
+                                 Parameter("proc", CONSTANTS.PROCEDURE),
+                                 Parameter("_\"a\"_", CONSTANTS.FIXED_STRING_WTIH_WILDCARD)
     };
     vector<vector<string>> content = {{"999", "main", "x+a"}};
     Table table(headers, content);
@@ -94,9 +103,10 @@ TEST_CASE("extractDesignEntities / test constant, procedure and fixed_string_wit
 }
 
 TEST_CASE("extractDesignEntities / test synonym ifs assign / return ifs, assign") {
-    vector<Parameter> headers = {Parameter("hello", "synonym"),
-                                 Parameter("ifs", "if"),
-                                 Parameter("a", "assign"),
+    AppConstants CONSTANTS;
+    vector<Parameter> headers = {Parameter("hello", CONSTANTS.SYNONYM),
+                                 Parameter("ifs", CONSTANTS.IF),
+                                 Parameter("a", CONSTANTS.ASSIGN),
     };
     vector<vector<string>> content = {{"hello", "5", "321"}};
     Table table(headers, content);
