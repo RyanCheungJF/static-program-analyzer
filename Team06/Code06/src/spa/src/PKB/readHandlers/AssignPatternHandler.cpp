@@ -4,7 +4,6 @@ AssignPatternHandler::AssignPatternHandler(std::shared_ptr<PatternStorage> patte
     this->patternStorage = patternStorage;
 }
 
-/* HELPER FUNCTIONS */
 bool isSameTree(Expression* expected, Expression* actual) {
         // if they are both constants, check they have the same value
     if (dynamic_cast<Constant*>(expected) && dynamic_cast<Constant*>(actual)) {
@@ -50,8 +49,6 @@ bool isSubTree(Expression* subTreeExpression, Expression* treeExpression) {
     // if they are not the same tree (checked above), that means it is not a subtree
     return false;
 }
-
-
 
 std::vector<std::vector<std::string>> AssignPatternHandler::handleVarWildcard(std::string lhs) {
     std::vector<std::vector<std::string>> res;
