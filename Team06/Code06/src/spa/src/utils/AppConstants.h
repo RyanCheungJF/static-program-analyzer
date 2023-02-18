@@ -5,6 +5,12 @@
 #include <string>
 #include <vector>
 
+typedef std::string ProcName;
+typedef std::string Stmt;
+typedef std::string Ent;
+typedef int StmtNum;
+typedef int Const;
+
 class AppConstants {
 public:
     inline static const std::string READ = "read";

@@ -36,12 +36,12 @@ public:
     void setEntity(Ent e, StmtNum line);
 
     // Sets the procedure along with the statement lines that are in that procedure appears in
-    void setProcedure(Proc p, std::unordered_set<StmtNum> lines);
+    void setProcedure(ProcName p, std::unordered_set<StmtNum> lines);
 
     // Sets the constants along with the statement line that the constants appears in
     void setConstant(StmtNum num, std::unordered_set<Const> constants);
 
-    void setCall(StmtNum callLine, Proc procedure_being_called);
+    void setCall(StmtNum callLine, ProcName procedure_being_called);
 
     void setUsesS(StmtNum num, std::unordered_set<Ent> entities);
 

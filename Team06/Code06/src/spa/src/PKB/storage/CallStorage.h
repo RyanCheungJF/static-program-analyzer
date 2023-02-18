@@ -5,9 +5,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
-
-typedef std::string ProcName;
-typedef int StmtNum;
+#include "../../../src/utils/AppConstants.h"
 
 class CallStorage {
 public:

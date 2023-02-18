@@ -6,10 +6,7 @@
 #include <string>
 #include <iostream>
 #include <deque>
-
-typedef int StmtNum;
-typedef std::string ProcName;
-typedef std::string Ent;
+#include "../../../src/utils/AppConstants.h"
 
 class ModifiesUsesStorage {
 public:

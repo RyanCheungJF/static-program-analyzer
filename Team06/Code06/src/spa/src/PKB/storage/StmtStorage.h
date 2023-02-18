@@ -4,9 +4,7 @@
 #include <unordered_set>
 #include <vector>
 #include <string>
-
-typedef std::string Stmt;
-typedef int StmtNum;
+#include "../../../src/utils/AppConstants.h"
 
 class StmtStorage {
 public:

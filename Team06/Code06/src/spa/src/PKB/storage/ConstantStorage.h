@@ -2,9 +2,7 @@
 #include <unordered_set>
 #include <vector>
 #include <string>
-
-typedef int Const;
-typedef int StmtNum;
+#include "../../../src/utils/AppConstants.h"
 
 class ConstantStorage {
 public:

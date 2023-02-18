@@ -25,7 +25,7 @@ public:
     bool checkStatement(Stmt stmt, StmtNum num);
 
     // returns all the statement lines that are contained in the given procedure
-    std::unordered_set<StmtNum> getProcedureStatementNumbers(Proc p);
+    std::unordered_set<StmtNum> getProcedureStatementNumbers(ProcName p);
 
     // returns all the call statement lines and the procedure that it is calling
     std::vector<std::pair<StmtNum, ProcName>> getCallStatements();

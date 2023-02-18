@@ -2,9 +2,7 @@
 #include <unordered_set>
 #include <vector>
 #include <string>
-
-typedef std::string Ent;
-typedef int StmtNum;
+#include "../../../src/utils/AppConstants.h"
 
 class EntityStorage {
 public:
