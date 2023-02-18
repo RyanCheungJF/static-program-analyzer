@@ -1,8 +1,10 @@
 #include "catch.hpp"
 #include "../../../spa/src/PKB/WritePKB.h"
 #include "../../../spa/src/PKB/ReadPKB.h"
+#include "../utils/utils.h"
 
 using namespace std;
+using namespace unit_testing_utils;
 
 TEST_CASE("Check that all followers are recorded in the followee") {
     FollowsTStorage fts;
@@ -103,9 +105,9 @@ TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
     params.push_back(param2);
     shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
 
-    std::vector<std::vector<std::string>> check = { {"1", "2"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(check == res);
+    REQUIRE(res.size() == 1);
+    REQUIRE(contains(res, {"1", "2"}));
 }
 
 TEST_CASE("Checks that a non-existent FollowsT relationship returns an empty vector from ReadPKB") {
@@ -128,9 +130,8 @@ TEST_CASE("Checks that a non-existent FollowsT relationship returns an empty vec
     params.push_back(param2);
     shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
 
-    std::vector<std::vector<std::string>> check;
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(check == res);
+    REQUIRE(res.size() == 0);
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(1, assign)") {
@@ -158,9 +159,10 @@ TEST_CASE("Checks for cases e.g. Follows*(1, assign)") {
     params.push_back(param2);
     shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
 
-    std::vector<std::vector<std::string>> check = { {"1", "2"}, {"1", "3"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(check == res);
+    REQUIRE(res.size() == 2);
+    REQUIRE(contains(res, { "1", "2" }));
+    REQUIRE(contains(res, { "1", "3" }));
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(1, _)") {
@@ -188,9 +190,11 @@ TEST_CASE("Checks for cases e.g. Follows*(1, _)") {
     params.push_back(param2);
     shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
 
-    std::vector<std::vector<std::string>> check = { {"1", "2"}, {"1", "3"}, {"1", "4"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(check == res);
+    REQUIRE(res.size() == 3);
+    REQUIRE(contains(res, { "1", "2" }));
+    REQUIRE(contains(res, { "1", "3" }));
+    REQUIRE(contains(res, { "1", "4" }));
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
@@ -217,9 +221,9 @@ TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
     params.push_back(param2);
     shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
 
-    std::vector<std::vector<std::string>> check = { {"1", "3"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(check == res);
+    REQUIRE(res.size() == 1);
+    REQUIRE(contains(res, { "1", "3" }));
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
@@ -247,9 +251,10 @@ TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
     params.push_back(param2);
     shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
 
-    std::vector<std::vector<std::string>> check = { {"1", "2"}, {"1", "3"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(check == res);
+    REQUIRE(res.size() == 2);
+    REQUIRE(contains(res, { "1", "2" }));
+    REQUIRE(contains(res, { "1", "3" }));
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
@@ -281,8 +286,11 @@ TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
 
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    std::vector<std::vector<std::string>> check = { { "1", "2" }, { "1", "3" }, { "1", "4" }, { "2", "3" } };
-    REQUIRE(res == check);
+    REQUIRE(res.size() == 4);
+    REQUIRE(contains(res, { "1", "2" }));
+    REQUIRE(contains(res, { "1", "3" }));
+    REQUIRE(contains(res, { "1", "4" }));
+    REQUIRE(contains(res, { "2", "3" }));
 }
 
 
@@ -311,8 +319,9 @@ TEST_CASE("Checks for cases e.g. Follows*(_, 3)") {
     shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    std::vector<std::vector<std::string>> check = { { "1", "3" }, { "2", "3" } };
-    REQUIRE(check == res);
+    REQUIRE(res.size() == 2);
+    REQUIRE(contains(res, { "1", "3" }));
+    REQUIRE(contains(res, { "2", "3" }));
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(_, call)") {
@@ -341,9 +350,9 @@ TEST_CASE("Checks for cases e.g. Follows*(_, call)") {
     params.push_back(param2);
     shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
 
-    std::vector<std::vector<std::string>> check = { {"1", "2"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(check == res);
+    REQUIRE(res.size() == 1);
+    REQUIRE(contains(res, { "1", "2" }));
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
@@ -371,7 +380,9 @@ TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
     shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    std::vector<std::vector<std::string>> check = { { "1", "2" }, { "1", "3" }, { "2", "3" } };
-    REQUIRE(res == check);
+    REQUIRE(res.size() == 3);
+    REQUIRE(contains(res, { "1", "2" }));
+    REQUIRE(contains(res, { "1", "3" }));
+    REQUIRE(contains(res, { "2", "3" }));
 }
 
