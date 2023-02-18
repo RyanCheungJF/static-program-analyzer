@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include "qps/QPSGrammarUtils.h"
 #include "../../../src/utils/AppConstants.h"
+#include "exceptions/InternalException.h"
 using namespace std;
 
 enum class ParameterType {
@@ -33,14 +34,19 @@ public:
 	Parameter(string, ParameterType);
 	Parameter(const Parameter&);
 	Parameter();
+	static bool isSyntacticEntityRef(Parameter&);
 	static bool isEntityRef(Parameter&);
+	static bool isSyntacticStatementRef(Parameter&);
 	static bool isStatementRef(Parameter&);
+	static bool isProcedure(Parameter&);
     static bool isDsgEntity(Parameter&);
+	static bool isPatternSyn(Parameter&);
 	bool isUncheckedSynonym();
 	void updateSynonymType(ParameterType);
     string getTypeString() const;
     bool isEqualTo(Parameter);
 	bool operator== (const Parameter&) const;
+	
     static ParameterType guessParameterType(string);
 private:
 	const static unordered_map<string, ParameterType> stringToTypeMap;

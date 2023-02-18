@@ -3,13 +3,25 @@
 
 
 vector<string> QPS::processQueries(string queryString, ReadPKB& readPKB) {
-    QPSParser parser = QPSParser();
-    vector<Query> queryVec = parser.parse(queryString);
     vector<string> finalResult;
-    for (Query query: queryVec) {
-        // Some API call
-        vector<string> result = query.evaluate(readPKB);
-        finalResult.insert(finalResult.end(), result.begin(), result.end());
+    try {
+        QPSParser parser = QPSParser();
+        vector<Query> queryVec = parser.parse(queryString);
+        for (Query query : queryVec) {
+            // Some API call
+            vector<string> result = query.evaluate(readPKB);
+            finalResult.insert(finalResult.end(), result.begin(), result.end());
+        }
     }
-    return finalResult;
+    catch (SyntaxException e) {
+        return vector<string> {e.getMessage()};
+    } 
+    catch (SemanticException e) {
+        return vector<string> {e.getMessage()};
+    }
+    catch (InternalException e) {
+        return vector<string> {e.getMessage()};
+    }
+
+    return finalResult;     
 }

@@ -409,6 +409,43 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
 			REQUIRE(exists(result, "sub"));
 		}
 	}
+
+	SECTION("Modifies") {
+		SECTION("stmtSyn, var") {
+			string query = R"(
+			stmt s;
+			Select s such that Modifies(s, "y"))";
+
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 4);
+			REQUIRE(exists(result, "2"));
+			REQUIRE(exists(result, "4"));
+			REQUIRE(exists(result, "5"));
+			REQUIRE(exists(result, "8"));
+		}
+
+		SECTION("stmtSyn, wildcard") {
+			string query = R"(
+			read r;
+			Select r such that Modifies(r, _))";
+
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 2);
+			REQUIRE(exists(result, "5"));
+			REQUIRE(exists(result, "10"));
+		}
+
+		SECTION("procSyn, syn") {
+			string query = R"(
+			procedure p; variable v;
+			Select p such that Modifies(p, v))";
+
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 2);
+			REQUIRE(exists(result, "main"));
+			REQUIRE(exists(result, "sub"));
+		}
+	}
 }
 
 TEST_CASE("Select synonym from single such that clause, synonym is not in clause") {
@@ -418,16 +455,25 @@ TEST_CASE("Select synonym from single such that clause, synonym is not in clause
 	QPS qps;
 	vector<string> result;
 
-	SECTION("clause is false") {
+	SECTION("clause is false, Parent") {
 		string query = R"(
 		if ifs;
-		Select ifs such that Parent(ifs, 5))";
+		Select ifs such that Parent(1, 5))";
 
 		result = qps.processQueries(query, readPkb);
 		REQUIRE(result.empty());
 	}
 
-	SECTION("clause is true") {
+	SECTION("clause is false, Modifies") {
+		string query = R"(
+		variable v;
+		Select v such that Modifies(1, "y"))";
+
+		result = qps.processQueries(query, readPkb);
+		REQUIRE(result.empty());
+	}
+
+	SECTION("clause is true, Follows*") {
 		string query = R"(
 		assign a;
 		Select a such that Follows*(_, 6))";
@@ -439,6 +485,16 @@ TEST_CASE("Select synonym from single such that clause, synonym is not in clause
 		REQUIRE(exists(result, "6"));
 		REQUIRE(exists(result, "8"));
 		REQUIRE(exists(result, "11"));
+	}
+
+	SECTION("clause is true, Uses") {
+		string query = R"(
+		while w; assign a; variable v;
+		Select w such that Uses(a, v))";
+
+		result = qps.processQueries(query, readPkb);
+		REQUIRE(result.size() == 1);
+		REQUIRE(exists(result, "3"));
 	}
 }
 

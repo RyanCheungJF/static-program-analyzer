@@ -1,7 +1,11 @@
 #include "catch.hpp"
 #include "../../../spa/src/PKB/storage/FollowsTStorage.h"
+#include "../../../spa/src/PKB/WritePKB.h"
+#include "../../../spa/src/PKB/ReadPKB.h"
+#include "../utils/utils.h"
 
 using namespace std;
+using namespace unit_testing_utils;
 
 TEST_CASE("Check that all followers are recorded in the followee") {
     FollowsTStorage fts;
@@ -80,3 +84,306 @@ TEST_CASE("Check that all of the followees of each follower is accurate, even wi
 
     REQUIRE(res);
 }
+
+
+TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
+
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    unordered_set<StmtNum> followers;
+    followers.insert(2);
+    writePkb.setFollowsT(1, followers);
+
+    Parameter param1 = Parameter("1", "fixed_int");
+    Parameter param2 = Parameter("2", "fixed_int");
+    std::vector<Parameter> params;
+    params.push_back(param1);
+    params.push_back(param2);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+
+    std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
+    REQUIRE(res.size() == 1);
+    REQUIRE(contains(res, {"1", "2"}));
+}
+
+TEST_CASE("Checks that a non-existent FollowsT relationship returns an empty vector from ReadPKB") {
+
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    unordered_set<StmtNum> followers;
+    followers.insert(2);
+    writePkb.setFollowsT(1, followers);
+
+    Parameter param1 = Parameter("1", "fixed_int");
+    Parameter param2 = Parameter("3", "fixed_int");
+    std::vector<Parameter> params;
+    params.push_back(param1);
+    params.push_back(param2);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+
+    std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
+    REQUIRE(res.size() == 0);
+}
+
+TEST_CASE("Checks for cases e.g. Follows*(1, assign)") {
+
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    unordered_set<StmtNum> followers;
+    followers.insert(2);
+    followers.insert(3);
+    followers.insert(4);
+    writePkb.setFollowsT(1, followers);
+    writePkb.setStatement("assign", 2);
+    writePkb.setStatement("assign", 3);
+    writePkb.setStatement("if", 4);
+
+    Parameter param1 = Parameter("1", "fixed_int");
+    Parameter param2 = Parameter("a", "assign");
+    std::vector<Parameter> params;
+    params.push_back(param1);
+    params.push_back(param2);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+
+    std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
+    REQUIRE(res.size() == 2);
+    REQUIRE(contains(res, { "1", "2" }));
+    REQUIRE(contains(res, { "1", "3" }));
+}
+
+TEST_CASE("Checks for cases e.g. Follows*(1, _)") {
+
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    unordered_set<StmtNum> followers;
+    followers.insert(2);
+    followers.insert(3);
+    followers.insert(4);
+    writePkb.setFollowsT(1, followers);
+    writePkb.setStatement("assign", 2);
+    writePkb.setStatement("assign", 3);
+    writePkb.setStatement("if", 4);
+
+    Parameter param1 = Parameter("1", "fixed_int");
+    Parameter param2 = Parameter("_", "wildcard");
+    std::vector<Parameter> params;
+    params.push_back(param1);
+    params.push_back(param2);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+
+    std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
+    REQUIRE(res.size() == 3);
+    REQUIRE(contains(res, { "1", "2" }));
+    REQUIRE(contains(res, { "1", "3" }));
+    REQUIRE(contains(res, { "1", "4" }));
+}
+
+TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
+
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    unordered_set<StmtNum> followers;
+    followers.insert(2);
+    followers.insert(3);
+    followers.insert(4);
+    writePkb.setFollowsT(1, followers);
+    writePkb.setStatement("while", 1);
+    writePkb.setStatement("while", 2);
+
+    Parameter param1 = Parameter("s", "stmt");
+    Parameter param2 = Parameter("3", "fixed_int");
+    std::vector<Parameter> params;
+    params.push_back(param1);
+    params.push_back(param2);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+
+    std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
+    REQUIRE(res.size() == 1);
+    REQUIRE(contains(res, { "1", "3" }));
+}
+
+TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
+
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    unordered_set<StmtNum> followers;
+    followers.insert(2);
+    followers.insert(3);
+    followers.insert(4);
+    writePkb.setFollowsT(1, followers);
+    writePkb.setStatement("while", 1);
+    writePkb.setStatement("if", 2);
+    writePkb.setStatement("if", 3);
+
+    Parameter param1 = Parameter("w", "while");
+    Parameter param2 = Parameter("if", "if");
+    std::vector<Parameter> params;
+    params.push_back(param1);
+    params.push_back(param2);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+
+    std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
+    REQUIRE(res.size() == 2);
+    REQUIRE(contains(res, { "1", "2" }));
+    REQUIRE(contains(res, { "1", "3" }));
+}
+
+TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
+
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    unordered_set<StmtNum> followers1;
+    followers1.insert(2);
+    followers1.insert(3);
+    followers1.insert(4);
+    unordered_set<StmtNum> followers2;
+    followers2.insert(3);
+    writePkb.setFollowsT(1, followers1);
+    writePkb.setFollowsT(2, followers2);
+    writePkb.setStatement("while", 1);
+    writePkb.setStatement("while", 2);
+
+    Parameter param1 = Parameter("w", "while");
+    Parameter param2 = Parameter("_", "wildcard");
+    std::vector<Parameter> params;
+    params.push_back(param1);
+    params.push_back(param2);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+
+
+    std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
+    REQUIRE(res.size() == 4);
+    REQUIRE(contains(res, { "1", "2" }));
+    REQUIRE(contains(res, { "1", "3" }));
+    REQUIRE(contains(res, { "1", "4" }));
+    REQUIRE(contains(res, { "2", "3" }));
+}
+
+
+TEST_CASE("Checks for cases e.g. Follows*(_, 3)") {
+
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    unordered_set<StmtNum> followers1;
+    followers1.insert(2);
+    followers1.insert(3);
+    unordered_set<StmtNum> followers2;
+    followers2.insert(3);
+    writePkb.setFollowsT(1, followers1);
+    writePkb.setFollowsT(2, followers2);
+
+    Parameter param1 = Parameter("_", "wildcard");
+    Parameter param2 = Parameter("3", "fixed_int");
+    std::vector<Parameter> params;
+    params.push_back(param1);
+    params.push_back(param2);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+
+    std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
+    REQUIRE(res.size() == 2);
+    REQUIRE(contains(res, { "1", "3" }));
+    REQUIRE(contains(res, { "2", "3" }));
+}
+
+TEST_CASE("Checks for cases e.g. Follows*(_, call)") {
+
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    unordered_set<StmtNum> followers1;
+    followers1.insert(2);
+    followers1.insert(3);
+    unordered_set<StmtNum> followers2;
+    followers2.insert(3);
+    writePkb.setFollowsT(1, followers1);
+    writePkb.setFollowsT(2, followers2);
+    writePkb.setStatement("print", 2);
+    writePkb.setStatement("call", 3);
+
+    Parameter param1 = Parameter("_", "wildcard");
+    Parameter param2 = Parameter("p", "print");
+    std::vector<Parameter> params;
+    params.push_back(param1);
+    params.push_back(param2);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+
+    std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
+    REQUIRE(res.size() == 1);
+    REQUIRE(contains(res, { "1", "2" }));
+}
+
+TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
+
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    unordered_set<StmtNum> followers1;
+    followers1.insert(2);
+    followers1.insert(3);
+    unordered_set<StmtNum> followers2;
+    followers2.insert(3);
+    writePkb.setFollowsT(1, followers1);
+    writePkb.setFollowsT(2, followers2);
+
+    Parameter param1 = Parameter("_", "wildcard");
+    Parameter param2 = Parameter("_", "wildcard");
+    std::vector<Parameter> params;
+    params.push_back(param1);
+    params.push_back(param2);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows*", params);
+
+    std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
+    REQUIRE(res.size() == 3);
+    REQUIRE(contains(res, { "1", "2" }));
+    REQUIRE(contains(res, { "1", "3" }));
+    REQUIRE(contains(res, { "2", "3" }));
+}
+
