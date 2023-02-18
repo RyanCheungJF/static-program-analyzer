@@ -208,14 +208,14 @@ TEST_CASE("Valid Source Program") {
 		auto rootNode = testParser.parseProgram(tokenQueue);
 
 		// creating expected tree
-		auto readStmt = std::make_unique<ReadStatement>("call");
-		auto callStmt = std::make_unique<CallStatement>("print");
-		auto printStmt = std::make_unique<PrintStatement>("read");		
-		auto readAssignStmt = std::make_unique<AssignStatement>("read", std::make_unique<Constant>(2));
-		auto callAssignStmt = std::make_unique<AssignStatement>("call", std::make_unique<Constant>(3));
-		auto whileAssignStmt = std::make_unique<AssignStatement>("while", std::make_unique<Constant>(5));
-		auto ifAssignStmt = std::make_unique<AssignStatement>("if", std::make_unique<Constant>(4));
-		auto printAssignStmt = std::make_unique<AssignStatement>("print", std::make_unique<Constant>(8));
+		auto readStmt = std::make_unique<ReadStatement>(AppConstants::CALL);
+		auto callStmt = std::make_unique<CallStatement>(AppConstants::PRINT);
+		auto printStmt = std::make_unique<PrintStatement>(AppConstants::READ);		
+		auto readAssignStmt = std::make_unique<AssignStatement>(AppConstants::READ, std::make_unique<Constant>(2));
+		auto callAssignStmt = std::make_unique<AssignStatement>(AppConstants::CALL, std::make_unique<Constant>(3));
+		auto whileAssignStmt = std::make_unique<AssignStatement>(AppConstants::WHILE, std::make_unique<Constant>(5));
+		auto ifAssignStmt = std::make_unique<AssignStatement>(AppConstants::IF, std::make_unique<Constant>(4));
+		auto printAssignStmt = std::make_unique<AssignStatement>(AppConstants::PRINT, std::make_unique<Constant>(8));
 
 		std::vector<std::unique_ptr<Statement>> statementsA;
 		statementsA.push_back(std::move(readStmt));
@@ -228,7 +228,7 @@ TEST_CASE("Valid Source Program") {
 		statementsA.push_back(std::move(printAssignStmt));
 
 		auto statementListNodeA = std::make_unique<StatementList>(std::move(statementsA));
-		auto procedureNodeA = std::make_unique<Procedure>("while", std::move(statementListNodeA));
+		auto procedureNodeA = std::make_unique<Procedure>(AppConstants::WHILE, std::move(statementListNodeA));
 		std::vector<std::unique_ptr<Procedure>> procedures;
 		procedures.push_back(std::move(procedureNodeA));
 

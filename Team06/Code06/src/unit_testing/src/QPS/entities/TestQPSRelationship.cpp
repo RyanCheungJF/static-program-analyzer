@@ -291,7 +291,7 @@ TEST_CASE("makeRelationship / Uses relationship / return relationship object") {
 TEST_CASE("makeRelationship / Uses, wrong 1st param / throws error") {
     AppConstants CONSTANTS;
 	string typeInput = CONSTANTS.USES;
-	Parameter p1("ent_ref", "variable");
+	Parameter p1("ent_ref", CONSTANTS.VARIABLE);
 	Parameter p2("a", CONSTANTS.SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
@@ -352,7 +352,7 @@ TEST_CASE("makeRelationship / Modifies relationship / return relationship object
 TEST_CASE("makeRelationship / Modifies, wrong 1st param / throws error") {
     AppConstants CONSTANTS;
 	string typeInput = CONSTANTS.MODIFIES;
-	Parameter p1("ent_ref", "variable");
+	Parameter p1("ent_ref", CONSTANTS.VARIABLE);
 	Parameter p2("a", CONSTANTS.SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
@@ -645,7 +645,7 @@ TEST_CASE("getAllUncheckedSynonyms / contains one synonyms / return list with po
 	string typeInput = CONSTANTS.FOLLOWS;
 	Parameter p1("a", CONSTANTS.SYNONYM);
 	Parameter p2("2", CONSTANTS.FIXED_INT);
-	Parameter p1After("a", "stmt");
+	Parameter p1After("a", CONSTANTS.STMT);
 	vector<Parameter> inputParameters{ p1, p2 };
 	vector<Parameter> afterParameters{ p1After, p2 };
 
