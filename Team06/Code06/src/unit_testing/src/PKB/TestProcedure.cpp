@@ -1,21 +1,14 @@
 #include "catch.hpp"
-#include "../../../spa/src/PKB/WritePKB.h"
-#include "../../../spa/src/PKB/ReadPKB.h"
+#include "../../../spa/src/PKB/storage/ProcedureStorage.h"
 
 using namespace std;
 
 TEST_CASE("All statement numbers are recorded in their respective procedures") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    pkb.initializePkb();
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
-    Proc p = "calculateEuclidean";
+    ProcedureStorage store;
+    ProcName p = "calculateEuclidean";
     std::unordered_set<StmtNum> lines = {2, 3, 4};
-    writePkb.setProcedure(p, lines);
-    std::unordered_set<StmtNum> statementNums = readPkb.getProcedureStatementNumbers(p);
+    store.writeProcedure(p, lines);
+    std::unordered_set<StmtNum> statementNums = store.getProcedureStatementNumbers(p);
 
     bool res = true;
     res = res && statementNums.size() == 3;
@@ -27,15 +20,9 @@ TEST_CASE("All statement numbers are recorded in their respective procedures") {
 }
 
 TEST_CASE("If a procedure does not appear in the source code, getProcedureStatementNumbers() should return an empty set") {
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb;
-    pkb.initializePkb();
-    writePkb.setInstancePKB(pkb);
-    readPkb.setInstancePKB(pkb);
-
-    Proc p = "calculateEuclidean";
-    std::unordered_set<StmtNum> statementNums = readPkb.getProcedureStatementNumbers(p);
+    ProcedureStorage store;
+    ProcName p = "calculateEuclidean";
+    std::unordered_set<StmtNum> statementNums = store.getProcedureStatementNumbers(p);
 
     bool res = true;
     res = res && statementNums.size() == 0;
@@ -44,7 +31,7 @@ TEST_CASE("If a procedure does not appear in the source code, getProcedureStatem
 
 TEST_CASE("Given a query for a procedure and a statementNumber that is not nested in the procedure, checkProcedure() returns false") {
     ProcedureStorage store;
-    Proc p = "computeCentroid";
+    ProcName p = "computeCentroid";
     std::unordered_set<StmtNum> lines = {2};
     store.writeProcedure(p, lines);
 

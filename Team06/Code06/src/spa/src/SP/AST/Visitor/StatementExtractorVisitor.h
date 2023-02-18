@@ -4,6 +4,7 @@
 #include "ASTVisitor.h"
 #include "ASTVisitorUtils.h"
 #include "../../../PKB/WritePKB.h"
+#include "../../../utils/AppConstants.h"
 
 class StatementExtractorVisitor : public ASTVisitor {
 private:

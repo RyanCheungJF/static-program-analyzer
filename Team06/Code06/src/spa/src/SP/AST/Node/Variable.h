@@ -5,10 +5,10 @@
 
 class Variable : public Expression {
 public:
-	std::string name;
+	Ent name;
 
 	Variable();
-	Variable(std::string name);
+	Variable(Ent name);
 
 	void accept(ASTVisitor* visitor) override;
 };

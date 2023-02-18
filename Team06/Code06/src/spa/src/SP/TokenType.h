@@ -8,22 +8,13 @@ enum class TokenType {
 	RIGHT_PARENTHESIS, // )
 	SEMICOLON, // ;
 
-	AND, // &&
-	OR, // ||
+	BINARY_LOGICAL_OPR, // &&, ||
 	NOT, // !
 
-	GREATER, // >
-	GREATER_EQUAL, // >=
-	LESS, // <
-	LESS_EQUAL, // <=
-	EQUAL, // ==
-	NOT_EQUAL, // !=
+	RELATIONAL_OPR, // >, <, >=, <=, ==, !=
 
-	PLUS, // +
-	MINUS, // -
-	MULTIPLY, // *
-	DIVIDE, // /
-	MODULO, // %
+	EXPR_ARITH_OPR, // +, -
+	TERM_ARITH_OPR, // *, /, %
 
 	ASSIGN, // =
 

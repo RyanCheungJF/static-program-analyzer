@@ -6,10 +6,10 @@
 #include <regex>
 #include "Token.h"
 #include "SPExceptions.h"
+#include "../utils/AppConstants.h"
 
-class Tokenizer {
+class Tokenizer : AppConstants {
 public:
 	bool isInteger(std::string value);
 	std::deque<Token> tokenize(std::stringstream& file);
 };
-

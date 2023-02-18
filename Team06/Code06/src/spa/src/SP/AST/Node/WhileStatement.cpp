@@ -2,7 +2,8 @@
 
 WhileStatement::WhileStatement() {};
 
-WhileStatement::WhileStatement(std::unique_ptr<ConditionalExpression> condExpr, std::unique_ptr<StatementList> stmtList) {
+WhileStatement::WhileStatement(StmtNum stmtNum, std::unique_ptr<ConditionalExpression> condExpr, std::unique_ptr<StatementList> stmtList) {
+	this->statementNumber = stmtNum;
 	this->condExpr = std::move(condExpr);
 	this->stmtList = std::move(stmtList);
 }

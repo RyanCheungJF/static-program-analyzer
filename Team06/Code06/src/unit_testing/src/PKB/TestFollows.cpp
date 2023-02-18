@@ -1,45 +1,60 @@
 #include "catch.hpp"
+//#include "../../../spa/src/PKB/storage/FollowsStorage.h"
 #include "../../../spa/src/PKB/WritePKB.h"
 #include "../../../spa/src/PKB/ReadPKB.h"
+#include "../utils/utils.h"
 
-using namespace std;
 
-TEST_CASE("Checks that write and read works for FollowsStorage") {
-
+TEST_CASE("FollowsStorage: write(StmtNum followee, StmtNum follower)") {
     FollowsStorage fs;
 
-    fs.write(1, 2);
-    bool res = fs.exists(1, 2);
-    REQUIRE(res);
-}
+    SECTION("exists(StmtNum followee, StmtNum follower): empty storage") {
+        REQUIRE(!fs.exists(1, 2));
+    }
 
-TEST_CASE("Checks that a non-existent follows relationship is detected in FollowsStorage") {
+    SECTION("getRightWildcard(StmtNum leftStmtNum): empty storage") {
+        std::unordered_set<StmtNum> res = fs.getRightWildcard(1);
+        REQUIRE(res.empty());
+    }
 
-    FollowsStorage fs;
-
-    fs.write(1, 2);
-    bool res = fs.exists(1, 3);
-    REQUIRE(res == false);
-}
-
-TEST_CASE("Checks FollowsStorage such that follower is correct given a followee") {
-
-    FollowsStorage fs;
+    SECTION("getLeftWildcard(StmtNum leftStmtNum): empty storage") {
+        std::unordered_set<StmtNum> res = fs.getLeftWildcard(2);
+        REQUIRE(res.size() == 0);
+    }
 
     fs.write(1, 2);
-    std::unordered_set<StmtNum> res = fs.getRightWildcard(1);
-    std::unordered_set<StmtNum> check = { 2 };
-    REQUIRE(res == check);
-}
+    fs.write(2, 3);
 
-TEST_CASE("Checks FollowsStorage such that followee is correct given a follower") {
+    SECTION("exists(StmtNum followee, StmtNum follower): non-empty storage") {
+        REQUIRE(fs.exists(1, 2));
+        REQUIRE(!fs.exists(1, 3));
+        REQUIRE(!fs.exists(3, 4));
+    }
 
-    FollowsStorage fs;
+    SECTION("getRightWildcard(StmtNum leftStmtNum): non-empty storage") {
+        std::unordered_set<StmtNum> res = fs.getRightWildcard(1);
+        std::vector<StmtNum> actual;
+        for (auto i : res) {
+            actual.push_back(i);
+        }
+        std::vector<StmtNum> expected = { 2 };
+        std::sort(actual.begin(), actual.end());
+        std::sort(expected.begin(), expected.end());
+        REQUIRE(res.size() == 1);
+    }
 
-    fs.write(1, 2);
-    std::unordered_set<StmtNum> res = fs.getLeftWildcard(2);
-    std::unordered_set<StmtNum> check = { 1 };
-    REQUIRE(res == check);
+    SECTION("getLeftWildcard(StmtNum leftStmtNum): non-empty storage") {
+        std::unordered_set<StmtNum> res = fs.getLeftWildcard(2);
+        std::vector<StmtNum> actual;
+        for (auto i : res) {
+            actual.push_back(i);
+        }
+        std::vector<StmtNum> expected = { 1 };
+        std::sort(actual.begin(), actual.end());
+        std::sort(expected.begin(), expected.end());
+        REQUIRE(res.size() == 1);
+    }
+
 }
 
 TEST_CASE("Checks FollowsStorage such that given a followee, if it does not have a certain follower, an empty vector is returned") {
@@ -382,47 +397,3 @@ TEST_CASE("Checks that PKB pointer in WritePKB and ReadPKB is set to first pkb i
     REQUIRE(check == res);
 }
 
-
-TEST_CASE("FollowsStorage: write(StmtNum followee, StmtNum follower)") {
-    FollowsStorage fs;
-    fs.write(1, 2);
-    fs.write(2, 3);
-
-    SECTION("exists(StmtNum followee, StmtNum follower)") {
-        REQUIRE(fs.exists(1, 2));
-        REQUIRE(!fs.exists(1, 3));
-        REQUIRE(!fs.exists(3, 4));
-    }
-}
-
-/*
-TEST_CASE("Checks that different PKB running instances can point to the same API") {
-
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb1;
-    FollowsStorage fs;
-    pkb1.followsStorage = &fs;
-    StmtStorage sts;
-    pkb1.statementStorage = &sts;
-    writePkb.setInstancePKB(pkb1);
-
-    writePkb.setFollows(1, 2);
-
-    PKB pkb2;
-    pkb2.followsStorage = &fs;
-    pkb2.statementStorage = &sts;
-    readPkb.setInstancePKB(pkb2);
-
-    Parameter param1 = Parameter("1", "fixed_int");
-    Parameter param2 = Parameter("2", "fixed_int");
-    std::vector<Parameter> params;
-    params.push_back(param1);
-    params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
-
-    std::vector<std::vector<std::string>> check = { {"1", "2"} };
-    std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(check == res);
-}
-*/

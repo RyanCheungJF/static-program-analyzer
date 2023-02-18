@@ -2,7 +2,7 @@
 
 BinaryConditionalExpression::BinaryConditionalExpression() {}
 
-BinaryConditionalExpression::BinaryConditionalExpression(std::string condOperator,
+BinaryConditionalExpression::BinaryConditionalExpression(Operator condOperator,
 	std::unique_ptr<ConditionalExpression> lhs,
 	std::unique_ptr<ConditionalExpression> rhs) {
 	this->condOperator = condOperator;

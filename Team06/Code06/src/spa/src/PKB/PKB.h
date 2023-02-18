@@ -15,20 +15,10 @@
 #include "storage/ConstantStorage.h"
 #include "storage/CallStorage.h"
 #include "storage/ModifiesUsesStorage.h"
-
-using namespace std;
-typedef short PROC;
-
-class TNode;
-
-class VarTable;  // no need to #include "VarTable.h" as all I need is pointer
+#include "utils/AppConstants.h"
 
 class PKB {
 public:
-    static VarTable* varTable;
-    static int setProcToAST(PROC p, TNode* r);
-    static TNode* getRootAST(PROC p);
-
     void initializePkb();
 
     friend class ReadPKB;

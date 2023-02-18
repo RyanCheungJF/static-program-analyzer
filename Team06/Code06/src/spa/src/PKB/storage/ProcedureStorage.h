@@ -2,19 +2,17 @@
 #include <unordered_set>
 #include <vector>
 #include <string>
-
-typedef std::string Proc;
-typedef int StmtNum;
+#include "../../../src/utils/AppConstants.h"
 
 class ProcedureStorage {
 public:
-    virtual void writeProcedure(Proc p, std::unordered_set<StmtNum> lines);
-    virtual bool checkProcedure(Proc p, StmtNum num);
-    virtual std::unordered_set<StmtNum> getProcedureStatementNumbers(Proc p);
-    std::unordered_set<Proc> getProcNames();
+    virtual void writeProcedure(ProcName p, std::unordered_set<StmtNum> lines);
+    virtual bool checkProcedure(ProcName p, StmtNum num);
+    virtual std::unordered_set<StmtNum> getProcedureStatementNumbers(ProcName p);
+    std::unordered_set<ProcName> getProcNames();
 private:
-    std::unordered_map<Proc, std::unordered_set<StmtNum>> proc_stmtNum;
-    std::unordered_map<StmtNum, std::unordered_set<Proc>> stmtNum_proc;
-    std::unordered_set<Proc> procNames;
+    std::unordered_map<ProcName, std::unordered_set<StmtNum>> proc_stmtNum;
+    std::unordered_map<StmtNum, std::unordered_set<ProcName>> stmtNum_proc;
+    std::unordered_set<ProcName> procedures;
 };
 

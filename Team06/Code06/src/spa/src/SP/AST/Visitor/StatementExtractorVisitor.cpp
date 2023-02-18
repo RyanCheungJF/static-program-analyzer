@@ -9,27 +9,27 @@ void StatementExtractorVisitor::visitProcedure(Procedure* procedure) {}
 void StatementExtractorVisitor::visitStatementList(StatementList* statementList) {}
 
 void StatementExtractorVisitor::visitReadStatement(ReadStatement* readStatement) {
-	writeApi->setStatement("read", readStatement->statementNumber);
+	writeApi->setStatement(AppConstants::READ, readStatement->statementNumber);
 }
 
 void StatementExtractorVisitor::visitPrintStatement(PrintStatement* printStatement) {
-	writeApi->setStatement("print", printStatement->statementNumber);
+	writeApi->setStatement(AppConstants::PRINT, printStatement->statementNumber);
 }
 
 void StatementExtractorVisitor::visitAssignStatement(AssignStatement* assignStatement) {
-	writeApi->setStatement("assign", assignStatement->statementNumber);
+	writeApi->setStatement(AppConstants::ASSIGN, assignStatement->statementNumber);
 }
 
 void StatementExtractorVisitor::visitCallStatement(CallStatement* callStatement) {
-	writeApi->setStatement("call", callStatement->statementNumber);
+	writeApi->setStatement(AppConstants::CALL, callStatement->statementNumber);
 }
 
 void StatementExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
-	writeApi->setStatement("if", ifStatement->statementNumber);
+	writeApi->setStatement(AppConstants::IF, ifStatement->statementNumber);
 }
 
 void StatementExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement) {
-	writeApi->setStatement("while", whileStatement->statementNumber);
+	writeApi->setStatement(AppConstants::WHILE, whileStatement->statementNumber);
 }
 
 void StatementExtractorVisitor::visitExpression(Expression* variable) {}

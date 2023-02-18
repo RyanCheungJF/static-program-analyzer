@@ -10,8 +10,8 @@ void SP::processFile(std::string filePath, WritePKB* writePKB, ReadPKB* readPKB)
 	strStream << sourceFile.rdbuf();
 
 	try {
-		std::deque<Token> tokens = tokenizer.tokenize(strStream);
-		std::unique_ptr<Program> root = parser.parseProgram(tokens);
+		auto tokens = tokenizer.tokenize(strStream);
+		auto root = parser.parseProgram(tokens);
 		designExtractor = DesignExtractor(std::move(root), writePKB, readPKB);
 		designExtractor.populatePKB();
 	} catch (SyntaxErrorException e) {

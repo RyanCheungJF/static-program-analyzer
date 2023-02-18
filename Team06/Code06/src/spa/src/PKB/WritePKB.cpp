@@ -23,11 +23,7 @@ void WritePKB::setParentT(StmtNum parent, std::unordered_set<StmtNum> children) 
     pkbInstance->parentTStorage->write(parent, children);
 }
 
-void WritePKB::setStatement(Stmt s, std::unordered_set<StmtNum> lines) {
-    pkbInstance->statementStorage->writeStatement(s, lines);
-}
-
-void WritePKB::setProcedure(Proc p, std::unordered_set<StmtNum> lines) {
+void WritePKB::setProcedure(ProcName p, std::unordered_set<StmtNum> lines) {
     pkbInstance->procedureStorage->writeProcedure(p, lines);
 }
 
@@ -43,7 +39,7 @@ void WritePKB::setConstant(StmtNum num, std::unordered_set<Const> constants) {
     pkbInstance->constantStorage->writeConstant(num, constants);
 }
 
-void WritePKB::setCall(StmtNum callLine, Proc procedure_being_called) {
+void WritePKB::setCall(StmtNum callLine, ProcName procedure_being_called) {
     pkbInstance->callStorage->writeCall(callLine, procedure_being_called);
 }
 

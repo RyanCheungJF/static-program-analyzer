@@ -1,9 +1,5 @@
 #pragma once
 
-#include <stdio.h>
-#include <iostream>
-#include <string>
-#include <vector>
 #include "AST/Visitor/FollowsExtractorVisitor.h"
 #include "AST/Visitor/ProcedureExtractorVisitor.h"
 #include "AST/Visitor/StatementExtractorVisitor.h"

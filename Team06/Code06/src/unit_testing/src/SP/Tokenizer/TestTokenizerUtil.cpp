@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "../../../../spa/src/SP/Tokenizer.h"
+#include "SP/Tokenizer.h"
 
 TEST_CASE("Valid Integers") {
 	Tokenizer tokenizer;

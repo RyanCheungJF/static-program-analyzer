@@ -18,8 +18,8 @@ TEST_CASE("Valid Source Program") {
 	Tokenizer testTokenizer;
 	Parser testParser;
 	std::deque<Token> tokenQueue;
-	auto testDirectory = std::filesystem::path(__FILE__);
-	for (int i = 0; i < 7; i++) {
+	auto testDirectory = std::filesystem::path(UNIT_TESTING_DIR);
+	for (int i = 0; i < 3; i++) {
 		testDirectory = testDirectory.parent_path();
 	}
 	testDirectory /= "Tests06/sp/parser/";
@@ -32,9 +32,9 @@ TEST_CASE("Valid Source Program") {
 		auto rootNode = testParser.parseProgram(tokenQueue);
 		
 		// creating expected tree
-		auto printNode = std::make_unique<PrintStatement>("z");
+		auto printNode = std::make_unique<PrintStatement>(2, "z");
 		auto expressionNode = std::make_unique<Constant>(1);
-		auto assignNode = std::make_unique<AssignStatement>("x", std::move(expressionNode));
+		auto assignNode = std::make_unique<AssignStatement>(1, "x", std::move(expressionNode));
 
 		std::vector<std::unique_ptr<Statement>> statements;
 		statements.push_back(std::move(assignNode));
@@ -60,15 +60,15 @@ TEST_CASE("Valid Source Program") {
 
 		// creating actual tree
 		auto mathNodeA = std::make_unique<MathExpression>("+", std::make_unique<Variable>("x"), std::make_unique<Constant>(1));
-		auto assignNodeA = std::make_unique<AssignStatement>("x", std::move(mathNodeA));
+		auto assignNodeA = std::make_unique<AssignStatement>(1, "x", std::move(mathNodeA));
 		std::vector<std::unique_ptr<Statement>> statementsA;
 		statementsA.push_back(std::move(assignNodeA));
 		auto statementListNodeA = std::make_unique<StatementList>(std::move(statementsA));
 		auto procedureNodeA = std::make_unique<Procedure>("A", std::move(statementListNodeA));
 
 		auto mathNodeB = std::make_unique<MathExpression>("*", std::make_unique<Variable>("y"), std::make_unique<Constant>(2));
-		auto assignNodeB = std::make_unique<AssignStatement>("y", std::move(mathNodeB));
-		auto readNodeB = std::make_unique<ReadStatement>("y");
+		auto assignNodeB = std::make_unique<AssignStatement>(2, "y", std::move(mathNodeB));
+		auto readNodeB = std::make_unique<ReadStatement>(3, "y");
 		std::vector<std::unique_ptr<Statement>> statementsB;    
 		statementsB.push_back(std::move(assignNodeB));
 		statementsB.push_back(std::move(readNodeB));
@@ -76,9 +76,9 @@ TEST_CASE("Valid Source Program") {
 		auto procedureNodeB = std::make_unique<Procedure>("B", std::move(statementListNodeB));
 
 		auto mathNodeC = std::make_unique<MathExpression>("-", std::make_unique<Variable>("z"), std::make_unique<Constant>(3));
-		auto assignNodeC = std::make_unique<AssignStatement>("z", std::move(mathNodeC));
-		auto printNodeC = std::make_unique<PrintStatement>("z");
-		auto callNodeC = std::make_unique<CallStatement>("B");
+		auto assignNodeC = std::make_unique<AssignStatement>(6, "z", std::move(mathNodeC));
+		auto printNodeC = std::make_unique<PrintStatement>(4, "z");
+		auto callNodeC = std::make_unique<CallStatement>(5, "B");
 		std::vector<std::unique_ptr<Statement>> statementsC;
 		statementsC.push_back(std::move(printNodeC));
 		statementsC.push_back(std::move(callNodeC));
@@ -103,24 +103,24 @@ TEST_CASE("Valid Source Program") {
 		auto rootNode = testParser.parseProgram(tokenQueue);
 
 		// creating actual tree
-		auto assignNodeX = std::make_unique<AssignStatement>("x", std::make_unique<Constant>(6));
-		auto assignNodeZ = std::make_unique<AssignStatement>("z", std::make_unique<Variable>("x"));
-		auto printNodeZ = std::make_unique<PrintStatement>("z");
+		auto assignNodeX = std::make_unique<AssignStatement>(1, "x", std::make_unique<Constant>(6));
+		auto assignNodeZ = std::make_unique<AssignStatement>(2, "z", std::make_unique<Variable>("x"));
+		auto printNodeZ = std::make_unique<PrintStatement>(7, "z");
 
 		std::vector<std::unique_ptr<Statement>> thenStatements;
-		auto thenStmtNode = std::make_unique<AssignStatement>("z", std::make_unique<Constant>(2));
+		auto thenStmtNode = std::make_unique<AssignStatement>(5, "z", std::make_unique<Constant>(2));
 		thenStatements.push_back(std::move(thenStmtNode));
 		auto thenStmtList = std::make_unique<StatementList>(std::move(thenStatements));
 
 		std::vector<std::unique_ptr<Statement>> elseStatements;
-		auto elseStmtNode = std::make_unique<AssignStatement>("z", std::make_unique<Constant>(3));
+		auto elseStmtNode = std::make_unique<AssignStatement>(6, "z", std::make_unique<Constant>(3));
 		elseStatements.push_back(std::move(elseStmtNode));
 		auto elseStmtList = std::make_unique<StatementList>(std::move(elseStatements));
 
 		auto lhsIfExpr = std::make_unique<MathExpression>("%", std::make_unique<Variable>("z"), std::make_unique<Constant>(2));
 		auto rhsIfExpr = std::make_unique<Constant>(0);
 		auto ifRelExprNode = std::make_unique<RelationalExpression>("==", std::move(lhsIfExpr), std::move(rhsIfExpr));
-		auto ifStatementNode = std::make_unique<IfStatement>(std::move(ifRelExprNode), std::move(thenStmtList), std::move(elseStmtList));
+		auto ifStatementNode = std::make_unique<IfStatement>(4, std::move(ifRelExprNode), std::move(thenStmtList), std::move(elseStmtList));
 		
 		auto leftRelExpr = std::make_unique<RelationalExpression>("<", std::make_unique<Variable>("x"), std::make_unique<Constant>(7));
 		auto leftCondExpr = std::make_unique<NotConditionalExpression>(std::move(leftRelExpr));
@@ -130,7 +130,7 @@ TEST_CASE("Valid Source Program") {
 		std::vector<std::unique_ptr<Statement>> whileStatements;
 		whileStatements.push_back(std::move(ifStatementNode));
 		auto whileStmtList = std::make_unique<StatementList>(std::move(whileStatements));
-		auto whileNode = std::make_unique<WhileStatement>(std::move(binaryCondNode), std::move(whileStmtList));
+		auto whileNode = std::make_unique<WhileStatement>(3, std::move(binaryCondNode), std::move(whileStmtList));
 
 		std::vector<std::unique_ptr<Statement>> statementsA;
 		statementsA.push_back(std::move(assignNodeX));
@@ -155,7 +155,7 @@ TEST_CASE("Valid Source Program") {
 		auto rootNode = testParser.parseProgram(tokenQueue);
 
 		// creating expected tree
-		auto printNode = std::make_unique<PrintStatement>("procedure");
+		auto printNode = std::make_unique<PrintStatement>(1, "procedure");
 		std::vector<std::unique_ptr<Statement>> statements;
 		statements.push_back(std::move(printNode));
 
@@ -178,14 +178,14 @@ TEST_CASE("Valid Source Program") {
 		auto rootNode = testParser.parseProgram(tokenQueue);
 
 		// creating expected tree
-		auto assignNodeX = std::make_unique<AssignStatement>("x", std::make_unique<Constant>(1));
+		auto assignNodeX = std::make_unique<AssignStatement>(2, "x", std::make_unique<Constant>(1));
 		std::vector<std::unique_ptr<Statement>> whileStatements;
 		whileStatements.push_back(std::move(assignNodeX));
 
 		auto whileStmtList = std::make_unique<StatementList>(std::move(whileStatements));
 		auto lhsExpr = std::make_unique<MathExpression>("+", std::make_unique<Constant>(1), std::make_unique<Constant>(3));
 		auto relExpr = std::make_unique<RelationalExpression>("<", std::move(lhsExpr), std::make_unique<Constant>(2));
-		auto whileNode = std::make_unique<WhileStatement>(std::move(relExpr), std::move(whileStmtList));
+		auto whileNode = std::make_unique<WhileStatement>(1, std::move(relExpr), std::move(whileStmtList));
 
 		std::vector<std::unique_ptr<Statement>> statementsA;
 		statementsA.push_back(std::move(whileNode));
@@ -208,14 +208,14 @@ TEST_CASE("Valid Source Program") {
 		auto rootNode = testParser.parseProgram(tokenQueue);
 
 		// creating expected tree
-		auto readStmt = std::make_unique<ReadStatement>("call");
-		auto callStmt = std::make_unique<CallStatement>("print");
-		auto printStmt = std::make_unique<PrintStatement>("read");		
-		auto readAssignStmt = std::make_unique<AssignStatement>("read", std::make_unique<Constant>(2));
-		auto callAssignStmt = std::make_unique<AssignStatement>("call", std::make_unique<Constant>(3));
-		auto whileAssignStmt = std::make_unique<AssignStatement>("while", std::make_unique<Constant>(5));
-		auto ifAssignStmt = std::make_unique<AssignStatement>("if", std::make_unique<Constant>(4));
-		auto printAssignStmt = std::make_unique<AssignStatement>("print", std::make_unique<Constant>(8));
+		auto readStmt = std::make_unique<ReadStatement>(1, "call");
+		auto callStmt = std::make_unique<CallStatement>(2, "print");
+		auto printStmt = std::make_unique<PrintStatement>(3, "read");		
+		auto readAssignStmt = std::make_unique<AssignStatement>(4, "read", std::make_unique<Constant>(2));
+		auto callAssignStmt = std::make_unique<AssignStatement>(5, "call", std::make_unique<Constant>(3));
+		auto whileAssignStmt = std::make_unique<AssignStatement>(6, "while", std::make_unique<Constant>(5));
+		auto ifAssignStmt = std::make_unique<AssignStatement>(7, "if", std::make_unique<Constant>(4));
+		auto printAssignStmt = std::make_unique<AssignStatement>(8, "print", std::make_unique<Constant>(8));
 
 		std::vector<std::unique_ptr<Statement>> statementsA;
 		statementsA.push_back(std::move(readStmt));
@@ -244,8 +244,8 @@ TEST_CASE("Invalid Source Program") {
 	Parser testParser;
 	std::deque<Token> tokenQueue;
 	std::string errorMessage = "";
-	auto testDirectory = std::filesystem::path(__FILE__);
-	for (int i = 0; i < 7; i++) {
+	auto testDirectory = std::filesystem::path(UNIT_TESTING_DIR);
+	for (int i = 0; i < 3; i++) {
 		testDirectory = testDirectory.parent_path();
 	}
 	testDirectory /= "Tests06/sp/parser/";
@@ -895,35 +895,41 @@ bool checkIfSameStatement(std::unique_ptr<Statement> expectedStatement, std::uni
 	auto actual = actualStatement.get();
 
 	if (CAST_TO(PrintStatement, expected) && CAST_TO(PrintStatement, actual)) {
-		return CAST_TO(PrintStatement, expected)->varName == CAST_TO(PrintStatement, actual)->varName;
+		return CAST_TO(PrintStatement, expected)->varName == CAST_TO(PrintStatement, actual)->varName &&
+			   CAST_TO(PrintStatement, expected)->statementNumber == CAST_TO(PrintStatement, actual)->statementNumber;
 	}
 	else if (CAST_TO(ReadStatement, expected) && CAST_TO(ReadStatement, actual)) {
-		return CAST_TO(ReadStatement, expected)->varName == CAST_TO(ReadStatement, actual)->varName;
+		return CAST_TO(ReadStatement, expected)->varName == CAST_TO(ReadStatement, actual)->varName &&
+			CAST_TO(ReadStatement, expected)->statementNumber == CAST_TO(ReadStatement, actual)->statementNumber;;
 	}
 	else if (CAST_TO(CallStatement, expected) && CAST_TO(CallStatement, actual)) {
-		return CAST_TO(CallStatement, expected)->procName == CAST_TO(CallStatement, actual)->procName;
+		return CAST_TO(CallStatement, expected)->procName == CAST_TO(CallStatement, actual)->procName &&
+			CAST_TO(CallStatement, expected)->statementNumber == CAST_TO(CallStatement, actual)->statementNumber;;
 	}
 	else if (CAST_TO(AssignStatement, expected) && CAST_TO(AssignStatement, actual)) {
 		auto expectedAssignStatement = CAST_TO(AssignStatement, expected);
 		auto actualAssignStatement = CAST_TO(AssignStatement, actual);
+		bool isSameStatementNumber = (expectedAssignStatement->statementNumber == actualAssignStatement->statementNumber);
 		bool isSameVariable = (expectedAssignStatement->varName == actualAssignStatement->varName);
 		bool isSameExpression = checkIfSameExpression(std::move(expectedAssignStatement->expr), std::move(actualAssignStatement->expr));
-		return isSameVariable && isSameExpression;
+		return isSameVariable && isSameExpression && isSameStatementNumber;
 	}
 	else if (CAST_TO(IfStatement, expected) && CAST_TO(IfStatement, actual)) {
 		auto expectedIfObject = CAST_TO(IfStatement, expected);
 		auto actualIfObject = CAST_TO(IfStatement, actual);
+		bool isSameStatementNumber = (expectedIfObject->statementNumber == actualIfObject->statementNumber);
 		bool isSameCondition = checkIfSameCondition(std::move(expectedIfObject->condExpr), std::move(actualIfObject->condExpr));
 		bool isSameThenStatements = checkIfSameStatementList(std::move(expectedIfObject->thenStmtList), std::move(actualIfObject->thenStmtList));
 		bool isSameElseStatements = checkIfSameStatementList(std::move(expectedIfObject->elseStmtList), std::move(actualIfObject->elseStmtList));
-		return isSameCondition && isSameThenStatements && isSameElseStatements;
+		return isSameCondition && isSameThenStatements && isSameElseStatements && isSameStatementNumber;
 	}
 	else if (CAST_TO(WhileStatement, expected) && CAST_TO(WhileStatement, actual)) {
 		auto expectedWhileObject = CAST_TO(WhileStatement, expected);
 		auto actualWhileObject = CAST_TO(WhileStatement, actual);
+		bool isSameStatementNumber = (expectedWhileObject->statementNumber == actualWhileObject->statementNumber);
 		bool isSameCondition = checkIfSameCondition(std::move(expectedWhileObject->condExpr), std::move(actualWhileObject->condExpr));
 		bool isSameStatements = checkIfSameStatementList(std::move(expectedWhileObject->stmtList), std::move(actualWhileObject->stmtList));
-		return isSameCondition && isSameStatements;
+		return isSameCondition && isSameStatements && isSameStatementNumber;
 	}
 	else {
 		return false;

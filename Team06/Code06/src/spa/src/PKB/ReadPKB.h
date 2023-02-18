@@ -5,15 +5,9 @@
 #include "readHandlers/AssignPatternHandler.h"
 #include "../qps/entities/Relationship.h"
 #include "../qps/entities/Pattern.h"
+#include "../utils/AppConstants.h"
 
-//#ifndef SPA_READPKB_H
-//#define SPA_READPKB_H
-//#endif //SPA_READPKB_H
-
-typedef int StmtNum;
-typedef std::string ProcName;
-
-class ReadPKB {
+class ReadPKB :AppConstants {
 public:
 
     // Sets the pointer to the PKB instance if it is not set yet
@@ -28,7 +22,7 @@ public:
     bool checkStatement(Stmt stmt, StmtNum num);
 
     // returns all the statement lines that are contained in the given procedure
-    std::unordered_set<StmtNum> getProcedureStatementNumbers(Proc p);
+    std::unordered_set<StmtNum> getProcedureStatementNumbers(ProcName p);
 
     // returns all the call statement lines and the procedure that it is calling
     std::vector<std::pair<StmtNum, ProcName>> getCallStatements();

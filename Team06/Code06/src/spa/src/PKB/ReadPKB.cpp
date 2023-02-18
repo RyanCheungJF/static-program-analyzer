@@ -37,7 +37,7 @@ std::vector<std::string> ReadPKB::findDesignEntities(Parameter p) {
     std::vector<std::string> res;
     std::string typeString = p.getTypeString();
     if (p.getType() == ParameterType::PROCEDURE) {
-        std::unordered_set<Proc> procs = pkbInstance->procedureStorage->getProcNames();
+        std::unordered_set<ProcName> procs = pkbInstance->procedureStorage->getProcNames();
         for (auto proc : procs) {
             res.push_back(proc);
         }
@@ -73,7 +73,7 @@ bool ReadPKB::checkStatement(Stmt stmt, StmtNum num) {
     return pkbInstance->statementStorage->checkStatement(stmt, num);
 }
 
-std::unordered_set<StmtNum> ReadPKB::getProcedureStatementNumbers(Proc p) {
+std::unordered_set<StmtNum> ReadPKB::getProcedureStatementNumbers(ProcName p) {
     return pkbInstance->procedureStorage->getProcedureStatementNumbers(p);
 }
 
@@ -102,11 +102,11 @@ std::unordered_set<Ent> ReadPKB::getModifiesP(ProcName name) {
 }
 
 std::unordered_set<StmtNum> ReadPKB::getIfStatementNumbers() {
-    return pkbInstance->statementStorage->getStatementNumbers("if");
+    return pkbInstance->statementStorage->getStatementNumbers(IF);
 }
 
 std::unordered_set<StmtNum> ReadPKB::getWhileStatementNumbers() {
-    return pkbInstance->statementStorage->getStatementNumbers("while");
+    return pkbInstance->statementStorage->getStatementNumbers(WHILE);
 }
 
 std::unordered_set<StmtNum> ReadPKB::getContainedStatements(StmtNum containerNum) {

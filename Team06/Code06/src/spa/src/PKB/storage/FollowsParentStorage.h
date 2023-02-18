@@ -2,8 +2,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
-
-typedef int StmtNum;
+#include "../../../src/utils/AppConstants.h"
 
 class FollowsParentStorage {
 public:
