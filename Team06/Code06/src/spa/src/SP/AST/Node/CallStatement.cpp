@@ -2,10 +2,6 @@
 
 CallStatement::CallStatement() {}
 
-CallStatement::CallStatement(ProcName procName) {
-	this->procName = procName;
-}
-
 CallStatement::CallStatement(StmtNum stmtNum, ProcName procName) {
 	this->statementNumber = stmtNum;
 	this->procName = procName;

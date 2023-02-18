@@ -2,10 +2,6 @@
 
 ReadStatement::ReadStatement() {}
 
-ReadStatement::ReadStatement(Ent varName) {
-	this->varName = varName;
-}
-
 ReadStatement::ReadStatement(StmtNum stmtNum, Ent varName) {
 	this->statementNumber = stmtNum;
 	this->varName = varName;

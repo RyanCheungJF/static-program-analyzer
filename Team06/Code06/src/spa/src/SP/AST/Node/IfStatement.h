@@ -10,9 +10,6 @@ public:
 	std::unique_ptr<StatementList> elseStmtList;
 
 	IfStatement();
-	IfStatement(std::unique_ptr<ConditionalExpression> condExpr,
-				std::unique_ptr<StatementList> thenStmtList,
-				std::unique_ptr<StatementList> elseStmtList);
 	IfStatement(StmtNum stmtNum, std::unique_ptr<ConditionalExpression> condExpr,
 				std::unique_ptr<StatementList> thenStmtList,
 				std::unique_ptr<StatementList> elseStmtList);

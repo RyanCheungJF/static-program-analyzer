@@ -7,7 +7,6 @@ public:
 	ProcName procName;
 
 	CallStatement();
-	CallStatement(ProcName procName);
 	CallStatement(StmtNum stmtNum, ProcName procName);
 
 	void accept(ASTVisitor* visitor) override;
