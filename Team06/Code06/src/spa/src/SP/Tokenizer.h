@@ -12,4 +12,3 @@ public:
 	bool isInteger(std::string value);
 	std::deque<Token> tokenize(std::stringstream& file);
 };
-

@@ -40,8 +40,6 @@ private:
 	std::unique_ptr<Expression> parseFactor(std::deque<Token>& tokens);
 	std::unique_ptr<Expression> parseConstant(std::deque<Token>& tokens);
 	std::unique_ptr<Expression> parseVariable(std::deque<Token>& tokens);
-	bool isRelationalOperator(TokenType tt);
-
 public:
 	std::unique_ptr<Program> parseProgram(std::deque<Token> tokens);
 	std::unique_ptr<Expression> parseExpression(std::deque<Token>& tokens); // Used by Pattern Storage
