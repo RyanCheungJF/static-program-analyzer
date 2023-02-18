@@ -3,7 +3,6 @@
 #include "../../../spa/src/PKB/ReadPKB.h"
 #include "../utils/utils.h"
 
-using namespace std;
 using namespace unit_testing_utils;
 
 TEST_CASE("Check writes and reads to/from ParentStorage") {

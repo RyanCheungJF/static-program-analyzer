@@ -2,6 +2,9 @@
 #include "../../../spa/src/PKB/WritePKB.h"
 #include "../../../spa/src/PKB/ReadPKB.h"
 #include "../../../spa/src/PKB/utils/utils.h"
+#include "../utils/utils.h"
+
+using namespace unit_testing_utils;
 
 TEST_CASE("PatternStorage: fringe cases") {
     PatternStorage ps;
@@ -23,6 +26,8 @@ TEST_CASE("PatternStorage: fringe cases") {
 
 
 TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
+    
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -41,7 +46,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
     Parameter param1;
-    Parameter param2 = Parameter("z", "fixed_string");
+    Parameter param2 = Parameter("z", CONSTANTS.FIXED_STRING);
     Pattern pattern1 = Pattern(param1, param2, "a + b / c");
     Pattern pattern2 = Pattern(param1, param2, "z * 5");
 
@@ -51,12 +56,13 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
     std::vector<std::vector<std::string>> check1 = { {"1", "z"} };
     std::vector<std::vector<std::string>> check2 = { {"2", "z"} };
 ;
-    REQUIRE(res1 == check1); 
-    REQUIRE(res2 == check2);
+    REQUIRE(unit_testing_utils::equals(check1, res1));
+    REQUIRE(unit_testing_utils::equals(check2, res2));
 }
 
 
 TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -75,7 +81,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
     Parameter param1;
-    Parameter param2 = Parameter("z", "fixed_string");
+    Parameter param2 = Parameter("z", CONSTANTS.FIXED_STRING);
     Pattern pattern1 = Pattern(param1, param2, "_b / c_");
     Pattern pattern2 = Pattern(param1, param2, "_5_");
 
@@ -85,13 +91,14 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
     std::vector<std::vector<std::string>> check1 = { {"1", "z"} };
     std::vector<std::vector<std::string>> check2 = { {"2", "z"} };
 
-    REQUIRE(res1 == check1);
-    REQUIRE(res2 == check2);
+    REQUIRE(unit_testing_utils::equals(check1, res1));
+    REQUIRE(unit_testing_utils::equals(check2, res2));
     REQUIRE(readPkb.findPattern(pattern2).size() == 1);
 }
 
 
 TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -109,17 +116,17 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
    
     Parameter param1;
-    Parameter param2 = Parameter("z", "fixed_string");
+    Parameter param2 = Parameter("z", CONSTANTS.FIXED_STRING);
     Pattern pattern1 = Pattern(param1, param2, "_");
 
     std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern1);
 
     std::vector<std::vector<std::string>> check = { {"1", "z"}, {"2", "z"} };
-
-    REQUIRE(res.size() == check.size());
+    REQUIRE(unit_testing_utils::equals(check, res));
 }
 
 TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -138,7 +145,7 @@ TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
     Parameter param1;
-    Parameter param2 = Parameter("_", "wildcard");
+    Parameter param2 = Parameter("_", CONSTANTS.WILDCARD);
     Pattern pattern1 = Pattern(param1, param2, "a + b / c");
     Pattern pattern2 = Pattern(param1, param2, "z * 5");
     Pattern pattern3 = Pattern(param1, param2, "z");
@@ -150,14 +157,15 @@ TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
 
     std::vector<std::vector<std::string>> check1 = { {"1", "z"} };
     std::vector<std::vector<std::string>> check2 = { {"2", "z"} };
-    std::vector<std::vector<std::string>> check3 = {};
-
-    REQUIRE(res1 == check1);
-    REQUIRE(res2 == check2);
-    REQUIRE(res3 == check3);
+    
+    REQUIRE(unit_testing_utils::equals(check1, res1));
+    REQUIRE(unit_testing_utils::equals(check2, res2));
+    REQUIRE(res3.empty());
 }
 
 TEST_CASE("Support for Select v pattern a (v, _)\'") {
+
+    AppConstants CONSTANTS;
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -176,13 +184,13 @@ TEST_CASE("Support for Select v pattern a (v, _)\'") {
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
     Parameter param1;
-    Parameter param2 = Parameter("v", "variable");
+    Parameter param2 = Parameter("v", CONSTANTS.VARIABLE);
     Pattern pattern = Pattern(param1, param2, "_");
 
     std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern);
     std::vector<std::vector<std::string>> check = { {"1", "z"}, {"2", "z"} };
 
-    REQUIRE(res.size() == check.size());
+    REQUIRE(unit_testing_utils::equals(check, res));
 }
 
 

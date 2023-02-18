@@ -1,6 +1,9 @@
 #include "catch.hpp"
 #include "../../../spa/src/PKB/WritePKB.h"
 #include "../../../spa/src/PKB/ReadPKB.h"
+#include "../utils/utils.h"
+
+using namespace unit_testing_utils;
 
 AppConstants CONSTANTS;
 

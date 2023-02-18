@@ -1,7 +1,9 @@
 #include "catch.hpp"
 #include "../../../spa/src/PKB/storage/ProcedureStorage.h"
+#include "../utils/utils.h"
 
-using namespace std;
+using namespace unit_testing_utils;
+
 
 TEST_CASE("All statement numbers are recorded in their respective procedures") {
     ProcedureStorage store;
@@ -9,24 +11,14 @@ TEST_CASE("All statement numbers are recorded in their respective procedures") {
     std::unordered_set<StmtNum> lines = {2, 3, 4};
     store.writeProcedure(p, lines);
     std::unordered_set<StmtNum> statementNums = store.getProcedureStatementNumbers(p);
-
-    bool res = true;
-    res = res && statementNums.size() == 3;
-    res = res && statementNums.find(2) != statementNums.end(); //3 is present
-    res = res && statementNums.find(3) != statementNums.end(); //6 is present
-    res = res && statementNums.find(4) != statementNums.end(); //9 is present
-    res = res && statementNums.find(12) == statementNums.end(); //12 is not present
-    REQUIRE(res);
+    REQUIRE(unit_testing_utils::equals(lines, statementNums));
 }
 
 TEST_CASE("If a procedure does not appear in the source code, getProcedureStatementNumbers() should return an empty set") {
     ProcedureStorage store;
     ProcName p = "calculateEuclidean";
     std::unordered_set<StmtNum> statementNums = store.getProcedureStatementNumbers(p);
-
-    bool res = true;
-    res = res && statementNums.size() == 0;
-    REQUIRE(res);
+    REQUIRE(statementNums.empty());
 }
 
 TEST_CASE("Given a query for a procedure and a statementNumber that is not nested in the procedure, checkProcedure() returns false") {
@@ -34,14 +26,10 @@ TEST_CASE("Given a query for a procedure and a statementNumber that is not neste
     ProcName p = "computeCentroid";
     std::unordered_set<StmtNum> lines = {2};
     store.writeProcedure(p, lines);
-
-    bool res = true;
-    res = res && (store.checkProcedure(p, 4) == false);
-    REQUIRE(res);
+    REQUIRE(!store.checkProcedure(p, 4));
 }
 
 TEST_CASE("If a procedure does not exist, checkProcedure() returns false") {
     ProcedureStorage store;
-    bool res = (store.checkProcedure("procedureThatDoesNotExist", 4) == false);
-    REQUIRE(res);
+    REQUIRE(!store.checkProcedure("procedureThatDoesNotExist", 4));
 }
