@@ -317,4 +317,253 @@ TEST_CASE("Check that a statement does not appear in the source code, ReadPKB sh
     REQUIRE(res == check);
 }
 
+TEST_CASE("CallStorage WritePKB ReadPKB Facade") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
 
+    writePkb.setCall(11, "proc2");
+    writePkb.setCall(22, "proc3");
+
+    SECTION("CallStorage WritePKB ReadPKB Facade: getCallStmt(StmtNum s)") {
+        auto res = readPkb.getCallStmt(11);
+        REQUIRE(res.first == 11);
+        REQUIRE(res.second == "proc2");
+    }
+
+    SECTION("CallStorage WritePKB ReadPKB Facade: getCallStatements()") {
+        auto actual = readPkb.getCallStatements();
+        std::vector<std::pair<StmtNum, ProcName>> expected = {{11, "proc2"}, {22, "proc3"}};
+        std::sort(actual.begin(), actual.end());
+        std::sort(expected.begin(), expected.end());
+        REQUIRE(actual == expected);
+    }
+}
+
+TEST_CASE("StmtStorage WritePKB ReadPKB Facade") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    writePkb.setStatement("if", 11);
+    writePkb.setStatement("if", 111);
+    writePkb.setStatement("if", 112);
+    writePkb.setStatement("while", 12);
+    writePkb.setStatement("while", 222);
+    writePkb.setStatement("while", 333);
+    writePkb.setStatement("assign", 13);
+    writePkb.setStatement("print", 20);
+    writePkb.setStatement("read", 2);
+    writePkb.setStatement("call", 7);
+    writePkb.setStatement("call", 10);
+
+    SECTION("StmtStorage WritePKB ReadPKB Facade: checkStatement(Stmt stmt, StmtNum num)") {
+        REQUIRE(readPkb.checkStatement("if", 11));
+        REQUIRE(readPkb.checkStatement("call", 10));
+        REQUIRE(readPkb.checkStatement("call", 7));
+        REQUIRE(!readPkb.checkStatement("while", 11));
+        REQUIRE(!readPkb.checkStatement("while", 2));
+    }
+
+    SECTION("StmtStorage WritePKB ReadPKB Facade: getIfStatementNumbers()") {
+        std::vector<StmtNum> expected = {11, 111, 112};
+        auto res = readPkb.getIfStatementNumbers();
+        std::vector<StmtNum> actual;
+        for (StmtNum num: res) {
+            actual.push_back(num);
+        }
+        std::sort(actual.begin(), actual.end());
+        std::sort(expected.begin(), expected.end());
+        REQUIRE(actual == expected);
+    }
+
+    SECTION("StmtStorage WritePKB ReadPKB Facade: getWhileStatementNumbers()") {
+        std::vector<StmtNum> expected = {12, 222, 333};
+        auto res = readPkb.getWhileStatementNumbers();
+        std::vector<StmtNum> actual;
+        for (StmtNum num: res) {
+            actual.push_back(num);
+        }
+        std::sort(actual.begin(), actual.end());
+        std::sort(expected.begin(), expected.end());
+        REQUIRE(actual == expected);
+    }
+}
+
+TEST_CASE("ProcedureStorage WritePKB ReadPKB Facade") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    writePkb.setProcedure("proc1", {1, 2, 3, 4, 5});
+    writePkb.setProcedure("proc2", {6, 7, 8});
+
+    SECTION("ProcedureStorage WritePKB ReadPKB Facade: getProcedureStatementNumbers(ProcName p) positive case") {
+        std::vector<StmtNum> expected = {1,2,3,4,5};
+        auto res = readPkb.getProcedureStatementNumbers("proc1");
+        std::vector<StmtNum> actual;
+        for (StmtNum num: res) {
+            actual.push_back(num);
+        }
+        std::sort(actual.begin(), actual.end());
+        std::sort(expected.begin(), expected.end());
+        REQUIRE(actual == expected);
+    }
+
+    SECTION("ProcedureStorage WritePKB ReadPKB Facade: getProcedureStatementNumbers(ProcName p) negative case") {
+        std::vector<StmtNum> expected = {};
+        auto res = readPkb.getProcedureStatementNumbers("doesNotExist");
+        REQUIRE(res.empty());
+    }
+
+    SECTION("ProcedureStorage WritePKB ReadPKB Facade: getAllProcedureNames() positive case") {
+        std::vector<ProcName> expected = {"proc1", "proc2"};
+        auto res = readPkb.getAllProcedureNames();
+        std::vector<ProcName> actual;
+        for (ProcName name: res) {
+            actual.push_back(name);
+        }
+        std::sort(actual.begin(), actual.end());
+        std::sort(expected.begin(), expected.end());
+        REQUIRE(actual == expected);
+    }
+}
+
+TEST_CASE("UsesStorage WritePKB ReadPKB Facade") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    writePkb.setUsesS(1, {"a", "b", "c"});
+    writePkb.setUsesS(2, {"a"});
+    writePkb.setUsesS(3, {"a"});
+    writePkb.setUsesS(4, {"b", "x", "z"});
+    writePkb.setUsesP("proc1", {"a", "b", "c"});
+    writePkb.setUsesP("proc2", {"a", "b", "x", "z"});
+
+    SECTION("UsesStorage WritePKB ReadPKB Facade: getUsesS(StmtNum num) positive case") {
+        std::vector<Ent> expected = {"a", "b", "c"};
+        auto res = readPkb.getUsesS(1);
+        std::vector<Ent> actual;
+        for (ProcName name: res) {
+            actual.push_back(name);
+        }
+        std::sort(actual.begin(), actual.end());
+        std::sort(expected.begin(), expected.end());
+        REQUIRE(actual == expected);
+    }
+
+    SECTION("UsesStorage WritePKB ReadPKB Facade: getUsesS(StmtNum num) negative case") {
+        auto res = readPkb.getUsesS(11);
+        REQUIRE(res.empty());
+    }
+
+    SECTION("UsesStorage WritePKB ReadPKB Facade: getUsesP(ProcName name) positive case") {
+        std::vector<Ent> expected = {"a", "b", "x", "z"};
+        auto res = readPkb.getUsesP("proc2");
+        std::vector<Ent> actual;
+        for (ProcName name: res) {
+            actual.push_back(name);
+        }
+        std::sort(actual.begin(), actual.end());
+        std::sort(expected.begin(), expected.end());
+        REQUIRE(actual == expected);
+    }
+
+    SECTION("UsesStorage WritePKB ReadPKB Facade: getUsesP(ProcName name) negative case") {
+        auto res = readPkb.getUsesP("proc3");
+        REQUIRE(res.empty());
+    }
+}
+
+TEST_CASE("ModifiesStorage WritePKB ReadPKB Facade") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    writePkb.setModifiesS(1, {"a", "b", "c"});
+    writePkb.setModifiesS(2, {"a"});
+    writePkb.setModifiesS(3, {"a"});
+    writePkb.setModifiesS(4, {"b", "x", "z"});
+    writePkb.setModifiesP("proc1", {"a", "b", "c"});
+    writePkb.setModifiesP("proc2", {"a", "b", "x", "z"});
+
+    SECTION("ModifiesStorage WritePKB ReadPKB Facade: getUsesS(StmtNum num) positive case") {
+        std::vector<Ent> expected = {"a", "b", "c"};
+        auto res = readPkb.getModifiesS(1);
+        std::vector<Ent> actual;
+        for (ProcName name: res) {
+            actual.push_back(name);
+        }
+        std::sort(actual.begin(), actual.end());
+        std::sort(expected.begin(), expected.end());
+        REQUIRE(actual == expected);
+    }
+
+    SECTION("ModifiesStorage WritePKB ReadPKB Facade: getUsesS(StmtNum num) negative case") {
+        auto res = readPkb.getModifiesS(11);
+        REQUIRE(res.empty());
+    }
+
+    SECTION("ModifiesStorage WritePKB ReadPKB Facade: getUsesP(ProcName name) positive case") {
+        std::vector<Ent> expected = {"a", "b", "x", "z"};
+        auto res = readPkb.getModifiesP("proc2");
+        std::vector<Ent> actual;
+        for (ProcName name: res) {
+            actual.push_back(name);
+        }
+        std::sort(actual.begin(), actual.end());
+        std::sort(expected.begin(), expected.end());
+        REQUIRE(actual == expected);
+    }
+
+    SECTION("ModifiesStorage WritePKB ReadPKB Facade: getUsesP(ProcName name) negative case") {
+        auto res = readPkb.getModifiesP("proc3");
+        REQUIRE(res.empty());
+    }
+}
+
+TEST_CASE("ParentTStorage WritePKB ReadPKB Facade") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    writePkb.setParentT(11, {12, 13, 14, 15});
+    writePkb.setParentT(12, {13});
+    writePkb.setParentT(14, {15});
+
+    SECTION("ParentTStorage WritePKB ReadPKB Facade: getContainedStatements(StmtNum containerNum) positive case") {
+        std::vector<StmtNum> expected = {12, 13, 14, 15};
+        auto res = readPkb.getContainedStatements(11);
+        std::vector<StmtNum> actual;
+        for (StmtNum num: res) {
+            actual.push_back(num);
+        }
+        std::sort(actual.begin(), actual.end());
+        std::sort(expected.begin(), expected.end());
+        REQUIRE(actual == expected);
+    }
+
+    SECTION("ParentTStorage WritePKB ReadPKB Facade: getContainedStatements(StmtNum containerNum) negative case") {
+        auto res = readPkb.getContainedStatements(15);
+        REQUIRE(res.empty());
+    }
+}
