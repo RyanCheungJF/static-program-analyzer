@@ -148,7 +148,7 @@ TEST_CASE("Valid source program") {
 		std::ifstream testFile(testDirectory.string());
 		strStream << testFile.rdbuf();
 
-		Token t1(TokenType::NAME, "procedure");
+		Token t1(TokenType::NAME, AppConstants::PROCEDURE);
 		Token t2(TokenType::NAME, "A");
 		Token t3(TokenType::LEFT_BRACE, "{");
 		Token t4(TokenType::NAME, "x");
@@ -173,7 +173,7 @@ TEST_CASE("Valid source program") {
 		std::ifstream testFile(testDirectory.string());
 		strStream << testFile.rdbuf();
 
-		Token t1(TokenType::NAME, "procedure");
+		Token t1(TokenType::NAME, AppConstants::PROCEDURE);
 		Token t2(TokenType::NAME, "A");
 		Token t3(TokenType::LEFT_BRACE, "{");
 		Token t4(TokenType::NAME, "x");
@@ -196,7 +196,7 @@ TEST_CASE("Valid source program") {
 		std::ifstream testFile(testDirectory.string());
 		strStream << testFile.rdbuf();
 
-		Token t1(TokenType::NAME, "procedure");
+		Token t1(TokenType::NAME, AppConstants::PROCEDURE);
 		Token t2(TokenType::NAME, "A");
 		Token t3(TokenType::LEFT_BRACE, "{");
 		Token t4(TokenType::NAME, "a");

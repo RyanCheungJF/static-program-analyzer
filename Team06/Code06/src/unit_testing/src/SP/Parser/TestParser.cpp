@@ -155,12 +155,12 @@ TEST_CASE("Valid Source Program") {
 		auto rootNode = testParser.parseProgram(tokenQueue);
 
 		// creating expected tree
-		auto printNode = std::make_unique<PrintStatement>("procedure");
+		auto printNode = std::make_unique<PrintStatement>(AppConstants::PROCEDURE);
 		std::vector<std::unique_ptr<Statement>> statements;
 		statements.push_back(std::move(printNode));
 
 		auto statementListNode = std::make_unique<StatementList>(std::move(statements));
-		auto procedureNode = std::make_unique<Procedure>("procedure", std::move(statementListNode));
+		auto procedureNode = std::make_unique<Procedure>(AppConstants::PROCEDURE, std::move(statementListNode));
 
 		std::vector<std::unique_ptr<Procedure>> procedures;
 		procedures.push_back(std::move(procedureNode));

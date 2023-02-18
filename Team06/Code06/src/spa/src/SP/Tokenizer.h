@@ -6,6 +6,7 @@
 #include <regex>
 #include "Token.h"
 #include "SPExceptions.h"
+#include "../utils/AppConstants.h"
 
 class Tokenizer {
 public:

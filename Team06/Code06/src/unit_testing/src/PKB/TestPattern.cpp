@@ -46,7 +46,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
     Parameter param1;
-    Parameter param2 = Parameter("z", CONSTANTS.FIXED_STRING);
+    Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
     Pattern pattern1 = Pattern(param1, param2, "a + b / c");
     Pattern pattern2 = Pattern(param1, param2, "z * 5");
 
@@ -81,7 +81,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
     Parameter param1;
-    Parameter param2 = Parameter("z", CONSTANTS.FIXED_STRING);
+    Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
     Pattern pattern1 = Pattern(param1, param2, "_b / c_");
     Pattern pattern2 = Pattern(param1, param2, "_5_");
 
@@ -116,7 +116,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
    
     Parameter param1;
-    Parameter param2 = Parameter("z", CONSTANTS.FIXED_STRING);
+    Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
     Pattern pattern1 = Pattern(param1, param2, "_");
 
     std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern1);
@@ -145,7 +145,7 @@ TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
     Parameter param1;
-    Parameter param2 = Parameter("_", CONSTANTS.WILDCARD);
+    Parameter param2 = Parameter("_", AppConstants::WILDCARD);
     Pattern pattern1 = Pattern(param1, param2, "a + b / c");
     Pattern pattern2 = Pattern(param1, param2, "z * 5");
     Pattern pattern3 = Pattern(param1, param2, "z");
@@ -184,7 +184,7 @@ TEST_CASE("Support for Select v pattern a (v, _)\'") {
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
     Parameter param1;
-    Parameter param2 = Parameter("v", CONSTANTS.VARIABLE);
+    Parameter param2 = Parameter("v", AppConstants::VARIABLE);
     Pattern pattern = Pattern(param1, param2, "_");
 
     std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern);

@@ -133,7 +133,7 @@ std::vector<std::unordered_set<Ent>> handleCallStmt(WritePKB* writePKB, ReadPKB*
 	std::unordered_set<Ent> currUsesVariables;
 	std::unordered_set<Ent> currModifiesVariables;
 	for (StmtNum sn : procedureStmtNum) {
-		if (readPKB->checkStatement("call", sn)) {
+		if (readPKB->checkStatement(AppConstants::CALL, sn)) {
 			std::unordered_set<Ent> moreUsesVariables;
 			if (readPKB->getUsesS(readPKB->getCallStmt(sn).first).empty()) {
 				moreUsesVariables = handleCallStmt(writePKB, readPKB, readPKB->getCallStmt(sn))[0];

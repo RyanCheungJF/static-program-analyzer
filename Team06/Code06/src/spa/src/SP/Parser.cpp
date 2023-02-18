@@ -22,7 +22,7 @@ std::unique_ptr<Program> Parser::parseProgram(std::deque<Token> tokens) {
 std::unique_ptr<Procedure> Parser::parseProcedure(std::deque<Token>& tokens) {
 	// Rule: 'procedure' proc_name '{' stmtLst '}'
 	// std::cout << "Parsing Procedure" << std::endl;
-	if (tokens.front().type != TokenType::NAME || tokens.front().value != "procedure") {
+	if (tokens.front().type != TokenType::NAME || tokens.front().value != AppConstants::PROCEDURE) {
 		throw SyntaxErrorException("Expected 'procedure' keyword, but got -> " + tokens.front().value);
 	}
 	tokens.pop_front();

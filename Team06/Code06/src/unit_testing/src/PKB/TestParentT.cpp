@@ -64,12 +64,12 @@ TEST_CASE("Checks for cases e.g. ParentT(assign, 3)") {
     unordered_set<StmtNum> children2{ 3 };
     writePkb.setParentT(1, children1);
     writePkb.setParentT(2, children2);
-    writePkb.setStatement(CONSTANTS.ASSIGN, 1);
-    writePkb.setStatement(CONSTANTS.ASSIGN, 2);
-    writePkb.setStatement(CONSTANTS.IF, 3);
+    writePkb.setStatement(AppConstants::ASSIGN, 1);
+    writePkb.setStatement(AppConstants::ASSIGN, 2);
+    writePkb.setStatement(AppConstants::IF, 3);
 
-    Parameter param1 = Parameter("a", CONSTANTS.ASSIGN);
-    Parameter param2 = Parameter("3", CONSTANTS.FIXED_INT);
+    Parameter param1 = Parameter("a", AppConstants::ASSIGN);
+    Parameter param2 = Parameter("3", AppConstants::FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -92,13 +92,13 @@ TEST_CASE("Checks for cases e.g. ParentT(while, assign)") {
 
     unordered_set<StmtNum> children{ 2, 3, 4 };
     writePkb.setParentT(1, children);
-    writePkb.setStatement(CONSTANTS.WHILE, 1);
-    writePkb.setStatement(CONSTANTS.ASSIGN, 2);
-    writePkb.setStatement(CONSTANTS.ASSIGN, 3);
-    writePkb.setStatement(CONSTANTS.CALL, 4);
+    writePkb.setStatement(AppConstants::WHILE, 1);
+    writePkb.setStatement(AppConstants::ASSIGN, 2);
+    writePkb.setStatement(AppConstants::ASSIGN, 3);
+    writePkb.setStatement(AppConstants::CALL, 4);
 
-    Parameter param1 = Parameter("w", CONSTANTS.WHILE);
-    Parameter param2 = Parameter("a", CONSTANTS.ASSIGN);
+    Parameter param1 = Parameter("w", AppConstants::WHILE);
+    Parameter param2 = Parameter("a", AppConstants::ASSIGN);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -120,13 +120,13 @@ TEST_CASE("Checks for cases e.g. Parent(stmt, _)") {
 
     unordered_set<StmtNum> children{ 2, 3, 4 };
     writePkb.setParentT(1, children);
-    writePkb.setStatement(CONSTANTS.IF, 1);
-    writePkb.setStatement(CONSTANTS.CALL, 2);
-    writePkb.setStatement(CONSTANTS.ASSIGN, 3);
-    writePkb.setStatement(CONSTANTS.PRINT, 4);
+    writePkb.setStatement(AppConstants::IF, 1);
+    writePkb.setStatement(AppConstants::CALL, 2);
+    writePkb.setStatement(AppConstants::ASSIGN, 3);
+    writePkb.setStatement(AppConstants::PRINT, 4);
 
-    Parameter param1 = Parameter("s", CONSTANTS.STMT);
-    Parameter param2 = Parameter("_", CONSTANTS.WILDCARD);
+    Parameter param1 = Parameter("s", AppConstants::STMT);
+    Parameter param2 = Parameter("_", AppConstants::WILDCARD);
 
     std::vector<Parameter> params;
     params.push_back(param1);
@@ -150,13 +150,13 @@ TEST_CASE("Checks that if both synonyms are the same, returns empty vector e.g. 
 
     unordered_set<StmtNum> children{ 2, 3, 4 };
     writePkb.setParentT(1, children);
-    writePkb.setStatement(CONSTANTS.IF, 1);
-    writePkb.setStatement(CONSTANTS.CALL, 2);
-    writePkb.setStatement(CONSTANTS.ASSIGN, 3);
-    writePkb.setStatement(CONSTANTS.PRINT, 4);
+    writePkb.setStatement(AppConstants::IF, 1);
+    writePkb.setStatement(AppConstants::CALL, 2);
+    writePkb.setStatement(AppConstants::ASSIGN, 3);
+    writePkb.setStatement(AppConstants::PRINT, 4);
 
-    Parameter param1 = Parameter("s", CONSTANTS.STMT);
-    Parameter param2 = Parameter("s", CONSTANTS.STMT);
+    Parameter param1 = Parameter("s", AppConstants::STMT);
+    Parameter param2 = Parameter("s", AppConstants::STMT);
 
     std::vector<Parameter> params;
     params.push_back(param1);

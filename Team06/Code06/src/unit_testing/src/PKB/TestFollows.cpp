@@ -73,8 +73,8 @@ TEST_CASE("Checks that writing and reading from ReadPKB works for Follows") {
     readPkb.setInstancePKB(pkb);
 
     writePkb.setFollows(1, 2);
-    Parameter param1 = Parameter("1", CONSTANTS.FIXED_INT);
-    Parameter param2 = Parameter("2", CONSTANTS.FIXED_INT);
+    Parameter param1 = Parameter("1", AppConstants::FIXED_INT);
+    Parameter param2 = Parameter("2", AppConstants::FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -96,8 +96,8 @@ TEST_CASE("Checks that a non-existent Follows relationship returns an empty vect
     readPkb.setInstancePKB(pkb);
 
     writePkb.setFollows(1, 2);
-    Parameter param1 = Parameter("1", CONSTANTS.FIXED_INT);
-    Parameter param2 = Parameter("3", CONSTANTS.FIXED_INT);
+    Parameter param1 = Parameter("1", AppConstants::FIXED_INT);
+    Parameter param2 = Parameter("3", AppConstants::FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -118,10 +118,10 @@ TEST_CASE("Checks that given a followee and a synonym, ReadPKB returns relevant 
     readPkb.setInstancePKB(pkb);
 
     writePkb.setFollows(1, 2);
-    writePkb.setStatement(CONSTANTS.ASSIGN, 2);
+    writePkb.setStatement(AppConstants::ASSIGN, 2);
 
-    Parameter param1 = Parameter("1", CONSTANTS.FIXED_INT);
-    Parameter param2 = Parameter("a", CONSTANTS.ASSIGN);
+    Parameter param1 = Parameter("1", AppConstants::FIXED_INT);
+    Parameter param2 = Parameter("a", AppConstants::ASSIGN);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -143,8 +143,8 @@ TEST_CASE("Checks that given a followee and a wildcard, ReadPKB returns all foll
     readPkb.setInstancePKB(pkb);
 
     writePkb.setFollows(1, 2);
-    Parameter param1 = Parameter("1", CONSTANTS.FIXED_INT);
-    Parameter param2 = Parameter("_", CONSTANTS.WILDCARD);
+    Parameter param1 = Parameter("1", AppConstants::FIXED_INT);
+    Parameter param2 = Parameter("_", AppConstants::WILDCARD);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -166,10 +166,10 @@ TEST_CASE("Checks that given a synonym and a follower, ReadPKB returns relevant 
     readPkb.setInstancePKB(pkb);
 
     writePkb.setFollows(1, 2);
-    writePkb.setStatement(CONSTANTS.WHILE, 1);
+    writePkb.setStatement(AppConstants::WHILE, 1);
 
-    Parameter param1 = Parameter("w", CONSTANTS.WHILE);
-    Parameter param2 = Parameter("2", CONSTANTS.FIXED_INT);
+    Parameter param1 = Parameter("w", AppConstants::WHILE);
+    Parameter param2 = Parameter("2", AppConstants::FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -192,11 +192,11 @@ TEST_CASE("Checks that given a synonym and a synonym, ReadPKB returns relevant f
     readPkb.setInstancePKB(pkb);
 
     writePkb.setFollows(1, 2);
-    writePkb.setStatement(CONSTANTS.WHILE, 1);
-    writePkb.setStatement(CONSTANTS.IF, 2);
+    writePkb.setStatement(AppConstants::WHILE, 1);
+    writePkb.setStatement(AppConstants::IF, 2);
 
-    Parameter param1 = Parameter("w", CONSTANTS.WHILE);
-    Parameter param2 = Parameter(CONSTANTS.IF, CONSTANTS.IF);
+    Parameter param1 = Parameter("w", AppConstants::WHILE);
+    Parameter param2 = Parameter(AppConstants::IF, AppConstants::IF);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -219,11 +219,11 @@ TEST_CASE("Checks that given a synonym and a wildcard, ReadPKB returns relevant 
     readPkb.setInstancePKB(pkb);
 
     writePkb.setFollows(1, 2);
-    writePkb.setStatement(CONSTANTS.WHILE, 1);
-    writePkb.setStatement(CONSTANTS.ASSIGN, 2);
+    writePkb.setStatement(AppConstants::WHILE, 1);
+    writePkb.setStatement(AppConstants::ASSIGN, 2);
 
-    Parameter param1 = Parameter("w", CONSTANTS.WHILE);
-    Parameter param2 = Parameter("_", CONSTANTS.WILDCARD);
+    Parameter param1 = Parameter("w", AppConstants::WHILE);
+    Parameter param2 = Parameter("_", AppConstants::WILDCARD);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -247,8 +247,8 @@ TEST_CASE("Checks that given a wildcard and a follower, ReadPKB returns relevant
 
     writePkb.setFollows(1, 2);
 
-    Parameter param1 = Parameter("_", CONSTANTS.WILDCARD);
-    Parameter param2 = Parameter("2", CONSTANTS.FIXED_INT);
+    Parameter param1 = Parameter("_", AppConstants::WILDCARD);
+    Parameter param2 = Parameter("2", AppConstants::FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -271,10 +271,10 @@ TEST_CASE("Checks that given a wildcard and a synonym, ReadPKB returns relevant 
     readPkb.setInstancePKB(pkb);
 
     writePkb.setFollows(1, 2);
-    writePkb.setStatement(CONSTANTS.PRINT, 2);
+    writePkb.setStatement(AppConstants::PRINT, 2);
 
-    Parameter param1 = Parameter("_", CONSTANTS.WILDCARD);
-    Parameter param2 = Parameter("p", CONSTANTS.PRINT);
+    Parameter param1 = Parameter("_", AppConstants::WILDCARD);
+    Parameter param2 = Parameter("p", AppConstants::PRINT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -298,8 +298,8 @@ TEST_CASE("Checks that given a wildcard and a wildcard, ReadPKB returns relevant
 
     writePkb.setFollows(1, 2);
 
-    Parameter param1 = Parameter("_", CONSTANTS.WILDCARD);
-    Parameter param2 = Parameter("_", CONSTANTS.WILDCARD);
+    Parameter param1 = Parameter("_", AppConstants::WILDCARD);
+    Parameter param2 = Parameter("_", AppConstants::WILDCARD);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -322,8 +322,8 @@ TEST_CASE("Checks that given a followee, if it does not have a certain follower,
     readPkb.setInstancePKB(pkb);
 
     writePkb.setFollows(1, 2);
-    Parameter param1 = Parameter("2", CONSTANTS.FIXED_INT);
-    Parameter param2 = Parameter("_", CONSTANTS.WILDCARD);
+    Parameter param1 = Parameter("2", AppConstants::FIXED_INT);
+    Parameter param2 = Parameter("_", AppConstants::WILDCARD);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -345,8 +345,8 @@ TEST_CASE("Checks that given a follower, if it does not have a certain followee,
     readPkb.setInstancePKB(pkb);
 
     writePkb.setFollows(1, 2);
-    Parameter param1 = Parameter("_", CONSTANTS.WILDCARD);
-    Parameter param2 = Parameter("3", CONSTANTS.FIXED_INT);
+    Parameter param1 = Parameter("_", AppConstants::WILDCARD);
+    Parameter param2 = Parameter("3", AppConstants::FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -374,8 +374,8 @@ TEST_CASE("Checks that PKB pointer in WritePKB and ReadPKB is set to first pkb i
     pkb2.initializePkb();
     writePkb.setInstancePKB(pkb2);
 
-    Parameter param1 = Parameter("1", CONSTANTS.FIXED_INT);
-    Parameter param2 = Parameter("2", CONSTANTS.FIXED_INT);
+    Parameter param1 = Parameter("1", AppConstants::FIXED_INT);
+    Parameter param2 = Parameter("2", AppConstants::FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
