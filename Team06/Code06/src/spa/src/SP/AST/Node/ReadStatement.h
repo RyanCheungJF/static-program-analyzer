@@ -1,6 +1,5 @@
 #pragma once
 
-#include <string>
 #include "Statement.h"
 
 class ReadStatement : public Statement {
