@@ -29,9 +29,7 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 			while (std::isalnum(file.peek())) {
 				tokenValue += (char)(file.get());
 			}
-			if (!isName(tokenValue)) {
-				throw SyntaxErrorException("Name does not follow format: LETTER (LETTER | DIGIT)*  -> " + tokenValue);
-			}
+			// Don't need a check here, since format for NAME -> LETTER (LETTER | DIGIT)*
 			tokens.push_back(Token(TokenType::NAME, tokenValue));
 		}
 		else if ((char)file.peek() == '<') { // Handle <, <=
@@ -133,7 +131,11 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 				tokens.push_back(Token(TokenType::MODULO, "%"));
 				break;
 			default:
-				throw SyntaxErrorException("Invalid token -> " + tokenValue);
+				// Getting the EOF is a bit buggy.
+				if (tokenValue == EOF) {
+					break;
+				}
+				throw SyntaxErrorException("Invalid token");
 			}
 		}
 	}
@@ -146,10 +148,4 @@ bool Tokenizer::isInteger(std::string value) {
 	// INTEGER: 0 | NZDIGIT ( DIGIT )*
 	std::regex integerRegex("^[1-9][0-9]*$");
 	return value == "0" || std::regex_match(value, integerRegex);
-}
-
-bool Tokenizer::isName(std::string value) {
-	// NAME: LETTER (LETTER | DIGIT)*
-	std::regex nameRegex("^[a-zA-Z]([0-9]|[a-zA-Z])*$");
-	return std::regex_match(value, nameRegex);
 }

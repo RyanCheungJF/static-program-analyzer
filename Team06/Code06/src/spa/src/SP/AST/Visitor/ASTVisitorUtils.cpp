@@ -145,7 +145,7 @@ std::vector<std::unordered_set<Ent>> handleCallStmt(WritePKB* writePKB, ReadPKB*
 
 			std::unordered_set<Ent> moreModifiesVariables;
 			if (readPKB->getModifiesS(readPKB->getCallStmt(sn).first).empty()) {
-				moreModifiesVariables = handleCallStmt(writePKB, readPKB, readPKB->getCallStmt(sn))[0];
+				moreModifiesVariables = handleCallStmt(writePKB, readPKB, readPKB->getCallStmt(sn))[1];
 			}
 			else {
 				// If I handled the call statement before, just read from it.

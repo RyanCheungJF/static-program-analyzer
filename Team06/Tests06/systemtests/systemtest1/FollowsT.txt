@@ -48,3 +48,18 @@ stmt s;
 Select s such that Follows*(36, s)
 none
 5000
+11 - comment
+while w; if i;
+Select w such that Follows*(i, 32)
+none
+5000
+12 - comment
+while w; if i; assign a;
+Select i such that Follows*(a, 30)
+31, 33
+5000
+13 - comment
+while w; if i; assign a; stmt s;
+Select s such that Follows*(s, 24)
+17, 18, 19, 20, 21, 22, 23
+5000

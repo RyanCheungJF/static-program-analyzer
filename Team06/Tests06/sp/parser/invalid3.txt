@@ -1,3 +1,3 @@
-procedure Test {
-
+procedure 123 {
+  x = 3;
 }

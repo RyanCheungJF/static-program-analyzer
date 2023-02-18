@@ -1,3 +1,5 @@
 procedure Test {
-   x = ((3 + 2)));
+   while x < 3) {
+      x = x + 1;
+   }
 }

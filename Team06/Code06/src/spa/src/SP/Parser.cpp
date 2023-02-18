@@ -28,7 +28,7 @@ std::unique_ptr<Procedure> Parser::parseProcedure(std::deque<Token>& tokens) {
 	tokens.pop_front();
 
 	if (tokens.front().type != TokenType::NAME) {
-		throw SyntaxErrorException("Expected 'proc_name', but got -> " + tokens.front().value);
+		throw SyntaxErrorException("Expected valid 'proc_name', but got -> " + tokens.front().value);
 	}
 	std::string procedureName = tokens.front().value;
 	tokens.pop_front();
@@ -54,7 +54,7 @@ std::unique_ptr<StatementList> Parser::parseStatementList(std::deque<Token>& tok
 	// std::cout << "Parsing Statement List" << std::endl;
 	std::vector<std::unique_ptr<Statement>> statements;
 
-	while (tokens.front().type != TokenType::RIGHT_BRACE) { // Reached end of statementList
+	while (tokens.front().type != TokenType::RIGHT_BRACE && tokens.front().type != TokenType::ENDOFFILE) { // Reached end of statementList
 		statements.push_back(parseStatement(tokens));
 	}
 
@@ -272,12 +272,9 @@ std::unique_ptr<AssignStatement> Parser::parseAssignStatement(std::deque<Token>&
 	assignStatement->statementNumber = currStatementNumber;
 	currStatementNumber++;
 
+	// Check for name & '=' done in parseStatement()
 	assignStatement->varName = tokens.front().value;
 	tokens.pop_front(); // Pop var_name
-
-	if (tokens.front().type != TokenType::ASSIGN) {
-		throw SyntaxErrorException("Expected '=' in assign statement, but got -> " + tokens.front().value);
-	}
 	tokens.pop_front(); // Pop "="
 
 	assignStatement->expr = parseExpression(tokens);
