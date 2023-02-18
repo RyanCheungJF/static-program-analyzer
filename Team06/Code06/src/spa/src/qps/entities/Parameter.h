@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include "qps/QPSGrammarUtils.h"
+#include "../../../src/utils/AppConstants.h"
 using namespace std;
 
 enum class ParameterType {
@@ -24,7 +25,7 @@ enum class ParameterType {
 	UNKNOWN
 };
 
-class Parameter {
+class Parameter : AppConstants {
 public:
 	string getValue();
     ParameterType getType() const;
