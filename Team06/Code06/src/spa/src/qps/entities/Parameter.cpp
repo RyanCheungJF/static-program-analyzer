@@ -34,9 +34,40 @@ Parameter::Parameter()
 	value = "";
 }
 
+bool Parameter::isSyntacticStatementRef(Parameter& p)
+{
+	return p.type == ParameterType::SYNONYM || isStatementRef(p);
+}
+
 bool Parameter::isStatementRef(Parameter& p)
 {
-	return isStmtRef(p.getValue());
+	switch (p.type) {
+	case ParameterType::STMT:
+		return true;
+	case ParameterType::READ:
+		return true;
+	case ParameterType::PRINT:
+		return true;
+	case ParameterType::WHILE:
+		return true;
+	case ParameterType::IF:
+		return true;
+	case ParameterType::ASSIGN:
+		return true;
+	case ParameterType::FIXED_INT:
+		return true;
+	case ParameterType::WILDCARD:
+		return true;
+	case ParameterType::CALL:
+		return true;
+
+	}
+	return false;
+}
+
+bool Parameter::isProcedure(Parameter& p)
+{
+	return p.type == ParameterType::PROCEDURE || p.type == ParameterType::FIXED_STRING;
 }
 
 bool Parameter::isDsgEntity(Parameter& p) {
@@ -51,14 +82,19 @@ bool Parameter::isUncheckedSynonym()
 void Parameter::updateSynonymType(ParameterType pt)
 {
 	if (type != ParameterType::SYNONYM) {
-		throw - 1;
+		throw InternalException("Error: Parameter.updateSynonymType parameter is not a synonym.");
 	}
 	type = pt;
 }
 
+bool Parameter::isSyntacticEntityRef(Parameter& p)
+{
+	return p.type == ParameterType::SYNONYM || isEntityRef(p);
+}
+
 bool Parameter::isEntityRef(Parameter& p)
 {
-	return isEntRef(p.getValue());
+	return p.type == ParameterType::VARIABLE || p.type == ParameterType::WILDCARD || p.type == ParameterType::FIXED_STRING;
 }
 
 //TODO: IF NOT FOUND, MAY WANT TO THROW ERROR
@@ -104,6 +140,11 @@ bool Parameter::isEqualTo(Parameter p) {
 bool Parameter::operator==(const Parameter& p) const
 {
 	return type == p.type && value == p.value;
+}
+
+bool Parameter::isPatternSyn(Parameter& p)
+{
+	return p.type == ParameterType::ASSIGN;
 }
 
 const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {

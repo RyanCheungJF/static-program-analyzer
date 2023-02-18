@@ -11,8 +11,9 @@ public:
 	Pattern();
 	Pattern(const Pattern&);
 	Pattern(Parameter, Parameter, string);
-	Parameter getSynAssign();
+	Parameter* getSynAssign();
 	Parameter* getEntRef();
+	bool validateParams();
 };
 
 #endif //SPQ_QPS_PATTERN_H

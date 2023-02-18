@@ -77,7 +77,7 @@ TEST_CASE("Checks that writing and reading from ReadPKB works for Follows") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -99,7 +99,7 @@ TEST_CASE("Checks that a non-existent Follows relationship returns an empty vect
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
     std::vector<std::vector<std::string>> check;
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -123,7 +123,7 @@ TEST_CASE("Checks that given a followee and a synonym, ReadPKB returns relevant 
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -145,7 +145,7 @@ TEST_CASE("Checks that given a followee and a wildcard, ReadPKB returns all foll
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -169,9 +169,9 @@ TEST_CASE("Checks that given a synonym and a follower, ReadPKB returns relevant 
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
-    std::vector<std::vector<std::string>> check = { {"1", "2"} };
+    std::vector<std::vector<std::string>> check = { {"1", "2"}};
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(check == res);
 }
@@ -195,7 +195,7 @@ TEST_CASE("Checks that given a synonym and a synonym, ReadPKB returns relevant f
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -221,7 +221,7 @@ TEST_CASE("Checks that given a synonym and a wildcard, ReadPKB returns relevant 
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -246,7 +246,7 @@ TEST_CASE("Checks that given a wildcard and a follower, ReadPKB returns relevant
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -271,7 +271,7 @@ TEST_CASE("Checks that given a wildcard and a synonym, ReadPKB returns relevant 
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -295,9 +295,9 @@ TEST_CASE("Checks that given a wildcard and a wildcard, ReadPKB returns relevant
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
-    std::vector<std::vector<std::string>> check = { {"1", "2"} };
+    std::vector<std::vector<std::string>> check = { {"1", "2"}};
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(check == res);
 }
@@ -318,7 +318,7 @@ TEST_CASE("Checks that given a followee, if it does not have a certain follower,
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
     std::vector<std::vector<std::string>> check;
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -341,7 +341,7 @@ TEST_CASE("Checks that given a follower, if it does not have a certain followee,
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
     std::vector<std::vector<std::string>> check;
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -370,7 +370,7 @@ TEST_CASE("Checks that PKB pointer in WritePKB and ReadPKB is set to first pkb i
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -419,7 +419,7 @@ TEST_CASE("Checks that different PKB running instances can point to the same API
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Follows", params);
 
     std::vector<std::vector<std::string>> check = { {"1", "2"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);

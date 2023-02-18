@@ -21,6 +21,7 @@ vector<vector<string>> Table::getContent() {
 Table Table::selectColumns(vector<int>& indexes) {
     vector<vector<string>> newContent;
     vector<Parameter> newHeader;
+    // I do not believe that there will be a case where the tables are empty.
     for(int index: indexes) {
         newHeader.push_back(headers[index]);
     }

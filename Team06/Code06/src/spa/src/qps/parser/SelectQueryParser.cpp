@@ -8,7 +8,7 @@ Query SelectQueryParser::parse(string selectQuery) {
 	vector<int> clauseEnds = getClauseEnds(clauseStarts, wordList.size());
 
 	vector<Parameter> selectParams = parseSelectClause(wordList, clauseStarts[0], clauseEnds[0]);
-	vector<Relationship> suchThatRelations = parseSuchThatClause(wordList, clauseStarts[1], clauseEnds[1]);
+	vector<shared_ptr<Relationship>> suchThatRelations = parseSuchThatClause(wordList, clauseStarts[1], clauseEnds[1]);
 	vector<Pattern> patterns = parsePatternClause(wordList, clauseStarts[2], clauseEnds[2]);
 
 	Query query(selectParams, suchThatRelations, patterns);
@@ -22,7 +22,6 @@ assuming we only have at most one of each type of clauses
 @returns: a vector of size 3, containing list of select clause, list of such that clause, and list of pattern clause in that order
 */
 vector<int> SelectQueryParser::getClauseStarts(vector<string> &wordList) {
-	//TODO: Implement this
 	int suchThatStart = findSuchThat(wordList);
 	int patternStart = findPattern(wordList);
 	int selectStart = 0;
@@ -30,9 +29,6 @@ vector<int> SelectQueryParser::getClauseStarts(vector<string> &wordList) {
 	return res;
 }
 
-/*
-
-*/
 vector<int> SelectQueryParser::getClauseEnds(vector<int> clauseStarts, int wordListLength)
 {
 	map<int, int> initialIndices;
@@ -63,13 +59,15 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
 {
 	vector<Parameter> params;
 	if (end - start != 2) {
-		throw Exception("select clause does not exist");
+		//select clause does not exist
+		throw SyntaxException();
 	}
 	if (!isSelect(wordList[start])) {
-		throw Exception();
+		throw InternalException("Error: SelectQueryParser.parseSelectClause bad start position for wordList");
 	}
 	if (!isSynonym(wordList[end - (size_t) 1])) {
-		throw Exception();
+		//bad select parameter
+		throw SyntaxException();
 	}
 	//TODO: replace with synonym type rather than string
 	Parameter param(wordList[1], "synonym");
@@ -81,17 +79,17 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
 Currently capable of parsing one condition after such that, with 2 params
 use loops for extensibility
 */
-vector<Relationship> SelectQueryParser::parseSuchThatClause(vector<string>& wordList, int start, int end)
+vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<string>& wordList, int start, int end)
 {
-	vector<Relationship> res;
+	vector<shared_ptr<Relationship>> res;
 	if (start == -1 && end == -1) {
 		return res;
 	}
 	if (end <= start) {
-		throw Exception();
+		throw InternalException("Error: SelectQueryParser.parseSuchThatClause bad start position and end position");
 	}
 	if (end - start < 3) {
-		throw Exception();
+		throw SyntaxException();
 	}
 
 	stringstream ss;
@@ -107,42 +105,22 @@ vector<Relationship> SelectQueryParser::parseSuchThatClause(vector<string>& word
 	string delimiter = "(";
 	size_t itemStart = 0;
 	size_t itemEnd;
-	try {
-		tie(rel, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-		itemStart = itemEnd;
-		delimiter = ",";
-		tie(param1, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-		itemStart = itemEnd;
-		delimiter = ")";
-		tie(param2, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-	}
-	catch (Exception e) {
-		//do nothing for now
-	}
-
-	if (!isRelRef(rel)) {
-		throw Exception();
-	}
-
-	//TODO: parse relationship first, and from there we can decide on how to filter params
-	//or it could be done while creating the relationship object
-	if (!isStmtRef(param1) && !isEntRef(param1)) {
-		throw Exception();
-	}
-
-	if (!isStmtRef(param2) && !isEntRef(param2)) {
-		throw Exception();
-	}
+	tie(rel, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
+	itemStart = itemEnd;
+	delimiter = ",";
+	tie(param1, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
+	itemStart = itemEnd;
+	delimiter = ")";
+	tie(param2, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
 
 	if (itemEnd != condString.size()) {
-		throw Exception();
+		throw InternalException("Error: SelectQueryParser.parseSuchThatClause not full clause parsed");
 	}
 	Parameter p1(removeCharFromString(param1, '\"'), Parameter::guessParameterType(param1));
 	Parameter p2(removeCharFromString(param2, '\"'), Parameter::guessParameterType(param2));
 	vector<Parameter> params{ p1, p2 };
 	//need to parse params first
-	Relationship relationship = Relationship::makeRelationship(rel, params);
-	res.push_back(relationship);
+	res.push_back(Relationship::makeRelationship(rel, params));
 
 
 	return res;
@@ -157,10 +135,10 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
 		return res;
 	}
 	if (end <= start) {
-		throw Exception();
+		throw InternalException("Error: SelectQueryParser.parseSuchThatClause bad start position and end position");
 	}
 	if (end - start < 2) {
-		throw Exception();
+		throw SyntaxException();
 	}
 
 	stringstream ss;
@@ -174,17 +152,17 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
 		string synAssignString, entRefString, patternString;
 		tie(synAssignString, entRefString, patternString) = t;
 		if (!isSynonym(synAssignString)) {
-			throw Exception();
+			throw SyntaxException();
 		}
 
 		if (!isEntRef(entRefString)) {
-			throw Exception();
+			throw SyntaxException();
 		}
 
 		if (!isExprSpec(patternString)) {
-			throw Exception();
+			throw SyntaxException();
 		}
-		Parameter synAssign(synAssignString, ParameterType::ASSIGN);
+		Parameter synAssign(synAssignString, ParameterType::SYNONYM);
 		Parameter entRef(removeCharFromString(entRefString, '\"'), Parameter::guessParameterType(entRefString));
 		Pattern p(synAssign, entRef, removeCharFromString(patternString, '\"'));
 		res.push_back(p);
