@@ -18,9 +18,12 @@ vector<Query> QPSParser::parse(string qpsQuery) {
     for (string queryStatement:queryStatements) {
         if (isDeclaration(queryStatement)) {
             declarations.push_back(queryStatement);
-        } else {
+        } else if (isSelect(queryStatement)) {
             Query query = selectQueryParser.parse(queryStatement);
             queryVec.push_back(query);
+        }
+        else {
+            throw SyntaxException();
         }
     }
     if(queryVec.empty()) {

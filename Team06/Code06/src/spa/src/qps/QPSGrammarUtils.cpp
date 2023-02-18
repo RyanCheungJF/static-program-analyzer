@@ -33,7 +33,7 @@ bool isInteger(string integer) {
 //}
 
 bool isSelect(string s) {
-    return regex_search(s, regex("^Select$"));
+    return regex_search(s, regex("^Select"));
 }
 
 bool isPattern(string s) {

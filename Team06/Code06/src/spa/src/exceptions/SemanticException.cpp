@@ -1,5 +1,7 @@
 #include "SemanticException.h"
 
-SemanticException::SemanticException() {
+const string SemanticException::ERROR_MESSAGE = "SemanticError";
 
+SemanticException::SemanticException() {
+	this->errorMessage = ERROR_MESSAGE;
 }
