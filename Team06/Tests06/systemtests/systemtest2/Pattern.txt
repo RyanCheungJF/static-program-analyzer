@@ -1,0 +1,20 @@
+1 - comment
+assign a;
+Select a pattern a(_, "2")
+none
+5000
+2 - comment
+assign a;
+Select a pattern a(_, _"2"_)
+22, 23, 29
+5000
+3 - comment
+assign a;
+Select a pattern a(         _,"2+3"   )
+23, 29
+5000
+4 - comment
+assign a;
+Select a pattern a("x", _"2"_)
+22
+5000
