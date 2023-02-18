@@ -9,7 +9,6 @@ typedef int StmtNum;
 class ProcedureStorage {
 public:
     virtual void writeProcedure(Proc p, std::unordered_set<StmtNum> lines);
-    virtual void writeProcedure(Proc p, StmtNum line);
     virtual bool checkProcedure(Proc p, StmtNum num);
     virtual std::unordered_set<StmtNum> getProcedureStatementNumbers(Proc p);
     std::unordered_set<Proc> getProcNames();

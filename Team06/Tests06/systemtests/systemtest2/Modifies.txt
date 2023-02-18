@@ -1,0 +1,5 @@
+1 - comment
+assign a;
+Select a such that Modifies(a, "read")
+6
+5000

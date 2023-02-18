@@ -19,6 +19,7 @@ void FollowsExtractorVisitor::visitStatementList(StatementList *statementList) {
 			followsTSet.insert(statementList->statements[j]->statementNumber);
 		}
 		writeApi->setFollowsT(statementList->statements[i]->statementNumber, followsTSet);
+		followsTSet.clear();
 	}
 }
 

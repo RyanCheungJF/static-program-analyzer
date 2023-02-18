@@ -10,7 +10,6 @@
 class Tokenizer {
 public:
 	bool isInteger(std::string value);
-	bool isName(std::string value);
 	std::deque<Token> tokenize(std::stringstream& file);
 };
 

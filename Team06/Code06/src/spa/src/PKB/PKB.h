@@ -14,8 +14,7 @@
 #include "storage/PatternStorage.h"
 #include "storage/ConstantStorage.h"
 #include "storage/CallStorage.h"
-#include "storage/UsesStorage.h"
-#include "storage/ModifiesStorage.h"
+#include "storage/ModifiesUsesStorage.h"
 
 using namespace std;
 typedef short PROC;
@@ -46,6 +45,6 @@ private:
     std::shared_ptr<ConstantStorage> constantStorage;
     std::shared_ptr<PatternStorage> patternStorage;
     std::shared_ptr<CallStorage> callStorage;
-    std::shared_ptr<UsesStorage> usesStorage;
-    std::shared_ptr<ModifiesStorage> modifiesStorage;
+    std::shared_ptr<ModifiesUsesStorage> usesStorage;
+    std::shared_ptr<ModifiesUsesStorage> modifiesStorage;
 };

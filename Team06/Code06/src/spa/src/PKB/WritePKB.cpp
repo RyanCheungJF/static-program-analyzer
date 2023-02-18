@@ -39,14 +39,6 @@ void WritePKB::setEntity(StmtNum num, std::unordered_set<Ent> entities) {
     pkbInstance->entityStorage->writeEntity(num, entities);
 }
 
-//void WritePKB::setEntity(Ent e, StmtNum line) {
-//    pkbInstance->entityStorage->writeEntity(e, line);
-//}
-
-//void WritePKB::setProcedure(Proc p, StmtNum num) {
-//    pkbInstance->procedureStorage->writeProcedure(p, num);
-//}
-
 void WritePKB::setConstant(StmtNum num, std::unordered_set<Const> constants) {
     pkbInstance->constantStorage->writeConstant(num, constants);
 }
@@ -56,25 +48,21 @@ void WritePKB::setCall(StmtNum callLine, Proc procedure_being_called) {
 }
 
 void WritePKB::setUsesS(StmtNum num, std::unordered_set<Ent> entities) {
-    pkbInstance->usesStorage->writeUsesS(num, entities);
+    pkbInstance->usesStorage->writeS(num, entities);
 }
 
 void WritePKB::setUsesP(ProcName name, std::unordered_set<Ent> entities) {
-    pkbInstance->usesStorage->writeUsesP(name, entities);
+    pkbInstance->usesStorage->writeP(name, entities);
 }
 
 void WritePKB::setModifiesS(StmtNum num, std::unordered_set<Ent> entities) {
-    pkbInstance->modifiesStorage->writeModifiesS(num, entities);
+    pkbInstance->modifiesStorage->writeS(num, entities);
 }
 
 void WritePKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {
-    pkbInstance->modifiesStorage->writeModifiesP(name, entities);
+    pkbInstance->modifiesStorage->writeP(name, entities);
 }
 
 void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer) {
     pkbInstance->patternStorage->writePattern(lhs, num, std::move(pointer));
-}
-
-std::unique_ptr<Expression> WritePKB::buildSubtree(std::string rhs) {
-    return std::move(pkbInstance->patternStorage->buildSubtree(rhs));
 }

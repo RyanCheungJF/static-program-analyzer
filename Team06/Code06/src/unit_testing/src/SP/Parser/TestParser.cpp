@@ -1,4 +1,5 @@
 #include <iostream>
+#include <filesystem>
 #include "catch.hpp"
 #include "../../spa/src/SP/Tokenizer.h"
 #include "../../spa/src/SP/Parser.h"
@@ -17,10 +18,14 @@ TEST_CASE("Valid Source Program") {
 	Tokenizer testTokenizer;
 	Parser testParser;
 	std::deque<Token> tokenQueue;
-	std::string testDirectory = "../../../../../../Tests06/sp/parser/";
+	auto testDirectory = std::filesystem::path(__FILE__);
+	for (int i = 0; i < 7; i++) {
+		testDirectory = testDirectory.parent_path();
+	}
+	testDirectory /= "Tests06/sp/parser/";
 
 	SECTION("Simple Valid Program") {
-		std::ifstream testFile(testDirectory + "valid1.txt");
+		std::ifstream testFile(testDirectory.string() + "valid1.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -45,8 +50,9 @@ TEST_CASE("Valid Source Program") {
 		REQUIRE(checkIfSameTree(std::move(rootNode), std::move(programNode)));
 	}
 
+
 	SECTION("Valid Program With Multiple Procedures") {
-		std::ifstream testFile(testDirectory + "valid2.txt");
+		std::ifstream testFile(testDirectory.string() + "valid2.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -90,7 +96,7 @@ TEST_CASE("Valid Source Program") {
 	}
 
 	SECTION("Valid Program With Conditionals") {
-		std::ifstream testFile(testDirectory + "valid3.txt");
+		std::ifstream testFile(testDirectory.string() + "valid3.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -142,7 +148,7 @@ TEST_CASE("Valid Source Program") {
 	}
 
 	SECTION("Valid Program using keywords as names") {
-		std::ifstream testFile(testDirectory + "valid4.txt");
+		std::ifstream testFile(testDirectory.string() + "valid4.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -165,7 +171,7 @@ TEST_CASE("Valid Source Program") {
 	}
 
 	SECTION("Valid Program to test distinguish between relExpr & condExpr") {
-		std::ifstream testFile(testDirectory + "valid5.txt");
+		std::ifstream testFile(testDirectory.string() + "valid5.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
@@ -194,6 +200,42 @@ TEST_CASE("Valid Source Program") {
 		REQUIRE(checkIfSameTree(std::move(rootNode), std::move(programNode)));
 	}
 
+	SECTION("Valid Program with procedure/variable names as keywords") {
+		std::ifstream testFile(testDirectory.string() + "valid6.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		auto rootNode = testParser.parseProgram(tokenQueue);
+
+		// creating expected tree
+		auto readStmt = std::make_unique<ReadStatement>("call");
+		auto callStmt = std::make_unique<CallStatement>("print");
+		auto printStmt = std::make_unique<PrintStatement>("read");		
+		auto readAssignStmt = std::make_unique<AssignStatement>("read", std::make_unique<Constant>(2));
+		auto callAssignStmt = std::make_unique<AssignStatement>("call", std::make_unique<Constant>(3));
+		auto whileAssignStmt = std::make_unique<AssignStatement>("while", std::make_unique<Constant>(5));
+		auto ifAssignStmt = std::make_unique<AssignStatement>("if", std::make_unique<Constant>(4));
+		auto printAssignStmt = std::make_unique<AssignStatement>("print", std::make_unique<Constant>(8));
+
+		std::vector<std::unique_ptr<Statement>> statementsA;
+		statementsA.push_back(std::move(readStmt));
+		statementsA.push_back(std::move(callStmt));
+		statementsA.push_back(std::move(printStmt));
+		statementsA.push_back(std::move(readAssignStmt));
+		statementsA.push_back(std::move(callAssignStmt));
+		statementsA.push_back(std::move(whileAssignStmt));
+		statementsA.push_back(std::move(ifAssignStmt));
+		statementsA.push_back(std::move(printAssignStmt));
+
+		auto statementListNodeA = std::make_unique<StatementList>(std::move(statementsA));
+		auto procedureNodeA = std::make_unique<Procedure>("while", std::move(statementListNodeA));
+		std::vector<std::unique_ptr<Procedure>> procedures;
+		procedures.push_back(std::move(procedureNodeA));
+
+		auto programNode = std::make_unique<Program>(std::move(procedures));
+
+		REQUIRE(checkIfSameTree(std::move(rootNode), std::move(programNode)));
+	}
 }
 
 TEST_CASE("Invalid Source Program") {
@@ -201,127 +243,598 @@ TEST_CASE("Invalid Source Program") {
 	Tokenizer testTokenizer;
 	Parser testParser;
 	std::deque<Token> tokenQueue;
-	std::string testDirectory = "../../../../../../Tests06/sp/parser/";
+	std::string errorMessage = "";
+	auto testDirectory = std::filesystem::path(__FILE__);
+	for (int i = 0; i < 7; i++) {
+		testDirectory = testDirectory.parent_path();
+	}
+	testDirectory /= "Tests06/sp/parser/";
 
 	SECTION("Program has no procedure") {
-		std::ifstream testFile(testDirectory + "invalid1.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid1.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
-		//REQUIRE_THROWS_MATCHES(testParser.parseProgram(tokenQueue), SyntaxErrorException, Catch::Message("SyntaxErrorException::what"));
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Program should contain at least one procedure") != std::string::npos);
 	}
 
-	SECTION("Procedure has invalid syntax") {
-		std::ifstream testFile(testDirectory + "invalid2.txt");
+	SECTION("No procedure keyword") {
+		std::ifstream testFile(testDirectory.string() + "invalid2.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected 'procedure' keyword") != std::string::npos);
 	}
 
-	SECTION("Statement List has no statement") {
-		std::ifstream testFile(testDirectory + "invalid3.txt");
+	SECTION("Invalid procedure name") {
+		std::ifstream testFile(testDirectory.string() + "invalid3.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected valid 'proc_name'") != std::string::npos);
 	}
 
-	SECTION("Invalid read statement") {
-		std::ifstream testFile(testDirectory + "invalid4.txt");
+
+	SECTION("Missing left brace in procedure") {
+		std::ifstream testFile(testDirectory.string() + "invalid4.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected '{'") != std::string::npos);
 	}
 
-	SECTION("Invalid print statement") {
-		std::ifstream testFile(testDirectory + "invalid5.txt");
+	SECTION("Missing right brace in procedure") {
+		std::ifstream testFile(testDirectory.string() + "invalid5.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected '}'") != std::string::npos);
 	}
 
-	SECTION("Invalid call statement") {
-		std::ifstream testFile(testDirectory + "invalid6.txt");
+	SECTION("Statement list no statements") {
+		std::ifstream testFile(testDirectory.string() + "invalid6.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
-	}
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
 
-	SECTION("Invalid while statement") {
-		std::ifstream testFile(testDirectory + "invalid7.txt");
-		strStream << testFile.rdbuf();
-		tokenQueue = testTokenizer.tokenize(strStream);
-
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
-	}
-
-	SECTION("Invalid if statement") {
-		std::ifstream testFile(testDirectory + "invalid8.txt");
-		strStream << testFile.rdbuf();
-		tokenQueue = testTokenizer.tokenize(strStream);
-
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
-	}
-
-	SECTION("Invalid assign statement") {
-		std::ifstream testFile(testDirectory + "invalid9.txt");
-		strStream << testFile.rdbuf();
-		tokenQueue = testTokenizer.tokenize(strStream);
-
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
-	}
-
-	SECTION("Invalid conditional") {
-		std::ifstream testFile(testDirectory + "invalid10.txt");
-		strStream << testFile.rdbuf();
-		tokenQueue = testTokenizer.tokenize(strStream);
-
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+		REQUIRE(errorMessage.find("Statement List should contain at least one statement") != std::string::npos);
 	}
 
 	SECTION("Invalid statement type") {
-		std::ifstream testFile(testDirectory + "invalid11.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid7.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Unexpected token when parsing statement") != std::string::npos);
 	}
 
-	SECTION("Invalid relational expression") {
-		std::ifstream testFile(testDirectory + "invalid12.txt");
+	SECTION("Invalid statement keyword") {
+		std::ifstream testFile(testDirectory.string() + "invalid8.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Unexpected token when parsing statement") != std::string::npos);
+	}
+
+	SECTION("Invalid read statement variable name") {
+		std::ifstream testFile(testDirectory.string() + "invalid9.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected var_name in read statement") != std::string::npos);
+	}
+
+	SECTION("Missing semicolon for read statement") {
+		std::ifstream testFile(testDirectory.string() + "invalid10.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected ; at end of read statement") != std::string::npos);
+	}
+
+	SECTION("Invalid print statement variable name") {
+		std::ifstream testFile(testDirectory.string() + "invalid11.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected var_name in print statement") != std::string::npos);
+	}
+
+	SECTION("Missing semicolon for read statement") {
+		std::ifstream testFile(testDirectory.string() + "invalid12.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected ; at end of print statement") != std::string::npos);
+	}
+
+	SECTION("Invalid call statement procedure name") {
+		std::ifstream testFile(testDirectory.string() + "invalid13.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected proc_name in call statement") != std::string::npos);
+	}
+
+	SECTION("Missing semicolon for call statement") {
+		std::ifstream testFile(testDirectory.string() + "invalid14.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected ; at end of call statement") != std::string::npos);
+	}
+
+	SECTION("Missing ( in while") {
+		std::ifstream testFile(testDirectory.string() + "invalid15.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected '(' in while statement") != std::string::npos);
+	}
+
+	SECTION("Missing ) in while") {
+		std::ifstream testFile(testDirectory.string() + "invalid16.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected ')' in while statement") != std::string::npos);
+	}
+
+	SECTION("Missing { in while") {
+		std::ifstream testFile(testDirectory.string() + "invalid17.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected '{' in while statement") != std::string::npos);
+	}
+
+	SECTION("Missing } in while") {
+		std::ifstream testFile(testDirectory.string() + "invalid18.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected '}'") != std::string::npos);
+	}
+
+	SECTION("Missing ( in if") {
+		std::ifstream testFile(testDirectory.string() + "invalid19.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected '(' in if statement") != std::string::npos);
+	}
+
+	SECTION("Missing ) in if") {
+		std::ifstream testFile(testDirectory.string() + "invalid20.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected ')' in if statement") != std::string::npos);
+	}
+
+	SECTION("Missing then in if") {
+		std::ifstream testFile(testDirectory.string() + "invalid21.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected 'then' in if statement") != std::string::npos);
+	}
+
+	SECTION("Missing { in if") {
+		std::ifstream testFile(testDirectory.string() + "invalid22.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected '{' in if statement") != std::string::npos);
+	}
+
+	SECTION("Missing } in if") {
+		std::ifstream testFile(testDirectory.string() + "invalid23.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Unexpected token") != std::string::npos);
+	}
+
+	SECTION("Missing else in if") {
+		std::ifstream testFile(testDirectory.string() + "invalid24.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected 'else' in if statement") != std::string::npos);
+	}
+
+	SECTION("Missing { in if after else") {
+		std::ifstream testFile(testDirectory.string() + "invalid25.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected '{' in if statement") != std::string::npos);
+	}
+	
+	SECTION("Missing } in if after else") {
+		std::ifstream testFile(testDirectory.string() + "invalid26.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected '}'") != std::string::npos);
+	}
+
+	SECTION("Invalid = in assign statement") {
+		std::ifstream testFile(testDirectory.string() + "invalid27.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Unexpected token") != std::string::npos);
+	}
+
+	SECTION("Missing semicolon for assign statement") {
+		std::ifstream testFile(testDirectory.string() + "invalid28.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected ';' at end of assign statement") != std::string::npos);
+	}
+
+	SECTION("Missing semicolon for assign statement") {
+		std::ifstream testFile(testDirectory.string() + "invalid28.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected ';' at end of assign statement") != std::string::npos);
+	}
+
+	SECTION("Missing ( for not conditional expression") {
+		std::ifstream testFile(testDirectory.string() + "invalid29.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected '(' in not conditional expression") != std::string::npos);
+	}
+
+	SECTION("Missing ( for not conditional expression") {
+		std::ifstream testFile(testDirectory.string() + "invalid30.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected ')'") != std::string::npos);
+	}
+
+	SECTION("Missing ) in binary conditional") {
+		std::ifstream testFile(testDirectory.string() + "invalid31.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected ')' in binary conditional expression") != std::string::npos);
+	}
+
+	SECTION("Missing && or || in binary conditional") {
+		std::ifstream testFile(testDirectory.string() + "invalid32.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected '&&' or '||' in binary conditional expression") != std::string::npos);
+	}
+
+
+	SECTION("Missing '(' in binary conditional") {
+		std::ifstream testFile(testDirectory.string() + "invalid33.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected '(' in binary conditional expression") != std::string::npos);
+	}
+
+	SECTION("Missing ')' in binary conditional") {
+		std::ifstream testFile(testDirectory.string() + "invalid34.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected ')'") != std::string::npos);
+	}
+
+	SECTION("Invalid comparator in relational expression") {
+		std::ifstream testFile(testDirectory.string() + "invalid35.txt");
+		strStream << testFile.rdbuf();
+		tokenQueue = testTokenizer.tokenize(strStream);
+
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected a comparator in relational expression") != std::string::npos);
 	}
 
 	SECTION("Invalid expression") {
-		std::ifstream testFile(testDirectory + "invalid13.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid36.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Parsing factor failed") != std::string::npos);
 	}
 
 	SECTION("Invalid term") {
-		std::ifstream testFile(testDirectory + "invalid14.txt");
+		std::ifstream testFile(testDirectory.string() + "invalid37.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Parsing factor failed") != std::string::npos);
 	}
 
-	SECTION("Invalid factor") {
-		std::ifstream testFile(testDirectory + "invalid15.txt");
+	SECTION("Invalid expression missing ')'") {
+		std::ifstream testFile(testDirectory.string() + "invalid38.txt");
 		strStream << testFile.rdbuf();
 		tokenQueue = testTokenizer.tokenize(strStream);
 
-		REQUIRE_THROWS_AS(testParser.parseProgram(tokenQueue), SyntaxErrorException);
+		try {
+			testParser.parseProgram(tokenQueue);
+		}
+		catch (SyntaxErrorException e) {
+			errorMessage = e.what();
+		}
+
+		REQUIRE(errorMessage.find("Expected ')' in factor") != std::string::npos);
 	}
 }
 
@@ -420,13 +933,11 @@ bool checkIfSameStatement(std::unique_ptr<Statement> expectedStatement, std::uni
 bool checkIfSameStatementList(std::unique_ptr<StatementList> expectedList, std::unique_ptr<StatementList> actualList) {
 	// preliminary check for statement list
 	if (expectedList->statements.size() != actualList->statements.size()) {
-		std::cout << "LOG: Trees differ in number of statements" << std::endl;
 		return false;
 	}
 
 	for (int i = 0; i < expectedList->statements.size(); i++) {
 		if (!checkIfSameStatement(std::move(expectedList->statements[i]), std::move(actualList->statements[i]))) {
-			std::cout << "LOG: Mismatch in statements!" << std::endl;
 			return false;
 		}
 	}
@@ -439,7 +950,6 @@ bool checkIfSameTree(std::unique_ptr<Program> expectedRoot, std::unique_ptr<Prog
 
 	// preliminary check for procedurelist
 	if (expectedProcedures.size() != actualProcedures.size()) {
-		std::cout << "LOG: Trees differ in number of procedures" << std::endl;
 		return false;
 	}
 
@@ -447,7 +957,6 @@ bool checkIfSameTree(std::unique_ptr<Program> expectedRoot, std::unique_ptr<Prog
 	for (int i = 0; i < expectedProcedures.size(); i++) {
 		auto expectedStatements = std::move(expectedProcedures[i]->statementList);
 		auto actualStatements = std::move(actualProcedures[i]->statementList);
-		std::cout << "LOG: Checking Procedure " << expectedProcedures[i]->procedureName << std::endl;
 		if (expectedProcedures[i]->procedureName != actualProcedures[i]->procedureName) {
 			return false;
 		}

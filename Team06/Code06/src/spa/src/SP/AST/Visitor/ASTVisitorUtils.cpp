@@ -56,12 +56,14 @@ void visitExprHelper(Expression* e, std::unordered_set<Ent>& variables, std::uno
 
 void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
 	if (auto i = CAST_TO(IfStatement, recurseStmt)) {
+		i->thenStmtList->accept(visitor);
 		for (const auto& statement : i->thenStmtList->statements) {
 			statement->accept(visitor);
 			if (auto i = CAST_TO(IfStatement, statement.get()) || CAST_TO(WhileStatement, statement.get())) {
 				recurseStatementHelper(statement.get(), visitor);
 			}
 		}
+		i->elseStmtList->accept(visitor);
 		for (const auto& statement : i->elseStmtList->statements) {
 			statement->accept(visitor);
 			if (auto i = CAST_TO(IfStatement, statement.get()) || CAST_TO(WhileStatement, statement.get())) {
@@ -70,6 +72,7 @@ void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
 		}
 	}
 	else if (auto i = CAST_TO(WhileStatement, recurseStmt)) {
+		i->stmtList->accept(visitor);
 		for (const auto& statement : i->stmtList->statements) {
 			statement->accept(visitor);
 			if (auto i = CAST_TO(IfStatement, statement.get()) || CAST_TO(WhileStatement, statement.get())) {
@@ -142,7 +145,7 @@ std::vector<std::unordered_set<Ent>> handleCallStmt(WritePKB* writePKB, ReadPKB*
 
 			std::unordered_set<Ent> moreModifiesVariables;
 			if (readPKB->getModifiesS(readPKB->getCallStmt(sn).first).empty()) {
-				moreModifiesVariables = handleCallStmt(writePKB, readPKB, readPKB->getCallStmt(sn))[0];
+				moreModifiesVariables = handleCallStmt(writePKB, readPKB, readPKB->getCallStmt(sn))[1];
 			}
 			else {
 				// If I handled the call statement before, just read from it.

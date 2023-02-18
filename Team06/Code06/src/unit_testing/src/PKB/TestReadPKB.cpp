@@ -39,6 +39,8 @@ TEST_CASE("findDesignEntities() Tests") {
     Parameter ifParam = Parameter("irrelevant", "if");
     res = readPkb.findDesignEntities(ifParam);
     check = { "3", "6", "9" };
+    std::sort(res.begin(), res.end());
+    std::sort(check.begin(), check.end());
     REQUIRE(res == check);
 
     Parameter entParam = Parameter("irrelevant", "variable");
