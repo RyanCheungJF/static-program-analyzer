@@ -3,11 +3,13 @@
 #include "../../spa/src/PKB/WritePKB.cpp"
 #include "../../spa/src/qps/QPS.h"
 #include "../../spa/src/PKB/utils/utils.h"
+#include "../../spa/src/utils/AppConstants.h"
 #include <algorithm>
 
 using namespace std;
 
 PKB buildPkb() {
+    AppConstants CONSTANTS;
 	PKB pkb;
 	WritePKB writePkb;
 
@@ -42,17 +44,17 @@ PKB buildPkb() {
 
 	writePkb.setCall(2, "sub");
 
-	writePkb.setStatement("assign", 1);
-	writePkb.setStatement("assign", 4);
-	writePkb.setStatement("assign", 6);
-	writePkb.setStatement("assign", 8);
-	writePkb.setStatement("assign", 11);
-	writePkb.setStatement("if", 9);
-	writePkb.setStatement("while", 3);
-	writePkb.setStatement("call", 2);
-	writePkb.setStatement("print", 7);
-	writePkb.setStatement("read", 5);
-	writePkb.setStatement("read", 10);
+	writePkb.setStatement(CONSTANTS.ASSIGN, 1);
+	writePkb.setStatement(CONSTANTS.ASSIGN, 4);
+	writePkb.setStatement(CONSTANTS.ASSIGN, 6);
+	writePkb.setStatement(CONSTANTS.ASSIGN, 8);
+	writePkb.setStatement(CONSTANTS.ASSIGN, 11);
+	writePkb.setStatement(CONSTANTS.IF, 9);
+	writePkb.setStatement(CONSTANTS.WHILE, 3);
+	writePkb.setStatement(CONSTANTS.CALL, 2);
+	writePkb.setStatement(CONSTANTS.PRINT, 7);
+	writePkb.setStatement(CONSTANTS.READ, 5);
+	writePkb.setStatement(CONSTANTS.READ, 10);
 
 	writePkb.setEntity(1, { "x" });
 	writePkb.setEntity(3, { "x" });

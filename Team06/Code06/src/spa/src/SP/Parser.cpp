@@ -73,19 +73,19 @@ std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
 		if (tokens.at(1).type == TokenType::ASSIGN) { // Assign Statement
 			return parseAssignStatement(tokens);
 		}
-		else if (tokens.front().value == "read") {
+		else if (tokens.front().value == READ) {
 			return parseReadStatement(tokens);
 		}
-		else if (tokens.front().value == "print") {
+		else if (tokens.front().value == PRINT) {
 			return parsePrintStatement(tokens);
 		}
-		else if (tokens.front().value == "call") {
+		else if (tokens.front().value == CALL) {
 			return parseCallStatement(tokens);
 		}
-		else if (tokens.front().value == "while") {
+		else if (tokens.front().value == WHILE) {
 			return parseWhileStatement(tokens);
 		}
-		else if (tokens.front().value == "if") {
+		else if (tokens.front().value == IF) {
 			return parseIfStatement(tokens);
 		}
 		else {

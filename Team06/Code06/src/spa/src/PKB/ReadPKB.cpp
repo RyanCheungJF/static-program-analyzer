@@ -102,11 +102,11 @@ std::unordered_set<Ent> ReadPKB::getModifiesP(ProcName name) {
 }
 
 std::unordered_set<StmtNum> ReadPKB::getIfStatementNumbers() {
-    return pkbInstance->statementStorage->getStatementNumbers("if");
+    return pkbInstance->statementStorage->getStatementNumbers(IF);
 }
 
 std::unordered_set<StmtNum> ReadPKB::getWhileStatementNumbers() {
-    return pkbInstance->statementStorage->getStatementNumbers("while");
+    return pkbInstance->statementStorage->getStatementNumbers(WHILE);
 }
 
 std::unordered_set<StmtNum> ReadPKB::getContainedStatements(StmtNum containerNum) {

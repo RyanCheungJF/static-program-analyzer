@@ -166,38 +166,5 @@ TEST_CASE("Support for Select v pattern a (v, _)\'") {
     REQUIRE(res.size() == check.size());
 }
 
-// Upcoming feature when we optimise it from a tree to a storage of postfix strings
-//TEST_CASE("Support for pattern's inorder traversal") {
-//    WritePKB writePkb;
-//    ReadPKB readPkb;
-//    PKB pkb;
-//    PatternStorage pa;
-//    pkb.patternStorage = &pa;
-//    writePkb.setInstancePKB(pkb);
-//    readPkb.setInstancePKB(pkb);
-//
-//    //line 1: z = a + b / c
-//    //line 2: z = z * 5
-//
-//    std::string lhs = "z";
-//    std::unique_ptr<Expression> line1rhs = writePkb.buildSubtree("a + b / c");
-//    std::unique_ptr<Expression> line2rhs = writePkb.buildSubtree("z * 5");
-//    std::unique_ptr<Expression> line3rhs = writePkb.buildSubtree("x * 5");
-//
-//    writePkb.writePattern(lhs, 1, std::move(line1rhs));
-//    writePkb.writePattern(lhs, 2, std::move(line2rhs));
-//    writePkb.writePattern(lhs, 3, std::move(line3rhs));
-//
-//    std::vector<StmtNum> lines_qs1 = readPkb.interpretQuery(qs1);
-//    std::vector<StmtNum> lines_qs2 = readPkb.interpretQuery(qs2);
-//
-//    bool res = true;
-//    res = res && lines_qs1.size() == 1;
-//    res = res && lines_qs2.size() == 0;
-//
-//    std::cout << "COMPLETE";
-//    REQUIRE(res);
-//}
-
 
 

@@ -2,7 +2,6 @@
 #include "../../../spa/src/PKB/WritePKB.h"
 #include "../../../spa/src/PKB/ReadPKB.h"
 
-using namespace std;
 
 TEST_CASE("Checks that write and read works for FollowsStorage") {
 
@@ -394,35 +393,3 @@ TEST_CASE("FollowsStorage: write(StmtNum followee, StmtNum follower)") {
         REQUIRE(!fs.exists(3, 4));
     }
 }
-
-/*
-TEST_CASE("Checks that different PKB running instances can point to the same API") {
-
-    WritePKB writePkb;
-    ReadPKB readPkb;
-    PKB pkb1;
-    FollowsStorage fs;
-    pkb1.followsStorage = &fs;
-    StmtStorage sts;
-    pkb1.statementStorage = &sts;
-    writePkb.setInstancePKB(pkb1);
-
-    writePkb.setFollows(1, 2);
-
-    PKB pkb2;
-    pkb2.followsStorage = &fs;
-    pkb2.statementStorage = &sts;
-    readPkb.setInstancePKB(pkb2);
-
-    Parameter param1 = Parameter("1", "fixed_int");
-    Parameter param2 = Parameter("2", "fixed_int");
-    std::vector<Parameter> params;
-    params.push_back(param1);
-    params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Follows", params);
-
-    std::vector<std::vector<std::string>> check = { {"1", "2"} };
-    std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(check == res);
-}
-*/

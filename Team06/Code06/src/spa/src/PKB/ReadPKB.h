@@ -5,15 +5,12 @@
 #include "readHandlers/AssignPatternHandler.h"
 #include "../qps/entities/Relationship.h"
 #include "../qps/entities/Pattern.h"
-
-//#ifndef SPA_READPKB_H
-//#define SPA_READPKB_H
-//#endif //SPA_READPKB_H
+#include "../utils/AppConstants.h"
 
 typedef int StmtNum;
 typedef std::string ProcName;
 
-class ReadPKB {
+class ReadPKB :AppConstants {
 public:
 
     // Sets the pointer to the PKB instance if it is not set yet
