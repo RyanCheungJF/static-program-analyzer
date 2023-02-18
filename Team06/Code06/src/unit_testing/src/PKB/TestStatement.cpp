@@ -7,8 +7,9 @@ TEST_CASE("Check that all statements are recorded in StmtStorage") {
     StmtStorage sts;
 
     Stmt s = "if";
-    std::unordered_set<StmtNum> lines = {3, 6, 9};
-    sts.writeStatement(s, lines);
+    sts.writeStatement(s, 3);
+    sts.writeStatement(s, 6);
+    sts.writeStatement(s, 9);
     std::unordered_set<StmtNum> statementNums = sts.getStatementNumbers(s);
 
     bool res = true;
@@ -24,8 +25,6 @@ TEST_CASE("Check that a statement does not appear in the source code, StmtStorag
     StmtStorage sts;
 
     Stmt s = "if";
-    std::unordered_set<StmtNum> lines;
-    sts.writeStatement(s, lines);
     std::unordered_set<StmtNum> statementNums = sts.getStatementNumbers(s);
 
     bool res = true;
@@ -39,8 +38,7 @@ TEST_CASE("Check that given query for a statement and a statementNumber that it 
     StmtStorage sts;
 
     Stmt s = "if";
-    std::unordered_set<StmtNum> lines = {3};
-    sts.writeStatement(s, lines);
+    sts.writeStatement(s, 3);
 
     bool res = true;
     res = res && (sts.checkStatement("if", 3) == true);
@@ -58,8 +56,7 @@ TEST_CASE("Check that given a StatementAPI and their StatementAPI numbers, a que
     StmtStorage sts;
 
     Stmt s = "if";
-    std::unordered_set<StmtNum> lines = {3};
-    sts.writeStatement(s, lines);
+    sts.writeStatement(s, 3);
 
     REQUIRE(sts.checkStatement("while", 4) == false);
 }
@@ -75,27 +72,34 @@ TEST_CASE("StmtStorage: getStatementNumbers(Stmt s): stmt") {
     }
     Stmt s1 = "if";
     std::unordered_set<StmtNum> lines1 = {3, 6, 9};
-    sts.writeStatement(s1, lines1);
+    sts.writeStatement(s1, 3);
+    sts.writeStatement(s1, 6);
+    sts.writeStatement(s1, 9);
 
     Stmt s2 = "while";
     std::unordered_set<StmtNum> lines2 = {17, 22, 24};
-    sts.writeStatement(s2, lines2);
+    sts.writeStatement(s2, 17);
+    sts.writeStatement(s2, 22);
+    sts.writeStatement(s2, 24);
 
     Stmt s3 = "assign";
     std::unordered_set<StmtNum> lines3 = {5, 7};
-    sts.writeStatement(s3, lines3);
+    sts.writeStatement(s3, 5);
+    sts.writeStatement(s3, 7);
 
     Stmt s4 = "print";
     std::unordered_set<StmtNum> lines4 = {4};
-    sts.writeStatement(s4, lines4);
+    sts.writeStatement(s4, 4);
 
     Stmt s5 = "read";
     std::unordered_set<StmtNum> lines5 = {8, 18, 20};
-    sts.writeStatement(s5, lines5);
+    sts.writeStatement(s5, 8);
+    sts.writeStatement(s5, 18);
+    sts.writeStatement(s5, 20);
 
     Stmt s6 = "call";
     std::unordered_set<StmtNum> lines6 = {23};
-    sts.writeStatement(s6, lines6);
+    sts.writeStatement(s6, 23);
 
     SECTION("getStatementNumbers(Stmt s): non-empty storage") {
         std::unordered_set<StmtNum> statementNums = sts.getStatementNumbers(stmt);

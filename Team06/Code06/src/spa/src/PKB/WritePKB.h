@@ -21,8 +21,6 @@ public:
     // Sets ParentT relation in PKB
     void setParentT(StmtNum parent, std::unordered_set<StmtNum> children);
 
-    // Sets the statement along with the statement lines that they appear in
-    void setStatement(Stmt s, std::unordered_set<StmtNum> lines);
 
     // Sets the statement along with the statement line that it appears in
     void setStatement(Stmt s, StmtNum line);

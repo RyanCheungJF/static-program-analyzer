@@ -21,7 +21,9 @@ TEST_CASE("findDesignEntities() Tests") {
     writePkb.setProcedure(p, lines);
 
     Stmt s = "if";
-    writePkb.setStatement(s, lines);
+    writePkb.setStatement(s, 3);
+    writePkb.setStatement(s, 6);
+    writePkb.setStatement(s, 9);
 
     Ent e = "varName";
     writePkb.setEntity(1, {e});
@@ -59,8 +61,9 @@ TEST_CASE("Check that ReadPKB returns all statement numbers of a given statement
     readPkb.setInstancePKB(pkb);
 
     Stmt s = "if";
-    std::unordered_set<StmtNum> lines = {3, 6, 9};
-    writePkb.setStatement(s, lines);
+    writePkb.setStatement(s, 3);
+    writePkb.setStatement(s, 6);
+    writePkb.setStatement(s, 9);
 
     Parameter p = Parameter("irrelevant", s);
     std::vector<std::string> res = readPkb.findDesignEntities(p);
@@ -80,8 +83,6 @@ TEST_CASE("Check that a statement does not appear in the source code, ReadPKB sh
     readPkb.setInstancePKB(pkb);
 
     Stmt s = "if";
-    std::unordered_set<StmtNum> lines;
-    writePkb.setStatement(s, lines);
     Parameter p = Parameter(s, "irrelevant");
     std::vector<std::string> res = readPkb.findDesignEntities(p);
     std::vector<std::string> check;
