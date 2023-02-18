@@ -8,18 +8,14 @@ TEST_CASE("Valid source program") {
 	Tokenizer testTokenizer;
 	std::deque<Token> generatedTokens;
 	std::deque<Token> expectedTokens;
-	auto testDirectory = std::filesystem::path(__FILE__);
-	for (int i = 0; i < 7; i++) {
+	auto testDirectory = std::filesystem::path(UNIT_TESTING_DIR);
+	for (int i = 0; i < 3; i++) {
 		testDirectory = testDirectory.parent_path();
 	}
-	testDirectory /= "Tests06";
-	testDirectory /= "sp";
-	testDirectory /= "tokenizer";
-
+	testDirectory /= "Tests06/sp/tokenizer/";
 
 	SECTION("Valid names") {
-		testDirectory /= "valid1.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "valid1.txt");
 		strStream << testFile.rdbuf();
 
 		Token t1(TokenType::NAME, "hello");
@@ -34,8 +30,7 @@ TEST_CASE("Valid source program") {
 	}
 
 	SECTION("Valid integers") {
-		testDirectory /= "valid2.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "valid2.txt");
 		strStream << testFile.rdbuf();
 
 		Token t1(TokenType::INTEGER, "123");
@@ -50,8 +45,7 @@ TEST_CASE("Valid source program") {
 	}
 
 	SECTION("Valid braces and semicolon") {
-		testDirectory /= "valid3.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "valid3.txt");
 		strStream << testFile.rdbuf();
 
 		Token t1(TokenType::LEFT_BRACE, "{");
@@ -69,8 +63,7 @@ TEST_CASE("Valid source program") {
 	}
 
 	SECTION("Valid cond_expr operators") {
-		testDirectory /= "valid4.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "valid4.txt");
 		strStream << testFile.rdbuf();
 
 		Token t1(TokenType::NOT, "!");
@@ -86,8 +79,7 @@ TEST_CASE("Valid source program") {
 	}
 
 	SECTION("Valid comparators") {
-		testDirectory /= "valid5.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "valid5.txt");
 		strStream << testFile.rdbuf();
 
 		Token t1(TokenType::GREATER, ">");
@@ -106,8 +98,7 @@ TEST_CASE("Valid source program") {
 	}
 
 	SECTION("Valid operators") {
-		testDirectory /= "valid6.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "valid6.txt");
 		strStream << testFile.rdbuf();
 
 		Token t1(TokenType::MODULO, "%");
@@ -126,8 +117,7 @@ TEST_CASE("Valid source program") {
 
 	// whitespace test for alphanumeric, valid but parser will catch
 	SECTION("Valid with no whitespace") {
-		testDirectory /= "valid7.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "valid7.txt");
 		strStream << testFile.rdbuf();
 
 		Token t1(TokenType::NAME, "aBc12");
@@ -144,8 +134,7 @@ TEST_CASE("Valid source program") {
 	}
 
 	SECTION("Valid sample program with no newlines") {
-		testDirectory /= "valid8.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "valid8.txt");
 		strStream << testFile.rdbuf();
 
 		Token t1(TokenType::NAME, "procedure");
@@ -169,8 +158,7 @@ TEST_CASE("Valid source program") {
 	}
 
 	SECTION("Valid sample program with lots of whitespaces") {
-		testDirectory /= "valid9.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "valid9.txt");
 		strStream << testFile.rdbuf();
 
 		Token t1(TokenType::NAME, "procedure");
@@ -192,8 +180,7 @@ TEST_CASE("Valid source program") {
 	}
 
 	SECTION("Valid sample program with varying whitespaces") {
-		testDirectory /= "valid10.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "valid10.txt");
 		strStream << testFile.rdbuf();
 
 		Token t1(TokenType::NAME, "procedure");
@@ -221,7 +208,7 @@ TEST_CASE("Valid source program") {
 		Token t23(TokenType::ENDOFFILE, "End of File");
 
 		expectedTokens = { t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13,
-						   t14, t15, t16, t17, t18, t19, t20, t21, t22, t23};
+						   t14, t15, t16, t17, t18, t19, t20, t21, t22, t23 };
 		generatedTokens = testTokenizer.tokenize(strStream);
 
 		REQUIRE(generatedTokens == expectedTokens);
@@ -231,18 +218,15 @@ TEST_CASE("Valid source program") {
 TEST_CASE("Invalid source program") {
 	std::stringstream strStream;
 	Tokenizer testTokenizer;
-	auto testDirectory = std::filesystem::path(__FILE__);
-	for (int i = 0; i < 7; i++) {
+	auto testDirectory = std::filesystem::path(UNIT_TESTING_DIR);
+	for (int i = 0; i < 3; i++) {
 		testDirectory = testDirectory.parent_path();
 	}
-	testDirectory /= "Tests06";
-	testDirectory /= "sp";
-	testDirectory /= "tokenizer";
+	testDirectory /= "Tests06/sp/tokenizer/";
 	std::string errorMessage = "";
 
 	SECTION("Invalid Integer") {
-		testDirectory /= "invalid1.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "invalid1.txt");
 		strStream << testFile.rdbuf();
 
 		try {
@@ -256,8 +240,7 @@ TEST_CASE("Invalid source program") {
 	}
 
 	SECTION("Invalid integer due to no whitespace between alphanumeric characters") {
-		testDirectory /= "invalid2.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "invalid2.txt");
 		strStream << testFile.rdbuf();
 
 		try {
@@ -271,10 +254,9 @@ TEST_CASE("Invalid source program") {
 	}
 
 	/*Upon detecting a '&', another '&' must follow(even though no whitespace between
-      non-alphanumeric tokens is allowed), the lone '&' is not a valid token. */
+	  non-alphanumeric tokens is allowed), the lone '&' is not a valid token. */
 	SECTION("Invalid and operator, lone ampersand") {
-		testDirectory /= "invalid3.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "invalid3.txt");
 		strStream << testFile.rdbuf();
 
 		try {
@@ -288,8 +270,7 @@ TEST_CASE("Invalid source program") {
 	}
 
 	SECTION("Invalid or operator, lone |") {
-		testDirectory /= "invalid4.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "invalid4.txt");
 		strStream << testFile.rdbuf();
 
 		try {
@@ -303,8 +284,7 @@ TEST_CASE("Invalid source program") {
 	}
 
 	SECTION("Invalid tokens") {
-		testDirectory /= "invalid5.txt";
-		std::ifstream testFile(testDirectory.string());
+		std::ifstream testFile(testDirectory.string() + "invalid5.txt");
 		strStream << testFile.rdbuf();
 
 		try {

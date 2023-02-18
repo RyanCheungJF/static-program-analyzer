@@ -18,8 +18,8 @@ TEST_CASE("Valid Source Program") {
 	Tokenizer testTokenizer;
 	Parser testParser;
 	std::deque<Token> tokenQueue;
-	auto testDirectory = std::filesystem::path(__FILE__);
-	for (int i = 0; i < 7; i++) {
+	auto testDirectory = std::filesystem::path(UNIT_TESTING_DIR);
+	for (int i = 0; i < 3; i++) {
 		testDirectory = testDirectory.parent_path();
 	}
 	testDirectory /= "Tests06/sp/parser/";
@@ -244,8 +244,8 @@ TEST_CASE("Invalid Source Program") {
 	Parser testParser;
 	std::deque<Token> tokenQueue;
 	std::string errorMessage = "";
-	auto testDirectory = std::filesystem::path(__FILE__);
-	for (int i = 0; i < 7; i++) {
+	auto testDirectory = std::filesystem::path(UNIT_TESTING_DIR);
+	for (int i = 0; i < 3; i++) {
 		testDirectory = testDirectory.parent_path();
 	}
 	testDirectory /= "Tests06/sp/parser/";
