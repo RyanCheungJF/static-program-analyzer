@@ -1,25 +1,25 @@
 1 - comment
 stamt s;
 Select s such that Follows(1, s)
-SyntaxError
+[syntax]
 5000
 2 - comment
 Stmt s;
 Select s such that Follows(1, s)
-SyntaxError
+[syntax]
 5000
 3 - comment
 stmt 1s;
 Select s such that Follows(1, s)
-SyntaxError
+[syntax]
 5000
 4 - comment
 stmt ;s;
 Select s such that Follows(1, s)
-SyntaxError
+[syntax]
 5000
 5 - comment
 hello world;
 Select s such that Follows(1, s)
-SyntaxError
+[syntax]
 5000

@@ -3,10 +3,10 @@
 using namespace std;
 
 TEST_CASE("processQueries / bad query string / throw corresponding error") {
-	string query = "stamt s; Select s such that Follows(1, s)";
+	string query = "assign a; Select n pattern a(\"k\", _)";
 	QPS qps;
 	ReadPKB r;
 	vector<string> result = qps.processQueries(query, r);
-	vector<string> expected{ "SyntaxError" };
+	vector<string> expected{ "SemanticError" };
 	CHECK(result == expected);
 }
