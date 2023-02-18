@@ -1,6 +1,5 @@
 #include "catch.hpp"
-#include "../../../spa/src/PKB/WritePKB.h"
-#include "../../../spa/src/PKB/ReadPKB.h"
+#include "../../../spa/src/PKB/storage/ParentStorage.h"
 
 TEST_CASE("Check writes and reads to/from ParentStorage") {
     ParentStorage par;
