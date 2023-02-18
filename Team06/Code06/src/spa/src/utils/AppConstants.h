@@ -29,4 +29,12 @@ public:
     inline static const std::string FIXED_INT = "fixed_int";
     inline static const std::string FIXED_STRING = "fixed_string";
     inline static const std::string FIXED_STRING_WTIH_WILDCARD = "fixed_string_with_wildcard";
+
+    // relationships
+    inline static const std::string FOLLOWS = "Follows";
+    inline static const std::string FOLLOWST = "Follows*";
+    inline static const std::string PARENT = "Parent";
+    inline static const std::string PARENTT = "Parent*";
+    inline static const std::string USES = "Uses";
+    inline static const std::string MODIFIES = "Modifies";
 };
