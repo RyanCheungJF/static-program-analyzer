@@ -64,8 +64,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynVar(Para
 	return res;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynWildcard(Parameter param1, Parameter param2) {
-	std::string paramString2 = param2.getValue();
+std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynWildcard(Parameter param1) {
 	std::vector<std::vector<std::string>> res;
 
 	std::unordered_set<StmtNum> typedStmtNums = stmtStorage->getStatementNumbers(param1.getTypeString());
@@ -73,7 +72,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynWildcard
 		std::unordered_set<Ent> entities = rlStorage->getEnt(typedStmtNum);
 		for (auto entity : entities) {
 			std::string stmtNumString = to_string(typedStmtNum);
-			res.push_back({ stmtNumString, paramString2 });
+			res.push_back({ stmtNumString, entity });
 		}
 	}
 	return res;
@@ -144,7 +143,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handle(Parameter para
 			return handleStmtSynVar(param1, param2);
 		}
 		else {
-			return handleStmtSynWildcard(param1, param2);
+			return handleStmtSynWildcard(param1);
 		}
 	}
 	return std::vector<std::vector<std::string>>();
