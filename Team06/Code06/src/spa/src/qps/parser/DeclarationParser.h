@@ -6,7 +6,11 @@
 #define SPA_DECLARATIONPARSER_H
 #include <map>
 #include <string>
+#include <list>
 #include "../VariableStore.h"
+#include "exceptions/SyntaxException.h"
+#include "ParserUtil.h"
+#include "../QPSGrammarUtils.h"
 using namespace std;
 
 

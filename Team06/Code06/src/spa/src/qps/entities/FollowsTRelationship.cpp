@@ -17,7 +17,7 @@ bool FollowsTRelationship::validateSyntax(vector<Parameter> ps)
 FollowsTRelationship::FollowsTRelationship(vector<Parameter> ps)
 {
 	if (!validateSyntax(ps)) {
-		throw - 1;
+		throw SyntaxException();
 	}
 	type = RelationshipType::FOLLOWST;
 	params = ps;

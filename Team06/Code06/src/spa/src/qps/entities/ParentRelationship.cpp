@@ -17,7 +17,7 @@ bool ParentRelationship::validateSyntax(vector<Parameter>& ps)
 ParentRelationship::ParentRelationship(vector<Parameter>& ps)
 {
 	if (!validateSyntax(ps)) {
-		throw - 1;
+		throw SyntaxException();
 	}
 	type = RelationshipType::PARENT;
 	params = ps;

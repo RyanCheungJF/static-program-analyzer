@@ -1,6 +1,7 @@
 #ifndef SPA_QPS_FOLLOWSTRELATIONSHIP_H
 #define SPA_QPS_FOLLOWSTRELATIONSHIP_H
 #include "Relationship.h"
+#include "exceptions/SyntaxException.h"
 
 using namespace std;
 

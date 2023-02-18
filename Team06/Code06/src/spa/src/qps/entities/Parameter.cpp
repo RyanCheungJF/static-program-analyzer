@@ -67,7 +67,7 @@ bool Parameter::isStatementRef(Parameter& p)
 
 bool Parameter::isProcedure(Parameter& p)
 {
-	return p.type == ParameterType::PROCEDURE;
+	return p.type == ParameterType::PROCEDURE || p.type == ParameterType::FIXED_STRING;
 }
 
 bool Parameter::isDsgEntity(Parameter& p) {
@@ -82,7 +82,7 @@ bool Parameter::isUncheckedSynonym()
 void Parameter::updateSynonymType(ParameterType pt)
 {
 	if (type != ParameterType::SYNONYM) {
-		throw - 1;
+		throw InternalException("Error: Parameter.updateSynonymType parameter is not a synonym.");
 	}
 	type = pt;
 }
