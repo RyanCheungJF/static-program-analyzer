@@ -21,65 +21,73 @@ void QueryDB::insertTable(Table table) {
     if (seenParameters.empty()) {
         tableVector.push_back(table);
     } else {
+        // Throw everything in here in a function
         vector<Table> newTableVector;
         while (!tableVector.empty()) {
             Table t = tableVector.back();
             tableVector.pop_back();
             vector<pair<int, int>> intersection = getAllIntersectingParams(t, table);
             if (intersection.empty()) {
+                // just insert the popped table into the newTableVector
                 newTableVector.push_back(t);
             } else {
-                pair<vector<int>, vector<int>> nonIntersectionIndexes = getAllNonIntersectingParams(t, table);
-                vector<Parameter> newHeader;
-                vector<vector<string>> newContent;
-                vector<Parameter> t1Head = t.getHeaders();
-                vector<Parameter> t2Head = table.getHeaders();
-                vector<vector<string>> t1Content = t.getContent();
-                vector<vector<string>> t2Content = table.getContent();
+                // intersect the two tables
+                 table = intersectTables(t,table, intersection);
+            }
+        }
+        newTableVector.push_back(table);
+        tableVector = newTableVector;
+    }
+}
+
+
+Table QueryDB::intersectTables(Table t1, Table t2, const vector<pair<int,int>> & intersection) {
+    pair<vector<int>, vector<int>> nonIntersectionIndexes = getAllNonIntersectingParams(t1, t2);
+    vector<Parameter> newHeader;
+    vector<vector<string>> newContent;
+    vector<Parameter> t1Head = t1.getHeaders();
+    vector<Parameter> t2Head = t2.getHeaders();
+    vector<vector<string>> t1Content = t1.getContent();
+    vector<vector<string>> t2Content = t2.getContent();
+    for (pair<int, int> index: intersection){
+        // Inserts the intersecting params first
+        newHeader.push_back(t1Head[index.first]);
+    }
+    for (int index: nonIntersectionIndexes.first) {
+        // Then inserts the remaining params for Table t
+        newHeader.push_back(t1Head[index]);
+    }
+    for (int index: nonIntersectionIndexes.second) {
+        // Then inserts the remaining params for Table table
+        newHeader.push_back(t2Head[index]);
+    }
+    for (vector<string> firstContent: t1Content) {
+        for (vector<string> secondContent: t2Content) {
+            bool isMatch = true;
+            for (pair<int, int> indexes: intersection) {
+                if(firstContent[indexes.first] != secondContent[indexes.second]) {
+                    isMatch = false;
+                }
+            }
+            if(isMatch) {
+                vector<string> contentArr;
                 for (pair<int, int> index: intersection){
                     // Inserts the intersecting params first
-                    newHeader.push_back(t1Head[index.first]);
+                    contentArr.push_back(firstContent[index.first]);
                 }
                 for (int index: nonIntersectionIndexes.first) {
                     // Then inserts the remaining params for Table t
-                    newHeader.push_back(t1Head[index]);
+                    contentArr.push_back(firstContent[index]);
                 }
                 for (int index: nonIntersectionIndexes.second) {
                     // Then inserts the remaining params for Table table
-                    newHeader.push_back(t2Head[index]);
+                    contentArr.push_back(secondContent[index]);
                 }
-                // HOLY SHIT I NEED TO REFACTOR THIS
-                for (vector<string> firstContent: t1Content) {
-                    for (vector<string> secondContent: t2Content) {
-                        bool isMatch = true;
-                        for (pair<int, int> indexes: intersection) {
-                            if(firstContent[indexes.first] != secondContent[indexes.second]) {
-                                isMatch = false;
-                            }
-                        }
-                        if(isMatch) {
-                            vector<string> contentArr;
-                            for (pair<int, int> index: intersection){
-                                // Inserts the intersecting params first
-                                contentArr.push_back(firstContent[index.first]);
-                            }
-                            for (int index: nonIntersectionIndexes.first) {
-                                // Then inserts the remaining params for Table t
-                                contentArr.push_back(firstContent[index]);
-                            }
-                            for (int index: nonIntersectionIndexes.second) {
-                                // Then inserts the remaining params for Table table
-                                contentArr.push_back(secondContent[index]);
-                            }
-                            newContent.push_back(contentArr);
-                        }
-                    }
-                }
-                newTableVector.emplace_back(newHeader, newContent);
+                newContent.push_back(contentArr);
             }
         }
-        tableVector = newTableVector;
     }
+    return Table{newHeader, newContent};
 }
 
 vector<pair<int, int>> QueryDB::getAllIntersectingParams(Table t1, Table t2) {

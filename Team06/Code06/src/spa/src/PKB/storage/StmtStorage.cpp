@@ -1,12 +1,5 @@
 #include "StmtStorage.h"
 
-void StmtStorage::writeStatement(Stmt s, std::unordered_set<StmtNum> lines) {
-    for (StmtNum line: lines) {
-        stmt_stmtNum[s].insert(line);
-    }
-    return;
-}
-
 void StmtStorage::writeStatement(Stmt s, StmtNum line) {
     stmt_stmtNum[s].insert(line);
     return;

@@ -21,8 +21,9 @@
 #include "./AST/Node/MathExpression.h"
 #include "./AST/Node/Variable.h"
 #include "./AST/Node/Constant.h"
+#include "../utils/AppConstants.h"
 
-class Parser {
+class Parser : AppConstants {
 private:
 	std::unique_ptr<Procedure> parseProcedure(std::deque<Token>& tokens);
 	std::unique_ptr<StatementList> parseStatementList(std::deque<Token>& tokens);

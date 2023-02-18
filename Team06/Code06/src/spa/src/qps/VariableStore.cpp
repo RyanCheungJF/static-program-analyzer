@@ -1,7 +1,6 @@
 //
 // Created by Faruq on 30/1/23.
 //
-#include <iostream>
 #include "VariableStore.h"
 
 VariableStore::VariableStore() = default;
@@ -14,7 +13,7 @@ void VariableStore::insertVariable(Parameter p) {
     if (!hasVariable(p)) {
         store[p.getValue()] = p;
     } else {
-        throw Exception("VariableStore: multiple variables with same name");
+        throw SemanticException();
     }
 }
 

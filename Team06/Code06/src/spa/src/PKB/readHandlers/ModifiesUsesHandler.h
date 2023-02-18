@@ -1,6 +1,7 @@
 #include "../storage/ModifiesUsesStorage.h"
 #include "../../qps/entities/Parameter.h"
 #include "../storage/StmtStorage.h"
+#include "../../../src/utils/AppConstants.h"
 #include <memory>
 
 
@@ -28,7 +29,7 @@ private:
 	std::vector<std::vector<std::string>> handleStmtSynVar(Parameter param1, Parameter param2);
 
 	// e.g. Uses(s, v) OR Uses(s, _)
-	std::vector<std::vector<std::string>> handleStmtSynWildcard(Parameter param1, Parameter param2);
+	std::vector<std::vector<std::string>> handleStmtSynWildcard(Parameter param1);
 
 	// e.g. Uses(p, "x")
 	std::vector<std::vector<std::string>> handleProcSynVar(Parameter fixedVarParam);

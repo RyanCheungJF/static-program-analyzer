@@ -6,8 +6,8 @@
 #include "../../SP/AST/Node/AssignStatement.h"
 #include "../../SP/Tokenizer.h"
 #include "../../SP/Parser.h"
+#include "../../../src/utils/AppConstants.h"
 
-typedef int StmtNum;
 struct hashFunction
 {
     size_t operator()(const std::pair<int, std::unique_ptr<Expression>>& x) const

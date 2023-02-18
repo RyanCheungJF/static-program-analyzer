@@ -1,8 +1,11 @@
 #include "catch.hpp"
+//#include "../../../spa/src/PKB/storage/ParentStorage.h"
 #include "../../../spa/src/PKB/WritePKB.h"
 #include "../../../spa/src/PKB/ReadPKB.h"
+#include "../utils/utils.h"
 
 using namespace std;
+using namespace unit_testing_utils;
 
 TEST_CASE("Check writes and reads to/from ParentStorage") {
     ParentStorage par;
@@ -57,17 +60,12 @@ TEST_CASE("Tests for getting parent") {
     REQUIRE(res == check);
 }
 
-// Test cases should be done. Waiting on Relationship object to support Parent Relationship
-/*
 TEST_CASE("Checks for cases e.g. Parent(1, assign)") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ParentStorage ps;
-    pkb.parentStorage = &ps;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -81,11 +79,11 @@ TEST_CASE("Checks for cases e.g. Parent(1, assign)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Parent", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Parent", params);
 
-    std::vector<std::vector<std::string>> check = { {"1", "2"}, {"1", "3"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(check == res);
+    REQUIRE(res.size() == 1);
+    REQUIRE(contains(res, { "1", "2" }));
 }
 
 TEST_CASE("Checks for cases e.g. Parent(while, assign)") {
@@ -93,10 +91,7 @@ TEST_CASE("Checks for cases e.g. Parent(while, assign)") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ParentStorage ps;
-    pkb.parentStorage = &ps;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -104,18 +99,18 @@ TEST_CASE("Checks for cases e.g. Parent(while, assign)") {
     writePkb.setParent(1, 3);
     writePkb.setStatement("while", 1);
     writePkb.setStatement("assign", 2);
-    writePkb.setStatement("assign", 3);
+    writePkb.setStatement("if", 3);
 
     Parameter param1 = Parameter("w", "while");
     Parameter param2 = Parameter("if", "if");
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Parent", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Parent", params);
 
-    std::vector<std::vector<std::string>> check = { {"1", "2"}, {"1", "3"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(check == res);
+    REQUIRE(res.size() == 1);
+    REQUIRE(contains(res, { "1", "3" }));
 }
 
 TEST_CASE("Checks for cases e.g. Parent(_, stmt)") {
@@ -123,10 +118,7 @@ TEST_CASE("Checks for cases e.g. Parent(_, stmt)") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    ParentStorage ps;
-    pkb.parentStorage = &ps;
-    StmtStorage sts;
-    pkb.statementStorage = &sts;
+    pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
@@ -140,10 +132,10 @@ TEST_CASE("Checks for cases e.g. Parent(_, stmt)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    Relationship rs = Relationship::makeRelationship("Parent", params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship("Parent", params);
 
-    std::vector<std::vector<std::string>> check = { {"1", "2"}, {"1", "3"} };
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(check == res);
+    REQUIRE(res.size() == 2);
+    REQUIRE(contains(res, { "1", "2" }));
+    REQUIRE(contains(res, { "1", "3" }));
 }
-*/

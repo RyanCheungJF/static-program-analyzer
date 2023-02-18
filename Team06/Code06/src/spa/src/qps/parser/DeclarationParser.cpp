@@ -1,11 +1,5 @@
-#include <iostream>
 #include "DeclarationParser.h"
-#include "ParserUtil.h"
-#include "../QPSGrammarUtils.h"
-//#include <stdio.h>
-#include <string>
-#include <map>
-#include <list>
+
 using namespace std;
 
 vector<Parameter> declarationToParameter(string s) {
@@ -22,7 +16,8 @@ vector<Parameter> declarationToParameter(string s) {
 
         return paramList;
     } else {
-        // TODO: throw error
+        // is not a design entity
+        throw SyntaxException();
     }
     return paramList;
 }

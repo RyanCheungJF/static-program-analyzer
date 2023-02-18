@@ -3,11 +3,13 @@
 #include "../../spa/src/PKB/WritePKB.cpp"
 #include "../../spa/src/qps/QPS.h"
 #include "../../spa/src/PKB/utils/utils.h"
+#include "../../spa/src/utils/AppConstants.h"
 #include <algorithm>
 
 using namespace std;
 
 PKB buildPkb() {
+    AppConstants CONSTANTS;
 	PKB pkb;
 	WritePKB writePkb;
 
@@ -42,17 +44,17 @@ PKB buildPkb() {
 
 	writePkb.setCall(2, "sub");
 
-	writePkb.setStatement("assign", 1);
-	writePkb.setStatement("assign", 4);
-	writePkb.setStatement("assign", 6);
-	writePkb.setStatement("assign", 8);
-	writePkb.setStatement("assign", 11);
-	writePkb.setStatement("if", 9);
-	writePkb.setStatement("while", 3);
-	writePkb.setStatement("call", 2);
-	writePkb.setStatement("print", 7);
-	writePkb.setStatement("read", 5);
-	writePkb.setStatement("read", 10);
+	writePkb.setStatement(CONSTANTS.ASSIGN, 1);
+	writePkb.setStatement(CONSTANTS.ASSIGN, 4);
+	writePkb.setStatement(CONSTANTS.ASSIGN, 6);
+	writePkb.setStatement(CONSTANTS.ASSIGN, 8);
+	writePkb.setStatement(CONSTANTS.ASSIGN, 11);
+	writePkb.setStatement(CONSTANTS.IF, 9);
+	writePkb.setStatement(CONSTANTS.WHILE, 3);
+	writePkb.setStatement(CONSTANTS.CALL, 2);
+	writePkb.setStatement(CONSTANTS.PRINT, 7);
+	writePkb.setStatement(CONSTANTS.READ, 5);
+	writePkb.setStatement(CONSTANTS.READ, 10);
 
 	writePkb.setEntity(1, { "x" });
 	writePkb.setEntity(3, { "x" });
@@ -407,6 +409,43 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
 			REQUIRE(exists(result, "sub"));
 		}
 	}
+
+	SECTION("Modifies") {
+		SECTION("stmtSyn, var") {
+			string query = R"(
+			stmt s;
+			Select s such that Modifies(s, "y"))";
+
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 4);
+			REQUIRE(exists(result, "2"));
+			REQUIRE(exists(result, "4"));
+			REQUIRE(exists(result, "5"));
+			REQUIRE(exists(result, "8"));
+		}
+
+		SECTION("stmtSyn, wildcard") {
+			string query = R"(
+			read r;
+			Select r such that Modifies(r, _))";
+
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 2);
+			REQUIRE(exists(result, "5"));
+			REQUIRE(exists(result, "10"));
+		}
+
+		SECTION("procSyn, syn") {
+			string query = R"(
+			procedure p; variable v;
+			Select p such that Modifies(p, v))";
+
+			result = qps.processQueries(query, readPkb);
+			REQUIRE(result.size() == 2);
+			REQUIRE(exists(result, "main"));
+			REQUIRE(exists(result, "sub"));
+		}
+	}
 }
 
 TEST_CASE("Select synonym from single such that clause, synonym is not in clause") {
@@ -416,16 +455,25 @@ TEST_CASE("Select synonym from single such that clause, synonym is not in clause
 	QPS qps;
 	vector<string> result;
 
-	SECTION("clause is false") {
+	SECTION("clause is false, Parent") {
 		string query = R"(
 		if ifs;
-		Select ifs such that Parent(ifs, 5))";
+		Select ifs such that Parent(1, 5))";
 
 		result = qps.processQueries(query, readPkb);
 		REQUIRE(result.empty());
 	}
 
-	SECTION("clause is true") {
+	SECTION("clause is false, Modifies") {
+		string query = R"(
+		variable v;
+		Select v such that Modifies(1, "y"))";
+
+		result = qps.processQueries(query, readPkb);
+		REQUIRE(result.empty());
+	}
+
+	SECTION("clause is true, Follows*") {
 		string query = R"(
 		assign a;
 		Select a such that Follows*(_, 6))";
@@ -437,6 +485,16 @@ TEST_CASE("Select synonym from single such that clause, synonym is not in clause
 		REQUIRE(exists(result, "6"));
 		REQUIRE(exists(result, "8"));
 		REQUIRE(exists(result, "11"));
+	}
+
+	SECTION("clause is true, Uses") {
+		string query = R"(
+		while w; assign a; variable v;
+		Select w such that Uses(a, v))";
+
+		result = qps.processQueries(query, readPkb);
+		REQUIRE(result.size() == 1);
+		REQUIRE(exists(result, "3"));
 	}
 }
 

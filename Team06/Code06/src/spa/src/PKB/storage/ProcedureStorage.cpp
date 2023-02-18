@@ -1,14 +1,14 @@
 #include "ProcedureStorage.h"
 
-void ProcedureStorage::writeProcedure(Proc p, std::unordered_set<StmtNum> lines) {
+void ProcedureStorage::writeProcedure(ProcName p, std::unordered_set<StmtNum> lines) {
     for (StmtNum line: lines) {
         proc_stmtNum[p].insert(line);
     }
-    procNames.insert(p);
+    procedures.insert(p);
     return;
 }
 
-bool ProcedureStorage::checkProcedure(Proc p, StmtNum num) {
+bool ProcedureStorage::checkProcedure(ProcName p, StmtNum num) {
 
     // source code does not even contain this type of statement
     if (proc_stmtNum.find(p) == proc_stmtNum.end()) {
@@ -17,7 +17,7 @@ bool ProcedureStorage::checkProcedure(Proc p, StmtNum num) {
     return proc_stmtNum[p].find(num) != proc_stmtNum[p].end();
 }
 
-std::unordered_set<StmtNum> ProcedureStorage::getProcedureStatementNumbers(Proc p) {
+std::unordered_set<StmtNum> ProcedureStorage::getProcedureStatementNumbers(ProcName p) {
     if (proc_stmtNum.find(p) == proc_stmtNum.end()) {
         std::unordered_set<StmtNum> emptySet;
         return emptySet;
@@ -25,6 +25,6 @@ std::unordered_set<StmtNum> ProcedureStorage::getProcedureStatementNumbers(Proc 
     return proc_stmtNum.at(p);
 }
 
-std::unordered_set<Proc> ProcedureStorage::getProcNames() {
-    return procNames;
+std::unordered_set<ProcName> ProcedureStorage::getProcNames() {
+    return procedures;
 }
