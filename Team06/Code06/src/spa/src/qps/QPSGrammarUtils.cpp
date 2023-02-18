@@ -24,9 +24,9 @@ bool isInteger(string integer) {
     return regex_match(integer, regex("^0$|^[1-9][0-9]*$"));
 }
 
-bool isSelectClause(string selectClause) {
-    return regex_search(selectClause, regex("^Select"));
-}
+//bool isSelectClause(string selectClause) {
+//    return regex_search(selectClause, regex("^Select"));
+//}
 
 //bool isSuchThatClause(string suchThatClause) {
 //    return regex_match(suchThatClause, regex("^such that"));
@@ -210,25 +210,25 @@ bool isFactor(string s) {
 }
 
 bool isFollows(string s) {
-    return true;
+    return s == "Follows";
 }
 
 bool isParent(string s) {
-    return true;
+    return s == "Parent";
 }
 
 bool isUses(string s) {
-    return true;
+    return s == "Uses";
 }
 
 bool isModifies(string s) {
-    return true;
+    return s == "Modifies";
 }
 
-bool isPatternCl(string s)
-{
-    return true;
-}
+//bool isPatternCl(string s)
+//{
+//    return s == "pattern";
+//}
 
 
 bool isRelRef(string s) {

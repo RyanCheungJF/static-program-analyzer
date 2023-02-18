@@ -20,6 +20,7 @@ private:
     vector<Table> tableVector;
     vector<pair<int, int>> getAllIntersectingParams(Table, Table);
     pair<vector<int>, vector<int>> getAllNonIntersectingParams(Table, Table);
+    Table intersectTables(Table t1, Table t2, const vector<pair<int,int>> & intersection);
 };
 
 

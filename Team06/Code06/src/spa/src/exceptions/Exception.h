@@ -10,7 +10,7 @@ private:
 public:
     Exception();
     Exception(string);
-    string getException();
+    string getMessage();
 };
 
 #endif

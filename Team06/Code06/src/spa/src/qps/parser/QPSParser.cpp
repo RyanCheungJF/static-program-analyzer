@@ -24,7 +24,8 @@ vector<Query> QPSParser::parse(string qpsQuery) {
         }
     }
     if(queryVec.empty()) {
-        throw Exception("missing select clause");
+        //no select query
+        throw SyntaxException();
     }
     vStore = parseDeclarations(declarations);
     // need to do it this way cuz dealing with pointer
@@ -52,7 +53,8 @@ vector<string> QPSParser::splitQuery(string qpsQuery) {
         clauses.push_back(clause);
     }
     if (endsWithSemicolon) {
-        throw Exception("Select clause should not end with ';'");
+        //select clause ends with semicolon
+        throw SyntaxException();
     }
     return clauses;
 }
@@ -60,18 +62,14 @@ vector<string> QPSParser::splitQuery(string qpsQuery) {
 void QPSParser::checkSynonyms(Query* query, VariableStore varStore)
 {
     vector<Parameter*> synPs = query->getAllUncheckedSynonyms();
-    for (Parameter* synP : synPs) {
-        if (!varStore.updateSynonym(synP)) {
-            throw Exception();
+    for (int i = 0; i < synPs.size(); i++) {
+        if (!varStore.updateSynonym(synPs.at(i))) {
+            //undeclared synonyms
+            throw SemanticException();
         }
     }
-    vector<Parameter> synAssigns = query->getAllSynAssigns();
-    for (Parameter p : synAssigns) {
-        if (!varStore.hasVariable(p)) {
-            throw Exception();
-        }
-        if (!(varStore.getType(p) == ParameterType::ASSIGN)) {
-            throw Exception();
-        }
+    if (!query->validateAllParameters()) {
+        //invalid parameter types
+        throw SemanticException();
     }
 }

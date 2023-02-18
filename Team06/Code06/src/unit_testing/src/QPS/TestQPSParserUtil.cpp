@@ -105,3 +105,40 @@ TEST_CASE("extractParameters / one clause with not proper format / throws error"
 	REQUIRE_THROWS(extractParameters(input));
 }
 
+TEST_CASE("extractSubStringUntilDelimiter / empty string, non-empty delimiter, 0 <= start < string length / throws error") {
+	string inputString = "";
+	string inputDelimiter = ",";
+	int start = 0;
+	CHECK_THROWS(extractSubStringUntilDelimiter(inputString, start, inputDelimiter));
+}
+
+TEST_CASE("extractSubStringUntilDelimiter / non-empty string, empty delimiter, 0 <= start < string length / throws error") {
+	string inputString = "helloMyName is johnny";
+	string inputDelimiter = "";
+	int start = 0;
+	CHECK_THROWS(extractSubStringUntilDelimiter(inputString, start, inputDelimiter));
+}
+
+TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty delimiter, start >= string length / throws error") {
+	string inputString = "helloMyName is johnny";
+	string inputDelimiter = ",";
+	int start = inputString.size();
+	CHECK_THROWS(extractSubStringUntilDelimiter(inputString, start, inputDelimiter));
+}
+
+TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty delimiter, start < 0 / throws error") {
+	string inputString = "helloMyName is johnny";
+	string inputDelimiter = ",";
+	int start = -1;
+	CHECK_THROWS(extractSubStringUntilDelimiter(inputString, start, inputDelimiter));
+}
+
+TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty delimiter not present, start = 0 / return tuple with full string and end pos at string length") {
+	string inputString = "helloMyName is johnny";
+	string inputDelimiter = ",";
+	int start = 0;
+
+	tuple<string, size_t> expected{ inputString, inputString.size() };
+	tuple<string, size_t> output = extractSubStringUntilDelimiter(inputString, start, inputDelimiter);
+	CHECK(expected == output);
+}
