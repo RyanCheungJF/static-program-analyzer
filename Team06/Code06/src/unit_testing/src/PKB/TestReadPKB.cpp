@@ -47,5 +47,46 @@ TEST_CASE("findDesignEntities() Tests") {
     res = readPkb.findDesignEntities(entParam);
     check = {"varName"};
     REQUIRE(res == check);
-
 }
+
+//findDesignEntities() tests
+TEST_CASE("Check that ReadPKB returns all statement numbers of a given statement type") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    Stmt s = "if";
+    std::unordered_set<StmtNum> lines = {3, 6, 9};
+    writePkb.setStatement(s, lines);
+
+    Parameter p = Parameter("irrelevant", s);
+    std::vector<std::string> res = readPkb.findDesignEntities(p);
+    std::vector<std::string> check = { "3", "6", "9" };
+
+    std::sort(res.begin(), res.end());
+    std::sort(check.begin(), check.end());
+    REQUIRE(res == check);
+}
+
+TEST_CASE("Check that a statement does not appear in the source code, ReadPKB should return an empty vector") {
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    Stmt s = "if";
+    std::unordered_set<StmtNum> lines;
+    writePkb.setStatement(s, lines);
+    Parameter p = Parameter(s, "irrelevant");
+    std::vector<std::string> res = readPkb.findDesignEntities(p);
+    std::vector<std::string> check;
+
+    REQUIRE(res == check);
+}
+
+

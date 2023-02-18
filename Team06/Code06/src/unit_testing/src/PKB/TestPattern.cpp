@@ -3,6 +3,25 @@
 #include "../../../spa/src/PKB/ReadPKB.h"
 #include "../../../spa/src/PKB/utils/utils.h"
 
+TEST_CASE("PatternStorage: fringe cases") {
+    PatternStorage ps;
+
+    SECTION("* getPatternWithLHS(std::string lhs): empty storage") {
+        auto res = ps.getPatternWithLHS("x");
+        REQUIRE(res == NULL);
+    }
+
+    std::string lhs = "z";
+    std::unique_ptr<Expression> line1rhs = pkb_utils::buildSubtree("a + b / c");
+    ps.writePattern(lhs, 1, std::move(line1rhs));
+
+    SECTION("* getPatternWithLHS(std::string lhs): non-empty storage, LHS not present") {
+        auto res = ps.getPatternWithLHS("x");
+        REQUIRE(res == NULL);
+    }
+}
+
+
 TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
     WritePKB writePkb;
     ReadPKB readPkb;
