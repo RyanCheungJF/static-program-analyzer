@@ -2,7 +2,12 @@
 
 CallStatement::CallStatement() {}
 
-CallStatement::CallStatement(std::string procName) {
+CallStatement::CallStatement(ProcName procName) {
+	this->procName = procName;
+}
+
+CallStatement::CallStatement(StmtNum stmtNum, ProcName procName) {
+	this->statementNumber = stmtNum;
 	this->procName = procName;
 }
 

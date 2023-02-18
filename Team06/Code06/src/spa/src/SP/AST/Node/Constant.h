@@ -5,10 +5,10 @@
 
 class Constant : public Expression {
 public:
-	int value;
+	Const value;
 
 	Constant();
-	Constant(int value);
+	Constant(Const value);
 
 	void accept(ASTVisitor* visitor) override;
 };

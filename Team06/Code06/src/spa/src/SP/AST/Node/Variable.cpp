@@ -2,7 +2,7 @@
 
 Variable::Variable() {}
 
-Variable::Variable(std::string name) {
+Variable::Variable(Ent name) {
 	this->name = name;
 }
 

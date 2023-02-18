@@ -2,7 +2,7 @@
 
 Constant::Constant() {}
 
-Constant::Constant(int value) {
+Constant::Constant(Const value) {
 	this->value = value;
 }
 

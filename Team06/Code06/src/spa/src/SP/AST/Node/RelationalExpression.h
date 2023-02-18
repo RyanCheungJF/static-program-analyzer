@@ -6,12 +6,12 @@
 
 class RelationalExpression : public ConditionalExpression {
 public:
-	std::string relationalOperator;
+	Operator relationalOperator;
 	std::unique_ptr<Expression> lhs;
 	std::unique_ptr<Expression> rhs;
 
 	RelationalExpression();
-	RelationalExpression(std::string relationalOperator,
+	RelationalExpression(Operator relationalOperator,
 						 std::unique_ptr<Expression> lhs,
 						 std::unique_ptr<Expression> rhs);
 

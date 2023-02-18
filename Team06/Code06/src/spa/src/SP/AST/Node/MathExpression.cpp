@@ -2,7 +2,7 @@
 
 MathExpression::MathExpression() {}
 
-MathExpression::MathExpression(std::string mathOperator, std::unique_ptr<Expression> lhs, std::unique_ptr<Expression> rhs) {
+MathExpression::MathExpression(Operator mathOperator, std::unique_ptr<Expression> lhs, std::unique_ptr<Expression> rhs) {
 	this->mathOperator = mathOperator;
 	this->lhs = std::move(lhs);
 	this->rhs = std::move(rhs);

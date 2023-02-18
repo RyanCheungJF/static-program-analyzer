@@ -4,10 +4,11 @@
 
 class CallStatement : public Statement {
 public:
-	std::string procName;
+	ProcName procName;
 
 	CallStatement();
-	CallStatement(std::string procName);
+	CallStatement(ProcName procName);
+	CallStatement(StmtNum stmtNum, ProcName procName);
 
 	void accept(ASTVisitor* visitor) override;
 };

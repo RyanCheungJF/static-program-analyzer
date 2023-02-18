@@ -4,10 +4,11 @@
 
 class PrintStatement : public Statement {
 public:
-	std::string varName;
+	Ent varName;
 
 	PrintStatement();
-	PrintStatement(std::string varName);
+	PrintStatement(Ent varName);
+	PrintStatement(StmtNum stmtNum, Ent varName);
 
 	void accept(ASTVisitor* visitor) override;
 };

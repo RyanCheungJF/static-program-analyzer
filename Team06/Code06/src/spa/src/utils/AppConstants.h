@@ -8,6 +8,7 @@
 typedef std::string ProcName;
 typedef std::string Stmt;
 typedef std::string Ent;
+typedef std::string Operator;
 typedef int StmtNum;
 typedef int Const;
 
