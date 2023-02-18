@@ -149,6 +149,9 @@ std::unique_ptr<CallStatement> Parser::parseCallStatement(std::deque<Token>& tok
 
 std::unique_ptr<WhileStatement> Parser::parseWhileStatement(std::deque<Token>& tokens) {
 	// Rule: 'while' '(' cond_expr ')' '{' stmtLst '}'
+	StmtNum stmtNum = currStatementNumber; // Need to note down the statement number, as the statement list gets processed first.
+	currStatementNumber++;
+
 	tokens.pop_front(); // Pop 'while'
 
 	if (!tokens.front().isType(TokenType::LEFT_PARENTHESIS)) {
@@ -177,11 +180,14 @@ std::unique_ptr<WhileStatement> Parser::parseWhileStatement(std::deque<Token>& t
 	}
 	tokens.pop_front(); // Pop '}'
 
-	return std::make_unique<WhileStatement>(currStatementNumber++, std::move(condExpr), std::move(stmtList));
+	return std::make_unique<WhileStatement>(stmtNum, std::move(condExpr), std::move(stmtList));
 }
 
 std::unique_ptr<IfStatement> Parser::parseIfStatement(std::deque<Token>& tokens) {
 	// Rule: 'if' '(' cond_expr ')' 'then' '{' stmtLst '}' 'else' '{' stmtLst '}'
+	StmtNum stmtNum = currStatementNumber;
+	currStatementNumber++;
+
 	tokens.pop_front(); // Pop 'if'
 
 	if (!tokens.front().isType(TokenType::LEFT_PARENTHESIS)) {
@@ -233,7 +239,7 @@ std::unique_ptr<IfStatement> Parser::parseIfStatement(std::deque<Token>& tokens)
 	}
 	tokens.pop_front(); // Pop '}'
 
-	return std::make_unique<IfStatement>(currStatementNumber++, std::move(condExpr), 
+	return std::make_unique<IfStatement>(stmtNum, std::move(condExpr), 
 										std::move(thenStmtList), std::move(elseStmtList));
 }
 
