@@ -38,8 +38,3 @@ string VariableStore::toString() {
     }
     return s;
 }
-
-//ParameterType VariableStore::getType(string) {
-////    return Parameter::Parameter().getType();
-//    return undefined;
-//}
