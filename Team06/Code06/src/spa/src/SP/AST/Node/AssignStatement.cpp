@@ -2,7 +2,8 @@
 
 AssignStatement::AssignStatement() {}
 
-AssignStatement::AssignStatement(std::string varName, std::unique_ptr<Expression> expr) {
+AssignStatement::AssignStatement(StmtNum stmtNum, Ent varName, std::unique_ptr<Expression> expr) {
+	this->statementNumber = stmtNum;
 	this->varName = varName;
 	this->expr = std::move(expr);
 }

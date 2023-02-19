@@ -2,7 +2,7 @@
 
 RelationalExpression::RelationalExpression() {};
 
-RelationalExpression::RelationalExpression(std::string relationalOperator,
+RelationalExpression::RelationalExpression(Operator relationalOperator,
 	std::unique_ptr<Expression> lhs,
 	std::unique_ptr<Expression> rhs) {
 	this->relationalOperator = relationalOperator;

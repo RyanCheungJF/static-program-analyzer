@@ -2,7 +2,8 @@
 
 PrintStatement::PrintStatement() {}
 
-PrintStatement::PrintStatement(std::string varName) {
+PrintStatement::PrintStatement(StmtNum stmtNum, Ent varName) {
+	this->statementNumber = stmtNum;
 	this->varName = varName;
 }
 

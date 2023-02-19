@@ -82,6 +82,10 @@ void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
 	}
 }
 
+bool isContainerStatement(Statement* statement) {
+	return CAST_TO(IfStatement, statement) || CAST_TO(WhileStatement, statement);
+}
+
 void populateRemainingTables(WritePKB* writePKB, ReadPKB* readPKB) {
 	populateUsesModifies(writePKB, readPKB);
 }
@@ -161,8 +165,4 @@ std::vector<std::unordered_set<Ent>> handleCallStmt(WritePKB* writePKB, ReadPKB*
 	writePKB->setUsesS(callStmt.first, currUsesVariables);
 	writePKB->setModifiesS(callStmt.first, currModifiesVariables);
 	return std::vector{ currUsesVariables, currModifiesVariables };
-}
-
-bool isContainerStatement(Statement* statement) {
-	return CAST_TO(IfStatement, statement) || CAST_TO(WhileStatement, statement);
 }

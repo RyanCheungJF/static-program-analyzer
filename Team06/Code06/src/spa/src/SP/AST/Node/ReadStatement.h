@@ -1,14 +1,13 @@
 #pragma once
 
-#include <string>
 #include "Statement.h"
 
 class ReadStatement : public Statement {
 public:
-	std::string varName;
+	Ent varName;
 
 	ReadStatement();
-	ReadStatement(std::string varName);
+	ReadStatement(StmtNum stmtNum, Ent varName);
 
 	void accept(ASTVisitor* visitor) override;
 };

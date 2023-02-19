@@ -2,7 +2,8 @@
 
 ReadStatement::ReadStatement() {}
 
-ReadStatement::ReadStatement(std::string varName) {
+ReadStatement::ReadStatement(StmtNum stmtNum, Ent varName) {
+	this->statementNumber = stmtNum;
 	this->varName = varName;
 }
 
