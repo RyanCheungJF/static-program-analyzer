@@ -65,9 +65,6 @@ pair<string,string> extractDesignEntity(string designEntity) {
     if (regex_search(designEntity, match, rgx)) {
         remainder = match.suffix().str();
     }
-    if (!isSynonym(remainder)) {
-        throw SyntaxException();
-    }
     return pair(match[1], remainder);
 }
 

@@ -98,3 +98,58 @@ stmt s; variable v;
 Select s such that follows(1, s)
 SyntaxError
 5000
+20 - invalid relationship
+stmt s; variable v;
+Select s such that Seek(1, s)
+SyntaxError
+5000
+21 - invalid Follows relationship, invalid params
+stmt s; variable v;
+Select s such that Follows(1, "s")
+SyntaxError
+5000
+22 - invalid Follows relationship, invalid params
+stmt s; variable v;
+Select s such that Follows("a", 1)
+SyntaxError
+5000
+22 - invalid Follows relationship, missing comma
+stmt s; variable v;
+Select s such that Follows("a" 1)
+SyntaxError
+5000
+22 - invalid Follows relationship, missing braces
+stmt s; variable v;
+Select s such that Follows"a", 1)
+SyntaxError
+5000
+23 - invalid Follows relationship, missing braces
+stmt s; variable v;
+Select s such that Follows("a", 1
+SyntaxError
+5000
+24 - invalid Follows relationship, invalid synonym type
+stmt s; variable v;
+Select s such that Follows(1, v)
+SemanticError
+5000
+25 - undeclared synonym
+stmt s; variable v;
+Select n such that Follows(v, 1)
+SemanticError
+5000
+26 - incomplete pattern clause
+stmt s; variable v;
+Select s such that Follows(s, 1) pattern 
+SyntaxError
+5000
+27 - pattern not synAssign
+stmt s; variable v;
+Select s such that Follows(s, 1) pattern s(_, _)
+SemanticError
+5000
+28 - pattern invalid expr_spec
+stmt s; assign a;
+Select s such that Follows(s, 1) pattern a(_, "this*")
+SyntaxError
+5000
