@@ -6,7 +6,7 @@ procedure Example {
       z = x + 1; }
     else {
       y = z + x; }
-    z = z + x + i;
+    z = z + x + i;; //this makes it invalid
     call q;
     i = i - 1; }
   call p; }

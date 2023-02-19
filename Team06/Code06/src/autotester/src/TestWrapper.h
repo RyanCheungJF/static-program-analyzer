@@ -19,13 +19,6 @@ private:
 	WritePKB writePKB;
     ReadPKB readPKB;
 	PKB pkb;
-	FollowsStorage fs;
-	FollowsTStorage ft;
-	EntityStorage et;
-    ConstantStorage c;
-    PatternStorage pt;
-	ProcedureStorage ps;
-	StmtStorage sts;
     QPS qps;
 
  public:

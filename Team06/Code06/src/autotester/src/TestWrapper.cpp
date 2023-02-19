@@ -23,14 +23,18 @@ void TestWrapper::parse(std::string filename) {
     try {
         sourceProcessor.processFile(filename, &writePKB, &readPKB);
     } catch (Exception e) {
-        std::cout << "ERROR BEING THROWN AT TESTWRAPPER. WILL IT CONTINUE TO EVALUATE? ONLY ONE WAY TO FIND OUT!\n";
         std::cout << e.getMessage() + "\n";
+        AbstractWrapper::GlobalStop = true;
         throw e;
     }
 }
 
 // method to evaluating a query
 void TestWrapper::evaluate(std::string query, std::list<std::string>& results) {
+    if (AbstractWrapper::GlobalStop) {
+        return;
+    }
+
 	// call your evaluator to evaluate the query here
 	  // ...code to evaluate query..
       vector<string> res = qps.processQueries(query, readPKB);
