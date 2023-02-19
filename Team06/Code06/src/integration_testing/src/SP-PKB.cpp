@@ -3,6 +3,9 @@
 #include "../../spa/src/utils/AppConstants.h"
 #include "../../spa/src/SP/SP.h"
 #include "../../spa/src/qps/entities/Relationship.h"
+#include "../../unit_testing/src/utils/utils.h"
+
+using namespace unit_testing_utils;
 
 TEST_CASE("Valid Source Program") {
     SP testSP;
@@ -27,6 +30,7 @@ TEST_CASE("Valid Source Program") {
         auto expectedProcedureNames = std::unordered_set<Ent>({ "A", "B", "C" });
         REQUIRE(procedureNames == expectedProcedureNames);
 
+        // Modifies
         auto variablesAModifies = readPKB.getModifiesP("A");
         auto expectedAModifies = std::unordered_set<Ent>({ "x" });
         REQUIRE(variablesAModifies == expectedAModifies);
@@ -63,6 +67,7 @@ TEST_CASE("Valid Source Program") {
         auto expected6Modifies = std::unordered_set<Ent>({ "z" });
         REQUIRE(variables6Modifies == expected6Modifies);
 
+        // Uses
         auto variablesAUses = readPKB.getUsesP("A");
         auto expectedAUses = std::unordered_set<Ent>({ "x" });
         REQUIRE(variablesAUses == expectedAUses);
@@ -98,6 +103,57 @@ TEST_CASE("Valid Source Program") {
         auto variables6Uses = readPKB.getUsesS(6);
         auto expected6Uses = std::unordered_set<Ent>({ "z" });
         REQUIRE(variables6Uses == expected6Uses);
+
+        // Follows
+        std::vector<Parameter> params1 = {Parameter("1", AppConstants::FIXED_INT), Parameter("2", AppConstants::FIXED_INT)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::FOLLOWS, params1);
+        std::vector<std::vector<std::string>> follows1actual = readPKB.findRelationship(rs1);
+        REQUIRE(follows1actual.empty());
+
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+                                                                      {Parameter("2", AppConstants::FIXED_INT),
+                                                                       Parameter("3", AppConstants::FIXED_INT)}
+                                                                       );
+        std::vector<std::vector<std::string>> follows2actual = readPKB.findRelationship(rs2);
+        std::vector<std::vector<std::string>> follows2expected = {{"2", "3"}};
+        REQUIRE(follows2expected == follows2actual);
+
+        shared_ptr<Relationship> rs3 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+                                                                      {Parameter("4", AppConstants::FIXED_INT),
+                                                                       Parameter("5", AppConstants::FIXED_INT)}
+        );
+        std::vector<std::vector<std::string>> follows3actual = readPKB.findRelationship(rs3);
+        std::vector<std::vector<std::string>> follows3expected = {{"4", "5"}};
+        REQUIRE(follows3expected == follows3actual);
+
+        shared_ptr<Relationship> rs4 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+                                                                      {Parameter("5", AppConstants::FIXED_INT),
+                                                                       Parameter("6", AppConstants::FIXED_INT)}
+        );
+        std::vector<std::vector<std::string>> follows4actual = readPKB.findRelationship(rs4);
+        std::vector<std::vector<std::string>> follows4expected = {{"5", "6"}};
+        REQUIRE(follows4expected == follows4actual);
+
+        shared_ptr<Relationship> rs5 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+                                                                      {Parameter("4", AppConstants::FIXED_INT),
+                                                                       Parameter("6", AppConstants::FIXED_INT)}
+        );
+        std::vector<std::vector<std::string>> follows5actual = readPKB.findRelationship(rs5);
+        REQUIRE(follows5actual.empty());
+
+
+//        std::cout << "follows2actual results:\n";
+//        for (auto i :follows2actual) {
+//            std::cout << i[0] << " " << i[1] << "\n";
+//        }
+
+
+        // FollowsT
+
+        // ParentT
+
+        // ParentT
+
     }
 }
 
@@ -121,14 +177,9 @@ TEST_CASE("Invalid Source Program") {
         std::string errorMessage = "";
         try {
             auto filePath = testDirectory.string() + "invalid1.txt";
-            std::cout << "SHOULD Still be hitting this\n";
             testSP.processFile(filePath, &writePKB, &readPKB); //execution should stop here.
-
-            auto procedureNames = readPKB.getAllProcedureNames();
-            auto expectedProcedureNames = std::unordered_set<Ent>({ "A", "B", "C" });
             REQUIRE(false);
         } catch (std::exception e) {
-            std::cout << "INSIDE THE CATCH BLOCK\n";
             REQUIRE(true);
         }
     }
