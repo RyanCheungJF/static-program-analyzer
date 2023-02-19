@@ -15,12 +15,10 @@ void SP::processFile(std::string filePath, WritePKB* writePKB, ReadPKB* readPKB)
 		designExtractor = DesignExtractor(std::move(root), writePKB, readPKB);
 		designExtractor.populatePKB();
 	} catch (SyntaxErrorException e) {
-		std::cout << "Syntax Error caught" << std::endl;
-		std::cout << e.what() << std::endl;
-        throw e;
+        Exception val = Exception("SyntaxError");
+        throw val;
 	} catch (SemanticErrorException e) {
-		std::cout << "Semantic Error caught" << std::endl;
-		std::cout << e.what() << std::endl;
-        throw e;
+        Exception val = Exception("SemanticError");
+        throw val;
 	}
 }
