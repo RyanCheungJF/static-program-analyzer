@@ -5,7 +5,7 @@
 using namespace std;
 
 class Exception : public exception {
-private:
+protected:
     string errorMessage = "the programmer was too lazy to write a custom error message";
 public:
     Exception();

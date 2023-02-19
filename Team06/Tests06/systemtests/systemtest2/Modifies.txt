@@ -3,3 +3,53 @@ assign a;
 Select a such that Modifies(a, "read")
 6
 5000
+2 - comment
+stmt s; assign a; while w; if i; procedure p; call c; read r;
+Select s such that Modifies(s, "a")
+29, 11, 19, 9, 4, 18, 13, 14, 15
+5000
+3 - comment
+stmt s; assign a; while w; if i; procedure p; call c; read r;
+Select c such that Modifies(c, "y")
+9
+5000
+4 - comment
+stmt s; assign a; while w; if i; procedure p; call c; read r;
+Select s such that Modifies(s, "a")
+29, 11, 19, 9, 4, 18, 13, 14, 15
+5000
+5 - comment
+stmt s; assign a; while w; if i; procedure p; call c; read r;
+Select p such that Modifies(p, "a")
+noindent, call, wEiRdNAmeS123
+5000
+6 - comment
+stmt s; assign a; while w; if i; procedure p; call c; read r;
+Select p such that Modifies(p, "m0ArWeirdNaMe5AnDtH7sIsVer9Lon6AnDILov3Ch3rr1E3")
+none
+5000
+7 - comment
+stmt s; assign a; while w; if i; procedure p; call c; read r;
+Select p such that Modifies(p, "m0ArWeirdNaMe5AnDtH7sIsVer9Lon6AnDILov3Ch3rr1E2")
+wEiRdNAmeS123
+5000
+8 - comment
+stmt s; assign a; while w; if i; procedure p; call c; read r; variable v;
+Select i such that Modifies("noindent", "x")
+4, 24
+5000
+9 - comment
+stmt s; assign a; while w; if i; procedure p; call c; read r; variable v;
+Select i such that Modifies("noindent", "z")
+none
+5000
+10 - comment
+stmt s; procedure p; if i; variable v; while w;
+Select i such that Modifies(i, "y")
+24, 4
+5000
+11 - comment
+stmt s; procedure p; if i; variable v; while w; read r;
+Select r such that Modifies(r, "read")
+5
+5000

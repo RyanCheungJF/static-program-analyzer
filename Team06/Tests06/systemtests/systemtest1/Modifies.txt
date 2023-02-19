@@ -18,3 +18,63 @@ stmt s;
 Select s such that Modifies(s, "b")
 2, 4, 13, 20, 25, 27, 30, 31, 33, 34, 35
 5000
+5 - comment
+stmt s; procedure p;
+Select p such that Modifies(p, "b")
+arithmetic, conditionalSpam
+5000
+6 - comment
+stmt s; procedure p;
+Select p such that Modifies(p, "m")
+none
+5000
+7 - comment
+stmt s; procedure p; if i;
+Select p such that Modifies(p, "k")
+arithmetic
+5000
+8 - comment
+stmt s; procedure p; if i;
+Select p such that Modifies(p, "if")
+arithmetic, conditionalSpam
+5000
+9 - comment
+stmt s; procedure p; if i; variable v;
+Select v such that Modifies("conditionalSpam", v)
+i, a, A, b, B, c, N, thisIsAVeryLongNameAndILikeApples, while, if, else
+5000
+10 - comment
+stmt s; procedure p; if i; variable v;
+Select v such that Modifies("arithmetic", v)
+i, a, A, b, B, c, N, thisIsAVeryLongNameAndILikeApples, while, if, else, z, y, x, w, o, k, j
+5000
+11 - comment
+stmt s; procedure p; if i; variable v;
+Select p such that Modifies("conditionalSpam", "k")
+none
+5000
+12 - comment
+stmt s; procedure p; if i; variable v;
+Select v such that Modifies("conditionalSpam", "if")
+i, a, A, b, B, c, N, thisIsAVeryLongNameAndILikeApples, while, if, else, z, y, x, w, o, k, j
+5000
+13 - comment
+stmt s; procedure p; if i; variable v; while w;
+Select w such that Modifies(w, "if")
+25, 27
+5000
+14 - comment
+stmt s; procedure p; if i; variable v; while w;
+Select i such that Modifies(i, "while")
+none
+5000
+15 - comment
+stmt s; procedure p; if i; variable v; while w;
+Select i such that Modifies(i, "b")
+31, 33
+5000
+16 - comment
+stmt s; procedure p; if i; variable v; while w; read r;
+Select r such that Modifies(r, "b")
+2
+5000

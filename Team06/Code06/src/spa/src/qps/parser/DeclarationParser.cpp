@@ -10,6 +10,9 @@ vector<Parameter> declarationToParameter(string s) {
         tie(designEntity,synonyms) = extractDesignEntity(s);
         vector<string> synonymList = stringToWordListByDelimiter(synonyms, ",");
         for (const string& synonym: synonymList) {
+            if (!isSynonym(synonym)) {
+                throw SyntaxException();
+            }
             Parameter p = Parameter(synonym, designEntity);
             paramList.push_back(p);
         }

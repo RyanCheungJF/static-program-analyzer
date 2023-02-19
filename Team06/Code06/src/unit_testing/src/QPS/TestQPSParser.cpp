@@ -33,7 +33,7 @@ TEST_CASE("parse / missing select clause / throw error") {
 TEST_CASE("splitQuery / splitting variable v; Select v; should give error / catch error") {
     string test = "variable v; Select v ; ";
     QPSParser qp;
-    CHECK_THROWS(qp.splitQuery(test));
+    CHECK_THROWS_AS(qp.splitQuery(test), SyntaxException);
 }
 
 TEST_CASE("checkSynonyms / the variable store contains all the required variables in query / no exceptions thrown") {
