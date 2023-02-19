@@ -9,7 +9,7 @@
 #include "qps/entities/ModifiesRelationship.h"
 
 TEST_CASE("makeRelationship / empty relationship type string / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = "";
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("b", AppConstants::SYNONYM);
@@ -18,7 +18,7 @@ TEST_CASE("makeRelationship / empty relationship type string / throws error") {
 }
 
 TEST_CASE("makeRelationship / unknown relationship type string / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = "unknown type";
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("b", AppConstants::SYNONYM);
@@ -27,7 +27,7 @@ TEST_CASE("makeRelationship / unknown relationship type string / throws error") 
 }
 
 TEST_CASE("makeRelationship / follows relationship, with correct params / returns relationship object with correct fields and types") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWS;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("1", AppConstants::FIXED_INT);
@@ -48,7 +48,7 @@ TEST_CASE("makeRelationship / follows relationship, with correct params / return
 }
 
 TEST_CASE("makeRelationship / follows relationship, with wrong second param / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWS;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2(AppConstants::FIXED_STRING, AppConstants::FIXED_STRING);
@@ -58,7 +58,7 @@ TEST_CASE("makeRelationship / follows relationship, with wrong second param / th
 }
 
 TEST_CASE("makeRelationship / follows relationship, with wrong first param / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWS;
 	Parameter p1(AppConstants::FIXED_STRING, AppConstants::FIXED_STRING);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -68,7 +68,7 @@ TEST_CASE("makeRelationship / follows relationship, with wrong first param / thr
 }
 
 TEST_CASE("makeRelationship / follows relationship, more than 2 parameter / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWS;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("b", AppConstants::SYNONYM);
@@ -79,7 +79,7 @@ TEST_CASE("makeRelationship / follows relationship, more than 2 parameter / thro
 }
 
 TEST_CASE("makeRelationship / follows relationship, less than 2 parameter / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWS;
 	Parameter p1("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1 };
@@ -89,7 +89,7 @@ TEST_CASE("makeRelationship / follows relationship, less than 2 parameter / thro
 
 
 TEST_CASE("makeRelationship / FollowsT relationship / return relationship object") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWST;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("1", AppConstants::FIXED_INT);
@@ -110,7 +110,7 @@ TEST_CASE("makeRelationship / FollowsT relationship / return relationship object
 }
 
 TEST_CASE("makeRelationship / FollowsT, wrong 2nd param / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWST;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("entity_ref", AppConstants::FIXED_STRING);
@@ -119,7 +119,7 @@ TEST_CASE("makeRelationship / FollowsT, wrong 2nd param / throws error") {
 }
 
 TEST_CASE("makeRelationship / FollowsT, wrong 1st param / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWST;
 	Parameter p1("entity_ref", AppConstants::FIXED_STRING);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -128,7 +128,7 @@ TEST_CASE("makeRelationship / FollowsT, wrong 1st param / throws error") {
 }
 
 TEST_CASE("makeRelationship / FollowsT relationship, more than 2 parameter / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWST;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("b", AppConstants::SYNONYM);
@@ -139,7 +139,7 @@ TEST_CASE("makeRelationship / FollowsT relationship, more than 2 parameter / thr
 }
 
 TEST_CASE("makeRelationship / FollowsT relationship, less than 2 parameter / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWST;
 	Parameter p1("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1 };
@@ -148,7 +148,7 @@ TEST_CASE("makeRelationship / FollowsT relationship, less than 2 parameter / thr
 }
 
 TEST_CASE("makeRelationship / Parent relationship / return relationship object") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENT;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("1", AppConstants::FIXED_INT);
@@ -169,7 +169,7 @@ TEST_CASE("makeRelationship / Parent relationship / return relationship object")
 }
 
 TEST_CASE("makeRelationship / Parent, wrong 2nd param / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENT;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("entity_ref", AppConstants::FIXED_STRING);
@@ -178,7 +178,7 @@ TEST_CASE("makeRelationship / Parent, wrong 2nd param / throws error") {
 }
 
 TEST_CASE("makeRelationship / Parent, wrong 1st param / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENT;
 	Parameter p1("entity_ref", AppConstants::FIXED_STRING);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -187,7 +187,7 @@ TEST_CASE("makeRelationship / Parent, wrong 1st param / throws error") {
 }
 
 TEST_CASE("makeRelationship / Parent relationship, more than 2 parameter / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENT;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("b", AppConstants::SYNONYM);
@@ -198,7 +198,7 @@ TEST_CASE("makeRelationship / Parent relationship, more than 2 parameter / throw
 }
 
 TEST_CASE("makeRelationship / Parent relationship, less than 2 parameter / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENT;
 	Parameter p1("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1 };
@@ -207,7 +207,7 @@ TEST_CASE("makeRelationship / Parent relationship, less than 2 parameter / throw
 }
 
 TEST_CASE("makeRelationship / ParentT relationship / return relationship object") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENTT;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("1", AppConstants::FIXED_INT);
@@ -228,7 +228,7 @@ TEST_CASE("makeRelationship / ParentT relationship / return relationship object"
 }
 
 TEST_CASE("makeRelationship / ParentT, wrong 2nd param / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENTT;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("entity_ref", AppConstants::FIXED_STRING);
@@ -237,7 +237,7 @@ TEST_CASE("makeRelationship / ParentT, wrong 2nd param / throws error") {
 }
 
 TEST_CASE("makeRelationship / ParentT, wrong 1st param / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENTT;
 	Parameter p1("entity_ref", AppConstants::FIXED_STRING);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -246,7 +246,7 @@ TEST_CASE("makeRelationship / ParentT, wrong 1st param / throws error") {
 }
 
 TEST_CASE("makeRelationship / ParentT relationship, more than 2 parameter / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENTT;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("b", AppConstants::SYNONYM);
@@ -257,7 +257,7 @@ TEST_CASE("makeRelationship / ParentT relationship, more than 2 parameter / thro
 }
 
 TEST_CASE("makeRelationship / ParentT relationship, less than 2 parameter / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENTT;
 	Parameter p1("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1 };
@@ -266,7 +266,7 @@ TEST_CASE("makeRelationship / ParentT relationship, less than 2 parameter / thro
 }
 
 TEST_CASE("makeRelationship / Uses relationship / return relationship object") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::USES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("_", AppConstants::WILDCARD);
@@ -289,7 +289,7 @@ TEST_CASE("makeRelationship / Uses relationship / return relationship object") {
 }
 
 TEST_CASE("makeRelationship / Uses, wrong 1st param / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::USES;
 	Parameter p1("ent_ref", AppConstants::VARIABLE);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -298,7 +298,7 @@ TEST_CASE("makeRelationship / Uses, wrong 1st param / throws error") {
 }
 
 TEST_CASE("makeRelationship / Uses, wrong 2nd param / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::USES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("stmt_ref", AppConstants::FIXED_INT);
@@ -307,7 +307,7 @@ TEST_CASE("makeRelationship / Uses, wrong 2nd param / throws error") {
 }
 
 TEST_CASE("makeRelationship / Uses relationship, more than 2 parameter / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::USES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("b", AppConstants::SYNONYM);
@@ -318,7 +318,7 @@ TEST_CASE("makeRelationship / Uses relationship, more than 2 parameter / throws 
 }
 
 TEST_CASE("makeRelationship / Uses relationship, less than 2 parameter / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::USES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1 };
@@ -327,7 +327,7 @@ TEST_CASE("makeRelationship / Uses relationship, less than 2 parameter / throws 
 }
 
 TEST_CASE("makeRelationship / Modifies relationship / return relationship object") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::MODIFIES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("_", AppConstants::WILDCARD);
@@ -350,7 +350,7 @@ TEST_CASE("makeRelationship / Modifies relationship / return relationship object
 }
 
 TEST_CASE("makeRelationship / Modifies, wrong 1st param / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::MODIFIES;
 	Parameter p1("ent_ref", AppConstants::VARIABLE);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -359,7 +359,7 @@ TEST_CASE("makeRelationship / Modifies, wrong 1st param / throws error") {
 }
 
 TEST_CASE("makeRelationship / Modifies, wrong 2nd param / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::MODIFIES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("stmt_ref", AppConstants::FIXED_INT);
@@ -368,7 +368,7 @@ TEST_CASE("makeRelationship / Modifies, wrong 2nd param / throws error") {
 }
 
 TEST_CASE("makeRelationship / Modifies relationship, more than 2 parameter / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::MODIFIES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("b", AppConstants::SYNONYM);
@@ -379,7 +379,7 @@ TEST_CASE("makeRelationship / Modifies relationship, more than 2 parameter / thr
 }
 
 TEST_CASE("makeRelationship / Modifies relationship, less than 2 parameter / throws error") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::MODIFIES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1 };
@@ -388,7 +388,7 @@ TEST_CASE("makeRelationship / Modifies relationship, less than 2 parameter / thr
 }
 
 TEST_CASE("FollowsRelationship.validateParams / invalid 1st param / return false") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWS;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("1", AppConstants::FIXED_INT);
@@ -400,7 +400,7 @@ TEST_CASE("FollowsRelationship.validateParams / invalid 1st param / return false
 }
 
 TEST_CASE("FollowsRelationship.validateParams / invalid 2nd params / return false") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWS;
 	Parameter p1("1", AppConstants::FIXED_INT);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -412,7 +412,7 @@ TEST_CASE("FollowsRelationship.validateParams / invalid 2nd params / return fals
 }
 
 TEST_CASE("FollowsRelationship.validateParams / valid params / return true") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWS;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("1", AppConstants::FIXED_INT);
@@ -424,7 +424,7 @@ TEST_CASE("FollowsRelationship.validateParams / valid params / return true") {
 }
 
 TEST_CASE("FollowsTRelationship.validateParams / invalid 1st params / return false") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWST;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("1", AppConstants::FIXED_INT);
@@ -436,7 +436,7 @@ TEST_CASE("FollowsTRelationship.validateParams / invalid 1st params / return fal
 }
 
 TEST_CASE("FollowsTRelationship.validateParams / invalid 2nd params / return false") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWST;
 	Parameter p1("1", AppConstants::FIXED_INT);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -449,7 +449,7 @@ TEST_CASE("FollowsTRelationship.validateParams / invalid 2nd params / return fal
 
 
 TEST_CASE("FollowsTRelationship.validateParams / valid params / return true") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWST;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("1", AppConstants::FIXED_INT);
@@ -461,7 +461,7 @@ TEST_CASE("FollowsTRelationship.validateParams / valid params / return true") {
 }
 
 TEST_CASE("ParentRelationship.validateParams / invalid 1st params / return false") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENT;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("1", AppConstants::FIXED_INT);
@@ -473,7 +473,7 @@ TEST_CASE("ParentRelationship.validateParams / invalid 1st params / return false
 }
 
 TEST_CASE("ParentRelationship.validateParams / invalid 2nd params / return false") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENT;
 	Parameter p1("1", AppConstants::FIXED_INT);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -485,7 +485,7 @@ TEST_CASE("ParentRelationship.validateParams / invalid 2nd params / return false
 }
 
 TEST_CASE("ParentRelationship.validateParams / valid params / return true") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENT;
 	Parameter p1("1", AppConstants::FIXED_INT);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -497,7 +497,7 @@ TEST_CASE("ParentRelationship.validateParams / valid params / return true") {
 }
 
 TEST_CASE("ParentTRelationship.validateParams / invalid 1st params / return false") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENTT;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("1", AppConstants::FIXED_INT);
@@ -509,7 +509,7 @@ TEST_CASE("ParentTRelationship.validateParams / invalid 1st params / return fals
 }
 
 TEST_CASE("ParentTRelationship.validateParams / invalid 2nd params / return false") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENTT;
 	Parameter p1("1", AppConstants::FIXED_INT);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -521,7 +521,7 @@ TEST_CASE("ParentTRelationship.validateParams / invalid 2nd params / return fals
 }
 
 TEST_CASE("ParentTRelationship.validateParams / valid params / return true") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::PARENTT;
 	Parameter p1("1", AppConstants::FIXED_INT);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -533,7 +533,7 @@ TEST_CASE("ParentTRelationship.validateParams / valid params / return true") {
 }
 
 TEST_CASE("ModifiesRelationship.validateParams / invalid 1st params / return false") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::MODIFIES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("a", AppConstants::FIXED_STRING);
@@ -545,7 +545,7 @@ TEST_CASE("ModifiesRelationship.validateParams / invalid 1st params / return fal
 }
 
 TEST_CASE("ModifiesRelationship.validateParams / invalid 2nd params / return false") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::MODIFIES;
 	Parameter p1("1", AppConstants::FIXED_INT);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -557,7 +557,7 @@ TEST_CASE("ModifiesRelationship.validateParams / invalid 2nd params / return fal
 }
 
 TEST_CASE("ModifiesRelationship.validateParams / 1st param is procedure / return true") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::MODIFIES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("a", AppConstants::FIXED_STRING);
@@ -569,7 +569,7 @@ TEST_CASE("ModifiesRelationship.validateParams / 1st param is procedure / return
 }
 
 TEST_CASE("ModifiesRelationship.validateParams / 1st param is stmt ref / return true") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::MODIFIES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("a", AppConstants::FIXED_STRING);
@@ -581,7 +581,7 @@ TEST_CASE("ModifiesRelationship.validateParams / 1st param is stmt ref / return 
 }
 
 TEST_CASE("UsesRelationship.validateParams / invalid 1st params / return false") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::USES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("a", AppConstants::FIXED_STRING);
@@ -593,7 +593,7 @@ TEST_CASE("UsesRelationship.validateParams / invalid 1st params / return false")
 }
 
 TEST_CASE("UsesRelationship.validateParams / invalid 2nd params / return false") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::USES;
 	Parameter p1("1", AppConstants::FIXED_INT);
 	Parameter p2("a", AppConstants::SYNONYM);
@@ -605,7 +605,7 @@ TEST_CASE("UsesRelationship.validateParams / invalid 2nd params / return false")
 }
 
 TEST_CASE("UsesRelationship.validateParams / 1st param is procedure / return true") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::USES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("a", AppConstants::FIXED_STRING);
@@ -617,7 +617,7 @@ TEST_CASE("UsesRelationship.validateParams / 1st param is procedure / return tru
 }
 
 TEST_CASE("UsesRelationship.validateParams / 1st param is stmt ref / return true") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::USES;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("a", AppConstants::FIXED_STRING);
@@ -629,7 +629,7 @@ TEST_CASE("UsesRelationship.validateParams / 1st param is stmt ref / return true
 }
 
 TEST_CASE("getAllUncheckedSynonyms / contains no synonyms / return empty list ") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWS;
 	Parameter p1("1", AppConstants::FIXED_INT);
 	Parameter p2("2", AppConstants::FIXED_INT);
@@ -641,7 +641,7 @@ TEST_CASE("getAllUncheckedSynonyms / contains no synonyms / return empty list ")
 }
 
 TEST_CASE("getAllUncheckedSynonyms / contains one synonyms / return list with pointer to synonym") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWS;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("2", AppConstants::FIXED_INT);
@@ -659,7 +659,7 @@ TEST_CASE("getAllUncheckedSynonyms / contains one synonyms / return list with po
 }
 
 TEST_CASE("getAllUncheckedSynonyms / contains more than one synonym / return list with pointer to the synonyms") {
-    AppConstants CONSTANTS;
+
 	string typeInput = AppConstants::FOLLOWS;
 	Parameter p1("a", AppConstants::SYNONYM);
 	Parameter p2("b", AppConstants::SYNONYM);

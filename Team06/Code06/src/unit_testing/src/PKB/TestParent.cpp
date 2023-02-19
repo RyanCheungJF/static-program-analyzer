@@ -53,7 +53,7 @@ TEST_CASE("Tests for getting parent") {
 
 TEST_CASE("Checks for cases e.g. Parent(1, assign)") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -80,7 +80,7 @@ TEST_CASE("Checks for cases e.g. Parent(1, assign)") {
 
 TEST_CASE("Checks for cases e.g. Parent(while, assign)") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -108,7 +108,7 @@ TEST_CASE("Checks for cases e.g. Parent(while, assign)") {
 
 TEST_CASE("Checks for cases e.g. Parent(_, stmt)") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;

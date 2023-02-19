@@ -8,7 +8,7 @@ using namespace unit_testing_utils;
 
 TEST_CASE("FollowsStorage: write(StmtNum followee, StmtNum follower)") {
     FollowsStorage fs;
-    AppConstants CONSTANTS;
+
 
     SECTION("exists(StmtNum followee, StmtNum follower): empty storage") {
         REQUIRE(!fs.exists(1, 2));
@@ -49,7 +49,7 @@ TEST_CASE("FollowsStorage: write(StmtNum followee, StmtNum follower)") {
 
 TEST_CASE("Checks FollowsStorage such that given a followee, if it does not have a certain follower, an empty vector is returned") {
     FollowsStorage fs;
-    AppConstants CONSTANTS;
+
     fs.write(1, 2);
     std::unordered_set<StmtNum> res = fs.getRightWildcard(3);
     REQUIRE(res.empty());
@@ -57,14 +57,14 @@ TEST_CASE("Checks FollowsStorage such that given a followee, if it does not have
 
 TEST_CASE("Checks FollowsStorage such that given a follower, if it does not have a certain followee, an empty vector is returned") {
     FollowsStorage fs;
-    AppConstants CONSTANTS;
+
     fs.write(1, 2);
     std::unordered_set<StmtNum> res = fs.getLeftWildcard(3);
     REQUIRE(res.empty());
 }
 
 TEST_CASE("Checks that writing and reading from ReadPKB works for Follows") {
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -87,7 +87,7 @@ TEST_CASE("Checks that writing and reading from ReadPKB works for Follows") {
 
 TEST_CASE("Checks that a non-existent Follows relationship returns an empty vector from ReadPKB") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -109,7 +109,7 @@ TEST_CASE("Checks that a non-existent Follows relationship returns an empty vect
 
 TEST_CASE("Checks that given a followee and a synonym, ReadPKB returns relevant followee-follower pairs") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -134,7 +134,7 @@ TEST_CASE("Checks that given a followee and a synonym, ReadPKB returns relevant 
 
 TEST_CASE("Checks that given a followee and a wildcard, ReadPKB returns all followee-follower pairs") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -157,7 +157,7 @@ TEST_CASE("Checks that given a followee and a wildcard, ReadPKB returns all foll
 
 TEST_CASE("Checks that given a synonym and a follower, ReadPKB returns relevant followee-follower pairs") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -182,7 +182,7 @@ TEST_CASE("Checks that given a synonym and a follower, ReadPKB returns relevant 
 
 TEST_CASE("Checks that given a synonym and a synonym, ReadPKB returns relevant followee-follower pairs") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -209,7 +209,7 @@ TEST_CASE("Checks that given a synonym and a synonym, ReadPKB returns relevant f
 
 TEST_CASE("Checks that given a synonym and a wildcard, ReadPKB returns relevant followee-follower pairs") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -236,7 +236,7 @@ TEST_CASE("Checks that given a synonym and a wildcard, ReadPKB returns relevant 
 
 TEST_CASE("Checks that given a wildcard and a follower, ReadPKB returns relevant followee-follower pairs") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -261,7 +261,7 @@ TEST_CASE("Checks that given a wildcard and a follower, ReadPKB returns relevant
 
 TEST_CASE("Checks that given a wildcard and a synonym, ReadPKB returns relevant followee-follower pairs") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -287,7 +287,7 @@ TEST_CASE("Checks that given a wildcard and a synonym, ReadPKB returns relevant 
 
 TEST_CASE("Checks that given a wildcard and a wildcard, ReadPKB returns relevant followee-follower pairs") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -312,7 +312,7 @@ TEST_CASE("Checks that given a wildcard and a wildcard, ReadPKB returns relevant
 
 TEST_CASE("Checks that given a followee, if it does not have a certain follower, readPKB returns an empty vector") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -335,7 +335,7 @@ TEST_CASE("Checks that given a followee, if it does not have a certain follower,
 
 TEST_CASE("Checks that given a follower, if it does not have a certain followee, readPKB returns an empty vector") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -358,7 +358,7 @@ TEST_CASE("Checks that given a follower, if it does not have a certain followee,
 
 TEST_CASE("Checks that PKB pointer in WritePKB and ReadPKB is set to first pkb instance and not overwritten") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb1;

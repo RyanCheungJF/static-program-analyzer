@@ -9,7 +9,7 @@
 using namespace std;
 
 PKB buildPkb() {
-    AppConstants CONSTANTS;
+
 	PKB pkb;
 	WritePKB writePkb;
 

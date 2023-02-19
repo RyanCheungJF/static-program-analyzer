@@ -6,7 +6,7 @@ using namespace unit_testing_utils;
 
 TEST_CASE("Check that all statements are recorded in StmtStorage") {
 
-    AppConstants CONSTANTS;
+
     StmtStorage sts;
 
     Stmt s = AppConstants::IF;
@@ -20,7 +20,7 @@ TEST_CASE("Check that all statements are recorded in StmtStorage") {
 
 TEST_CASE("Check that a statement does not appear in the source code, StmtStorage should return an empty set") {
     StmtStorage sts;
-    AppConstants CONSTANTS;
+
 
     Stmt s = AppConstants::IF;
     std::unordered_set<StmtNum> statementNums = sts.getStatementNumbers(s);
@@ -29,7 +29,7 @@ TEST_CASE("Check that a statement does not appear in the source code, StmtStorag
 
 TEST_CASE("Check that given query for a statement and a statementNumber that it appears in, it returns true") {
     StmtStorage sts;
-    AppConstants CONSTANTS;
+
 
     Stmt s = AppConstants::IF;
     sts.writeStatement(s, 3);
@@ -40,20 +40,20 @@ TEST_CASE("Check that given query for a statement and a statementNumber that it 
 
 TEST_CASE("Check that if a statement does not exist, t returns false") {
     StmtStorage sts;
-    AppConstants CONSTANTS;
+
     REQUIRE(!sts.checkStatement(AppConstants::IF, 4));
 }
 
 TEST_CASE("Check that given a Stmt and its StmtNum, a query for an non-existent Stmt returns false") {
     StmtStorage sts;
-    AppConstants CONSTANTS;
+
     Stmt s = AppConstants::IF;
     REQUIRE(!sts.checkStatement(AppConstants::WHILE, 4));
 }
 
 TEST_CASE("StmtStorage: getStatementNumbers(Stmt s): stmt") {
     StmtStorage sts;
-    AppConstants CONSTANTS;
+
 
     Stmt stmt = AppConstants::STMT;
 

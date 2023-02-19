@@ -5,7 +5,7 @@
 using namespace std;
 
 TEST_CASE("insertTable / insertion of two tables with intersection / return one table with 2 values ") {
-    AppConstants CONSTANTS;
+
     QueryDB qdb;
     vector<vector<string>> content1 = {{"1"}, {"2"}, {"3"}};
     vector<vector<string>> content2 = {{"1"}, {"2"}};
@@ -20,7 +20,7 @@ TEST_CASE("insertTable / insertion of two tables with intersection / return one 
 }
 
 TEST_CASE("insertTable / insertion of two tables without intersection / return two tables") {
-    AppConstants CONSTANTS;
+
     QueryDB qdb;
     vector<vector<string>> content1 = {{"1"}, {"2"}, {"3"}};
     vector<vector<string>> content2 = {{"4"}, {"5"}};
@@ -36,7 +36,7 @@ TEST_CASE("insertTable / insertion of two tables without intersection / return t
 }
 
 TEST_CASE("insertTable / insertion of three tables with intersection / return ONE table") {
-    AppConstants CONSTANTS;
+
     QueryDB qdb;
     vector<vector<string>> content1 = {{"1", "x"}, {"2", "y"}, {"3", "y"}};
     vector<vector<string>> content2 = {{"4", "x"}, {"5", "y"}};
@@ -72,7 +72,7 @@ TEST_CASE("insertTable / insertion of three tables with intersection / return ON
 }
 
 TEST_CASE("insertTable / intersecting headers but non intersecting content / return ONE empty table") {
-    AppConstants CONSTANTS;
+
     QueryDB qdb;
     vector<vector<string>> content1 = {{"1", "x"}, {"2", "y"}, {"3", "y"}};
     vector<vector<string>> content2 = {{"4", "a"}, {"5", "b"}};
@@ -108,7 +108,7 @@ TEST_CASE("insertTable / intersecting headers but non intersecting content / ret
 }
 
 TEST_CASE("insertTable / third table intersects with first two tables / return ONE empty table") {
-    AppConstants CONSTANTS;
+
     QueryDB qdb;
     vector<vector<string>> content1 = {{"1", "x"}, {"2", "y"}, {"3", "y"}};
     vector<vector<string>> content2 = {{"4", "a"}, {"5", "b"}};

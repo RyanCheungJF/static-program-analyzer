@@ -67,7 +67,7 @@ TEST_CASE("Check that all of the followees of each follower is accurate, even wi
 
 
 TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -93,7 +93,7 @@ TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
 
 TEST_CASE("Checks that a non-existent FollowsT relationship returns an empty vector from ReadPKB") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -118,7 +118,7 @@ TEST_CASE("Checks that a non-existent FollowsT relationship returns an empty vec
 
 TEST_CASE("Checks for cases e.g. Follows*(1, assign)") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -150,7 +150,7 @@ TEST_CASE("Checks for cases e.g. Follows*(1, assign)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(1, _)") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -183,7 +183,7 @@ TEST_CASE("Checks for cases e.g. Follows*(1, _)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -213,7 +213,7 @@ TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -245,7 +245,7 @@ TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -283,7 +283,7 @@ TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(_, 3)") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -314,7 +314,7 @@ TEST_CASE("Checks for cases e.g. Follows*(_, 3)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(_, call)") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -346,7 +346,7 @@ TEST_CASE("Checks for cases e.g. Follows*(_, call)") {
 
 TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;

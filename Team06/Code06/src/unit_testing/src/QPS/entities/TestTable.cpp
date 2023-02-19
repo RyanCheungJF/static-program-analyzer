@@ -5,7 +5,7 @@
 using namespace std;
 
 TEST_CASE("getHeader / returns the correct vector of headers / return true") {
-    AppConstants CONSTANTS;
+
     vector<Parameter> headers = {Parameter("v", AppConstants::VARIABLE), Parameter("_", AppConstants::WILDCARD)};
     vector<vector<string>> content = {{"x", "5"}};
     Table table(headers, content);
@@ -13,7 +13,7 @@ TEST_CASE("getHeader / returns the correct vector of headers / return true") {
 }
 
 TEST_CASE("getContent / returns the correct vector of contents / return true") {
-    AppConstants CONSTANTS;
+
     vector<Parameter> headers = {Parameter("v", AppConstants::VARIABLE), Parameter("_", AppConstants::WILDCARD)};
     vector<vector<string>> content = {{"x", "5"}};
     Table table(headers, content);
@@ -21,7 +21,7 @@ TEST_CASE("getContent / returns the correct vector of contents / return true") {
 }
 
 TEST_CASE("selectColumns / the selection of single column will reduce the table to chosen column / return true") {
-    AppConstants CONSTANTS;
+
     vector<Parameter> headers = {Parameter("v", AppConstants::VARIABLE), Parameter("_", AppConstants::WILDCARD)};
     vector<vector<string>> content = {{"x", "5"}};
     Table table(headers, content);
@@ -33,7 +33,7 @@ TEST_CASE("selectColumns / the selection of single column will reduce the table 
 }
 
 TEST_CASE("selectColumns / select nothing / return true") {
-    AppConstants CONSTANTS;
+
     vector<Parameter> headers = {Parameter("v", AppConstants::VARIABLE), Parameter("_", AppConstants::WILDCARD)};
     vector<vector<string>> content = {{"x", "5"}};
     Table table(headers, content);
@@ -43,7 +43,7 @@ TEST_CASE("selectColumns / select nothing / return true") {
 }
 
 TEST_CASE("extractDesignEntities / test for variable and wild card / return only variable") {
-    AppConstants CONSTANTS;
+
     vector<Parameter> headers = {Parameter("v", AppConstants::VARIABLE),
                                  Parameter("_", AppConstants::WILDCARD)
                                  };
@@ -55,7 +55,7 @@ TEST_CASE("extractDesignEntities / test for variable and wild card / return only
 }
 
 TEST_CASE("extractDesignEntities / test for stmt and fixed_int / return only stmt") {
-    AppConstants CONSTANTS;
+
     vector<Parameter> headers = {Parameter("s", AppConstants::STMT),
                                  Parameter("321", AppConstants::FIXED_INT)
                                 };
@@ -67,7 +67,7 @@ TEST_CASE("extractDesignEntities / test for stmt and fixed_int / return only stm
 }
 
 TEST_CASE("extractDesignEntities / test for fixed_string, read and stmt / returns read and stmt") {
-    AppConstants CONSTANTS;
+
     vector<Parameter> headers = {Parameter("abc", AppConstants::FIXED_STRING),
                                  Parameter("rd", AppConstants::READ),
                                  Parameter("s", AppConstants::STMT),
@@ -79,7 +79,7 @@ TEST_CASE("extractDesignEntities / test for fixed_string, read and stmt / return
 }
 
 TEST_CASE("extractDesignEntities / test for call and fixed_string / returns call") {
-    AppConstants CONSTANTS;
+
     vector<Parameter> headers = {Parameter("abc", AppConstants::FIXED_STRING),
                                  Parameter("cl", AppConstants::CALL)
     };
@@ -91,7 +91,7 @@ TEST_CASE("extractDesignEntities / test for call and fixed_string / returns call
 }
 
 TEST_CASE("extractDesignEntities / test constant, procedure and fixed_string_with_wildcard") {
-    AppConstants CONSTANTS;
+
     vector<Parameter> headers = {Parameter("c", CONSTANTS.CONSTANT),
                                  Parameter("proc", AppConstants::PROCEDURE),
                                  Parameter("_\"a\"_", AppConstants::FIXED_STRING_WTIH_WILDCARD)
@@ -103,7 +103,7 @@ TEST_CASE("extractDesignEntities / test constant, procedure and fixed_string_wit
 }
 
 TEST_CASE("extractDesignEntities / test synonym ifs assign / return ifs, assign") {
-    AppConstants CONSTANTS;
+
     vector<Parameter> headers = {Parameter("hello", AppConstants::SYNONYM),
                                  Parameter("ifs", AppConstants::IF),
                                  Parameter("a", AppConstants::ASSIGN),

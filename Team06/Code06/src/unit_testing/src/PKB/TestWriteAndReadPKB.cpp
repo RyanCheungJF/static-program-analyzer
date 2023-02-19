@@ -5,7 +5,7 @@
 
 using namespace unit_testing_utils;
 
-AppConstants CONSTANTS;
+
 
 //findRelationship() tests
 //Modifies and Uses has the same storage structure and logic thus these test cases that covers the relationship for

@@ -37,7 +37,7 @@ TEST_CASE("splitQuery / splitting variable v; Select v; should give error / catc
 }
 
 TEST_CASE("checkSynonyms / the variable store contains all the required variables in query / no exceptions thrown") {
-    AppConstants CONSTANTS;
+
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
@@ -50,7 +50,7 @@ TEST_CASE("checkSynonyms / the variable store contains all the required variable
 }
 
 TEST_CASE("checkSynonyms / the variable store does not contain stmt / exception is thrown") {
-    AppConstants CONSTANTS;
+
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
@@ -61,7 +61,7 @@ TEST_CASE("checkSynonyms / the variable store does not contain stmt / exception 
 }
 
 TEST_CASE("checkSynonyms / the variable store does not contain variable / exception is thrown") {
-    AppConstants CONSTANTS;
+
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
@@ -80,7 +80,7 @@ TEST_CASE("checkSynonyms / variable store is empty / exception is thrown") {
 }
 
 TEST_CASE("checkSynonyms / the variable store contains more variable than needed / no exception is thrown") {
-    AppConstants CONSTANTS;
+
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
@@ -105,7 +105,7 @@ TEST_CASE("checkSynonyms / the variable store contains more variable than needed
 }
 
 TEST_CASE("checkSynonyms / the variable store has correct type but wrong synonym / exception is thrown") {
-    AppConstants CONSTANTS;
+
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;

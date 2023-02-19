@@ -52,7 +52,7 @@ TEST_CASE("Tests for getting parent for ParentTStorage") {
 
 TEST_CASE("Checks for cases e.g. ParentT(assign, 3)") {
     
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -82,7 +82,7 @@ TEST_CASE("Checks for cases e.g. ParentT(assign, 3)") {
 
 TEST_CASE("Checks for cases e.g. ParentT(while, assign)") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -110,7 +110,7 @@ TEST_CASE("Checks for cases e.g. ParentT(while, assign)") {
 }
 
 TEST_CASE("Checks for cases e.g. Parent(stmt, _)") {
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -140,7 +140,7 @@ TEST_CASE("Checks for cases e.g. Parent(stmt, _)") {
 
 TEST_CASE("Checks that if both synonyms are the same, returns empty vector e.g. ParentT(s, s)") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;

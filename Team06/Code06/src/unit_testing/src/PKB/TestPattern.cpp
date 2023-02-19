@@ -27,7 +27,7 @@ TEST_CASE("PatternStorage: fringe cases") {
 
 TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
     
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -62,7 +62,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
 
 
 TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -98,7 +98,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
 
 
 TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -126,7 +126,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
 }
 
 TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -165,7 +165,7 @@ TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
 
 TEST_CASE("Support for Select v pattern a (v, _)\'") {
 
-    AppConstants CONSTANTS;
+
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
