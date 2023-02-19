@@ -9,6 +9,7 @@ on:
       - pkb
       - qps
       - sp
+      - milestone1
   pull_request:
     branches: 
       - master
