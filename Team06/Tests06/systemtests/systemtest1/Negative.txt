@@ -198,3 +198,13 @@ stmt s;
 Select s such that Follows(s, ___)
 SyntaxError
 5000
+39 - wildcard for first argument of Uses
+read r;
+Select r such that Uses(_, _)
+SemanticError
+5000
+40 - wildcard for first argument of Modifies
+variable v;
+Select v such that Modifies(_, v)
+SemanticError
+5000

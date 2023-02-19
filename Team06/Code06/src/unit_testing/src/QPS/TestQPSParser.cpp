@@ -1,14 +1,8 @@
 #include "catch.hpp"
 #include "qps/parser/QPSParser.h"
+#include "exceptions/SyntaxException.h"
+#include "exceptions/SemanticException.h"
 #include <string>
-
-TEST_CASE("splitQuery / given multiple clauses split by ; / vector of string split by ;") {
-	string test = "stmt s; variable v    ;\n     Select v such that Follows (s, 1) ";
-	QPSParser qp;
-	vector<string> expected = { "stmt s", "variable v", "Select v such that Follows (s, 1)" };
-	vector<string> output = qp.splitQuery(test);
-	REQUIRE(expected == output);
-}
 
 TEST_CASE("parse / given valid string with such that clause / parse into correct vector of queries") {
 	string test = "stmt s; variable v    ;\n     Select v such that Follows (s, 1) ";
@@ -27,13 +21,61 @@ TEST_CASE("parse / given valid string with such that and pattern clause / parse 
 TEST_CASE("parse / missing select clause / throw error") {
     string test = "variable v;stmt s;";
     QPSParser qp;
-    CHECK_THROWS(qp.parse(test));
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / parsing empty strings / throw syntax error") {
+    string test = "variable v; ; Select v";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / rubbish clauses is a syntax error / catch error") {
+    string test = "coding at 2am sucks; but here is a syntax error;";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / variable v; Select v such that Uses(_,_) / catch error") {
+    string test = "variable v; Select v such that Uses(_,_)";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SemanticException);
 }
 
 TEST_CASE("splitQuery / splitting variable v; Select v; should give error / catch error") {
     string test = "variable v; Select v ; ";
     QPSParser qp;
     CHECK_THROWS_AS(qp.splitQuery(test), SyntaxException);
+}
+
+TEST_CASE("splitQuery / splitting variable v;;Select c / still splits normally with empty string") {
+    string test = "variable v; ;Select c  ";
+    QPSParser qp;
+    vector<string> vs = qp.splitQuery(test);
+    CHECK(vs.size() == 3);
+}
+
+TEST_CASE("splitQuery / splitting ;;;;;;;;s / still splits normally with 9 empty strings") {
+    string test = ";;;;;;;;s";
+    QPSParser qp;
+    vector<string> vs = qp.splitQuery(test);
+    int count = 0;
+    for (string s:vs) {
+        if (s != "s") {
+            CHECK(s.empty());
+        } else {
+            count += 1;
+        }
+    }
+    CHECK(count == 1);
+}
+
+TEST_CASE("splitQuery / given multiple clauses split by ; / vector of string split by ;") {
+    string test = "stmt s; variable v    ;\n     Select v such that Follows (s, 1) ";
+    QPSParser qp;
+    vector<string> expected = { "stmt s", "variable v", "Select v such that Follows (s, 1)" };
+    vector<string> output = qp.splitQuery(test);
+    REQUIRE(expected == output);
 }
 
 TEST_CASE("checkSynonyms / the variable store contains all the required variables in query / no exceptions thrown") {
@@ -57,7 +99,7 @@ TEST_CASE("checkSynonyms / the variable store does not contain stmt / exception 
     Parameter p1("v", AppConstants::VARIABLE);
     vs.insertVariable(p1);
     Query q = sqp.parse("Select s such that Modifies(s, v)");
-    REQUIRE_THROWS(qp.checkSynonyms(&q, vs));
+    REQUIRE_THROWS_AS(qp.checkSynonyms(&q, vs), SemanticException);
 }
 
 TEST_CASE("checkSynonyms / the variable store does not contain variable / exception is thrown") {
@@ -68,7 +110,7 @@ TEST_CASE("checkSynonyms / the variable store does not contain variable / except
     Parameter p1("s", AppConstants::STMT);
     vs.insertVariable(p1);
     Query q = sqp.parse("Select s such that Modifies(s, v)");
-    REQUIRE_THROWS(qp.checkSynonyms(&q, vs));
+    REQUIRE_THROWS_AS(qp.checkSynonyms(&q, vs), SemanticException);
 }
 
 TEST_CASE("checkSynonyms / variable store is empty / exception is thrown") {

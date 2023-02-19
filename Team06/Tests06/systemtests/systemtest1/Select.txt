@@ -1,0 +1,50 @@
+1 - comment
+stmt s;
+Select s
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42
+5000
+2 - comment
+if i;
+Select i
+31, 33
+5000
+3 - comment
+while w;
+Select w
+25, 27, 30, 34
+5000
+4 - comment
+read r;
+Select r
+1, 2, 3
+5000
+5 - comment
+print p;
+Select p
+32, 36, 42
+5000
+6 - comment
+assign a;
+Select a
+5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 28, 29, 35, 37, 38, 39, 40, 41
+5000
+7 - comment
+call c;
+Select c
+4
+5000
+8 - comment
+variable v;
+Select v
+i, a, A, b, B, c, N, thisIsAVeryLongNameAndILikeApples, while, if, else, z, y, x, w, o, k, j
+5000
+9 - comment
+constant c;
+Select c
+2, 0, 1, 7, 3, 10, 42, 5, 145
+5000
+10 - comment
+procedure p;
+Select p
+arithmetic, conditionalSpam
+5000

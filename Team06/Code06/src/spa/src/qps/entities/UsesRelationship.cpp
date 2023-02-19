@@ -25,7 +25,8 @@ UsesRelationship::UsesRelationship(vector<Parameter>& ps)
 
 bool UsesRelationship::validateParams()
 {
-	if (!Parameter::isStatementRef(params[0]) && !Parameter::isProcedure(params[0])) {
+	if (params[0].getValue() == "_" ||
+    (!Parameter::isStatementRef(params[0]) && !Parameter::isProcedure(params[0]))) {
 		return false;
 	}
 	if (!Parameter::isEntityRef(params[1])) {

@@ -20,7 +20,7 @@ private:
 	std::vector<std::vector<std::string>> handleIntSyn(Parameter param1, Parameter param2);
 
 	// e.g. FollowsT(1, _)
-	std::vector<std::vector<std::string>> handleIntWildcard(Parameter param1, Parameter param2);
+	std::vector<std::vector<std::string>> handleIntWildcard(Parameter param1);
 
 	// e.g. FollowsT(a, 2)
 	std::vector<std::vector<std::string>> handleSynInt(Parameter param1, Parameter param2);
@@ -29,14 +29,14 @@ private:
 	std::vector<std::vector<std::string>> handleSynSyn(Parameter param1, Parameter param2);
 
 	// e.g. FollowsT(a, _)
-	std::vector<std::vector<std::string>> handleSynWildcard(Parameter param1, Parameter param2);
+	std::vector<std::vector<std::string>> handleSynWildcard(Parameter param1);
 
 	// e.g. FollowsT(_, 2)
-	std::vector<std::vector<std::string>> handleWildcardInt(Parameter param1, Parameter param2);
+	std::vector<std::vector<std::string>> handleWildcardInt(Parameter param2);
 
 	// .e.g FollowsT(_, a)
-	std::vector<std::vector<std::string>> handleWildcardSyn(Parameter param1, Parameter param2);
+	std::vector<std::vector<std::string>> handleWildcardSyn(Parameter param2);
 
 	// e.g. FollowsT(_, _)
-	std::vector<std::vector<std::string>> handleWildcardWildcard(Parameter param1, Parameter param2);
+	std::vector<std::vector<std::string>> handleWildcardWildcard();
 };

@@ -78,3 +78,18 @@ stmt s; procedure p; if i; variable v; while w; read r;
 Select r such that Modifies(r, "b")
 2
 5000
+17 - comment
+stmt s; variable v;
+Select s such that Modifies(s, v)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 37, 38, 39, 40, 41
+5000
+18 - comment
+stmt s;
+Select s such that Modifies(s, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 37, 38, 39, 40, 41
+5000
+19 - comment
+variable v; print p; 
+Select v such that Modifies(p, v)
+none
+5000

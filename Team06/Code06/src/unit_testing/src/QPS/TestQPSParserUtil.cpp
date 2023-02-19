@@ -109,28 +109,28 @@ TEST_CASE("extractSubStringUntilDelimiter / empty string, non-empty delimiter, 0
 	string inputString = "";
 	string inputDelimiter = ",";
 	int start = 0;
-	CHECK_THROWS(extractSubStringUntilDelimiter(inputString, start, inputDelimiter));
+	REQUIRE_THROWS(extractSubStringUntilDelimiter(inputString, start, inputDelimiter));
 }
 
 TEST_CASE("extractSubStringUntilDelimiter / non-empty string, empty delimiter, 0 <= start < string length / throws error") {
 	string inputString = "helloMyName is johnny";
 	string inputDelimiter = "";
 	int start = 0;
-	CHECK_THROWS(extractSubStringUntilDelimiter(inputString, start, inputDelimiter));
+    REQUIRE_THROWS(extractSubStringUntilDelimiter(inputString, start, inputDelimiter));
 }
 
 TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty delimiter, start >= string length / throws error") {
 	string inputString = "helloMyName is johnny";
 	string inputDelimiter = ",";
 	int start = inputString.size();
-	CHECK_THROWS(extractSubStringUntilDelimiter(inputString, start, inputDelimiter));
+    REQUIRE_THROWS(extractSubStringUntilDelimiter(inputString, start, inputDelimiter));
 }
 
 TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty delimiter, start < 0 / throws error") {
 	string inputString = "helloMyName is johnny";
 	string inputDelimiter = ",";
 	int start = -1;
-	CHECK_THROWS(extractSubStringUntilDelimiter(inputString, start, inputDelimiter));
+    REQUIRE_THROWS(extractSubStringUntilDelimiter(inputString, start, inputDelimiter));
 }
 
 TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty delimiter not present, start = 0 / return tuple with full string and end pos at string length") {

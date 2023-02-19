@@ -98,3 +98,9 @@ stmt s; while w; procedure p; if i;
 Select i such that Uses(i, "if")
 31, 33
 5000
+21 - comment
+if i; variable v;
+Select v such that Uses(i, v)
+if, N, a, A, b, B, while
+5000
+

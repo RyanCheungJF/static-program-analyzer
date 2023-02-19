@@ -31,7 +31,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleIntSyn(Paramet
 	return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleIntWildcard(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleIntWildcard(Parameter param1) {
 	std::string paramString1 = param1.getValue();
 	std::vector<std::vector<std::string>> res;
 
@@ -80,9 +80,8 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynSyn(Paramet
 	return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleSynWildcard(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleSynWildcard(Parameter param1) {
 	std::string paramString1 = param1.getValue();
-	std::string paramString2 = param2.getValue();
 	std::vector<std::vector<std::string>> res;
 
 	std::unordered_set<StmtNum> typedStmtNums = stmtStorage->getStatementNumbers(param1.getTypeString());
@@ -97,7 +96,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynWildcard(Pa
 	return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardInt(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardInt(Parameter param2) {
 	std::string paramString2 = param2.getValue();
 	std::vector<std::vector<std::string>> res;
 
@@ -109,7 +108,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardInt(Pa
 	return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardSyn(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardSyn(Parameter param2) {
 	std::string paramString2 = param2.getValue();
 	std::vector<std::vector<std::string>> res;
  
@@ -125,7 +124,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardSyn(Pa
 	return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardWildcard(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardWildcard() {
 	std::vector<std::vector<std::string>> res;
 
 	std::pair<std::vector<StmtNum>, std::vector<StmtNum>> stmtNumsArrayPair = rlStorage->getAllPairs();
@@ -143,10 +142,12 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handle(Parameter par
 	
 	std::string paramString1 = param1.getValue();
 	std::string paramString2 = param2.getValue();
-	bool isIntParam1 = Parameter::guessParameterType(paramString1) == ParameterType::FIXED_INT;
-	bool isIntParam2 = Parameter::guessParameterType(paramString2) == ParameterType::FIXED_INT;
-	bool isSynonymParam1 = Parameter::guessParameterType(paramString1) == ParameterType::SYNONYM;
-	bool isSynonymParam2 = Parameter::guessParameterType(paramString2) == ParameterType::SYNONYM;
+	ParameterType paramType1 = param1.getType();
+	ParameterType paramType2 = param2.getType();
+	bool isIntParam1 = paramType1 == ParameterType::FIXED_INT;
+	bool isIntParam2 = paramType2 == ParameterType::FIXED_INT;
+	bool isSynonymParam1 = paramType1 != ParameterType::FIXED_INT && paramType1 != ParameterType::WILDCARD;
+	bool isSynonymParam2 = paramType2 != ParameterType::FIXED_INT && paramType2 != ParameterType::WILDCARD;
 
 	if (isIntParam1) {
 		if (isIntParam2) {
@@ -156,7 +157,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handle(Parameter par
 			return handleIntSyn(param1, param2);
 		}
 		else {
-			return handleIntWildcard(param1, param2);
+			return handleIntWildcard(param1);
 		}
 	}
 	else if (isSynonymParam1) {
@@ -168,17 +169,17 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handle(Parameter par
 			return handleSynSyn(param1, param2);
 		}
 		else {
-			return handleSynWildcard(param1, param2);
+			return handleSynWildcard(param1);
 		}
 	} else {
 		if (isIntParam2) {
-			return handleWildcardInt(param1, param2);
+			return handleWildcardInt(param2);
 		}
 		else if (isSynonymParam2) {
-			return handleWildcardSyn(param1, param2);
+			return handleWildcardSyn(param2);
 		}
 		else {
-			return handleWildcardWildcard(param1, param2);
+			return handleWildcardWildcard();
 		}
 	}
 	return std::vector<std::vector<std::string>>();
