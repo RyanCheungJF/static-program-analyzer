@@ -33,11 +33,6 @@ stmt s variable v;
 Select s such that Follows(1, s)
 SyntaxError
 5000
-7 - semi colon replaced with comma
-stmt s, variable v;
-Select s such that Follows(1, s)
-SyntaxError
-5000
 8 - duplicate declaration
 stmt s; stmt s;
 Select s such that Follows(1, s)
@@ -151,5 +146,30 @@ SemanticError
 28 - pattern invalid expr_spec
 stmt s; assign a;
 Select s such that Follows(s, 1) pattern a(_, "this*")
+SyntaxError
+5000
+29 - semi colon replaced with comma
+stmt s, variable v;
+Select s such that Follows(1, s)
+SyntaxError
+5000
+30 - variable not supported for Modifies
+stmt s; procedure p; if i; variable v;
+Select v such that Modifies(v, "j")
+SemanticError
+5000
+31 - variable not supported for Uses
+stmt s; procedure p; if i; variable v;
+Select v such that Uses(v, "j")
+SemanticError
+5000
+32 - single quotes
+stmt s; procedure p; if i; variable v;
+Select s such that Uses(s, 'j')
+SyntaxError
+5000
+33 - single quotes
+stmt s; assign a;
+Select s such that Follows(s, 1) pattern a(_, _'x'_)
 SyntaxError
 5000

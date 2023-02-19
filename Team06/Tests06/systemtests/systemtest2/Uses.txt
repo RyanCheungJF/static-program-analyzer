@@ -73,3 +73,23 @@ stmt s1, s2; while w; if i; print p; read r; call c;
 Select s2 such that Uses(s1, "y")
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29
 5000
+16 - comment
+stmt s; while w;
+Select w such that Uses(w, "N")
+18
+5000
+17 - comment
+stmt s; while w; procedure p; if i; 
+Select w such that Uses(w, "a")
+none
+5000
+18 - comment
+stmt s; while w; procedure p; if i; 
+Select w such that Uses(w, "i")
+18
+5000
+19 - comment
+stmt s; while w; procedure p; if i; 
+Select p such that Uses(p, "y")
+noindent, wEiRdNAmeS123
+5000
