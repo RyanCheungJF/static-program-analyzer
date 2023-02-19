@@ -5,7 +5,6 @@
 #include "QPSParser.h"
 
 QPSParser::QPSParser() {
-    // Do something lmao idek
 }
 
 vector<Query> QPSParser::parse(string qpsQuery) {
@@ -31,7 +30,7 @@ vector<Query> QPSParser::parse(string qpsQuery) {
         throw SyntaxException();
     }
     vStore = parseDeclarations(declarations);
-    // need to do it this way cuz dealing with pointer
+    // need to do it this way cos dealing with pointer
     for (int i = 0; i < queryVec.size(); i++) {
         checkSynonyms(&queryVec.at(i), vStore);
     }
