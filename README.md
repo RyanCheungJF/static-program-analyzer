@@ -1,18 +1,5 @@
 # Team 06 
 
-> Please fill in this Readme with the required information, and delete this box.
-> 
-> 1. Note that if you are using the `Windows Startup SPA Solution`, your target environment must be using `Microsoft Visual Studio Enterprise 2019`. 
->   If you are using `Cross-platform Startup SPA Solution`, you will need to decide on your target environment (see [Wiki](https://github.com/nus-cs3203/project-wiki/wiki/Version-Control-System-and-Code-Repository)).
->   Then, please enter the appropriate information below, giving details on the full toolchain (ie. OS, cmake and make versions.)
-> 2. The `.gitigore` is already pre-configured, note that the included libraries files (ie. `Team00/Code00/lib`) must accompany this repository and not to be removed from the repository.
-> 3. Put your test cases inside the correct directory (ie. `Team00/Tests00/`) not inside the scratch test directory (ie. `Team00/Code00/tests/`). The `.gitignore` is configured to prevent this.
-> 4. If you encounter build issues, please visit the respective FAQ *before* reaching out for help:
->     1. [Windows-Startup-SPA-Solution FAQ](https://github.com/nus-cs3203/project-wiki/wiki/Windows-Startup-SPA-Solution#faq)
->     2. [Cross-platform-Startup-SPA-Solution FAQ](https://github.com/nus-cs3203/project-wiki/wiki/Cross-platform-Startup-SPA-Solution#faq)
-> 5. Avoid using removed/deprecated features in C++, make sure you use features that exist in C++17. It is not recommended to use an earlier version of C++, if you want to proceed, please specify the C++ version specifically in the build configuration.
-> 6. Please rename every reference of `00` (ie. `Team00/Code00`) to your own team number. Since the `.gitignore` is configured to ignore libs, remember to force add the autotester libs back to the repository by running `git add -f Team*/Code*/lib/` after you rename.
-
 ## Target Environment
 
 Item | Version
@@ -23,7 +10,9 @@ C++ Standard | C++17
 
 ### Additional Build Instructions
 
-No additional instructions required.
+1. To run the system tests, do check out the readme under the `Team06/Tests06/systemtests/` directory on the instructions to run the relevant files based on your operating system.
+2. To run your own custom test cases, please enter the directory where your AutoTester.exe resides in. Then, run the command `.\AutoTester.exe ..\Tests\Sample_source.txt ..\Tests\Sample_queries.txt ..\Tests\out.xml` to check that it is compiling where an <b>out.xml</b> will be produced. To have your own custom input, please feel free to edit the <i>Sample_queries.txt</i> and <i>Sample_source.txt</i>
+3. To view your results of the out.xml, run `python -m http.server {PORT}` where PORT can be any port number of your liking, such as `8000`. Go to your `localhost:{PORT}` in your browser, navigate and open the out.xml file.
 
 # Team Members
 
