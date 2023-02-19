@@ -70,7 +70,7 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
 		throw SyntaxException();
 	}
 	//TODO: replace with synonym type rather than string
-	Parameter param(wordList[1], "synonym");
+	Parameter param(wordList[1], AppConstants::SYNONYM);
 	params.push_back(param);
 	return params;
 }
@@ -105,16 +105,22 @@ vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<s
 	string delimiter = "(";
 	size_t itemStart = 0;
 	size_t itemEnd;
-	tie(rel, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-	itemStart = itemEnd;
-	delimiter = ",";
-	tie(param1, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-	itemStart = itemEnd;
-	delimiter = ")";
-	tie(param2, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
+	try {
+		tie(rel, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
+		itemStart = itemEnd;
+		delimiter = ",";
+		tie(param1, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
+		itemStart = itemEnd;
+		delimiter = ")";
+		tie(param2, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
+	}
+	catch (InternalException e) {
+		throw SyntaxException();
+	}
+
 
 	if (itemEnd != condString.size()) {
-		throw InternalException("Error: SelectQueryParser.parseSuchThatClause not full clause parsed");
+		throw SyntaxException();
 	}
 	Parameter p1(removeCharFromString(param1, '\"'), Parameter::guessParameterType(param1));
 	Parameter p2(removeCharFromString(param2, '\"'), Parameter::guessParameterType(param2));
@@ -135,7 +141,7 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
 		return res;
 	}
 	if (end <= start) {
-		throw InternalException("Error: SelectQueryParser.parseSuchThatClause bad start position and end position");
+		throw InternalException("Error: SelectQueryParser.parsePatternClause bad start position and end position");
 	}
 	if (end - start < 2) {
 		throw SyntaxException();

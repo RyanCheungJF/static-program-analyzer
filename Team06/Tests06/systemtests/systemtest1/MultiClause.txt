@@ -1,0 +1,55 @@
+1 - true such that clause with non-empty pattern clause
+assign a;
+Select a such that Follows(1, 2) pattern a("x", _)
+7
+5000
+2 - false such that clause with non-empty pattern clause
+assign a;
+Select a such that Parent*(1, 999999) pattern a("w", _)
+none
+5000
+3 - true such that with empty pattern
+assign a;
+Select a such that Modifies(2, "b") pattern a(_, _"x"_)
+none
+5000
+4 - non-empty such that with non-empty pattern, selection in both clauses
+assign a; variable v;
+Select a such that Uses(a, v) pattern a(v, _"w"_)
+9, 10
+5000
+5 - empty such that with non-empty pattern, selection in both clauses
+assign a;
+Select a such that Modifies(a, "lalalala") pattern a("a", _)
+none
+5000
+6 - non-empty such that with empty pattern, selection in both clauses
+assign a;
+Select a such that Follows*(1, a) pattern a("A", "6 +        9 *         6          / 9")
+none
+5000
+7 - selection in such that clause, common synonym in both
+assign a; variable v;
+Select v such that Uses(a, v) pattern a(_, _"a"_)
+a, b, c, w, j, y, z
+5000
+8 - selection in such that clause, no common synonym
+assign a; variable v;
+Select v such that Uses(7, v) pattern a(_, _"a"_)
+a, b, c, y, z
+5000
+9 - selection in pattern clause, common synonym in both
+assign a; variable v;
+Select v such that Uses(a, "b") pattern a(v, _"a"_)
+z, x, w
+5000
+10 - selection in pattern clause, no common synonym
+assign a1, a2; variable v;
+Select a2 such that Uses(a1, v) pattern a2(_, _"a"_)
+5, 6, 7, 8, 16, 26
+5000
+11 - selection not in any clause
+assign a; variable v1, v2;
+Select v1 such that Uses(a, v2) pattern a(_, _"a"_)
+i, a, A, b, B, c, N, thisIsAVeryLongNameAndILikeApples, while, if, else, z, y, x, w, o, k, j
+5000

@@ -1,3 +1,26 @@
-procedure veryLongFile {
-
-}
+procedure Loid {
+print wes;
+ost = x / 15;
+y = 5;
+z = ost + 1;
+call Anya;
+ost = ost + x * y * z - wes;
+while (wes < 0) {
+if (wes > 15) then {
+read z;
+wes = z % ost + x * (y * z); }
+else {
+y = (x / y * z);
+call Anya; }
+x = z - wes; }
+ost = ost * x + y * z - wes;
+read wes; }
+procedure Anya {
+if (ost > wes) then {
+wes = z * 5;
+call Yor; }
+else {
+ost = 10; }}
+procedure Yor {
+read x;
+print y; }

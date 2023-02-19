@@ -1,0 +1,200 @@
+1 - Invalid design entity
+stamt s;
+Select s such that Follows(1, s)
+SyntaxError
+5000
+2 - Capitalized design entity
+Stmt s;
+Select s such that Follows(1, s)
+SyntaxError
+5000
+3 - Invalid synonym name in declaration
+stmt 1s;
+Select s such that Follows(1, s)
+SyntaxError
+5000
+4 - Invalid declaration
+stmt ;s;
+Select s such that Follows(1, s)
+SyntaxError
+5000
+5 - Invalid declaration
+hello world;
+Select s such that Follows(1, s)
+SyntaxError
+5000
+6 - missing semi colon
+stmt s
+Select s such that Follows(1, s)
+SyntaxError
+5000
+7 - missing semi colon between declaration clauses
+stmt s variable v;
+Select s such that Follows(1, s)
+SyntaxError
+5000
+8 - duplicate declaration
+stmt s; stmt s;
+Select s such that Follows(1, s)
+SemanticError
+5000
+9 - duplicate name
+stmt s; variable s;
+Select s such that Follows(1, s)
+SemanticError
+5000
+10 - missing select clause
+stmt s; variable v;
+
+SyntaxError
+5000
+11 - additional semi-colon at the end of select clause
+stmt s; variable v;
+Select s such that Follows(1, s);
+SyntaxError
+5000
+12 - non-capitalized select
+stmt s; variable v;
+select s such that Follows(1, s)
+SyntaxError
+5000
+13 - invalid select variable name
+stmt s; variable v;
+Select 123s such that Follows(1, s)
+SyntaxError
+5000
+14 - extra semi-colon in select
+stmt s; variable v;
+Select s ; such that Follows(1, s)
+SyntaxError
+5000
+15 - select with extra variables
+stmt s; variable v;
+Select s, v such that Follows(1, s)
+SyntaxError
+5000
+16 - such that conjoined
+stmt s; variable v;
+Select s suchthat Follows(1, s)
+SyntaxError
+5000
+17 - random characters after select
+stmt s; variable v;
+Select s asdas hellos pasd
+SyntaxError
+5000
+18 - random characters after select 
+stmt s; variable v;
+Select s such that Follows(1, s)asdwqe asdjfkks
+SyntaxError
+5000
+19 - Invalid Follows relationship, not capitalized
+stmt s; variable v;
+Select s such that follows(1, s)
+SyntaxError
+5000
+20 - invalid relationship
+stmt s; variable v;
+Select s such that Seek(1, s)
+SyntaxError
+5000
+21 - invalid Follows relationship, invalid params
+stmt s; variable v;
+Select s such that Follows(1, "s")
+SyntaxError
+5000
+22 - invalid Follows relationship, invalid params
+stmt s; variable v;
+Select s such that Follows("a", 1)
+SyntaxError
+5000
+22 - invalid Follows relationship, missing comma
+stmt s; variable v;
+Select s such that Follows("a" 1)
+SyntaxError
+5000
+22 - invalid Follows relationship, missing braces
+stmt s; variable v;
+Select s such that Follows"a", 1)
+SyntaxError
+5000
+23 - invalid Follows relationship, missing braces
+stmt s; variable v;
+Select s such that Follows("a", 1
+SyntaxError
+5000
+24 - invalid Follows relationship, invalid synonym type
+stmt s; variable v;
+Select s such that Follows(1, v)
+SemanticError
+5000
+25 - undeclared synonym
+stmt s; variable v;
+Select n such that Follows(v, 1)
+SemanticError
+5000
+26 - incomplete pattern clause
+stmt s; variable v;
+Select s such that Follows(s, 1) pattern 
+SyntaxError
+5000
+27 - pattern not synAssign
+stmt s; variable v;
+Select s such that Follows(s, 1) pattern s(_, _)
+SemanticError
+5000
+28 - pattern invalid expr_spec
+stmt s; assign a;
+Select s such that Follows(s, 1) pattern a(_, "this*")
+SyntaxError
+5000
+29 - semi colon replaced with comma
+stmt s, variable v;
+Select s such that Follows(1, s)
+SyntaxError
+5000
+30 - variable not supported for Modifies
+stmt s; procedure p; if i; variable v;
+Select v such that Modifies(v, "j")
+SemanticError
+5000
+31 - variable not supported for Uses
+stmt s; procedure p; if i; variable v;
+Select v such that Uses(v, "j")
+SemanticError
+5000
+32 - single quotes
+stmt s; procedure p; if i; variable v;
+Select s such that Uses(s, 'j')
+SyntaxError
+5000
+33 - single quotes
+stmt s; assign a;
+Select s such that Follows(s, 1) pattern a(_, _'x'_)
+SyntaxError
+5000
+34 - pattern invalid expr_spec
+stmt s; assign a;
+Select s such that Follows(s, 1) pattern a(_, "+3+4")
+SyntaxError
+5000
+35 - pattern invalid expr_spec
+stmt s; assign a;
+Select s such that Follows(s, 1) pattern a(_, "3+*4")
+SyntaxError
+5000
+36 - invalid multi declaration, missing commas
+stmt s1, s2, s3 s4 s5, s6; 
+Select s1 such that Follows(s1, s2)
+SyntaxError
+5000
+37 - letters before Select
+stmt s1 s2; 
+random letters 1234 Select s such that Follows(s1, s2)
+SyntaxError
+5000
+38 - multiple underscores for wildcard
+stmt s;
+Select s such that Follows(s, ___)
+SyntaxError
+5000

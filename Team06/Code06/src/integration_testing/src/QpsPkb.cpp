@@ -9,7 +9,7 @@
 using namespace std;
 
 PKB buildPkb() {
-    AppConstants CONSTANTS;
+
 	PKB pkb;
 	WritePKB writePkb;
 
@@ -44,17 +44,17 @@ PKB buildPkb() {
 
 	writePkb.setCall(2, "sub");
 
-	writePkb.setStatement(CONSTANTS.ASSIGN, 1);
-	writePkb.setStatement(CONSTANTS.ASSIGN, 4);
-	writePkb.setStatement(CONSTANTS.ASSIGN, 6);
-	writePkb.setStatement(CONSTANTS.ASSIGN, 8);
-	writePkb.setStatement(CONSTANTS.ASSIGN, 11);
-	writePkb.setStatement(CONSTANTS.IF, 9);
-	writePkb.setStatement(CONSTANTS.WHILE, 3);
-	writePkb.setStatement(CONSTANTS.CALL, 2);
-	writePkb.setStatement(CONSTANTS.PRINT, 7);
-	writePkb.setStatement(CONSTANTS.READ, 5);
-	writePkb.setStatement(CONSTANTS.READ, 10);
+	writePkb.setStatement(AppConstants::ASSIGN, 1);
+	writePkb.setStatement(AppConstants::ASSIGN, 4);
+	writePkb.setStatement(AppConstants::ASSIGN, 6);
+	writePkb.setStatement(AppConstants::ASSIGN, 8);
+	writePkb.setStatement(AppConstants::ASSIGN, 11);
+	writePkb.setStatement(AppConstants::IF, 9);
+	writePkb.setStatement(AppConstants::WHILE, 3);
+	writePkb.setStatement(AppConstants::CALL, 2);
+	writePkb.setStatement(AppConstants::PRINT, 7);
+	writePkb.setStatement(AppConstants::READ, 5);
+	writePkb.setStatement(AppConstants::READ, 10);
 
 	writePkb.setEntity(1, { "x" });
 	writePkb.setEntity(3, { "x" });

@@ -6,7 +6,7 @@ using namespace std;
 
 class SemanticException : public Exception {
 private:
-    string errorMessage = "SemanticError";
+    const static string ERROR_MESSAGE;
 public:
     SemanticException();
 };

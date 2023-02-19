@@ -17,8 +17,10 @@ void SP::processFile(std::string filePath, WritePKB* writePKB, ReadPKB* readPKB)
 	} catch (SyntaxErrorException e) {
 		std::cout << "Syntax Error caught" << std::endl;
 		std::cout << e.what() << std::endl;
+        throw e;
 	} catch (SemanticErrorException e) {
 		std::cout << "Semantic Error caught" << std::endl;
 		std::cout << e.what() << std::endl;
+        throw e;
 	}
 }

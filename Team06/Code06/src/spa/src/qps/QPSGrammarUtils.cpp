@@ -33,7 +33,7 @@ bool isInteger(string integer) {
 //}
 
 bool isSelect(string s) {
-    return regex_search(s, regex("^Select$"));
+    return regex_search(s, regex("^Select"));
 }
 
 bool isPattern(string s) {
@@ -56,7 +56,8 @@ bool isDesignEntity(string designEntity) {
     return regex_search(designEntity, regex("^(stmt|read|print|call|while|if|assign|variable|constant|procedure)"));
 }
 
-//TODO: Does this belong in parser util?
+//TODO: Does this belong in parser util? 
+// Yes, put it into parserUtil
 pair<string,string> extractDesignEntity(string designEntity) {
     regex rgx("^(stmt|read|print|call|while|if|assign|variable|constant|procedure)\\s+");
     smatch match;

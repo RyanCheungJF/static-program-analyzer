@@ -6,7 +6,7 @@ using namespace std;
 
 class InternalException : public Exception {
 private:
-    string errorMessage = "InternalException";
+    const static string ERROR_MESSAGE;
 public:
     using Exception::Exception;
 };

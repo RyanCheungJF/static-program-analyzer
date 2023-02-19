@@ -34,7 +34,7 @@ TEST_CASE("ModifiesUsesStorage: writeS") {
         REQUIRE(res2.size() == input2_1.size());
 
         std::unordered_set<Ent> res3 = us.getEnt(100000);
-        REQUIRE(res3.size() == 0);
+        REQUIRE(res3.empty());
     }
 
     SECTION("ModifiesUsesStorage: exists(StmtNum num, Ent var)") {
@@ -56,7 +56,7 @@ TEST_CASE("ModifiesUsesStorage: writeS") {
         REQUIRE(res3.size() == 1);
 
         std::unordered_set<StmtNum> res4 = us.getStmtsFromEnt("z");
-        REQUIRE(res4.size() == 0);
+        REQUIRE(res4.empty());
     }
 
     SECTION("ModifiesUsesStorage: getAllStmtEntPairs()") {

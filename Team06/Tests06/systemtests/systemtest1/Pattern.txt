@@ -118,3 +118,18 @@ assign a;
 Select a pattern a(_, "(w*a)+j")
 16
 5000
+23 - comment
+assign a;
+Select a pattern a(_, "0")
+13, 17, 22
+5000
+24 - comment
+assign a;
+Select a pattern a(_, _"0"_)
+11, 13, 14, 17, 22
+5000
+25 - comment
+assign a;
+Select a pattern a("xyz", _)
+none
+5000

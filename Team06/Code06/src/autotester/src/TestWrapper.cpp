@@ -20,11 +20,20 @@ TestWrapper::TestWrapper() {
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
-	sourceProcessor.processFile(filename, &writePKB, &readPKB);
+    try {
+        sourceProcessor.processFile(filename, &writePKB, &readPKB);
+    } catch (SyntaxErrorException e) {
+        ::exit(0);
+    } catch (SemanticErrorException e) {
+        ::exit(0);
+    } catch (std::exception e) {
+        ::exit(0);
+    }
 }
 
 // method to evaluating a query
 void TestWrapper::evaluate(std::string query, std::list<std::string>& results) {
+
 	// call your evaluator to evaluate the query here
 	  // ...code to evaluate query..
       vector<string> res = qps.processQueries(query, readPKB);
