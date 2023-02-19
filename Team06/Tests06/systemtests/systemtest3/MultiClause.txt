@@ -1,0 +1,20 @@
+1 - comment
+assign a, a1; variable v, v1;
+Select a such that Uses (a, v) pattern a (v, _"y"_)
+6, 11, 14
+5000
+2 - comment
+assign a, a1; variable v, v1;
+Select a such that Uses (a, v) pattern a (v1, _"y"_)
+6, 10, 11, 14
+5000
+3 - comment
+assign a, a1; variable v, v1;
+Select v such that Uses (a, v) pattern a1 (v, _"y"_)
+ost, wes, y
+5000
+4 - comment
+assign a, a1; variable v, v1;
+Select v such that Uses (a, v) pattern a1 (v1, _"y"_)
+ost, wes, x, y, z
+5000

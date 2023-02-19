@@ -173,3 +173,28 @@ stmt s; assign a;
 Select s such that Follows(s, 1) pattern a(_, _'x'_)
 SyntaxError
 5000
+34 - pattern invalid expr_spec
+stmt s; assign a;
+Select s such that Follows(s, 1) pattern a(_, "+3+4")
+SyntaxError
+5000
+35 - pattern invalid expr_spec
+stmt s; assign a;
+Select s such that Follows(s, 1) pattern a(_, "3+*4")
+SyntaxError
+5000
+36 - invalid multi declaration, missing commas
+stmt s1, s2, s3 s4 s5, s6; 
+Select s1 such that Follows(s1, s2)
+SyntaxError
+5000
+37 - letters before Select
+stmt s1 s2; 
+random letters 1234 Select s such that Follows(s1, s2)
+SyntaxError
+5000
+38 - multiple underscores for wildcard
+stmt s;
+Select s such that Follows(s, ___)
+SyntaxError
+5000
