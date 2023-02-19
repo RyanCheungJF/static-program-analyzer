@@ -344,20 +344,57 @@ TEST_CASE("SP-PKB Integration: Valid Source Program, Parent, ParentT") {
 
     SECTION("SP-PKB Integration: Valid Source Program, Parent, ParentT: ParentT") {
 
+        shared_ptr<Relationship> parentTTest1 = Relationship::makeRelationship(AppConstants::PARENTT,
+                                                                              {Parameter("_", AppConstants::WILDCARD),
+                                                                               Parameter("ass", AppConstants::ASSIGN)}
+        );
+        std::vector<std::vector<std::string>> parentT1actual = readPKB.findRelationship(parentTTest1);
+        std::vector<std::vector<std::string>> parentT1expected = { { "3", "5" }, { "3", "6" }, { "3", "8" },
+                                                                   { "3", "9" }, { "4", "5" }, { "4", "6" },
+                                                                   { "7", "8" }, { "7", "9" } };
+        std::sort(parentT1actual.begin(), parentT1actual.end());
+        std::sort(parentT1expected.begin(), parentT1expected.end());
+        REQUIRE(parentT1expected == parentT1actual);
 
+        shared_ptr<Relationship> parentTTest2 = Relationship::makeRelationship(AppConstants::PARENTT,
+                                                                              {Parameter("_", AppConstants::WILDCARD),
+                                                                               Parameter("if", AppConstants::IF)}
+        );
+        std::vector<std::vector<std::string>> parentT2actual = readPKB.findRelationship(parentTTest2);
+        std::vector<std::vector<std::string>> parentT2expected = {{"3", "4"}};
+        std::sort(parentT2actual.begin(), parentT2actual.end());
+        std::sort(parentT2expected.begin(), parentT2expected.end());
+        REQUIRE(parentT2expected == parentT2actual);
 
+        shared_ptr<Relationship> parentTTest3 = Relationship::makeRelationship(AppConstants::PARENTT,
+                                                                              {Parameter("_", AppConstants::WILDCARD),
+                                                                               Parameter("w", AppConstants::WHILE)}
+        );
+        std::vector<std::vector<std::string>> parentT3actual = readPKB.findRelationship(parentTTest3);
+        std::vector<std::vector<std::string>> parentT3expected = {{"3", "7"}};
+        std::sort(parentT3actual.begin(), parentT3actual.end());
+        std::sort(parentT3expected.begin(), parentT3expected.end());
+        REQUIRE(parentT3expected == parentT3actual);
 
+        shared_ptr<Relationship> parentTTest4 = Relationship::makeRelationship(AppConstants::PARENTT,
+                                                                              {Parameter("ass", AppConstants::ASSIGN),
+                                                                               Parameter("w", AppConstants::WHILE)}
+        );
+        std::vector<std::vector<std::string>> parent4actual = readPKB.findRelationship(parentTTest4);
+        REQUIRE(parent4actual.empty());
 
-//        std::cout << "parent5actual results:\n";
-//        for (auto i :parent5actual) {
-//            std::cout << i[0] << " " << i[1] << "\n";
-//        }
+        shared_ptr<Relationship> parentTTest5 = Relationship::makeRelationship(AppConstants::PARENTT,
+                                                                              {Parameter("w", AppConstants::WHILE),
+                                                                               Parameter("ca", AppConstants::CALL)}
+        );
+        std::vector<std::vector<std::string>> parentT5actual = readPKB.findRelationship(parentTTest5);
+        std::vector<std::vector<std::string>> parentT5expected = { { "3", "10" }, { "7", "10" } };
+        std::sort(parentT5actual.begin(), parentT5actual.end());
+        std::sort(parentT5expected.begin(), parentT5expected.end());
+        REQUIRE(parentT5expected == parentT5actual);
+
 
     }
-
-
-    // ParentT
-
 
 }
 
