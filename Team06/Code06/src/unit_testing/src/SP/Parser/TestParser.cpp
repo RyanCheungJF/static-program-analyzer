@@ -160,7 +160,7 @@ TEST_CASE("Valid Source Program") {
 		statements.push_back(std::move(printNode));
 
 		auto statementListNode = std::make_unique<StatementList>(std::move(statements));
-		auto procedureNode = std::make_unique<Procedure>("procedure", std::move(statementListNode));
+		auto procedureNode = std::make_unique<Procedure>(AppConstants::PROCEDURE, std::move(statementListNode));
 
 		std::vector<std::unique_ptr<Procedure>> procedures;
 		procedures.push_back(std::move(procedureNode));
@@ -208,14 +208,14 @@ TEST_CASE("Valid Source Program") {
 		auto rootNode = testParser.parseProgram(tokenQueue);
 
 		// creating expected tree
-		auto readStmt = std::make_unique<ReadStatement>(1, "call");
-		auto callStmt = std::make_unique<CallStatement>(2, "print");
-		auto printStmt = std::make_unique<PrintStatement>(3, "read");		
-		auto readAssignStmt = std::make_unique<AssignStatement>(4, "read", std::make_unique<Constant>(2));
-		auto callAssignStmt = std::make_unique<AssignStatement>(5, "call", std::make_unique<Constant>(3));
-		auto whileAssignStmt = std::make_unique<AssignStatement>(6, "while", std::make_unique<Constant>(5));
-		auto ifAssignStmt = std::make_unique<AssignStatement>(7, "if", std::make_unique<Constant>(4));
-		auto printAssignStmt = std::make_unique<AssignStatement>(8, "print", std::make_unique<Constant>(8));
+		auto readStmt = std::make_unique<ReadStatement>(1, AppConstants::CALL);
+		auto callStmt = std::make_unique<CallStatement>(2, AppConstants::PRINT);
+		auto printStmt = std::make_unique<PrintStatement>(3, AppConstants::READ);
+		auto readAssignStmt = std::make_unique<AssignStatement>(4, AppConstants::READ, std::make_unique<Constant>(2));
+		auto callAssignStmt = std::make_unique<AssignStatement>(5, AppConstants::CALL, std::make_unique<Constant>(3));
+		auto whileAssignStmt = std::make_unique<AssignStatement>(6, AppConstants::WHILE, std::make_unique<Constant>(5));
+		auto ifAssignStmt = std::make_unique<AssignStatement>(7, AppConstants::IF, std::make_unique<Constant>(4));
+		auto printAssignStmt = std::make_unique<AssignStatement>(8, AppConstants::PRINT, std::make_unique<Constant>(8));
 
 		std::vector<std::unique_ptr<Statement>> statementsA;
 		statementsA.push_back(std::move(readStmt));
@@ -228,7 +228,7 @@ TEST_CASE("Valid Source Program") {
 		statementsA.push_back(std::move(printAssignStmt));
 
 		auto statementListNodeA = std::make_unique<StatementList>(std::move(statementsA));
-		auto procedureNodeA = std::make_unique<Procedure>("while", std::move(statementListNodeA));
+		auto procedureNodeA = std::make_unique<Procedure>(AppConstants::WHILE, std::move(statementListNodeA));
 		std::vector<std::unique_ptr<Procedure>> procedures;
 		procedures.push_back(std::move(procedureNodeA));
 

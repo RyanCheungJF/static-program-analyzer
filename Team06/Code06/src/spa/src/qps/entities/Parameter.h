@@ -26,7 +26,7 @@ enum class ParameterType {
 	UNKNOWN
 };
 
-class Parameter : AppConstants {
+class Parameter  {
 public:
 	string getValue();
     ParameterType getType() const;

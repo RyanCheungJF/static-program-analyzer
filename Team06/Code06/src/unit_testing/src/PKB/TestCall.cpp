@@ -1,7 +1,6 @@
 #include "catch.hpp"
 #include "../../../spa/src/PKB/storage/CallStorage.h"
 
-
 TEST_CASE("CallStorage: writeS") {
     CallStorage cs;
     StmtNum s = 10;
@@ -14,7 +13,7 @@ TEST_CASE("CallStorage: writeS") {
 
     SECTION("getCallStatements(): empty storage") {
         auto res = cs.getCallStatements();
-        REQUIRE(res.size() == 0);
+        REQUIRE(res.empty());
     }
 
     ProcName proc1 = "proc1";

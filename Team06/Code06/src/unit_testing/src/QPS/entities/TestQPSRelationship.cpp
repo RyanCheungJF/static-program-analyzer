@@ -9,26 +9,29 @@
 #include "qps/entities/ModifiesRelationship.h"
 
 TEST_CASE("makeRelationship / empty relationship type string / throws error") {
+
 	string typeInput = "";
-	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("b", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / unknown relationship type string / throws error") {
+
 	string typeInput = "unknown type";
-	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("b", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / follows relationship, with correct params / returns relationship object with correct fields and types") {
-	string typeInput = "Follows";
-	Parameter p1("a", "synonym");
-	Parameter p2("1", "fixed_int");
-	Parameter p3("_", "wildcard");
+
+	string typeInput = AppConstants::FOLLOWS;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("1", AppConstants::FIXED_INT);
+	Parameter p3("_", AppConstants::WILDCARD);
 	vector<Parameter> inputParameters{p1, p2};
 	vector<Parameter> inputParameters2{p2, p3};
 	vector<Parameter> inputParameters3{p3, p1};
@@ -45,36 +48,40 @@ TEST_CASE("makeRelationship / follows relationship, with correct params / return
 }
 
 TEST_CASE("makeRelationship / follows relationship, with wrong second param / throws error") {
-	string typeInput = "Follows";
-	Parameter p1("a", "synonym");
-	Parameter p2("fixed_string", "fixed_string");
+
+	string typeInput = AppConstants::FOLLOWS;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2(AppConstants::FIXED_STRING, AppConstants::FIXED_STRING);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / follows relationship, with wrong first param / throws error") {
-	string typeInput = "Follows";
-	Parameter p1("fixed_string", "fixed_string");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::FOLLOWS;
+	Parameter p1(AppConstants::FIXED_STRING, AppConstants::FIXED_STRING);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / follows relationship, more than 2 parameter / throws error") {
-	string typeInput = "Follows";
-	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
-	Parameter p3("c", "synonym");
+
+	string typeInput = AppConstants::FOLLOWS;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("b", AppConstants::SYNONYM);
+	Parameter p3("c", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2, p3 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / follows relationship, less than 2 parameter / throws error") {
-	string typeInput = "Follows";
-	Parameter p1("a", "synonym");
+
+	string typeInput = AppConstants::FOLLOWS;
+	Parameter p1("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
@@ -82,10 +89,11 @@ TEST_CASE("makeRelationship / follows relationship, less than 2 parameter / thro
 
 
 TEST_CASE("makeRelationship / FollowsT relationship / return relationship object") {
-	string typeInput = "Follows*";
-	Parameter p1("a", "synonym");
-	Parameter p2("1", "fixed_int");
-	Parameter p3("_", "wildcard");
+
+	string typeInput = AppConstants::FOLLOWST;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("1", AppConstants::FIXED_INT);
+	Parameter p3("_", AppConstants::WILDCARD);
 	vector<Parameter> inputParameters{ p1, p2 };
 	vector<Parameter> inputParameters2{ p2, p3 };
 	vector<Parameter> inputParameters3{ p3, p1 };
@@ -102,44 +110,49 @@ TEST_CASE("makeRelationship / FollowsT relationship / return relationship object
 }
 
 TEST_CASE("makeRelationship / FollowsT, wrong 2nd param / throws error") {
-	string typeInput = "Follows*";
-	Parameter p1("a", "synonym");
-	Parameter p2("entity_ref", "fixed_string");
+
+	string typeInput = AppConstants::FOLLOWST;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("entity_ref", AppConstants::FIXED_STRING);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / FollowsT, wrong 1st param / throws error") {
-	string typeInput = "Follows*";
-	Parameter p1("entity_ref", "fixed_string");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::FOLLOWST;
+	Parameter p1("entity_ref", AppConstants::FIXED_STRING);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / FollowsT relationship, more than 2 parameter / throws error") {
-	string typeInput = "Follows*";
-	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
-	Parameter p3("c", "synonym");
+
+	string typeInput = AppConstants::FOLLOWST;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("b", AppConstants::SYNONYM);
+	Parameter p3("c", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2, p3 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / FollowsT relationship, less than 2 parameter / throws error") {
-	string typeInput = "Follows*";
-	Parameter p1("a", "synonym");
+
+	string typeInput = AppConstants::FOLLOWST;
+	Parameter p1("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Parent relationship / return relationship object") {
-	string typeInput = "Parent";
-	Parameter p1("a", "synonym");
-	Parameter p2("1", "fixed_int");
-	Parameter p3("_", "wildcard");
+
+	string typeInput = AppConstants::PARENT;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("1", AppConstants::FIXED_INT);
+	Parameter p3("_", AppConstants::WILDCARD);
 	vector<Parameter> inputParameters{ p1, p2 };
 	vector<Parameter> inputParameters2{ p2, p3 };
 	vector<Parameter> inputParameters3{ p3, p1 };
@@ -156,44 +169,49 @@ TEST_CASE("makeRelationship / Parent relationship / return relationship object")
 }
 
 TEST_CASE("makeRelationship / Parent, wrong 2nd param / throws error") {
-	string typeInput = "Parent";
-	Parameter p1("a", "synonym");
-	Parameter p2("entity_ref", "fixed_string");
+
+	string typeInput = AppConstants::PARENT;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("entity_ref", AppConstants::FIXED_STRING);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Parent, wrong 1st param / throws error") {
-	string typeInput = "Parent";
-	Parameter p1("entity_ref", "fixed_string");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::PARENT;
+	Parameter p1("entity_ref", AppConstants::FIXED_STRING);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Parent relationship, more than 2 parameter / throws error") {
-	string typeInput = "Parent";
-	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
-	Parameter p3("c", "synonym");
+
+	string typeInput = AppConstants::PARENT;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("b", AppConstants::SYNONYM);
+	Parameter p3("c", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2, p3 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Parent relationship, less than 2 parameter / throws error") {
-	string typeInput = "Parent";
-	Parameter p1("a", "synonym");
+
+	string typeInput = AppConstants::PARENT;
+	Parameter p1("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / ParentT relationship / return relationship object") {
-	string typeInput = "Parent*";
-	Parameter p1("a", "synonym");
-	Parameter p2("1", "fixed_int");
-	Parameter p3("_", "wildcard");
+
+	string typeInput = AppConstants::PARENTT;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("1", AppConstants::FIXED_INT);
+	Parameter p3("_", AppConstants::WILDCARD);
 	vector<Parameter> inputParameters{ p1, p2 };
 	vector<Parameter> inputParameters2{ p2, p3 };
 	vector<Parameter> inputParameters3{ p3, p1 };
@@ -210,45 +228,50 @@ TEST_CASE("makeRelationship / ParentT relationship / return relationship object"
 }
 
 TEST_CASE("makeRelationship / ParentT, wrong 2nd param / throws error") {
-	string typeInput = "Parent*";
-	Parameter p1("a", "synonym");
-	Parameter p2("entity_ref", "fixed_string");
+
+	string typeInput = AppConstants::PARENTT;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("entity_ref", AppConstants::FIXED_STRING);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / ParentT, wrong 1st param / throws error") {
-	string typeInput = "Parent*";
-	Parameter p1("entity_ref", "fixed_string");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::PARENTT;
+	Parameter p1("entity_ref", AppConstants::FIXED_STRING);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / ParentT relationship, more than 2 parameter / throws error") {
-	string typeInput = "Parent*";
-	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
-	Parameter p3("c", "synonym");
+
+	string typeInput = AppConstants::PARENTT;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("b", AppConstants::SYNONYM);
+	Parameter p3("c", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2, p3 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / ParentT relationship, less than 2 parameter / throws error") {
-	string typeInput = "Parent*";
-	Parameter p1("a", "synonym");
+
+	string typeInput = AppConstants::PARENTT;
+	Parameter p1("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Uses relationship / return relationship object") {
-	string typeInput = "Uses";
-	Parameter p1("a", "synonym");
-	Parameter p2("_", "wildcard");
-	Parameter p3("ent_ref", "fixed_string");
-	Parameter p4("1", "fixed_int");
+
+	string typeInput = AppConstants::USES;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("_", AppConstants::WILDCARD);
+	Parameter p3("ent_ref", AppConstants::FIXED_STRING);
+	Parameter p4("1", AppConstants::FIXED_INT);
 	vector<Parameter> inputParameters{ p1, p2 };
 	vector<Parameter> inputParameters2{ p4, p3 };
 	vector<Parameter> inputParameters3{ p2, p3 };
@@ -266,45 +289,50 @@ TEST_CASE("makeRelationship / Uses relationship / return relationship object") {
 }
 
 TEST_CASE("makeRelationship / Uses, wrong 1st param / throws error") {
-	string typeInput = "Uses";
-	Parameter p1("ent_ref", "variable");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::USES;
+	Parameter p1("ent_ref", AppConstants::VARIABLE);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Uses, wrong 2nd param / throws error") {
-	string typeInput = "Uses";
-	Parameter p1("a", "synonym");
-	Parameter p2("stmt_ref", "fixed_int");
+
+	string typeInput = AppConstants::USES;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("stmt_ref", AppConstants::FIXED_INT);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Uses relationship, more than 2 parameter / throws error") {
-	string typeInput = "Uses";
-	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
-	Parameter p3("c", "synonym");
+
+	string typeInput = AppConstants::USES;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("b", AppConstants::SYNONYM);
+	Parameter p3("c", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2, p3 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Uses relationship, less than 2 parameter / throws error") {
-	string typeInput = "Uses";
-	Parameter p1("a", "synonym");
+
+	string typeInput = AppConstants::USES;
+	Parameter p1("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Modifies relationship / return relationship object") {
-	string typeInput = "Modifies";
-	Parameter p1("a", "synonym");
-	Parameter p2("_", "wildcard");
-	Parameter p3("ent_ref", "fixed_string");
-	Parameter p4("1", "fixed_int");
+
+	string typeInput = AppConstants::MODIFIES;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("_", AppConstants::WILDCARD);
+	Parameter p3("ent_ref", AppConstants::FIXED_STRING);
+	Parameter p4("1", AppConstants::FIXED_INT);
 	vector<Parameter> inputParameters{ p1, p2 };
 	vector<Parameter> inputParameters2{ p4, p3 };
 	vector<Parameter> inputParameters3{ p2, p3 };
@@ -322,65 +350,72 @@ TEST_CASE("makeRelationship / Modifies relationship / return relationship object
 }
 
 TEST_CASE("makeRelationship / Modifies, wrong 1st param / throws error") {
-	string typeInput = "Modifies";
-	Parameter p1("ent_ref", "variable");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::MODIFIES;
+	Parameter p1("ent_ref", AppConstants::VARIABLE);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Modifies, wrong 2nd param / throws error") {
-	string typeInput = "Modifies";
-	Parameter p1("a", "synonym");
-	Parameter p2("stmt_ref", "fixed_int");
+
+	string typeInput = AppConstants::MODIFIES;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("stmt_ref", AppConstants::FIXED_INT);
 	vector<Parameter> inputParameters{ p1, p2 };
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Modifies relationship, more than 2 parameter / throws error") {
-	string typeInput = "Modifies";
-	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
-	Parameter p3("c", "synonym");
+
+	string typeInput = AppConstants::MODIFIES;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("b", AppConstants::SYNONYM);
+	Parameter p3("c", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2, p3 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("makeRelationship / Modifies relationship, less than 2 parameter / throws error") {
-	string typeInput = "Modifies";
-	Parameter p1("a", "synonym");
+
+	string typeInput = AppConstants::MODIFIES;
+	Parameter p1("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1 };
 
 	REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
 }
 
 TEST_CASE("FollowsRelationship.validateParams / invalid 1st param / return false") {
-	string typeInput = "Follows";
-	Parameter p1("a", "synonym");
-	Parameter p2("1", "fixed_int");
+
+	string typeInput = AppConstants::FOLLOWS;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("1", AppConstants::FIXED_INT);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(0).updateSynonymType(ParameterType::VARIABLE);
-	CHECK(output->validateParams() == false);
+	CHECK(!output->validateParams());
 }
 
 TEST_CASE("FollowsRelationship.validateParams / invalid 2nd params / return false") {
-	string typeInput = "Follows";
-	Parameter p1("1", "fixed_int");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::FOLLOWS;
+	Parameter p1("1", AppConstants::FIXED_INT);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(1).updateSynonymType(ParameterType::VARIABLE);
-	CHECK(output->validateParams() == false);
+	CHECK(!output->validateParams());
 }
 
 TEST_CASE("FollowsRelationship.validateParams / valid params / return true") {
-	string typeInput = "Follows";
-	Parameter p1("a", "synonym");
-	Parameter p2("1", "fixed_int");
+
+	string typeInput = AppConstants::FOLLOWS;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("1", AppConstants::FIXED_INT);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
@@ -389,32 +424,35 @@ TEST_CASE("FollowsRelationship.validateParams / valid params / return true") {
 }
 
 TEST_CASE("FollowsTRelationship.validateParams / invalid 1st params / return false") {
-	string typeInput = "Follows*";
-	Parameter p1("a", "synonym");
-	Parameter p2("1", "fixed_int");
+
+	string typeInput = AppConstants::FOLLOWST;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("1", AppConstants::FIXED_INT);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(0).updateSynonymType(ParameterType::VARIABLE);
-	CHECK(output->validateParams() == false);
+	CHECK(!output->validateParams());
 }
 
 TEST_CASE("FollowsTRelationship.validateParams / invalid 2nd params / return false") {
-	string typeInput = "Follows*";
-	Parameter p1("1", "fixed_int");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::FOLLOWST;
+	Parameter p1("1", AppConstants::FIXED_INT);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(1).updateSynonymType(ParameterType::VARIABLE);
-	CHECK(output->validateParams() == false);
+	CHECK(!output->validateParams());
 }
 
 
 TEST_CASE("FollowsTRelationship.validateParams / valid params / return true") {
-	string typeInput = "Follows*";
-	Parameter p1("a", "synonym");
-	Parameter p2("1", "fixed_int");
+
+	string typeInput = AppConstants::FOLLOWST;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("1", AppConstants::FIXED_INT);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
@@ -423,31 +461,34 @@ TEST_CASE("FollowsTRelationship.validateParams / valid params / return true") {
 }
 
 TEST_CASE("ParentRelationship.validateParams / invalid 1st params / return false") {
-	string typeInput = "Parent";
-	Parameter p1("a", "synonym");
-	Parameter p2("1", "fixed_int");
+
+	string typeInput = AppConstants::PARENT;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("1", AppConstants::FIXED_INT);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(0).updateSynonymType(ParameterType::VARIABLE);
-	CHECK(output->validateParams() == false);
+	CHECK(!output->validateParams());
 }
 
 TEST_CASE("ParentRelationship.validateParams / invalid 2nd params / return false") {
-	string typeInput = "Parent";
-	Parameter p1("1", "fixed_int");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::PARENT;
+	Parameter p1("1", AppConstants::FIXED_INT);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(1).updateSynonymType(ParameterType::VARIABLE);
-	CHECK(output->validateParams() == false);
+	CHECK(!output->validateParams());
 }
 
 TEST_CASE("ParentRelationship.validateParams / valid params / return true") {
-	string typeInput = "Parent";
-	Parameter p1("1", "fixed_int");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::PARENT;
+	Parameter p1("1", AppConstants::FIXED_INT);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
@@ -456,31 +497,34 @@ TEST_CASE("ParentRelationship.validateParams / valid params / return true") {
 }
 
 TEST_CASE("ParentTRelationship.validateParams / invalid 1st params / return false") {
-	string typeInput = "Parent*";
-	Parameter p1("a", "synonym");
-	Parameter p2("1", "fixed_int");
+
+	string typeInput = AppConstants::PARENTT;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("1", AppConstants::FIXED_INT);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(0).updateSynonymType(ParameterType::VARIABLE);
-	CHECK(output->validateParams() == false);
+	CHECK(!output->validateParams());
 }
 
 TEST_CASE("ParentTRelationship.validateParams / invalid 2nd params / return false") {
-	string typeInput = "Parent*";
-	Parameter p1("1", "fixed_int");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::PARENTT;
+	Parameter p1("1", AppConstants::FIXED_INT);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(1).updateSynonymType(ParameterType::VARIABLE);
-	CHECK(output->validateParams() == false);
+	CHECK(!output->validateParams());
 }
 
 TEST_CASE("ParentTRelationship.validateParams / valid params / return true") {
-	string typeInput = "Parent*";
-	Parameter p1("1", "fixed_int");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::PARENTT;
+	Parameter p1("1", AppConstants::FIXED_INT);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
@@ -489,31 +533,34 @@ TEST_CASE("ParentTRelationship.validateParams / valid params / return true") {
 }
 
 TEST_CASE("ModifiesRelationship.validateParams / invalid 1st params / return false") {
-	string typeInput = "Modifies";
-	Parameter p1("a", "synonym");
-	Parameter p2("a", "fixed_string");
+
+	string typeInput = AppConstants::MODIFIES;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("a", AppConstants::FIXED_STRING);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(0).updateSynonymType(ParameterType::VARIABLE);
-	CHECK(output->validateParams() == false);
+	CHECK(!output->validateParams());
 }
 
 TEST_CASE("ModifiesRelationship.validateParams / invalid 2nd params / return false") {
-	string typeInput = "Modifies";
-	Parameter p1("1", "fixed_int");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::MODIFIES;
+	Parameter p1("1", AppConstants::FIXED_INT);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(1).updateSynonymType(ParameterType::PROCEDURE);
-	CHECK(output->validateParams() == false);
+	CHECK(!output->validateParams());
 }
 
 TEST_CASE("ModifiesRelationship.validateParams / 1st param is procedure / return true") {
-	string typeInput = "Modifies";
-	Parameter p1("a", "synonym");
-	Parameter p2("a", "fixed_string");
+
+	string typeInput = AppConstants::MODIFIES;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("a", AppConstants::FIXED_STRING);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
@@ -522,9 +569,10 @@ TEST_CASE("ModifiesRelationship.validateParams / 1st param is procedure / return
 }
 
 TEST_CASE("ModifiesRelationship.validateParams / 1st param is stmt ref / return true") {
-	string typeInput = "Modifies";
-	Parameter p1("a", "synonym");
-	Parameter p2("a", "fixed_string");
+
+	string typeInput = AppConstants::MODIFIES;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("a", AppConstants::FIXED_STRING);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
@@ -533,31 +581,34 @@ TEST_CASE("ModifiesRelationship.validateParams / 1st param is stmt ref / return 
 }
 
 TEST_CASE("UsesRelationship.validateParams / invalid 1st params / return false") {
-	string typeInput = "Uses";
-	Parameter p1("a", "synonym");
-	Parameter p2("a", "fixed_string");
+
+	string typeInput = AppConstants::USES;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("a", AppConstants::FIXED_STRING);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(0).updateSynonymType(ParameterType::VARIABLE);
-	CHECK(output->validateParams() == false);
+	CHECK(!output->validateParams());
 }
 
 TEST_CASE("UsesRelationship.validateParams / invalid 2nd params / return false") {
-	string typeInput = "Uses";
-	Parameter p1("1", "fixed_int");
-	Parameter p2("a", "synonym");
+
+	string typeInput = AppConstants::USES;
+	Parameter p1("1", AppConstants::FIXED_INT);
+	Parameter p2("a", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
 	output->params.at(1).updateSynonymType(ParameterType::PROCEDURE);
-	CHECK(output->validateParams() == false);
+	CHECK(!output->validateParams());
 }
 
 TEST_CASE("UsesRelationship.validateParams / 1st param is procedure / return true") {
-	string typeInput = "Uses";
-	Parameter p1("a", "synonym");
-	Parameter p2("a", "fixed_string");
+
+	string typeInput = AppConstants::USES;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("a", AppConstants::FIXED_STRING);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
@@ -566,9 +617,10 @@ TEST_CASE("UsesRelationship.validateParams / 1st param is procedure / return tru
 }
 
 TEST_CASE("UsesRelationship.validateParams / 1st param is stmt ref / return true") {
-	string typeInput = "Uses";
-	Parameter p1("a", "synonym");
-	Parameter p2("a", "fixed_string");
+
+	string typeInput = AppConstants::USES;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("a", AppConstants::FIXED_STRING);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
@@ -577,9 +629,10 @@ TEST_CASE("UsesRelationship.validateParams / 1st param is stmt ref / return true
 }
 
 TEST_CASE("getAllUncheckedSynonyms / contains no synonyms / return empty list ") {
-	string typeInput = "Follows";
-	Parameter p1("1", "fixed_int");
-	Parameter p2("2", "fixed_int");
+
+	string typeInput = AppConstants::FOLLOWS;
+	Parameter p1("1", AppConstants::FIXED_INT);
+	Parameter p2("2", AppConstants::FIXED_INT);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);
@@ -588,10 +641,11 @@ TEST_CASE("getAllUncheckedSynonyms / contains no synonyms / return empty list ")
 }
 
 TEST_CASE("getAllUncheckedSynonyms / contains one synonyms / return list with pointer to synonym") {
-	string typeInput = "Follows";
-	Parameter p1("a", "synonym");
-	Parameter p2("2", "fixed_int");
-	Parameter p1After("a", "stmt");
+
+	string typeInput = AppConstants::FOLLOWS;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("2", AppConstants::FIXED_INT);
+	Parameter p1After("a", AppConstants::STMT);
 	vector<Parameter> inputParameters{ p1, p2 };
 	vector<Parameter> afterParameters{ p1After, p2 };
 
@@ -605,9 +659,10 @@ TEST_CASE("getAllUncheckedSynonyms / contains one synonyms / return list with po
 }
 
 TEST_CASE("getAllUncheckedSynonyms / contains more than one synonym / return list with pointer to the synonyms") {
-	string typeInput = "Follows";
-	Parameter p1("a", "synonym");
-	Parameter p2("b", "synonym");
+
+	string typeInput = AppConstants::FOLLOWS;
+	Parameter p1("a", AppConstants::SYNONYM);
+	Parameter p2("b", AppConstants::SYNONYM);
 	vector<Parameter> inputParameters{ p1, p2 };
 
 	shared_ptr<Relationship> output = Relationship::makeRelationship(typeInput, inputParameters);

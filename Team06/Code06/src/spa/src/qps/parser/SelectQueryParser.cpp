@@ -70,7 +70,7 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
 		throw SyntaxException();
 	}
 	//TODO: replace with synonym type rather than string
-	Parameter param(wordList[1], "synonym");
+	Parameter param(wordList[1], AppConstants::SYNONYM);
 	params.push_back(param);
 	return params;
 }

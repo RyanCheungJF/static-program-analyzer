@@ -16,7 +16,7 @@ bool StmtStorage::checkStatement(Stmt stmt, StmtNum num) {
 
 std::unordered_set<StmtNum> StmtStorage::getStatementNumbers(Stmt s) {
     std::unordered_set<StmtNum> res;
-    if (s == "stmt") {
+    if (s == AppConstants::STMT) {
         for (auto i: stmt_stmtNum) {
             auto p = stmt_stmtNum.at(i.first);
             for (auto v: p) {
