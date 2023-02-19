@@ -28,6 +28,9 @@ void TestWrapper::parse(std::string filename) {
     } catch (SemanticErrorException e) {
         AbstractWrapper::GlobalStop = true;
         throw e;
+    } catch (std::exception e) {
+        AbstractWrapper::GlobalStop = true;
+        throw e;
     }
 }
 
