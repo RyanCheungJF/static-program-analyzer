@@ -1,3 +1,5 @@
+..\..\..\Code06\out\build\x64-Debug\src\autotester\autotester.exe source.txt Select.txt out-Select.xml
+
 ..\..\..\Code06\out\build\x64-Debug\src\autotester\autotester.exe source.txt Follows.txt out-Follows.xml
 ..\..\..\Code06\out\build\x64-Debug\src\autotester\autotester.exe source.txt FollowsT.txt out-FollowsT.xml
 

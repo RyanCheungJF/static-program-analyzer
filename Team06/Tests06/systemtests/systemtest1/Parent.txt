@@ -33,3 +33,29 @@ stmt s;
 Select s such that Parent(s, 37)
 30
 5000
+8 - comment
+while w; if i;
+Select w such that Parent(w, i)
+30
+5000
+9 - comment
+stmt s; while w;
+Select s such that Parent(s, w)
+25, 27, 33
+5000
+10 - comment
+if i;
+Select i such that Parent(_, i)
+31, 33
+5000
+11 - comment 
+stmt s;
+Select s such that Parent(1, 2)
+none
+5000
+12 - comment
+stmt s; 
+Select s such that Parent(27, 28)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42
+5000
+
