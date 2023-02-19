@@ -92,7 +92,7 @@ TEST_CASE("extractDesignEntities / test for call and fixed_string / returns call
 
 TEST_CASE("extractDesignEntities / test constant, procedure and fixed_string_with_wildcard") {
 
-    vector<Parameter> headers = {Parameter("c", CONSTANTS.CONSTANT),
+    vector<Parameter> headers = {Parameter("c", AppConstants::CONSTANT),
                                  Parameter("proc", AppConstants::PROCEDURE),
                                  Parameter("_\"a\"_", AppConstants::FIXED_STRING_WTIH_WILDCARD)
     };

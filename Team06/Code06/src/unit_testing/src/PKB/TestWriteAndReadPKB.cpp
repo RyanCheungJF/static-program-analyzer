@@ -257,7 +257,7 @@ TEST_CASE("findDesignEntities() Tests") {
     Ent e = "varName";
     writePkb.setEntity(1, {e});
 
-    Parameter constParam = Parameter("irrelevant", CONSTANTS.CONSTANT);
+    Parameter constParam = Parameter("irrelevant", AppConstants::CONSTANT);
     std::vector<std::string> res = readPkb.findDesignEntities(constParam);
     std::vector<std::string> check = { "123" };
     REQUIRE(res == check);
