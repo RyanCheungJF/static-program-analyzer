@@ -73,7 +73,7 @@ TEST_CASE("Checks for cases e.g. ParentT(assign, 3)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.PARENTT, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::PARENTT, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     std::vector<std::vector<std::string>> expected = {{ "1", "3" }, { "2", "3" }};
@@ -102,7 +102,7 @@ TEST_CASE("Checks for cases e.g. ParentT(while, assign)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.PARENTT, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::PARENTT, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     std::vector<std::vector<std::string>> expected = {{ "1", "3" }, { "1", "2" }};
@@ -131,7 +131,7 @@ TEST_CASE("Checks for cases e.g. Parent(stmt, _)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.PARENTT, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::PARENTT, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     std::vector<std::vector<std::string>> expected = {{ "1", "2" }, { "1", "3" }, { "1", "4" }};
@@ -161,7 +161,7 @@ TEST_CASE("Checks that if both synonyms are the same, returns empty vector e.g. 
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.PARENTT, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::PARENTT, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.empty());

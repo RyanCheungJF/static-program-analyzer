@@ -57,7 +57,7 @@ TEST_CASE("extractDesignEntities / test for variable and wild card / return only
 TEST_CASE("extractDesignEntities / test for stmt and fixed_int / return only stmt") {
     AppConstants CONSTANTS;
     vector<Parameter> headers = {Parameter("s", AppConstants::STMT),
-                                 Parameter("321", CONSTANTS.FIXED_INT)
+                                 Parameter("321", AppConstants::FIXED_INT)
                                 };
     vector<vector<string>> content = {{"4", "321"}};
     Table table(headers, content);
@@ -68,7 +68,7 @@ TEST_CASE("extractDesignEntities / test for stmt and fixed_int / return only stm
 
 TEST_CASE("extractDesignEntities / test for fixed_string, read and stmt / returns read and stmt") {
     AppConstants CONSTANTS;
-    vector<Parameter> headers = {Parameter("abc", CONSTANTS.FIXED_STRING),
+    vector<Parameter> headers = {Parameter("abc", AppConstants::FIXED_STRING),
                                  Parameter("rd", AppConstants::READ),
                                  Parameter("s", AppConstants::STMT),
     };
@@ -80,7 +80,7 @@ TEST_CASE("extractDesignEntities / test for fixed_string, read and stmt / return
 
 TEST_CASE("extractDesignEntities / test for call and fixed_string / returns call") {
     AppConstants CONSTANTS;
-    vector<Parameter> headers = {Parameter("abc", CONSTANTS.FIXED_STRING),
+    vector<Parameter> headers = {Parameter("abc", AppConstants::FIXED_STRING),
                                  Parameter("cl", AppConstants::CALL)
     };
     vector<vector<string>> content = {{"abc", "5"}};

@@ -71,7 +71,7 @@ TEST_CASE("Checks for cases e.g. Parent(1, assign)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.PARENT, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::PARENT, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
@@ -99,7 +99,7 @@ TEST_CASE("Checks for cases e.g. Parent(while, assign)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.PARENT, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::PARENT, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
@@ -126,7 +126,7 @@ TEST_CASE("Checks for cases e.g. Parent(_, stmt)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.PARENT, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::PARENT, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 2);

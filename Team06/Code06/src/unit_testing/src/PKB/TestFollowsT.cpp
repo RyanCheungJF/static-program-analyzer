@@ -84,7 +84,7 @@ TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
@@ -110,7 +110,7 @@ TEST_CASE("Checks that a non-existent FollowsT relationship returns an empty vec
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.empty());
@@ -140,7 +140,7 @@ TEST_CASE("Checks for cases e.g. Follows*(1, assign)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 2);
@@ -172,7 +172,7 @@ TEST_CASE("Checks for cases e.g. Follows*(1, _)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 3);
@@ -204,7 +204,7 @@ TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
@@ -235,7 +235,7 @@ TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 2);
@@ -269,7 +269,7 @@ TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWST, params);
 
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
@@ -304,7 +304,7 @@ TEST_CASE("Checks for cases e.g. Follows*(_, 3)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 2);
@@ -337,7 +337,7 @@ TEST_CASE("Checks for cases e.g. Follows*(_, call)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
@@ -367,7 +367,7 @@ TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
-    shared_ptr<Relationship> rs = Relationship::makeRelationship(CONSTANTS.FOLLOWST, params);
+    shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 3);

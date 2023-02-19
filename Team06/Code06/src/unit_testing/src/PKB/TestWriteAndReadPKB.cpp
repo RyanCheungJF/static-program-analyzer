@@ -20,7 +20,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
 
     // Modifies (1, "a")
     std::vector<Parameter> params1 = {Parameter("1", AppConstants::FIXED_INT), Parameter("a", AppConstants::FIXED_STRING)};
-    shared_ptr<Relationship> rs1 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params1);
+    shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::MODIFIES, params1);
 
     SECTION("findRelationship(shared_ptr<Relationship> rs): empty storage") {
         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
@@ -47,7 +47,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, negative case, LHS: StmtNum, RHS: non-exist") {
         // Modifies (1, "nonExist")
         std::vector<Parameter> params2 = {Parameter("1", AppConstants::FIXED_INT), Parameter("nonExist", AppConstants::FIXED_STRING)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params2);
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
         std::vector<std::vector<std::string>> expected = {};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
         std::sort(actual.begin(), actual.end());
@@ -58,7 +58,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, positive case, LHS: non-exist, RHS: non-wildcard") {
         // Modifies (nonExist, "a")
         std::vector<Parameter> params2 = {Parameter("100000", AppConstants::FIXED_INT), Parameter("a", AppConstants::FIXED_STRING)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params2);
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
         std::vector<std::vector<std::string>> expected = {};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
         std::sort(actual.begin(), actual.end());
@@ -69,7 +69,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, positive case, LHS: non-exist, RHS: non-exist") {
         // Modifies (nonExist, nonExist)
         std::vector<Parameter> params2 = {Parameter("100000", AppConstants::FIXED_INT), Parameter("nonExist", AppConstants::FIXED_STRING)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params2);
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
         std::vector<std::vector<std::string>> expected = {};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
         std::sort(actual.begin(), actual.end());
@@ -80,7 +80,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, positive case, LHS: StmtNum, RHS: wildcard") {
         // Modifies (1, _)
         std::vector<Parameter> params2 = {Parameter("1", AppConstants::FIXED_INT), Parameter("_", AppConstants::WILDCARD)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params2);
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
 
         std::vector<std::vector<std::string>> expected = {{"1", "a"}, {"1", "b"}, {"1", "c"}};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
@@ -92,7 +92,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, negative case, LHS: non-exist, RHS: wildcard") {
         // Modifies (nonExist, _)
         std::vector<Parameter> params2 = {Parameter("100000", AppConstants::FIXED_INT), Parameter("_", AppConstants::WILDCARD)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params2);
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
 
         std::vector<std::vector<std::string>> expected = {};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
@@ -104,7 +104,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, positive case, LHS: Stmt, RHS: wildcard") {
         // Modifies (s, _)
         std::vector<Parameter> params2 = {Parameter("s", AppConstants::STMT), Parameter("_", AppConstants::WILDCARD)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params2);
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
 
         std::vector<std::vector<std::string>> expected = {{"1", "a"}, {"1", "b"}, {"1", "c"},
                                                           {"2", "a"}, {"3", "a"}, {"3", "b"}
@@ -118,7 +118,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, positive case, LHS: Stmt, RHS: non-wildcard") {
         // Modifies (s, "a")
         std::vector<Parameter> params2 = {Parameter("s", AppConstants::STMT), Parameter("a", AppConstants::FIXED_STRING)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params2);
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
 
         std::vector<std::vector<std::string>> expected = {{"1", "a"}, {"2", "a"}, {"3", "a"}};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
@@ -130,7 +130,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, negative case, LHS: Stmt, RHS: nonExist") {
         // Modifies (s, "nonExist")
         std::vector<Parameter> params2 = {Parameter("s", AppConstants::STMT), Parameter("nonExist", AppConstants::FIXED_STRING)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params2);
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
 
         std::vector<std::vector<std::string>> expected = {};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
@@ -152,7 +152,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
 
     // Modifies ("proc1", "a")
     std::vector<Parameter> params1 = {Parameter("proc1", AppConstants::PROCEDURE), Parameter("a", AppConstants::FIXED_STRING)};
-    shared_ptr<Relationship> rs1 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params1);
+    shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::MODIFIES, params1);
 
     SECTION("findRelationship(shared_ptr<Relationship> rs): empty storage") {
         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
@@ -176,7 +176,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, negative case, LHS: ProcName, RHS: non-existent entity") {
         // Modifies ("proc1", "nonExist")
         std::vector<Parameter> params2 = {Parameter("proc1", AppConstants::PROCEDURE), Parameter("nonExist", AppConstants::FIXED_STRING)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params2);
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
         std::vector<std::vector<std::string>> expected = {};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
         std::sort(actual.begin(), actual.end());
@@ -187,7 +187,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, negative case, LHS: non-existent procedure, RHS: non-wildcard") {
         // Modifies ("nonExist", "c")
         std::vector<Parameter> params2 = {Parameter("nonExist", AppConstants::PROCEDURE), Parameter("c", AppConstants::FIXED_STRING)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params2);
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
         std::vector<std::vector<std::string>> expected = {};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
         std::sort(actual.begin(), actual.end());
@@ -198,7 +198,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, negative case, LHS: non-existent procedure, RHS: non-existent entity") {
         // Modifies ("nonExist", "nonExist")
         std::vector<Parameter> params2 = {Parameter("nonExist", AppConstants::PROCEDURE), Parameter("nonExist", AppConstants::FIXED_STRING)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params2);
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
         std::vector<std::vector<std::string>> expected = {};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
         std::sort(actual.begin(), actual.end());
@@ -209,7 +209,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, positive case, LHS: ProcName, RHS: wildcard") {
         // Modifies ("proc1", _)
         std::vector<Parameter> params2 = {Parameter("proc1", AppConstants::PROCEDURE), Parameter("_", AppConstants::WILDCARD)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params2);
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
 
         std::vector<std::vector<std::string>> expected = { { "proc1", "a" }, { "proc1", "b" }, { "proc1", "c" } };
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
@@ -221,7 +221,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, negative case, LHS: non-existent, RHS: wildcard") {
         // Modifies ("nonExist", _)
         std::vector<Parameter> params2 = {Parameter("nonExist", AppConstants::PROCEDURE), Parameter("_", AppConstants::WILDCARD)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(CONSTANTS.MODIFIES, params2);
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
 
         std::vector<std::vector<std::string>> expected = { { "proc1", "a" }, { "proc1", "b" }, { "proc1", "c" } };
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
