@@ -100,3 +100,38 @@ TEST_CASE("Valid Source Program") {
         REQUIRE(variables6Uses == expected6Uses);
     }
 }
+
+
+TEST_CASE("Invalid Source Program") {
+    SP testSP;
+    PKB testPKB;
+    WritePKB writePKB;
+    ReadPKB readPKB;
+    testPKB.initializePkb();
+    writePKB.setInstancePKB(testPKB);
+    readPKB.setInstancePKB(testPKB);
+
+    auto testDirectory = std::filesystem::path(INTEGRATION_TESTING_DIR);
+    for (int i = 0; i < 3; i++) {
+        testDirectory = testDirectory.parent_path();
+    }
+    testDirectory /= "Tests06/sp/sp-pkb/";
+
+    // TODO: get the failing message
+    SECTION("additional ;") {
+        try {
+            auto filePath = testDirectory.string() + "invalid1.txt";
+            testSP.processFile(filePath, &writePKB, &readPKB); //execution should stop here.
+
+//            auto procedureNames = readPKB.getAllProcedureNames();
+//            auto expectedProcedureNames = std::unordered_set<Ent>({ "A", "B", "C" });
+//            REQUIRE(false);
+        } catch (Exception e) {
+            std::cout << "INSIDE THE CATCH BLOCK\n";
+            std::cout << e.what();
+            REQUIRE(e.what() == "Syntax Error caught");
+        }
+
+
+    }
+}

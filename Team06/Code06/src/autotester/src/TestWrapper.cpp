@@ -20,7 +20,13 @@ TestWrapper::TestWrapper() {
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
-	sourceProcessor.processFile(filename, &writePKB, &readPKB);
+    try {
+        sourceProcessor.processFile(filename, &writePKB, &readPKB);
+    } catch (Exception e) {
+        std::cout << "ERROR BEING THROWN AT TESTWRAPPER. WILL IT CONTINUE TO EVALUATE? ONLY ONE WAY TO FIND OUT!\n";
+        std::cout << e.getMessage() + "\n";
+        throw e;
+    }
 }
 
 // method to evaluating a query
