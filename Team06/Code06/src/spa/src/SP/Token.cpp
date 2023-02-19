@@ -5,6 +5,11 @@ Token::Token(TokenType type, std::string value) {
 	this->value = value;
 }
 
+Token::Token(TokenType type) {
+	this->type = type;
+	this->value = "";
+}
+
 bool Token::isType(TokenType tt) {
 	return type == tt;
 }

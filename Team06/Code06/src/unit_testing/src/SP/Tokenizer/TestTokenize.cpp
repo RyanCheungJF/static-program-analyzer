@@ -21,7 +21,7 @@ TEST_CASE("Valid source program") {
 		Token t1(TokenType::NAME, "hello");
 		Token t2(TokenType::NAME, "There");
 		Token t3(TokenType::NAME, "test123");
-		Token t4(TokenType::ENDOFFILE, "End of File");
+		Token t4(TokenType::ENDOFFILE);
 		expectedTokens = { t1, t2, t3, t4 };
 
 		generatedTokens = testTokenizer.tokenize(strStream);
@@ -36,7 +36,7 @@ TEST_CASE("Valid source program") {
 		Token t1(TokenType::INTEGER, "123");
 		Token t2(TokenType::INTEGER, "0");
 		Token t3(TokenType::INTEGER, "340");
-		Token t4(TokenType::ENDOFFILE, "End of File");
+		Token t4(TokenType::ENDOFFILE);
 		expectedTokens = { t1, t2, t3, t4 };
 
 		generatedTokens = testTokenizer.tokenize(strStream);
@@ -48,12 +48,12 @@ TEST_CASE("Valid source program") {
 		std::ifstream testFile(testDirectory.string() + "valid3.txt");
 		strStream << testFile.rdbuf();
 
-		Token t1(TokenType::LEFT_BRACE, "{");
-		Token t2(TokenType::RIGHT_BRACE, "}");
-		Token t3(TokenType::LEFT_PARENTHESIS, "(");
-		Token t4(TokenType::RIGHT_PARENTHESIS, ")");
-		Token t5(TokenType::SEMICOLON, ";");
-		Token t6(TokenType::ENDOFFILE, "End of File");
+		Token t1(TokenType::LEFT_BRACE);
+		Token t2(TokenType::RIGHT_BRACE);
+		Token t3(TokenType::LEFT_PARENTHESIS);
+		Token t4(TokenType::RIGHT_PARENTHESIS);
+		Token t5(TokenType::SEMICOLON);
+		Token t6(TokenType::ENDOFFILE);
 
 		expectedTokens = { t1, t2, t3, t4, t5, t6 };
 
@@ -66,10 +66,10 @@ TEST_CASE("Valid source program") {
 		std::ifstream testFile(testDirectory.string() + "valid4.txt");
 		strStream << testFile.rdbuf();
 
-		Token t1(TokenType::NOT, "!");
+		Token t1(TokenType::NOT);
 		Token t2(TokenType::BINARY_LOGICAL_OPR, "&&");
 		Token t3(TokenType::BINARY_LOGICAL_OPR, "||");
-		Token t4(TokenType::ENDOFFILE, "End of File");
+		Token t4(TokenType::ENDOFFILE);
 
 		expectedTokens = { t1, t2, t3, t4 };
 
@@ -88,7 +88,7 @@ TEST_CASE("Valid source program") {
 		Token t4(TokenType::RELATIONAL_OPR, "<=");
 		Token t5(TokenType::RELATIONAL_OPR, ">=");
 		Token t6(TokenType::RELATIONAL_OPR, "!=");
-		Token t7(TokenType::ENDOFFILE, "End of File");
+		Token t7(TokenType::ENDOFFILE);
 
 		expectedTokens = { t1, t2, t3, t4, t5, t6, t7 };
 
@@ -106,7 +106,7 @@ TEST_CASE("Valid source program") {
 		Token t3(TokenType::TERM_ARITH_OPR, "*");
 		Token t4(TokenType::EXPR_ARITH_OPR, "-");
 		Token t5(TokenType::EXPR_ARITH_OPR, "+");
-		Token t6(TokenType::ENDOFFILE, "End of File");
+		Token t6(TokenType::ENDOFFILE);
 
 		expectedTokens = { t1, t2, t3, t4, t5, t6 };
 
@@ -121,10 +121,10 @@ TEST_CASE("Valid source program") {
 		strStream << testFile.rdbuf();
 
 		Token t1(TokenType::NAME, "aBc12");
-		Token t2(TokenType::LEFT_BRACE, "{");
-		Token t3(TokenType::RIGHT_BRACE, "}");
-		Token t4(TokenType::SEMICOLON, ";");
-		Token t5(TokenType::ENDOFFILE, "End of File");
+		Token t2(TokenType::LEFT_BRACE);
+		Token t3(TokenType::RIGHT_BRACE);
+		Token t4(TokenType::SEMICOLON);
+		Token t5(TokenType::ENDOFFILE);
 
 		expectedTokens = { t1, t2, t3, t4, t5 };
 
@@ -139,17 +139,17 @@ TEST_CASE("Valid source program") {
 
 		Token t1(TokenType::NAME, "procedure");
 		Token t2(TokenType::NAME, "A");
-		Token t3(TokenType::LEFT_BRACE, "{");
+		Token t3(TokenType::LEFT_BRACE);
 		Token t4(TokenType::NAME, "x");
-		Token t5(TokenType::ASSIGN, "=");
+		Token t5(TokenType::ASSIGN);
 		Token t6(TokenType::INTEGER, "1");
-		Token t7(TokenType::SEMICOLON, ";");
+		Token t7(TokenType::SEMICOLON);
 		Token t8(TokenType::NAME, "y");
 		Token t9(TokenType::RELATIONAL_OPR, "<");
 		Token t10(TokenType::NAME, "z");
-		Token t11(TokenType::SEMICOLON, ";");
-		Token t12(TokenType::RIGHT_BRACE, "}");
-		Token t13(TokenType::ENDOFFILE, "End of File");
+		Token t11(TokenType::SEMICOLON);
+		Token t12(TokenType::RIGHT_BRACE);
+		Token t13(TokenType::ENDOFFILE);
 
 		expectedTokens = { t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13 };
 		generatedTokens = testTokenizer.tokenize(strStream);
@@ -163,15 +163,15 @@ TEST_CASE("Valid source program") {
 
 		Token t1(TokenType::NAME, "procedure");
 		Token t2(TokenType::NAME, "A");
-		Token t3(TokenType::LEFT_BRACE, "{");
+		Token t3(TokenType::LEFT_BRACE);
 		Token t4(TokenType::NAME, "x");
-		Token t5(TokenType::ASSIGN, "=");
+		Token t5(TokenType::ASSIGN);
 		Token t6(TokenType::INTEGER, "1");
 		Token t7(TokenType::EXPR_ARITH_OPR, "+");
 		Token t8(TokenType::NAME, "y");
-		Token t9(TokenType::SEMICOLON, ";");
-		Token t10(TokenType::RIGHT_BRACE, "}");
-		Token t11(TokenType::ENDOFFILE, "End of File");
+		Token t9(TokenType::SEMICOLON);
+		Token t10(TokenType::RIGHT_BRACE);
+		Token t11(TokenType::ENDOFFILE);
 
 		expectedTokens = { t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11 };
 		generatedTokens = testTokenizer.tokenize(strStream);
@@ -185,27 +185,27 @@ TEST_CASE("Valid source program") {
 
 		Token t1(TokenType::NAME, "procedure");
 		Token t2(TokenType::NAME, "A");
-		Token t3(TokenType::LEFT_BRACE, "{");
+		Token t3(TokenType::LEFT_BRACE);
 		Token t4(TokenType::NAME, "a");
-		Token t5(TokenType::ASSIGN, "=");
+		Token t5(TokenType::ASSIGN);
 		Token t6(TokenType::NAME, "x");
 		Token t7(TokenType::EXPR_ARITH_OPR, "+");
 		Token t8(TokenType::NAME, "y");
-		Token t9(TokenType::SEMICOLON, ";");
+		Token t9(TokenType::SEMICOLON);
 		Token t10(TokenType::NAME, "a");
-		Token t11(TokenType::ASSIGN, "=");
+		Token t11(TokenType::ASSIGN);
 		Token t12(TokenType::NAME, "x");
 		Token t13(TokenType::EXPR_ARITH_OPR, "+");
 		Token t14(TokenType::NAME, "y");
-		Token t15(TokenType::SEMICOLON, ";");
+		Token t15(TokenType::SEMICOLON);
 		Token t16(TokenType::NAME, "a");
-		Token t17(TokenType::ASSIGN, "=");
+		Token t17(TokenType::ASSIGN);
 		Token t18(TokenType::NAME, "x");
 		Token t19(TokenType::EXPR_ARITH_OPR, "+");
 		Token t20(TokenType::NAME, "y");
-		Token t21(TokenType::SEMICOLON, ";");
-		Token t22(TokenType::RIGHT_BRACE, "}");
-		Token t23(TokenType::ENDOFFILE, "End of File");
+		Token t21(TokenType::SEMICOLON);
+		Token t22(TokenType::RIGHT_BRACE);
+		Token t23(TokenType::ENDOFFILE);
 
 		expectedTokens = { t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13,
 						   t14, t15, t16, t17, t18, t19, t20, t21, t22, t23 };

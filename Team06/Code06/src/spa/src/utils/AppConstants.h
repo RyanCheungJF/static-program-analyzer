@@ -38,4 +38,23 @@ public:
     inline static const std::string PARENTT = "Parent*";
     inline static const std::string USES = "Uses";
     inline static const std::string MODIFIES = "Modifies";
+
+    // terminals
+    inline static const std::string THEN = "then";
+    inline static const std::string ELSE = "else";
+    inline static const std::string AND = "&&";
+    inline static const std::string OR = "||";
+    inline static const char NOT = '!';
+    inline static const char GREATER = '>';
+    inline static const char LESS = '<';
+    inline static const char PLUS = '+';
+    inline static const char MINUS = '-';
+    inline static const char MULTIPLY = '*';
+    inline static const char DIVIDE = '/';
+    inline static const char MODULO = '%';
+    inline static const char LEFT_BRACE = '{';
+    inline static const char RIGHT_BRACE = '}';
+    inline static const char LEFT_PARENTHESIS = '(';
+    inline static const char RIGHT_PARENTHESIS = ')';
+    inline static const char SEMICOLON = ';';
 };

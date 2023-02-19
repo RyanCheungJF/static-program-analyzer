@@ -6,7 +6,7 @@
 #include "../../../PKB/WritePKB.h"
 #include "../../../utils/AppConstants.h"
 
-class StatementExtractorVisitor : public ASTVisitor, public AppConstants {
+class StatementExtractorVisitor : public ASTVisitor {
 private:
 	WritePKB* writeApi;
 public:

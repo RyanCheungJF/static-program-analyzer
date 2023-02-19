@@ -53,8 +53,11 @@ bool isSubTree(Expression* subTreeExpression, Expression* treeExpression) {
 std::vector<std::vector<std::string>> AssignPatternHandler::handleVarWildcard(std::string lhs) {
     std::vector<std::vector<std::string>> res;
 
-    for (const auto& p : *patternStorage->getPatternWithLHS(lhs)) {
-        res.push_back({ std::to_string(p.first), lhs });
+    std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>* pointer = patternStorage->getPatternWithLHS(lhs);
+    if (pointer == NULL) return res;
+
+    for (const auto& pair : *pointer) {
+        res.push_back({ std::to_string(pair.first), lhs });
     }
     return res;
 }
@@ -63,10 +66,13 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handleVarPattern(std
     std::unique_ptr<Expression> expected = pkb_utils::buildSubtree(rhs);
     std::vector<std::vector<std::string>> res;
 
-    for (const auto& p : *(patternStorage->getPatternWithLHS(lhs))) {
-        Expression* actual = p.second.get();
+    std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>* pointer = patternStorage->getPatternWithLHS(lhs);
+    if (pointer == NULL) return res;
+
+    for (const auto& pair : *pointer) {
+        Expression* actual = pair.second.get();
         if (checkTree(expected.get(), actual)) {
-            res.push_back({ std::to_string(p.first), lhs });
+            res.push_back({ std::to_string(pair.first), lhs });
         }
     }
     return res;
@@ -75,12 +81,12 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handleVarPattern(std
 std::vector<std::vector<std::string>> AssignPatternHandler::handleWildcardWildcard() {
     std::vector<std::vector<std::string>> res;
 
-    for (auto const& i : *patternStorage->getAll()) {
-        for (const auto& p : i.second) {
-            Expression* actual = p.second.get();
+    for (auto const& row : *patternStorage->getAll()) {
+        for (const auto& pair : row.second) {
+            Expression* actual = pair.second.get();
             std::vector<std::string> curr;
-            curr.push_back(std::to_string(p.first));
-            curr.push_back(i.first);
+            curr.push_back(std::to_string(pair.first));
+            curr.push_back(row.first);
             res.push_back(curr);
         }
     }
@@ -91,13 +97,13 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handleSynPattern(std
     std::vector<std::vector<std::string>> res;
     std::unique_ptr<Expression> expected = std::move(pkb_utils::buildSubtree(rhs));
 
-    for (auto const& i : *patternStorage->getAll()) {
-        for (const auto& p : i.second) {
-            Expression* actual = p.second.get();
+    for (auto const& row : *patternStorage->getAll()) {
+        for (const auto& pair : row.second) {
+            Expression* actual = pair.second.get();
             std::vector<std::string> curr;
             if (checkTree(expected.get(), actual)) {
-                curr.push_back(std::to_string(p.first));
-                curr.push_back(i.first);
+                curr.push_back(std::to_string(pair.first));
+                curr.push_back(row.first);
                 res.push_back(curr);
             }
         }
@@ -109,13 +115,13 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handleWildcardPatter
     std::unique_ptr<Expression> expected = std::move(pkb_utils::buildSubtree(rhs));
     std::vector<std::vector<std::string>> res;
 
-    for (auto const& i : *patternStorage->getAll()) {
-        for (const auto& p : i.second) {
-            Expression* actual = p.second.get();
+    for (auto const& row : *patternStorage->getAll()) {
+        for (const auto& pair : row.second) {
+            Expression* actual = pair.second.get();
             std::vector<std::string> curr;
             if (checkTree(expected.get(), actual)) {
-                curr.push_back(std::to_string(p.first));
-                curr.push_back(i.first);
+                curr.push_back(std::to_string(pair.first));
+                curr.push_back(row.first);
                 res.push_back(curr);
             }
         }

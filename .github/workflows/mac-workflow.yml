@@ -6,6 +6,9 @@ on:
       - master
       - ci
       - test
+      - pkb
+      - qps
+      - sp
   pull_request:
     branches: 
       - master

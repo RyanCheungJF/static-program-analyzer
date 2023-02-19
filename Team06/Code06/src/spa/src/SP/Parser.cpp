@@ -20,7 +20,7 @@ std::unique_ptr<Program> Parser::parseProgram(std::deque<Token> tokens) {
 
 std::unique_ptr<Procedure> Parser::parseProcedure(std::deque<Token>& tokens) {
 	// Rule: 'procedure' proc_name '{' stmtLst '}'
-	if (!tokens.front().isType(TokenType::NAME) || !tokens.front().hasValue("procedure")) {
+	if (!tokens.front().isType(TokenType::NAME) || !tokens.front().hasValue(AppConstants::PROCEDURE)) {
 		throw SyntaxErrorException("Expected 'procedure' keyword, but got -> " + tokens.front().value);
 	}
 	tokens.pop_front();
@@ -69,19 +69,19 @@ std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
 		if (tokens.at(1).isType(TokenType::ASSIGN)) { // Assign Statement
 			return parseAssignStatement(tokens);
 		}
-		else if (tokens.front().hasValue(READ)) {
+		else if (tokens.front().hasValue(AppConstants::READ)) {
 			return parseReadStatement(tokens);
 		}
-		else if (tokens.front().hasValue(PRINT)) {
+		else if (tokens.front().hasValue(AppConstants::PRINT)) {
 			return parsePrintStatement(tokens);
 		}
-		else if (tokens.front().hasValue(CALL)) {
+		else if (tokens.front().hasValue(AppConstants::CALL)) {
 			return parseCallStatement(tokens);
 		}
-		else if (tokens.front().hasValue(WHILE)) {
+		else if (tokens.front().hasValue(AppConstants::WHILE)) {
 			return parseWhileStatement(tokens);
 		}
-		else if (tokens.front().hasValue(IF)) {
+		else if (tokens.front().hasValue(AppConstants::IF)) {
 			return parseIfStatement(tokens);
 		}
 		else {
@@ -203,7 +203,7 @@ std::unique_ptr<IfStatement> Parser::parseIfStatement(std::deque<Token>& tokens)
 	}
 	tokens.pop_front(); // Pop ')'
 
-	if (!tokens.front().isType(TokenType::NAME) || !tokens.front().hasValue("then")) {
+	if (!tokens.front().isType(TokenType::NAME) || !tokens.front().hasValue(AppConstants::THEN)) {
 		throw SyntaxErrorException("Expected 'then' in if statement, but got -> " + tokens.front().value);
 	}
 	tokens.pop_front(); // Pop 'then'
@@ -221,7 +221,7 @@ std::unique_ptr<IfStatement> Parser::parseIfStatement(std::deque<Token>& tokens)
 	}
 	tokens.pop_front(); // Pop '}'
 
-	if (!tokens.front().isType(TokenType::NAME) || !tokens.front().hasValue("else")) {
+	if (!tokens.front().isType(TokenType::NAME) || !tokens.front().hasValue(AppConstants::ELSE)) {
 		throw SyntaxErrorException("Expected 'else' in if statement, but got -> " + tokens.front().value);
 	}
 	tokens.pop_front(); // Pop 'else'
