@@ -136,3 +136,25 @@ TEST_CASE("insertTable / third table intersects with first two tables / return O
     bool d = qdb.fetch(Parameter("y", AppConstants::VARIABLE)) == expectedCols[3];
     REQUIRE((a && b && c && d));
 }
+
+TEST_CASE("insertTable / insert tables with empty content / tables can still be inserted without content") {
+
+    QueryDB qdb;
+    vector<vector<string>> content1 = {};
+    vector<vector<string>> content2 = {};
+    vector<vector<string>> content3 = {};
+    vector<Parameter> params1 = {Parameter("s1", AppConstants::STMT), Parameter("x", AppConstants::VARIABLE)};
+    vector<Parameter> params2 = {Parameter("s2", AppConstants::STMT), Parameter("y", AppConstants::VARIABLE)};
+    vector<Parameter> params3 = {Parameter("s2", AppConstants::STMT), Parameter("s1", AppConstants::STMT)};
+    Table t1(params1, content1);
+    Table t2(params2, content2);
+    Table t3(params3, content3);
+    qdb.insertTable(t1);
+    qdb.insertTable(t2);
+    qdb.insertTable(t3);
+    bool a = qdb.fetch(Parameter("s1", AppConstants::STMT)).empty();
+    bool b = qdb.fetch(Parameter("s2", AppConstants::STMT)).empty();
+    bool c = qdb.fetch(Parameter("x", AppConstants::VARIABLE)).empty();
+    bool d = qdb.fetch(Parameter("y", AppConstants::VARIABLE)).empty();
+    REQUIRE((a && b && c && d));
+}
