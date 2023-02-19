@@ -23,7 +23,6 @@ void TestWrapper::parse(std::string filename) {
     try {
         sourceProcessor.processFile(filename, &writePKB, &readPKB);
     } catch (Exception e) {
-        std::cout << e.getMessage() + "\n";
         AbstractWrapper::GlobalStop = true;
         throw e;
     }
