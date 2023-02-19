@@ -22,7 +22,10 @@ TestWrapper::TestWrapper() {
 void TestWrapper::parse(std::string filename) {
     try {
         sourceProcessor.processFile(filename, &writePKB, &readPKB);
-    } catch (Exception e) {
+    } catch (SyntaxErrorException e) {
+        AbstractWrapper::GlobalStop = true;
+        throw e;
+    } catch (SemanticErrorException e) {
         AbstractWrapper::GlobalStop = true;
         throw e;
     }

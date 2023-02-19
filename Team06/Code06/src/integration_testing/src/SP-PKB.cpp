@@ -117,21 +117,19 @@ TEST_CASE("Invalid Source Program") {
     }
     testDirectory /= "Tests06/sp/sp-pkb/";
 
-    // TODO: get the failing message
     SECTION("additional ;") {
+        std::string errorMessage = "";
         try {
             auto filePath = testDirectory.string() + "invalid1.txt";
+            std::cout << "SHOULD Still be hitting this\n";
             testSP.processFile(filePath, &writePKB, &readPKB); //execution should stop here.
 
-//            auto procedureNames = readPKB.getAllProcedureNames();
-//            auto expectedProcedureNames = std::unordered_set<Ent>({ "A", "B", "C" });
-//            REQUIRE(false);
-        } catch (Exception e) {
+            auto procedureNames = readPKB.getAllProcedureNames();
+            auto expectedProcedureNames = std::unordered_set<Ent>({ "A", "B", "C" });
+            REQUIRE(false);
+        } catch (std::exception e) {
             std::cout << "INSIDE THE CATCH BLOCK\n";
-            std::cout << e.what();
-            REQUIRE(e.what() == "Syntax Error caught");
+            REQUIRE(true);
         }
-
-
     }
 }
