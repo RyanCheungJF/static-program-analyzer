@@ -2,7 +2,6 @@
 #include <filesystem>
 #include "../../spa/src/utils/AppConstants.h"
 #include "../../spa/src/SP/SP.h"
-#include "../../spa/src/qps/entities/Relationship.h"
 #include "../../unit_testing/src/utils/utils.h"
 
 using namespace unit_testing_utils;
@@ -106,55 +105,182 @@ TEST_CASE("Valid Source Program") {
 
         // Follows
         std::vector<Parameter> params1 = {Parameter("1", AppConstants::FIXED_INT), Parameter("2", AppConstants::FIXED_INT)};
-        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::FOLLOWS, params1);
-        std::vector<std::vector<std::string>> follows1actual = readPKB.findRelationship(rs1);
+        shared_ptr<Relationship> followsTest1 = Relationship::makeRelationship(AppConstants::FOLLOWS, params1);
+        std::vector<std::vector<std::string>> follows1actual = readPKB.findRelationship(followsTest1);
         REQUIRE(follows1actual.empty());
 
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+        shared_ptr<Relationship> followsTest2 = Relationship::makeRelationship(AppConstants::FOLLOWS,
                                                                       {Parameter("2", AppConstants::FIXED_INT),
                                                                        Parameter("3", AppConstants::FIXED_INT)}
                                                                        );
-        std::vector<std::vector<std::string>> follows2actual = readPKB.findRelationship(rs2);
+        std::vector<std::vector<std::string>> follows2actual = readPKB.findRelationship(followsTest2);
         std::vector<std::vector<std::string>> follows2expected = {{"2", "3"}};
         REQUIRE(follows2expected == follows2actual);
 
-        shared_ptr<Relationship> rs3 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+        shared_ptr<Relationship> followsTest3 = Relationship::makeRelationship(AppConstants::FOLLOWS,
                                                                       {Parameter("4", AppConstants::FIXED_INT),
                                                                        Parameter("5", AppConstants::FIXED_INT)}
         );
-        std::vector<std::vector<std::string>> follows3actual = readPKB.findRelationship(rs3);
+        std::vector<std::vector<std::string>> follows3actual = readPKB.findRelationship(followsTest3);
         std::vector<std::vector<std::string>> follows3expected = {{"4", "5"}};
         REQUIRE(follows3expected == follows3actual);
 
-        shared_ptr<Relationship> rs4 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+        shared_ptr<Relationship> followsTest4 = Relationship::makeRelationship(AppConstants::FOLLOWS,
                                                                       {Parameter("5", AppConstants::FIXED_INT),
                                                                        Parameter("6", AppConstants::FIXED_INT)}
         );
-        std::vector<std::vector<std::string>> follows4actual = readPKB.findRelationship(rs4);
+        std::vector<std::vector<std::string>> follows4actual = readPKB.findRelationship(followsTest4);
         std::vector<std::vector<std::string>> follows4expected = {{"5", "6"}};
         REQUIRE(follows4expected == follows4actual);
 
-        shared_ptr<Relationship> rs5 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+        shared_ptr<Relationship> followsTest5 = Relationship::makeRelationship(AppConstants::FOLLOWS,
                                                                       {Parameter("4", AppConstants::FIXED_INT),
                                                                        Parameter("6", AppConstants::FIXED_INT)}
         );
-        std::vector<std::vector<std::string>> follows5actual = readPKB.findRelationship(rs5);
+        std::vector<std::vector<std::string>> follows5actual = readPKB.findRelationship(followsTest5);
         REQUIRE(follows5actual.empty());
 
+        shared_ptr<Relationship> followsTest7 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+                                                                      {Parameter("4", AppConstants::FIXED_INT),
+                                                                       Parameter("_", AppConstants::WILDCARD)}
+        );
+        std::vector<std::vector<std::string>> follows7actual = readPKB.findRelationship(followsTest7);
+        std::vector<std::vector<std::string>> follows7expected = {{"4", "5"}};
+        REQUIRE(follows7expected == follows7actual);
 
-//        std::cout << "follows2actual results:\n";
-//        for (auto i :follows2actual) {
+        shared_ptr<Relationship> followsTest8 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+                                                                      {Parameter("_", AppConstants::WILDCARD),
+                                                                       Parameter("6", AppConstants::FIXED_INT)}
+        );
+        std::vector<std::vector<std::string>> follows8actual = readPKB.findRelationship(followsTest8);
+        std::vector<std::vector<std::string>> follows8expected = {{"5", "6"}};
+        REQUIRE(follows8expected == follows8actual);
+
+        shared_ptr<Relationship> followsTest9 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+                                                                      {Parameter("_", AppConstants::WILDCARD),
+                                                                       Parameter("_", AppConstants::WILDCARD)}
+        );
+        std::vector<std::vector<std::string>> follows9actual = readPKB.findRelationship(followsTest9);
+        std::vector<std::vector<std::string>> follows9expected = {{"2", "3"}, {"4", "5"}, {"5", "6"}};
+        std::sort(follows9actual.begin(), follows9actual.end());
+        std::sort(follows9expected.begin(), follows9expected.end());
+        REQUIRE(follows9expected == follows9actual);
+
+        shared_ptr<Relationship> followsTest10 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+                                                                      {Parameter("re", AppConstants::READ),
+                                                                       Parameter("_", AppConstants::WILDCARD)}
+        );
+        std::vector<std::vector<std::string>> follows10actual = readPKB.findRelationship(followsTest10);
+        REQUIRE(follows1actual.empty());
+
+        shared_ptr<Relationship> followsTest11 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+                                                                                {Parameter("_", AppConstants::WILDCARD),
+                                                                                 Parameter("re", AppConstants::READ)}
+        );
+        std::vector<std::vector<std::string>> follows11actual = readPKB.findRelationship(followsTest11);
+        std::vector<std::vector<std::string>> follows11expected = {{"2", "3"}};
+        std::sort(follows11actual.begin(), follows11actual.end());
+        std::sort(follows11expected.begin(), follows11expected.end());
+        REQUIRE(follows11expected == follows11actual);
+
+        shared_ptr<Relationship> followsTest12 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+                                                                                {Parameter("pn", AppConstants::PRINT),
+                                                                                 Parameter("ca", AppConstants::CALL)}
+        );
+        std::vector<std::vector<std::string>> follows12actual = readPKB.findRelationship(followsTest12);
+        std::vector<std::vector<std::string>> follows12expected = {{"4", "5"}};
+        REQUIRE(follows12expected == follows12actual);
+
+        shared_ptr<Relationship> followsTest13 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+                                                                                {Parameter("s", AppConstants::STMT),
+                                                                                 Parameter("ca", AppConstants::CALL)}
+        );
+        std::vector<std::vector<std::string>> follows13actual = readPKB.findRelationship(followsTest13);
+        std::vector<std::vector<std::string>> follows13expected = {{"4", "5"}};
+        REQUIRE(follows13expected == follows13actual);
+
+        shared_ptr<Relationship> followsTest14 = Relationship::makeRelationship(AppConstants::FOLLOWS,
+                                                                                {Parameter("as", AppConstants::ASSIGN),
+                                                                                 Parameter("_", AppConstants::WILDCARD)}
+        );
+        std::vector<std::vector<std::string>> follows14actual = readPKB.findRelationship(followsTest14);
+        std::vector<std::vector<std::string>> follows14expected = {{"2", "3"}};
+        REQUIRE(follows14expected == follows14actual);
+
+        // FollowsT
+        shared_ptr<Relationship> followsTTest1 = Relationship::makeRelationship(AppConstants::FOLLOWST,
+                                                                                {Parameter("4", AppConstants::FIXED_INT),
+                                                                                 Parameter("_", AppConstants::WILDCARD)}
+        );
+        std::vector<std::vector<std::string>> followsT1actual = readPKB.findRelationship(followsTTest1);
+        std::vector<std::vector<std::string>> followsT1expected = {{"4", "5"}, {"4", "6"}};
+        std::sort(followsT1actual.begin(), followsT1actual.end());
+        std::sort(followsT1expected.begin(), followsT1expected.end());
+        REQUIRE(followsT1expected == followsT1actual);
+
+        shared_ptr<Relationship> followsTTest2 = Relationship::makeRelationship(AppConstants::FOLLOWST,
+                                                                                {Parameter("as", AppConstants::ASSIGN),
+                                                                                 Parameter("_", AppConstants::WILDCARD)}
+        );
+        std::vector<std::vector<std::string>> followsT2actual = readPKB.findRelationship(followsTTest2);
+        std::vector<std::vector<std::string>> followsT2expected = {{"2", "3"}};
+        REQUIRE(followsT2expected == followsT2actual);
+
+        shared_ptr<Relationship> followsTTest3 = Relationship::makeRelationship(AppConstants::FOLLOWST,
+                                                                                {Parameter("s", AppConstants::STMT),
+                                                                                 Parameter("_", AppConstants::WILDCARD)}
+        );
+        std::vector<std::vector<std::string>> followsT3actual = readPKB.findRelationship(followsTTest3);
+        std::vector<std::vector<std::string>> followsT3expected = {{"2", "3"}, {"4", "5"}, {"4", "6"}, {"5", "6"}};
+        std::sort(followsT3actual.begin(), followsT3actual.end());
+        std::sort(followsT3expected.begin(), followsT3expected.end());
+        REQUIRE(followsT3expected == followsT3actual);
+
+        shared_ptr<Relationship> followsTTest4 = Relationship::makeRelationship(AppConstants::FOLLOWST,
+                                                                                {Parameter("pn", AppConstants::PRINT),
+                                                                                 Parameter("_", AppConstants::WILDCARD)}
+        );
+        std::vector<std::vector<std::string>> followsT4actual = readPKB.findRelationship(followsTTest4);
+        std::vector<std::vector<std::string>> followsT4expected = {{"4", "5"}, {"4", "6"}};
+        std::sort(followsT4actual.begin(), followsT4actual.end());
+        std::sort(followsT4expected.begin(), followsT4expected.end());
+        REQUIRE(followsT4expected == followsT4actual);
+
+    }
+}
+
+TEST_CASE("Valid Source Program") {
+    SP testSP;
+    PKB testPKB;
+    WritePKB writePKB;
+    ReadPKB readPKB;
+    testPKB.initializePkb();
+    writePKB.setInstancePKB(testPKB);
+    readPKB.setInstancePKB(testPKB);
+
+    auto testDirectory = std::filesystem::path(INTEGRATION_TESTING_DIR);
+    for (int i = 0; i < 3; i++) {
+        testDirectory = testDirectory.parent_path();
+    }
+    testDirectory /= "Tests06/sp/sp-pkb/";
+
+    SECTION("Simple multi-procedure SIMPLE program") {
+        auto filePath = testDirectory.string() + "valid2.txt";
+        testSP.processFile(filePath, &writePKB, &readPKB);
+
+
+//        std::cout << "followsT1actual results:\n";
+//        for (auto i :followsT1actual) {
 //            std::cout << i[0] << " " << i[1] << "\n";
 //        }
 
 
-        // FollowsT
-
         // ParentT
 
         // ParentT
-
     }
+
+
 }
 
 
