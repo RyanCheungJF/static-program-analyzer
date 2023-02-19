@@ -22,6 +22,8 @@ private:
     QPS qps;
 
  public:
+    bool invalidSource;
+
   // default constructor
   TestWrapper();
   

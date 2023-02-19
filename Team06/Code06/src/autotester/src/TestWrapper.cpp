@@ -16,6 +16,7 @@ TestWrapper::TestWrapper() {
 	pkb.initializePkb();
 	writePKB.setInstancePKB(pkb);
 	readPKB.setInstancePKB(pkb);
+    this->invalidSource = false;
 }
 
 // method for parsing the SIMPLE source
@@ -23,20 +24,20 @@ void TestWrapper::parse(std::string filename) {
     try {
         sourceProcessor.processFile(filename, &writePKB, &readPKB);
     } catch (SyntaxErrorException e) {
-        AbstractWrapper::GlobalStop = true;
-        throw e;
+        this->invalidSource = true;
+        return;
     } catch (SemanticErrorException e) {
-        AbstractWrapper::GlobalStop = true;
-        throw e;
+        this->invalidSource = true;
+        return;
     } catch (std::exception e) {
-        AbstractWrapper::GlobalStop = true;
-        throw e;
+        this->invalidSource = true;
+        return;
     }
 }
 
 // method to evaluating a query
 void TestWrapper::evaluate(std::string query, std::list<std::string>& results) {
-    if (AbstractWrapper::GlobalStop) {
+    if (this->invalidSource) {
         return;
     }
 
