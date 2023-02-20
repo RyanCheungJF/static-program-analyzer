@@ -51,14 +51,6 @@ public:
 
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
-    // Sets Uses relation in PKB
-    void setUsesProcedure(std::string name, std::vector<Ent> entities);
-    void setUsesStmtnum(StmtNum num, std::vector<Ent> entities);
-
-    // Sets Modifies relation in PKB
-    void setModifiesProcedure(std::string name, std::vector<Ent> entities);
-    void setModifiesStmtnum(StmtNum num, std::vector<Ent> entities);
-
 private:
     PKB* pkbInstance = NULL;
 };
