@@ -5,29 +5,33 @@ returns index of "such" which is followed immediately by a "that" in the word li
  */
 
 const string WHITESPACE = " \n\r\t\f\v";
+const string SUCH = "such";
+const string THAT = "that";
+const string PATTERN = "pattern";
+const string AND = "and";
 
-long findSuchThat(const vector<string> &wordList)
+vector<int> findSuchThat(const vector<string> &wordList)
 {
-	string such = "such";
-	string that = "that";
+	vector<int> suchThatStarts;
 	for (int i = 0; i < wordList.size(); i++) {
-		if (such != wordList[i]) {
+		if (SUCH != wordList[i]) {
 			continue;
 		}
 		if (i == wordList.size() - 1) {
 			continue;
 		}
-		if (that != wordList[i + 1]) {
+		if (THAT != wordList[i + 1]) {
 			continue;
 		}
-		return i;
+		suchThatStarts.push_back(i);
 	}
 
-	return -1;
+	return suchThatStarts;
 }
 
-long findPattern(const vector<string> &wordList)
+vector<int> findPattern(const vector<string> &wordList)
 {
+	vector<int> patternStarts;
 	for (int i = 0; i < wordList.size(); i++) {
 		if (!isPattern(wordList[i])) {
 			continue;
@@ -38,9 +42,9 @@ long findPattern(const vector<string> &wordList)
 		if (!startsWithLetter(wordList[i + 1])) {
 			continue;
 		}
-		return i;
+		patternStarts.push_back(i);
 	}
-	return -1;
+	return patternStarts;
 }
 
 vector<tuple<string, string, string>> extractParameters(string s)

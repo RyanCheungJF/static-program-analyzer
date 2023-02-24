@@ -10,8 +10,8 @@
 #include "exceptions/InternalException.h"
 using namespace std;
 
-long findSuchThat(const vector<string> &wordList);
-long findPattern(const vector<string> &wordList);
+vector<int> findSuchThat(const vector<string> &wordList);
+vector<int> findPattern(const vector<string> &wordList);
 vector<tuple<string, string, string>> extractParameters(string s);
 tuple<string, size_t> extractSubStringUntilDelimiter(const string& original, int start, string delimiter);
 vector<string> stringToWordList(string s);
