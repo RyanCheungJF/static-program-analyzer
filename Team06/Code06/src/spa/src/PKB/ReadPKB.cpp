@@ -116,3 +116,8 @@ std::unordered_set<StmtNum> ReadPKB::getContainedStatements(StmtNum containerNum
 std::pair<StmtNum, ProcName> ReadPKB::getCallStmt(StmtNum s) {
     return pkbInstance->callStorage->getCallStmt(s);
 }
+
+CFGNodeStub* ReadPKB::getCFG(StmtNum num) {
+    return pkbInstance->cfgStorage->getNode(num);
+}
+

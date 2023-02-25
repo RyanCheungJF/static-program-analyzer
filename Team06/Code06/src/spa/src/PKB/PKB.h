@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "utils/AppConstants.h"
 #include "storage/FollowsStorage.h"
 #include "storage/FollowsTStorage.h"
 #include "storage/ParentStorage.h"
@@ -15,7 +16,7 @@
 #include "storage/ConstantStorage.h"
 #include "storage/CallStorage.h"
 #include "storage/ModifiesUsesStorage.h"
-#include "utils/AppConstants.h"
+#include "storage/CFGStorage.h"
 
 class PKB {
 public:
@@ -37,4 +38,5 @@ private:
     std::shared_ptr<CallStorage> callStorage;
     std::shared_ptr<ModifiesUsesStorage> usesStorage;
     std::shared_ptr<ModifiesUsesStorage> modifiesStorage;
+    std::shared_ptr<CFGStorage> cfgStorage;
 };

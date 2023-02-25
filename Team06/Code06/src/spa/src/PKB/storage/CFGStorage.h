@@ -11,11 +11,9 @@
 
 class CFGStorage {
 public:
+    void writeCFG(StmtNum num, CFGNodeStub &head);
 
-    void writeCFG(ProcName procedure, CFGNodeStub head);
-
-    std::unordered_map<ProcName, CFGNodeStub> getAll();
-
+    CFGNodeStub* getNode(StmtNum num);
 private:
-    std::unordered_map<ProcName, CFGNodeStub> procName_cfgRoot;
+    std::unordered_map<StmtNum, CFGNodeStub*> procName_cfgRoot;
 };

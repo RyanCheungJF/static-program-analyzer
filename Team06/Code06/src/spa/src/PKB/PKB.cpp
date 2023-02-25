@@ -13,4 +13,5 @@ void PKB::initializePkb() {
     this->callStorage = std::make_shared<CallStorage>();
     this->usesStorage = std::make_shared<ModifiesUsesStorage>();
     this->modifiesStorage = std::make_shared<ModifiesUsesStorage>();
+    this->cfgStorage = std::make_shared<CFGStorage>();
 }
