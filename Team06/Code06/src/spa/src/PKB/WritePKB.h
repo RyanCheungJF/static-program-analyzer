@@ -50,7 +50,7 @@ public:
 
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
-    void writeCFG(StmtNum num, CFGNodeStub root);
+    void writeCFG(StmtNum num, CFGNodeStub &root);
 
 private:
     PKB* pkbInstance = NULL;

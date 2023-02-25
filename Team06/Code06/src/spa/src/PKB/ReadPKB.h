@@ -1,4 +1,5 @@
 #pragma once
+#include <queue>
 #include "PKB.h"
 #include "readHandlers/FollowsParentHandler.h"
 #include "readHandlers/ModifiesUsesHandler.h"
@@ -60,16 +61,16 @@ public:
     CFGNodeStub* getCFG(StmtNum num);
 
     // returns n2 where n2 satisfies Next(n1, n2)
-    std::unordered_set<StmtNum> getNextRHS(StmtNum n1);
+    std::vector<StmtNum> getNextRHS(StmtNum n1);
 
     // returns n1 where n1 satisfies Next(n1, n2)
-    std::unordered_set<StmtNum> getNextLHS(StmtNum n2);
+    std::vector<StmtNum> getNextLHS(StmtNum n2);
 
     // returns all n2 where n2 satisfies Next*(n1, n2)
-    std::unordered_set<StmtNum> getNextTRHS(StmtNum n1);
+    std::vector<StmtNum> getNextTRHS(StmtNum n1);
 
     // returns all n1 where n1 satisfies Next*(n1, n2)
-    std::unordered_set<StmtNum> getNextTLHS(StmtNum n2);
+    std::vector<StmtNum> getNextTLHS(StmtNum n2);
 
 
 
