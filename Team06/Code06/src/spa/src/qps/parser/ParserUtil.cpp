@@ -33,7 +33,7 @@ vector<int> findPattern(const vector<string> &wordList)
 {
 	vector<int> patternStarts;
 	for (int i = 0; i < wordList.size(); i++) {
-		if (!isPattern(wordList[i])) {
+		if (PATTERN != wordList[i]) {
 			continue;
 		}
 		if (i == wordList.size() - 1) {
@@ -47,59 +47,68 @@ vector<int> findPattern(const vector<string> &wordList)
 	return patternStarts;
 }
 
-vector<tuple<string, string, string>> extractParameters(string s)
+vector<int> findAnds(const vector<string>& wordList, int start, int end) {
+	vector<int> ands;
+	for (int i = start; i < end; i++) {
+		if (AND != wordList[i]) {
+			continue;
+		}
+		if (i == wordList.size() - 1) {
+			continue;
+		}
+		ands.push_back(i);
+	}
+	return ands;
+}
+
+tuple<string, string, string> extractParameters(string s)
 {
-	vector<tuple<string, string, string>> res;
+	tuple<string, string, string> res;
 	int endOfString = s.size();
 	int curIndex = 0;
-	string param1;
-	string param2;
-	string param3;
-	int bracCount;
-	char curChar;
+	string param1 = "";
+	string param2 = "";
+	string param3 = "";
+	int bracCount = 0;
+	char curChar = '\0';
 	while (curIndex < endOfString) {
-		param1 = "";
-		param2 = "";
-		param3 = "";
-		bracCount = 0;
-		curChar = '\0';
-		while (curIndex < endOfString) {
-			curChar = s[curIndex];
-			if (curChar == '(') {
-				bracCount++;
-				break;
-			}
-			param1 += curChar;
-			curIndex++;
+		curChar = s[curIndex];
+		if (curChar == '(') {
+			bracCount++;
+			break;
 		}
-		curIndex++;
-		while (curIndex < endOfString) {
-			curChar = s[curIndex];
-			if (curChar == ',') {
-				break;
-			}
-			param2 += curChar;
-			curIndex++;
-		}
-		curIndex++;
-		while (curIndex < endOfString) {
-			curChar = s[curIndex];
-			if (curChar == '(') {
-				bracCount++;
-			}
-			if (curChar == ')') {
-				bracCount--;
-				if (bracCount == 0) break;
-			}
-			param3 += curChar;
-			curIndex++;
-		}
-		if (param1 == "" || param2 == "" || param3 == "" || curChar != ')') {
-			throw SyntaxException();
-		}
-		res.push_back(tuple<string, string, string>(param1, param2, param3));
+		param1 += curChar;
 		curIndex++;
 	}
+	curIndex++;
+	while (curIndex < endOfString) {
+		curChar = s[curIndex];
+		if (curChar == ',') {
+			break;
+		}
+		param2 += curChar;
+		curIndex++;
+	}
+	curIndex++;
+	while (curIndex < endOfString) {
+		curChar = s[curIndex];
+		if (curChar == '(') {
+			bracCount++;
+		}
+		if (curChar == ')') {
+			bracCount--;
+			if (bracCount == 0) {
+				curIndex++;
+				break;
+			}
+		}
+		param3 += curChar;
+		curIndex++;
+	}
+	if (param1 == "" || param2 == "" || param3 == "" || curIndex != endOfString || curChar != ')') {
+		throw SyntaxException();
+	}
+	res = tuple<string, string, string>(param1, param2, param3);
 	return res;
 }
 

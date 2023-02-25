@@ -12,7 +12,8 @@ using namespace std;
 
 vector<int> findSuchThat(const vector<string> &wordList);
 vector<int> findPattern(const vector<string> &wordList);
-vector<tuple<string, string, string>> extractParameters(string s);
+vector<int> findAnds(const vector<string> &wordList, int start, int end);
+tuple<string, string, string> extractParameters(string s);
 tuple<string, size_t> extractSubStringUntilDelimiter(const string& original, int start, string delimiter);
 vector<string> stringToWordList(string s);
 vector<string> stringToWordListByDelimiter(string original, string delimiter);

@@ -119,40 +119,44 @@ vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<s
 		throw SyntaxException();
 	}
 
-	stringstream ss;
-	int condStart = start + 2;
-	for (int i = condStart; i < end; i++) {
-		ss << wordList[i];
-	}
-	string condString = ss.str();
+	int curIndex = start + 2;
 
-	string rel;
-	string param1;
-	string param2;
-	string delimiter = "(";
-	size_t itemStart = 0;
-	size_t itemEnd;
-	try {
-		tie(rel, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-		itemStart = itemEnd;
-		delimiter = ",";
-		tie(param1, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-		itemStart = itemEnd;
-		delimiter = ")";
-		tie(param2, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-	}
-	catch (InternalException e) {
-		throw SyntaxException();
+	vector<int> ands = findAnds(wordList, start, end);
+	vector<string> unparsedRelRef;
+	string condString = "";
+	for (int i = 0; i < ands.size(); i++) {
+		for (int j = curIndex; j < ands[i]; j++) {
+			condString += wordList[j];
+		}
+		if (!hasCorrectRelRefOrPatternForm(condString)) {
+			curIndex = ands[i];
+			continue;
+		}
+		unparsedRelRef.push_back(condString);
+		condString = "";
+		curIndex = ands[i] + 1;
 	}
 
-
-	if (itemEnd != condString.size()) {
-		throw SyntaxException();
+	while (curIndex < end) {
+		condString += wordList[curIndex];
+		curIndex++;
 	}
-	Parameter p1(removeCharFromString(param1, '\"'), Parameter::guessParameterType(param1));
-	Parameter p2(removeCharFromString(param2, '\"'), Parameter::guessParameterType(param2));
-	vector<Parameter> params{ p1, p2 };
-	res.push_back(Relationship::makeRelationship(rel, params));
+	unparsedRelRef.push_back(condString);
+
+	vector<tuple<string, string, string>> relRefParams;
+	for (int i = 0; i < unparsedRelRef.size(); i++) {
+		relRefParams.push_back(extractParameters(unparsedRelRef[i]));
+	}
+
+	for (tuple<string, string, string> t : relRefParams) {
+		string rel, param1, param2;
+		tie(rel, param1, param2) = t;
+
+		Parameter p1(removeCharFromString(param1, '\"'), Parameter::guessParameterType(param1));
+		Parameter p2(removeCharFromString(param2, '\"'), Parameter::guessParameterType(param2));
+		vector<Parameter> params{ p1, p2 };
+		res.push_back(Relationship::makeRelationship(rel, params));
+	}
 
 	return res;
 }
@@ -170,13 +174,36 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
 		throw SyntaxException();
 	}
 
-	stringstream ss;
-	int condStart = start + 1;
-	for (int i = condStart; i < end; i++) {
-		ss << wordList[i];
+	int curIndex = start + 1;
+
+	vector<int> ands = findAnds(wordList, start, end);
+	vector<string> unparsedPatterns;
+	string condString = "";
+	for (int i = 0; i < ands.size(); i++) {
+		for (int j = curIndex; j < ands[i]; j++) {
+			condString += wordList[j];
+		}
+		if (!hasCorrectRelRefOrPatternForm(condString)) {
+			curIndex = ands[i];
+			continue;
+		}
+		unparsedPatterns.push_back(condString);
+		condString = "";
+		curIndex = ands[i] + 1;
 	}
-	string condString = ss.str();
-	vector<tuple<string, string, string>> patternParams = extractParameters(condString);
+
+	while (curIndex < end) {
+		condString += wordList[curIndex];
+		curIndex++;
+	}
+	unparsedPatterns.push_back(condString);
+
+
+	vector<tuple<string, string, string>> patternParams;
+	for (int i = 0; i < unparsedPatterns.size(); i++) {
+		patternParams.push_back(extractParameters(unparsedPatterns[i]));
+	}
+
 	for (tuple<string, string, string> t : patternParams) {
 		string synAssignString, entRefString, patternString;
 		tie(synAssignString, entRefString, patternString) = t;
