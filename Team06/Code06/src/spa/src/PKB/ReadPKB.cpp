@@ -121,3 +121,42 @@ CFGNodeStub* ReadPKB::getCFG(StmtNum num) {
     return pkbInstance->cfgStorage->getNode(num);
 }
 
+//TODO: liaise with QPS on what they want as return type for the below
+std::unordered_set<StmtNum> ReadPKB::getNextRHS(StmtNum n1) {
+    CFGNodeStub* node = pkbInstance->cfgStorage->getNode(n1);
+    if (node == nullptr) {
+        return {};
+    }
+    if (node->range.find(n1 + 1) != node->range.end()) {
+        return {n1 + 1};
+    }
+    std::unordered_set<StmtNum> res;
+    for (auto child : node->children) {
+        res.insert(child->first);
+    }
+    return res;
+}
+
+std::unordered_set<StmtNum> ReadPKB::getNextLHS(StmtNum n2) {
+    CFGNodeStub* node = pkbInstance->cfgStorage->getNode(n2);
+    if (node == nullptr) {
+        return {};
+    }
+    if (node->range.find(n2 - 1) != node->range.end()) {
+        return {n2 - 1};
+    }
+    std::unordered_set<StmtNum> res;
+    for (auto child : node->parents) {
+        res.insert(child->last);
+    }
+    return res;
+}
+
+std::unordered_set<StmtNum> ReadPKB::getNextTRHS(StmtNum n1) {
+
+}
+
+std::unordered_set<StmtNum> ReadPKB::getNextTLHS(StmtNum n2) {
+
+}
+
