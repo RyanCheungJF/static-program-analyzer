@@ -166,3 +166,62 @@ std::vector<std::unordered_set<Ent>> handleCallStmt(WritePKB* writePKB, ReadPKB*
 	writePKB->setModifiesS(callStmt.first, currModifiesVariables);
 	return std::vector{ currUsesVariables, currModifiesVariables };
 }
+
+void buildCFG(Procedure* proc, WritePKB* writePKB, ReadPKB* readPKB) {
+	std::unordered_map<StmtNum, std::pair<std::vector<StmtNum>, std::vector<StmtNum>>> cfg;
+	buildCFGHelper(cfg, proc->statementList.get(), 0);
+	auto test = readPKB->getProcedureStatementNumbers(proc->procedureName);
+	std::cout << proc->procedureName << std::endl;
+	//for (StmtNum i : test) {
+	//	std::cout << i << ": ";
+	//	for (auto j : cfg[i].first) {
+	//		std::cout << j << ", ";
+	//	}
+	//	std::cout << "" << std::endl;
+	//}
+
+	//for (StmtNum i : test) {
+	//	std::cout << i << ": ";
+	//	for (auto j : cfg[i].second) {
+	//		std::cout << j << ", ";
+	//	}
+	//	std::cout << "" << std::endl;
+	//}
+
+	// writePKB->writeCFG(proc->procedureName, cfg);
+}
+
+void buildCFGHelper(std::unordered_map<StmtNum, std::pair<std::vector<StmtNum>, std::vector<StmtNum>>>& cfg, StatementList* stmtList, StmtNum loopedStmtNum) {
+	StmtNum lastStmtNum = stmtList->statements.back()->statementNumber;
+	for (int i = 0; i < stmtList->statements.size(); i++) {
+		StmtNum currStmtNum = stmtList->statements[i]->statementNumber;
+		StmtNum nextStmtNum = currStmtNum != lastStmtNum ? stmtList->statements[i + 1]->statementNumber : 0;
+
+		if (auto j = CAST_TO(IfStatement, stmtList->statements[i].get())) {
+			cfg[currStmtNum].first.push_back(j->thenStmtList.get()->statements[0]->statementNumber);
+			cfg[currStmtNum].first.push_back(j->elseStmtList.get()->statements[0]->statementNumber);
+			cfg[j->thenStmtList.get()->statements[0]->statementNumber].second.push_back(currStmtNum);
+			cfg[j->elseStmtList.get()->statements[0]->statementNumber].second.push_back(currStmtNum);
+			buildCFGHelper(cfg, j->thenStmtList.get(), nextStmtNum == 0 ? loopedStmtNum : nextStmtNum);
+			buildCFGHelper(cfg, j->elseStmtList.get(), nextStmtNum == 0 ? loopedStmtNum : nextStmtNum);
+		}
+		else {
+			if (nextStmtNum != 0) {
+				cfg[currStmtNum].first.push_back(nextStmtNum);
+				if (currStmtNum != 0) {
+					cfg[nextStmtNum].second.push_back(currStmtNum);
+				}
+			}
+			else if (loopedStmtNum != 0) {
+				cfg[currStmtNum].first.push_back(loopedStmtNum);
+				cfg[loopedStmtNum].second.push_back(currStmtNum);
+			}
+		}
+
+		if (auto j = CAST_TO(WhileStatement, stmtList->statements[i].get())) {
+			cfg[currStmtNum].first.push_back(j->stmtList.get()->statements[0]->statementNumber);
+			cfg[j->stmtList.get()->statements[0]->statementNumber].second.push_back(currStmtNum);
+			buildCFGHelper(cfg, j->stmtList.get(), currStmtNum);
+		}
+	}
+}
