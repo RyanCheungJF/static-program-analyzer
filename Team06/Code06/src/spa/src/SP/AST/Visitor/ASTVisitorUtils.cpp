@@ -171,7 +171,7 @@ void buildCFG(Procedure* proc, WritePKB* writePKB, ReadPKB* readPKB) {
 	std::unordered_map<StmtNum, std::pair<std::vector<StmtNum>, std::vector<StmtNum>>> cfg;
 	buildCFGHelper(cfg, proc->statementList.get(), 0);
 	auto test = readPKB->getProcedureStatementNumbers(proc->procedureName);
-	std::cout << proc->procedureName << std::endl;
+	// std::cout << proc->procedureName << std::endl;
 	//for (StmtNum i : test) {
 	//	std::cout << i << ": ";
 	//	for (auto j : cfg[i].first) {
