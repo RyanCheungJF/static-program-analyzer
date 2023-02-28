@@ -104,15 +104,12 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcSynWildcard
 
 std::vector<std::vector<std::string>> ModifiesUsesHandler::handle(Parameter param1, Parameter param2) {
 
-	std::string paramString1 = param1.getValue();
-	std::string paramString2 = param2.getValue();
 	ParameterType param1Type = param1.getType();
 	ParameterType param2Type = param2.getType();
 	bool isIntParam1 = param1Type == ParameterType::FIXED_INT;
 	bool isStringParam1 = param1Type == ParameterType::FIXED_STRING;
 	bool isStringParam2 = param2Type == ParameterType::FIXED_STRING;
 	bool isProcParam1 = param1Type == ParameterType::PROCEDURE;
-	bool isWildcardParam1 = param1Type == ParameterType::WILDCARD;
 
 	if (isIntParam1) {
 		if (isStringParam2) {
