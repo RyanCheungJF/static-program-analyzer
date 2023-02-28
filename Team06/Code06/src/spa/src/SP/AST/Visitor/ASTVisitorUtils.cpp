@@ -307,5 +307,41 @@ void recurseCallStatementHelper(
 void validateNoCycles(
     std::vector<ProcName> procedureNames,
     std::unordered_map<ProcName, std::vector<ProcName>> procCallMap) {
+  std::deque<ProcName> queue;
+  std::unordered_map<ProcName, std::pair<int, std::unordered_set<ProcName>>> nodes;
+  std::vector<ProcName> order;
 
+  for (int i = 0; i < procedureNames.size(); i++) {
+    nodes[procedureNames[i]] = std::make_pair(0, std::unordered_set<ProcName>());
+  }
+
+  for (const auto &pair : procCallMap) {
+    ProcName callerProc = pair.first;
+    for (const auto &calledProc : pair.second) {
+      nodes[calledProc].first += 1;
+      nodes[callerProc].second.insert(calledProc);
+    }
+  }
+
+  for (const auto &pair : nodes) {
+    if (pair.second.first == 0) {
+      queue.push_back(pair.first);
+    }
+  }
+
+  while (queue.size() > 0) {
+    auto proc = queue.back();
+    queue.pop_back();
+    for (auto calledProc : nodes[proc].second) {
+      nodes[calledProc].first -= 1;
+      if (nodes[calledProc].first == 0) {
+        queue.push_back(calledProc);
+      }
+    }
+    order.push_back(proc);
+  }
+
+  if (order.size() != procedureNames.size()) {
+    throw SemanticErrorException("Recursive and cyclic calls are not allowed.");
+  }
 }
