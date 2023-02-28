@@ -36,6 +36,7 @@ bool isParent(string);
 bool isUses(string);
 bool isModifies(string);
 bool isFixedStringWithWildCard(string);
+bool hasCorrectRelRefOrPatternForm(string);
 
 
 #endif //SPA_QPSGRAMMARUTILS_H
