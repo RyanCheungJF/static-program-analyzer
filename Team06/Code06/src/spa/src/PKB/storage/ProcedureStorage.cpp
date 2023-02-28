@@ -5,7 +5,6 @@ void ProcedureStorage::writeProcedure(ProcName p, std::unordered_set<StmtNum> li
         proc_stmtNum[p].insert(line);
     }
     procedures.insert(p);
-    return;
 }
 
 bool ProcedureStorage::checkProcedure(ProcName p, StmtNum num) {

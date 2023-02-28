@@ -5,10 +5,7 @@
 #include <string>
 #include <vector>
 #include "utils/AppConstants.h"
-#include "storage/FollowsStorage.h"
-#include "storage/FollowsTStorage.h"
-#include "storage/ParentStorage.h"
-#include "storage/ParentTStorage.h"
+#include "storage/FollowsParentStorage.h"
 #include "storage/EntityStorage.h"
 #include "storage/ProcedureStorage.h"
 #include "storage/StmtStorage.h"
@@ -26,10 +23,10 @@ public:
     friend class WritePKB;
 
 private:
-    std::shared_ptr<FollowsStorage> followsStorage;
-    std::shared_ptr<FollowsTStorage> followsTStorage;
-    std::shared_ptr<ParentStorage> parentStorage;
-    std::shared_ptr<ParentTStorage> parentTStorage;
+    std::shared_ptr<FollowsParentStorage> followsStorage;
+    std::shared_ptr<FollowsParentStorage> followsTStorage;
+    std::shared_ptr<FollowsParentStorage> parentStorage;
+    std::shared_ptr<FollowsParentStorage> parentTStorage;
     std::shared_ptr<StmtStorage> statementStorage;
     std::shared_ptr<EntityStorage> entityStorage;
     std::shared_ptr<ProcedureStorage> procedureStorage;
