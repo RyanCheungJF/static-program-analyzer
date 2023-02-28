@@ -1,0 +1,90 @@
+1 - comment
+prog_line n;
+Select p such that Next(1, p)
+2
+5000
+2 - comment
+prog_line n;
+Select p such that Next(16, p)
+none
+5000
+3 - comment
+prog_line n;
+Select p such that Next(p, 5)
+4
+5000
+4 - comment
+prog_line n;
+Select p such that Next(17, p)
+18
+5000
+5 - comment
+prog_line n;
+Select p such that Next(24, p)
+25
+5000
+6 - comment
+prog_line n;
+Select p such that Next(25, p)
+26, 42
+5000
+7 - comment
+prog_line n;
+Select p such that Next(p, 42)
+25
+5000
+8 - comment
+prog_line n;
+Select p such that Next(27, p)
+28, 41
+5000
+9 - comment
+prog_line n;
+Select p such that Next(30, p)
+39, 31
+5000
+10 - comment
+prog_line n;
+Select p such that Next(31, p)
+32, 33
+5000
+11 - comment
+prog_line n;
+Select p such that Next(33, p)
+34, 36
+5000
+12 - comment
+prog_line n;
+Select p such that Next(34, p)
+35, 37
+5000
+13 - comment
+prog_line n;
+Select p such that Next(35, p)
+34
+5000
+14 - comment
+prog_line n;
+Select p such that Next(38, p)
+30
+5000
+15 - comment
+prog_line n;
+Select p such that Next(p, 37)
+32, 36, 34
+5000
+16 - comment
+prog_line n;
+Select p such that Next(p, 30)
+29, 38
+5000
+17 - comment
+prog_line n; stmt s;
+Select p such that Next(16, 1)
+none
+5000
+18 - comment
+prog_line n; stmt s;
+Select p such that Next(1, 3)
+none
+5000
