@@ -4,10 +4,10 @@
 
 class PrintStatement : public Statement {
 public:
-	Ent varName;
+  Ent varName;
 
-	PrintStatement();
-	PrintStatement(StmtNum stmtNum, Ent varName);
+  PrintStatement();
+  PrintStatement(StmtNum stmtNum, Ent varName);
 
-	void accept(ASTVisitor* visitor) override;
+  void accept(ASTVisitor *visitor) override;
 };

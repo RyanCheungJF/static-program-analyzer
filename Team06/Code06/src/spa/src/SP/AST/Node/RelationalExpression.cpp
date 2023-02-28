@@ -1,16 +1,15 @@
 #include "RelationalExpression.h"
 
-RelationalExpression::RelationalExpression() {};
+RelationalExpression::RelationalExpression(){};
 
 RelationalExpression::RelationalExpression(Operator relationalOperator,
-	std::unique_ptr<Expression> lhs,
-	std::unique_ptr<Expression> rhs) {
-	this->relationalOperator = relationalOperator;
-	this->lhs = std::move(lhs);
-	this->rhs = std::move(rhs);
+                                           std::unique_ptr<Expression> lhs,
+                                           std::unique_ptr<Expression> rhs) {
+  this->relationalOperator = relationalOperator;
+  this->lhs = std::move(lhs);
+  this->rhs = std::move(rhs);
 }
 
-void RelationalExpression::accept(ASTVisitor* visitor) {
-	visitor->visitConditionalExpression(this);
+void RelationalExpression::accept(ASTVisitor *visitor) {
+  visitor->visitConditionalExpression(this);
 }
-

@@ -1,26 +1,27 @@
 #include "SP.h"
 
-void SP::processFile(std::string filePath, WritePKB* writePKB, ReadPKB* readPKB) {
-	std::ifstream sourceFile(filePath);
-	if (!sourceFile) {
-		std::cerr << "File not found" << std::endl;
-	}
+void SP::processFile(std::string filePath, WritePKB *writePKB,
+                     ReadPKB *readPKB) {
+  std::ifstream sourceFile(filePath);
+  if (!sourceFile) {
+    std::cerr << "File not found" << std::endl;
+  }
 
-	std::stringstream strStream;
-	strStream << sourceFile.rdbuf();
+  std::stringstream strStream;
+  strStream << sourceFile.rdbuf();
 
-	try {
-		auto tokens = tokenizer.tokenize(strStream);
-		auto root = parser.parseProgram(tokens);
-		designExtractor = DesignExtractor(std::move(root), writePKB, readPKB);
-		designExtractor.populatePKB();
-	} catch (SyntaxErrorException e) {
-		std::cout << "Syntax Error caught" << std::endl;
-		std::cout << e.what() << std::endl;
-        throw e;
-	} catch (SemanticErrorException e) {
-		std::cout << "Semantic Error caught" << std::endl;
-		std::cout << e.what() << std::endl;
-        throw e;
-	}
+  try {
+    auto tokens = tokenizer.tokenize(strStream);
+    auto root = parser.parseProgram(tokens);
+    designExtractor = DesignExtractor(std::move(root), writePKB, readPKB);
+    designExtractor.populatePKB();
+  } catch (SyntaxErrorException e) {
+    std::cout << "Syntax Error caught" << std::endl;
+    std::cout << e.what() << std::endl;
+    throw e;
+  } catch (SemanticErrorException e) {
+    std::cout << "Semantic Error caught" << std::endl;
+    std::cout << e.what() << std::endl;
+    throw e;
+  }
 }
