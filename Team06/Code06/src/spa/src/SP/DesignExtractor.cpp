@@ -2,46 +2,47 @@
 
 DesignExtractor::DesignExtractor() : ASTroot() {}
 
-DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writePKB, ReadPKB* readPKB) {
-	ASTroot = std::move(root);
-	writePkb = writePKB;
-	readPkb = readPKB;
+DesignExtractor::DesignExtractor(std::unique_ptr<Program> root,
+                                 WritePKB *writePKB, ReadPKB *readPKB) {
+  ASTroot = std::move(root);
+  writePkb = writePKB;
+  readPkb = readPKB;
 }
 
 void DesignExtractor::populatePKB() {
-	extractInfo();
-	extractCFG();
-	populateRemainingTables(writePkb, readPkb);
+  extractInfo();
+  extractCFG();
+  populateRemainingTables(writePkb, readPkb);
 }
 
 void DesignExtractor::extractInfo() {
-    FollowsExtractorVisitor followsExtractor = FollowsExtractorVisitor(writePkb);
-    ParentExtractorVisitor parentExtractor = ParentExtractorVisitor(writePkb);
-    StatementExtractorVisitor statementExtractor = StatementExtractorVisitor(writePkb);
-    ProcedureExtractorVisitor procedureExtractor = ProcedureExtractorVisitor(writePkb);
-    EntRefExtractorVisitor entRefExtractor = EntRefExtractorVisitor(writePkb);
-	std::vector<ASTVisitor*> visitors{ &followsExtractor,
-									   &parentExtractor,
-									   &statementExtractor,
-									   &procedureExtractor,
-									   &entRefExtractor };
+  FollowsExtractorVisitor followsExtractor = FollowsExtractorVisitor(writePkb);
+  ParentExtractorVisitor parentExtractor = ParentExtractorVisitor(writePkb);
+  StatementExtractorVisitor statementExtractor =
+      StatementExtractorVisitor(writePkb);
+  ProcedureExtractorVisitor procedureExtractor =
+      ProcedureExtractorVisitor(writePkb);
+  EntRefExtractorVisitor entRefExtractor = EntRefExtractorVisitor(writePkb);
+  std::vector<ASTVisitor *> visitors{&followsExtractor, &parentExtractor,
+                                     &statementExtractor, &procedureExtractor,
+                                     &entRefExtractor};
 
-	for (auto& visitor : visitors) {
-		for (const auto& procedure : ASTroot->procedureList) {
-			procedure->accept(visitor);
-			procedure->statementList->accept(visitor);
-			for (const auto& statement : procedure->statementList->statements) {
-				statement->accept(visitor);
-				if (isContainerStatement(statement.get())) {
-					recurseStatementHelper(statement.get(), visitor);
-				}
-			}
-		}
-	}
+  for (auto &visitor : visitors) {
+    for (const auto &procedure : ASTroot->procedureList) {
+      procedure->accept(visitor);
+      procedure->statementList->accept(visitor);
+      for (const auto &statement : procedure->statementList->statements) {
+        statement->accept(visitor);
+        if (isContainerStatement(statement.get())) {
+          recurseStatementHelper(statement.get(), visitor);
+        }
+      }
+    }
+  }
 }
 
 void DesignExtractor::extractCFG() {
-	for (const auto& procedure : ASTroot->procedureList) {
-		buildCFG(procedure.get(), writePkb, readPkb);
-	}
+  for (const auto &procedure : ASTroot->procedureList) {
+    buildCFG(procedure.get(), writePkb, readPkb);
+  }
 }

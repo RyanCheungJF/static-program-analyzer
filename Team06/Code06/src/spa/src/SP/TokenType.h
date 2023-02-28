@@ -1,22 +1,22 @@
 enum class TokenType {
-	NAME,
-	INTEGER,
+  NAME,
+  INTEGER,
 
-	LEFT_BRACE, // {
-	RIGHT_BRACE, // }
-	LEFT_PARENTHESIS, // (
-	RIGHT_PARENTHESIS, // )
-	SEMICOLON, // ;
+  LEFT_BRACE,        // {
+  RIGHT_BRACE,       // }
+  LEFT_PARENTHESIS,  // (
+  RIGHT_PARENTHESIS, // )
+  SEMICOLON,         // ;
 
-	BINARY_LOGICAL_OPR, // &&, ||
-	NOT, // !
+  BINARY_LOGICAL_OPR, // &&, ||
+  NOT,                // !
 
-	RELATIONAL_OPR, // >, <, >=, <=, ==, !=
+  RELATIONAL_OPR, // >, <, >=, <=, ==, !=
 
-	EXPR_ARITH_OPR, // +, -
-	TERM_ARITH_OPR, // *, /, %
+  EXPR_ARITH_OPR, // +, -
+  TERM_ARITH_OPR, // *, /, %
 
-	ASSIGN, // =
+  ASSIGN, // =
 
-	ENDOFFILE
+  ENDOFFILE
 };

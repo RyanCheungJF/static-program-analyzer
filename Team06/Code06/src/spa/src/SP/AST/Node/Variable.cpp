@@ -2,10 +2,6 @@
 
 Variable::Variable() {}
 
-Variable::Variable(Ent name) {
-	this->name = name;
-}
+Variable::Variable(Ent name) { this->name = name; }
 
-void Variable::accept(ASTVisitor* visitor) {
-	visitor->visitExpression(this);
-};
+void Variable::accept(ASTVisitor *visitor) { visitor->visitExpression(this); };

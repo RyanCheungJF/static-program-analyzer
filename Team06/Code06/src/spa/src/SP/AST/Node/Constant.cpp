@@ -2,10 +2,6 @@
 
 Constant::Constant() {}
 
-Constant::Constant(Const value) {
-	this->value = value;
-}
+Constant::Constant(Const value) { this->value = value; }
 
-void Constant::accept(ASTVisitor* visitor) {
-	visitor->visitExpression(this);
-}
+void Constant::accept(ASTVisitor *visitor) { visitor->visitExpression(this); }
