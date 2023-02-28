@@ -1,14 +1,11 @@
 #pragma once
 #include <queue>
 #include "PKB.h"
-#include "readHandlers/FollowsParentHandler.h"
-#include "readHandlers/ModifiesUsesHandler.h"
-#include "readHandlers/AssignPatternHandler.h"
 #include "../qps/entities/Relationship.h"
 #include "../qps/entities/Pattern.h"
 #include "../utils/AppConstants.h"
 
-class ReadPKB :AppConstants {
+class ReadPKB : AppConstants {
 public:
 
     // Sets the pointer to the PKB instance if it is not set yet

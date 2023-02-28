@@ -1,8 +1,8 @@
 #include "FollowsParentStorage.h"
 
 void FollowsParentStorage::write(StmtNum leftNum, StmtNum rightNum) {
-    leftToRightMap.insert({ leftNum, {rightNum} });
-    rightToLeftMap.insert({ rightNum, {leftNum} });
+    leftToRightMap[leftNum].insert(rightNum);
+    rightToLeftMap[rightNum].insert(leftNum);
 }
 
 void FollowsParentStorage::write(StmtNum leftNum, std::unordered_set<StmtNum> rightNums) {
