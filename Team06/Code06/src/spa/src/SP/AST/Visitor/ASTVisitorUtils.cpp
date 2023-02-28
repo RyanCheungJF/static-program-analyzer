@@ -249,7 +249,8 @@ void validateNoDuplicateProcedureName(std::vector<ProcName> procedureNames) {
     procSet.insert(p);
   }
   if (procSet.size() != procedureNames.size()) {
-    throw SemanticErrorException("A program cannot have two procedures with the same name.");
+    throw SemanticErrorException(
+        "A program cannot have two procedures with the same name.");
   }
 }
 
@@ -274,31 +275,35 @@ void validateCalledProceduresExist(
 
 void recurseCallStatementHelper(
     Statement *recurseStmt,
-    std::unordered_map<ProcName, std::vector<ProcName>> &procCallMap) {
+    std::unordered_map<ProcName, std::vector<ProcName>> &procCallMap,
+    ProcName parentProcedure) {
   if (auto i = CAST_TO(IfStatement, recurseStmt)) {
     for (const auto &statement : i->thenStmtList->statements) {
       if (auto i = CAST_TO(CallStatement, statement.get())) {
-        procCallMap[i->parentProcedure].push_back(i->procName);
+        procCallMap[parentProcedure].push_back(i->procName);
       }
       if (isContainerStatement(statement.get())) {
-        recurseCallStatementHelper(statement.get(), procCallMap);
+        recurseCallStatementHelper(statement.get(), procCallMap,
+                                   parentProcedure);
       }
     }
     for (const auto &statement : i->elseStmtList->statements) {
       if (auto i = CAST_TO(CallStatement, statement.get())) {
-        procCallMap[i->parentProcedure].push_back(i->procName);
+        procCallMap[parentProcedure].push_back(i->procName);
       }
       if (isContainerStatement(statement.get())) {
-        recurseCallStatementHelper(statement.get(), procCallMap);
+        recurseCallStatementHelper(statement.get(), procCallMap,
+                                   parentProcedure);
       }
     }
   } else if (auto i = CAST_TO(WhileStatement, recurseStmt)) {
     for (const auto &statement : i->stmtList->statements) {
       if (auto i = CAST_TO(CallStatement, statement.get())) {
-        procCallMap[i->parentProcedure].push_back(i->procName);
+        procCallMap[parentProcedure].push_back(i->procName);
       }
       if (isContainerStatement(statement.get())) {
-        recurseCallStatementHelper(statement.get(), procCallMap);
+        recurseCallStatementHelper(statement.get(), procCallMap,
+                                   parentProcedure);
       }
     }
   }
@@ -308,11 +313,13 @@ void validateNoCycles(
     std::vector<ProcName> procedureNames,
     std::unordered_map<ProcName, std::vector<ProcName>> procCallMap) {
   std::deque<ProcName> queue;
-  std::unordered_map<ProcName, std::pair<int, std::unordered_set<ProcName>>> nodes;
+  std::unordered_map<ProcName, std::pair<int, std::unordered_set<ProcName>>>
+      nodes;
   std::vector<ProcName> order;
 
   for (int i = 0; i < procedureNames.size(); i++) {
-    nodes[procedureNames[i]] = std::make_pair(0, std::unordered_set<ProcName>());
+    nodes[procedureNames[i]] =
+        std::make_pair(0, std::unordered_set<ProcName>());
   }
 
   for (const auto &pair : procCallMap) {

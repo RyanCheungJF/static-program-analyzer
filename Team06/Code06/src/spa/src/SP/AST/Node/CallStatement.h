@@ -5,10 +5,9 @@
 class CallStatement : public Statement {
 public:
   ProcName procName;
-  ProcName parentProcedure;
 
   CallStatement();
-  CallStatement(StmtNum stmtNum, ProcName procName, ProcName parentProc);
+  CallStatement(StmtNum stmtNum, ProcName procName);
 
   void accept(ASTVisitor *visitor) override;
 };

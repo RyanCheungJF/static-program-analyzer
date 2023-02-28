@@ -28,10 +28,11 @@ void DesignExtractor::validateSemantics() {
     procedureNames.push_back(procedure->procedureName);
     for (const auto &statement : procedure->statementList->statements) {
       if (auto i = CAST_TO(CallStatement, statement.get())) {
-        procCallMap[i->parentProcedure].push_back(i->procName);
+        procCallMap[procedure->procedureName].push_back(i->procName);
       }
       if (isContainerStatement(statement.get())) {
-        recurseCallStatementHelper(statement.get(), procCallMap);
+        recurseCallStatementHelper(statement.get(), procCallMap,
+                                   procedure->procedureName);
       }
     }
   }
