@@ -10,6 +10,7 @@ DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writeP
 
 void DesignExtractor::populatePKB() {
 	extractInfo();
+	extractCFG();
 	populateRemainingTables(writePkb, readPkb);
 }
 
@@ -36,5 +37,11 @@ void DesignExtractor::extractInfo() {
 				}
 			}
 		}
+	}
+}
+
+void DesignExtractor::extractCFG() {
+	for (const auto& procedure : ASTroot->procedureList) {
+		buildCFG(procedure.get(), writePkb, readPkb);
 	}
 }

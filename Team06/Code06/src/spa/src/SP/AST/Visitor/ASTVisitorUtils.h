@@ -32,3 +32,5 @@ void populateRemainingTables(WritePKB* writePKB, ReadPKB* readPKB);
 void populateUsesModifies(WritePKB* writePKB, ReadPKB* readPKB);
 bool isContainerStatement(Statement* statement);
 std::vector<std::unordered_set<Ent>> handleCallStmt(WritePKB* writePKB, ReadPKB* readPKB, std::pair<StmtNum, ProcName> callStmt);
+void buildCFG(Procedure* proc, WritePKB* writePKB, ReadPKB* readPKB);
+void buildCFGHelper(std::unordered_map<StmtNum, std::pair<std::vector<StmtNum>, std::vector<StmtNum>>>& cfg, StatementList* stmtList, StmtNum loopedStmtNum);

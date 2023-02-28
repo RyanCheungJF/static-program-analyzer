@@ -16,6 +16,7 @@ private:
 	ReadPKB* readPkb;
 
 	void extractInfo();
+	void extractCFG();
 public:
 	DesignExtractor();
 	DesignExtractor(std::unique_ptr<Program>, WritePKB* writePKB, ReadPKB* readPKB);
