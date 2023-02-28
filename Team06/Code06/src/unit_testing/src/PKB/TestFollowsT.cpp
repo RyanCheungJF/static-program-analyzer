@@ -7,7 +7,7 @@ using namespace std;
 using namespace unit_testing_utils;
 
 TEST_CASE("Check that all followers are recorded in the followee") {
-    FollowsTStorage fts;
+    FollowsParentStorage fts;
 
     std::unordered_set<StmtNum> followers = {2, 3, 4};
     fts.write(1, followers);
@@ -19,7 +19,7 @@ TEST_CASE("Check that all followers are recorded in the followee") {
 }
 
 TEST_CASE("Check that a follower is not recorded as a followee") {
-    FollowsTStorage fts;
+    FollowsParentStorage fts;
 
     std::unordered_set<StmtNum> followers = {2};
     fts.write(1, followers);
@@ -28,7 +28,7 @@ TEST_CASE("Check that a follower is not recorded as a followee") {
 }
 
 TEST_CASE("Check that all of the followers of each followee is accurate, even with duplicate entries") {
-    FollowsTStorage fts;
+    FollowsParentStorage fts;
     std::unordered_set<StmtNum> followers_1 = {2, 3, 4, 4, 3, 4};
     std::unordered_set<StmtNum> followers_2 = {3, 4, 4, 3, 4};
     fts.write(1, followers_1);
@@ -44,7 +44,7 @@ TEST_CASE("Check that all of the followers of each followee is accurate, even wi
 }
 
 TEST_CASE("Check that all of the followees of each follower is accurate, even with duplicate entries") {
-    FollowsTStorage fts;
+    FollowsParentStorage fts;
     std::unordered_set<StmtNum> followers1 = {2, 3, 3, 4};
     std::unordered_set<StmtNum> followers2 = {3, 4};
     std::unordered_set<StmtNum> followers3 = {4};

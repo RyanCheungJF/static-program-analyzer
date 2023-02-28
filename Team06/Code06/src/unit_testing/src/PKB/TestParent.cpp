@@ -6,7 +6,7 @@
 using namespace unit_testing_utils;
 
 TEST_CASE("Check writes and reads to/from ParentStorage") {
-    ParentStorage par;
+    FollowsParentStorage par;
 
     par.write(1, 2);
     REQUIRE(par.exists(1, 2));
@@ -19,7 +19,7 @@ TEST_CASE("Check writes and reads to/from ParentStorage") {
 }
 
 TEST_CASE("Tests for getting children") {
-    ParentStorage par;
+    FollowsParentStorage par;
 
     par.write(1, 2);
     par.write(1, 3);
@@ -36,7 +36,7 @@ TEST_CASE("Tests for getting children") {
 }
 
 TEST_CASE("Tests for getting parent") {
-    ParentStorage par;
+    FollowsParentStorage par;
 
     par.write(1, 2);
 

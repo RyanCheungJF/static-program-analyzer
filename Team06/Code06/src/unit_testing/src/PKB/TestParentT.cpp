@@ -6,7 +6,7 @@
 using namespace unit_testing_utils;
 
 TEST_CASE("Check writes and reads to/from ParentTStorage") {
-    ParentTStorage pts;
+    FollowsParentStorage pts;
     std::unordered_set<StmtNum> children = {2, 3, 4};
     pts.write(1, children);
 
@@ -17,7 +17,7 @@ TEST_CASE("Check writes and reads to/from ParentTStorage") {
 }
 
 TEST_CASE("Tests for getting children for ParentTStorage") {
-    ParentTStorage pts;
+    FollowsParentStorage pts;
     std::unordered_set<StmtNum> children = {2, 3, 4};
     pts.write(1, children);
 
@@ -33,7 +33,7 @@ TEST_CASE("Tests for getting children for ParentTStorage") {
 }
 
 TEST_CASE("Tests for getting parent for ParentTStorage") {
-    ParentTStorage pts;
+    FollowsParentStorage pts;
     std::unordered_set<StmtNum> children1 = {2, 3, 4};
     std::unordered_set<StmtNum> children2 = {3};
     pts.write(1, children1);

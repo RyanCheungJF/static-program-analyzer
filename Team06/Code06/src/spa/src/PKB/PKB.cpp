@@ -1,10 +1,10 @@
 #include "PKB.h"
 
 void PKB::initializePkb() {
-    this->followsStorage = std::make_shared<FollowsStorage>();
-    this->followsTStorage = std::make_shared<FollowsTStorage>();
-    this->parentStorage = std::make_shared<ParentStorage>();
-    this->parentTStorage = std::make_shared<ParentTStorage>();
+    this->followsStorage = std::make_shared<FollowsParentStorage>();
+    this->followsTStorage = std::make_shared<FollowsParentStorage>();
+    this->parentStorage = std::make_shared<FollowsParentStorage>();
+    this->parentTStorage = std::make_shared<FollowsParentStorage>();
     this->statementStorage = std::make_shared<StmtStorage>();
     this->entityStorage = std::make_shared<EntityStorage>();
     this->procedureStorage = std::make_shared<ProcedureStorage>();
