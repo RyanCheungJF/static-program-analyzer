@@ -58,16 +58,14 @@ void recurseStatementHelper(Statement *recurseStmt, ASTVisitor *visitor) {
     i->thenStmtList->accept(visitor);
     for (const auto &statement : i->thenStmtList->statements) {
       statement->accept(visitor);
-      if (auto i = CAST_TO(IfStatement, statement.get()) ||
-                   CAST_TO(WhileStatement, statement.get())) {
+      if (isContainerStatement(statement.get())) {
         recurseStatementHelper(statement.get(), visitor);
       }
     }
     i->elseStmtList->accept(visitor);
     for (const auto &statement : i->elseStmtList->statements) {
       statement->accept(visitor);
-      if (auto i = CAST_TO(IfStatement, statement.get()) ||
-                   CAST_TO(WhileStatement, statement.get())) {
+      if (isContainerStatement(statement.get())) {
         recurseStatementHelper(statement.get(), visitor);
       }
     }
@@ -75,8 +73,7 @@ void recurseStatementHelper(Statement *recurseStmt, ASTVisitor *visitor) {
     i->stmtList->accept(visitor);
     for (const auto &statement : i->stmtList->statements) {
       statement->accept(visitor);
-      if (auto i = CAST_TO(IfStatement, statement.get()) ||
-                   CAST_TO(WhileStatement, statement.get())) {
+      if (isContainerStatement(statement.get())) {
         recurseStatementHelper(statement.get(), visitor);
       }
     }
@@ -244,4 +241,71 @@ void buildCFGHelper(
       buildCFGHelper(cfg, j->stmtList.get(), currStmtNum);
     }
   }
+}
+
+void validateNoDuplicateProcedureName(std::vector<ProcName> procedureNames) {
+  std::unordered_set<ProcName> procSet;
+  for (ProcName p : procedureNames) {
+    procSet.insert(p);
+  }
+  if (procSet.size() != procedureNames.size()) {
+    throw SemanticErrorException("A program cannot have two procedures with the same name.");
+  }
+}
+
+void validateCalledProceduresExist(
+    std::vector<ProcName> procedureNames,
+    std::unordered_map<ProcName, std::vector<ProcName>> procCallMap) {
+  std::unordered_set<ProcName> calledProcedures;
+  for (const auto &pair : procCallMap) {
+    for (const auto &calledProc : pair.second) {
+      calledProcedures.insert(calledProc);
+    }
+  }
+
+  for (const auto &calledProc : calledProcedures) {
+    if (std::find(procedureNames.begin(), procedureNames.end(), calledProc) ==
+        procedureNames.end()) {
+      throw SemanticErrorException(
+          "A procedure cannot call a non-existing procedure -> " + calledProc);
+    }
+  }
+}
+
+void recurseCallStatementHelper(
+    Statement *recurseStmt,
+    std::unordered_map<ProcName, std::vector<ProcName>> &procCallMap) {
+  if (auto i = CAST_TO(IfStatement, recurseStmt)) {
+    for (const auto &statement : i->thenStmtList->statements) {
+      if (auto i = CAST_TO(CallStatement, statement.get())) {
+        procCallMap[i->parentProcedure].push_back(i->procName);
+      }
+      if (isContainerStatement(statement.get())) {
+        recurseCallStatementHelper(statement.get(), procCallMap);
+      }
+    }
+    for (const auto &statement : i->elseStmtList->statements) {
+      if (auto i = CAST_TO(CallStatement, statement.get())) {
+        procCallMap[i->parentProcedure].push_back(i->procName);
+      }
+      if (isContainerStatement(statement.get())) {
+        recurseCallStatementHelper(statement.get(), procCallMap);
+      }
+    }
+  } else if (auto i = CAST_TO(WhileStatement, recurseStmt)) {
+    for (const auto &statement : i->stmtList->statements) {
+      if (auto i = CAST_TO(CallStatement, statement.get())) {
+        procCallMap[i->parentProcedure].push_back(i->procName);
+      }
+      if (isContainerStatement(statement.get())) {
+        recurseCallStatementHelper(statement.get(), procCallMap);
+      }
+    }
+  }
+}
+
+void validateNoCycles(
+    std::vector<ProcName> procedureNames,
+    std::unordered_map<ProcName, std::vector<ProcName>> procCallMap) {
+
 }

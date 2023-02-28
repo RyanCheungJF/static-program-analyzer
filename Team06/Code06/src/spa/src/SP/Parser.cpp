@@ -1,5 +1,6 @@
 #include "Parser.h"
 
+ProcName currProcedure;
 StmtNum currStatementNumber = 1;
 
 std::unique_ptr<Program> Parser::parseProgram(std::deque<Token> tokens) {
@@ -33,6 +34,7 @@ std::unique_ptr<Procedure> Parser::parseProcedure(std::deque<Token> &tokens) {
                                tokens.front().value);
   }
   ProcName procedureName = tokens.front().value;
+  currProcedure = procedureName;
   tokens.pop_front();
 
   if (!tokens.front().isType(TokenType::LEFT_BRACE)) {
@@ -165,7 +167,7 @@ Parser::parseCallStatement(std::deque<Token> &tokens) {
   }
   tokens.pop_front(); // Pop ;
 
-  return std::make_unique<CallStatement>(currStatementNumber++, procName);
+  return std::make_unique<CallStatement>(currStatementNumber++, procName, currProcedure);
 }
 
 std::unique_ptr<WhileStatement>

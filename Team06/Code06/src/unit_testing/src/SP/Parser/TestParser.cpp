@@ -96,7 +96,7 @@ TEST_CASE("Valid Source Program") {
     auto assignNodeC =
         std::make_unique<AssignStatement>(6, "z", std::move(mathNodeC));
     auto printNodeC = std::make_unique<PrintStatement>(4, "z");
-    auto callNodeC = std::make_unique<CallStatement>(5, "B");
+    auto callNodeC = std::make_unique<CallStatement>(5, "B", "C");
     std::vector<std::unique_ptr<Statement>> statementsC;
     statementsC.push_back(std::move(printNodeC));
     statementsC.push_back(std::move(callNodeC));
@@ -256,7 +256,7 @@ TEST_CASE("Valid Source Program") {
 
     // creating expected tree
     auto readStmt = std::make_unique<ReadStatement>(1, AppConstants::CALL);
-    auto callStmt = std::make_unique<CallStatement>(2, AppConstants::PRINT);
+    auto callStmt = std::make_unique<CallStatement>(2, AppConstants::PRINT, AppConstants::WHILE);
     auto printStmt = std::make_unique<PrintStatement>(3, AppConstants::READ);
     auto readAssignStmt = std::make_unique<AssignStatement>(
         4, AppConstants::READ, std::make_unique<Constant>(2));
@@ -965,14 +965,14 @@ bool checkIfSameStatement(std::unique_ptr<Statement> expectedStatement,
                CAST_TO(ReadStatement, actual)->varName &&
            CAST_TO(ReadStatement, expected)->statementNumber ==
                CAST_TO(ReadStatement, actual)->statementNumber;
-    ;
   } else if (CAST_TO(CallStatement, expected) &&
              CAST_TO(CallStatement, actual)) {
     return CAST_TO(CallStatement, expected)->procName ==
                CAST_TO(CallStatement, actual)->procName &&
            CAST_TO(CallStatement, expected)->statementNumber ==
-               CAST_TO(CallStatement, actual)->statementNumber;
-    ;
+               CAST_TO(CallStatement, actual)->statementNumber &&
+           CAST_TO(CallStatement, expected)->parentProcedure ==
+               CAST_TO(CallStatement, actual)->parentProcedure;
   } else if (CAST_TO(AssignStatement, expected) &&
              CAST_TO(AssignStatement, actual)) {
     auto expectedAssignStatement = CAST_TO(AssignStatement, expected);

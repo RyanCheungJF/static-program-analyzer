@@ -17,6 +17,7 @@ private:
 
   void extractInfo();
   void extractCFG();
+  void validateSemantics();
 
 public:
   DesignExtractor();
