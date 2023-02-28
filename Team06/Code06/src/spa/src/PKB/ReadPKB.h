@@ -1,4 +1,5 @@
 #pragma once
+#include <queue>
 #include "PKB.h"
 #include "readHandlers/FollowsParentHandler.h"
 #include "readHandlers/ModifiesUsesHandler.h"
@@ -56,6 +57,20 @@ public:
     // Returns relevant strings based on Pattern object passed
     std::vector<std::vector<std::string>> findPattern(Pattern p);
 
+    // returns the root node of the CFG of the procedure if it exists. else it returns a nullptr
+    CFGNodeStub* getCFG(StmtNum num);
+
+    // returns n2 where n2 satisfies Next(n1, n2)
+    std::vector<StmtNum> getNextRHS(StmtNum n1);
+
+    // returns n1 where n1 satisfies Next(n1, n2)
+    std::vector<StmtNum> getNextLHS(StmtNum n2);
+
+    // returns all n2 where n2 satisfies Next*(n1, n2)
+    std::vector<StmtNum> getNextTRHS(StmtNum n1);
+
+    // returns all n1 where n1 satisfies Next*(n1, n2)
+    std::vector<StmtNum> getNextTLHS(StmtNum n2);
 
 
 

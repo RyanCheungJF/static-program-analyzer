@@ -116,3 +116,119 @@ std::unordered_set<StmtNum> ReadPKB::getContainedStatements(StmtNum containerNum
 std::pair<StmtNum, ProcName> ReadPKB::getCallStmt(StmtNum s) {
     return pkbInstance->callStorage->getCallStmt(s);
 }
+
+CFGNodeStub* ReadPKB::getCFG(StmtNum num) {
+    return pkbInstance->cfgStorage->getNode(num);
+}
+
+//TODO: liaise with QPS on what they want as return type for the below
+std::vector<StmtNum> ReadPKB::getNextRHS(StmtNum n1) {
+    CFGNodeStub* node = pkbInstance->cfgStorage->getNode(n1);
+    if (node == nullptr) {
+        return {};
+    }
+    if ((n1 + 1) <= (node->last)) {
+        return {n1 + 1};
+    }
+    std::vector<StmtNum> res;
+    std::vector<CFGNodeStub*> children = node->children;
+    for (CFGNodeStub* child : children) {
+        res.push_back(child->first);
+    }
+    return res;
+}
+
+std::vector<StmtNum> ReadPKB::getNextLHS(StmtNum n2) {
+    CFGNodeStub* node = pkbInstance->cfgStorage->getNode(n2);
+    if (node == nullptr) {
+        return {};
+    }
+    if ((n2 - 1) >= (node->first)) {
+        return {n2 - 1};
+    }
+
+    std::vector<StmtNum> res;
+    for (auto child : node->parents) {
+        res.push_back(child->last);
+    }
+    return res;
+}
+
+std::vector<StmtNum> ReadPKB::getNextTRHS(StmtNum n1) {
+    CFGNodeStub* node = pkbInstance->cfgStorage->getNode(n1);
+    if (node == nullptr) {
+        return {};
+    }
+
+    std::unordered_set<StmtNum> res;
+    std::queue<CFGNodeStub*> queue;
+
+    for (int i = n1; i <= node->last; i++) {
+        res.insert(i);
+    }
+    for (CFGNodeStub* child : node->children) {
+        queue.push(child);
+    }
+
+    std::unordered_set<StmtNum> seen;
+    while (!queue.empty()) {
+        CFGNodeStub* curr = queue.front();
+        queue.pop();
+
+        if (seen.find(curr->first) != seen.end()) {
+            continue;
+        }
+        seen.insert(curr->first);
+
+        for (int i = curr->first; i <= curr->last; i++) {
+            res.insert(i);
+        }
+
+        for (CFGNodeStub* child : curr->children) {
+            queue.push(child);
+        }
+    }
+    std::vector<StmtNum> result;
+    result.insert(result.end(), res.begin(), res.end());
+    return result;
+}
+
+std::vector<StmtNum> ReadPKB::getNextTLHS(StmtNum n2) {
+    CFGNodeStub* node = pkbInstance->cfgStorage->getNode(n2);
+    if (node == nullptr) {
+        return {};
+    }
+
+    std::unordered_set<StmtNum> res;
+    std::queue<CFGNodeStub*> queue;
+
+    for (int i = n2; i >= node->first; i--) {
+        res.insert(i);
+    }
+    for (CFGNodeStub* parent : node->parents) {
+        queue.push(parent);
+    }
+
+    std::unordered_set<StmtNum> seen;
+    while (!queue.empty()) {
+        CFGNodeStub* curr = queue.front();
+        queue.pop();
+
+        if (seen.find(curr->last) != seen.end()) {
+            continue;
+        }
+        seen.insert(curr->last);
+
+        for (int i = curr->last; i >= curr->first; i--) {
+            res.insert(i);
+        }
+
+        for (CFGNodeStub* parent : curr->parents) {
+            queue.push(parent);
+        }
+    }
+    std::vector<StmtNum> result;
+    result.insert(result.end(), res.begin(), res.end());
+    return result;
+}
+
