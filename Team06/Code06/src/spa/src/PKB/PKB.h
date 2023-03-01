@@ -104,7 +104,12 @@ public:
   // v) relationship
   std::unordered_set<Ent> getModifiesP(ProcName name);
 
+  // returns the name of the procedure being called on line number s
+  // if line s is not a call statement, it returns a pair {-1, "INVALID"}
   std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
+
+  // returns all procedures that are being called from a given procedure
+  std::vector<std::pair<ProcName, ProcName>> getCallCallees(ProcName caller);
 
   // returns all statement numbers for if statement
   std::unordered_set<StmtNum> getIfStatementNumbers();

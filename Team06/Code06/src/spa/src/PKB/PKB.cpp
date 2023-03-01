@@ -183,7 +183,18 @@ std::unordered_set<StmtNum> PKB::getContainedStatements(StmtNum containerNum) {
 }
 
 std::pair<StmtNum, ProcName> PKB::getCallStmt(StmtNum s) {
-  return callStorage->getCallStmt(s);
+    return callStorage->getCallStmt(s);
+}
+
+std::vector<std::pair<ProcName, ProcName>> PKB::getCallCallees(ProcName caller) {
+    std::unordered_set<ProcName> callees = callStorage->getCallees(caller);
+
+    std::vector<std::pair<ProcName, ProcName>> res;
+    for (ProcName callee: callees) {
+        std::pair<ProcName, ProcName> caller_callee = std::make_pair(caller, callee);
+        res.push_back(caller_callee);
+    }
+    return res;
 }
 
 CFGNodeStub *PKB::getCFG(StmtNum num) {

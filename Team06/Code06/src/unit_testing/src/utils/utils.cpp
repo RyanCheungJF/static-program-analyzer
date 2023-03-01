@@ -42,3 +42,32 @@ bool unit_testing_utils::equals(std::vector<std::vector<std::string>> expected,
   std::sort(expected.begin(), expected.end());
   return expected == actual;
 }
+
+
+bool unit_testing_utils::equals(std::unordered_set<std::string> expectedSet,
+                                std::unordered_set<std::string> actualSet) {
+
+    std::vector<std::string> actual;
+    for (auto i : actualSet) {
+        actual.push_back(i);
+    }
+
+    std::vector<std::string> expected;
+    for (auto i : expectedSet) {
+        expected.push_back(i);
+    }
+
+    std::sort(actual.begin(), actual.end());
+    std::sort(expected.begin(), expected.end());
+    return expected == actual;
+}
+
+
+bool unit_testing_utils::equals(std::vector<std::pair<std::string, std::string>> expected,
+            std::vector<std::pair<std::string, std::string>> actual) {
+
+    std::sort(actual.begin(), actual.end());
+    std::sort(expected.begin(), expected.end());
+    return expected == actual;
+
+}
