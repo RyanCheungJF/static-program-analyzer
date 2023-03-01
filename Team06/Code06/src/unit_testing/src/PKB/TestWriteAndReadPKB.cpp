@@ -140,7 +140,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
     }
 }
 
-/*
+
 // TODO: by default, all are failing since it is not part of Milestone 1's requirements. it is part of our TDD.
 TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
     WritePKB writePkb;
@@ -151,7 +151,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
     readPkb.setInstancePKB(pkb);
 
     // Modifies ("proc1", "a")
-    std::vector<Parameter> params1 = {Parameter("proc1", AppConstants::PROCEDURE), Parameter("a", AppConstants::FIXED_STRING)};
+    std::vector<Parameter> params1 = {Parameter("proc1", AppConstants::FIXED_STRING), Parameter("a", AppConstants::FIXED_STRING)};
     shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::MODIFIES, params1);
 
     SECTION("findRelationship(shared_ptr<Relationship> rs): empty storage") {
@@ -164,73 +164,62 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
     writePkb.setModifiesP("proc3", {"a", "b"});
 
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, positive case, LHS: ProcName, RHS: non-wildcard") {
-        // TODO: or is it everything since the query evaluates to true?
+        // Modifies ("proc1", "a")
         std::vector<std::vector<std::string>> expected = {{"proc1", "a"}};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs1);
-        std::sort(actual.begin(), actual.end());
-        std::sort(expected.begin(), expected.end());
-        REQUIRE(actual == expected);
+        REQUIRE(equals(actual, expected));
     }
 
 
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, negative case, LHS: ProcName, RHS: non-existent entity") {
         // Modifies ("proc1", "nonExist")
-        std::vector<Parameter> params2 = {Parameter("proc1", AppConstants::PROCEDURE), Parameter("nonExist", AppConstants::FIXED_STRING)};
+        std::vector<Parameter> params2 = {Parameter("proc1", AppConstants::FIXED_STRING), Parameter("nonExist", AppConstants::FIXED_STRING)};
         shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
         std::vector<std::vector<std::string>> expected = {};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
-        std::sort(actual.begin(), actual.end());
-        std::sort(expected.begin(), expected.end());
-        REQUIRE(actual == expected);
+        REQUIRE(equals(actual, expected));
     }
 
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, negative case, LHS: non-existent procedure, RHS: non-wildcard") {
         // Modifies ("nonExist", "c")
-        std::vector<Parameter> params2 = {Parameter("nonExist", AppConstants::PROCEDURE), Parameter("c", AppConstants::FIXED_STRING)};
+        std::vector<Parameter> params2 = {Parameter("nonExist", AppConstants::FIXED_STRING), Parameter("c", AppConstants::FIXED_STRING)};
         shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
         std::vector<std::vector<std::string>> expected = {};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
-        std::sort(actual.begin(), actual.end());
-        std::sort(expected.begin(), expected.end());
-        REQUIRE(actual == expected);
+        REQUIRE(equals(actual, expected));
     }
 
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, negative case, LHS: non-existent procedure, RHS: non-existent entity") {
         // Modifies ("nonExist", "nonExist")
-        std::vector<Parameter> params2 = {Parameter("nonExist", AppConstants::PROCEDURE), Parameter("nonExist", AppConstants::FIXED_STRING)};
+        std::vector<Parameter> params2 = {Parameter("nonExist", AppConstants::FIXED_STRING),
+                                          Parameter("nonExist", AppConstants::FIXED_STRING)};
         shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
         std::vector<std::vector<std::string>> expected = {};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
-        std::sort(actual.begin(), actual.end());
-        std::sort(expected.begin(), expected.end());
-        REQUIRE(actual == expected);
+        REQUIRE(equals(actual, expected));
     }
 
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, positive case, LHS: ProcName, RHS: wildcard") {
         // Modifies ("proc1", _)
-        std::vector<Parameter> params2 = {Parameter("proc1", AppConstants::PROCEDURE), Parameter("_", AppConstants::WILDCARD)};
+        std::vector<Parameter> params2 = {Parameter("proc1", AppConstants::FIXED_STRING),
+                                          Parameter("_", AppConstants::WILDCARD)};
         shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
 
-        std::vector<std::vector<std::string>> expected = { { "proc1", "a" }, { "proc1", "b" }, { "proc1", "c" } };
+        std::vector<std::vector<std::string>> expected = {{"proc1", "a"}, {"proc1", "b"}, {"proc1", "c"}};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
-        std::sort(actual.begin(), actual.end());
-        std::sort(expected.begin(), expected.end());
-        REQUIRE(actual == expected);
+        REQUIRE(equals(actual, expected));
     }
 
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, negative case, LHS: non-existent, RHS: wildcard") {
         // Modifies ("nonExist", _)
-        std::vector<Parameter> params2 = {Parameter("nonExist", AppConstants::PROCEDURE), Parameter("_", AppConstants::WILDCARD)};
+        std::vector<Parameter> params2 = {Parameter("nonExist", AppConstants::FIXED_STRING), Parameter("_", AppConstants::WILDCARD)};
         shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
 
-        std::vector<std::vector<std::string>> expected = { { "proc1", "a" }, { "proc1", "b" }, { "proc1", "c" } };
+        std::vector<std::vector<std::string>> expected = {};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
-        std::sort(actual.begin(), actual.end());
-        std::sort(expected.begin(), expected.end());
-        REQUIRE(actual == expected);
+        REQUIRE(equals(actual, expected));
     }
 }
-*/
 
 
 TEST_CASE("findDesignEntities() Tests") {
