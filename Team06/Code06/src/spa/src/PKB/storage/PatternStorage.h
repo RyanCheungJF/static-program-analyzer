@@ -1,3 +1,4 @@
+#pragma once
 #include "../../../src/utils/AppConstants.h"
 #include <unordered_set>
 #include <unordered_map>

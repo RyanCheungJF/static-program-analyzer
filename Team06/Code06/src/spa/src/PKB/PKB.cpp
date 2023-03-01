@@ -9,7 +9,9 @@ void PKB::initializePkb() {
   this->entityStorage = std::make_shared<EntityStorage>();
   this->procedureStorage = std::make_shared<ProcedureStorage>();
   this->constantStorage = std::make_shared<ConstantStorage>();
-  this->patternStorage = std::make_shared<PatternWithExprStorage>();
+  this->assignPatternStorage = std::make_shared<PatternWithExprStorage>();
+  this->ifPatternStorage = std::make_shared<PatternStorage>();
+  this->whilePatternStorage = std::make_shared<PatternStorage>();
   this->callStorage = std::make_shared<CallStorage>();
   this->usesStorage = std::make_shared<ModifiesUsesStorage>();
   this->modifiesStorage = std::make_shared<ModifiesUsesStorage>();
@@ -22,6 +24,9 @@ void PKB::initializePkb() {
 
   this->modifiesUsesMap[RelationshipType::MODIFIES] = modifiesStorage;
   this->modifiesUsesMap[RelationshipType::USES] = usesStorage;
+
+  this->ifWhilePatternMap[ParameterType::IF] = ifPatternStorage;
+  this->ifWhilePatternMap[ParameterType::WHILE] = whilePatternStorage;
 }
 
 void PKB::setFollows(StmtNum followee, StmtNum follower) {
@@ -77,7 +82,15 @@ void PKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {
 }
 
 void PKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer) {
-  patternStorage->writePattern(lhs, num, std::move(pointer));
+  assignPatternStorage->writePattern(lhs, num, std::move(pointer));
+}
+
+void PKB::writeIfPattern(StmtNum num, std::unordered_set<Ent> variables) {
+  ifPatternStorage->writePattern(num, variables);
+}
+
+void PKB::writeWhilePattern(StmtNum num, std::unordered_set<Ent> variables) {
+  whilePatternStorage->writePattern(num, variables);
 }
 
 void PKB::writeCFG(StmtNum num, CFGNodeStub &root) {
@@ -130,8 +143,20 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
 }
 
 std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
-  AssignPatternHandler handler(patternStorage);
-  return handler.handle(p);
+    //TODO: This violates LoD. Needs QPS to have a getPatternType() function
+  ParameterType type = p.getPatternSyn()->getType();
+
+  if (type == ParameterType::ASSIGN) {
+    AssignPatternHandler handler(assignPatternStorage);
+    return handler.handle(p);
+
+  } else if (ifWhilePatternMap.find(type) != ifWhilePatternMap.end()) {
+    IfWhilePatternHandler handler(ifWhilePatternMap.at(type));
+
+    return handler.handle(p);
+  }
+  
+  return std::vector<std::vector<std::string>>();
 }
 
 bool PKB::checkStatement(Stmt stmt, StmtNum num) {

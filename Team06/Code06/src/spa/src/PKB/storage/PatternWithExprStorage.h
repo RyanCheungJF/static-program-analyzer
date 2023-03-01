@@ -22,15 +22,16 @@ struct hashFunction
 class PatternWithExprStorage {
 public:
 
-    void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
+    void writePattern(Ent var, StmtNum num, std::unique_ptr<Expression> pointer);
 
-    std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>* getPatternWithLHS(std::string lhs);
+    std::unordered_set<std::pair<StmtNum, std::unique_ptr<Expression>>, hashFunction>* getPatternWithLHS(Ent var);
 
-    std::unordered_map<std::string, std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>>* getAll();
+    std::unordered_map<Ent, std::unordered_set<std::pair<StmtNum, std::unique_ptr<Expression>>, hashFunction>>* getAll();
 
     // utility function for debugging
 //    virtual std::vector<std::pair<std::string, std::vector<std::string>>> getAll();
 
 private:
-    std::unordered_map<std::string, std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>> lhs_stmtNum_rhsPostfix;
+    std::unordered_map<Ent, std::unordered_set<std::pair<StmtNum, std::unique_ptr<Expression>>, hashFunction>>
+        lhs_stmtNum_rhsPostfix;
 };

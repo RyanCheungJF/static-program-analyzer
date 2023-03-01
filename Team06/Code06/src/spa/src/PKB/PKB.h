@@ -4,6 +4,7 @@
 #include "../qps/entities/Relationship.h"
 #include "../utils/AppConstants.h"
 #include "readHandlers/AssignPatternHandler.h"
+#include "readHandlers/ifWhilePatternHandler.h"
 #include "readHandlers/FollowsParentHandler.h"
 #include "readHandlers/ModifiesUsesHandler.h"
 #include "storage/CFGStorage.h"
@@ -13,6 +14,7 @@
 #include "storage/FollowsParentStorage.h"
 #include "storage/ModifiesUsesStorage.h"
 #include "storage/PatternWithExprStorage.h"
+#include "storage/PatternStorage.h"
 #include "storage/ProcedureStorage.h"
 #include "storage/StmtStorage.h"
 #include "utils/AppConstants.h"
@@ -64,6 +66,10 @@ public:
   void setModifiesS(StmtNum num, std::unordered_set<Ent> entities);
 
   void setModifiesP(ProcName, std::unordered_set<Ent> entities);
+
+  void writeIfPattern(StmtNum num, std::unordered_set<Ent> variables);
+
+  void writeWhilePattern(StmtNum num, std::unordered_set<Ent> variables);
 
   void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
@@ -141,7 +147,9 @@ private:
   std::shared_ptr<EntityStorage> entityStorage;
   std::shared_ptr<ProcedureStorage> procedureStorage;
   std::shared_ptr<ConstantStorage> constantStorage;
-  std::shared_ptr<PatternWithExprStorage> patternStorage;
+  std::shared_ptr<PatternWithExprStorage> assignPatternStorage;
+  std::shared_ptr<PatternStorage> ifPatternStorage;
+  std::shared_ptr<PatternStorage> whilePatternStorage;
   std::shared_ptr<CallStorage> callStorage;
   std::shared_ptr<ModifiesUsesStorage> usesStorage;
   std::shared_ptr<ModifiesUsesStorage> modifiesStorage;
@@ -155,4 +163,7 @@ private:
 
   std::unordered_map<RelationshipType, std::shared_ptr<ModifiesUsesStorage>> modifiesUsesMap = {
       {RelationshipType::MODIFIES, NULL}, {RelationshipType::USES, NULL}};
+
+  std::unordered_map<ParameterType, std::shared_ptr<PatternStorage>> ifWhilePatternMap = {{ParameterType::IF, NULL},
+                                                                                          {ParameterType::WHILE, NULL}};
 };
