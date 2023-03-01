@@ -2,14 +2,13 @@
 
 MathExpression::MathExpression() {}
 
-MathExpression::MathExpression(Operator mathOperator,
-                               std::unique_ptr<Expression> lhs,
+MathExpression::MathExpression(Operator mathOperator, std::unique_ptr<Expression> lhs,
                                std::unique_ptr<Expression> rhs) {
-  this->mathOperator = mathOperator;
-  this->lhs = std::move(lhs);
-  this->rhs = std::move(rhs);
+    this->mathOperator = mathOperator;
+    this->lhs = std::move(lhs);
+    this->rhs = std::move(rhs);
 }
 
-void MathExpression::accept(ASTVisitor *visitor) {
-  visitor->visitExpression(this);
+void MathExpression::accept(ASTVisitor* visitor) {
+    visitor->visitExpression(this);
 }

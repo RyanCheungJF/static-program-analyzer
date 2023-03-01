@@ -1,14 +1,15 @@
 #pragma once
 
-#include "Expression.h"
 #include <iostream>
+
+#include "Expression.h"
 
 class Constant : public Expression {
 public:
-  Const value;
+    Const value;
 
-  Constant();
-  Constant(Const value);
+    Constant();
+    Constant(Const value);
 
-  void accept(ASTVisitor *visitor) override;
+    void accept(ASTVisitor* visitor) override;
 };

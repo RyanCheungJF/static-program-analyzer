@@ -11,18 +11,17 @@
 
 class DesignExtractor {
 private:
-  std::unique_ptr<Program> ASTroot;
-  WritePKB *writePkb;
-  ReadPKB *readPkb;
+    std::unique_ptr<Program> ASTroot;
+    WritePKB* writePkb;
+    ReadPKB* readPkb;
 
-  void extractInfo();
-  void extractCFG();
-  void validateSemantics();
+    void extractInfo();
+    void extractCFG();
+    void validateSemantics();
 
 public:
-  DesignExtractor();
-  DesignExtractor(std::unique_ptr<Program>, WritePKB *writePKB,
-                  ReadPKB *readPKB);
+    DesignExtractor();
+    DesignExtractor(std::unique_ptr<Program>, WritePKB* writePKB, ReadPKB* readPKB);
 
-  void populatePKB();
+    void populatePKB();
 };

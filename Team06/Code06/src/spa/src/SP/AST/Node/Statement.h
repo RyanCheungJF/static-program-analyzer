@@ -4,5 +4,5 @@
 
 class Statement : public ASTNode {
 public:
-  StmtNum statementNumber;
+    StmtNum statementNumber;
 };

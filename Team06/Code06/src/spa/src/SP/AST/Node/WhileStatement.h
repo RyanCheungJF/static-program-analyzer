@@ -5,13 +5,12 @@
 
 class WhileStatement : public Statement {
 public:
-  std::unique_ptr<ConditionalExpression> condExpr;
-  std::unique_ptr<StatementList> stmtList;
+    std::unique_ptr<ConditionalExpression> condExpr;
+    std::unique_ptr<StatementList> stmtList;
 
-  WhileStatement();
-  WhileStatement(StmtNum stmtNum,
-                 std::unique_ptr<ConditionalExpression> condExpr,
-                 std::unique_ptr<StatementList> stmtList);
+    WhileStatement();
+    WhileStatement(StmtNum stmtNum, std::unique_ptr<ConditionalExpression> condExpr,
+                   std::unique_ptr<StatementList> stmtList);
 
-  void accept(ASTVisitor *visitor) override;
+    void accept(ASTVisitor* visitor) override;
 };

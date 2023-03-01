@@ -5,11 +5,11 @@
 
 class NotConditionalExpression : public ConditionalExpression {
 public:
-  Operator op = "!";
-  std::unique_ptr<ConditionalExpression> condExpr;
+    Operator op = "!";
+    std::unique_ptr<ConditionalExpression> condExpr;
 
-  NotConditionalExpression();
-  NotConditionalExpression(std::unique_ptr<ConditionalExpression> condExpr);
+    NotConditionalExpression();
+    NotConditionalExpression(std::unique_ptr<ConditionalExpression> condExpr);
 
-  void accept(ASTVisitor *visitor) override;
+    void accept(ASTVisitor* visitor) override;
 };

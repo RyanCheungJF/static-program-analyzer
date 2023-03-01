@@ -4,10 +4,10 @@
 
 class CallStatement : public Statement {
 public:
-  ProcName procName;
+    ProcName procName;
 
-  CallStatement();
-  CallStatement(StmtNum stmtNum, ProcName procName);
+    CallStatement();
+    CallStatement(StmtNum stmtNum, ProcName procName);
 
-  void accept(ASTVisitor *visitor) override;
+    void accept(ASTVisitor* visitor) override;
 };

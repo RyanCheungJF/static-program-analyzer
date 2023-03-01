@@ -1,5 +1,7 @@
 #pragma once
 
+#include <deque>
+
 #include "../utils/AppConstants.h"
 #include "./AST/Node/AssignStatement.h"
 #include "./AST/Node/BinaryConditionalExpression.h"
@@ -21,34 +23,27 @@
 #include "./AST/Node/WhileStatement.h"
 #include "SPExceptions.h"
 #include "Token.h"
-#include <deque>
 
 class Parser {
 private:
-  std::unique_ptr<Procedure> parseProcedure(std::deque<Token> &tokens);
-  std::unique_ptr<StatementList> parseStatementList(std::deque<Token> &tokens);
-  std::unique_ptr<Statement> parseStatement(std::deque<Token> &tokens);
-  std::unique_ptr<ReadStatement> parseReadStatement(std::deque<Token> &tokens);
-  std::unique_ptr<PrintStatement>
-  parsePrintStatement(std::deque<Token> &tokens);
-  std::unique_ptr<CallStatement> parseCallStatement(std::deque<Token> &tokens);
-  std::unique_ptr<WhileStatement>
-  parseWhileStatement(std::deque<Token> &tokens);
-  std::unique_ptr<IfStatement> parseIfStatement(std::deque<Token> &tokens);
-  std::unique_ptr<AssignStatement>
-  parseAssignStatement(std::deque<Token> &tokens);
-  std::unique_ptr<ConditionalExpression>
-  parseConditionalExpression(std::deque<Token> &tokens);
-  std::unique_ptr<ConditionalExpression>
-  parseRelationalExpression(std::deque<Token> &tokens);
-  std::unique_ptr<Expression> parseRelationalFactor(std::deque<Token> &tokens);
-  std::unique_ptr<Expression> parseTerm(std::deque<Token> &tokens);
-  std::unique_ptr<Expression> parseFactor(std::deque<Token> &tokens);
-  std::unique_ptr<Expression> parseConstant(std::deque<Token> &tokens);
-  std::unique_ptr<Expression> parseVariable(std::deque<Token> &tokens);
+    std::unique_ptr<Procedure> parseProcedure(std::deque<Token>& tokens);
+    std::unique_ptr<StatementList> parseStatementList(std::deque<Token>& tokens);
+    std::unique_ptr<Statement> parseStatement(std::deque<Token>& tokens);
+    std::unique_ptr<ReadStatement> parseReadStatement(std::deque<Token>& tokens);
+    std::unique_ptr<PrintStatement> parsePrintStatement(std::deque<Token>& tokens);
+    std::unique_ptr<CallStatement> parseCallStatement(std::deque<Token>& tokens);
+    std::unique_ptr<WhileStatement> parseWhileStatement(std::deque<Token>& tokens);
+    std::unique_ptr<IfStatement> parseIfStatement(std::deque<Token>& tokens);
+    std::unique_ptr<AssignStatement> parseAssignStatement(std::deque<Token>& tokens);
+    std::unique_ptr<ConditionalExpression> parseConditionalExpression(std::deque<Token>& tokens);
+    std::unique_ptr<ConditionalExpression> parseRelationalExpression(std::deque<Token>& tokens);
+    std::unique_ptr<Expression> parseRelationalFactor(std::deque<Token>& tokens);
+    std::unique_ptr<Expression> parseTerm(std::deque<Token>& tokens);
+    std::unique_ptr<Expression> parseFactor(std::deque<Token>& tokens);
+    std::unique_ptr<Expression> parseConstant(std::deque<Token>& tokens);
+    std::unique_ptr<Expression> parseVariable(std::deque<Token>& tokens);
 
 public:
-  std::unique_ptr<Program> parseProgram(std::deque<Token> tokens);
-  std::unique_ptr<Expression>
-  parseExpression(std::deque<Token> &tokens); // Used by Pattern Storage
+    std::unique_ptr<Program> parseProgram(std::deque<Token> tokens);
+    std::unique_ptr<Expression> parseExpression(std::deque<Token>& tokens); // Used by Pattern Storage
 };
