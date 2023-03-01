@@ -24,3 +24,14 @@ public:
         return (this->message).c_str();
     }
 };
+
+class FileNotFoundException : public std::exception {
+private:
+    std::string message;
+
+public:
+    FileNotFoundException(const std::string msg) : message(msg) {}
+    const char* what() {
+        return (this->message).c_str();
+    }
+};

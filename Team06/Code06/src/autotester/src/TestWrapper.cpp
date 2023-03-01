@@ -22,10 +22,6 @@ TestWrapper::TestWrapper() {
 void TestWrapper::parse(std::string filename) {
     try {
         sourceProcessor.processFile(filename, &writePKB, &readPKB);
-    } catch (SyntaxErrorException e) {
-        ::exit(0);
-    } catch (SemanticErrorException e) {
-        ::exit(0);
     } catch (std::exception e) {
         ::exit(0);
     }

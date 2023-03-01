@@ -29,12 +29,10 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
             while (std::isalnum(file.peek())) {
                 tokenValue += (char)(file.get());
             }
-            // Don't need a check for name here, since format for NAME -> LETTER
-            // (LETTER | DIGIT)*
+            // Don't need a check for name here, since format for NAME -> LETTER (LETTER | DIGIT)*
             tokens.push_back(Token(TokenType::NAME, tokenValue));
         }
-        // Between two non-alphanumeric tokens, there need not be a whitespace in
-        // between the tokens
+        // Between two non-alphanumeric tokens, there need not be a whitespace in between the tokens
         else if ((char)file.peek() == AppConstants::NOT) { // Handle !, !=
             file.get();
             if ((char)file.peek() == '=') {
