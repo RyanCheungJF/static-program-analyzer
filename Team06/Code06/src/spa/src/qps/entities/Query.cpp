@@ -26,10 +26,10 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
     for(Pattern pattern: patterns) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
-        vector<vector<string>> response = readPKB.findPattern(pattern);
-        Parameter *synAssign = pattern.getSynAssign();
+        vector<vector<string>> response = readPKB.findPattern( pattern);
+        Parameter *patternSyn = pattern.getPatternSyn();
         Parameter *entRef = pattern.getEntRef();
-        vector<Parameter> headers{ *synAssign, *entRef };
+        vector<Parameter> headers{ *patternSyn, *entRef };
         Table table(headers, response);
         if(response.empty()) {
             isFalseQuery = true;
@@ -85,12 +85,12 @@ vector<Parameter*> Query::getAllUncheckedSynonyms()
     }
     for (int i = 0; i < patterns.size(); i++) {
         Parameter* entRef = patterns.at(i).getEntRef();
-        Parameter* synAssign = patterns.at(i).getSynAssign();
+        Parameter* patternSyn = patterns.at(i).getPatternSyn();
         if (entRef->getType() == ParameterType::SYNONYM) {
             synonyms.push_back(entRef);
         }
-        if (synAssign->getType() == ParameterType::SYNONYM) {
-            synonyms.push_back(synAssign);
+        if (patternSyn->getType() == ParameterType::SYNONYM) {
+            synonyms.push_back(patternSyn);
         }
     }
     return synonyms;

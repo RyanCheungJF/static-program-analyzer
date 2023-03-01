@@ -144,7 +144,7 @@ bool Parameter::operator==(const Parameter& p) const
 
 bool Parameter::isPatternSyn(Parameter& p)
 {
-	return p.type == ParameterType::ASSIGN;
+	return p.type == ParameterType::ASSIGN || p.type == ParameterType::WHILE || p.type == ParameterType::IF;
 }
 
 const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
