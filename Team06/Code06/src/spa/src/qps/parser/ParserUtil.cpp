@@ -61,14 +61,15 @@ vector<int> findAnds(const vector<string>& wordList, int start, int end) {
 	return ands;
 }
 
-tuple<string, string, string> extractParameters(string s)
+tuple<string, string, string, string> extractParameters(string s)
 {
-	tuple<string, string, string> res;
+    tuple<string, string, string, string> res;
 	int endOfString = s.size();
 	int curIndex = 0;
 	string param1 = "";
 	string param2 = "";
 	string param3 = "";
+    string param4 = "";
 	int bracCount = 0;
 	char curChar = '\0';
 	while (curIndex < endOfString) {
@@ -92,6 +93,14 @@ tuple<string, string, string> extractParameters(string s)
 	curIndex++;
 	while (curIndex < endOfString) {
 		curChar = s[curIndex];
+        if (curChar == ',') {
+            curIndex++;
+            if (curIndex == endOfString-1) {
+                // for the case of "(v,_,)"
+                throw SyntaxException();
+            }
+            break;
+        }
 		if (curChar == '(') {
 			bracCount++;
 		}
@@ -105,10 +114,27 @@ tuple<string, string, string> extractParameters(string s)
 		param3 += curChar;
 		curIndex++;
 	}
-	if (param1 == "" || param2 == "" || param3 == "" || curIndex != endOfString || curChar != ')') {
+
+    while (curIndex < endOfString) {
+        curChar = s[curIndex];
+        if (curChar == '(') {
+            bracCount++;
+        }
+        if (curChar == ')') {
+            bracCount--;
+            if (bracCount == 0) {
+                curIndex++;
+                break;
+            }
+        }
+        param4 += curChar;
+        curIndex++;
+    }
+
+	if (param1 == "" || param2 == "" || param3 == "" || !(param4 == "" || param4 == "_") || curIndex != endOfString || curChar != ')') {
 		throw SyntaxException();
 	}
-	res = tuple<string, string, string>(param1, param2, param3);
+    res = make_tuple(param1, param2, param3, param4);
 	return res;
 }
 

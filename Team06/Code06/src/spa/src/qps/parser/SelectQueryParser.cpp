@@ -143,14 +143,14 @@ vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<s
 	}
 	unparsedRelRef.push_back(condString);
 
-	vector<tuple<string, string, string>> relRefParams;
+	vector<tuple<string, string, string, string>> relRefParams;
 	for (int i = 0; i < unparsedRelRef.size(); i++) {
 		relRefParams.push_back(extractParameters(unparsedRelRef[i]));
 	}
 
-	for (tuple<string, string, string> t : relRefParams) {
+	for (tuple<string, string, string, string> t : relRefParams) {
 		string rel, param1, param2;
-		tie(rel, param1, param2) = t;
+		tie(rel, param1, param2, std::ignore) = t;
 
 		Parameter p1(removeCharFromString(param1, '\"'), Parameter::guessParameterType(param1));
 		Parameter p2(removeCharFromString(param2, '\"'), Parameter::guessParameterType(param2));
@@ -178,7 +178,7 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
 
 	vector<int> ands = findAnds(wordList, start, end);
 	vector<string> unparsedPatterns;
-	string condString = "";
+	string condString;
 	for (int i = 0; i < ands.size(); i++) {
 		for (int j = curIndex; j < ands[i]; j++) {
 			condString += wordList[j];
@@ -199,15 +199,15 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
 	unparsedPatterns.push_back(condString);
 
 
-	vector<tuple<string, string, string>> patternParams;
-	for (int i = 0; i < unparsedPatterns.size(); i++) {
-		patternParams.push_back(extractParameters(unparsedPatterns[i]));
+	vector<tuple<string, string, string, string>> patternParams;
+	for (const auto & unparsedPattern : unparsedPatterns) {
+		patternParams.push_back(extractParameters(unparsedPattern));
 	}
 
-	for (tuple<string, string, string> t : patternParams) {
-		string synAssignString, entRefString, patternString;
-		tie(synAssignString, entRefString, patternString) = t;
-		if (!isSynonym(synAssignString)) {
+	for (tuple<string, string, string, string> t : patternParams) {
+		string patternDsgEntString, entRefString, patternString, ifsString;
+		tie(patternDsgEntString, entRefString, patternString, ifsString) = t;
+		if (!isSynonym(patternDsgEntString)) {
 			throw SyntaxException();
 		}
 
@@ -218,12 +218,14 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
 		if (!isExprSpec(patternString)) {
 			throw SyntaxException();
 		}
-		Parameter synAssign(synAssignString, ParameterType::SYNONYM);
+		Parameter patternDsgEnt(patternDsgEntString, ParameterType::SYNONYM);
 		Parameter entRef(removeCharFromString(entRefString, '\"'), Parameter::guessParameterType(entRefString));
-		Pattern p(synAssign, entRef, removeCharFromString(patternString, '\"'));
-		res.push_back(p);
+        Parameter ifParam("", ParameterType::UNKNOWN);
+        if(!ifsString.empty()) {
+            ifParam = *new Parameter("", ParameterType::WILDCARD);
+        }
+        res.emplace_back(patternDsgEnt, entRef, patternString, ifParam);
 	}
-
 	return res;
 }
 
