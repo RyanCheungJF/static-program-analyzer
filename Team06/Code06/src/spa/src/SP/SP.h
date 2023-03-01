@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include "DesignExtractor.h"
 #include "Parser.h"
 #include "SPExceptions.h"

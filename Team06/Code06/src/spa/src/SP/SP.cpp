@@ -3,7 +3,8 @@
 void SP::processFile(std::string filePath, WritePKB* writePKB, ReadPKB* readPKB) {
     std::ifstream sourceFile(filePath);
     if (!sourceFile) {
-        std::cerr << "File not found" << std::endl;
+        std::cout << "File not found at path: " << filePath << std::endl;
+        throw FileNotFoundException("File not found");
     }
 
     std::stringstream strStream;

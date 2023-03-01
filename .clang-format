@@ -64,7 +64,7 @@ DisableFormat: false
 ExperimentalAutoDetectBinPacking: false
 EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: Always
-FixNamespaceComments: true
+FixNamespaceComments: false
 ForEachMacros:
   - foreach
   - Q_FOREACH
@@ -82,7 +82,7 @@ KeepEmptyLinesAtTheStartOfBlocks: true
 MacroBlockBegin: ""
 MacroBlockEnd: ""
 MaxEmptyLinesToKeep: 1
-NamespaceIndentation: None
+NamespaceIndentation: All
 ObjCBinPackProtocolList: Auto
 ObjCBlockIndentWidth: 2
 ObjCSpaceAfterProperty: false
