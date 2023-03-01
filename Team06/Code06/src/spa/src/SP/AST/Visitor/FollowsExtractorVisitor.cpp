@@ -10,16 +10,15 @@ void FollowsExtractorVisitor::visitProcedure(Procedure* procedure) {}
 void FollowsExtractorVisitor::visitStatementList(StatementList* statementList) {
     // For Follows
     for (StmtNum i = 0; i < statementList->statements.size() - 1; i++) {
-        writeApi->setFollows(statementList->statements[i]->statementNumber,
-                             statementList->statements[i + 1]->statementNumber);
+        writeApi->setFollows(statementList->getStmtNumForStmtIdx(i), statementList->getStmtNumForStmtIdx(i + 1));
     }
     // For FollowsT
     std::unordered_set<StmtNum> followsTSet;
     for (StmtNum i = 0; i < statementList->statements.size(); i++) {
         for (StmtNum j = i + 1; j < statementList->statements.size(); j++) {
-            followsTSet.insert(statementList->statements[j]->statementNumber);
+            followsTSet.insert(statementList->getStmtNumForStmtIdx(j));
         }
-        writeApi->setFollowsT(statementList->statements[i]->statementNumber, followsTSet);
+        writeApi->setFollowsT(statementList->getStmtNumForStmtIdx(i), followsTSet);
         followsTSet.clear();
     }
 }

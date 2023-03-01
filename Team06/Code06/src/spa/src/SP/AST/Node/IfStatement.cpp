@@ -10,6 +10,14 @@ IfStatement::IfStatement(StmtNum stmtNum, std::unique_ptr<ConditionalExpression>
     this->elseStmtList = std::move(elseStmtList);
 }
 
+std::vector<std::unique_ptr<Statement>>& IfStatement::getThenStatements() {
+    return thenStmtList->statements;
+}
+
+std::vector<std::unique_ptr<Statement>>& IfStatement::getElseStatements() {
+    return elseStmtList->statements;
+}
+
 void IfStatement::accept(ASTVisitor* visitor) {
     visitor->visitIfStatement(this);
 }

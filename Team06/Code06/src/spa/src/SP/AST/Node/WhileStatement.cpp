@@ -9,6 +9,10 @@ WhileStatement::WhileStatement(StmtNum stmtNum, std::unique_ptr<ConditionalExpre
     this->stmtList = std::move(stmtList);
 }
 
+std::vector<std::unique_ptr<Statement>>& WhileStatement::getStatements() {
+    return stmtList->statements;
+}
+
 void WhileStatement::accept(ASTVisitor* visitor) {
     visitor->visitWhileStatement(this);
 }

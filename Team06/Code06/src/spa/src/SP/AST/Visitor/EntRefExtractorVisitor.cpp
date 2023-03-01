@@ -22,7 +22,7 @@ void EntRefExtractorVisitor::visitPrintStatement(PrintStatement* printStatement)
 
 void EntRefExtractorVisitor::visitAssignStatement(AssignStatement* assignStatement) {
     std::unordered_set<Ent> variables;
-    std::unordered_set<int> constants;
+    std::unordered_set<Const> constants;
 
     std::unordered_set<Ent> lhsVariables = {assignStatement->varName};
     writeApi->setModifiesS(assignStatement->statementNumber, lhsVariables);
@@ -36,17 +36,8 @@ void EntRefExtractorVisitor::visitAssignStatement(AssignStatement* assignStateme
     writeApi->setConstant(assignStatement->statementNumber, constants);
 
     // Write expression tree to pattern storage
-    std::unique_ptr<Expression> expr;
-    if (auto i = CAST_TO(MathExpression, assignStatement->expr.get())) {
-        expr = std::make_unique<MathExpression>(std::move(*i));
-    }
-    else if (auto i = CAST_TO(Constant, assignStatement->expr.get())) {
-        expr = std::make_unique<Constant>(std::move(*i));
-    }
-    else if (auto i = CAST_TO(Variable, assignStatement->expr.get())) {
-        expr = std::make_unique<Variable>(std::move(*i));
-    }
-    writeApi->writePattern(assignStatement->varName, assignStatement->statementNumber, std::move(expr));
+    writeApi->writePattern(assignStatement->varName, assignStatement->statementNumber,
+                           std::move(assignStatement->expr));
 }
 
 void EntRefExtractorVisitor::visitCallStatement(CallStatement* callStatement) {
@@ -55,7 +46,7 @@ void EntRefExtractorVisitor::visitCallStatement(CallStatement* callStatement) {
 
 void EntRefExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
     std::unordered_set<Ent> variables;
-    std::unordered_set<int> constants;
+    std::unordered_set<Const> constants;
 
     visitCondExprHelper(ifStatement->condExpr.get(), variables, constants);
 
@@ -66,7 +57,7 @@ void EntRefExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
 
 void EntRefExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement) {
     std::unordered_set<Ent> variables;
-    std::unordered_set<int> constants;
+    std::unordered_set<Const> constants;
 
     visitCondExprHelper(whileStatement->condExpr.get(), variables, constants);
 

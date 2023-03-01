@@ -12,5 +12,7 @@ public:
     StatementList();
     StatementList(std::vector<std::unique_ptr<Statement>> statements);
 
+    StmtNum getStmtNumForStmtIdx(int idx);
+
     void accept(ASTVisitor* visitor) override;
 };

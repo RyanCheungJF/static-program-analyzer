@@ -14,11 +14,11 @@ void ParentExtractorVisitor::visitCallStatement(CallStatement* callStatement) {}
 
 void ParentExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
     // For Parent
-    for (auto const& i : ifStatement->thenStmtList->statements) {
-        writeApi->setParent(ifStatement->statementNumber, i->statementNumber);
+    for (auto const& child : ifStatement->getThenStatements()) {
+        writeApi->setParent(ifStatement->statementNumber, child->statementNumber);
     }
-    for (auto const& i : ifStatement->elseStmtList->statements) {
-        writeApi->setParent(ifStatement->statementNumber, i->statementNumber);
+    for (auto const& child : ifStatement->getElseStatements()) {
+        writeApi->setParent(ifStatement->statementNumber, child->statementNumber);
     }
     // For ParentT
     std::unordered_set<StmtNum> parentTSet;
@@ -33,8 +33,8 @@ void ParentExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
 
 void ParentExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement) {
     // For Parent
-    for (auto const& i : whileStatement->stmtList->statements) {
-        writeApi->setParent(whileStatement->statementNumber, i->statementNumber);
+    for (auto const& child : whileStatement->getStatements()) {
+        writeApi->setParent(whileStatement->statementNumber, child->statementNumber);
     }
     // For ParentT
     std::unordered_set<StmtNum> parentTSet;

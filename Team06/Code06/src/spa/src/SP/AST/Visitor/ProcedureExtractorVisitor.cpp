@@ -7,17 +7,15 @@ ProcedureExtractorVisitor::ProcedureExtractorVisitor(WritePKB* writePKB) {
 void ProcedureExtractorVisitor::visitProgram(Program* program) {}
 
 void ProcedureExtractorVisitor::visitProcedure(Procedure* procedure) {
-    StmtNum firstStatementNumber = procedure->statementList->statements.front()->statementNumber;
-    StmtNum lastStatementNumber = procedure->statementList->statements.back()->statementNumber;
+    StmtNum firstStatementNumber = procedure->getFirstStatementNumber();
+    StmtNum lastStatementNumber = procedure->getLastStatementNumber();
 
     // if its an if or while statement, we recurse down further
-    if (CAST_TO(IfStatement, procedure->statementList->statements.back().get())) {
-        lastStatementNumber =
-            visitIfStatementHelper(CAST_TO(IfStatement, procedure->statementList->statements.back().get()));
+    if (CAST_TO(IfStatement, procedure->getLastStatement())) {
+        lastStatementNumber = visitIfStatementHelper(CAST_TO(IfStatement, procedure->getLastStatement()));
     }
-    if (CAST_TO(WhileStatement, procedure->statementList->statements.back().get())) {
-        lastStatementNumber =
-            visitWhileStatementHelper(CAST_TO(WhileStatement, procedure->statementList->statements.back().get()));
+    if (CAST_TO(WhileStatement, procedure->getLastStatement())) {
+        lastStatementNumber = visitWhileStatementHelper(CAST_TO(WhileStatement, procedure->getLastStatement()));
     }
 
     std::unordered_set<StmtNum> statementNumbers;

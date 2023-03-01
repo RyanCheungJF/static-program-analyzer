@@ -58,14 +58,14 @@ void visitExprHelper(Expression* e, std::unordered_set<Ent>& variables, std::uno
 void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
     if (auto i = CAST_TO(IfStatement, recurseStmt)) {
         i->thenStmtList->accept(visitor);
-        for (const auto& statement : i->thenStmtList->statements) {
+        for (const auto& statement : i->getThenStatements()) {
             statement->accept(visitor);
             if (isContainerStatement(statement.get())) {
                 recurseStatementHelper(statement.get(), visitor);
             }
         }
         i->elseStmtList->accept(visitor);
-        for (const auto& statement : i->elseStmtList->statements) {
+        for (const auto& statement : i->getElseStatements()) {
             statement->accept(visitor);
             if (isContainerStatement(statement.get())) {
                 recurseStatementHelper(statement.get(), visitor);
@@ -74,7 +74,7 @@ void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
     }
     else if (auto i = CAST_TO(WhileStatement, recurseStmt)) {
         i->stmtList->accept(visitor);
-        for (const auto& statement : i->stmtList->statements) {
+        for (const auto& statement : i->getStatements()) {
             statement->accept(visitor);
             if (isContainerStatement(statement.get())) {
                 recurseStatementHelper(statement.get(), visitor);
@@ -261,7 +261,7 @@ void recurseCallStatementHelper(Statement* recurseStmt,
                                 std::unordered_map<ProcName, std::vector<ProcName>>& procCallMap,
                                 ProcName parentProcedure) {
     if (auto i = CAST_TO(IfStatement, recurseStmt)) {
-        for (const auto& statement : i->thenStmtList->statements) {
+        for (const auto& statement : i->getThenStatements()) {
             if (auto i = CAST_TO(CallStatement, statement.get())) {
                 procCallMap[parentProcedure].push_back(i->procName);
             }
@@ -269,7 +269,7 @@ void recurseCallStatementHelper(Statement* recurseStmt,
                 recurseCallStatementHelper(statement.get(), procCallMap, parentProcedure);
             }
         }
-        for (const auto& statement : i->elseStmtList->statements) {
+        for (const auto& statement : i->getElseStatements()) {
             if (auto i = CAST_TO(CallStatement, statement.get())) {
                 procCallMap[parentProcedure].push_back(i->procName);
             }
@@ -279,7 +279,7 @@ void recurseCallStatementHelper(Statement* recurseStmt,
         }
     }
     else if (auto i = CAST_TO(WhileStatement, recurseStmt)) {
-        for (const auto& statement : i->stmtList->statements) {
+        for (const auto& statement : i->getStatements()) {
             if (auto i = CAST_TO(CallStatement, statement.get())) {
                 procCallMap[parentProcedure].push_back(i->procName);
             }
