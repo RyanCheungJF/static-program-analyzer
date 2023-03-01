@@ -1,11 +1,7 @@
 #pragma once
-#include "../qps/entities/Pattern.h"
-#include "../qps/entities/Relationship.h"
-#include "../utils/AppConstants.h"
 #include "PKB.h"
-#include <queue>
 
-class ReadPKB : AppConstants {
+class ReadPKB {
 public:
   // Sets the pointer to the PKB instance if it is not set yet
   void setInstancePKB(PKB &pkb);

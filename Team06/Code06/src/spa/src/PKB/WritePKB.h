@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../utils/AppConstants.h"
 #include "PKB.h"
 
 class WritePKB {
