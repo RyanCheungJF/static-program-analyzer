@@ -49,10 +49,7 @@ void EntRefExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
     std::unordered_set<Const> constants;
 
     visitCondExprHelper(ifStatement->condExpr.get(), variables, constants);
-
-    writeApi->setEntity(ifStatement->statementNumber, variables);
-    writeApi->setConstant(ifStatement->statementNumber, constants);
-    writeApi->setUsesS(ifStatement->statementNumber, variables);
+    writeContainerStmtEntities(ifStatement->statementNumber, variables, constants);
 }
 
 void EntRefExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement) {
@@ -60,11 +57,15 @@ void EntRefExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement)
     std::unordered_set<Const> constants;
 
     visitCondExprHelper(whileStatement->condExpr.get(), variables, constants);
-
-    writeApi->setEntity(whileStatement->statementNumber, variables);
-    writeApi->setConstant(whileStatement->statementNumber, constants);
-    writeApi->setUsesS(whileStatement->statementNumber, variables);
+    writeContainerStmtEntities(whileStatement->statementNumber, variables, constants);
 }
 
 void EntRefExtractorVisitor::visitExpression(Expression* variable){};
 void EntRefExtractorVisitor::visitConditionalExpression(ConditionalExpression* conditionalExpression){};
+
+void EntRefExtractorVisitor::writeContainerStmtEntities(StmtNum stmtNum, std::unordered_set<Ent>& variables,
+                                                        std::unordered_set<Const>& constants) {
+    writeApi->setEntity(stmtNum, variables);
+    writeApi->setConstant(stmtNum, constants);
+    writeApi->setUsesS(stmtNum, variables);
+}

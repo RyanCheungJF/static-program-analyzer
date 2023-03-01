@@ -10,6 +10,8 @@
 class EntRefExtractorVisitor : public ASTVisitor {
 private:
     WritePKB* writeApi;
+    void writeContainerStmtEntities(StmtNum stmtNum, std::unordered_set<Ent>& variables,
+                                      std::unordered_set<Const>& constants);
 
 public:
     EntRefExtractorVisitor(WritePKB* writePKB);
