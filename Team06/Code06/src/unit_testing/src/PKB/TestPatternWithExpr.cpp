@@ -7,7 +7,7 @@
 using namespace unit_testing_utils;
 
 TEST_CASE("PatternStorage: fringe cases") {
-    PatternStorage ps;
+  PatternWithExprStorage ps;
 
     SECTION("* getPatternWithLHS(std::string lhs): empty storage") {
         auto res = ps.getPatternWithLHS("x");

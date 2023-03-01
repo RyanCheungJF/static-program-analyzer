@@ -1,17 +1,17 @@
 #include "../../qps/entities/Pattern.h"
 #include "../../qps/entities/Parameter.h"
-#include "../storage/PatternStorage.h"
+#include "../storage/PatternWithExprStorage.h"
 #include "../utils/utils.h"
 
 
 class AssignPatternHandler {
 public:
-    AssignPatternHandler(std::shared_ptr<PatternStorage> patternStorage);
+    AssignPatternHandler(std::shared_ptr<PatternWithExprStorage> patternStorage);
 
 	std::vector<std::vector<std::string>> handle(Pattern p);
 
 private:
-    std::shared_ptr<PatternStorage> patternStorage;
+        std::shared_ptr<PatternWithExprStorage> patternStorage;
 
     // pattern a ("a", _)
     std::vector<std::vector<std::string>> handleVarWildcard(std::string lhs);

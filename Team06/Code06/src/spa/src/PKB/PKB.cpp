@@ -9,7 +9,7 @@ void PKB::initializePkb() {
   this->entityStorage = std::make_shared<EntityStorage>();
   this->procedureStorage = std::make_shared<ProcedureStorage>();
   this->constantStorage = std::make_shared<ConstantStorage>();
-  this->patternStorage = std::make_shared<PatternStorage>();
+  this->patternStorage = std::make_shared<PatternWithExprStorage>();
   this->callStorage = std::make_shared<CallStorage>();
   this->usesStorage = std::make_shared<ModifiesUsesStorage>();
   this->modifiesStorage = std::make_shared<ModifiesUsesStorage>();

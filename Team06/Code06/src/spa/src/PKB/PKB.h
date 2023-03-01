@@ -12,7 +12,7 @@
 #include "storage/EntityStorage.h"
 #include "storage/FollowsParentStorage.h"
 #include "storage/ModifiesUsesStorage.h"
-#include "storage/PatternStorage.h"
+#include "storage/PatternWithExprStorage.h"
 #include "storage/ProcedureStorage.h"
 #include "storage/StmtStorage.h"
 #include "utils/AppConstants.h"
@@ -141,7 +141,7 @@ private:
   std::shared_ptr<EntityStorage> entityStorage;
   std::shared_ptr<ProcedureStorage> procedureStorage;
   std::shared_ptr<ConstantStorage> constantStorage;
-  std::shared_ptr<PatternStorage> patternStorage;
+  std::shared_ptr<PatternWithExprStorage> patternStorage;
   std::shared_ptr<CallStorage> callStorage;
   std::shared_ptr<ModifiesUsesStorage> usesStorage;
   std::shared_ptr<ModifiesUsesStorage> modifiesStorage;

@@ -1,6 +1,6 @@
 #include "AssignPatternHandler.h"
 
-AssignPatternHandler::AssignPatternHandler(std::shared_ptr<PatternStorage> patternStorage) {
+AssignPatternHandler::AssignPatternHandler(std::shared_ptr<PatternWithExprStorage> patternStorage) {
     this->patternStorage = patternStorage;
 }
 
