@@ -19,8 +19,8 @@ TEST_CASE("CallStorage: writeS") {
   ProcName proc1 = "proc1";
   ProcName proc2 = "proc2";
 
-  cs.writeCall(11, proc1);
-  cs.writeCall(21, proc2);
+  cs.writeCallS(11, proc1);
+  cs.writeCallS(21, proc2);
 
   SECTION("getCallStatements(): non-empty storage") {
     auto i = cs.getCallStatements();

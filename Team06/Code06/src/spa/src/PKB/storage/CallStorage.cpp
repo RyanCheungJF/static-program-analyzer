@@ -1,7 +1,11 @@
 #include "CallStorage.h"
 
-void CallStorage::writeCall(StmtNum callLine, ProcName callee) {
+void CallStorage::writeCallS(StmtNum callLine, ProcName callee) {
   callLine_callee[callLine] = callee;
+}
+
+void CallStorage::writeCallP(ProcName caller, std::unordered_set<ProcName> callees) {
+    caller_callees[caller].insert(callees.begin(), callees.end());
 }
 
 std::vector<std::pair<StmtNum, ProcName>> CallStorage::getCallStatements() {
@@ -19,4 +23,12 @@ std::pair<StmtNum, ProcName> CallStorage::getCallStmt(StmtNum s) {
     return emptyPair;
   }
   return std::make_pair(s, callLine_callee[s]);
+}
+
+std::unordered_set<ProcName> CallStorage::getCallees(ProcName caller) {
+    if (caller_callees.find(caller) == caller_callees.end()) {
+        std::unordered_set<ProcName> emptySet;
+        return emptySet;
+    }
+    return caller_callees[caller];
 }

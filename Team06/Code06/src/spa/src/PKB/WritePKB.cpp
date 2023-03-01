@@ -38,8 +38,12 @@ void WritePKB::setConstant(StmtNum num, std::unordered_set<Const> constants) {
   pkbInstance->setConstant(num, constants);
 }
 
-void WritePKB::setCall(StmtNum callLine, ProcName procedure_being_called) {
-  pkbInstance->setCall(callLine, procedure_being_called);
+void WritePKB::setCallS(StmtNum callLine, ProcName procedure_being_called) {
+  pkbInstance->setCallS(callLine, procedure_being_called);
+}
+
+void WritePKB::setCallP(ProcName caller, std::unordered_set<ProcName> callees) {
+    pkbInstance->setCallP(caller, callees);
 }
 
 void WritePKB::setUsesS(StmtNum num, std::unordered_set<Ent> entities) {

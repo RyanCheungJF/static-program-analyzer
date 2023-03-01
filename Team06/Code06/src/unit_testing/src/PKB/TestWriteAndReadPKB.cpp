@@ -338,8 +338,8 @@ TEST_CASE("CallStorage WritePKB ReadPKB Facade") {
   writePkb.setInstancePKB(pkb);
   readPkb.setInstancePKB(pkb);
 
-  writePkb.setCall(11, "proc2");
-  writePkb.setCall(22, "proc3");
+  writePkb.setCallS(11, "proc2");
+  writePkb.setCallS(22, "proc3");
 
   SECTION("CallStorage WritePKB ReadPKB Facade: getCallStmt(StmtNum s)") {
     auto res = readPkb.getCallStmt(11);

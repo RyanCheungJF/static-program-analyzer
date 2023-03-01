@@ -56,8 +56,12 @@ void PKB::setConstant(StmtNum num, std::unordered_set<Const> constants) {
   constantStorage->writeConstant(num, constants);
 }
 
-void PKB::setCall(StmtNum callLine, ProcName procedure_being_called) {
-  callStorage->writeCall(callLine, procedure_being_called);
+void PKB::setCallS(StmtNum callLine, ProcName procedure_being_called) {
+  callStorage->writeCallS(callLine, procedure_being_called);
+}
+
+void PKB::setCallP(ProcName caller, std::unordered_set<ProcName> callees) {
+  callStorage->writeCallP(caller, callees);
 }
 
 void PKB::setUsesS(StmtNum num, std::unordered_set<Ent> entities) {

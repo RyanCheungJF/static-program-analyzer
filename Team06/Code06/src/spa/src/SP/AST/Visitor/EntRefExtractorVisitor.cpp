@@ -50,7 +50,7 @@ void EntRefExtractorVisitor::visitAssignStatement(AssignStatement* assignStateme
 }
 
 void EntRefExtractorVisitor::visitCallStatement(CallStatement* callStatement) {
-	writeApi->setCall(callStatement->statementNumber, callStatement->procName);
+	writeApi->setCallS(callStatement->statementNumber, callStatement->procName);
 }
 
 void EntRefExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
