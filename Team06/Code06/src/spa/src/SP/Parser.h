@@ -35,7 +35,7 @@ private:
     std::unique_ptr<StatementList> parseStatementList(std::deque<Token>& tokens);
     std::unique_ptr<StatementList> checkBracesForStatementList(std::deque<Token>& tokens);
     std::unique_ptr<Statement> parseStatement(std::deque<Token>& tokens);
-    std::string Parser::parseStatementHelper(std::deque<Token>& tokens);
+    std::string parseStatementHelper(std::deque<Token>& tokens);
     std::unique_ptr<ReadStatement> parseReadStatement(std::deque<Token>& tokens);
     std::unique_ptr<PrintStatement> parsePrintStatement(std::deque<Token>& tokens);
     std::unique_ptr<CallStatement> parseCallStatement(std::deque<Token>& tokens);
