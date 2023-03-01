@@ -7,6 +7,10 @@ Procedure::Procedure(ProcName procedureName, std::unique_ptr<StatementList> stat
     this->statementList = std::move(statementList);
 }
 
+std::vector<std::unique_ptr<Statement>>& Procedure::getStatements() {
+    return statementList->statements;
+}
+
 Statement* Procedure::getLastStatement() {
     return statementList->statements.back().get();
 }

@@ -14,6 +14,7 @@ public:
     Statement* getLastStatement();
     StmtNum getLastStatementNumber();
     StmtNum getFirstStatementNumber();
+    std::vector<std::unique_ptr<Statement>>& getStatements();
 
     void accept(ASTVisitor* visitor) override;
 };

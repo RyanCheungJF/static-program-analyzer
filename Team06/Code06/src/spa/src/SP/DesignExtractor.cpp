@@ -25,7 +25,7 @@ void DesignExtractor::validateSemantics() {
 
     for (const auto& procedure : ASTroot->procedureList) {
         procedureNames.push_back(procedure->procedureName);
-        for (const auto& statement : procedure->statementList->statements) {
+        for (const auto& statement : procedure->getStatements()) {
             if (auto i = CAST_TO(CallStatement, statement.get())) {
                 procCallMap[procedure->procedureName].push_back(i->procName);
             }
@@ -57,7 +57,7 @@ void DesignExtractor::extractInfo() {
         for (const auto& procedure : ASTroot->procedureList) {
             procedure->accept(visitor);
             procedure->statementList->accept(visitor);
-            for (const auto& statement : procedure->statementList->statements) {
+            for (const auto& statement : procedure->getStatements()) {
                 statement->accept(visitor);
                 if (isContainerStatement(statement.get())) {
                     recurseStatementHelper(statement.get(), visitor);
