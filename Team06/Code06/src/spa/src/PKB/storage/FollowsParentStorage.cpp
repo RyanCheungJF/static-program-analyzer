@@ -1,5 +1,17 @@
 #include "FollowsParentStorage.h"
 
+void FollowsParentStorage::write(StmtNum leftNum, StmtNum rightNum) {
+    leftToRightMap[leftNum].insert(rightNum);
+    rightToLeftMap[rightNum].insert(leftNum);
+}
+
+void FollowsParentStorage::write(StmtNum leftNum, std::unordered_set<StmtNum> rightNums) {
+    leftToRightMap[leftNum].insert(rightNums.begin(), rightNums.end());
+    for (StmtNum rightNum : rightNums) {
+        rightToLeftMap[rightNum].insert(leftNum);
+    }
+}
+
 bool FollowsParentStorage::exists(StmtNum leftNum, StmtNum rightNum) {
     if (leftToRightMap.find(leftNum) == leftToRightMap.end()) {
         return false;

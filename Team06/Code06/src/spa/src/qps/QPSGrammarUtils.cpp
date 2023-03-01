@@ -44,6 +44,27 @@ bool startsWithLetter(string s) {
     return regex_match(s, regex("^[a-zA-Z].*"));
 }
 
+bool hasBalancedBrackets(string s) {
+    int balance = 0;
+    for (char c : s) {
+        if (c == '(') {
+            balance += 1;
+        }
+        else if (c == ')') {
+            balance -= 1;
+        }
+    }
+    return balance == 0;
+}
+
+
+bool hasCorrectRelRefOrPatternForm(string s) {
+    bool regexMatched =  regex_match(s, regex("^[a-zA-Z].*\(.*,.*\)$"));
+    bool bracketBalanced = hasBalancedBrackets(s);
+    return regexMatched && bracketBalanced;
+
+}
+
 bool isDeclaration(string declaration) {
     int index = declaration.find(" ");
     string declarationToken = declaration.substr(0, index);
@@ -235,3 +256,4 @@ bool isModifies(string s) {
 bool isRelRef(string s) {
     return isFollows(s) || isParent(s) || isUses(s) || isModifies(s);
 }
+

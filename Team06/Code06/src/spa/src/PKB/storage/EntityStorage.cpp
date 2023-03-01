@@ -4,11 +4,10 @@ void EntityStorage::writeEntity(StmtNum num, std::unordered_set<Ent> entities) {
     stmtNum_ent[num].insert(entities.begin(), entities.end());
     for (Ent e : entities) {
         ent_stmtNum[e].insert(num);
-    }
-
-    for (Ent e : entities) {
         entNames.insert(e);
     }
+
+    
 }
 
 bool EntityStorage::checkEntity(Ent e, StmtNum num) {

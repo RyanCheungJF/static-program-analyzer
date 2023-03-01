@@ -2,7 +2,6 @@
 
 void CallStorage::writeCall(StmtNum callLine, ProcName callee) {
     callLine_callee[callLine]= callee;
-    return;
 }
 
 std::vector<std::pair<StmtNum, ProcName>> CallStorage::getCallStatements() {

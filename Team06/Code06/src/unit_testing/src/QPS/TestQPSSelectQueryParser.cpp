@@ -46,3 +46,73 @@ TEST_CASE("parse / small s select clause / throws exception") {
     SelectQueryParser sqp;
     CHECK_THROWS(sqp.parse(input));
 }
+
+TEST_CASE("parse / multiple such that clauses / returns query object") {
+    string input = "Select s such that Follows(a, b) such that Follows(b, c)";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / multiple pattern clauses / returns query object") {
+    string input = "Select s pattern a(a, _) pattern a(c, _)";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / single pattern clause, multiple ands / return query object") {
+    string input = "Select s pattern a(a, _) and a(c, _)";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / single pattern clause, with dummy and / return query object") {
+    string input = "Select s pattern a(and, _)";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / single pattern clause, with multiple dummy ands / return query object") {
+    string input = "Select s pattern and(and, \"(and) * and\")";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / single pattern clause, with multiple dummy ands and true ands / return query object") {
+    string input = "Select s pattern and(and, \"(and) * and\") and c(b, \"(and)\")";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / multiple pattern clause, with multiple dummy ands and true ands / return query object") {
+    string input = "Select s pattern and(and, \"(and) * and\") and c(b, \"(and)\") pattern and(a, \"b\") and yes(a, _)";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / single such that clauses with and/ returns query object") {
+    string input = "Select s such that Follows(a, b) and Follows(b, c)";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / single such that clauses with dummy ands and true ands/ returns query object") {
+    string input = "Select s such that Follows(and, and) and Modifies(c, \"and\")";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / multiple such that clauses with dummy ands and true ands/ returns query object") {
+    string input = "Select s such that Follows(and, and) and Modifies(c, \"and\") such that Modifies(d, \"and\") and Follows(a, b)";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}

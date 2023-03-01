@@ -4,14 +4,36 @@
 //does not check if synonym is declared
 Query SelectQueryParser::parse(string selectQuery) {
 	vector<string> wordList = stringToWordList(selectQuery);
-	vector<int> clauseStarts = getClauseStarts(wordList);
-	vector<int> clauseEnds = getClauseEnds(clauseStarts, wordList.size());
-
-	vector<Parameter> selectParams = parseSelectClause(wordList, clauseStarts[0], clauseEnds[0]);
-	vector<shared_ptr<Relationship>> suchThatRelations = parseSuchThatClause(wordList, clauseStarts[1], clauseEnds[1]);
-	vector<Pattern> patterns = parsePatternClause(wordList, clauseStarts[2], clauseEnds[2]);
-
-	Query query(selectParams, suchThatRelations, patterns);
+	map<ClauseType, vector<int>> clauseStarts = getClauseStarts(wordList);
+	vector<tuple<ClauseType, int, int>> clausePositions = getClausePositions(clauseStarts, wordList.size());
+	vector<Parameter> selectParams;
+	vector<shared_ptr<Relationship>> relations;
+	vector<shared_ptr<Relationship>> tempRelations;
+	vector<Pattern> patterns;
+	vector<Pattern> tempPatterns;
+	for (tuple<ClauseType, int, int> clause : clausePositions) {
+		ClauseType ct;
+		int clauseStart, clauseEnd;
+		tie(ct, clauseStart, clauseEnd) = clause;
+		switch (ct) {
+		case SUCH_THAT:
+			tempRelations = parseSuchThatClause(wordList, clauseStart, clauseEnd);
+			relations.insert(relations.end(), tempRelations.begin(), tempRelations.end());
+			break;
+		case PATTERN:
+			tempPatterns = parsePatternClause(wordList, clauseStart, clauseEnd);
+			patterns.insert(patterns.end(), tempPatterns.begin(), tempPatterns.end());
+			break;
+		case WITH:
+			break;
+		case SELECT:
+			selectParams = parseSelectClause(wordList, clauseStart, clauseEnd);
+			break;
+		default:
+			break;
+		}
+	}
+	Query query(selectParams, relations, patterns);
 	return query;
 }
 
@@ -21,32 +43,37 @@ assuming we only have at most one of each type of clauses
 
 @returns: a vector of size 3, containing list of select clause, list of such that clause, and list of pattern clause in that order
 */
-vector<int> SelectQueryParser::getClauseStarts(vector<string> &wordList) {
-	int suchThatStart = findSuchThat(wordList);
-	int patternStart = findPattern(wordList);
-	int selectStart = 0;
-	vector<int> res{ selectStart, suchThatStart, patternStart };
+map<ClauseType, vector<int>> SelectQueryParser::getClauseStarts(vector<string> &wordList) {
+	vector<int> suchThatStart = findSuchThat(wordList);
+	vector<int> patternStart = findPattern(wordList);
+	vector<int> withStart{};
+	vector<int> selectStart{ 0 };
+
+
+	map<ClauseType, vector<int>> res{ { SELECT, selectStart}, {SUCH_THAT, suchThatStart} , {PATTERN, patternStart}, {WITH, withStart} };
 	return res;
 }
 
-vector<int> SelectQueryParser::getClauseEnds(vector<int> clauseStarts, int wordListLength)
+vector<tuple<ClauseType, int, int>> SelectQueryParser::getClausePositions(map<ClauseType, vector<int>> clauseStarts, int wordListLength)
 {
-	map<int, int> initialIndices;
-	vector<int> res(clauseStarts.size(), -1);
-	int clauseEnd;
-	for (int i = 0; i < clauseStarts.size(); i++) {
-		if (clauseStarts[i] == -1) {
-			continue;
+	vector<ClauseType> allClauseTypes = getAllClauseTypes();
+	map<int, ClauseType> startToClauseType;
+	vector<int> clauseStartsVector;
+	for (ClauseType ct : allClauseTypes) {
+		vector<int> starts = clauseStarts[ct];
+		for (int s : starts) {
+			clauseStartsVector.push_back(s);
+			startToClauseType.insert({ s, ct });
 		}
-		initialIndices.insert({ clauseStarts[i], i });
 	}
-	sort(clauseStarts.begin(), clauseStarts.end());
-	for (int i = 0; i < clauseStarts.size(); i++) {
-		if (clauseStarts[i] == -1) {
-			continue;
-		}
-		clauseEnd = (i != clauseStarts.size() - 1) ? clauseStarts[i + (size_t) 1] : wordListLength;
-		res[initialIndices[clauseStarts[i]]] = clauseEnd;
+
+	sort(clauseStartsVector.begin(), clauseStartsVector.end());
+	vector<tuple<ClauseType, int, int>> res;
+	for (int i = 0; i < clauseStartsVector.size(); i++) {
+		int clauseStart = clauseStartsVector[i];
+		int clauseEnd = (i != clauseStartsVector.size() - 1) ? clauseStartsVector[i + (size_t)1] : wordListLength;
+		ClauseType ct = startToClauseType[clauseStart];
+		res.push_back({ ct, clauseStart, clauseEnd });
 	}
 
 	return res;
@@ -92,48 +119,48 @@ vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<s
 		throw SyntaxException();
 	}
 
-	stringstream ss;
-	int condStart = start + 2;
-	for (int i = condStart; i < end; i++) {
-		ss << wordList[i];
-	}
-	string condString = ss.str();
+	int curIndex = start + 2;
 
-	string rel;
-	string param1;
-	string param2;
-	string delimiter = "(";
-	size_t itemStart = 0;
-	size_t itemEnd;
-	try {
-		tie(rel, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-		itemStart = itemEnd;
-		delimiter = ",";
-		tie(param1, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-		itemStart = itemEnd;
-		delimiter = ")";
-		tie(param2, itemEnd) = extractSubStringUntilDelimiter(condString, itemStart, delimiter);
-	}
-	catch (InternalException e) {
-		throw SyntaxException();
+	vector<int> ands = findAnds(wordList, start, end);
+	vector<string> unparsedRelRef;
+	string condString = "";
+	for (int i = 0; i < ands.size(); i++) {
+		for (int j = curIndex; j < ands[i]; j++) {
+			condString += wordList[j];
+		}
+		if (!hasCorrectRelRefOrPatternForm(condString)) {
+			curIndex = ands[i];
+			continue;
+		}
+		unparsedRelRef.push_back(condString);
+		condString = "";
+		curIndex = ands[i] + 1;
 	}
 
-
-	if (itemEnd != condString.size()) {
-		throw SyntaxException();
+	while (curIndex < end) {
+		condString += wordList[curIndex];
+		curIndex++;
 	}
-	Parameter p1(removeCharFromString(param1, '\"'), Parameter::guessParameterType(param1));
-	Parameter p2(removeCharFromString(param2, '\"'), Parameter::guessParameterType(param2));
-	vector<Parameter> params{ p1, p2 };
-	//need to parse params first
-	res.push_back(Relationship::makeRelationship(rel, params));
+	unparsedRelRef.push_back(condString);
 
+	vector<tuple<string, string, string>> relRefParams;
+	for (int i = 0; i < unparsedRelRef.size(); i++) {
+		relRefParams.push_back(extractParameters(unparsedRelRef[i]));
+	}
+
+	for (tuple<string, string, string> t : relRefParams) {
+		string rel, param1, param2;
+		tie(rel, param1, param2) = t;
+
+		Parameter p1(removeCharFromString(param1, '\"'), Parameter::guessParameterType(param1));
+		Parameter p2(removeCharFromString(param2, '\"'), Parameter::guessParameterType(param2));
+		vector<Parameter> params{ p1, p2 };
+		res.push_back(Relationship::makeRelationship(rel, params));
+	}
 
 	return res;
 }
 
-
-//TODO fix bug with patternclause
 vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, int start, int end)
 {
 	vector<Pattern> res;
@@ -147,13 +174,36 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
 		throw SyntaxException();
 	}
 
-	stringstream ss;
-	int condStart = start + 1;
-	for (int i = condStart; i < end; i++) {
-		ss << wordList[i];
+	int curIndex = start + 1;
+
+	vector<int> ands = findAnds(wordList, start, end);
+	vector<string> unparsedPatterns;
+	string condString = "";
+	for (int i = 0; i < ands.size(); i++) {
+		for (int j = curIndex; j < ands[i]; j++) {
+			condString += wordList[j];
+		}
+		if (!hasCorrectRelRefOrPatternForm(condString)) {
+			curIndex = ands[i];
+			continue;
+		}
+		unparsedPatterns.push_back(condString);
+		condString = "";
+		curIndex = ands[i] + 1;
 	}
-	string condString = ss.str();
-	vector<tuple<string, string, string>> patternParams = extractParameters(condString);
+
+	while (curIndex < end) {
+		condString += wordList[curIndex];
+		curIndex++;
+	}
+	unparsedPatterns.push_back(condString);
+
+
+	vector<tuple<string, string, string>> patternParams;
+	for (int i = 0; i < unparsedPatterns.size(); i++) {
+		patternParams.push_back(extractParameters(unparsedPatterns[i]));
+	}
+
 	for (tuple<string, string, string> t : patternParams) {
 		string synAssignString, entRefString, patternString;
 		tie(synAssignString, entRefString, patternString) = t;
@@ -175,5 +225,10 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
 	}
 
 	return res;
+}
+
+vector<ClauseType> SelectQueryParser::getAllClauseTypes()
+{
+	return vector<ClauseType>{SELECT, SUCH_THAT, PATTERN, WITH};
 }
 

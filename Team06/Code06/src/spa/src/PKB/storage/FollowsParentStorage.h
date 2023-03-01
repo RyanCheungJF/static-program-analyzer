@@ -6,7 +6,9 @@
 
 class FollowsParentStorage {
 public:
-    bool exists(StmtNum stmtNum1, StmtNum stmtNum2);
+    void write(StmtNum leftNum, StmtNum rightNum);
+    void write(StmtNum leftNum, std::unordered_set<StmtNum> rightNums);
+    bool exists(StmtNum leftNum, StmtNum rightNum);
     std::unordered_set<StmtNum> getRightWildcard(StmtNum leftStmtNum);
     std::unordered_set<StmtNum> getLeftWildcard(StmtNum rightStmtNum);
     std::pair<std::vector<StmtNum>, std::vector<StmtNum>> getAllPairs();

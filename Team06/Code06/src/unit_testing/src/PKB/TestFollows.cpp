@@ -7,7 +7,7 @@ using namespace unit_testing_utils;
 
 
 TEST_CASE("FollowsStorage: write(StmtNum followee, StmtNum follower)") {
-    FollowsStorage fs;
+    FollowsParentStorage fs;
 
 
     SECTION("exists(StmtNum followee, StmtNum follower): empty storage") {
@@ -48,7 +48,7 @@ TEST_CASE("FollowsStorage: write(StmtNum followee, StmtNum follower)") {
 }
 
 TEST_CASE("Checks FollowsStorage such that given a followee, if it does not have a certain follower, an empty vector is returned") {
-    FollowsStorage fs;
+    FollowsParentStorage fs;
 
     fs.write(1, 2);
     std::unordered_set<StmtNum> res = fs.getRightWildcard(3);
@@ -56,7 +56,7 @@ TEST_CASE("Checks FollowsStorage such that given a followee, if it does not have
 }
 
 TEST_CASE("Checks FollowsStorage such that given a follower, if it does not have a certain followee, an empty vector is returned") {
-    FollowsStorage fs;
+    FollowsParentStorage fs;
 
     fs.write(1, 2);
     std::unordered_set<StmtNum> res = fs.getLeftWildcard(3);
@@ -86,7 +86,6 @@ TEST_CASE("Checks that writing and reading from ReadPKB works for Follows") {
 }
 
 TEST_CASE("Checks that a non-existent Follows relationship returns an empty vector from ReadPKB") {
-
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -186,7 +185,6 @@ TEST_CASE("Checks that given a synonym and a synonym, ReadPKB returns relevant f
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    FollowsStorage fs;
     pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
@@ -213,7 +211,6 @@ TEST_CASE("Checks that given a synonym and a wildcard, ReadPKB returns relevant 
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    FollowsStorage fs;
     pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
@@ -240,7 +237,6 @@ TEST_CASE("Checks that given a wildcard and a follower, ReadPKB returns relevant
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    FollowsStorage fs;
     pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
@@ -265,7 +261,6 @@ TEST_CASE("Checks that given a wildcard and a synonym, ReadPKB returns relevant 
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    FollowsStorage fs;
     pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
@@ -291,7 +286,6 @@ TEST_CASE("Checks that given a wildcard and a wildcard, ReadPKB returns relevant
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    FollowsStorage fs;
     pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
@@ -316,7 +310,6 @@ TEST_CASE("Checks that given a followee, if it does not have a certain follower,
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    FollowsStorage fs;
     pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
@@ -339,7 +332,6 @@ TEST_CASE("Checks that given a follower, if it does not have a certain followee,
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
-    FollowsStorage fs;
     pkb.initializePkb();
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
@@ -362,7 +354,6 @@ TEST_CASE("Checks that PKB pointer in WritePKB and ReadPKB is set to first pkb i
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb1;
-    FollowsStorage fs;
     pkb1.initializePkb();
     writePkb.setInstancePKB(pkb1);
     readPkb.setInstancePKB(pkb1);
@@ -370,7 +361,7 @@ TEST_CASE("Checks that PKB pointer in WritePKB and ReadPKB is set to first pkb i
     writePkb.setFollows(1, 2);
 
     PKB pkb2;
-    FollowsStorage fs2;
+    FollowsParentStorage fs2;
     pkb2.initializePkb();
     writePkb.setInstancePKB(pkb2);
 
