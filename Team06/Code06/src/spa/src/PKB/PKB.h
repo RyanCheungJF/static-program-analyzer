@@ -65,13 +65,11 @@ public:
 
   void setModifiesP(ProcName, std::unordered_set<Ent> entities);
 
-  void writePattern(std::string lhs, StmtNum num,
-                    std::unique_ptr<Expression> pointer);
+  void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
   void writeCFG(StmtNum num, CFGNodeStub &root);
 
-  std::vector<std::vector<std::string>>
-  findRelationship(shared_ptr<Relationship> rs);
+  std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship> rs);
 
   std::vector<std::string> findDesignEntities(Parameter p);
 
@@ -149,13 +147,12 @@ private:
   std::shared_ptr<ModifiesUsesStorage> modifiesStorage;
   std::shared_ptr<CFGStorage> cfgStorage;
 
-  std::unordered_map<RelationshipType, std::shared_ptr<FollowsParentStorage>>
-      followsParentMap = {{RelationshipType::FOLLOWS, NULL},
-                          {RelationshipType::FOLLOWST, NULL},
-                          {RelationshipType::PARENT, NULL},
-                          {RelationshipType::PARENTT, NULL}};
+  std::unordered_map<RelationshipType, std::shared_ptr<FollowsParentStorage>> followsParentMap = {
+      {RelationshipType::FOLLOWS, NULL},
+      {RelationshipType::FOLLOWST, NULL},
+      {RelationshipType::PARENT, NULL},
+      {RelationshipType::PARENTT, NULL}};
 
-  std::unordered_map<RelationshipType, std::shared_ptr<ModifiesUsesStorage>>
-      modifiesUsesMap = {{RelationshipType::MODIFIES, NULL},
-                         {RelationshipType::USES, NULL}};
+  std::unordered_map<RelationshipType, std::shared_ptr<ModifiesUsesStorage>> modifiesUsesMap = {
+      {RelationshipType::MODIFIES, NULL}, {RelationshipType::USES, NULL}};
 };

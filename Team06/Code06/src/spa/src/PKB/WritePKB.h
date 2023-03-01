@@ -47,8 +47,7 @@ public:
 
   void setModifiesP(ProcName, std::unordered_set<Ent> entities);
 
-  void writePattern(std::string lhs, StmtNum num,
-                    std::unique_ptr<Expression> pointer);
+  void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
   void writeCFG(StmtNum num, CFGNodeStub &root);
 
