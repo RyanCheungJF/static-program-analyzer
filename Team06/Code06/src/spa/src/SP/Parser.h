@@ -24,18 +24,27 @@
 #include "SPExceptions.h"
 #include "Token.h"
 
+namespace ParserConstants {
+    const int NEXT_TOKEN_IDX = 1;
+    const int START_STMT_NO = 1;
+}
+
 class Parser {
 private:
     std::unique_ptr<Procedure> parseProcedure(std::deque<Token>& tokens);
     std::unique_ptr<StatementList> parseStatementList(std::deque<Token>& tokens);
+    std::unique_ptr<StatementList> checkBracesForStatementList(std::deque<Token>& tokens);
     std::unique_ptr<Statement> parseStatement(std::deque<Token>& tokens);
+    std::string Parser::parseStatementHelper(std::deque<Token>& tokens);
     std::unique_ptr<ReadStatement> parseReadStatement(std::deque<Token>& tokens);
     std::unique_ptr<PrintStatement> parsePrintStatement(std::deque<Token>& tokens);
     std::unique_ptr<CallStatement> parseCallStatement(std::deque<Token>& tokens);
     std::unique_ptr<WhileStatement> parseWhileStatement(std::deque<Token>& tokens);
     std::unique_ptr<IfStatement> parseIfStatement(std::deque<Token>& tokens);
     std::unique_ptr<AssignStatement> parseAssignStatement(std::deque<Token>& tokens);
+    std::unique_ptr<ConditionalExpression> checkParenthesesForCondExpr(std::deque<Token>& tokens);
     std::unique_ptr<ConditionalExpression> parseConditionalExpression(std::deque<Token>& tokens);
+    std::unique_ptr<ConditionalExpression> parseBinaryConditionalExpression(std::deque<Token>& tokens);
     std::unique_ptr<ConditionalExpression> parseRelationalExpression(std::deque<Token>& tokens);
     std::unique_ptr<Expression> parseRelationalFactor(std::deque<Token>& tokens);
     std::unique_ptr<Expression> parseTerm(std::deque<Token>& tokens);

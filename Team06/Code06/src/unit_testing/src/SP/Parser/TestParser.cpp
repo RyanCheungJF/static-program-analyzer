@@ -390,7 +390,7 @@ TEST_CASE("Invalid Source Program") {
     }
 
     REQUIRE(errorMessage.find(
-                "Statement List should contain at least one statement") !=
+                "Statement list should contain at least one statement") !=
             std::string::npos);
   }
 
@@ -435,7 +435,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected var_name in read statement") !=
+    REQUIRE(errorMessage.find("Expected proc_name/var_name in statement") !=
             std::string::npos);
   }
 
@@ -450,7 +450,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected ; at end of read statement") !=
+    REQUIRE(errorMessage.find("Expected ; at end of statement") !=
             std::string::npos);
   }
 
@@ -465,7 +465,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected var_name in print statement") !=
+    REQUIRE(errorMessage.find("Expected proc_name/var_name in statement") !=
             std::string::npos);
   }
 
@@ -480,7 +480,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected ; at end of print statement") !=
+    REQUIRE(errorMessage.find("Expected ; at end of statement") !=
             std::string::npos);
   }
 
@@ -495,7 +495,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected proc_name in call statement") !=
+    REQUIRE(errorMessage.find("Expected proc_name/var_name in statement") !=
             std::string::npos);
   }
 
@@ -510,7 +510,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected ; at end of call statement") !=
+    REQUIRE(errorMessage.find("Expected ; at end of statement") !=
             std::string::npos);
   }
 
@@ -525,7 +525,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected '(' in while statement") !=
+    REQUIRE(errorMessage.find("Expected '(' before conditional expression") !=
             std::string::npos);
   }
 
@@ -540,7 +540,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected ')' in while statement") !=
+    REQUIRE(errorMessage.find("Expected ')' after conditional expression") !=
             std::string::npos);
   }
 
@@ -555,7 +555,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected '{' in while statement") !=
+    REQUIRE(errorMessage.find("Expected '{' before statement list") !=
             std::string::npos);
   }
 
@@ -584,7 +584,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected '(' in if statement") !=
+    REQUIRE(errorMessage.find("Expected '(' before conditional expression") !=
             std::string::npos);
   }
 
@@ -599,7 +599,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected ')' in if statement") !=
+    REQUIRE(errorMessage.find("Expected ')' after conditional expression") !=
             std::string::npos);
   }
 
@@ -629,7 +629,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected '{' in if statement") !=
+    REQUIRE(errorMessage.find("Expected '{' before statement list") !=
             std::string::npos);
   }
 
@@ -673,7 +673,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected '{' in if statement") !=
+    REQUIRE(errorMessage.find("Expected '{' before statement list") !=
             std::string::npos);
   }
 
@@ -746,7 +746,7 @@ TEST_CASE("Invalid Source Program") {
       errorMessage = e.what();
     }
 
-    REQUIRE(errorMessage.find("Expected '(' in not conditional expression") !=
+    REQUIRE(errorMessage.find("Expected '(' before conditional expression") !=
             std::string::npos);
   }
 
@@ -776,7 +776,7 @@ TEST_CASE("Invalid Source Program") {
     }
 
     REQUIRE(
-        errorMessage.find("Expected ')' in binary conditional expression") !=
+        errorMessage.find("Expected ')' after conditional expression") !=
         std::string::npos);
   }
 
@@ -808,7 +808,7 @@ TEST_CASE("Invalid Source Program") {
     }
 
     REQUIRE(
-        errorMessage.find("Expected '(' in binary conditional expression") !=
+        errorMessage.find("Expected '(' before conditional expression") !=
         std::string::npos);
   }
 
