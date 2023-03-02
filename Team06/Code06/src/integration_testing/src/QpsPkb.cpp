@@ -549,7 +549,7 @@ TEST_CASE("Select synonym from single if/while pattern clause, synonym is in cla
 
   SECTION("if", "exact") {
     string query = R"(
-		ifs if; 
+		if if; 
 		Select if pattern if("count", _, _))";
 
     result = qps.processQueries(query, readPkb);
@@ -560,7 +560,7 @@ TEST_CASE("Select synonym from single if/while pattern clause, synonym is in cla
 
   SECTION("if", "syn") {
     string query = R"(
-		ifs if; variable v;
+		if if; variable v;
 		Select if pattern if(v, _, _))";
 
     result = qps.processQueries(query, readPkb);
@@ -571,7 +571,7 @@ TEST_CASE("Select synonym from single if/while pattern clause, synonym is in cla
   SECTION("while", "exact") {
     string query = R"(
 		while w; 
-		Select w pattern w("abcdef", _, _))";
+		Select w pattern w("abcdef", _))";
 
     result = qps.processQueries(query, readPkb);
     REQUIRE(result.size() == 0);
@@ -580,7 +580,7 @@ TEST_CASE("Select synonym from single if/while pattern clause, synonym is in cla
   SECTION("while", "syn") {
     string query = R"(
 		while w; variable v;
-		Select v pattern w(v, _, _))";
+		Select v pattern w(v, _))";
 
     result = qps.processQueries(query, readPkb);
     REQUIRE(result.size() == 2);
