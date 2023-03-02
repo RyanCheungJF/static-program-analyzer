@@ -55,7 +55,8 @@ TEST_CASE("Semantically Invalid Source Programs") {
             errorMessage = e.what();
         }
 
-        REQUIRE(errorMessage.find("A procedure cannot call a non-existing procedure -> nonExistentProcedure") != std::string::npos);
+        REQUIRE(errorMessage.find("A procedure cannot call a non-existing procedure -> nonExistentProcedure") !=
+                std::string::npos);
     }
 
     SECTION("Program with recursive call") {
