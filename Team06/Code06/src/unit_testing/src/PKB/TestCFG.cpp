@@ -7,49 +7,48 @@ using namespace unit_testing_utils;
 
 TEST_CASE("CFGStorage, ReadPKB, WritePKB, no while loop") {
 
-  WritePKB writePkb;
-  ReadPKB readPkb;
-  PKB pkb;
-  pkb.initializePkb();
-  writePkb.setInstancePKB(pkb);
-  readPkb.setInstancePKB(pkb);
-
-  SECTION("CFGStorage: procedure does not exist") {
-    REQUIRE(readPkb.getCFG("doesNotExist").empty());
-  }
-
-
-  std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph1 = {
-          {1,
-           {
-              {AppConstants::PARENTS, {}},
-              {AppConstants::CHILDREN, {2, 3}}
-           }
-          },
-          {2,
-           {
-              {AppConstants::PARENTS, {1}},
-              {AppConstants::CHILDREN, {5}}
-           }
-          },
-          {3,
-           {
-              {AppConstants::PARENTS, {1}},
-              {AppConstants::CHILDREN, {4}}
-           }
-          },
-          {4,
-           {
-              {AppConstants::PARENTS, {3}},
-              {AppConstants::CHILDREN, {5}}
-           }
-          },
-          {5,
-           {
-              {AppConstants::PARENTS, {2, 4}},
-              {AppConstants::CHILDREN, {}}
-           }
-          }
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+    
+    SECTION("CFGStorage: procedure does not exist") {
+        REQUIRE(readPkb.getCFG("doesNotExist").empty());
+    }
+    
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph1 = {
+        {1, 
+            {
+                {AppConstants::PARENTS, {}},
+                {AppConstants::CHILDREN, {2, 3}}
+            }
+        },
+        {2,
+            {
+                {AppConstants::PARENTS, {1}},
+                {AppConstants::CHILDREN, {5}}
+            }
+        },
+        {3,
+            {
+                {AppConstants::PARENTS, {1}},
+                {AppConstants::CHILDREN, {4}}
+            }
+        },
+        {4,
+            {
+                {AppConstants::PARENTS, {3}},
+                {AppConstants::CHILDREN, {5}}
+            }
+        },
+        {5,
+            {
+                {AppConstants::PARENTS, {2, 4}},
+                {AppConstants::CHILDREN, {}}
+            }
+        }
   };
 
     ProcName proc1 = "proc1";
