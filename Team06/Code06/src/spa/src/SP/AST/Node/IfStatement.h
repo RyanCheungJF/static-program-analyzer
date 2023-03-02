@@ -15,6 +15,8 @@ public:
 
     std::vector<std::unique_ptr<Statement>>& getThenStatements();
     std::vector<std::unique_ptr<Statement>>& getElseStatements();
+    StmtNum getFirstStmtNumForThen();
+    StmtNum getFirstStmtNumForElse();
 
     void accept(ASTVisitor* visitor) override;
 };

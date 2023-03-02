@@ -23,7 +23,7 @@ void ParentExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
     // For ParentT
     std::unordered_set<StmtNum> parentTSet;
     StmtNum start = ifStatement->statementNumber + 1;
-    StmtNum end = visitIfStatementHelper(ifStatement);
+    StmtNum end = visitLastStatementHelper(ifStatement);
     for (StmtNum i = start; i <= end; i++) {
         parentTSet.insert(i);
     }
@@ -39,7 +39,7 @@ void ParentExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement)
     // For ParentT
     std::unordered_set<StmtNum> parentTSet;
     StmtNum start = whileStatement->statementNumber + 1;
-    StmtNum end = visitWhileStatementHelper(whileStatement);
+    StmtNum end = visitLastStatementHelper(whileStatement);
     for (StmtNum i = start; i <= end; i++) {
         parentTSet.insert(i);
     }

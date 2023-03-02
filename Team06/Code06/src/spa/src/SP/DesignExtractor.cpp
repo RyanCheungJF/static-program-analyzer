@@ -13,7 +13,7 @@ void DesignExtractor::populatePKB() {
         validateSemantics();
         extractInfo();
         extractCFG();
-        populateRemainingTables(writePkb, readPkb);
+        populateUsesModifies(writePkb, readPkb);
     } catch (SemanticErrorException e) {
         throw e;
     }

@@ -13,6 +13,10 @@ std::vector<std::unique_ptr<Statement>>& WhileStatement::getStatements() {
     return stmtList->statements;
 }
 
+StmtNum WhileStatement::getFirstStmtNumForList() {
+    return stmtList->statements[0]->statementNumber;
+}
+
 void WhileStatement::accept(ASTVisitor* visitor) {
     visitor->visitWhileStatement(this);
 }

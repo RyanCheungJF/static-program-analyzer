@@ -13,6 +13,7 @@ public:
                    std::unique_ptr<StatementList> stmtList);
 
     std::vector<std::unique_ptr<Statement>>& getStatements();
+    StmtNum getFirstStmtNumForList();
 
     void accept(ASTVisitor* visitor) override;
 };

@@ -12,6 +12,9 @@ public:
     StatementList();
     StatementList(std::vector<std::unique_ptr<Statement>> statements);
 
+    Statement* getLastStatement();
+    StmtNum getLastStatementNumber();
+    Statement* getStmtForStmtIdx(int idx);
     StmtNum getStmtNumForStmtIdx(int idx);
 
     void accept(ASTVisitor* visitor) override;

@@ -12,10 +12,10 @@ void ProcedureExtractorVisitor::visitProcedure(Procedure* procedure) {
 
     // if its an if or while statement, we recurse down further
     if (CAST_TO(IfStatement, procedure->getLastStatement())) {
-        lastStatementNumber = visitIfStatementHelper(CAST_TO(IfStatement, procedure->getLastStatement()));
+        lastStatementNumber = visitLastStatementHelper(procedure->getLastStatement());
     }
     if (CAST_TO(WhileStatement, procedure->getLastStatement())) {
-        lastStatementNumber = visitWhileStatementHelper(CAST_TO(WhileStatement, procedure->getLastStatement()));
+        lastStatementNumber = visitLastStatementHelper(procedure->getLastStatement());
     }
 
     std::unordered_set<StmtNum> statementNumbers;

@@ -21,19 +21,22 @@
 #include "SP/AST/Node/Variable.h"
 #include "SP/AST/Node/WhileStatement.h"
 
-int visitIfStatementHelper(IfStatement* ifStatement);
-int visitWhileStatementHelper(WhileStatement* whileStatement);
+StmtNum visitLastStatementHelper(Statement* statement);
+StmtNum checkLastStatementHelper(StatementList* stmtList);
 void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor);
-void visitCondExprHelper(ConditionalExpression* e, std::unordered_set<Ent>& variables,
-                         std::unordered_set<int>& constants);
-void visitExprHelper(Expression* e, std::unordered_set<Ent>& variables, std::unordered_set<int>& constants);
-void populateRemainingTables(WritePKB* writePKB, ReadPKB* readPKB);
+void checkStatementHelper(Statement* recurseStmt, ASTVisitor* visitor);
+void visitCondExprHelper(ConditionalExpression* condExpr, std::unordered_set<Ent>& variables,
+                         std::unordered_set<Const>& constants);
+void visitExprHelper(Expression* expr, std::unordered_set<Ent>& variables, std::unordered_set<Const>& constants);
 void populateUsesModifies(WritePKB* writePKB, ReadPKB* readPKB);
+void processCallStatements(WritePKB* writePKB, ReadPKB* readPKB);
+void processContainerStatements(WritePKB* writePKB, ReadPKB* readPKB);
+void processProcedures(WritePKB* writePKB, ReadPKB* readPKB);
 bool isContainerStatement(Statement* statement);
 std::vector<std::unordered_set<Ent>> handleCallStmt(WritePKB* writePKB, ReadPKB* readPKB,
                                                     std::pair<StmtNum, ProcName> callStmt);
 void buildCFG(Procedure* proc, WritePKB* writePKB, ReadPKB* readPKB);
-void buildCFGHelper(std::unordered_map<StmtNum, std::pair<std::vector<StmtNum>, std::vector<StmtNum>>>& cfg,
+void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
                     StatementList* stmtList, StmtNum loopedStmtNum);
 void validateNoDuplicateProcedureName(std::vector<ProcName> procedureNames);
 void validateCalledProceduresExist(std::vector<ProcName> procedureNames,
@@ -43,3 +46,5 @@ void validateNoCycles(std::vector<ProcName> procedureNames,
 void recurseCallStatementHelper(Statement* recurseStmt,
                                 std::unordered_map<ProcName, std::vector<ProcName>>& procCallMap,
                                 ProcName parentProcedure);
+void checkCallStatementHelper(Statement* recurseStmt, std::unordered_map<ProcName, std::vector<ProcName>>& procCallMap,
+                              ProcName parentProcedure);

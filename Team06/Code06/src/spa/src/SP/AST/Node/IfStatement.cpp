@@ -18,6 +18,14 @@ std::vector<std::unique_ptr<Statement>>& IfStatement::getElseStatements() {
     return elseStmtList->statements;
 }
 
+StmtNum IfStatement::getFirstStmtNumForThen() {
+    return thenStmtList->statements[0]->statementNumber;
+}
+
+StmtNum IfStatement::getFirstStmtNumForElse() {
+    return elseStmtList->statements[0]->statementNumber;
+}
+
 void IfStatement::accept(ASTVisitor* visitor) {
     visitor->visitIfStatement(this);
 }
