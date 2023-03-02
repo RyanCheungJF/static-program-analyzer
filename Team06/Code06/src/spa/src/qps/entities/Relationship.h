@@ -15,6 +15,8 @@ enum class RelationshipType {
 	MODIFIES,
     CALLS,
     CALLST,
+    NEXT,
+    NEXTT,
 	RELATIONSHIP,
 	UNKNOWN
 };
