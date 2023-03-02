@@ -21,13 +21,13 @@ void DesignExtractor::populatePKB() {
 
 void DesignExtractor::validateSemantics() {
     std::vector<ProcName> procedureNames;
-    std::unordered_map<ProcName, std::vector<ProcName>> procCallMap;
+    std::unordered_map<ProcName, std::unordered_set<ProcName>> procCallMap;
 
     for (const auto& procedure : ASTroot->procedureList) {
         procedureNames.push_back(procedure->procedureName);
         for (const auto& statement : procedure->getStatements()) {
             if (auto i = CAST_TO(CallStatement, statement.get())) {
-                procCallMap[procedure->procedureName].push_back(i->procName);
+                procCallMap[procedure->procedureName].insert(i->procName);
             }
             if (isContainerStatement(statement.get())) {
                 recurseCallStatementHelper(statement.get(), procCallMap, procedure->procedureName);
@@ -38,7 +38,7 @@ void DesignExtractor::validateSemantics() {
     try {
         validateNoDuplicateProcedureName(procedureNames);
         validateCalledProceduresExist(procedureNames, procCallMap);
-        validateNoCycles(procedureNames, procCallMap);
+        validateNoCycles(procedureNames, procCallMap, writePkb, readPkb);
     } catch (SemanticErrorException e) {
         throw e;
     }

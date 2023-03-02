@@ -43,7 +43,7 @@ PKB buildPkb() {
     unordered_set<int> subProcNums = {10, 11, 12, 13, 14};
     writePkb.setProcedure("sub", subProcNums);
 
-    writePkb.setCallS(2, "sub");
+    writePkb.setCall(2, "sub");
 
     writePkb.setStatement(AppConstants::ASSIGN, 1);
     writePkb.setStatement(AppConstants::ASSIGN, 4);

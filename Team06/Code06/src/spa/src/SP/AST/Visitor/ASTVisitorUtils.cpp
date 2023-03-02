@@ -169,7 +169,7 @@ void buildCFG(Procedure* proc, WritePKB* writePKB, ReadPKB* readPKB) {
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> cfg;
     buildCFGHelper(cfg, proc->statementList.get(), 0);
     auto test = readPKB->getProcedureStatementNumbers(proc->procedureName);
-    // writePKB->writeCFG(proc->procedureName, cfg);
+    writePKB->writeCFG(proc->procedureName, cfg);
 }
 
 void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
@@ -206,7 +206,7 @@ void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, 
     }
 }
 
-void validateNoDuplicateProcedureName(std::vector<ProcName> procedureNames) {
+void validateNoDuplicateProcedureName(std::vector<ProcName>& procedureNames) {
     std::unordered_set<ProcName> procSet;
     for (ProcName p : procedureNames) {
         procSet.insert(p);
@@ -216,8 +216,8 @@ void validateNoDuplicateProcedureName(std::vector<ProcName> procedureNames) {
     }
 }
 
-void validateCalledProceduresExist(std::vector<ProcName> procedureNames,
-                                   std::unordered_map<ProcName, std::vector<ProcName>> procCallMap) {
+void validateCalledProceduresExist(std::vector<ProcName>& procedureNames,
+                                   std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap) {
     std::unordered_set<ProcName> calledProcedures;
     for (const auto& pair : procCallMap) {
         for (const auto& calledProc : pair.second) {
@@ -233,7 +233,7 @@ void validateCalledProceduresExist(std::vector<ProcName> procedureNames,
 }
 
 void recurseCallStatementHelper(Statement* recurseStmt,
-                                std::unordered_map<ProcName, std::vector<ProcName>>& procCallMap,
+                                std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
                                 ProcName parentProcedure) {
     if (auto ifStmt = CAST_TO(IfStatement, recurseStmt)) {
         for (const auto& statement : ifStmt->getThenStatements()) {
@@ -250,18 +250,20 @@ void recurseCallStatementHelper(Statement* recurseStmt,
     }
 }
 
-void checkCallStatementHelper(Statement* recurseStmt, std::unordered_map<ProcName, std::vector<ProcName>>& procCallMap,
+void checkCallStatementHelper(Statement* recurseStmt,
+                              std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
                               ProcName parentProcedure) {
     if (auto callStmt = CAST_TO(CallStatement, recurseStmt)) {
-        procCallMap[parentProcedure].push_back(callStmt->procName);
+        procCallMap[parentProcedure].insert(callStmt->procName);
     }
     if (isContainerStatement(recurseStmt)) {
         recurseCallStatementHelper(recurseStmt, procCallMap, parentProcedure);
     }
 }
 
-void validateNoCycles(std::vector<ProcName> procedureNames,
-                      std::unordered_map<ProcName, std::vector<ProcName>> procCallMap) {
+void validateNoCycles(std::vector<ProcName>& procedureNames,
+                      std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
+                      WritePKB* writePkb, ReadPKB* readPkb) {
     std::deque<ProcName> queue;
     std::unordered_map<ProcName, std::pair<int, std::unordered_set<ProcName>>> nodes;
     std::vector<ProcName> order;
@@ -299,4 +301,20 @@ void validateNoCycles(std::vector<ProcName> procedureNames,
     if (order.size() != procedureNames.size()) {
         throw SemanticErrorException("Recursive and cyclic calls are not allowed.");
     }
+    else {
+        populateCallsTable(procCallMap, order, writePkb, readPkb);
+    }
+}
+
+void populateCallsTable(std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
+                        std::vector<ProcName>& order, WritePKB* writePKB, ReadPKB* readPKB) {
+    //std::unordered_set<ProcName> calleeTSet;
+    //for (ProcName p : order) {
+    //    writePKB->setCalls(p, procCallMap[p]);
+    //    for (ProcName j : procCallMap[p]) {
+    //        calleeTSet.merge(readPKB->getCalls(j));
+    //    }
+    //    writePKB->setCallsT(p, calleeTSet);
+    //    calleeTSet.clear();
+    //}
 }
