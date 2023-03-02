@@ -1,16 +1,8 @@
 #pragma once
-#include <queue>
 #include "PKB.h"
-#include "readHandlers/FollowsParentHandler.h"
-#include "readHandlers/ModifiesUsesHandler.h"
-#include "readHandlers/AssignPatternHandler.h"
-#include "../qps/entities/Relationship.h"
-#include "../qps/entities/Pattern.h"
-#include "../utils/AppConstants.h"
 
-class ReadPKB :AppConstants {
+class ReadPKB {
 public:
-
     // Sets the pointer to the PKB instance if it is not set yet
     void setInstancePKB(PKB& pkb);
 
@@ -18,8 +10,8 @@ public:
 
     std::vector<std::string> findDesignEntities(Parameter p);
 
-    // check if given a statement type and statement line number, whether that statement line number is indeed
-    // of that statement type
+    // check if given a statement type and statement line number, whether that
+    // statement line number is indeed of that statement type
     bool checkStatement(Stmt stmt, StmtNum num);
 
     // returns all the statement lines that are contained in the given procedure
@@ -31,18 +23,24 @@ public:
     // returns all the procedure names present in the source code
     std::unordered_set<ProcName> getAllProcedureNames();
 
-    // returns the entire row of all Entities involved in the Uses(StmtNum, v) relationship
+    // returns the entire row of all Entities involved in the Uses(StmtNum, v)
+    // relationship
     std::unordered_set<Ent> getUsesS(StmtNum num);
 
-    // returns the entire row of all Entities involved in the Modifies(StmtNum, v) relationship
+    // returns the entire row of all Entities involved in the Modifies(StmtNum, v)
+    // relationship
     std::unordered_set<Ent> getModifiesS(StmtNum num);
 
-    // returns the entire row of all Entities involved in the Uses(ProcName, v) relationship
+    // returns the entire row of all Entities involved in the Uses(ProcName, v)
+    // relationship
     std::unordered_set<Ent> getUsesP(ProcName name);
 
-    // returns the entire row of all Entities involved in the Modifies(ProcName, v) relationship
+    // returns the entire row of all Entities involved in the Modifies(ProcName,
+    // v) relationship
     std::unordered_set<Ent> getModifiesP(ProcName name);
 
+    // returns the name of the procedure being called on line number s
+    // if line s is not a call statement, it returns a pair {-1, "INVALID"}
     std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
 
     // returns all statement numbers for if statement
@@ -57,8 +55,8 @@ public:
     // Returns relevant strings based on Pattern object passed
     std::vector<std::vector<std::string>> findPattern(Pattern p);
 
-    // returns the root node of the CFG of the procedure if it exists. else it returns a nullptr
-    CFGNodeStub* getCFG(StmtNum num);
+    // returns a pointer to the CFG graph
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> getCFG(ProcName name);
 
     // returns n2 where n2 satisfies Next(n1, n2)
     std::vector<StmtNum> getNextRHS(StmtNum n1);
@@ -72,19 +70,14 @@ public:
     // returns all n1 where n1 satisfies Next*(n1, n2)
     std::vector<StmtNum> getNextTLHS(StmtNum n2);
 
-
-
 private:
     PKB* pkbInstance = NULL;
-    std::unordered_map <RelationshipType, std::shared_ptr<FollowsParentStorage>> followsParentMap = {
-        {RelationshipType::FOLLOWS, NULL}, 
-        {RelationshipType::FOLLOWST, NULL}, 
-        {RelationshipType::PARENT, NULL}, 
-        {RelationshipType::PARENTT, NULL}
-    };
+    std::unordered_map<RelationshipType, std::shared_ptr<FollowsParentStorage>> followsParentMap = {
+        {RelationshipType::FOLLOWS, NULL},
+        {RelationshipType::FOLLOWST, NULL},
+        {RelationshipType::PARENT, NULL},
+        {RelationshipType::PARENTT, NULL}};
 
-    std::unordered_map <RelationshipType, std::shared_ptr<ModifiesUsesStorage>> modifiesUsesMap = {
-        {RelationshipType::MODIFIES, NULL},
-        {RelationshipType::USES, NULL}
-    };
+    std::unordered_map<RelationshipType, std::shared_ptr<ModifiesUsesStorage>> modifiesUsesMap = {
+        {RelationshipType::MODIFIES, NULL}, {RelationshipType::USES, NULL}};
 };

@@ -1,11 +1,9 @@
 #pragma once
 
 #include "PKB.h"
-#include "../utils/AppConstants.h"
 
 class WritePKB {
 public:
-
     // Sets the pointer to the PKB instance if it is not set yet
     void setInstancePKB(PKB& pkb);
 
@@ -21,10 +19,8 @@ public:
     // Sets ParentT relation in PKB
     void setParentT(StmtNum parent, std::unordered_set<StmtNum> children);
 
-
     // Sets the statement along with the statement line that it appears in
     void setStatement(Stmt s, StmtNum line);
-
 
     // Sets the entity along with the statement line that the entities appears in
     void setEntity(StmtNum line, std::unordered_set<Ent> entities);
@@ -32,14 +28,20 @@ public:
     // Sets the entity along with the statement line that it appears in
     void setEntity(Ent e, StmtNum line);
 
-    // Sets the procedure along with the statement lines that are in that procedure appears in
+    // Sets the procedure along with the statement lines that are in that
+    // procedure appears in
     void setProcedure(ProcName p, std::unordered_set<StmtNum> lines);
 
-    // Sets the constants along with the statement line that the constants appears in
+    // Sets the constants along with the statement line that the constants appears
+    // in
     void setConstant(StmtNum num, std::unordered_set<Const> constants);
 
     void setCall(StmtNum callLine, ProcName procedure_being_called);
 
+    void setCalls(ProcName caller, std::unordered_set<ProcName> callees);
+    
+    void setCallsT(ProcName caller, std::unordered_set<ProcName> callees);
+    
     void setUsesS(StmtNum num, std::unordered_set<Ent> entities);
 
     void setUsesP(ProcName, std::unordered_set<Ent> entities);
@@ -50,7 +52,7 @@ public:
 
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
-    void writeCFG(StmtNum num, CFGNodeStub &root);
+    void writeCFG(ProcName name, std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph);
 
 private:
     PKB* pkbInstance = NULL;

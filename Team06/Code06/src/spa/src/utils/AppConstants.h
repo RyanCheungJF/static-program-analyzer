@@ -57,4 +57,9 @@ public:
     inline static const char LEFT_PARENTHESIS = '(';
     inline static const char RIGHT_PARENTHESIS = ')';
     inline static const char SEMICOLON = ';';
+
+
+    // CFG-related
+    inline static const std::string PARENTS = "parents";
+    inline static const std::string CHILDREN = "children";
 };
