@@ -1,6 +1,6 @@
 #include "CallStorage.h"
 
-void CallStorage::writeCall(StmtNum callLine, ProcName callee) {
+void CallStorage::writeCallS(StmtNum callLine, ProcName callee) {
   callLine_callee[callLine] = callee;
 }
 
