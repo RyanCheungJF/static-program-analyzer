@@ -1,12 +1,12 @@
 #include "CallsHandler.h"
 
-CallsHandler::CallsHandler(std::shared_ptr<CallStorage> callStorage, std::shared_ptr<ProcedureStorage> procStorage, bool isTransitive) {
-    this->callStorage = callStorage;
-    this->procStorage = procStorage;
+CallsHandler::CallsHandler(std::shared_ptr<CallsStorage> callsStorage, bool isTransitive) {
+    this->callsStorage = callsStorage;
     this->isTransitive = isTransitive;
 }
 
 std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcname(Parameter param1, Parameter param2) {
+
 }
 
 std::vector<std::vector<std::string>> CallsHandler::handleProcnameWildcard(Parameter param1, Parameter param2) {
@@ -47,14 +47,16 @@ std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Par
 
     if (isProcnameParam1) {
         if (isProcnameParam2) {
-            return handleProcnameProcname(param1, param2);
+            return isTransitive ? handleProcnameProcnameTransitive(param1, param2) : handleProcnameProcname(param1, param2);
         }
-        return handleProcnameWildcard(param1, param2);
+        return isTransitive ? handleProcnameWildcardTransitive(param1, param2) : handleProcnameWildcard(param1, param2);
     } else if (isProcnameParam2) {
-        return handleWildcardProcname(param1, param2);
+        return isTransitive ? handleWildcardProcnameTransitive(param1, param2) : handleWildcardProcname(param1, param2);
     } else if (isWildcardParam1 && isWildcardParam2) {
-        return handleWildcardWildcard();
+        return isTransitive ? handleWildcardWildcardTransitive() : handleWildcardWildcard();
     }
     return std::vector<std::vector<std::string>>();
 }
+
+
 

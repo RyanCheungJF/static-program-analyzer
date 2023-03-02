@@ -36,9 +36,11 @@ public:
   // in
   void setConstant(StmtNum num, std::unordered_set<Const> constants);
 
-  void setCallS(StmtNum callLine, ProcName procedure_being_called);
+  void setCall(StmtNum callLine, ProcName procedure_being_called);
 
-  void setCallP(ProcName caller, std::unordered_set<ProcName> callees);
+  void setCalls(ProcName caller, ProcName callee);
+
+  void setCallsT(ProcName caller, std::unordered_set<ProcName> callees);
 
   void setUsesS(StmtNum num, std::unordered_set<Ent> entities);
 

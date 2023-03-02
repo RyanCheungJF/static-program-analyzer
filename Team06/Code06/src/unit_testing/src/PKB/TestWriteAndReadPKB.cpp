@@ -338,8 +338,8 @@ TEST_CASE("CallStorage WritePKB ReadPKB Facade") {
   writePkb.setInstancePKB(pkb);
   readPkb.setInstancePKB(pkb);
 
-  writePkb.setCallS(11, "proc2");
-  writePkb.setCallS(22, "proc3");
+  writePkb.setCall(11, "proc2");
+  writePkb.setCall(22, "proc3");
 
   SECTION("CallStorage WritePKB ReadPKB Facade: getCallStmt(StmtNum s)") {
     auto res = readPkb.getCallStmt(11);
@@ -595,8 +595,9 @@ TEST_CASE("CallStorage WritePKB ReadPKB Facade procedure names") {
     ProcName proc2 = "proc2";
     std::unordered_set<ProcName> callees = {proc1, proc2};
 
-    writePkb.setCallS(11, proc1);
-    writePkb.setCallS(21, proc2);
-    writePkb.setCallP(caller, callees);
-
+    writePkb.setCall(11, proc1);
+    writePkb.setCall(21, proc2);
+    writePkb.setCalls(caller, proc1);
+    writePkb.setCalls(caller, proc2);
+    writePkb.setCallsT(caller, callees);
 }

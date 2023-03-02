@@ -9,6 +9,7 @@
 #include "readHandlers/CallsHandler.h"
 #include "storage/CFGStorage.h"
 #include "storage/CallStorage.h"
+#include "storage/CallsStorage.h"
 #include "storage/ConstantStorage.h"
 #include "storage/EntityStorage.h"
 #include "storage/FollowsParentStorage.h"
@@ -56,9 +57,11 @@ public:
   // in
   void setConstant(StmtNum num, std::unordered_set<Const> constants);
 
-  void setCallS(StmtNum callLine, ProcName procedure_being_called);
+  void setCall(StmtNum callLine, ProcName procedure_being_called);
 
-  void setCallP(ProcName caller, std::unordered_set<ProcName> callees);
+  void setCalls(ProcName caller, ProcName callee);
+
+  void setCallsT(ProcName caller, std::unordered_set<ProcName> callees);
 
   void setUsesS(StmtNum num, std::unordered_set<Ent> entities);
 
@@ -137,6 +140,8 @@ public:
 //  std::vector<StmtNum> getNextTLHS(StmtNum n2);
 
 private:
+
+  //STATEMENTS
   std::shared_ptr<FollowsParentStorage> followsStorage;
   std::shared_ptr<FollowsParentStorage> followsTStorage;
   std::shared_ptr<FollowsParentStorage> parentStorage;
@@ -147,8 +152,12 @@ private:
   std::shared_ptr<ConstantStorage> constantStorage;
   std::shared_ptr<PatternStorage> patternStorage;
   std::shared_ptr<CallStorage> callStorage;
+
+  //RELATIONSHIPS
   std::shared_ptr<ModifiesUsesStorage> usesStorage;
   std::shared_ptr<ModifiesUsesStorage> modifiesStorage;
+  std::shared_ptr<CallsStorage> callsStorage;
+  std::shared_ptr<CallsStorage> callsTStorage;
   std::shared_ptr<CFGStorage> cfgStorage;
 
   std::unordered_map<RelationshipType, std::shared_ptr<FollowsParentStorage>> followsParentMap = {
@@ -160,7 +169,7 @@ private:
   std::unordered_map<RelationshipType, std::shared_ptr<ModifiesUsesStorage>> modifiesUsesMap = {
       {RelationshipType::MODIFIES, NULL}, {RelationshipType::USES, NULL}};
 
-  std::unordered_map<RelationshipType, std::shared_ptr<CallStorage>> callsMap = {
+  std::unordered_map<RelationshipType, std::shared_ptr<CallsStorage>> callsMap = {
       {RelationshipType::CALLS, NULL},
       {RelationshipType::CALLST, NULL}};
 };

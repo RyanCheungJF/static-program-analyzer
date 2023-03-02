@@ -1,18 +1,16 @@
 #include "../../qps/entities/Parameter.h"
-#include "../storage/CallStorage.h"
-#include "../storage/ProcedureStorage.h"
+#include "../storage/CallsStorage.h"
 #include <algorithm>
 #include <memory>
 
 
 class CallsHandler {
 public:
-    CallsHandler(std::shared_ptr<CallStorage> callStorage, std::shared_ptr<ProcedureStorage> procStorage, bool isTransitive);
+    CallsHandler(std::shared_ptr<CallsStorage> callsStorage, bool isTransitive);
     std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
 
 private:
-    std::shared_ptr<CallStorage> callStorage;
-    std::shared_ptr<ProcedureStorage> procStorage;
+    std::shared_ptr<CallsStorage> callsStorage;
     bool isTransitive;
 
     // e.g. Calls("proc1", "proc2")
