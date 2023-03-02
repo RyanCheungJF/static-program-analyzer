@@ -42,8 +42,8 @@ void WritePKB::setCall(StmtNum callLine, ProcName procedure_being_called) {
     pkbInstance->setCall(callLine, procedure_being_called);
 }
 
-void WritePKB::setCalls(ProcName caller, ProcName callee) {
-    pkbInstance->setCalls(caller, callee);
+void WritePKB::setCalls(ProcName caller, std::unordered_set<ProcName> callees) {
+    pkbInstance->setCalls(caller, callees);
 }
 
 void WritePKB::setCallsT(ProcName caller, std::unordered_set<ProcName> callees) {

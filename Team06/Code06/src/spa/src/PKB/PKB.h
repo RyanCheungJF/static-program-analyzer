@@ -61,7 +61,7 @@ public:
 
     void setCall(StmtNum callLine, ProcName procedure_being_called);
 
-    void setCalls(ProcName caller, ProcName callee);
+    void setCalls(ProcName caller, std::unordered_set<ProcName> callees);
     
     void setCallsT(ProcName caller, std::unordered_set<ProcName> callees);
     
