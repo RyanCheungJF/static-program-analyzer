@@ -135,7 +135,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntStmttype(Parameter p
 
     std::unordered_set<StmtNum> stmttypeLines = stmtStorage->getStatementNumbers(type);
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
-    std::unordered_set<StmtNum> children = graph[stoi(paramString2)][AppConstants::CHILDREN];
+    std::unordered_set<StmtNum> children = graph[stoi(paramString1)][AppConstants::CHILDREN];
     for (StmtNum child : children) {
         if (stmttypeLines.find(child) != stmttypeLines.end()) {
             res.push_back({paramString1, std::to_string(child)});
@@ -240,10 +240,10 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
             std::unordered_set<StmtNum> lines = kv.second;
             std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
             for (StmtNum line : lines) {
-                std::unordered_set<StmtNum> children = graph[line][AppConstants::CHILDREN];
-                for (StmtNum child : children) {
-                    if (stmttypeLines1.find(child) != stmttypeLines1.end()) {
-                        res.push_back({std::to_string(line), std::to_string(child)});
+                std::unordered_set<StmtNum> parents = graph[line][AppConstants::PARENTS];
+                for (StmtNum p : parents) {
+                    if (stmttypeLines1.find(p) != stmttypeLines1.end()) {
+                        res.push_back({std::to_string(p), std::to_string(line)});
                     }
                 }
             }
