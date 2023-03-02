@@ -21,7 +21,7 @@ private:
 
 public:
     DesignExtractor();
-    DesignExtractor(std::unique_ptr<Program>, WritePKB* writePKB, ReadPKB* readPKB);
+    DesignExtractor(std::unique_ptr<Program> root, WritePKB* writePKB, ReadPKB* readPKB);
 
     void populatePKB();
 };

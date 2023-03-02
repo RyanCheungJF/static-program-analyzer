@@ -1,8 +1,8 @@
 procedure A { 
-	x = x + 1;;
+	x = x + 1;
 }
 
-procedure B {
+procedure A {
 	y = y * 2;
 	read y;
 }
