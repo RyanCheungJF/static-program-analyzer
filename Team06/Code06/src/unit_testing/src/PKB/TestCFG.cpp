@@ -1,84 +1,64 @@
-//#include "../../../spa/src/PKB/ReadPKB.h"
-//#include "../../../spa/src/PKB/WritePKB.h"
-//#include "../utils/utils.h"
-//#include "catch.hpp"
-//
-//using namespace unit_testing_utils;
-//
-//TEST_CASE("CFGStorage, ReadPKB, WritePKB, no while loop") {
-//
-//  WritePKB writePkb;
-//  ReadPKB readPkb;
-//  PKB pkb;
-//  pkb.initializePkb();
-//  writePkb.setInstancePKB(pkb);
-//  readPkb.setInstancePKB(pkb);
-//
-//  SECTION("CFGStorage: procedure does not exist") {
-//    StmtNum num = 1;
-//    CFGNodeStub node;
-//    writePkb.writeCFG(num, node);
-//    REQUIRE(readPkb.getCFG(2) == nullptr);
-//  }
-//
-//  SECTION("CFGStorage: empty procedure") {
-//    StmtNum num = 1;
-//    CFGNodeStub node;
-//    writePkb.writeCFG(num, node);
-//
-//    auto root = readPkb.getCFG(num);
-//    auto children = root->children;
-//
-//    REQUIRE(children.empty());
-//  }
-//
-//  CFGNodeStub root;
-//  root.first = 1;
-//  root.last = 2;
-//  CFGNodeStub node1;
-//  node1.first = 3;
-//  node1.last = 4;
-//  CFGNodeStub node2;
-//  node2.first = 5;
-//  node2.last = 6;
-//  CFGNodeStub node3;
-//  node3.first = 7;
-//  node3.last = 9;
-//  CFGNodeStub node4;
-//  node4.first = 10;
-//  node4.last = 12;
-//  CFGNodeStub node5;
-//  node5.first = 13;
-//  node5.last = 13;
-//
-//  node5.children = {};
-//  node4.children = {&node5};
-//  node3.children = {&node4};
-//  node2.children = {&node4};
-//  node1.children = {&node3, &node2};
-//  root.children = {&node1};
-//
-//  root.parents = {};
-//  node1.parents = {&root};
-//  node2.parents = {&node1};
-//  node3.parents = {&node1};
-//  node4.parents = {&node2, &node3};
-//  node5.parents = {&node4};
-//
-//  writePkb.writeCFG(1, root);
-//  writePkb.writeCFG(2, root);
-//  writePkb.writeCFG(3, node1);
-//  writePkb.writeCFG(4, node1);
-//  writePkb.writeCFG(5, node2);
-//  writePkb.writeCFG(6, node2);
-//  writePkb.writeCFG(7, node3);
-//  writePkb.writeCFG(8, node3);
-//  writePkb.writeCFG(9, node3);
-//  writePkb.writeCFG(10, node4);
-//  writePkb.writeCFG(11, node4);
-//  writePkb.writeCFG(12, node4);
-//  writePkb.writeCFG(13, node5);
-//
+#include "../../../spa/src/PKB/ReadPKB.h"
+#include "../../../spa/src/PKB/WritePKB.h"
+#include "../utils/utils.h"
+#include "catch.hpp"
+
+using namespace unit_testing_utils;
+
+TEST_CASE("CFGStorage, ReadPKB, WritePKB, no while loop") {
+
+  WritePKB writePkb;
+  ReadPKB readPkb;
+  PKB pkb;
+  pkb.initializePkb();
+  writePkb.setInstancePKB(pkb);
+  readPkb.setInstancePKB(pkb);
+
+  SECTION("CFGStorage: procedure does not exist") {
+    REQUIRE(readPkb.getCFG("doesNotExist").empty());
+  }
+
+
+  std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph1 = {
+          {1,
+           {
+              {AppConstants::PARENTS, {}},
+              {AppConstants::CHILDREN, {2, 3}}
+           }
+          },
+          {2,
+           {
+              {AppConstants::PARENTS, {1}},
+              {AppConstants::CHILDREN, {5}}
+           }
+          },
+          {3,
+           {
+              {AppConstants::PARENTS, {1}},
+              {AppConstants::CHILDREN, {4}}
+           }
+          },
+          {4,
+           {
+              {AppConstants::PARENTS, {3}},
+              {AppConstants::CHILDREN, {5}}
+           }
+          },
+          {5,
+           {
+              {AppConstants::PARENTS, {2, 4}},
+              {AppConstants::CHILDREN, {}}
+           }
+          }
+  };
+
+    ProcName proc1 = "proc1";
+    writePkb.writeCFG(proc1, graph1);
+
+    auto j = readPkb.getCFG(proc1);
+    auto i = readPkb.getCFG("proc0");
+
+
 //  SECTION("CFGStorage: Next(n1, n2) given n1 find n2") {
 //    std::vector<StmtNum> res1 = readPkb.getNextRHS(3);
 //    std::vector<StmtNum> expected1 = {4};
@@ -114,8 +94,8 @@
 //    std::vector<StmtNum> expected5 = {};
 //    REQUIRE(unit_testing_utils::equals(expected5, res5));
 //  }
-//}
-//
+}
+
 //TEST_CASE("CFGStorage, ReadPKB, WritePKB, have while loop") {
 //
 //  WritePKB writePkb;
