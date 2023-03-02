@@ -46,6 +46,10 @@ public:
   // returns all procedures that are being called from a given procedure
   std::vector<std::pair<ProcName, ProcName>> getCallCallees(ProcName caller);
 
+  //
+  std::vector<std::pair<ProcName, ProcName>> getCalls(ProcName caller);
+
+
   // returns all statement numbers for if statement
   std::unordered_set<StmtNum> getIfStatementNumbers();
 
