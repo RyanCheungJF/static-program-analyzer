@@ -4,8 +4,8 @@
 #include "readHandlers/FollowsParentHandler.h"
 #include "readHandlers/ModifiesUsesHandler.h"
 #include "readHandlers/AssignPatternHandler.h"
-#include "../qps/entities/Relationship.h"
-#include "../qps/entities/Pattern.h"
+#include "../QPS/entities/Relationship.h"
+#include "../QPS/entities/Pattern.h"
 #include "../utils/AppConstants.h"
 
 class ReadPKB :AppConstants {
