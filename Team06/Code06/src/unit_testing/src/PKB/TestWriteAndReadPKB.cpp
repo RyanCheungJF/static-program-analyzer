@@ -601,7 +601,7 @@ TEST_CASE("CallStorage WritePKB ReadPKB Facade procedure names") {
 
     writePkb.setCall(11, proc1);
     writePkb.setCall(21, proc2);
-    writePkb.setCalls(caller, proc1);
-    writePkb.setCalls(caller, proc2);
+    writePkb.setCalls(caller, {proc1});
+    writePkb.setCalls(caller, {proc2});
     writePkb.setCallsT(caller, callees);
 }
