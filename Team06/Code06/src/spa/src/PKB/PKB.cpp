@@ -65,8 +65,8 @@ void PKB::setCall(StmtNum callLine, ProcName procedure_being_called) {
     callStorage->writeCallS(callLine, procedure_being_called);
 }
 
-void PKB::setCalls(ProcName caller, ProcName callee) {
-    callsStorage->writeCallP(caller, {callee});
+void PKB::setCalls(ProcName caller, std::unordered_set<ProcName> callees) {
+    callsStorage->writeCallP(caller, callees);
 }
 
 void PKB::setCallsT(ProcName caller, std::unordered_set<ProcName> callees) {
