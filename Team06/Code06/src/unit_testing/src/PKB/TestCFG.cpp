@@ -103,54 +103,6 @@ TEST_CASE("CFGStorage, ReadPKB, WritePKB, no while loop") {
 //  pkb.initializePkb();
 //  writePkb.setInstancePKB(pkb);
 //  readPkb.setInstancePKB(pkb);
-//
-//  CFGNodeStub root;
-//  root.first = 1;
-//  root.last = 2;
-//  CFGNodeStub node1;
-//  node1.first = 3;
-//  node1.last = 4;
-//  CFGNodeStub node2;
-//  node2.first = 5;
-//  node2.last = 6;
-//  CFGNodeStub node3;
-//  node3.first = 7;
-//  node3.last = 9;
-//  CFGNodeStub node4;
-//  node4.first = 10;
-//  node4.last = 12;
-//  CFGNodeStub node5;
-//  node5.first = 13;
-//  node5.last = 13;
-//
-//  node5.children = {};
-//  node4.children = {&node5, &node1}; // introduce a while loop here
-//  node3.children = {&node4};
-//  node2.children = {&node4};
-//  node1.children = {&node3, &node2};
-//  root.children = {&node1};
-//
-//  root.parents = {};
-//  node1.parents = {&root, &node4}; // introduce a while loop here
-//  node2.parents = {&node1};
-//  node3.parents = {&node1};
-//  node4.parents = {&node2, &node3};
-//  node5.parents = {&node4};
-//
-//  writePkb.writeCFG(1, root);
-//  writePkb.writeCFG(2, root);
-//  writePkb.writeCFG(3, node1);
-//  writePkb.writeCFG(4, node1);
-//  writePkb.writeCFG(5, node2);
-//  writePkb.writeCFG(6, node2);
-//  writePkb.writeCFG(7, node3);
-//  writePkb.writeCFG(8, node3);
-//  writePkb.writeCFG(9, node3);
-//  writePkb.writeCFG(10, node4);
-//  writePkb.writeCFG(11, node4);
-//  writePkb.writeCFG(12, node4);
-//  writePkb.writeCFG(13, node5);
-//
 //  SECTION("CFGStorage: Next(n1, n2) given n1 find n2") {
 //    std::vector<StmtNum> res1 = readPkb.getNextRHS(11);
 //    std::vector<StmtNum> expected1 = {12};
