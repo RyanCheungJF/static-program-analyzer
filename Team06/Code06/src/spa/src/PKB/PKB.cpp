@@ -96,15 +96,12 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
   if (followsParentMap.find(type) != followsParentMap.end()) {
     FollowsParentHandler handler(followsParentMap.at(type), statementStorage);
     return handler.handle(param1, param2);
-
   } else if (modifiesUsesMap.find(type) != modifiesUsesMap.end()) {
     ModifiesUsesHandler handler(modifiesUsesMap.at(type), statementStorage);
-
     return handler.handle(param1, param2);
   } else if (callsMap.find(type) != callsMap.end()) {
-      CallsHandler handler(callsMap.at(type), statementStorage);
-
-      return handler.handle(param1, param2);
+    CallsHandler handler(callsMap.at(type), statementStorage);
+    return handler.handle(param1, param2);
   }
     return std::vector<std::vector<std::string>>();
 }
