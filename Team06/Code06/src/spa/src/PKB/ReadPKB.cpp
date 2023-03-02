@@ -67,10 +67,6 @@ std::pair<StmtNum, ProcName> ReadPKB::getCallStmt(StmtNum s) {
   return pkbInstance->getCallStmt(s);
 }
 
-std::vector<std::pair<ProcName, ProcName>> ReadPKB::getCallCallees(ProcName caller) {
-    return pkbInstance->getCallCallees(caller);
-}
-
 CFGNodeStub *ReadPKB::getCFG(StmtNum num) {
   return pkbInstance->getCFG(num);
 }

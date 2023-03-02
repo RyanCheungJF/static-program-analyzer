@@ -599,14 +599,4 @@ TEST_CASE("CallStorage WritePKB ReadPKB Facade procedure names") {
     writePkb.setCallS(21, proc2);
     writePkb.setCallP(caller, callees);
 
-
-    std::vector<std::pair<ProcName, ProcName>> res1 = readPkb.getCallCallees("nonExistent");
-    REQUIRE(res1.empty());
-
-    std::vector<std::pair<ProcName, ProcName>> res2 = readPkb.getCallCallees(caller);
-    std::vector<std::pair<ProcName, ProcName>> expected2;
-    expected2.push_back(std::make_pair("proc0", "proc1"));
-    expected2.push_back(std::make_pair("proc0", "proc2"));
-    REQUIRE(unit_testing_utils::equals(expected2, res2));
-
 }
