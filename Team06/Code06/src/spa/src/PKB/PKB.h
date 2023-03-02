@@ -70,7 +70,7 @@ public:
 
   void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
-  void writeCFG(StmtNum num, CFGNodeStub &root);
+  void writeCFG(ProcName name, std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph);
 
   std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship> rs);
 
@@ -121,21 +121,20 @@ public:
   // Returns relevant strings based on Pattern object passed
   std::vector<std::vector<std::string>> findPattern(Pattern p);
 
-  // returns the root node of the CFG of the procedure if it exists. else it
-  // returns a nullptr
-  CFGNodeStub *getCFG(StmtNum num);
+  // returns the cfg if it exists, else it returns an empty graph
+  std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> getCFG(ProcName name);
 
-  // returns n2 where n2 satisfies Next(n1, n2)
-  std::vector<StmtNum> getNextRHS(StmtNum n1);
-
-  // returns n1 where n1 satisfies Next(n1, n2)
-  std::vector<StmtNum> getNextLHS(StmtNum n2);
-
-  // returns all n2 where n2 satisfies Next*(n1, n2)
-  std::vector<StmtNum> getNextTRHS(StmtNum n1);
-
-  // returns all n1 where n1 satisfies Next*(n1, n2)
-  std::vector<StmtNum> getNextTLHS(StmtNum n2);
+//  // returns n2 where n2 satisfies Next(n1, n2)
+//  std::vector<StmtNum> getNextRHS(StmtNum n1);
+//
+//  // returns n1 where n1 satisfies Next(n1, n2)
+//  std::vector<StmtNum> getNextLHS(StmtNum n2);
+//
+//  // returns all n2 where n2 satisfies Next*(n1, n2)
+//  std::vector<StmtNum> getNextTRHS(StmtNum n1);
+//
+//  // returns all n1 where n1 satisfies Next*(n1, n2)
+//  std::vector<StmtNum> getNextTLHS(StmtNum n2);
 
 private:
   std::shared_ptr<FollowsParentStorage> followsStorage;
