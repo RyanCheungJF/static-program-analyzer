@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../../../src/utils/AppConstants.h"
 #include <string>
 #include <unordered_map>
@@ -12,6 +14,12 @@ public:
   std::unordered_set<ProcName> getProcNames();
 
 private:
+    /*
+     * Structure of table
+     *  ProcName | statementNumbers
+     *  "proc1" | [1, 2, 3, ...]
+     *  "proc2" | [7, 9, ...]
+     */
   std::unordered_map<ProcName, std::unordered_set<StmtNum>> proc_stmtNum;
   std::unordered_map<StmtNum, std::unordered_set<ProcName>> stmtNum_proc;
   std::unordered_set<ProcName> procedures;

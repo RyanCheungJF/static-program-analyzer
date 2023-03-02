@@ -1,8 +1,9 @@
 #include "CallsHandler.h"
 
-CallsHandler::CallsHandler(std::shared_ptr<CallStorage> callStorage, std::shared_ptr<StmtStorage> stmtStorage) {
+CallsHandler::CallsHandler(std::shared_ptr<CallStorage> callStorage, std::shared_ptr<ProcedureStorage> procStorage, bool isTransitive) {
     this->callStorage = callStorage;
-    this->stmtStorage = stmtStorage;
+    this->procStorage = procStorage;
+    this->isTransitive = isTransitive;
 }
 
 std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcname(Parameter param1, Parameter param2) {
@@ -17,7 +18,18 @@ std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcname(Param
 std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard() {
 }
 
-// TODO: how to distinguish between transitive and non-transitive calls?
+std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcnameTransitive(Parameter param1, Parameter param2) {
+}
+
+std::vector<std::vector<std::string>> CallsHandler::handleProcnameWildcardTransitive(Parameter param1, Parameter param2) {
+}
+
+std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcnameTransitive(Parameter param1, Parameter param2) {
+}
+
+std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcardTransitive() {
+}
+
 std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Parameter param2) {
 
     std::string paramString1 = param1.getValue();

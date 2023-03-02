@@ -10,9 +10,9 @@ void PKB::initializePkb() {
   this->procedureStorage = std::make_shared<ProcedureStorage>();
   this->constantStorage = std::make_shared<ConstantStorage>();
   this->patternStorage = std::make_shared<PatternStorage>();
-  this->callStorage = std::make_shared<CallStorage>();
   this->usesStorage = std::make_shared<ModifiesUsesStorage>();
   this->modifiesStorage = std::make_shared<ModifiesUsesStorage>();
+  this->callStorage = std::make_shared<CallStorage>();
   this->cfgStorage = std::make_shared<CFGStorage>();
 
   this->followsParentMap[RelationshipType::FOLLOWS] = followsStorage;
@@ -100,7 +100,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     ModifiesUsesHandler handler(modifiesUsesMap.at(type), statementStorage);
     return handler.handle(param1, param2);
   } else if (callsMap.find(type) != callsMap.end()) {
-    CallsHandler handler(callsMap.at(type), statementStorage);
+    CallsHandler handler(callsMap.at(type), procedureStorage, type == RelationshipType::CALLST);
     return handler.handle(param1, param2);
   }
     return std::vector<std::vector<std::string>>();
