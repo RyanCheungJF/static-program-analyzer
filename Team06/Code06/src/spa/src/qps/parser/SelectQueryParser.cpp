@@ -224,7 +224,7 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
         if(!ifsString.empty()) {
             ifParam = *new Parameter("", ParameterType::WILDCARD);
         }
-        res.emplace_back(patternDsgEnt, entRef, patternString, ifParam);
+        res.emplace_back(patternDsgEnt, entRef, removeCharFromString(patternString, '\"'), ifParam);
 	}
 	return res;
 }
