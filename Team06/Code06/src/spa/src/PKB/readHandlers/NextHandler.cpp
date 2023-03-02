@@ -198,6 +198,10 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardStmttype(Parame
     return res;
 }
 
+std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parameter param1, Parameter param2) {
+
+}
+
 std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcard() {
     std::unordered_set<ProcName> procedures = procStorage->getProcNames();
     std::vector<std::vector<std::string>> res;
