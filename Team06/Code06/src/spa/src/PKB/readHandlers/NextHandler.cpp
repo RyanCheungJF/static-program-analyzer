@@ -40,6 +40,7 @@ std::vector<std::vector<std::string>> NextHandler::handle(Parameter param1, Para
     return std::vector<std::vector<std::string>>();
 }
 
+// returns {lineNum, lineNum}
 std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
@@ -60,6 +61,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1
     return res;
 }
 
+// returns {param1Num, sNum}
 std::vector<std::vector<std::string>> NextHandler::handleIntWildcard(Parameter param1) {
     std::string paramString1 = param1.getValue();
     ProcName proc1 = procStorage->getProcedure(stoi(paramString1));
@@ -77,6 +79,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntWildcard(Parameter p
     return res;
 }
 
+// returns {sNum, param2Num}
 std::vector<std::vector<std::string>> NextHandler::handleWildcardInt(Parameter param2) {
     std::string paramString2 = param2.getValue();
     ProcName proc2 = procStorage->getProcedure(stoi(paramString2));
@@ -94,6 +97,8 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardInt(Parameter p
     return res;
 }
 
+
+// returns {param1Num, lineNum}
 std::vector<std::vector<std::string>> NextHandler::handleStmttypeInt(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
@@ -116,6 +121,7 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeInt(Parameter p
     return res;
 }
 
+// returns {lineNum, param2Num}
 std::vector<std::vector<std::string>> NextHandler::handleIntStmttype(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
@@ -138,4 +144,74 @@ std::vector<std::vector<std::string>> NextHandler::handleIntStmttype(Parameter p
     return res;
 }
 
+// returns {param1Num, sNum}
+std::vector<std::vector<std::string>> NextHandler::handleStmttypeWildcard(Parameter param1) {
+    std::string paramString1 = param1.getValue();
+    Stmt type = stmtTypesSet[param1.getType()];
+    std::vector<std::vector<std::string>> res;
 
+    std::unordered_set<StmtNum> stmttypeLines = stmtStorage->getStatementNumbers(type);
+    std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines;
+    for (StmtNum num : stmttypeLines) {
+        ProcName proc = procStorage->getProcedure(num);
+        procedure_lines[proc].insert(num);
+    }
+
+    for (auto kv : procedure_lines) {
+        ProcName proc = kv.first;
+        std::unordered_set<StmtNum> lines = kv.second;
+        std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
+        for (StmtNum line : lines) {
+            std::unordered_set<StmtNum> children = graph[line][AppConstants::CHILDREN];
+            for (StmtNum child : children) {
+                res.push_back({std::to_string(line), std::to_string(child)});
+            }
+        }
+    }
+    return res;
+}
+
+// returns {sNum, param2Num}
+std::vector<std::vector<std::string>> NextHandler::handleWildcardStmttype(Parameter param2) {
+    std::string paramString2 = param2.getValue();
+    Stmt type = stmtTypesSet[param2.getType()];
+    std::vector<std::vector<std::string>> res;
+
+    std::unordered_set<StmtNum> stmttypeLines = stmtStorage->getStatementNumbers(type);
+    std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines;
+    for (StmtNum num : stmttypeLines) {
+        ProcName proc = procStorage->getProcedure(num);
+        procedure_lines[proc].insert(num);
+    }
+
+    for (auto kv : procedure_lines) {
+        ProcName proc = kv.first;
+        std::unordered_set<StmtNum> lines = kv.second;
+        std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
+        for (StmtNum line : lines) {
+            std::unordered_set<StmtNum> parents = graph[line][AppConstants::PARENTS];
+            for (StmtNum parent : parents) {
+                res.push_back({std::to_string(parent), std::to_string(line)});
+            }
+        }
+    }
+    return res;
+}
+
+std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcard() {
+    std::unordered_set<ProcName> procedures = procStorage->getProcNames();
+    std::vector<std::vector<std::string>> res;
+
+    for (ProcName proc : procedures) {
+        std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
+
+        for (auto kv : graph) {
+            StmtNum p = kv.first;
+            auto children = graph[p][AppConstants::CHILDREN];
+            for (StmtNum child : children) {
+                res.push_back({std::to_string(p), std::to_string(child)});
+            }
+        }
+    }
+    return res;
+}
