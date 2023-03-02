@@ -14,6 +14,8 @@ public:
   virtual std::unordered_set<ProcName> getCallees(ProcName caller);
   virtual std::unordered_set<ProcName> getCallers(ProcName callee);
 
+  virtual std::unordered_set<ProcName> getAllCallers();
+
 private:
     /*
      * Structure of table example below

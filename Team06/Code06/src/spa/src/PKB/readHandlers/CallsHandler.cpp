@@ -1,33 +1,52 @@
 #include "CallsHandler.h"
 
-CallsHandler::CallsHandler(std::shared_ptr<CallsStorage> callsStorage, bool isTransitive) {
+CallsHandler::CallsHandler(std::shared_ptr<CallsStorage> callsStorage) {
     this->callsStorage = callsStorage;
-    this->isTransitive = isTransitive;
 }
 
 std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcname(Parameter param1, Parameter param2) {
+    std::string caller = param1.getValue();
+    std::string callee = param2.getValue();
+    std::vector<std::vector<std::string>> res;
+
+    std::unordered_set<ProcName> callees = callsStorage->getCallees(caller);
+    if (callees.find(callee) != callees.end()) {
+        res.push_back({caller, callee});
+    }
+    return res;
 
 }
 
-std::vector<std::vector<std::string>> CallsHandler::handleProcnameWildcard(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> CallsHandler::handleProcnameWildcard(Parameter param1) {
+    std::string caller = param1.getValue();
+    std::vector<std::vector<std::string>> res;
+
+    std::unordered_set<ProcName> callees = callsStorage->getCallees(caller);
+    for (auto i : callees) {
+        res.push_back({caller, i});
+    }
+    return res;
 }
 
-std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcname(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcname(Parameter param2) {
+    std::string callee = param2.getValue();
+    std::vector<std::vector<std::string>> res;
+
+    std::unordered_set<ProcName> callers = callsStorage->getCallers(callee);
+    for (auto i : callers) {
+        res.push_back({i, callee});
+    }
+    return res;
 }
 
 std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard() {
-}
-
-std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcnameTransitive(Parameter param1, Parameter param2) {
-}
-
-std::vector<std::vector<std::string>> CallsHandler::handleProcnameWildcardTransitive(Parameter param1, Parameter param2) {
-}
-
-std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcnameTransitive(Parameter param1, Parameter param2) {
-}
-
-std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcardTransitive() {
+    std::vector<std::vector<std::string>> res;
+    for (auto caller : callsStorage->getAllCallers()) {
+        for (auto callee : callsStorage->getCallees(caller)) {
+            res.push_back({caller, callee});
+        }
+    }
+    return res;
 }
 
 std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Parameter param2) {
@@ -47,13 +66,13 @@ std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Par
 
     if (isProcnameParam1) {
         if (isProcnameParam2) {
-            return isTransitive ? handleProcnameProcnameTransitive(param1, param2) : handleProcnameProcname(param1, param2);
+            return handleProcnameProcname(param1, param2);
         }
-        return isTransitive ? handleProcnameWildcardTransitive(param1, param2) : handleProcnameWildcard(param1, param2);
+        return handleProcnameWildcard(param1);
     } else if (isProcnameParam2) {
-        return isTransitive ? handleWildcardProcnameTransitive(param1, param2) : handleWildcardProcname(param1, param2);
+        return handleWildcardProcname(param2);
     } else if (isWildcardParam1 && isWildcardParam2) {
-        return isTransitive ? handleWildcardWildcardTransitive() : handleWildcardWildcard();
+        return handleWildcardWildcard();
     }
     return std::vector<std::vector<std::string>>();
 }

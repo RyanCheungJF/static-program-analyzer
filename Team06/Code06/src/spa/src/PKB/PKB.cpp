@@ -109,7 +109,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     ModifiesUsesHandler handler(modifiesUsesMap.at(type), statementStorage);
     return handler.handle(param1, param2);
   } else if (callsMap.find(type) != callsMap.end()) {
-    CallsHandler handler(callsMap.at(type), type == RelationshipType::CALLST);
+    CallsHandler handler(callsMap.at(type));
     return handler.handle(param1, param2);
   }
     return std::vector<std::vector<std::string>>();

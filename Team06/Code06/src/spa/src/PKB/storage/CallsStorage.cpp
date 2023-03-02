@@ -22,3 +22,11 @@ std::unordered_set<ProcName> CallsStorage::getCallers(ProcName callee) {
     }
     return callee_callers[callee];
 }
+
+std::unordered_set<ProcName> CallsStorage::getAllCallers() {
+    std::unordered_set<ProcName> res;
+    for (auto kv : caller_callees) {
+        res.insert(kv.first);
+    }
+    return res;
+}
