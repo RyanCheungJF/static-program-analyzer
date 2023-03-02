@@ -71,3 +71,4 @@ TEST_CASE("Check Pattern Storage Write and empty Gets") {
     REQUIRE(res.size() == 0);
   }
 }
+
