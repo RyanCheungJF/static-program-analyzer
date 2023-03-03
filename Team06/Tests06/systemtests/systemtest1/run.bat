@@ -10,6 +10,8 @@
 
 ..\..\..\Code06\out\build\x64-Debug\src\autotester\autotester.exe source.txt Uses.txt out-Uses.xml
 
+..\..\..\Code06\out\build\x64-Debug\src\autotester\autotester.exe source.txt Calls.txt out-Calls.xml
+
 ..\..\..\Code06\out\build\x64-Debug\src\autotester\autotester.exe source.txt Pattern.txt out-Pattern.xml
 
 ..\..\..\Code06\out\build\x64-Debug\src\autotester\autotester.exe source.txt Negative.txt out-Negative.xml
