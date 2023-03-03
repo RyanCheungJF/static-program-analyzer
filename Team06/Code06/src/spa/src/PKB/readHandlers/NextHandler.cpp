@@ -13,29 +13,45 @@ std::vector<std::vector<std::string>> NextHandler::handle(Parameter param1, Para
     ParameterType paramType1 = param1.getType();
     ParameterType paramType2 = param2.getType();
 
-    if (paramType1 == ParameterType::FIXED_INT && paramType2 == ParameterType::FIXED_INT) {
-        return handleIntInt(param1, param2);
-    } else if ((paramType1 == ParameterType::FIXED_INT && paramType2 == ParameterType::WILDCARD) ||
-            (paramType1 == ParameterType::FIXED_INT && paramType2 == ParameterType::STMT)) {
-        return handleIntWildcard(param1);
-    } else if ((paramType1 == ParameterType::WILDCARD && paramType2 == ParameterType::FIXED_INT) ||
-            (paramType1 == ParameterType::STMT && paramType2 == ParameterType::FIXED_INT)) {
-        return handleWildcardInt(param2);
-    } else if ((stmtTypesSet.find(paramType1) != stmtTypesSet.end()) && paramType2 == ParameterType::FIXED_INT) {
-        return handleStmttypeInt(param1, param2);
-    } else if (paramType1 == ParameterType::FIXED_INT && (stmtTypesSet.find(paramType2) != stmtTypesSet.end())) {
-        return handleIntStmttype(param1, param2);
-    } else if (((stmtTypesSet.find(paramType1) != stmtTypesSet.end()) && paramType2 == ParameterType::WILDCARD) ||
-            ((stmtTypesSet.find(paramType1) != stmtTypesSet.end()) && paramType2 == ParameterType::STMT)) {
-        return handleStmttypeWildcard(param1);
-    } else if ((paramType1 == ParameterType::WILDCARD && (stmtTypesSet.find(paramType2) != stmtTypesSet.end())) ||
-            (paramType1 == ParameterType::STMT && (stmtTypesSet.find(paramType2) != stmtTypesSet.end()))) {
-        return handleWildcardStmttype(param2);
-    } else if ((stmtTypesSet.find(paramType1) != stmtTypesSet.end()) && (stmtTypesSet.find(paramType2) != stmtTypesSet.end())) {
-        return handleStmttypeStmttype(param1, param2);
-    } else if ((paramType1 == ParameterType::WILDCARD && paramType2 == ParameterType::WILDCARD) ||
-            (paramType1 == ParameterType::STMT && paramType2 == ParameterType::STMT)) {
-        return handleWildcardWildcard();
+    bool isFixedIntParam1 = paramType1 == ParameterType::FIXED_INT;
+    bool isFixedIntParam2 = paramType2 == ParameterType::FIXED_INT;
+    bool isWildCardParam1 = paramType1 == ParameterType::WILDCARD || paramType1 == ParameterType::STMT;
+    bool isWildCardParam2 = paramType2 == ParameterType::WILDCARD || paramType2 == ParameterType::STMT;
+    bool isTypedStmtParam1 = stmtTypesSet.find(paramType1) != stmtTypesSet.end();
+    bool isTypedStmtParam2 = stmtTypesSet.find(paramType2) != stmtTypesSet.end();
+
+    if (isFixedIntParam1) {
+        if (isFixedIntParam2) {
+            return handleIntInt(param1, param2);
+        }
+        else if (isTypedStmtParam2) {
+            return handleStmttypeInt(param1, param2);
+        }
+        else if (isWildCardParam2) {
+            return handleIntWildcard(param1);
+        }
+    }
+    else if (isTypedStmtParam1) {
+        if (isFixedIntParam2) {
+            return handleStmttypeInt(param1, param2);
+        }
+        else if (isTypedStmtParam2) {
+            return handleStmttypeStmttype(param1, param2);
+        }
+        else if (isWildCardParam2) {
+            return handleStmttypeWildcard(param1);
+        }
+    }
+    else if (isWildCardParam1) {
+        if (isFixedIntParam2) {
+            return handleWildcardInt(param2);
+        }
+        else if (isTypedStmtParam2) {
+            return handleWildcardStmttype(param2);
+        }
+        else if (isWildCardParam2) {
+            return handleWildcardWildcard();
+        }
     }
     return std::vector<std::vector<std::string>>();
 }
