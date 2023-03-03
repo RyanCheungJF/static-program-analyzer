@@ -43,6 +43,9 @@ public:
     // if line s is not a call statement, it returns a pair {-1, "INVALID"}
     std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
 
+    // returns all the procedures that are called from a given procedure
+    std::unordered_set<ProcName> getCallsT(ProcName p);
+
     // returns all statement numbers for if statement
     std::unordered_set<StmtNum> getIfStatementNumbers();
 
