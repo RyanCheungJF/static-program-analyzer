@@ -132,23 +132,15 @@ public:
     // returns nested statement numbers of all if and while statements
     std::unordered_set<StmtNum> getContainedStatements(StmtNum containerNum);
 
+    // returns all the procedures that are called from a given procedure
+    std::unordered_set<ProcName> getCallsT(ProcName p);
+
     // Returns relevant strings based on Pattern object passed
     std::vector<std::vector<std::string>> findPattern(Pattern p);
 
     // returns the cfg if it exists, else it returns an empty graph
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> getCFG(ProcName name);
 
-    // // returns n2 where n2 satisfies Next(n1, n2)
-    // std::vector<StmtNum> getNextRHS(StmtNum n1);
-
-    // // returns n1 where n1 satisfies Next(n1, n2)
-    // std::vector<StmtNum> getNextLHS(StmtNum n2);
-
-    // // returns all n2 where n2 satisfies Next*(n1, n2)
-    // std::vector<StmtNum> getNextTRHS(StmtNum n1);
-
-    // // returns all n1 where n1 satisfies Next*(n1, n2)
-    // std::vector<StmtNum> getNextTLHS(StmtNum n2);
 
 private:
     // STATEMENTS
