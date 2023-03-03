@@ -1,5 +1,8 @@
 #include "Relationship.h"
+#include "AffectsRelationship.h"
+#include "AffectsTRelationship.h"
 #include "CallsRelationship.h"
+#include "CallsTRelationship.h"
 #include "FollowsRelationship.h"
 #include "FollowsTRelationship.h"
 #include "ModifiesRelationship.h"
@@ -8,7 +11,6 @@
 #include "ParentRelationship.h"
 #include "ParentTRelationship.h"
 #include "UsesRelationship.h"
-#include "CallsTRelationship.h"
 
 shared_ptr<Relationship>
 Relationship::makeRelationship(string type, vector<Parameter> params) {
@@ -34,6 +36,10 @@ Relationship::makeRelationship(string type, vector<Parameter> params) {
     return make_shared<CallsRelationship>(CallsRelationship(params));
   case RelationshipType::CALLST:
     return make_shared<CallsTRelationship>(CallsTRelationship(params));
+  case RelationshipType::AFFECTS:
+    return make_shared<AffectsRelationship>(AffectsRelationship(params));
+  case RelationshipType::AFFECTST:
+    return make_shared<AffectsTRelationship>(AffectsTRelationship(params));
   }
   throw SyntaxException();
 }
