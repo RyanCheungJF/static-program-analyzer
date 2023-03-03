@@ -51,5 +51,7 @@ private:
     // e.g. Next(s1, s2) or Next(_, _)
     std::vector<std::vector<std::string>> handleWildcardWildcard();
 
+    std::unordered_map<ProcName, std::unordered_set<StmtNum>> getProcedureLines(std::unordered_set<StmtNum> statementNumbers);
+
 };
 
