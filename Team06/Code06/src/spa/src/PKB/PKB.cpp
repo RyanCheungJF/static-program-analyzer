@@ -180,6 +180,10 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
     return std::vector<std::vector<std::string>>();
 }
 
+std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
+    
+}
+
 bool PKB::checkStatement(Stmt stmt, StmtNum num) {
     return statementStorage->checkStatement(stmt, num);
 }

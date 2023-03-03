@@ -12,7 +12,6 @@ using namespace std;
 
 PKB buildPkb() {
 
-<<<<<<< HEAD
     PKB pkb;
     WritePKB writePkb;
 

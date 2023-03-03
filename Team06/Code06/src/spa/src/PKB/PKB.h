@@ -29,6 +29,8 @@
 #include "storage/StmtStorage.h"
 #include "utils/AppConstants.h"
 
+#include "../../unit_testing/src/stubs/With.h"
+
 class PKB : AppConstants {
 
 public:
@@ -90,6 +92,11 @@ public:
 
     std::vector<std::string> findDesignEntities(Parameter p);
 
+    // Returns relevant strings based on Pattern object passed
+    std::vector<std::vector<std::string>> findPattern(Pattern p);
+
+    std::vector<std::vector<std::string>> findAttribute(With w);
+
     // check if given a statement type and statement line number, whether that
     // statement line number is indeed of that statement type
     bool checkStatement(Stmt stmt, StmtNum num);
@@ -134,9 +141,6 @@ public:
 
     // returns all the procedures that are called from a given procedure
     std::unordered_set<ProcName> getCallsT(ProcName p);
-
-    // Returns relevant strings based on Pattern object passed
-    std::vector<std::vector<std::string>> findPattern(Pattern p);
 
     // returns the cfg if it exists, else it returns an empty graph
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> getCFG(ProcName name);
