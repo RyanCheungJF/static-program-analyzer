@@ -1,0 +1,35 @@
+1 - comment
+procedure p1, p2;
+Select p2 such that Calls*("One", p2)
+Two, Three, Four, Five, Six
+5000
+2 - comment
+procedure p1, p2;
+Select p2 such that Calls*("Two", p2)
+Three, Four, Five, Six
+5000
+3 - comment
+procedure p1, p2;
+Select p1 such that Calls*(p1, "Five")
+One, Two, Four
+5000
+4 - comment
+procedure p1, p2;
+Select p2 such that Calls*("Six", p2)
+none
+5000
+5 - comment
+procedure p1, p2;
+Select p2 such that Calls*(_, p2)
+Two, Three, Four, Five, Six 
+5000
+6 - comment
+procedure p1, p2;
+Select p1 such that Calls*(p1, _)
+One, Two, Three, Four, Five
+5000
+7 - comment
+procedure p1, p2;
+Select p1 such that Calls*(_, _)
+One, Two, Three, Four, Five, Six
+5000
