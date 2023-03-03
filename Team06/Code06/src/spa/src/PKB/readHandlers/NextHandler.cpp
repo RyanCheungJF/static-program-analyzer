@@ -25,7 +25,7 @@ std::vector<std::vector<std::string>> NextHandler::handle(Parameter param1, Para
             return handleIntInt(param1, param2);
         }
         else if (isTypedStmtParam2) {
-            return handleStmttypeInt(param1, param2);
+            return handleIntStmttype(param1, param2);
         }
         else if (isWildCardParam2) {
             return handleIntWildcard(param1);
