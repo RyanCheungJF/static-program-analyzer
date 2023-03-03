@@ -1,17 +1,20 @@
 #ifndef SPQ_QPS_PATTERN_H
 #define SPQ_QPS_PATTERN_H
 #include "Parameter.h"
+#include "../../exceptions/SyntaxException.h"
 using namespace std;
 
 class Pattern {
 public:
-	Parameter synAssign;
+	Parameter patternSyn;
 	Parameter entRef;
+    Parameter ifsParam = Parameter("", "");
 	string pattern;
 	Pattern();
 	Pattern(const Pattern&);
 	Pattern(Parameter, Parameter, string);
-	Parameter* getSynAssign();
+    Pattern(Parameter, Parameter, string, Parameter);
+	Parameter* getPatternSyn();
 	Parameter* getEntRef();
 	bool validateParams();
 };

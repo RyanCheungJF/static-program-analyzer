@@ -18,6 +18,61 @@ TEST_CASE("parse / given valid string with such that and pattern clause / parse 
 	REQUIRE(true);
 }
 
+TEST_CASE("parse / create ifs pattern clause no issues / parse into correct vector of queries") {
+    string test = "variable v; if a; Select v pattern a (v, _, _) ";
+    QPSParser qp;
+    vector<Query> queries = qp.parse(test);
+    REQUIRE(true);
+}
+
+TEST_CASE("parse / create ifs pattern clause last param is not a wildcard / throws syntax error") {
+    string test = "variable v; if a; Select v pattern a (v, _, \"apple\") ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / assign pattern can only have 2 params (wild card) / throws syntax error") {
+    string test = "variable v; assign a; Select v pattern a (v, _, _) ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / assign pattern can only have 2 params (synonym) / throws syntax error") {
+    string test = "variable v; assign a; Select v pattern a (v, _, v) ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / while pattern can only have 2 params (wild card) / throws syntax error") {
+    string test = "variable v; while while; Select v pattern while (v, _, _) ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / while pattern can only have 2 params (synonym) / throws syntax error") {
+    string test = "variable v; while while; Select v pattern while (v, _, v) ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / ifs pattern can only have 3 params / throws syntax error") {
+    string test = "variable v; while while; Select v pattern while (v, _, _, _, _) ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / additional brackets / throws syntax error") {
+    string test = "variable v; while while; Select v pattern while ((v, _)) ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / create while pattern clause second param is not a wildcard / throws syntax error") {
+    string test = "variable v; while a; Select v pattern a (v, \"apple\") ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
 TEST_CASE("parse / missing select clause / throw error") {
     string test = "variable v;stmt s;";
     QPSParser qp;

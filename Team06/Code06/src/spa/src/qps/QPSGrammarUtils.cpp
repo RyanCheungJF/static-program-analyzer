@@ -113,7 +113,6 @@ bool isEntRef(string entRef) {
 //bool QPSGrammarUtils::isUses(string)
 //bool QPSGrammarUtils::isModifies(string)
 
-//TODO: Implement this
 bool isExprSpec(string s)
 {
     s = trim(s);

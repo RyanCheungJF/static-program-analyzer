@@ -1,18 +1,18 @@
 #include "AssignPatternHandler.h"
 
-AssignPatternHandler::AssignPatternHandler(std::shared_ptr<PatternStorage> patternStorage) {
+AssignPatternHandler::AssignPatternHandler(std::shared_ptr<PatternWithExprStorage> patternStorage) {
     this->patternStorage = patternStorage;
 }
 
 bool isSameTree(Expression* expected, Expression* actual) {
-        // if they are both constants, check they have the same value
+    // if they are both constants, check they have the same value
     if (dynamic_cast<Constant*>(expected) && dynamic_cast<Constant*>(actual)) {
         auto expectedValue = dynamic_cast<Constant*>(expected)->value;
         auto actualValue = dynamic_cast<Constant*>(actual)->value;
         return expectedValue == actualValue;
     }
     // if they are both variables, check they have the same value
-    else if (dynamic_cast<Variable*>(expected) && dynamic_cast<Variable*> (actual)) {
+    else if (dynamic_cast<Variable*>(expected) && dynamic_cast<Variable*>(actual)) {
         auto expectedName = dynamic_cast<Variable*>(expected)->name;
         auto actualName = dynamic_cast<Variable*>(actual)->name;
         return expectedName == actualName;
@@ -53,26 +53,31 @@ bool isSubTree(Expression* subTreeExpression, Expression* treeExpression) {
 std::vector<std::vector<std::string>> AssignPatternHandler::handleVarWildcard(std::string lhs) {
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>* pointer = patternStorage->getPatternWithLHS(lhs);
-    if (pointer == NULL) return res;
+    std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>* pointer =
+        patternStorage->getPatternWithLHS(lhs);
+    if (pointer == NULL)
+        return res;
 
     for (const auto& pair : *pointer) {
-        res.push_back({ std::to_string(pair.first), lhs });
+        res.push_back({std::to_string(pair.first), lhs});
     }
     return res;
 }
 
-std::vector<std::vector<std::string>> AssignPatternHandler::handleVarPattern(std::string lhs, std::string rhs, bool (*checkTree)(Expression*, Expression*)) {
+std::vector<std::vector<std::string>>
+AssignPatternHandler::handleVarPattern(std::string lhs, std::string rhs, bool (*checkTree)(Expression*, Expression*)) {
     std::unique_ptr<Expression> expected = pkb_utils::buildSubtree(rhs);
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>* pointer = patternStorage->getPatternWithLHS(lhs);
-    if (pointer == NULL) return res;
+    std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>* pointer =
+        patternStorage->getPatternWithLHS(lhs);
+    if (pointer == NULL)
+        return res;
 
     for (const auto& pair : *pointer) {
         Expression* actual = pair.second.get();
         if (checkTree(expected.get(), actual)) {
-            res.push_back({ std::to_string(pair.first), lhs });
+            res.push_back({std::to_string(pair.first), lhs});
         }
     }
     return res;
@@ -93,7 +98,8 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handleWildcardWildca
     return res;
 }
 
-std::vector<std::vector<std::string>> AssignPatternHandler::handleSynPattern(std::string rhs, bool (*checkTree)(Expression*, Expression*)) {
+std::vector<std::vector<std::string>>
+AssignPatternHandler::handleSynPattern(std::string rhs, bool (*checkTree)(Expression*, Expression*)) {
     std::vector<std::vector<std::string>> res;
     std::unique_ptr<Expression> expected = std::move(pkb_utils::buildSubtree(rhs));
 
@@ -111,7 +117,8 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handleSynPattern(std
     return res;
 }
 
-std::vector<std::vector<std::string>> AssignPatternHandler::handleWildcardPattern(std::string rhs, bool (*checkTree)(Expression*, Expression*)) {
+std::vector<std::vector<std::string>>
+AssignPatternHandler::handleWildcardPattern(std::string rhs, bool (*checkTree)(Expression*, Expression*)) {
     std::unique_ptr<Expression> expected = std::move(pkb_utils::buildSubtree(rhs));
     std::vector<std::vector<std::string>> res;
 
@@ -142,8 +149,8 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handle(Pattern p) {
         rightWildcard = rhs[rhs.length() - 1] == '_';
     }
 
-    if (leftWildcard && rightWildcard) rhs = rhs.substr(1, rhs.length() - 2);
-
+    if (leftWildcard && rightWildcard)
+        rhs = rhs.substr(1, rhs.length() - 2);
 
     if (lhsType == ParameterType::FIXED_STRING) {
         if (rhs == "_") {

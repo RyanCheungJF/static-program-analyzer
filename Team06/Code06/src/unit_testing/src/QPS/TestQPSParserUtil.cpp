@@ -63,23 +63,23 @@ TEST_CASE("stringToWordList / string with consecutive spaces / return wordlist w
 
 TEST_CASE("extractParameters / one clause / return vector with one tuple") {
 	string input = "a(sd,\"x*y\")";
-	tuple<string, string, string> expectedTuple("a", "sd", "\"x*y\"");
+	tuple<string, string, string, string> expectedTuple("a", "sd", "\"x*y\"", "");
 
-	tuple<string, string, string> output = extractParameters(input);
+	tuple<string, string, string, string> output = extractParameters(input);
 	REQUIRE(expectedTuple == output);
 }
 
 TEST_CASE("extractParameters / one clause with brackets in third parameter / return vector with one tuple") {
 	string input = "a(sd,\"(x*y)+(z*y)\")";
-	tuple<string, string, string> expectedTuple("a", "sd", "\"(x*y)+(z*y)\"");
-	tuple<string, string, string> output = extractParameters(input);
+	tuple<string, string, string, string> expectedTuple("a", "sd", "\"(x*y)+(z*y)\"", "");
+	tuple<string, string, string, string> output = extractParameters(input);
 	REQUIRE(expectedTuple == output);
 }
 
 TEST_CASE("extractParameters / pattern string with wild cards / return vector with one tuple") {
 	string input = "a(sd,_\"(x*y)+(z*y)\"_)";
-	tuple<string, string, string> expectedTuple("a", "sd", "_\"(x*y)+(z*y)\"_");
-	tuple<string, string, string> output = extractParameters(input);
+	tuple<string, string, string, string> expectedTuple("a", "sd", "_\"(x*y)+(z*y)\"_", "");
+	tuple<string, string, string, string> output = extractParameters(input);
 	REQUIRE(expectedTuple == output);
 }
 

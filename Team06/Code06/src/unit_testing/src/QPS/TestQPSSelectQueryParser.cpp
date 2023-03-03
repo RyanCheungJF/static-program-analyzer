@@ -1,6 +1,7 @@
 #include "catch.hpp"
 #include <string>
 #include "qps/parser/SelectQueryParser.h"
+#include "exceptions/SyntaxException.h"
 using namespace std;
 
 TEST_CASE("parse / sample select query string / returns query object") {
@@ -73,6 +74,36 @@ TEST_CASE("parse / single pattern clause, with dummy and / return query object")
     SelectQueryParser sqp;
     Query q = sqp.parse(input);
     CHECK(true);
+}
+
+TEST_CASE("parse / single ifs pattern clause, with dummy variable v / return ifs pattern query object") {
+    string input = "Select s pattern ifs(v, _, _)";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / single ifs pattern clause, with third parameter not wild card / expect syntax error") {
+    // The third parameter MUST be a wild card if it exists.
+    string input = "Select s pattern ifs(v, _, sheeHuiBestTA)";
+    // error because of SheeHui
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
+TEST_CASE("parse / missing third  / expect syntax error") {
+    // The third parameter MUST be a wild card if it exists.
+    string input = "Select s pattern ifs(v, _,)";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
+
+TEST_CASE("parse / single ifs pattern clause, with second parameter not wild card / expect syntax error") {
+    // The second parameter can either be an ExprSpec or a wild card
+    string input = "Select s pattern ifs(v, sheeHuiBestTA, _)";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
 }
 
 TEST_CASE("parse / single pattern clause, with multiple dummy ands / return query object") {

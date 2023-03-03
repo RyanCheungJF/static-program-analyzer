@@ -5,6 +5,7 @@
 #include "ParentTRelationship.h"
 #include "UsesRelationship.h"
 #include "ModifiesRelationship.h"
+#include "../../unit_testing/src/stubs/NextRelationshipStub.h"
 
 shared_ptr<Relationship> Relationship::makeRelationship(string type, vector<Parameter> params)
 {
@@ -22,6 +23,8 @@ shared_ptr<Relationship> Relationship::makeRelationship(string type, vector<Para
 		return make_shared<UsesRelationship>(UsesRelationship(params));
 	case RelationshipType::MODIFIES:
 		return make_shared<ModifiesRelationship>(ModifiesRelationship(params));
+    case RelationshipType::NEXT: // TODO: delete this when the real one is ready
+        return make_shared<NextRelationshipStub>(NextRelationshipStub(params));
 	}
 	throw SyntaxException();
 }
@@ -78,5 +81,7 @@ const unordered_map<string, RelationshipType> Relationship::stringToTypeMap = {
 	{"Parent", RelationshipType::PARENT},
 	{"Parent*", RelationshipType::PARENTT},
 	{"Uses", RelationshipType::USES},
-	{"Modifies", RelationshipType::MODIFIES}
+	{"Modifies", RelationshipType::MODIFIES},
+    {"Next", RelationshipType::NEXT},
+    {"Next*", RelationshipType::NEXTT}
 };

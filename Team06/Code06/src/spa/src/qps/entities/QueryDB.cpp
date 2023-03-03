@@ -40,7 +40,7 @@ void QueryDB::insertTable(Table table) {
     }
 }
 
-
+// TODO: this function should be placed in Table instead of QueryDB
 Table QueryDB::intersectTables(Table t1, Table t2, const vector<pair<int,int>> & intersection) {
     pair<vector<int>, vector<int>> nonIntersectionIndexes = getAllNonIntersectingParams(t1, t2);
     vector<Parameter> newHeader;

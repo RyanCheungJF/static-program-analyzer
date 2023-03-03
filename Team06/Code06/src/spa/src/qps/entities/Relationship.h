@@ -13,6 +13,10 @@ enum class RelationshipType {
 	PARENTT,
 	USES,
 	MODIFIES,
+    CALLS,
+    CALLST,
+    NEXT,
+    NEXTT,
 	RELATIONSHIP,
 	UNKNOWN
 };
