@@ -72,19 +72,6 @@ ReadPKB::getCFG(ProcName name) {
     return pkbInstance->getCFG(name);
 }
 
-// TODO: liaise with QPS on what they want as return type for the below
-//std::vector<StmtNum> ReadPKB::getNextRHS(StmtNum n1) {
-//  return pkbInstance->getNextRHS(n1);
-//}
-//
-//std::vector<StmtNum> ReadPKB::getNextLHS(StmtNum n2) {
-//  return pkbInstance->getNextLHS(n2);
-//}
-//
-//std::vector<StmtNum> ReadPKB::getNextTRHS(StmtNum n1) {
-//  return pkbInstance->getNextTRHS(n1);
-//}
-//
-//std::vector<StmtNum> ReadPKB::getNextTLHS(StmtNum n2) {
-//  return pkbInstance->getNextTLHS(n2);
-//}
+std::unordered_set<ProcName> ReadPKB::getCallsT(ProcName p) {
+    return pkbInstance->getCallsT(p);
+}

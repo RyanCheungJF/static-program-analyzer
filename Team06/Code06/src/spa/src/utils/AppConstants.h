@@ -38,6 +38,8 @@ public:
     inline static const std::string PARENTT = "Parent*";
     inline static const std::string USES = "Uses";
     inline static const std::string MODIFIES = "Modifies";
+    inline static const std::string NEXT = "Next";
+    inline static const std::string NEXTT = "Next*";
 
     // terminals
     inline static const std::string THEN = "then";
