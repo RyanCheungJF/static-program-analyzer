@@ -1,0 +1,32 @@
+#include "CallsTRelationship.h"
+
+CallsTRelationship::CallsTRelationship(vector<Parameter> &ps) {
+  if (!validateSyntax(ps)) {
+    throw SyntaxException();
+  }
+  type = RelationshipType::CALLST;
+  params = ps;
+}
+
+bool CallsTRelationship::validateParams() {
+  if (!Parameter::isEntityRef(params[0])) {
+    return false;
+  }
+  if (!Parameter::isEntityRef(params[1])) {
+    return false;
+  }
+  return true;
+}
+
+bool CallsTRelationship::validateSyntax(vector<Parameter> &ps) {
+  if (ps.size() != 2) {
+    return false;
+  }
+  if (!Parameter::isSyntacticEntityRef(ps[0])) {
+    return false;
+  }
+  if (!Parameter::isSyntacticEntityRef(ps[1])) {
+    return false;
+  }
+  return true;
+}

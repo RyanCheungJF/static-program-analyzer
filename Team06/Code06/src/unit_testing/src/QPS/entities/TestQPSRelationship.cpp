@@ -1,3 +1,5 @@
+#include "QPS/entities/CallsRelationship.h"
+#include "QPS/entities/CallsTRelationship.h"
 #include "QPS/entities/FollowsRelationship.h"
 #include "QPS/entities/FollowsTRelationship.h"
 #include "QPS/entities/ModifiesRelationship.h"
@@ -548,6 +550,136 @@ TEST_CASE("makeRelationship / NextT relationship, less than 2 parameter / "
           "throws error") {
 
   string typeInput = AppConstants::NEXTT;
+  Parameter p1("a", AppConstants::SYNONYM);
+  vector<Parameter> inputParameters{p1};
+
+  REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE(
+    "makeRelationship / Calls relationship / return relationship object") {
+  string typeInput = AppConstants::CALLS;
+  Parameter p1("a", AppConstants::SYNONYM);
+  Parameter p2("_", AppConstants::WILDCARD);
+  Parameter p3("ent_ref", AppConstants::FIXED_STRING);
+  vector<Parameter> inputParameters{p1, p2};
+  vector<Parameter> inputParameters2{p2, p3};
+  vector<Parameter> inputParameters3{p3, p1};
+  RelationshipType expectedType = RelationshipType::CALLS;
+
+  shared_ptr<Relationship> output =
+      Relationship::makeRelationship(typeInput, inputParameters);
+  CallsRelationship expected(inputParameters);
+  CHECK(expected == *output);
+  shared_ptr<Relationship> output2 =
+      Relationship::makeRelationship(typeInput, inputParameters2);
+  CallsRelationship expected2(inputParameters2);
+  CHECK(expected2 == *output2);
+  shared_ptr<Relationship> output3 =
+      Relationship::makeRelationship(typeInput, inputParameters3);
+  CallsRelationship expected3(inputParameters3);
+  CHECK(expected3 == *output3);
+}
+
+TEST_CASE("makeRelationship / Calls, wrong 1st param / throws error") {
+
+  string typeInput = AppConstants::CALLS;
+  Parameter p1("stmt_ref", AppConstants::FIXED_INT);
+  Parameter p2("a", AppConstants::SYNONYM);
+  vector<Parameter> inputParameters{p1, p2};
+  REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / Calls, wrong 2nd param / throws error") {
+
+  string typeInput = AppConstants::CALLS;
+  Parameter p1("a", AppConstants::SYNONYM);
+  Parameter p2("stmt_ref", AppConstants::FIXED_INT);
+  vector<Parameter> inputParameters{p1, p2};
+  REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / Calls relationship, more than 2 parameter / "
+          "throws error") {
+
+  string typeInput = AppConstants::CALLS;
+  Parameter p1("a", AppConstants::SYNONYM);
+  Parameter p2("b", AppConstants::SYNONYM);
+  Parameter p3("c", AppConstants::SYNONYM);
+  vector<Parameter> inputParameters{p1, p2, p3};
+
+  REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / Calls relationship, less than 2 parameter / "
+          "throws error") {
+
+  string typeInput = AppConstants::CALLS;
+  Parameter p1("a", AppConstants::SYNONYM);
+  vector<Parameter> inputParameters{p1};
+
+  REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE(
+    "makeRelationship / CallsT relationship / return relationship object") {
+  string typeInput = AppConstants::CALLST;
+  Parameter p1("a", AppConstants::SYNONYM);
+  Parameter p2("_", AppConstants::WILDCARD);
+  Parameter p3("ent_ref", AppConstants::FIXED_STRING);
+  vector<Parameter> inputParameters{p1, p2};
+  vector<Parameter> inputParameters2{p2, p3};
+  vector<Parameter> inputParameters3{p3, p1};
+  RelationshipType expectedType = RelationshipType::CALLST;
+
+  shared_ptr<Relationship> output =
+      Relationship::makeRelationship(typeInput, inputParameters);
+  CallsTRelationship expected(inputParameters);
+  CHECK(expected == *output);
+  shared_ptr<Relationship> output2 =
+      Relationship::makeRelationship(typeInput, inputParameters2);
+  CallsTRelationship expected2(inputParameters2);
+  CHECK(expected2 == *output2);
+  shared_ptr<Relationship> output3 =
+      Relationship::makeRelationship(typeInput, inputParameters3);
+  CallsTRelationship expected3(inputParameters3);
+  CHECK(expected3 == *output3);
+}
+
+TEST_CASE("makeRelationship / CallsT, wrong 1st param / throws error") {
+
+  string typeInput = AppConstants::CALLST;
+  Parameter p1("stmt_ref", AppConstants::FIXED_INT);
+  Parameter p2("a", AppConstants::SYNONYM);
+  vector<Parameter> inputParameters{p1, p2};
+  REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / CallsT, wrong 2nd param / throws error") {
+
+  string typeInput = AppConstants::CALLST;
+  Parameter p1("a", AppConstants::SYNONYM);
+  Parameter p2("stmt_ref", AppConstants::FIXED_INT);
+  vector<Parameter> inputParameters{p1, p2};
+  REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / CallsT relationship, more than 2 parameter / "
+          "throws error") {
+
+  string typeInput = AppConstants::CALLST;
+  Parameter p1("a", AppConstants::SYNONYM);
+  Parameter p2("b", AppConstants::SYNONYM);
+  Parameter p3("c", AppConstants::SYNONYM);
+  vector<Parameter> inputParameters{p1, p2, p3};
+
+  REQUIRE_THROWS(Relationship::makeRelationship(typeInput, inputParameters));
+}
+
+TEST_CASE("makeRelationship / CallsT relationship, less than 2 parameter / "
+          "throws error") {
+
+  string typeInput = AppConstants::CALLST;
   Parameter p1("a", AppConstants::SYNONYM);
   vector<Parameter> inputParameters{p1};
 

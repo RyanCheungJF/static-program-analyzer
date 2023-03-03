@@ -1,6 +1,6 @@
 #include "NextRelationship.h"
 
-NextRelationship::NextRelationship(vector<Parameter> ps) {
+NextRelationship::NextRelationship(vector<Parameter> &ps) {
   if (!validateSyntax(ps)) {
     throw SyntaxException();
   }
@@ -18,7 +18,7 @@ bool NextRelationship::validateParams() {
   return true;
 }
 
-bool NextRelationship::validateSyntax(vector<Parameter> ps) {
+bool NextRelationship::validateSyntax(vector<Parameter> &ps) {
   if (ps.size() != 2) {
     return false;
   }

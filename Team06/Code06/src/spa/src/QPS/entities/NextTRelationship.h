@@ -7,10 +7,10 @@ using namespace std;
 
 class NextTRelationship : public Relationship {
 public:
-  NextTRelationship(vector<Parameter>);
+  NextTRelationship(vector<Parameter> &);
   bool validateParams();
 
 private:
-  bool validateSyntax(vector<Parameter>);
+  bool validateSyntax(vector<Parameter> &);
 };
 #endif // !SPA_QPS_NEXTTRELATIONSHIP_H
