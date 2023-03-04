@@ -29,7 +29,7 @@ bool CallsTRelationship::validateSyntax(vector<Parameter> &ps) {
     return false;
   }
   if (!Parameter::isSyntacticEntityRef(ps[1]) &&
-      !Parameter::isProcedure(ps[0])) {
+      !Parameter::isProcedure(ps[1])) {
     return false;
   }
   return true;
