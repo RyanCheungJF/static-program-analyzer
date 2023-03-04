@@ -9,10 +9,12 @@ CallsRelationship::CallsRelationship(vector<Parameter> &ps) {
 }
 
 bool CallsRelationship::validateParams() {
-  if (!Parameter::isEntityRef(params[0])) {
+  if (params[0].getType() != ParameterType::PROCEDURE &&
+      !Parameter::isFixedStringOrWildcard(params[0])) {
     return false;
   }
-  if (!Parameter::isEntityRef(params[1])) {
+  if (params[1].getType() != ParameterType::PROCEDURE &&
+      !Parameter::isFixedStringOrWildcard(params[1])) {
     return false;
   }
   return true;

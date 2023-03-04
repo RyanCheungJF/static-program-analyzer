@@ -41,6 +41,8 @@ public:
   static bool isProcedure(Parameter &);
   static bool isDsgEntity(Parameter &);
   static bool isPatternSyn(Parameter &);
+  static bool isFixedStringOrWildcard(Parameter &);
+  static bool isFixedIntOrWildCard(Parameter &);
   bool isUncheckedSynonym();
   void updateSynonymType(ParameterType);
   string getTypeString() const;

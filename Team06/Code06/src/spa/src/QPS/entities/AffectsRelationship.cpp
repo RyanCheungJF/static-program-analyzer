@@ -9,10 +9,12 @@ AffectsRelationship::AffectsRelationship(vector<Parameter> &ps) {
 }
 
 bool AffectsRelationship::validateParams() {
-  if (!Parameter::isStatementRef(params[0])) {
+  if (!(params[0].getType() == ParameterType::ASSIGN) &&
+      !(Parameter::isFixedIntOrWildCard(params[0]))) {
     return false;
   }
-  if (!Parameter::isStatementRef(params[1])) {
+  if (!(params[1].getType() == ParameterType::ASSIGN) &&
+      !(Parameter::isFixedIntOrWildCard(params[1]))) {
     return false;
   }
   return true;
