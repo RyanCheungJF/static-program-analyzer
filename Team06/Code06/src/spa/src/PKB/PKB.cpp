@@ -213,7 +213,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
             for (auto stmtNum : stmtNums) {
                 res.push_back({std::to_string(stmtNum), std::to_string(stmtNum)});
             }
-        } 
+        }
     }
     // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
     else if (paramType == ParameterType::CONSTANT) {
@@ -225,7 +225,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
     // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
     else if (paramType == ParameterType::VARIABLE) {
         std::unordered_set<Ent> vars = entityStorage->getEntNames();
-        for (auto var: vars) {
+        for (auto var : vars) {
             res.push_back({var, var});
         }
     }
@@ -236,8 +236,6 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
             res.push_back({proc, proc});
         }
     }
-
-    
 
     return res;
 }

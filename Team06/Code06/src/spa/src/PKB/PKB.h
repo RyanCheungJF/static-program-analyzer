@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include "../../unit_testing/src/stubs/With.h"
 #include "../qps/entities/Pattern.h"
 #include "../qps/entities/Relationship.h"
 #include "../utils/AppConstants.h"
@@ -28,8 +29,6 @@
 #include "storage/ProcedureStorage.h"
 #include "storage/StmtStorage.h"
 #include "utils/AppConstants.h"
-
-#include "../../unit_testing/src/stubs/With.h"
 
 class PKB : AppConstants {
 
@@ -144,7 +143,6 @@ public:
 
     // returns the cfg if it exists, else it returns an empty graph
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> getCFG(ProcName name);
-
 
 private:
     // STATEMENTS
