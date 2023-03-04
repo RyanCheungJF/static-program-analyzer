@@ -69,6 +69,26 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
         REQUIRE(equals(res, expected));
    }
 
+   SECTION("Calls(proc synonym, fixed_string)") {
+        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
+                                          Parameter("proc3", AppConstants::FIXED_STRING)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
+
+        auto res = readPkb.findRelationship(rs1);
+        vector<vector<string>> expected = {{"proc2", "proc3"}};
+        REQUIRE(equals(res, expected));
+   }
+
+   SECTION("Calls(proc synonym, wildcard)") {
+        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
+                                          Parameter("_", AppConstants::WILDCARD)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
+
+        auto res = readPkb.findRelationship(rs1);
+        vector<vector<string>> expected = {{"proc1", "proc2"}, {"proc2", "proc3"}};
+        REQUIRE(equals(res, expected));
+   }
+
    SECTION("Calls*(fixed_string, wildcard)") {
         std::vector<Parameter> params1 = {Parameter("proc1", AppConstants::FIXED_STRING),
                                           Parameter("_", AppConstants::WILDCARD)};
@@ -86,6 +106,36 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
 
         auto res = readPkb.findRelationship(rs1);
         vector<vector<string>> expected = {{"proc1", "proc2"}, {"proc1", "proc3"}};
+        REQUIRE(equals(res, expected));
+   }
+
+   SECTION("Calls*(proc synonym, proc synonym)") {
+        std::vector<Parameter> params1 = {Parameter("p1", AppConstants::PROCEDURE),
+                                          Parameter("p2", AppConstants::PROCEDURE)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
+
+        auto res = readPkb.findRelationship(rs1);
+        vector<vector<string>> expected = {{"proc1", "proc2"}, {"proc1", "proc3"}, {"proc2", "proc3"}};
+        REQUIRE(equals(res, expected));
+   }
+
+   SECTION("Calls*(wildcard, proc synonym)") {
+        std::vector<Parameter> params1 = {Parameter("_", AppConstants::WILDCARD),
+                                          Parameter("p2", AppConstants::PROCEDURE)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
+
+        auto res = readPkb.findRelationship(rs1);
+        vector<vector<string>> expected = {{"proc1", "proc2"}, {"proc1", "proc3"}, {"proc2", "proc3"}};
+        REQUIRE(equals(res, expected));
+   }
+
+   SECTION("Calls*(wildcard, wildcard)") {
+        std::vector<Parameter> params1 = {Parameter("_", AppConstants::WILDCARD),
+                                          Parameter("_", AppConstants::WILDCARD)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
+
+        auto res = readPkb.findRelationship(rs1);
+        vector<vector<string>> expected = {{"proc1", "proc2"}, {"proc1", "proc3"}, {"proc2", "proc3"}};
         REQUIRE(equals(res, expected));
    }
 }
