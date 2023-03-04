@@ -18,6 +18,7 @@ private:
    *  stmt | statementNumbers
    *  "if" | [1, 15, ...]
    *  "while" | [7, 11, ...]
+   *  ... "assign", "call", "print", "read"
    */
   std::unordered_map<Stmt, std::unordered_set<StmtNum>> stmt_stmtNum;
   std::unordered_map<StmtNum, std::unordered_set<Stmt>> stmtNum_stmt;

@@ -1,3 +1,4 @@
+
 #include <algorithm>
 
 #include "../../spa/src/PKB/ReadPKB.cpp"
@@ -141,6 +142,9 @@ PKB buildPkb() {
     lhs = "z";
     patternTree = pkb_utils::buildSubtree("x * y");
     writePkb.writePattern(lhs, 11, move(patternTree));
+
+    writePkb.setWhilePattern(3, {"x", "y"});
+    writePkb.setIfPattern(9, {"count"});
 
     return pkb;
 }
@@ -535,6 +539,55 @@ TEST_CASE("Select synonym from single assign pattern clause, synonym is in claus
         result = qps.processQueries(query, readPkb);
         REQUIRE(result.size() == 1);
         REQUIRE(exists(result, "11"));
+    }
+}
+
+TEST_CASE("Select synonym from single if/while pattern clause, synonym is in clause") {
+    PKB pkb = buildPkb();
+    ReadPKB readPkb;
+    readPkb.setInstancePKB(pkb);
+    QPS qps;
+    vector<string> result;
+
+    SECTION("if", "exact") {
+        string query = R"(
+		if if; 
+		Select if pattern if("count", _, _))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(result[0] == "9");
+        REQUIRE(exists(result, "9"));
+    }
+
+    SECTION("if", "syn") {
+        string query = R"(
+		if if; variable v;
+		Select if pattern if(v, _, _))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(exists(result, "9"));
+    }
+
+    SECTION("while", "exact") {
+        string query = R"(
+		while w; 
+		Select w pattern w("abcdef", _))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 0);
+    }
+
+    SECTION("while", "syn") {
+        string query = R"(
+		while w; variable v;
+		Select v pattern w(v, _))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 2);
+        REQUIRE(exists(result, "x"));
+        REQUIRE(exists(result, "y"));
     }
 }
 

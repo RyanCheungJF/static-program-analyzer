@@ -9,10 +9,12 @@ void PKB::initializePkb() {
     this->entityStorage = std::make_shared<EntityStorage>();
     this->procedureStorage = std::make_shared<ProcedureStorage>();
     this->constantStorage = std::make_shared<ConstantStorage>();
-    this->patternStorage = std::make_shared<PatternStorage>();
+    this->assignPatternStorage = std::make_shared<PatternWithExprStorage>();
+    this->ifPatternStorage = std::make_shared<PatternStorage>();
+    this->whilePatternStorage = std::make_shared<PatternStorage>();
+    this->callStorage = std::make_shared<CallStorage>();
     this->usesStorage = std::make_shared<ModifiesUsesStorage>();
     this->modifiesStorage = std::make_shared<ModifiesUsesStorage>();
-    this->callStorage = std::make_shared<CallStorage>();
     this->cfgStorage = std::make_shared<CFGStorage>();
     this->callsStorage = std::make_shared<CallsStorage>();
     this->callsTStorage = std::make_shared<CallsStorage>();
@@ -24,7 +26,10 @@ void PKB::initializePkb() {
 
     this->modifiesUsesMap[RelationshipType::MODIFIES] = modifiesStorage;
     this->modifiesUsesMap[RelationshipType::USES] = usesStorage;
-    
+
+    this->ifWhilePatternMap[ParameterType::IF] = ifPatternStorage;
+    this->ifWhilePatternMap[ParameterType::WHILE] = whilePatternStorage;
+
     this->callsMap[RelationshipType::CALLS] = callsStorage;
     this->callsMap[RelationshipType::CALLST] = callsTStorage;
 }
@@ -70,7 +75,7 @@ void PKB::setCalls(ProcName caller, std::unordered_set<ProcName> callees) {
 }
 
 void PKB::setCallsT(ProcName caller, std::unordered_set<ProcName> callees) {
-  callsStorage->writeCallP(caller, callees);
+    callsTStorage->writeCallP(caller, callees);
 }
 
 void PKB::setUsesS(StmtNum num, std::unordered_set<Ent> entities) {
@@ -90,28 +95,43 @@ void PKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {
 }
 
 void PKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer) {
-    patternStorage->writePattern(lhs, num, std::move(pointer));
+    assignPatternStorage->writePattern(lhs, num, std::move(pointer));
 }
 
-void PKB::writeCFG(ProcName name, std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph) {
+void PKB::writeIfPattern(StmtNum num, std::unordered_set<Ent> variables) {
+    ifPatternStorage->writePattern(num, variables);
+}
+
+void PKB::writeWhilePattern(StmtNum num, std::unordered_set<Ent> variables) {
+    whilePatternStorage->writePattern(num, variables);
+}
+
+void PKB::writeCFG(ProcName name,
+                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph) {
     cfgStorage->writeCFG(name, graph);
 }
 
 std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relationship> rs) {
-  RelationshipType type = rs->getType();
-  vector<Parameter> params = rs->getParameters();
-  Parameter param1 = params[0];
-  Parameter param2 = params[1];
-  if (followsParentMap.find(type) != followsParentMap.end()) {
-    FollowsParentHandler handler(followsParentMap.at(type), statementStorage);
-    return handler.handle(param1, param2);
-  } else if (modifiesUsesMap.find(type) != modifiesUsesMap.end()) {
-    ModifiesUsesHandler handler(modifiesUsesMap.at(type), statementStorage);
-    return handler.handle(param1, param2);
-  } else if (callsMap.find(type) != callsMap.end()) {
-    CallsHandler handler(callsMap.at(type));
-    return handler.handle(param1, param2);
-  }
+    RelationshipType type = rs->getType();
+    vector<Parameter> params = rs->getParameters();
+    Parameter param1 = params[0];
+    Parameter param2 = params[1];
+    if (followsParentMap.find(type) != followsParentMap.end()) {
+        FollowsParentHandler handler(followsParentMap.at(type), statementStorage);
+        return handler.handle(param1, param2);
+    }
+    else if (modifiesUsesMap.find(type) != modifiesUsesMap.end()) {
+        ModifiesUsesHandler handler(modifiesUsesMap.at(type), statementStorage);
+        return handler.handle(param1, param2);
+    }
+    else if (callsMap.find(type) != callsMap.end()) {
+        CallsHandler handler(callsMap.at(type));
+        return handler.handle(param1, param2);
+    }
+    else if (nextMap.find(type) != nextMap.end()) {
+        NextHandler handler(cfgStorage, statementStorage, procedureStorage);
+        return handler.handle(param1, param2);
+    }
     return std::vector<std::vector<std::string>>();
 }
 
@@ -147,8 +167,20 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
 }
 
 std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
-    AssignPatternHandler handler(patternStorage);
-    return handler.handle(p);
+    // TODO: This violates LoD. Needs QPS to have a getPatternType() function
+    ParameterType type = p.getPatternSyn()->getType();
+
+    if (type == ParameterType::ASSIGN) {
+        AssignPatternHandler handler(assignPatternStorage);
+        return handler.handle(p);
+    }
+    else if (ifWhilePatternMap.find(type) != ifWhilePatternMap.end()) {
+        IfWhilePatternHandler handler(ifWhilePatternMap.at(type));
+
+        return handler.handle(p);
+    }
+
+    return std::vector<std::vector<std::string>>();
 }
 
 bool PKB::checkStatement(Stmt stmt, StmtNum num) {
@@ -199,118 +231,10 @@ std::pair<StmtNum, ProcName> PKB::getCallStmt(StmtNum s) {
     return callStorage->getCallStmt(s);
 }
 
+std::unordered_set<ProcName> PKB::getCallsT(ProcName p) {
+    return callsTStorage->getCallees(p);
+}
+
 std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> PKB::getCFG(ProcName name) {
     return cfgStorage->getGraph(name);
 }
-
-// TODO: liaise with QPS on what they want as return type for the below.
-// TODO: move to handler
-//std::vector<StmtNum> PKB::getNextRHS(StmtNum n1) {
-//  CFGNodeStub *node = cfgStorage->getNode(n1);
-//  if (node == nullptr) {
-//    return {};
-//  }
-//  if ((n1 + 1) <= (node->last)) {
-//    return {n1 + 1};
-//  }
-//  std::vector<StmtNum> res;
-//  std::vector<CFGNodeStub *> children = node->children;
-//  for (CFGNodeStub *child : children) {
-//    res.push_back(child->first);
-//  }
-//  return res;
-//}
-//
-//std::vector<StmtNum> PKB::getNextLHS(StmtNum n2) {
-//  CFGNodeStub *node = cfgStorage->getNode(n2);
-//  if (node == nullptr) {
-//    return {};
-//  }
-//  if ((n2 - 1) >= (node->first)) {
-//    return {n2 - 1};
-//  }
-//
-//  std::vector<StmtNum> res;
-//  for (auto child : node->parents) {
-//    res.push_back(child->last);
-//  }
-//  return res;
-//}
-//
-//std::vector<StmtNum> PKB::getNextTRHS(StmtNum n1) {
-//  CFGNodeStub *node = cfgStorage->getNode(n1);
-//  if (node == nullptr) {
-//    return {};
-//  }
-//
-//  std::unordered_set<StmtNum> res;
-//  std::queue<CFGNodeStub *> queue;
-//
-//  for (int i = n1; i <= node->last; i++) {
-//    res.insert(i);
-//  }
-//  for (CFGNodeStub *child : node->children) {
-//    queue.push(child);
-//  }
-//
-//  std::unordered_set<StmtNum> seen;
-//  while (!queue.empty()) {
-//    CFGNodeStub *curr = queue.front();
-//    queue.pop();
-//
-//    if (seen.find(curr->first) != seen.end()) {
-//      continue;
-//    }
-//    seen.insert(curr->first);
-//
-//    for (int i = curr->first; i <= curr->last; i++) {
-//      res.insert(i);
-//    }
-//
-//    for (CFGNodeStub *child : curr->children) {
-//      queue.push(child);
-//    }
-//  }
-//  std::vector<StmtNum> result;
-//  result.insert(result.end(), res.begin(), res.end());
-//  return result;
-//}
-//
-//std::vector<StmtNum> PKB::getNextTLHS(StmtNum n2) {
-//  CFGNodeStub *node = cfgStorage->getNode(n2);
-//  if (node == nullptr) {
-//    return {};
-//  }
-//
-//  std::unordered_set<StmtNum> res;
-//  std::queue<CFGNodeStub *> queue;
-//
-//  for (int i = n2; i >= node->first; i--) {
-//    res.insert(i);
-//  }
-//  for (CFGNodeStub *parent : node->parents) {
-//    queue.push(parent);
-//  }
-//
-//  std::unordered_set<StmtNum> seen;
-//  while (!queue.empty()) {
-//    CFGNodeStub *curr = queue.front();
-//    queue.pop();
-//
-//    if (seen.find(curr->last) != seen.end()) {
-//      continue;
-//    }
-//    seen.insert(curr->last);
-//
-//    for (int i = curr->last; i >= curr->first; i--) {
-//      res.insert(i);
-//    }
-//
-//    for (CFGNodeStub *parent : curr->parents) {
-//      queue.push(parent);
-//    }
-//  }
-//  std::vector<StmtNum> result;
-//  result.insert(result.end(), res.begin(), res.end());
-//  return result;
-//}

@@ -39,9 +39,9 @@ public:
     void setCall(StmtNum callLine, ProcName procedure_being_called);
 
     void setCalls(ProcName caller, std::unordered_set<ProcName> callees);
-    
+
     void setCallsT(ProcName caller, std::unordered_set<ProcName> callees);
-    
+
     void setUsesS(StmtNum num, std::unordered_set<Ent> entities);
 
     void setUsesP(ProcName, std::unordered_set<Ent> entities);
@@ -50,9 +50,14 @@ public:
 
     void setModifiesP(ProcName, std::unordered_set<Ent> entities);
 
+    void setIfPattern(StmtNum num, std::unordered_set<Ent> variables);
+
+    void setWhilePattern(StmtNum num, std::unordered_set<Ent> variables);
+
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
-    void writeCFG(ProcName name, std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph);
+    void writeCFG(ProcName name,
+                  std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph);
 
 private:
     PKB* pkbInstance = NULL;

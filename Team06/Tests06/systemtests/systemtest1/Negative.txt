@@ -208,7 +208,32 @@ variable v;
 Select v such that Modifies(_, v)
 SemanticError
 5000
-41 - Calls only supported for procedure
+41 - invalid If Pattern, invalid param
+if if; assign a;
+Select if pattern if(a, _, _)
+SemanticError
+5000
+42 - invalid While Pattern, extra param
+while w;
+Select w pattern w("x", _, _)
+SemanticError
+5000
+43 - invalid If Pattern, invalid second param
+if if; assign a;
+Select if pattern if("x" "invalid", _)
+SyntaxError
+5000
+44 - invalid If Pattern, invalid third param
+if if; assign a;
+Select if pattern if("x" _, "invalid")
+SyntaxError
+5000
+45 - invalid While Pattern, invalid param
+while w; assign a;
+Select w pattern w("x", "invalid")
+SyntaxError
+5000
+46 - Calls only supported for procedure
 while w; procedure p;
 Select p such that Calls(w, "Tasty")
 SemanticError
