@@ -182,25 +182,25 @@ void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, 
         if (auto ifStmt = CAST_TO(IfStatement, stmtList->getStmtForStmtIdx(i))) {
             cfg[currStmtNum]["children"].insert(ifStmt->getFirstStmtNumForThen());
             cfg[currStmtNum]["children"].insert(ifStmt->getFirstStmtNumForElse());
-            cfg[ifStmt->getFirstStmtNumForThen()]["parent"].insert(currStmtNum);
-            cfg[ifStmt->getFirstStmtNumForElse()]["parent"].insert(currStmtNum);
+            cfg[ifStmt->getFirstStmtNumForThen()]["parents"].insert(currStmtNum);
+            cfg[ifStmt->getFirstStmtNumForElse()]["parents"].insert(currStmtNum);
             buildCFGHelper(cfg, ifStmt->thenStmtList.get(), nextStmtNum == 0 ? loopedStmtNum : nextStmtNum);
             buildCFGHelper(cfg, ifStmt->elseStmtList.get(), nextStmtNum == 0 ? loopedStmtNum : nextStmtNum);
         }
         else {
             if (nextStmtNum != 0) {
                 cfg[currStmtNum]["children"].insert(nextStmtNum);
-                cfg[nextStmtNum]["parent"].insert(currStmtNum);
+                cfg[nextStmtNum]["parents"].insert(currStmtNum);
             }
             else if (loopedStmtNum != 0) {
                 cfg[currStmtNum]["children"].insert(loopedStmtNum);
-                cfg[loopedStmtNum]["parent"].insert(currStmtNum);
+                cfg[loopedStmtNum]["parents"].insert(currStmtNum);
             }
         }
 
         if (auto whileStmt = CAST_TO(WhileStatement, stmtList->getStmtForStmtIdx(i))) {
             cfg[currStmtNum]["children"].insert(whileStmt->getFirstStmtNumForList());
-            cfg[whileStmt->getFirstStmtNumForList()]["parent"].insert(currStmtNum);
+            cfg[whileStmt->getFirstStmtNumForList()]["parents"].insert(currStmtNum);
             buildCFGHelper(cfg, whileStmt->stmtList.get(), currStmtNum);
         }
     }
