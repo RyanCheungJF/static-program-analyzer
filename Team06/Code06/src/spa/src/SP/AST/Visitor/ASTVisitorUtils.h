@@ -38,6 +38,8 @@ std::vector<std::unordered_set<Ent>> handleCallStmt(WritePKB* writePKB, ReadPKB*
 void buildCFG(Procedure* proc, WritePKB* writePKB, ReadPKB* readPKB);
 void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
                     StatementList* stmtList, StmtNum loopedStmtNum);
+void connectNodesForCFG(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
+                        StmtNum curr, StmtNum next);
 void validateNoDuplicateProcedureName(std::vector<ProcName>& procedureNames);
 void validateCalledProceduresExist(std::vector<ProcName>& procedureNames,
                                    std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap);

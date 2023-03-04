@@ -180,30 +180,31 @@ void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, 
         StmtNum nextStmtNum = currStmtNum != lastStmtNum ? stmtList->getStmtNumForStmtIdx(i + 1) : 0;
 
         if (auto ifStmt = CAST_TO(IfStatement, stmtList->getStmtForStmtIdx(i))) {
-            cfg[currStmtNum]["children"].insert(ifStmt->getFirstStmtNumForThen());
-            cfg[currStmtNum]["children"].insert(ifStmt->getFirstStmtNumForElse());
-            cfg[ifStmt->getFirstStmtNumForThen()]["parents"].insert(currStmtNum);
-            cfg[ifStmt->getFirstStmtNumForElse()]["parents"].insert(currStmtNum);
+            connectNodesForCFG(cfg, currStmtNum, ifStmt->getFirstStmtNumForThen());
+            connectNodesForCFG(cfg, currStmtNum, ifStmt->getFirstStmtNumForElse());
             buildCFGHelper(cfg, ifStmt->thenStmtList.get(), nextStmtNum == 0 ? loopedStmtNum : nextStmtNum);
             buildCFGHelper(cfg, ifStmt->elseStmtList.get(), nextStmtNum == 0 ? loopedStmtNum : nextStmtNum);
         }
         else {
             if (nextStmtNum != 0) {
-                cfg[currStmtNum]["children"].insert(nextStmtNum);
-                cfg[nextStmtNum]["parents"].insert(currStmtNum);
+                connectNodesForCFG(cfg, currStmtNum, nextStmtNum);
             }
             else if (loopedStmtNum != 0) {
-                cfg[currStmtNum]["children"].insert(loopedStmtNum);
-                cfg[loopedStmtNum]["parents"].insert(currStmtNum);
+                connectNodesForCFG(cfg, currStmtNum, loopedStmtNum);
             }
         }
 
         if (auto whileStmt = CAST_TO(WhileStatement, stmtList->getStmtForStmtIdx(i))) {
-            cfg[currStmtNum]["children"].insert(whileStmt->getFirstStmtNumForList());
-            cfg[whileStmt->getFirstStmtNumForList()]["parents"].insert(currStmtNum);
+            connectNodesForCFG(cfg, currStmtNum, whileStmt->getFirstStmtNumForList());
             buildCFGHelper(cfg, whileStmt->stmtList.get(), currStmtNum);
         }
     }
+}
+
+void connectNodesForCFG(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
+    StmtNum curr, StmtNum next) {
+    cfg[curr]["children"].insert(next);
+    cfg[next]["parents"].insert(curr);
 }
 
 void validateNoDuplicateProcedureName(std::vector<ProcName>& procedureNames) {
