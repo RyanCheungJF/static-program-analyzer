@@ -308,13 +308,13 @@ void validateNoCycles(std::vector<ProcName>& procedureNames,
 
 void populateCallsTable(std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
                         std::vector<ProcName>& order, WritePKB* writePKB, ReadPKB* readPKB) {
-    //std::unordered_set<ProcName> calleeTSet;
-    //for (ProcName p : order) {
-    //    writePKB->setCalls(p, procCallMap[p]);
-    //    for (ProcName j : procCallMap[p]) {
-    //        calleeTSet.merge(readPKB->getCalls(j));
-    //    }
-    //    writePKB->setCallsT(p, calleeTSet);
-    //    calleeTSet.clear();
-    //}
+    std::unordered_set<ProcName> calleeTSet;
+    for (ProcName p : order) {
+        writePKB->setCalls(p, procCallMap[p]);
+        for (ProcName j : procCallMap[p]) {
+            calleeTSet.merge(readPKB->getCallsT(j));
+        }
+        writePKB->setCallsT(p, calleeTSet);
+        calleeTSet.clear();
+    }
 }

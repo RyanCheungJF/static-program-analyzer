@@ -49,7 +49,7 @@ void EntRefExtractorVisitor::visitIfStatement(IfStatement* ifStatement) {
     std::unordered_set<Const> constants;
 
     visitCondExprHelper(ifStatement->condExpr.get(), variables, constants);
-    // writeApi->setIfPattern(ifStatement->statementNumber, variables);
+    writeApi->setIfPattern(ifStatement->statementNumber, variables);
     writeContainerStmtEntities(ifStatement->statementNumber, variables, constants);
 }
 
@@ -58,7 +58,7 @@ void EntRefExtractorVisitor::visitWhileStatement(WhileStatement* whileStatement)
     std::unordered_set<Const> constants;
 
     visitCondExprHelper(whileStatement->condExpr.get(), variables, constants);
-    // writeApi->setWhilePattern(whileStatement->statementNumber, variables);
+    writeApi->setWhilePattern(whileStatement->statementNumber, variables);
     writeContainerStmtEntities(whileStatement->statementNumber, variables, constants);
 }
 
