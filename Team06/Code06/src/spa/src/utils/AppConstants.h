@@ -40,6 +40,10 @@ public:
     inline static const std::string MODIFIES = "Modifies";
     inline static const std::string NEXT = "Next";
     inline static const std::string NEXTT = "Next*";
+    inline static const std::string CALLS = "Calls";
+    inline static const std::string CALLST = "Calls*";
+    inline static const std::string AFFECTS = "Affects";
+    inline static const std::string AFFECTST = "Affects*";
 
     // terminals
     inline static const std::string THEN = "then";
