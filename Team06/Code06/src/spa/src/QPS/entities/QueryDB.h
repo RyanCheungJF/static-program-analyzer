@@ -12,7 +12,6 @@
 class QueryDB {
 public:
   QueryDB();
-  QueryDB(Table);
   void insertTable(Table);
   bool hasParameter(Parameter &);
   vector<string> fetch(Parameter);

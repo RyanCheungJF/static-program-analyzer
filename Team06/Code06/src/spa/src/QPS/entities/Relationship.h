@@ -20,7 +20,6 @@ enum class RelationshipType {
   CALLST,
   AFFECTS,
   AFFECTST,
-  RELATIONSHIP,
   UNKNOWN
 };
 

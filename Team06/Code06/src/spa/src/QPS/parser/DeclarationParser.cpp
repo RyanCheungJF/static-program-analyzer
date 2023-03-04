@@ -16,8 +16,6 @@ vector<Parameter> declarationToParameter(string s) {
       Parameter p = Parameter(synonym, designEntity);
       paramList.push_back(p);
     }
-
-    return paramList;
   } else {
     // is not a design entity
     throw SyntaxException();

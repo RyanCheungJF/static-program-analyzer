@@ -15,7 +15,6 @@ class QPSParser {
 public:
   QPSParser();
   vector<Query> parse(string);
-  // private:
   vector<string> splitQuery(string);
   void checkSynonyms(Query *, VariableStore);
 };

@@ -67,10 +67,7 @@ bool Relationship::operator==(const Relationship &r) const {
 
 RelationshipType Relationship::getType() { return type; }
 
-Relationship::Relationship() {
-  type = RelationshipType::UNKNOWN;
-  params;
-}
+Relationship::Relationship() { type = RelationshipType::UNKNOWN; }
 
 RelationshipType Relationship::stringToType(string s) {
   auto iter = Relationship::stringToTypeMap.find(s);
