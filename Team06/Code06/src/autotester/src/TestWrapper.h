@@ -11,7 +11,7 @@
 #include "PKB/WritePKB.h"
 #include "PKB/PKB.h"
 #include "PKB/ReadPKB.h"
-#include "qps/QPS.h"
+#include "QPS/QPS.h"
 
 class TestWrapper : public AbstractWrapper {
 private:
