@@ -208,3 +208,8 @@ variable v;
 Select v such that Modifies(_, v)
 SemanticError
 5000
+41 - Calls only supported for procedure
+while w; procedure p;
+Select p such that Calls(w, "Tasty")
+SemanticError
+5000

@@ -1,45 +1,55 @@
 1 - comment
-prog_line n;
+stmt p;
 Select p such that Next*(1, p)
 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
 5000
 2 - comment
-prog_line n;
+stmt p;
 Select p such that Next*(p, 22)
 17, 18, 19, 20, 21
 5000
 3 - comment
-prog_line n;
+stmt p;
 Select p such that Next*(35, p)
 34, 37, 38, 30, 31, 32, 33, 36, 39, 40, 27, 28, 29, 41, 25, 26, 42 
 5000
 4 - comment
-prog_line n;
+stmt p;
 Select p such that Next*(25, p)
 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42
 5000
 5 - comment
-prog_line n;
+stmt p;
 Select p such that Next*(42, p)
 none
 5000
 6 - comment
-prog_line n; call c;
+stmt p; call c;
 Select c such that Next*(32, 36)
 4
 5000
 7 - comment
-prog_line n; call c;
+stmt p; call c;
 Select c such that Next*(36, 32)
 4
 5000
 8 - comment
-prog_line n; call c;
+stmt p; call c;
 Select c such that Next*(35, 25)
 4
 5000
 9 - comment
-prog_line n; call c;
+stmt p; call c;
 Select c such that Next*(35, 24)
 none
+5000
+6 - comment
+stmt s; while w; if i; call c; print p; read r;
+Select w such that Next(r, 16)
+1, 2, 3
+5000
+7 - comment
+stmt s; while w; if i; call c; print p; read r;
+Select w such that Next(25, w)
+25, 27, 30, 34
 5000
