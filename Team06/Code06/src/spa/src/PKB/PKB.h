@@ -15,6 +15,7 @@
 #include "readHandlers/FollowsParentHandler.h"
 #include "readHandlers/ModifiesUsesHandler.h"
 #include "readHandlers/NextHandler.h"
+#include "readHandlers/NextTHandler.h"
 #include "readHandlers/ifWhilePatternHandler.h"
 #include "storage/CFGStorage.h"
 #include "storage/CallStorage.h"
