@@ -3,7 +3,6 @@
 //
 #include "catch.hpp"
 #include "QPS/parser/DeclarationParser.h"
-#include <iostream>
 using namespace std;
 
 TEST_CASE("parseDeclaration / stores two stmt declaration into store / store "
@@ -11,7 +10,6 @@ TEST_CASE("parseDeclaration / stores two stmt declaration into store / store "
   vector<string> declarations = {"stmt s1, s2", "call cl", "assign a"};
   VariableStore store = parseDeclarations(declarations);
   // change this to an assertion
-  cout << "store:\n" << store.toString();
 }
 
 TEST_CASE("parseDeclaration / cannot store declaration with same name / throws "

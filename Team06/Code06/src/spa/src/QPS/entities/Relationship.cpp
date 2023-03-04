@@ -1,7 +1,13 @@
 #include "Relationship.h"
+#include "AffectsRelationship.h"
+#include "AffectsTRelationship.h"
+#include "CallsRelationship.h"
+#include "CallsTRelationship.h"
 #include "FollowsRelationship.h"
 #include "FollowsTRelationship.h"
 #include "ModifiesRelationship.h"
+#include "NextRelationship.h"
+#include "NextTRelationship.h"
 #include "ParentRelationship.h"
 #include "ParentTRelationship.h"
 #include "UsesRelationship.h"
@@ -22,6 +28,18 @@ Relationship::makeRelationship(string type, vector<Parameter> params) {
     return make_shared<UsesRelationship>(UsesRelationship(params));
   case RelationshipType::MODIFIES:
     return make_shared<ModifiesRelationship>(ModifiesRelationship(params));
+  case RelationshipType::NEXT:
+    return make_shared<NextRelationship>(NextRelationship(params));
+  case RelationshipType::NEXTT:
+    return make_shared<NextTRelationship>(NextTRelationship(params));
+  case RelationshipType::CALLS:
+    return make_shared<CallsRelationship>(CallsRelationship(params));
+  case RelationshipType::CALLST:
+    return make_shared<CallsTRelationship>(CallsTRelationship(params));
+  case RelationshipType::AFFECTS:
+    return make_shared<AffectsRelationship>(AffectsRelationship(params));
+  case RelationshipType::AFFECTST:
+    return make_shared<AffectsTRelationship>(AffectsTRelationship(params));
   }
   throw SyntaxException();
 }
@@ -63,9 +81,15 @@ RelationshipType Relationship::stringToType(string s) {
 }
 
 const unordered_map<string, RelationshipType> Relationship::stringToTypeMap = {
-    {"Follows", RelationshipType::FOLLOWS},
-    {"Follows*", RelationshipType::FOLLOWST},
-    {"Parent", RelationshipType::PARENT},
-    {"Parent*", RelationshipType::PARENTT},
-    {"Uses", RelationshipType::USES},
-    {"Modifies", RelationshipType::MODIFIES}};
+    {AppConstants::FOLLOWS, RelationshipType::FOLLOWS},
+    {AppConstants::FOLLOWST, RelationshipType::FOLLOWST},
+    {AppConstants::PARENT, RelationshipType::PARENT},
+    {AppConstants::PARENTT, RelationshipType::PARENTT},
+    {AppConstants::USES, RelationshipType::USES},
+    {AppConstants::MODIFIES, RelationshipType::MODIFIES},
+    {AppConstants::NEXT, RelationshipType::NEXT},
+    {AppConstants::NEXTT, RelationshipType::NEXTT},
+    {AppConstants::CALLS, RelationshipType::CALLS},
+    {AppConstants::CALLST, RelationshipType::CALLST},
+    {AppConstants::AFFECTS, RelationshipType::AFFECTS},
+    {AppConstants::AFFECTST, RelationshipType::AFFECTST}};

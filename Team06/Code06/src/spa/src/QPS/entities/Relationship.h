@@ -1,5 +1,6 @@
 #ifndef SPA_QPS_RELATIONSHIP_H
 #define SPA_QPS_RELATIONSHIP_H
+#include "./utils/AppConstants.h"
 #include "Parameter.h"
 #include <string>
 #include <vector>
@@ -13,6 +14,12 @@ enum class RelationshipType {
   PARENTT,
   USES,
   MODIFIES,
+  NEXT,
+  NEXTT,
+  CALLS,
+  CALLST,
+  AFFECTS,
+  AFFECTST,
   RELATIONSHIP,
   UNKNOWN
 };

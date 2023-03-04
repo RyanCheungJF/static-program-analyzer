@@ -1,6 +1,5 @@
 #include "catch.hpp"
 #include "QPS/parser/ParserUtil.h"
-#include <iostream>
 using namespace std;
 
 TEST_CASE("FindSuchThat / such that present  / original wordlist not modified "

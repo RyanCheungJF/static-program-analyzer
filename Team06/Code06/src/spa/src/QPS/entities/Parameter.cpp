@@ -31,21 +31,13 @@ bool Parameter::isSyntacticStatementRef(Parameter &p) {
 bool Parameter::isStatementRef(Parameter &p) {
   switch (p.type) {
   case ParameterType::STMT:
-    return true;
   case ParameterType::READ:
-    return true;
   case ParameterType::PRINT:
-    return true;
   case ParameterType::WHILE:
-    return true;
   case ParameterType::IF:
-    return true;
   case ParameterType::ASSIGN:
-    return true;
   case ParameterType::FIXED_INT:
-    return true;
   case ParameterType::WILDCARD:
-    return true;
   case ParameterType::CALL:
     return true;
   }
@@ -76,9 +68,7 @@ bool Parameter::isSyntacticEntityRef(Parameter &p) {
 }
 
 bool Parameter::isEntityRef(Parameter &p) {
-  return p.type == ParameterType::VARIABLE ||
-         p.type == ParameterType::WILDCARD ||
-         p.type == ParameterType::FIXED_STRING;
+  return p.type == ParameterType::VARIABLE || isFixedStringOrWildcard(p);
 }
 
 // TODO: IF NOT FOUND, MAY WANT TO THROW ERROR
@@ -126,6 +116,16 @@ bool Parameter::operator==(const Parameter &p) const {
 bool Parameter::isPatternSyn(Parameter &p) {
   return p.type == ParameterType::ASSIGN || p.type == ParameterType::WHILE ||
          p.type == ParameterType::IF;
+}
+
+bool Parameter::isFixedStringOrWildcard(Parameter &p) {
+  return p.type == ParameterType::FIXED_STRING ||
+         p.type == ParameterType::WILDCARD;
+}
+
+bool Parameter::isFixedIntOrWildCard(Parameter &p) {
+  return p.type == ParameterType::FIXED_INT ||
+         p.type == ParameterType::WILDCARD;
 }
 
 const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {

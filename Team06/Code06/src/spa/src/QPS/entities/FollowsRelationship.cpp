@@ -1,6 +1,6 @@
 #include "FollowsRelationship.h"
 
-bool FollowsRelationship::validateSyntax(vector<Parameter> ps) {
+bool FollowsRelationship::validateSyntax(vector<Parameter> &ps) {
   if (ps.size() != 2) {
     return false;
   }
@@ -13,7 +13,7 @@ bool FollowsRelationship::validateSyntax(vector<Parameter> ps) {
   return true;
 }
 
-FollowsRelationship::FollowsRelationship(vector<Parameter> ps) {
+FollowsRelationship::FollowsRelationship(vector<Parameter> &ps) {
   if (!validateSyntax(ps)) {
     throw SyntaxException();
   }
