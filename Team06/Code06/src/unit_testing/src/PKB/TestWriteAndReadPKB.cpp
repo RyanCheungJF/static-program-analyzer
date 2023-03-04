@@ -206,13 +206,14 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
         REQUIRE(equals(actual, expected));
     }
 
-    SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, negative case, LHS: non-existent "
-            "procedure, RHS: non-existent entity") {
-        // Modifies ("nonExist", "nonExist")
-        std::vector<Parameter> params2 = {Parameter("nonExist", AppConstants::FIXED_STRING),
-                                          Parameter("nonExist", AppConstants::FIXED_STRING)};
+    SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, positive case, LHS: ProcName, RHS: "
+            "variable") {
+        // Modifies ("proc1", v)
+        std::vector<Parameter> params2 = {Parameter("proc1", AppConstants::FIXED_STRING),
+                                          Parameter("v", AppConstants::VARIABLE)};
         shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
-        std::vector<std::vector<std::string>> expected = {};
+
+        std::vector<std::vector<std::string>> expected = {{"proc1", "a"}, {"proc1", "b"}, {"proc1", "c"}};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
         REQUIRE(equals(actual, expected));
     }
