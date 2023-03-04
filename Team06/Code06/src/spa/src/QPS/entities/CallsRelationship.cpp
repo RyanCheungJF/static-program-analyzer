@@ -1,7 +1,7 @@
 #include "CallsRelationship.h"
 
 CallsRelationship::CallsRelationship(vector<Parameter> &ps) {
-  if (!validateSyntax(ps)) {
+  if (!validateSyntaxEntityEntity(ps)) {
     throw SyntaxException();
   }
   type = RelationshipType::CALLS;
@@ -20,17 +20,4 @@ bool CallsRelationship::validateParams() {
   return true;
 }
 
-bool CallsRelationship::validateSyntax(vector<Parameter> &ps) {
-  if (ps.size() != 2) {
-    return false;
-  }
-  if (!Parameter::isSyntacticEntityRef(ps[0]) &&
-      !Parameter::isProcedure(ps[0])) {
-    return false;
-  }
-  if (!Parameter::isSyntacticEntityRef(ps[1]) &&
-      !Parameter::isProcedure(ps[1])) {
-    return false;
-  }
-  return true;
-}
+

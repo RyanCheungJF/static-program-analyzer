@@ -64,7 +64,7 @@ void Parameter::updateSynonymType(ParameterType pt) {
 }
 
 bool Parameter::isSyntacticEntityRef(Parameter &p) {
-  return p.type == ParameterType::SYNONYM || isEntityRef(p);
+  return p.type == ParameterType::SYNONYM || isEntityRef(p) || isProcedure(p);
 }
 
 bool Parameter::isEntityRef(Parameter &p) {

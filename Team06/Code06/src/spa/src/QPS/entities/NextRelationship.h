@@ -9,8 +9,5 @@ class NextRelationship : public Relationship {
 public:
   NextRelationship(vector<Parameter> &);
   bool validateParams();
-
-private:
-  bool validateSyntax(vector<Parameter> &);
 };
 #endif // !SPA_QPS_NEXTRELATIONSHIP_H
