@@ -25,6 +25,14 @@ std::unordered_set<StmtNum> EntityStorage::getEntityStmtNums(Ent e) {
   return ent_stmtNum.at(e);
 }
 
+std::unordered_set<Ent> EntityStorage::getEntities(StmtNum num) {
+  if (stmtNum_ent.find(num) == stmtNum_ent.end()) {
+    std::unordered_set<Ent> emptySet;
+    return emptySet;
+  }
+  return stmtNum_ent.at(num);
+}
+
 std::unordered_set<std::string> EntityStorage::getEntNames() {
   return entNames;
 }
