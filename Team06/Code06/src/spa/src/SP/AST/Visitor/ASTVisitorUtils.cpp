@@ -312,6 +312,7 @@ void populateCallsTable(std::unordered_map<ProcName, std::unordered_set<ProcName
     std::unordered_set<ProcName> calleeTSet;
     for (ProcName p : order) {
         writePKB->setCalls(p, procCallMap[p]);
+        calleeTSet.merge(procCallMap[p]);
         for (ProcName j : procCallMap[p]) {
             calleeTSet.merge(readPKB->getCallsT(j));
         }
