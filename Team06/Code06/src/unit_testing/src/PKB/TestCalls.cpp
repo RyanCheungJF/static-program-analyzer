@@ -1,8 +1,10 @@
-#include "../../../spa/src/PKB/storage/CallsStorage.h"
+#include "../../../spa/src/PKB/ReadPKB.h"
+#include "../../../spa/src/PKB/WritePKB.h"
 #include "../utils/utils.h"
 #include "catch.hpp"
 
 using namespace unit_testing_utils;
+using namespace std;
 
 TEST_CASE("CallsStorage: writeP") {
    CallsStorage cs;
@@ -31,5 +33,59 @@ TEST_CASE("CallsStorage: writeP") {
 
         std::unordered_set<ProcName> res4 = cs.getCallers(proc1);
         REQUIRE(unit_testing_utils::equals({caller}, res4));
+   }
+}
+
+TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
+   WritePKB writePkb;
+   ReadPKB readPkb;
+   PKB pkb;
+   pkb.initializePkb();
+   writePkb.setInstancePKB(pkb);
+   readPkb.setInstancePKB(pkb);
+
+   writePkb.setCalls("proc1", {"proc2"});
+   writePkb.setCalls("proc2", {"proc3"});
+   writePkb.setCallsT("proc1", {"proc2", "proc3"});
+   writePkb.setCallsT("proc2", {"proc3"});
+
+   SECTION("Calls(fixed_string, wildcard)") {
+        std::vector<Parameter> params1 = {Parameter("proc1", AppConstants::FIXED_STRING),
+                                          Parameter("_", AppConstants::WILDCARD)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
+
+        auto res = readPkb.findRelationship(rs1);
+        vector<vector<string>> expected = {{"proc1", "proc2"}};
+        REQUIRE(res == expected);
+   }
+
+   SECTION("Calls(fixed_string, fixed_string)") {
+        std::vector<Parameter> params1 = {Parameter("proc2", AppConstants::FIXED_STRING),
+                                          Parameter("proc3", AppConstants::FIXED_STRING)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
+
+        auto res = readPkb.findRelationship(rs1);
+        vector<vector<string>> expected = {{"proc2", "proc3"}};
+        REQUIRE(equals(res, expected));
+   }
+
+   SECTION("Calls*(fixed_string, wildcard)") {
+        std::vector<Parameter> params1 = {Parameter("proc1", AppConstants::FIXED_STRING),
+                                          Parameter("_", AppConstants::WILDCARD)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
+
+        auto res = readPkb.findRelationship(rs1);
+        vector<vector<string>> expected = {{"proc1", "proc2"}, {"proc1", "proc3"}};
+        REQUIRE(equals(res, expected));
+   }
+
+   SECTION("Calls*(fixed_string, proc synonym)") {
+        std::vector<Parameter> params1 = {Parameter("proc1", AppConstants::FIXED_STRING),
+                                          Parameter("p", AppConstants::PROCEDURE)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
+
+        auto res = readPkb.findRelationship(rs1);
+        vector<vector<string>> expected = {{"proc1", "proc2"}, {"proc1", "proc3"}};
+        REQUIRE(equals(res, expected));
    }
 }

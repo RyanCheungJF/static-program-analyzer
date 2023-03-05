@@ -29,6 +29,9 @@ void PKB::initializePkb() {
 
     this->ifWhilePatternMap[ParameterType::IF] = ifPatternStorage;
     this->ifWhilePatternMap[ParameterType::WHILE] = whilePatternStorage;
+
+    this->callsMap[RelationshipType::CALLS] = callsStorage;
+    this->callsMap[RelationshipType::CALLST] = callsTStorage;
 }
 
 void PKB::setFollows(StmtNum followee, StmtNum follower) {
@@ -72,7 +75,7 @@ void PKB::setCalls(ProcName caller, std::unordered_set<ProcName> callees) {
 }
 
 void PKB::setCallsT(ProcName caller, std::unordered_set<ProcName> callees) {
-    callsStorage->writeCallP(caller, callees);
+    callsTStorage->writeCallP(caller, callees);
 }
 
 void PKB::setUsesS(StmtNum num, std::unordered_set<Ent> entities) {
