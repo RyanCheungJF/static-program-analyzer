@@ -319,5 +319,4 @@ void populateCallsTable(std::unordered_map<ProcName, std::unordered_set<ProcName
         writePKB->setCallsT(p, calleeTSet);
         calleeTSet.clear();
     }
-
 }
