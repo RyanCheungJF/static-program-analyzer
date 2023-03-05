@@ -9,7 +9,7 @@ on:
       - pkb
       - qps
       - sp
-      - milestone1
+      - staging
   pull_request:
     branches: 
       - master
