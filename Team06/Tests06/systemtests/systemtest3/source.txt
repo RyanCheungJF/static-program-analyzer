@@ -1,26 +1,38 @@
-procedure Loid {
-print wes;
-ost = x / 15;
-y = 5;
-z = ost + 1;
-call Anya;
-ost = ost + x * y * z - wes;
-while (wes < 0) {
-if (wes > 15) then {
-read z;
-wes = z % ost + x * (y * z); }
-else {
-y = (x / y * z);
-call Anya; }
-x = z - wes; }
-ost = ost * x + y * z - wes;
-read wes; }
-procedure Anya {
-if (ost > wes) then {
-wes = z * 5;
-call Yor; }
-else {
-ost = 10; }}
-procedure Yor {
-read x;
-print y; }
+procedure One {
+	x = x + 1;
+	y = y + x;
+	z = x + y + c;
+	c = 12345
+	while (z == x + y) {print c; c = c + 0;}
+	call Two;
+	call Three;
+	call Four;
+}
+
+procedure Two {
+	y = x + 2;
+	a = 999 + c;
+	b = a + y * x / z;
+	c = 1 + 2;
+	read b;
+	if (b != c) then {call Three; call Four;} else {a = b;}
+}
+
+procedure Three {
+d = 100;
+e = d;
+call Six;
+}
+
+procedure Four {
+print d;
+print e;
+call Three;
+call Five;
+}
+
+procedure Five {if(x == y) then {read d; print e;} else {if(y == z) then {call Six;} else {call Three;}}}
+
+procedure Six {
+	print endpoint;
+}

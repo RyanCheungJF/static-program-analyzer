@@ -67,17 +67,18 @@ void WritePKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {
 }
 
 void WritePKB::setIfPattern(StmtNum num, std::unordered_set<Ent> variables) {
-  pkbInstance->writeIfPattern(num, variables);
+    pkbInstance->writeIfPattern(num, variables);
 }
 
 void WritePKB::setWhilePattern(StmtNum num, std::unordered_set<Ent> variables) {
-  pkbInstance->writeWhilePattern(num, variables);
+    pkbInstance->writeWhilePattern(num, variables);
 }
 
 void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer) {
     pkbInstance->writePattern(lhs, num, std::move(pointer));
 }
 
-void WritePKB::writeCFG(ProcName name, std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph) {
+void WritePKB::writeCFG(
+    ProcName name, std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph) {
     pkbInstance->writeCFG(name, graph);
 }

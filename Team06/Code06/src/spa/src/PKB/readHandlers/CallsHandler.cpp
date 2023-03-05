@@ -57,7 +57,7 @@ std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Par
     bool isProcnameParam1 = paramType1 == ParameterType::FIXED_STRING;
     bool isProcnameParam2 = paramType2 == ParameterType::FIXED_STRING;
     bool isWildcardParam1 = paramType1 == ParameterType::PROCEDURE || paramType1 == ParameterType::WILDCARD;
-    bool isWildcardParam2 = paramType1 == ParameterType::PROCEDURE || paramType2 == ParameterType::WILDCARD;
+    bool isWildcardParam2 = paramType2 == ParameterType::PROCEDURE || paramType2 == ParameterType::WILDCARD;
 
     if (isProcnameParam1) {
         if (isProcnameParam2) {

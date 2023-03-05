@@ -3,5 +3,5 @@
 #include "../../SP/Tokenizer.h"
 
 namespace pkb_utils {
-std::unique_ptr<Expression> buildSubtree(std::string rhs);
+    std::unique_ptr<Expression> buildSubtree(std::string rhs);
 }
