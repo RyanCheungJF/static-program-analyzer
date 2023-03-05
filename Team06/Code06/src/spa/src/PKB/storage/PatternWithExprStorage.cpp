@@ -1,4 +1,5 @@
 #include "PatternWithExprStorage.h"
+
 #include <string>
 #include <unordered_map>
 
@@ -7,7 +8,7 @@ void PatternWithExprStorage::writePattern(std::string lhs, StmtNum num, std::uni
     return;
 }
 
-std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction> *
+std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>*
 PatternWithExprStorage::getPatternWithLHS(std::string lhs) {
     if (lhs_stmtNum_rhsPostfix.find(lhs) == lhs_stmtNum_rhsPostfix.end()) {
         return NULL;
@@ -15,7 +16,7 @@ PatternWithExprStorage::getPatternWithLHS(std::string lhs) {
     return &lhs_stmtNum_rhsPostfix.at(lhs);
 }
 
-std::unordered_map<std::string, std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>> *
+std::unordered_map<std::string, std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>>*
 PatternWithExprStorage::getAll() {
     return &lhs_stmtNum_rhsPostfix;
 }

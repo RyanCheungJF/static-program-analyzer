@@ -36,15 +36,24 @@ PKB buildPkb() {
     //       } else {
     // 11         z = x * y;
     //       }
+    // 12    call end;
     //   }
+    //
+    //   procedure end {
+    // 13    print end;
+    //   }    
 
-    unordered_set<int> mainProcNums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    unordered_set<int> mainProcNums = {1, 2, 3, 4, 5, 6};
     writePkb.setProcedure("main", mainProcNums);
 
-    unordered_set<int> subProcNums = {10, 11, 12, 13, 14};
+    unordered_set<int> subProcNums = {7, 8, 9, 10, 11, 12};
     writePkb.setProcedure("sub", subProcNums);
 
+    unordered_set<int> endProcNums = {13};
+    writePkb.setProcedure("end", endProcNums);
+
     writePkb.setCall(2, "sub");
+    writePkb.setCall(12, "end");
 
     writePkb.setStatement(AppConstants::ASSIGN, 1);
     writePkb.setStatement(AppConstants::ASSIGN, 4);
@@ -54,25 +63,23 @@ PKB buildPkb() {
     writePkb.setStatement(AppConstants::IF, 9);
     writePkb.setStatement(AppConstants::WHILE, 3);
     writePkb.setStatement(AppConstants::CALL, 2);
+    writePkb.setStatement(AppConstants::CALL, 12);
     writePkb.setStatement(AppConstants::PRINT, 7);
+    writePkb.setStatement(AppConstants::PRINT, 13);
     writePkb.setStatement(AppConstants::READ, 5);
     writePkb.setStatement(AppConstants::READ, 10);
 
     writePkb.setEntity(1, {"x"});
-    writePkb.setEntity(3, {"x"});
-    writePkb.setEntity(4, {"x"});
+    writePkb.setEntity(3, {"x", "y"});
+    writePkb.setEntity(4, {"x", "y"});
+    writePkb.setEntity(5, {"y"});
     writePkb.setEntity(6, {"x"});
     writePkb.setEntity(7, {"x"});
-    writePkb.setEntity(8, {"x"});
-    writePkb.setEntity(10, {"x"});
-    writePkb.setEntity(11, {"x"});
-    writePkb.setEntity(3, {"y"});
-    writePkb.setEntity(4, {"y"});
-    writePkb.setEntity(5, {"y"});
-    writePkb.setEntity(8, {"y"});
-    writePkb.setEntity(11, {"y"});
+    writePkb.setEntity(8, {"x", "y"});
     writePkb.setEntity(9, {"count"});
-    writePkb.setEntity(11, {"z"});
+    writePkb.setEntity(10, {"x"});
+    writePkb.setEntity(11, {"x", "y", "z"});
+    writePkb.setEntity(13, {"end"});
 
     writePkb.setConstant(1, unordered_set<int>{1});
     writePkb.setConstant(4, unordered_set<int>{2});
@@ -90,8 +97,8 @@ PKB buildPkb() {
     writePkb.setFollowsT(2, unordered_set<int>{3, 6});
     writePkb.setFollowsT(3, unordered_set<int>{6});
     writePkb.setFollowsT(4, unordered_set<int>{5});
-    writePkb.setFollowsT(7, unordered_set<int>{8, 9});
-    writePkb.setFollowsT(8, unordered_set<int>{9});
+    writePkb.setFollowsT(7, unordered_set<int>{8, 9, 12});
+    writePkb.setFollowsT(8, unordered_set<int>{9, 12});
 
     writePkb.setParent(3, 4);
     writePkb.setParent(3, 5);
@@ -109,8 +116,10 @@ PKB buildPkb() {
     writePkb.setUsesS(8, {"x"});
     writePkb.setUsesS(9, {"x", "y", "count"});
     writePkb.setUsesS(11, {"x", "y"});
-    writePkb.setUsesP("main", {"x", "y", "count"});
-    writePkb.setUsesP("sub", {"x", "y", "count"});
+    writePkb.setUsesS(12, {"end"});
+    writePkb.setUsesP("main", {"x", "y", "count", "end"});
+    writePkb.setUsesP("sub", {"x", "y", "count", "end"});
+    writePkb.setUsesP("end", {"end"});
 
     writePkb.setModifiesS(1, {"x"});
     writePkb.setModifiesS(2, {"x", "y", "z"});
@@ -122,6 +131,11 @@ PKB buildPkb() {
     writePkb.setModifiesS(11, {"z"});
     writePkb.setModifiesP("main", {"x", "y", "z"});
     writePkb.setModifiesP("sub", {"x", "y", "z"});
+
+    writePkb.setCalls("main", {"sub"});
+    writePkb.setCalls("sub", {"end"});
+    writePkb.setCallsT("main", {"sub", "end"});
+    writePkb.setCallsT("sub", {"end"});
 
     string lhs = "x";
     unique_ptr<Expression> patternTree = pkb_utils::buildSubtree("1");
@@ -166,7 +180,7 @@ TEST_CASE("Single Select Query") {
 		Select s)";
 
         result = qps.processQueries(query, readPkb);
-        REQUIRE(result.size() == 11);
+        REQUIRE(result.size() == 13);
         REQUIRE(exists(result, "1"));
         REQUIRE(exists(result, "2"));
         REQUIRE(exists(result, "3"));
@@ -178,6 +192,8 @@ TEST_CASE("Single Select Query") {
         REQUIRE(exists(result, "9"));
         REQUIRE(exists(result, "10"));
         REQUIRE(exists(result, "11"));
+        REQUIRE(exists(result, "12"));
+        REQUIRE(exists(result, "13"));
     }
 
     SECTION("Select read") {
@@ -197,8 +213,9 @@ TEST_CASE("Single Select Query") {
 		Select p)";
 
         result = qps.processQueries(query, readPkb);
-        REQUIRE(result.size() == 1);
+        REQUIRE(result.size() == 2);
         REQUIRE(exists(result, "7"));
+        REQUIRE(exists(result, "13"));
     }
 
     SECTION("Select call") {
@@ -207,8 +224,9 @@ TEST_CASE("Single Select Query") {
 		Select c)";
 
         result = qps.processQueries(query, readPkb);
-        REQUIRE(result.size() == 1);
+        REQUIRE(result.size() == 2);
         REQUIRE(exists(result, "2"));
+        REQUIRE(exists(result, "12"));
     }
 
     SECTION("Select while") {
@@ -251,11 +269,12 @@ TEST_CASE("Single Select Query") {
 		Select v)";
 
         result = qps.processQueries(query, readPkb);
-        REQUIRE(result.size() == 4);
+        REQUIRE(result.size() == 5);
         REQUIRE(exists(result, "x"));
         REQUIRE(exists(result, "y"));
         REQUIRE(exists(result, "z"));
         REQUIRE(exists(result, "count"));
+        REQUIRE(exists(result, "end"));
     }
 
     SECTION("Select constant") {
@@ -447,6 +466,109 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
             REQUIRE(exists(result, "main"));
             REQUIRE(exists(result, "sub"));
         }
+
+        SECTION("proc, syn") {
+            string query = R"(
+			variable v;
+			Select v such that Modifies("main", v))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 3);
+            REQUIRE(exists(result, "x"));
+            REQUIRE(exists(result, "y"));
+            REQUIRE(exists(result, "z"));
+        }
+    }
+
+    SECTION("Calls") {
+        SECTION("proc, procSyn") {
+            string query = R"(
+			procedure p;
+			Select p such that Calls("main", p))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 1);
+            REQUIRE(exists(result, "sub"));
+        }
+
+        SECTION("wildcard, procSyn") {
+            string query = R"(
+			procedure p;
+			Select p such that Calls(_, p))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 2);
+            REQUIRE(exists(result, "sub"));
+            REQUIRE(exists(result, "end"));
+        }
+
+        SECTION("procSyn, wildcard") {
+            string query = R"(
+			procedure p;
+			Select p such that Calls(p, _))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 2);
+            REQUIRE(exists(result, "main"));
+            REQUIRE(exists(result, "sub"));
+        }
+
+        SECTION("procSyn, proc") {
+            string query = R"(
+			procedure p;
+			Select p such that Calls(p, "sub"))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 1);
+            REQUIRE(exists(result, "main"));
+        }
+        
+    }
+
+    SECTION("CallsT") {
+        SECTION("proc, procSyn") {
+            string query = R"(
+			procedure p;
+			Select p such that Calls*("main", p))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 2);
+            REQUIRE(exists(result, "sub"));
+            REQUIRE(exists(result, "end"));
+        }
+
+        SECTION("wildcard, procSyn") {
+            string query = R"(
+			procedure p;
+			Select p such that Calls*(_, p))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 2);
+            REQUIRE(exists(result, "sub"));
+            REQUIRE(exists(result, "end"));
+        }
+
+        SECTION("procSyn, wildcard") {
+            string query = R"(
+			procedure p;
+			Select p such that Calls*(p, _))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 2);
+            REQUIRE(exists(result, "main"));
+            REQUIRE(exists(result, "sub"));
+        }
+
+        SECTION("procSyn, proc") {
+            string query = R"(
+			procedure p;
+			Select p such that Calls*(p, "end"))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 2);
+            REQUIRE(exists(result, "main"));
+            REQUIRE(exists(result, "sub"));
+        }
     }
 }
 
@@ -475,6 +597,15 @@ TEST_CASE("Select synonym from single such that clause, synonym is not in clause
         REQUIRE(result.empty());
     }
 
+    SECTION("clause is false, Calls") {
+        string query = R"(
+		procedure p;
+		Select p such that Calls("main", "end"))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.empty());
+    }
+
     SECTION("clause is true, Follows*") {
         string query = R"(
 		assign a;
@@ -497,6 +628,18 @@ TEST_CASE("Select synonym from single such that clause, synonym is not in clause
         result = qps.processQueries(query, readPkb);
         REQUIRE(result.size() == 1);
         REQUIRE(exists(result, "3"));
+    }
+
+    SECTION("clause is true, CallsT") {
+        string query = R"(
+		procedure p;
+		Select p such that Calls*("main", "end"))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 3);
+        REQUIRE(exists(result, "main"));
+        REQUIRE(exists(result, "sub"));
+        REQUIRE(exists(result, "end"));
     }
 }
 
@@ -543,6 +686,55 @@ TEST_CASE("Select synonym from single assign pattern clause, synonym is in claus
 }
 
 TEST_CASE("Select synonym from single if/while pattern clause, synonym is in clause") {
+    PKB pkb = buildPkb();
+    ReadPKB readPkb;
+    readPkb.setInstancePKB(pkb);
+    QPS qps;
+    vector<string> result;
+
+    SECTION("if", "exact") {
+        string query = R"(
+		if if; 
+		Select if pattern if("count", _, _))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(result[0] == "9");
+        REQUIRE(exists(result, "9"));
+    }
+
+    SECTION("if", "syn") {
+        string query = R"(
+		if if; variable v;
+		Select if pattern if(v, _, _))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(exists(result, "9"));
+    }
+
+    SECTION("while", "exact") {
+        string query = R"(
+		while w; 
+		Select w pattern w("abcdef", _))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 0);
+    }
+
+    SECTION("while", "syn") {
+        string query = R"(
+		while w; variable v;
+		Select v pattern w(v, _))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 2);
+        REQUIRE(exists(result, "x"));
+        REQUIRE(exists(result, "y"));
+    }
+}
+
+TEST_CASE("Select synonym from single such that  clause, synonym is in clause") {
     PKB pkb = buildPkb();
     ReadPKB readPkb;
     readPkb.setInstancePKB(pkb);
