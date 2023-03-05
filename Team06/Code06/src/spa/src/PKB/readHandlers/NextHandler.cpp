@@ -395,7 +395,7 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeIntTransitive(P
             res.push_back({std::to_string(curr[0]), std::to_string(curr[1])});
         }
 
-        for (StmtNum parent : graph[curr[1]][AppConstants::PARENTS]) {
+        for (StmtNum parent : graph[curr[0]][AppConstants::PARENTS]) {
             queue.push_back({parent, curr[1]});
         }
     }
@@ -516,7 +516,7 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardStmttypeTransit
                 seen.insert(curr[0]);
                 res.push_back({std::to_string(curr[0]), std::to_string(curr[1])});
 
-                for (StmtNum parent : graph[curr[1]][AppConstants::PARENTS]) {
+                for (StmtNum parent : graph[curr[0]][AppConstants::PARENTS]) {
                     queue.push_back({parent, curr[1]});
                 }
             }
