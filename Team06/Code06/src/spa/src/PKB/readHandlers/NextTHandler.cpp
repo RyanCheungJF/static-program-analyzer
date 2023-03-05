@@ -22,42 +22,42 @@ std::vector<std::vector<std::string>> NextTHandler::handle(Parameter param1, Par
 
     if (isFixedIntParam1) {
         if (isFixedIntParam2) {
-            return handleIntInt(param1, param2);
+            return handleIntIntTransitive(param1, param2);
         }
         else if (isTypedStmtParam2) {
-            return handleIntStmttype(param1, param2);
+            return handleIntStmttypeTransitive(param1, param2);
         }
         else if (isWildCardParam2) {
-            return handleIntWildcard(param1);
+            return handleIntWildcardTransitive(param1);
         }
     }
     else if (isTypedStmtParam1) {
         if (isFixedIntParam2) {
-            return handleStmttypeInt(param1, param2);
+            return handleStmttypeIntTransitive(param1, param2);
         }
         else if (isTypedStmtParam2) {
-            return handleStmttypeStmttype(param1, param2);
+            return handleStmttypeStmttypeTransitive(param1, param2);
         }
         else if (isWildCardParam2) {
-            return handleStmttypeWildcard(param1);
+            return handleStmttypeWildcardTransitive(param1);
         }
     }
     else if (isWildCardParam1) {
         if (isFixedIntParam2) {
-            return handleWildcardInt(param2);
+            return handleWildcardIntTransitive(param2);
         }
         else if (isTypedStmtParam2) {
-            return handleWildcardStmttype(param2);
+            return handleWildcardStmttypeTransitive(param2);
         }
         else if (isWildCardParam2) {
-            return handleWildcardWildcard();
+            return handleWildcardWildcardTransitive();
         }
     }
     return std::vector<std::vector<std::string>>();
 }
 
 // returns {lineNum, lineNum}
-std::vector<std::vector<std::string>> NextTHandler::handleIntInt(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> NextTHandler::handleIntIntTransitive(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
     ProcName proc1 = procStorage->getProcedure(stoi(paramString1));
@@ -103,7 +103,7 @@ std::vector<std::vector<std::string>> NextTHandler::handleIntInt(Parameter param
 }
 
 // returns {param1Num, sNum}
-std::vector<std::vector<std::string>> NextTHandler::handleIntWildcard(Parameter param1) {
+std::vector<std::vector<std::string>> NextTHandler::handleIntWildcardTransitive(Parameter param1) {
     std::string paramString1 = param1.getValue();
     ProcName proc1 = procStorage->getProcedure(stoi(paramString1));
     std::vector<std::vector<std::string>> res;
@@ -136,7 +136,7 @@ std::vector<std::vector<std::string>> NextTHandler::handleIntWildcard(Parameter 
 }
 
 // returns {sNum, param2Num}
-std::vector<std::vector<std::string>> NextTHandler::handleWildcardInt(Parameter param2) {
+std::vector<std::vector<std::string>> NextTHandler::handleWildcardIntTransitive(Parameter param2) {
     std::string paramString2 = param2.getValue();
     ProcName proc = procStorage->getProcedure(stoi(paramString2));
     std::vector<std::vector<std::string>> res;
@@ -169,7 +169,7 @@ std::vector<std::vector<std::string>> NextTHandler::handleWildcardInt(Parameter 
 }
 
 // returns {param1Num, lineNum}
-std::vector<std::vector<std::string>> NextTHandler::handleStmttypeInt(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> NextTHandler::handleStmttypeIntTransitive(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
     Stmt type = param1.getTypeString();
@@ -209,7 +209,7 @@ std::vector<std::vector<std::string>> NextTHandler::handleStmttypeInt(Parameter 
 }
 
 // returns {lineNum, param2Num}
-std::vector<std::vector<std::string>> NextTHandler::handleIntStmttype(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> NextTHandler::handleIntStmttypeTransitive(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
     Stmt type = param2.getTypeString();
@@ -248,7 +248,7 @@ std::vector<std::vector<std::string>> NextTHandler::handleIntStmttype(Parameter 
 }
 
 // returns {param1Num, sNum}
-std::vector<std::vector<std::string>> NextTHandler::handleStmttypeWildcard(Parameter param1) {
+std::vector<std::vector<std::string>> NextTHandler::handleStmttypeWildcardTransitive(Parameter param1) {
     std::string paramString1 = param1.getValue();
     Stmt type = param1.getTypeString();
     std::vector<std::vector<std::string>> res;
@@ -290,7 +290,7 @@ std::vector<std::vector<std::string>> NextTHandler::handleStmttypeWildcard(Param
 }
 
 // returns {sNum, param2Num}
-std::vector<std::vector<std::string>> NextTHandler::handleWildcardStmttype(Parameter param2) {
+std::vector<std::vector<std::string>> NextTHandler::handleWildcardStmttypeTransitive(Parameter param2) {
     std::string paramString1 = param2.getValue();
     Stmt type = param2.getTypeString();
     std::vector<std::vector<std::string>> res;
@@ -331,7 +331,7 @@ std::vector<std::vector<std::string>> NextTHandler::handleWildcardStmttype(Param
     return res;
 }
 
-std::vector<std::vector<std::string>> NextTHandler::handleStmttypeStmttype(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> NextTHandler::handleStmttypeStmttypeTransitive(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
     Stmt type = param1.getTypeString();
@@ -377,7 +377,7 @@ std::vector<std::vector<std::string>> NextTHandler::handleStmttypeStmttype(Param
     return res;
 }
 
-std::vector<std::vector<std::string>> NextTHandler::handleWildcardWildcard() {
+std::vector<std::vector<std::string>> NextTHandler::handleWildcardWildcardTransitive() {
     std::unordered_set<ProcName> procedures = procStorage->getProcNames();
     std::vector<std::vector<std::string>> res;
 

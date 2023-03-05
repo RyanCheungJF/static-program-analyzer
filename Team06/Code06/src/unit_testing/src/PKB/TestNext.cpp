@@ -3,7 +3,6 @@
 #include "../utils/utils.h"
 #include "catch.hpp"
 
-// findRelationship() tests
 TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next") {
     WritePKB writePkb;
     ReadPKB readPkb;

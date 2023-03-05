@@ -3,8 +3,7 @@
 #include "../utils/utils.h"
 #include "catch.hpp"
 
-// findRelationship() tests
-TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next") {
+TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next*") {
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -110,37 +109,46 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next") {
     writePkb.setStatement("print", 12);
     writePkb.setProcedure(proc2, {9, 10, 11, 12});
 
-//     SECTION("Next(int, int)") {
-//         std::vector<Parameter> params = {Parameter("1", AppConstants::FIXED_INT),
-//                                           Parameter("2", AppConstants::FIXED_INT)};
-//         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::NEXT, params);
-//         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
-//         REQUIRE(unit_testing_utils::equals({{"1", "2"}}, res));
-//     }
+     SECTION("Next*(int, int)") {
+         std::vector<Parameter> params = {Parameter("1", AppConstants::FIXED_INT),
+                                           Parameter("2", AppConstants::FIXED_INT)};
+         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::NEXTT, params);
+         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
+         REQUIRE(unit_testing_utils::equals({{"1", "2"}}, res));
+     }
 
-//     SECTION("Next(int, _)") {
-//         std::vector<Parameter> params = {Parameter("1", AppConstants::FIXED_INT),
-//                                          Parameter("_", AppConstants::WILDCARD)};
-//         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::NEXT, params);
-//         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
-//         REQUIRE(unit_testing_utils::equals({{"1", "2"}, {"1", "3"}}, res));
-//     }
+     SECTION("Next*(int, _)") {
+         std::vector<Parameter> params = {Parameter("1", AppConstants::FIXED_INT),
+                                          Parameter("_", AppConstants::WILDCARD)};
+         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::NEXTT, params);
+         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected = { { "1", "2" }, { "1", "3" }, { "1", "4" },
+                                                            { "1", "5" }, { "1", "6" }, { "1", "7" },
+                                                            { "1", "8" } };
+        REQUIRE(unit_testing_utils::equals(expected, res));
+     }
 
-//     SECTION("Next(int, stmt)") {
-//         std::vector<Parameter> params = {Parameter("10", AppConstants::FIXED_INT),
-//                                          Parameter("s2", AppConstants::STMT)};
-//         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::NEXT, params);
-//         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
-//         REQUIRE(unit_testing_utils::equals({{"10", "11"}}, res));
-//     }
+     SECTION("Next*(int, stmt)") {
+         std::vector<Parameter> params = {Parameter("10", AppConstants::FIXED_INT),
+                                          Parameter("s2", AppConstants::STMT)};
+         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::NEXTT, params);
+         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected = { { "10", "11" }, { "10", "12" }, {"10", "9"},
+                                                           {"10", "10"}};
 
-//     SECTION("Next(_, int)") {
-//         std::vector<Parameter> params = {Parameter("_", AppConstants::WILDCARD),
-//                                          Parameter("5", AppConstants::FIXED_INT)};
-//         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::NEXT, params);
-//         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
-//         REQUIRE(unit_testing_utils::equals({{"2", "5"}, {"4", "5"}}, res));
-//     }
+        REQUIRE(unit_testing_utils::equals(expected, res));
+     }
+
+     SECTION("Next*(_, int)") {
+         std::vector<Parameter> params = {Parameter("_", AppConstants::WILDCARD),
+                                          Parameter("5", AppConstants::FIXED_INT)};
+         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::NEXTT, params);
+         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected = {{"1", "5"}, {"2", "5"}, {"3", "5"},
+                                                          {"4", "5"}};
+        REQUIRE(unit_testing_utils::equals(expected, res));
+//        REQUIRE(expected == res);
+     }
 
 //     SECTION("Next(stmt, int)") {
 //         std::vector<Parameter> params = {Parameter("asTeeAmTii", AppConstants::STMT),
@@ -270,4 +278,81 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next") {
 //         std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
 //         REQUIRE(unit_testing_utils::equals(expected, res2));
 //     }
+
+//    // TODO: need to remap the values
+//    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph3 = {
+//            {13,
+//                    {
+//                            {AppConstants::PARENTS, {18}},
+//                            {AppConstants::CHILDREN, {14}}
+//                    }
+//            },
+//            {14,
+//                    {
+//                            {AppConstants::PARENTS, {13}},
+//                            {AppConstants::CHILDREN, {15, 17}}
+//                    }
+//            },
+//            {15,
+//                    {
+//                            {AppConstants::PARENTS, {14, 16}},
+//                            {AppConstants::CHILDREN, {16}}
+//                    }
+//            },
+//            {16,
+//                    {
+//                            {AppConstants::PARENTS, {15}},
+//                            {AppConstants::CHILDREN, {18}}
+//                    }
+//            },
+//            {17,
+//                    {
+//                            {AppConstants::PARENTS, {14, 17}},
+//                            {AppConstants::CHILDREN, {18}}
+//                    }
+//            },
+//            {18,
+//                    {
+//                            {AppConstants::PARENTS, {16, 17}},
+//                            {AppConstants::CHILDREN, {13, 19}}
+//                    }
+//            },
+//            {19,
+//                    {
+//                            {AppConstants::PARENTS, {18}},
+//                            {AppConstants::CHILDREN, {20, 21}}
+//                    }
+//            },
+//            {20,
+//                    {
+//                            {AppConstants::PARENTS, {19}},
+//                            {AppConstants::CHILDREN, {}}
+//                    }
+//            },
+//            {21,
+//                    {
+//                            {AppConstants::PARENTS, {19}},
+//                            {AppConstants::CHILDREN, {22}}
+//                    }
+//            },
+//            {22,
+//                    {
+//                            {AppConstants::PARENTS, {21}},
+//                            {AppConstants::CHILDREN, {}}
+//                    }
+//            }
+//    };
+//
+//    ProcName proc3 = "proc3";
+//    writePkb.writeCFG(proc1, graph1);
+//    writePkb.setStatement("while", 13);
+//    writePkb.setStatement("if", 14);
+//    writePkb.setStatement("while", 15);
+//    writePkb.setStatement("print", 16);
+//    writePkb.setStatement("while", 17);
+//    writePkb.setStatement("if", 6);
+//    writePkb.setStatement("read", 7);
+//    writePkb.setStatement("call", 8);
+//    writePkb.setProcedure(proc3, {1,2,3,4,5,6,7,8});
+
 }
