@@ -333,81 +333,127 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next*") {
          std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
          REQUIRE(unit_testing_utils::equals(expected, res2));
      }
+}
 
-//    // TODO: need to remap the values
-//    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph3 = {
-//            {13,
-//                    {
-//                            {AppConstants::PARENTS, {18}},
-//                            {AppConstants::CHILDREN, {14}}
-//                    }
-//            },
-//            {14,
-//                    {
-//                            {AppConstants::PARENTS, {13}},
-//                            {AppConstants::CHILDREN, {15, 17}}
-//                    }
-//            },
-//            {15,
-//                    {
-//                            {AppConstants::PARENTS, {14, 16}},
-//                            {AppConstants::CHILDREN, {16}}
-//                    }
-//            },
-//            {16,
-//                    {
-//                            {AppConstants::PARENTS, {15}},
-//                            {AppConstants::CHILDREN, {18}}
-//                    }
-//            },
-//            {17,
-//                    {
-//                            {AppConstants::PARENTS, {14, 17}},
-//                            {AppConstants::CHILDREN, {18}}
-//                    }
-//            },
-//            {18,
-//                    {
-//                            {AppConstants::PARENTS, {16, 17}},
-//                            {AppConstants::CHILDREN, {13, 19}}
-//                    }
-//            },
-//            {19,
-//                    {
-//                            {AppConstants::PARENTS, {18}},
-//                            {AppConstants::CHILDREN, {20, 21}}
-//                    }
-//            },
-//            {20,
-//                    {
-//                            {AppConstants::PARENTS, {19}},
-//                            {AppConstants::CHILDREN, {}}
-//                    }
-//            },
-//            {21,
-//                    {
-//                            {AppConstants::PARENTS, {19}},
-//                            {AppConstants::CHILDREN, {22}}
-//                    }
-//            },
-//            {22,
-//                    {
-//                            {AppConstants::PARENTS, {21}},
-//                            {AppConstants::CHILDREN, {}}
-//                    }
-//            }
-//    };
-//
-//    ProcName proc3 = "proc3";
-//    writePkb.writeCFG(proc1, graph1);
-//    writePkb.setStatement("while", 13);
-//    writePkb.setStatement("if", 14);
-//    writePkb.setStatement("while", 15);
-//    writePkb.setStatement("print", 16);
-//    writePkb.setStatement("while", 17);
-//    writePkb.setStatement("if", 6);
-//    writePkb.setStatement("read", 7);
-//    writePkb.setStatement("call", 8);
-//    writePkb.setProcedure(proc3, {1,2,3,4,5,6,7,8});
+TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next* - complex") {
 
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    // TODO: are self pointing nodes allowed?
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph3 = {
+            {13,
+                    {
+                            {AppConstants::PARENTS, {15, 16}},
+                            {AppConstants::CHILDREN, {14}}
+                    }
+            },
+            {14,
+                    {
+                            {AppConstants::PARENTS, {13}},
+                            {AppConstants::CHILDREN, {15, 17}}
+                    }
+            },
+            {15,
+                    {
+                            {AppConstants::PARENTS, {14}},
+                            {AppConstants::CHILDREN, {16, 13}}
+                    }
+            },
+            {16,
+                    {
+                            {AppConstants::PARENTS, {15}},
+                            {AppConstants::CHILDREN, {15, 13, 18}}
+                    }
+            },
+            {17,
+                    {
+                            {AppConstants::PARENTS, {14, 17}},
+                            {AppConstants::CHILDREN, {18, 17, 13}}
+                    }
+            },
+            {18,
+                    {
+                            {AppConstants::PARENTS, {16, 17}},
+                            {AppConstants::CHILDREN, {19, 20}}
+                    }
+            },
+            {19,
+                    {
+                            {AppConstants::PARENTS, {18}},
+                            {AppConstants::CHILDREN, {}}
+                    }
+            },
+            {20,
+                    {
+                            {AppConstants::PARENTS, {19}},
+                            {AppConstants::CHILDREN, {21, 22}}
+                    }
+            },
+            {21,
+                    {
+                            {AppConstants::PARENTS, {20}},
+                            {AppConstants::CHILDREN, {}}
+                    }
+            },
+            {22,
+                    {
+                            {AppConstants::PARENTS, {20}},
+                            {AppConstants::CHILDREN, {22}}
+                    }
+            }
+    };
+
+    ProcName proc3 = "proc3";
+    writePkb.writeCFG(proc3, graph3);
+    writePkb.setStatement("while", 13);
+    writePkb.setStatement("if", 14);
+    writePkb.setStatement("while", 15);
+    writePkb.setStatement("print", 16);
+    writePkb.setStatement("while", 17);
+    writePkb.setStatement("if", 18);
+    writePkb.setStatement("call", 19);
+    writePkb.setStatement("if", 20);
+    writePkb.setStatement("call", 21);
+    writePkb.setStatement("while", 22);
+    writePkb.setProcedure(proc3, {13,14,15,16,17,18,19,20,21,22});
+
+
+    SECTION("Next*(_, _)") {
+        std::vector<std::vector<std::string>> expected = { { "13", "14" }, { "13", "15" }, { "13", "17" },
+                                                           { "13", "16" }, { "13", "13" }, { "13", "18" },
+                                                           { "13", "19" }, { "13", "20" }, { "13", "21" },
+                                                           { "13", "22" }, { "14", "17" }, { "14", "15" },
+                                                           { "14", "18" }, { "14", "13" }, { "14", "16" },
+                                                           { "14", "19" }, { "14", "20" }, { "14", "14" },
+                                                           { "14", "21" }, { "14", "22" }, { "15", "13" },
+                                                           { "15", "16" }, { "15", "14" }, { "15", "15" },
+                                                           { "15", "18" }, { "15", "17" }, { "15", "19" },
+                                                           { "15", "20" }, { "15", "21" }, { "15", "22" },
+                                                           { "16", "18" }, { "16", "13" }, { "16", "15" },
+                                                           { "16", "19" }, { "16", "20" }, { "16", "14" },
+                                                           { "16", "16" }, { "16", "21" }, { "16", "22" },
+                                                           { "16", "17" }, { "17", "17" }, { "17", "13" },
+                                                           { "17", "18" }, { "17", "14" }, { "17", "19" },
+                                                           { "17", "20" }, { "17", "15" }, { "17", "21" },
+                                                           { "17", "22" }, { "17", "16" }, { "18", "20" },
+                                                           { "18", "19" }, { "18", "21" }, { "18", "22" },
+                                                           { "20", "22" }, { "20", "21" }, { "22", "22" } };
+
+        std::vector<Parameter> params = {Parameter("_", AppConstants::WILDCARD),
+                                         Parameter("_", AppConstants::WILDCARD)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::NEXTT, params);
+        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        REQUIRE(unit_testing_utils::equals(expected, res1));
+
+        std::vector<Parameter> params2 = {Parameter("st1", AppConstants::STMT),
+                                          Parameter("st2", AppConstants::STMT)};
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::NEXTT, params2);
+        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
+        REQUIRE(unit_testing_utils::equals(expected, res2));
+    }
 }
