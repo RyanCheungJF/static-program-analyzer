@@ -18,6 +18,7 @@ enum ClauseType { SELECT, SUCH_THAT, PATTERN, WITH };
 class SelectQueryParser {
 public:
   Query parse(string selectQuery);
+  Parameter parseParameter(string);
 
 private:
   map<ClauseType, vector<int>> getClauseStarts(vector<string> &wordList);
@@ -31,6 +32,8 @@ private:
   vector<Pattern> parsePatternClause(vector<string> &wordList, int start,
                                      int end);
   vector<ClauseType> getAllClauseTypes();
+
+
 };
 
 #endif // SPA_SELECTCLAUSEPARSER_H

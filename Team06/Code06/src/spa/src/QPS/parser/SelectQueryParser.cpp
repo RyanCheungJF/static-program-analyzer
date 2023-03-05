@@ -106,7 +106,7 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string> &wordList,
     // bad select parameter
     throw SyntaxException();
   }
-  // TODO: replace with synonym type rather than string
+
   Parameter param(wordList[1], AppConstants::SYNONYM);
   params.push_back(param);
   return params;
@@ -247,4 +247,17 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string> &wordList,
 
 vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
   return vector<ClauseType>{SELECT, SUCH_THAT, PATTERN, WITH};
+}
+
+Parameter SelectQueryParser::parseParameter(string paramString) {
+  string paramName;
+  int index;
+  tie(paramName, index) = extractSubStringUntilDelimiter(paramString, 0, ".");
+  if (index == -1) {
+    return Parameter(removeCharFromString(paramName, '\"'),
+                     Parameter::guessParameterType(paramName));
+  }
+  string attributeType = paramString.substr(index, paramString.length() - index);
+  return Parameter(removeCharFromString(paramName, '\"'),
+                   Parameter::guessParameterType(paramName), attributeType);
 }

@@ -31,6 +31,12 @@ public:
     inline static const std::string FIXED_STRING = "fixed_string";
     inline static const std::string FIXED_STRING_WTIH_WILDCARD = "fixed_string_with_wildcard";
 
+    // synonym attributes
+    inline static const std::string PROCNAME = "procName";
+    inline static const std::string VARNAME = "varName";
+    inline static const std::string VALUE = "value";
+    inline static const std::string STMTNO = "stmt#";
+
     // relationships
     inline static const std::string FOLLOWS = "Follows";
     inline static const std::string FOLLOWST = "Follows*";

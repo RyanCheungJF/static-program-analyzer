@@ -39,23 +39,21 @@ vector<Query> QPSParser::parse(string qpsQuery) {
 vector<string> QPSParser::splitQuery(string qpsQuery) {
   qpsQuery = trim(qpsQuery);
   // Check if the last term is a semicolon.
-  bool endsWithSemicolon = false;
   if (qpsQuery.back() == ';') {
-    endsWithSemicolon = true;
+    throw SyntaxException();
   }
   string delimiter = ";";
   vector<string> clauses;
   int start = 0;
-  while (start != qpsQuery.size()) {
+  while (start != -1) {
+    if (start >= qpsQuery.length()) {
+      throw SyntaxException();
+    }
     string clause;
     tie(clause, start) =
         extractSubStringUntilDelimiter(qpsQuery, start, delimiter);
     clause = trim(clause);
     clauses.push_back(clause);
-  }
-  if (endsWithSemicolon) {
-    // select clause ends with semicolon
-    throw SyntaxException();
   }
   return clauses;
 }

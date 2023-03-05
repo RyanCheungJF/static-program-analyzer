@@ -7,21 +7,31 @@ ParameterType Parameter::getType() const { return type; }
 Parameter::Parameter(string v, string t) {
   value = v;
   type = stringToType(t);
+  attribute = AttributeType::NONE;
 }
 
 Parameter::Parameter(string v, ParameterType t) {
   value = v;
   type = t;
+  attribute = AttributeType::NONE;
+}
+
+Parameter::Parameter(string v, ParameterType t, string a) {
+  value = v;
+  type = t;
+  attribute = stringToAttribute(a);
 }
 
 Parameter::Parameter(const Parameter &p) {
   value = p.value;
   type = p.type;
+  attribute = p.attribute;
 }
 
 Parameter::Parameter() {
   type = ParameterType::UNKNOWN;
   value = "";
+  attribute = AttributeType::NONE;
 }
 
 bool Parameter::isSyntacticStatementRef(Parameter &p) {
@@ -80,6 +90,14 @@ ParameterType Parameter::stringToType(string s) {
   return iter->second;
 }
 
+AttributeType Parameter::stringToAttribute(string s) { 
+  auto iter = Parameter::stringToAttributeMap.find(s);
+  if (iter == stringToAttributeMap.end()) {
+    throw SyntaxException();
+  }
+  return iter->second;
+}
+
 string Parameter::getTypeString() const {
   for (pair<string, ParameterType> item : stringToTypeMap) {
     if (item.second == this->getType()) {
@@ -110,7 +128,7 @@ bool Parameter::isEqualTo(Parameter p) {
 }
 
 bool Parameter::operator==(const Parameter &p) const {
-  return type == p.type && value == p.value;
+  return type == p.type && value == p.value && attribute == p.attribute;
 }
 
 bool Parameter::isPatternSyn(Parameter &p) {
@@ -145,4 +163,11 @@ const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
     {AppConstants::FIXED_STRING, ParameterType::FIXED_STRING},
     {AppConstants::FIXED_STRING_WTIH_WILDCARD,
      ParameterType::FIXED_STRING_WITH_WILDCARD},
+};
+
+const unordered_map<string, AttributeType> Parameter::stringToAttributeMap = {
+    {AppConstants::PROCNAME, AttributeType::PROCNAME},
+    {AppConstants::VARNAME, AttributeType::VARNAME},
+    {AppConstants::VALUE, AttributeType::VALUE},
+    {AppConstants::STMTNO, AttributeType::STMTNO},
 };

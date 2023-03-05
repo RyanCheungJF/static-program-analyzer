@@ -161,7 +161,7 @@ TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty "
   string inputDelimiter = ",";
   int start = 0;
 
-  tuple<string, size_t> expected{inputString, inputString.size()};
+  tuple<string, size_t> expected{inputString, -1};
   tuple<string, size_t> output =
       extractSubStringUntilDelimiter(inputString, start, inputDelimiter);
   CHECK(expected == output);

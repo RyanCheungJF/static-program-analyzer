@@ -1,8 +1,8 @@
 #ifndef SPA_QPS_PARAMETER_H
 #define SPA_QPS_PARAMETER_H
 #include "../../../src/utils/AppConstants.h"
-#include "exceptions/InternalException.h"
 #include "QPS/QPSGrammarUtils.h"
+#include "exceptions/InternalException.h"
 #include <string>
 #include <unordered_map>
 using namespace std;
@@ -26,12 +26,15 @@ enum class ParameterType {
   UNKNOWN
 };
 
+enum class AttributeType { PROCNAME, VARNAME, VALUE, STMTNO, NONE };
+
 class Parameter {
 public:
   string getValue();
   ParameterType getType() const;
   Parameter(string, string);
   Parameter(string, ParameterType);
+  Parameter(string, ParameterType, string);
   Parameter(const Parameter &);
   Parameter();
   static bool isSyntacticEntityRef(Parameter &);
@@ -53,9 +56,12 @@ public:
 
 private:
   const static unordered_map<string, ParameterType> stringToTypeMap;
+  const static unordered_map<string, AttributeType> stringToAttributeMap;
   static ParameterType stringToType(string);
+  static AttributeType stringToAttribute(string);
   string value;
   ParameterType type;
+  AttributeType attribute;
 };
 
 #endif

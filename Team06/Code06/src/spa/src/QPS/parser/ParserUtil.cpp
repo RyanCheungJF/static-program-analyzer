@@ -157,7 +157,7 @@ tuple<string, size_t> extractSubStringUntilDelimiter(const string &original,
   size_t end = original.find(delimiter, start);
   if (end == string::npos) {
     return tuple<string, int>(original.substr(start, original.size()),
-                              original.size());
+                              -1);
   }
   size_t length = end - start;
   string substr = original.substr(start, length);
