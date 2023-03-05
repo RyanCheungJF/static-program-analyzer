@@ -1,23 +1,22 @@
-#include "../../qps/entities/Parameter.h"
-#include "../storage/CFGStorage.h"
-#include "../storage/StmtStorage.h"
-#include "../storage/ProcedureStorage.h"
 #include <algorithm>
 #include <memory>
 #include <queue>
 
+#include "../../qps/entities/Parameter.h"
+#include "../storage/CFGStorage.h"
+#include "../storage/ProcedureStorage.h"
+#include "../storage/StmtStorage.h"
 
 ////TODO: MIGHT be buggy? would be good to have a formal proof
-//struct hashFunctionNextT
+// struct hashFunctionNextT
 //{
-//    size_t operator()(const std::pair<int, int> &x) const
-//    {
-//        std::size_t h1 = std::hash<double>{}(x.first);
-//        std::size_t h2 = std::hash<double>{}(x.second);
-//        return h1 ^ h2;
-//    }
-//};
-
+//     size_t operator()(const std::pair<int, int> &x) const
+//     {
+//         std::size_t h1 = std::hash<double>{}(x.first);
+//         std::size_t h2 = std::hash<double>{}(x.second);
+//         return h1 ^ h2;
+//     }
+// };
 
 class NextHandler {
 public:
@@ -30,13 +29,9 @@ private:
     std::shared_ptr<StmtStorage> stmtStorage;
     std::shared_ptr<ProcedureStorage> procStorage;
     std::unordered_map<ParameterType, std::string> stmtTypesSet = {
-            {ParameterType::IF, AppConstants::IF},
-            {ParameterType::WHILE, AppConstants::WHILE},
-            {ParameterType::ASSIGN, AppConstants::ASSIGN},
-            {ParameterType::PRINT, AppConstants::PRINT},
-            {ParameterType::READ, AppConstants::READ},
-            {ParameterType::CALL, AppConstants::CALL}
-    };
+        {ParameterType::IF, AppConstants::IF},         {ParameterType::WHILE, AppConstants::WHILE},
+        {ParameterType::ASSIGN, AppConstants::ASSIGN}, {ParameterType::PRINT, AppConstants::PRINT},
+        {ParameterType::READ, AppConstants::READ},     {ParameterType::CALL, AppConstants::CALL}};
     bool isTransitive;
 
     // e.g. Next(1, 2)
@@ -93,18 +88,15 @@ private:
     // e.g. Next*(s1, s2) or Next*(_, _)
     std::vector<std::vector<std::string>> handleWildcardWildcardTransitive();
 
-
-
     // helper functions
-    std::unordered_map<ProcName, std::unordered_set<StmtNum>> getProcedureLines(std::unordered_set<StmtNum> statementNumbers);
-    std::vector<std::vector<std::string>> handleNonTransitive(Parameter param1, Parameter param2,
-                                                              bool isFixedIntParam1, bool isFixedIntParam2,
-                                                              bool isWildCardParam1, bool isWildCardParam2,
-                                                              bool isTypedStmtParam1, bool isTypedStmtParam2);
-    std::vector<std::vector<std::string>> handleTransitive(Parameter param1, Parameter param2,
-                                                              bool isFixedIntParam1, bool isFixedIntParam2,
-                                                              bool isWildCardParam1, bool isWildCardParam2,
-                                                              bool isTypedStmtParam1, bool isTypedStmtParam2);
-
+    std::unordered_map<ProcName, std::unordered_set<StmtNum>>
+    getProcedureLines(std::unordered_set<StmtNum> statementNumbers);
+    std::vector<std::vector<std::string>> handleNonTransitive(Parameter param1, Parameter param2, bool isFixedIntParam1,
+                                                              bool isFixedIntParam2, bool isWildCardParam1,
+                                                              bool isWildCardParam2, bool isTypedStmtParam1,
+                                                              bool isTypedStmtParam2);
+    std::vector<std::vector<std::string>> handleTransitive(Parameter param1, Parameter param2, bool isFixedIntParam1,
+                                                           bool isFixedIntParam2, bool isWildCardParam1,
+                                                           bool isWildCardParam2, bool isTypedStmtParam1,
+                                                           bool isTypedStmtParam2);
 };
-
