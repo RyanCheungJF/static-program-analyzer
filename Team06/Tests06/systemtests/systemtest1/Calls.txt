@@ -5,7 +5,7 @@ conditionalSpam
 5000
 2 - comment
 procedure p;
-Select p such that Calls(p, "condtionalSpam")
+Select p such that Calls(p, "conditionalSpam")
 arithmetic
 5000
 3 - comment
@@ -15,7 +15,7 @@ none
 5000
 4 - comment
 procedure p;
-Select p such that Calls("non-exist", p)
+Select p such that Calls("nonExist", p)
 none
 5000
 5 - comment
@@ -24,7 +24,7 @@ Select p such that Calls(p, _)
 arithmetic
 5000
 6 - comment
-print pr
+print pr;
 Select pr such that Calls(_, _)
 32, 36, 42
 5000

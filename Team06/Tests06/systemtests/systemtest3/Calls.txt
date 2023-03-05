@@ -6,11 +6,11 @@ Two, Three, Four
 2 - comment
 procedure p;
 Select p such that Calls(p, "Three")
-One, Two, Four
+One, Two, Four, Five
 5000
 3 - comment
 procedure p;
-Select p such that Calls("non-exist", p)
+Select p such that Calls("nonExist", p)
 none
 5000
 4 - comment
