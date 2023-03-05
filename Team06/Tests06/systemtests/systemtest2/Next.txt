@@ -1,0 +1,85 @@
+1 - comment
+stmt p;
+Select p such that Next(2, p)
+3
+5000
+2 - comment
+stmt p;
+Select p such that Next(3, p)
+4
+5000
+3 - comment
+stmt p;
+Select p such that Next(4, p)
+5, 9
+5000
+4 - comment
+stmt p;
+Select p such that Next(p, 12)
+8, 10
+5000
+5 - comment
+stmt p;
+Select p such that Next(12, p)
+none
+5000
+6 - comment
+stmt p;
+Select p such that Next(p, 1)
+none
+5000
+7 - comment
+stmt p;
+Select p such that Next(18, p)
+19, 22
+5000
+8 - comment
+stmt p;
+Select p such that Next(p, 18)
+17, 21
+5000
+9 - comment
+stmt p;
+Select p such that Next(24, p)
+25, 26
+5000
+10 - comment
+stmt p;
+Select p such that Next(28, p)
+none
+5000
+11 - comment
+stmt p;
+Select p such that Next(p, 29)
+none
+5000
+12 - comment
+stmt p; call c;
+Select c such that Next(28, 29)
+none
+5000
+13 - comment
+stmt p; call c;
+Select c such that Next(27, 28)
+9, 11, 13, 14, 15, 19
+5000
+14 - comment
+stmt p; call c;
+Select c such that Next(28, 27)
+none
+5000
+15 - comment
+stmt p; call c; if i;
+Select c such that Next(21, 18)
+4, 24
+5000
+16 - comment
+stmt p; call c; if i; read r1, r2;
+Select r1 such that Next(2, r2)
+1, 2, 3, 5, 7
+5000
+17 - comment
+stmt p; call c; if i; read r1, r2;
+Select r2 such that Next(3, r1)
+none
+5000

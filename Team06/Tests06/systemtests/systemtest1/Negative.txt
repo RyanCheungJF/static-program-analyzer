@@ -303,3 +303,8 @@ print pr; procedure p;
 Select p such that Calls*(p, pr)
 SemanticError
 5000
+60 - Calls only supported for procedure
+while w; procedure p;
+Select p such that Calls(w, "Tasty")
+SemanticError
+5000

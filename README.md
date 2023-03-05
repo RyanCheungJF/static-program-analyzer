@@ -16,10 +16,10 @@
 
 ### Running Checkstyle
 
-To run checkstyle, first install the `clang-format` package.
+To run checkstyle, first install the `clang-format` package using `npm`.
 
 ```bash
-sudo apt-get install clang-format
+npm i
 ```
 
 Ensure that your `style.sh` script has executable permissions,
