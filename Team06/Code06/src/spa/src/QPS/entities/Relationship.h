@@ -43,6 +43,7 @@ public:
 private:
   static const unordered_map<string, RelationshipType> stringToTypeMap;
   static RelationshipType stringToType(string);
+  static const int NUM_OF_PARAMS = 2;
 };
 
 #endif // !SPA_QPS_RELATIONSHIP_H

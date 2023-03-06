@@ -70,7 +70,7 @@ RelationshipType Relationship::getType() { return type; }
 Relationship::Relationship() { type = RelationshipType::UNKNOWN; }
 
 bool Relationship::validateSyntaxStmtStmt(vector<Parameter> &ps) {
-  if (ps.size() != 2) {
+  if (ps.size() != NUM_OF_PARAMS) {
     return false;
   }
   if (!Parameter::isSyntacticStatementRef(ps[0])) {
@@ -83,7 +83,7 @@ bool Relationship::validateSyntaxStmtStmt(vector<Parameter> &ps) {
 }
 
 bool Relationship::validateSyntaxEntityEntity(vector<Parameter> &ps) {
-  if (ps.size() != 2) {
+  if (ps.size() != NUM_OF_PARAMS) {
     return false;
   }
   if (!Parameter::isSyntacticEntityRef(ps[0])) {
@@ -96,7 +96,7 @@ bool Relationship::validateSyntaxEntityEntity(vector<Parameter> &ps) {
 }
 
 bool Relationship::validateSyntaxStmtProcEntity(vector<Parameter> &ps) {
-  if (ps.size() != 2) {
+  if (ps.size() != NUM_OF_PARAMS) {
     return false;
   }
   if (!Parameter::isSyntacticStatementRef(ps[0]) &&
