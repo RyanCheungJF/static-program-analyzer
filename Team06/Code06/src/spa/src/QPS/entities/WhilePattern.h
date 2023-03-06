@@ -4,8 +4,8 @@
 
 class WhilePattern : public Pattern {
 public:
-  WhilePattern(Parameter ps, Parameter er, string p);
-  bool validateParams();
+    WhilePattern(Parameter ps, Parameter er, string p);
+    bool validateParams();
 };
 
 #endif // SPA_WHILEPATTERN_H

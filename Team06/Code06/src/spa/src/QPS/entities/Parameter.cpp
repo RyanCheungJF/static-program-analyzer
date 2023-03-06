@@ -1,127 +1,128 @@
 #include "Parameter.h"
 
-string Parameter::getValue() { return value; }
+string Parameter::getValue() {
+    return value;
+}
 
-ParameterType Parameter::getType() const { return type; }
+ParameterType Parameter::getType() const {
+    return type;
+}
 
 Parameter::Parameter(string v, string t) {
-  value = v;
-  type = stringToType(t);
+    value = v;
+    type = stringToType(t);
 }
 
 Parameter::Parameter(string v, ParameterType t) {
-  value = v;
-  type = t;
+    value = v;
+    type = t;
 }
 
-Parameter::Parameter(const Parameter &p) {
-  value = p.value;
-  type = p.type;
+Parameter::Parameter(const Parameter& p) {
+    value = p.value;
+    type = p.type;
 }
 
 Parameter::Parameter() {
-  type = ParameterType::UNKNOWN;
-  value = "";
+    type = ParameterType::UNKNOWN;
+    value = "";
 }
 
-bool Parameter::isSyntacticStatementRef(Parameter &p) {
-  return p.type == ParameterType::SYNONYM || isStatementRef(p);
+bool Parameter::isSyntacticStatementRef(Parameter& p) {
+    return p.type == ParameterType::SYNONYM || isStatementRef(p);
 }
 
-bool Parameter::isStatementRef(Parameter &p) {
-  switch (p.type) {
-  case ParameterType::STMT:
-  case ParameterType::READ:
-  case ParameterType::PRINT:
-  case ParameterType::WHILE:
-  case ParameterType::IF:
-  case ParameterType::ASSIGN:
-  case ParameterType::FIXED_INT:
-  case ParameterType::WILDCARD:
-  case ParameterType::CALL:
-    return true;
-  }
-  return false;
+bool Parameter::isStatementRef(Parameter& p) {
+    switch (p.type) {
+    case ParameterType::STMT:
+    case ParameterType::READ:
+    case ParameterType::PRINT:
+    case ParameterType::WHILE:
+    case ParameterType::IF:
+    case ParameterType::ASSIGN:
+    case ParameterType::FIXED_INT:
+    case ParameterType::WILDCARD:
+    case ParameterType::CALL:
+        return true;
+    }
+    return false;
 }
 
-bool Parameter::isProcedure(Parameter &p) {
-  return p.type == ParameterType::PROCEDURE ||
-         p.type == ParameterType::FIXED_STRING;
+bool Parameter::isProcedure(Parameter& p) {
+    return p.type == ParameterType::PROCEDURE || p.type == ParameterType::FIXED_STRING;
 }
 
-bool Parameter::isDsgEntity(Parameter &p) {
-  return isDesignEntity(p.getTypeString());
+bool Parameter::isDsgEntity(Parameter& p) {
+    return isDesignEntity(p.getTypeString());
 }
 
-bool Parameter::isUncheckedSynonym() { return type == ParameterType::SYNONYM; }
+bool Parameter::isUncheckedSynonym() {
+    return type == ParameterType::SYNONYM;
+}
 
 void Parameter::updateSynonymType(ParameterType pt) {
-  if (type != ParameterType::SYNONYM) {
-    throw InternalException(
-        "Error: Parameter.updateSynonymType parameter is not a synonym.");
-  }
-  type = pt;
+    if (type != ParameterType::SYNONYM) {
+        throw InternalException("Error: Parameter.updateSynonymType parameter is not a synonym.");
+    }
+    type = pt;
 }
 
-bool Parameter::isSyntacticEntityRef(Parameter &p) {
-  return p.type == ParameterType::SYNONYM || isEntityRef(p) || isProcedure(p);
+bool Parameter::isSyntacticEntityRef(Parameter& p) {
+    return p.type == ParameterType::SYNONYM || isEntityRef(p) || isProcedure(p);
 }
 
-bool Parameter::isEntityRef(Parameter &p) {
-  return p.type == ParameterType::VARIABLE || isFixedStringOrWildcard(p);
+bool Parameter::isEntityRef(Parameter& p) {
+    return p.type == ParameterType::VARIABLE || isFixedStringOrWildcard(p);
 }
 
 // TODO: IF NOT FOUND, MAY WANT TO THROW ERROR
 ParameterType Parameter::stringToType(string s) {
-  auto iter = Parameter::stringToTypeMap.find(s);
-  if (iter == stringToTypeMap.end()) {
-    return ParameterType::UNKNOWN;
-  }
-  return iter->second;
+    auto iter = Parameter::stringToTypeMap.find(s);
+    if (iter == stringToTypeMap.end()) {
+        return ParameterType::UNKNOWN;
+    }
+    return iter->second;
 }
 
 string Parameter::getTypeString() const {
-  for (pair<string, ParameterType> item : stringToTypeMap) {
-    if (item.second == this->getType()) {
-      return item.first;
+    for (pair<string, ParameterType> item : stringToTypeMap) {
+        if (item.second == this->getType()) {
+            return item.first;
+        }
     }
-  }
-  return "None";
+    return "None";
 }
 
 ParameterType Parameter::guessParameterType(string s) {
-  if (isSynonym(s)) {
-    return ParameterType::SYNONYM;
-  }
-  if (isFixedString(s)) {
-    return ParameterType::FIXED_STRING;
-  }
-  if (isInteger(s)) {
-    return ParameterType::FIXED_INT;
-  }
-  if (isWildCard(s)) {
-    return ParameterType::WILDCARD;
-  }
-  return ParameterType::UNKNOWN;
+    if (isSynonym(s)) {
+        return ParameterType::SYNONYM;
+    }
+    if (isFixedString(s)) {
+        return ParameterType::FIXED_STRING;
+    }
+    if (isInteger(s)) {
+        return ParameterType::FIXED_INT;
+    }
+    if (isWildCard(s)) {
+        return ParameterType::WILDCARD;
+    }
+    return ParameterType::UNKNOWN;
 }
 
-bool Parameter::operator==(const Parameter &p) const {
-  return type == p.type && value == p.value;
+bool Parameter::operator==(const Parameter& p) const {
+    return type == p.type && value == p.value;
 }
 
-bool Parameter::isPatternSyn(Parameter &p) {
-  return p.type == ParameterType::ASSIGN || p.type == ParameterType::WHILE ||
-         p.type == ParameterType::IF;
+bool Parameter::isPatternSyn(Parameter& p) {
+    return p.type == ParameterType::ASSIGN || p.type == ParameterType::WHILE || p.type == ParameterType::IF;
 }
 
-bool Parameter::isFixedStringOrWildcard(Parameter &p) {
-  return p.type == ParameterType::FIXED_STRING ||
-         p.type == ParameterType::WILDCARD;
+bool Parameter::isFixedStringOrWildcard(Parameter& p) {
+    return p.type == ParameterType::FIXED_STRING || p.type == ParameterType::WILDCARD;
 }
 
-bool Parameter::isFixedIntOrWildCard(Parameter &p) {
-  return p.type == ParameterType::FIXED_INT ||
-         p.type == ParameterType::WILDCARD;
+bool Parameter::isFixedIntOrWildCard(Parameter& p) {
+    return p.type == ParameterType::FIXED_INT || p.type == ParameterType::WILDCARD;
 }
 
 const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
@@ -139,6 +140,5 @@ const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
     {AppConstants::WILDCARD, ParameterType::WILDCARD},
     {AppConstants::FIXED_INT, ParameterType::FIXED_INT},
     {AppConstants::FIXED_STRING, ParameterType::FIXED_STRING},
-    {AppConstants::FIXED_STRING_WTIH_WILDCARD,
-     ParameterType::FIXED_STRING_WITH_WILDCARD},
+    {AppConstants::FIXED_STRING_WTIH_WILDCARD, ParameterType::FIXED_STRING_WITH_WILDCARD},
 };

@@ -7,8 +7,8 @@ using namespace std;
 
 class ModifiesRelationship : public Relationship {
 public:
-  ModifiesRelationship(vector<Parameter> &);
-  bool validateParams();
+    ModifiesRelationship(vector<Parameter>&);
+    bool validateParams();
 };
 
 #endif // SPA_QPS_MODIFIESRELATIONSHIP_H

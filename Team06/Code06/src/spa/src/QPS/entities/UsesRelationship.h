@@ -7,8 +7,8 @@ using namespace std;
 
 class UsesRelationship : public Relationship {
 public:
-  UsesRelationship(vector<Parameter> &);
-  bool validateParams();
+    UsesRelationship(vector<Parameter>&);
+    bool validateParams();
 };
 
 #endif // SPA_QPS_USESRELATIONSHIP_H
