@@ -15,7 +15,7 @@ Select p such that Next(4, p)
 5000
 4 - comment
 stmt p;
-Select p such that Next(p, 12)
+Select p such that Next(p, 11)
 8, 10
 5000
 5 - comment
@@ -70,7 +70,7 @@ none
 5000
 15 - comment
 stmt p; call c; if i;
-Select c such that Next(21, 18)
+Select i such that Next(21, 18)
 4, 24
 5000
 16 - comment

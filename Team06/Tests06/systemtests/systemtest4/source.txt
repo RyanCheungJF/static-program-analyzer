@@ -51,7 +51,7 @@ procedure a {
 	call x;
 	abc = a + b * c;
 	print y;
-	def = 1000000000000000000000000000000000000000000000000000000000000000000000000000000000;
+	def = 100000000;
 	read z;
 } 
 
@@ -84,7 +84,7 @@ procedure c {
 																				y = y - 1;
 																			}
 																		} else {
-																			while (y > -1) {
+																			while (y > 1) {
 																				y = 1 + y - 2;
 																			}
 																		}
@@ -131,7 +131,7 @@ procedure c {
 	}
 	x = x + 1;
 	print x;
-	call d;
+	call k;
 }
 
 procedure d{
@@ -139,15 +139,15 @@ procedure d{
 	b = 0;
 	mul = a * b;
 	div = b / a;
-	call a;
-	sum = a + b;
 	call b;
-	minus = a - b;
+	sum = a + b;
 	call c;
+	minus = a - b;
+	call e;
 	mod = a % b;
 	if(  add       ==   mod )  then{
 		c = mod * mod + sum * mul / div - minus;
-		if((!((b * c / div >= 120318248019891023123) && (mul * mul < mul + 1)) && ((b / b) != (a * (mul + a) - (div - mod)/2 + c % mod))) || (!(a > mod + 2 / (b)) && (c <= div)))then {
+		if((!(b * c / div >= 2147483647)) && ((mul * mul < mul + 1) || (a * (mul + a) - (div - mod) /2 + c % mod != minus)))then {
 			a = 0;
 			b = 1;
 			c = 2;
@@ -185,7 +185,7 @@ procedure d{
 	mutex = 0;
 	read sheMo;
 	semaphore = sheMo + NULL;
-} 
+}
 
 procedure e {
 	darren = 7;
@@ -246,7 +246,6 @@ procedure e {
 	alwayshungry = 1;
 }
 
-
 procedure f {
 	while (itis > raining) {
 		umbrella = 1;
@@ -284,7 +283,7 @@ procedure f {
 	wow = am;
 	wow = hungry;
 	wow = its;
-	wow = 156am;
+	wow = a156am;
 	wow = are;
 	wow = there;
 	wow = noodles;
@@ -302,7 +301,7 @@ procedure g {
 			try = catchPeppa;
 		}
 		if (notCaught == 1) then {
-			call retire;
+			print retire;
 			print retireFromFarming;
 		} else {
 			notCaught = 0;
@@ -324,7 +323,7 @@ procedure g {
 		print servePeppa;
 		peppa = served;
 		read withSaltAndButter;
-		call waiter;
+		read waiter;
 		call x;
 		peppa = eaten;
 		peppa = peppa + yum + pepper + yum;
@@ -383,7 +382,7 @@ procedure m {
 	}
 }
 
-proceudure n {
+procedure n {
 	if = if;
 	chatGPT = 0;
 	chatGPT = me + feed - fake % info;
@@ -408,7 +407,7 @@ procedure o {
 	i = my + parrot + to + attack + people;
 	read bestParrot;
 	print true;
-	if (i || (i > i) || (i && (i * i % i == 0))) then {
+	if ((i > i) || ((i == i) && (i * i % i == 0))) then {
 		print please;
 		read buymeaparrot;
 	} else {
@@ -506,7 +505,7 @@ procedure s {
 	s = 31;
 }
 
-procdeure t {
+procedure t {
 	tea = i + love + tea;
 	read tea;
 	print tea;
@@ -562,7 +561,7 @@ procedure w {
 	bye = bye * 2;
 }
 
-precodeure x { 
+procedure x { 
 	kkk = jjj + 111;
 	www = xxx + yyy;
 	read hj8kp9jasd321jfjllf;

@@ -64,7 +64,7 @@ void Parameter::updateSynonymType(ParameterType pt) {
 }
 
 bool Parameter::isSyntacticEntityRef(Parameter &p) {
-  return p.type == ParameterType::SYNONYM || isEntityRef(p);
+  return p.type == ParameterType::SYNONYM || isEntityRef(p) || isProcedure(p);
 }
 
 bool Parameter::isEntityRef(Parameter &p) {
@@ -103,10 +103,6 @@ ParameterType Parameter::guessParameterType(string s) {
     return ParameterType::WILDCARD;
   }
   return ParameterType::UNKNOWN;
-}
-
-bool Parameter::isEqualTo(Parameter p) {
-  return p.getValue() == this->getValue();
 }
 
 bool Parameter::operator==(const Parameter &p) const {

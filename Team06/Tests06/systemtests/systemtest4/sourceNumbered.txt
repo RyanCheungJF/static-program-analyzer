@@ -55,7 +55,7 @@ procedure a {
 	call x;	// 50
 	abc = a + b * c;	// 51
 	print y;	// 52
-	def = 1000000000000000000000000000000000000000000000000000000000000000000000000000000000;	// 53
+	def = 100000000;	// 53
 	read z;	// 54
 } 
 
@@ -88,7 +88,7 @@ procedure c {
 																				y = y - 1;	// 77
 																			}
 																		} else {
-																			while (y > -1) {	// 78
+																			while (y > 1) {	// 78
 																				y = 1 + y - 2;	// 79
 																			}
 																		}
@@ -135,7 +135,7 @@ procedure c {
 	}
 	x = x + 1;	// 102
 	print x;	// 103
-	call d;	// 104
+	call k;	// 104
 }
 
 procedure d {
@@ -143,15 +143,15 @@ procedure d {
 	b = 0;	// 106
 	mul = a * b;	// 107
 	div = b / a;	// 108
-	call a;	// 109
+	call b;	// 109
 	sum = a + b;	// 110
-	call b;	// 111
+	call c;	// 111
 	minus = a - b;	// 112
-	call c;	// 113
+	call e;	// 113
 	mod = a % b;	// 114
 	if (add == mod) then {	// 115
 		c = mod * mod + sum * mul / div - minus;	// 116
-		if((!((b * c / div >= 120318248019891023123) && (mul * mul < mul + 1)) && ((b / b) != (a * (mul + a) - (div - mod) /2 + c % mod))) || (!(a > mod + 2 / (b)) && (c <= div))) then {	// 117
+		if((!(b * c / div >= 2147483647)) && ((mul * mul < mul + 1) || (a * (mul + a) - (div - mod) /2 + c % mod != minus))) then {	// 117
 			a = 0;	// 118
 			b = 1;	// 119
 			c = 2;	// 120
@@ -288,7 +288,7 @@ procedure f {
 	wow = am;	// 223
 	wow = hungry;	// 224
 	wow = its;	// 225
-	wow = 156am;	// 226
+	wow = a156am;	// 226
 	wow = are;	// 227
 	wow = there;	// 228
 	wow = noodles;	// 229
@@ -306,7 +306,7 @@ procedure g {
 			try = catchPeppa;	// 238
 		}
 		if (notCaught == 1) then {	// 239
-			call retire;	// 240
+			print retire;	// 240
 			print retireFromFarming;	// 241
 		} else {
 			notCaught = 0;	// 242
@@ -328,7 +328,7 @@ procedure g {
 		print servePeppa;	// 254
 		peppa = served;	// 255
 		read withSaltAndButter;	// 256
-		call waiter;	// 257
+		read waiter;	// 257
 		call x;	// 258
 		peppa = eaten;	// 259
 		peppa = peppa + yum + pepper + yum;	// 260
@@ -387,7 +387,7 @@ procedure m {
 	}
 }
 
-proceudure n {
+procedure n {
 	if = if;	// 288
 	chatGPT = 0;	// 289
 	chatGPT = me + feed - fake % info;	// 290
@@ -412,7 +412,7 @@ procedure o {
 	i = my + parrot + to + attack + people;	// 306
 	read bestParrot;	// 307
 	print true;	// 308
-	if (i || (i > i) || (i && (i * i % i == 0))) then {	// 309
+	if ((i > i) || ((i == i) && (i * i % i == 0))) then {	// 309
 		print please;	// 310
 		read buymeaparrot;	// 311
 	} else {	
@@ -510,7 +510,7 @@ procedure s {
 	s = 31;	// 390
 }
 
-procdeure t {
+procedure t {
 	tea = i + love + tea;	// 391
 	read tea;	// 392
 	print tea;	// 393
@@ -566,7 +566,7 @@ procedure w {
 	bye = bye * 2;	// 434
 }
 
-precodeure x { 
+procedure x { 
 	kkk = jjj + 111;	// 435
 	www = xxx + yyy;	// 436
 	read hj8kp9jasd321jfjllf;	// 437

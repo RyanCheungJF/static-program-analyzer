@@ -144,7 +144,7 @@ Select v pattern if(v, _, _)
 a, A, if, N
 5000
 28 - comment
-if if;
+if if; variable v;
 Select v pattern if("while", _, _)
 none
 5000
@@ -154,7 +154,7 @@ Select w pattern w("while", _)
 30
 5000
 30 - comment
-while w;
+while w; variable v;
 Select v pattern w(v, _)
 i, thisIsAVeryLongNameAndILikeApples, c, while, b, B
 5000

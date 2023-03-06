@@ -1,7 +1,7 @@
 1 - comment
 procedure p;
 Select p such that Calls*("arithmetic", p)
-conditonalSpam
+conditionalSpam
 5000
 2 - comment
 procedure p;

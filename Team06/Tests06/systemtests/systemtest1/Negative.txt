@@ -256,7 +256,7 @@ SyntaxError
 50 - invalid While Pattern, invalid first param
 while w; procedure p;
 Select w pattern w(p, _)
-SyntaxError
+SemanticError
 5000
 51 - invalid While Pattern, invalid second param
 while w; assign a;

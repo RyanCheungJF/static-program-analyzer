@@ -7,7 +7,7 @@
 
 using namespace unit_testing_utils;
 
-TEST_CASE("SP-PKB Integration: Valid Source Program, Uses, Modifies") {
+TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
     SP testSP;
     PKB testPKB;
     WritePKB writePKB;
@@ -24,8 +24,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program, Uses, Modifies") {
     auto filePath = testDirectory.string() + "valid1.txt";
     testSP.processFile(filePath, &writePKB, &readPKB);
 
-    SECTION("SP-PKB Integration: Valid Source Program, Uses, Modifies: ModifiesS "
-            "+ ModifiesP") {
+    SECTION("SP-PKB Integration: ModifiesS ModifiesP") {
 
         auto procedureNames = readPKB.getAllProcedureNames();
         auto expectedProcedureNames = std::unordered_set<Ent>({"A", "B", "C"});
@@ -69,8 +68,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program, Uses, Modifies") {
         REQUIRE(variables6Modifies == expected6Modifies);
     }
 
-    SECTION("SP-PKB Integration: Valid Source Program, Uses, Modifies: UsesS + "
-            "UsesP") {
+    SECTION("SP-PKB Integration: UsesS UsesP") {
 
         // Uses
         auto variablesAUses = readPKB.getUsesP("A");
@@ -109,26 +107,8 @@ TEST_CASE("SP-PKB Integration: Valid Source Program, Uses, Modifies") {
         auto expected6Uses = std::unordered_set<Ent>({"z"});
         REQUIRE(variables6Uses == expected6Uses);
     }
-}
 
-TEST_CASE("SP-PKB Integration: Valid Source Program, Follows, FollowsT") {
-    SP testSP;
-    PKB testPKB;
-    WritePKB writePKB;
-    ReadPKB readPKB;
-    testPKB.initializePkb();
-    writePKB.setInstancePKB(testPKB);
-    readPKB.setInstancePKB(testPKB);
-
-    auto testDirectory = std::filesystem::path(INTEGRATION_TESTING_DIR);
-    for (int i = 0; i < 3; i++) {
-        testDirectory = testDirectory.parent_path();
-    }
-    testDirectory /= "Tests06/sp/sp-pkb/";
-    auto filePath = testDirectory.string() + "valid1.txt";
-    testSP.processFile(filePath, &writePKB, &readPKB);
-
-    SECTION("SP-PKB Integration: Valid Source Program, Follows, FollowsT: Follows") {
+    SECTION("SP-PKB Integration: Follows") {
         // Follows
         std::vector<Parameter> params1 = {Parameter("1", AppConstants::FIXED_INT),
                                           Parameter("2", AppConstants::FIXED_INT)};
@@ -211,7 +191,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program, Follows, FollowsT") {
         REQUIRE(follows14expected == follows14actual);
     }
 
-    SECTION("SP-PKB Integration: Valid Source Program, Follows, FollowsT: FollowsT") {
+    SECTION("SP-PKB Integration: FollowsT") {
         // FollowsT
         shared_ptr<Relationship> followsTTest1 = Relationship::makeRelationship(
             AppConstants::FOLLOWST, {Parameter("4", AppConstants::FIXED_INT), Parameter("_", AppConstants::WILDCARD)});
@@ -243,9 +223,29 @@ TEST_CASE("SP-PKB Integration: Valid Source Program, Follows, FollowsT") {
         std::sort(followsT4expected.begin(), followsT4expected.end());
         REQUIRE(followsT4expected == followsT4actual);
     }
+
+    SECTION("SP-PKB Integration: CFG") {
+        auto cfgA = readPKB.getCFG("A");
+        REQUIRE(cfgA[1]["parents"].empty());
+        REQUIRE(cfgA[1]["children"].empty());
+
+        auto cfgB = readPKB.getCFG("B");
+        REQUIRE(cfgB[2]["parents"].empty());
+        REQUIRE(cfgB[2]["children"] == std::unordered_set({3}));
+        REQUIRE(cfgB[3]["parents"] == std::unordered_set({2}));
+        REQUIRE(cfgB[3]["children"].empty());
+
+        auto cfgC = readPKB.getCFG("C");
+        REQUIRE(cfgC[4]["parents"].empty());
+        REQUIRE(cfgC[4]["children"] == std::unordered_set({5}));
+        REQUIRE(cfgC[5]["parents"] == std::unordered_set({4}));
+        REQUIRE(cfgC[5]["children"] == std::unordered_set({6}));
+        REQUIRE(cfgC[6]["parents"] == std::unordered_set({5}));
+        REQUIRE(cfgC[6]["children"].empty());
+    }
 }
 
-TEST_CASE("SP-PKB Integration: Valid Source Program, Parent, ParentT") {
+TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
     SP testSP;
     PKB testPKB;
     WritePKB writePKB;
@@ -262,8 +262,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program, Parent, ParentT") {
     auto filePath = testDirectory.string() + "valid2.txt";
     testSP.processFile(filePath, &writePKB, &readPKB);
 
-    SECTION("SP-PKB Integration: Valid Source Program, Parent, ParentT: Parent") {
-
+    SECTION("SP-PKB Integration: Parent") {
         shared_ptr<Relationship> parentTest1 = Relationship::makeRelationship(
             AppConstants::PARENT, {Parameter("_", AppConstants::WILDCARD), Parameter("ass", AppConstants::ASSIGN)});
         std::vector<std::vector<std::string>> parent1actual = readPKB.findRelationship(parentTest1);
@@ -302,8 +301,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program, Parent, ParentT") {
         REQUIRE(parent5expected == parent5actual);
     }
 
-    SECTION("SP-PKB Integration: Valid Source Program, Parent, ParentT: ParentT") {
-
+    SECTION("SP-PKB Integration: ParentT") {
         shared_ptr<Relationship> parentTTest1 = Relationship::makeRelationship(
             AppConstants::PARENTT, {Parameter("_", AppConstants::WILDCARD), Parameter("ass", AppConstants::ASSIGN)});
         std::vector<std::vector<std::string>> parentT1actual = readPKB.findRelationship(parentTTest1);
@@ -342,6 +340,34 @@ TEST_CASE("SP-PKB Integration: Valid Source Program, Parent, ParentT") {
         std::sort(parentT5expected.begin(), parentT5expected.end());
         REQUIRE(parentT5expected == parentT5actual);
     }
+
+    SECTION("SP-PKB Integration: CFG") {
+        auto cfgA = readPKB.getCFG("A");
+        REQUIRE(cfgA[1]["parents"].empty());
+        REQUIRE(cfgA[1]["children"] == std::unordered_set({2}));
+        REQUIRE(cfgA[2]["parents"] == std::unordered_set({1}));
+        REQUIRE(cfgA[2]["children"] == std::unordered_set({3}));
+        REQUIRE(cfgA[3]["parents"] == std::unordered_set({2, 7}));
+        REQUIRE(cfgA[3]["children"] == std::unordered_set({4}));
+        REQUIRE(cfgA[4]["parents"] == std::unordered_set({3}));
+        REQUIRE(cfgA[4]["children"] == std::unordered_set({5, 6}));
+        REQUIRE(cfgA[5]["parents"] == std::unordered_set({4}));
+        REQUIRE(cfgA[5]["children"] == std::unordered_set({7}));
+        REQUIRE(cfgA[6]["parents"] == std::unordered_set({4}));
+        REQUIRE(cfgA[6]["children"] == std::unordered_set({7}));
+        REQUIRE(cfgA[7]["parents"] == std::unordered_set({5, 6, 10}));
+        REQUIRE(cfgA[7]["children"] == std::unordered_set({3, 8}));
+        REQUIRE(cfgA[8]["parents"] == std::unordered_set({7}));
+        REQUIRE(cfgA[8]["children"] == std::unordered_set({9}));
+        REQUIRE(cfgA[9]["parents"] == std::unordered_set({8}));
+        REQUIRE(cfgA[9]["children"] == std::unordered_set({10}));
+        REQUIRE(cfgA[10]["parents"] == std::unordered_set({9}));
+        REQUIRE(cfgA[10]["children"] == std::unordered_set({7}));
+
+        auto cfgB = readPKB.getCFG("B");
+        REQUIRE(cfgA[11]["parents"].empty());
+        REQUIRE(cfgA[11]["children"].empty());
+    }
 }
 
 TEST_CASE("Invalid Source Program") {
@@ -363,8 +389,7 @@ TEST_CASE("Invalid Source Program") {
         std::string errorMessage = "";
         try {
             auto filePath = testDirectory.string() + "invalid1.txt";
-            testSP.processFile(filePath, &writePKB,
-                               &readPKB); // execution should stop here.
+            testSP.processFile(filePath, &writePKB, &readPKB); // execution should stop here.
             REQUIRE(false);
         } catch (std::exception e) {
             REQUIRE(true);
