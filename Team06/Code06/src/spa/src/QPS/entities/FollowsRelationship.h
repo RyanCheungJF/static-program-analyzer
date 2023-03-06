@@ -9,8 +9,5 @@ class FollowsRelationship : public Relationship {
 public:
   FollowsRelationship(vector<Parameter> &);
   bool validateParams();
-
-private:
-  bool validateSyntax(vector<Parameter> &);
 };
 #endif // !SPA_QPS_FOLLOWSRELATIONSHIP_H

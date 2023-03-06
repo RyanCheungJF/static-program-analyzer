@@ -9,9 +9,6 @@ class AffectsTRelationship : public Relationship {
 public:
   AffectsTRelationship(vector<Parameter> &);
   bool validateParams();
-
-private:
-  bool validateSyntax(vector<Parameter> &);
 };
 
 #endif // SPA_QPS_AFFECTSTRELATIONSHIP_H

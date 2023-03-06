@@ -9,9 +9,6 @@ class ParentRelationship : public Relationship {
 public:
   ParentRelationship(vector<Parameter> &);
   bool validateParams();
-
-private:
-  bool validateSyntax(vector<Parameter> &);
 };
 
 #endif // SPA_QPS_PARENTRELATIONSHIP_H

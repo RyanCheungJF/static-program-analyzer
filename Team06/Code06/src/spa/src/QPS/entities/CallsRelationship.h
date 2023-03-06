@@ -11,7 +11,6 @@ public:
   bool validateParams();
 
 private:
-  bool validateSyntax(vector<Parameter> &);
 };
 
 #endif // SPA_QPS_CALLSRELATIONSHIP_H
