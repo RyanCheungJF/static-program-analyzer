@@ -7,8 +7,8 @@ using namespace std;
 
 class ParentRelationship : public Relationship {
 public:
-  ParentRelationship(vector<Parameter> &);
-  bool validateParams();
+    ParentRelationship(vector<Parameter>&);
+    bool validateParams();
 };
 
 #endif // SPA_QPS_PARENTRELATIONSHIP_H
