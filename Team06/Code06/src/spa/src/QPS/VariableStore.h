@@ -18,7 +18,6 @@ public:
   bool hasVariable(Parameter);
   bool updateSynonym(Parameter *);
   string toString();
-  // private:
   unordered_map<string, Parameter> store;
 };
 
