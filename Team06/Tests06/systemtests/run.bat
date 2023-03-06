@@ -1,6 +1,8 @@
-cd systemtest1 && run.bat
-cd ..
-cd systemtest2 && run.bat
-cd ..
-cd systemtest3 && run.bat
-cd ..
+cd systemtest1
+call run.bat
+cd ../systemtest2
+call run.bat
+cd ../systemtest3
+call run.bat
+cd ../systemtest4
+call run.bat

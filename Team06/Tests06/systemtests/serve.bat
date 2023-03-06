@@ -4,3 +4,5 @@ cd systemtest2 && START /B "" python -m http.server 8200
 cd ..
 cd systemtest3 && START /B "" python -m http.server 8300
 cd ..
+cd systemtest4 && START /B "" python -m http.server 8400
+cd ..
