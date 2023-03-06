@@ -276,8 +276,8 @@ void validateNoCycles(std::vector<ProcName>& procedureNames,
     for (const auto& pair : procCallMap) {
         ProcName callerProc = pair.first;
         for (const auto& calledProc : pair.second) {
-            nodes[calledProc].first += 1;
-            nodes[callerProc].second.insert(calledProc);
+            nodes[callerProc].first += 1;
+            nodes[calledProc].second.insert(callerProc);
         }
     }
 
@@ -288,12 +288,12 @@ void validateNoCycles(std::vector<ProcName>& procedureNames,
     }
 
     while (queue.size() > 0) {
-        auto proc = queue.back();
-        queue.pop_back();
-        for (auto calledProc : nodes[proc].second) {
-            nodes[calledProc].first -= 1;
-            if (nodes[calledProc].first == 0) {
-                queue.push_back(calledProc);
+        auto proc = queue.front();
+        queue.pop_front();
+        for (auto callerProc : nodes[proc].second) {
+            nodes[callerProc].first -= 1;
+            if (nodes[callerProc].first == 0) {
+                queue.push_back(callerProc);
             }
         }
         order.push_back(proc);
@@ -313,6 +313,7 @@ void populateCallsTable(std::unordered_map<ProcName, std::unordered_set<ProcName
     for (ProcName p : order) {
         writePKB->setCalls(p, procCallMap[p]);
         for (ProcName j : procCallMap[p]) {
+            calleeTSet.insert(j);
             calleeTSet.merge(readPKB->getCallsT(j));
         }
         writePKB->setCallsT(p, calleeTSet);
