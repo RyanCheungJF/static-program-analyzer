@@ -46,7 +46,6 @@ public:
   bool isUncheckedSynonym();
   void updateSynonymType(ParameterType);
   string getTypeString() const;
-  bool isEqualTo(Parameter);
   bool operator==(const Parameter &) const;
 
   static ParameterType guessParameterType(string);
