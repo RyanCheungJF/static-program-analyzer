@@ -20,7 +20,6 @@ enum class RelationshipType {
   CALLST,
   AFFECTS,
   AFFECTST,
-  RELATIONSHIP,
   UNKNOWN
 };
 
@@ -37,6 +36,9 @@ public:
   vector<Parameter> getParameters();
   RelationshipType getType();
   bool operator==(const Relationship &) const;
+  bool validateSyntaxStmtStmt(vector<Parameter> &);
+  bool validateSyntaxEntityEntity(vector<Parameter> &);
+  bool validateSyntaxStmtProcEntity(vector<Parameter> &);
 
 private:
   static const unordered_map<string, RelationshipType> stringToTypeMap;

@@ -67,9 +67,46 @@ bool Relationship::operator==(const Relationship &r) const {
 
 RelationshipType Relationship::getType() { return type; }
 
-Relationship::Relationship() {
-  type = RelationshipType::UNKNOWN;
-  params;
+Relationship::Relationship() { type = RelationshipType::UNKNOWN; }
+
+bool Relationship::validateSyntaxStmtStmt(vector<Parameter> &ps) {
+  if (ps.size() != 2) {
+    return false;
+  }
+  if (!Parameter::isSyntacticStatementRef(ps[0])) {
+    return false;
+  }
+  if (!Parameter::isSyntacticStatementRef(ps[1])) {
+    return false;
+  }
+  return true;
+}
+
+bool Relationship::validateSyntaxEntityEntity(vector<Parameter> &ps) {
+  if (ps.size() != 2) {
+    return false;
+  }
+  if (!Parameter::isSyntacticEntityRef(ps[0])) {
+    return false;
+  }
+  if (!Parameter::isSyntacticEntityRef(ps[1])) {
+    return false;
+  }
+  return true;
+}
+
+bool Relationship::validateSyntaxStmtProcEntity(vector<Parameter> &ps) {
+  if (ps.size() != 2) {
+    return false;
+  }
+  if (!Parameter::isSyntacticStatementRef(ps[0]) &&
+      !Parameter::isProcedure(ps[0])) {
+    return false;
+  }
+  if (!Parameter::isSyntacticEntityRef(ps[1])) {
+    return false;
+  }
+  return true;
 }
 
 RelationshipType Relationship::stringToType(string s) {
