@@ -1,6 +1,7 @@
 #include "NextHandler.h"
 
-NextHandler::NextHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage, std::shared_ptr<ProcedureStorage> procStorage) {
+NextHandler::NextHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
+                         std::shared_ptr<ProcedureStorage> procStorage) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
     this->procStorage = procStorage;
@@ -66,12 +67,15 @@ std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1
 
     if (proc1 == "INVALID" || proc2 == "INVALID") {
         return res;
-    } else if (proc1 != proc2) {
+    }
+    else if (proc1 != proc2) {
         return res;
     }
 
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc1);
-    if (graph[stoi(paramString1)][AppConstants::CHILDREN].find(stoi(paramString2)) != graph[stoi(paramString1)][AppConstants::CHILDREN].end()) {
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
+        cfgStorage->getGraph(proc1);
+    if (graph[stoi(paramString1)][AppConstants::CHILDREN].find(stoi(paramString2)) !=
+        graph[stoi(paramString1)][AppConstants::CHILDREN].end()) {
         res.push_back({paramString1, paramString2});
     }
     return res;
@@ -87,7 +91,8 @@ std::vector<std::vector<std::string>> NextHandler::handleIntWildcard(Parameter p
         return res;
     }
 
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc1);
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
+        cfgStorage->getGraph(proc1);
     std::unordered_set<StmtNum> children = graph[stoi(paramString1)][AppConstants::CHILDREN];
     for (StmtNum child : children) {
         res.push_back({paramString1, std::to_string(child)});
@@ -105,14 +110,14 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardInt(Parameter p
         return res;
     }
 
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc2);
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
+        cfgStorage->getGraph(proc2);
     std::unordered_set<StmtNum> parents = graph[stoi(paramString2)][AppConstants::PARENTS];
     for (StmtNum parent : parents) {
         res.push_back({std::to_string(parent), paramString2});
     }
     return res;
 }
-
 
 // returns {param1Num, lineNum}
 std::vector<std::vector<std::string>> NextHandler::handleStmttypeInt(Parameter param1, Parameter param2) {
@@ -127,7 +132,8 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeInt(Parameter p
     }
 
     std::unordered_set<StmtNum> stmttypeLines = stmtStorage->getStatementNumbers(type);
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
+        cfgStorage->getGraph(proc);
     std::unordered_set<StmtNum> parents = graph[stoi(paramString2)][AppConstants::PARENTS];
     for (StmtNum parent : parents) {
         if (stmttypeLines.find(parent) != stmttypeLines.end()) {
@@ -150,7 +156,8 @@ std::vector<std::vector<std::string>> NextHandler::handleIntStmttype(Parameter p
     }
 
     std::unordered_set<StmtNum> stmttypeLines = stmtStorage->getStatementNumbers(type);
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
+        cfgStorage->getGraph(proc);
     std::unordered_set<StmtNum> children = graph[stoi(paramString1)][AppConstants::CHILDREN];
     for (StmtNum child : children) {
         if (stmttypeLines.find(child) != stmttypeLines.end()) {
@@ -172,7 +179,8 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeWildcard(Parame
     for (auto kv : procedure_lines) {
         ProcName proc = kv.first;
         std::unordered_set<StmtNum> lines = kv.second;
-        std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
+        std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
+            cfgStorage->getGraph(proc);
         for (StmtNum line : lines) {
             std::unordered_set<StmtNum> children = graph[line][AppConstants::CHILDREN];
             for (StmtNum child : children) {
@@ -195,7 +203,8 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardStmttype(Parame
     for (auto kv : procedure_lines) {
         ProcName proc = kv.first;
         std::unordered_set<StmtNum> lines = kv.second;
-        std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
+        std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
+            cfgStorage->getGraph(proc);
         for (StmtNum line : lines) {
             std::unordered_set<StmtNum> parents = graph[line][AppConstants::PARENTS];
             for (StmtNum parent : parents) {
@@ -222,7 +231,8 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
         for (auto kv : procedure_lines) {
             ProcName proc = kv.first;
             std::unordered_set<StmtNum> lines = kv.second;
-            std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
+            std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
+                cfgStorage->getGraph(proc);
             for (StmtNum line : lines) {
                 std::unordered_set<StmtNum> children = graph[line][AppConstants::CHILDREN];
                 for (StmtNum child : children) {
@@ -232,14 +242,15 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
                 }
             }
         }
-
-    } else {
+    }
+    else {
         std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines = getProcedureLines(stmttypeLines2);
 
         for (auto kv : procedure_lines) {
             ProcName proc = kv.first;
             std::unordered_set<StmtNum> lines = kv.second;
-            std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
+            std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
+                cfgStorage->getGraph(proc);
             for (StmtNum line : lines) {
                 std::unordered_set<StmtNum> parents = graph[line][AppConstants::PARENTS];
                 for (StmtNum p : parents) {
@@ -251,7 +262,6 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
         }
     }
     return res;
-
 }
 
 std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcard() {
@@ -259,7 +269,8 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcard() {
     std::vector<std::vector<std::string>> res;
 
     for (ProcName proc : procedures) {
-        std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
+        std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
+            cfgStorage->getGraph(proc);
 
         for (auto kv : graph) {
             StmtNum p = kv.first;
@@ -272,10 +283,9 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcard() {
     return res;
 }
 
-
-
 // helper functions
-std::unordered_map<ProcName, std::unordered_set<StmtNum>> NextHandler::getProcedureLines(std::unordered_set<StmtNum> statementNumbers) {
+std::unordered_map<ProcName, std::unordered_set<StmtNum>>
+NextHandler::getProcedureLines(std::unordered_set<StmtNum> statementNumbers) {
     std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines;
     for (StmtNum num : statementNumbers) {
         ProcName proc = procStorage->getProcedure(num);

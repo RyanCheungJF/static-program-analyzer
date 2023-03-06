@@ -1,14 +1,15 @@
-#include "../../qps/entities/Parameter.h"
-#include "../storage/CFGStorage.h"
-#include "../storage/StmtStorage.h"
-#include "../storage/ProcedureStorage.h"
 #include <algorithm>
 #include <memory>
 
+#include "../../qps/entities/Parameter.h"
+#include "../storage/CFGStorage.h"
+#include "../storage/ProcedureStorage.h"
+#include "../storage/StmtStorage.h"
 
 class NextHandler {
 public:
-    NextHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage, std::shared_ptr<ProcedureStorage> procStorage);
+    NextHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
+                std::shared_ptr<ProcedureStorage> procStorage);
     std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
 
 private:
@@ -16,13 +17,9 @@ private:
     std::shared_ptr<StmtStorage> stmtStorage;
     std::shared_ptr<ProcedureStorage> procStorage;
     std::unordered_map<ParameterType, std::string> stmtTypesSet = {
-            {ParameterType::IF, AppConstants::IF},
-            {ParameterType::WHILE, AppConstants::WHILE},
-            {ParameterType::ASSIGN, AppConstants::ASSIGN},
-            {ParameterType::PRINT, AppConstants::PRINT},
-            {ParameterType::READ, AppConstants::READ},
-            {ParameterType::CALL, AppConstants::CALL}
-    };
+        {ParameterType::IF, AppConstants::IF},         {ParameterType::WHILE, AppConstants::WHILE},
+        {ParameterType::ASSIGN, AppConstants::ASSIGN}, {ParameterType::PRINT, AppConstants::PRINT},
+        {ParameterType::READ, AppConstants::READ},     {ParameterType::CALL, AppConstants::CALL}};
 
     // e.g. Next(1, 2)
     std::vector<std::vector<std::string>> handleIntInt(Parameter param1, Parameter param2);
@@ -51,7 +48,6 @@ private:
     // e.g. Next(s1, s2) or Next(_, _)
     std::vector<std::vector<std::string>> handleWildcardWildcard();
 
-    std::unordered_map<ProcName, std::unordered_set<StmtNum>> getProcedureLines(std::unordered_set<StmtNum> statementNumbers);
-
+    std::unordered_map<ProcName, std::unordered_set<StmtNum>>
+    getProcedureLines(std::unordered_set<StmtNum> statementNumbers);
 };
-
