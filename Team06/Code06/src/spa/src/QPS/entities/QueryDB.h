@@ -12,13 +12,12 @@
 class QueryDB {
 public:
   QueryDB();
-  QueryDB(Table);
   void insertTable(Table);
   bool hasParameter(Parameter &);
   vector<string> fetch(Parameter);
 
 private:
-  vector<Table> tableVector;
+  vector<Table>* tableVector;
 };
 
 #endif // SPA_QUERYDB_H
