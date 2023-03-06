@@ -1,7 +1,3 @@
-//
-// Created by Faruq on 3/2/23.
-//
-
 #ifndef SPA_TABLE_H
 #define SPA_TABLE_H
 #include "Parameter.h"
@@ -18,6 +14,9 @@ public:
   Table selectColumns(vector<int> &);
   vector<string> extractColumn(int);
   Table extractDesignEntities();
+  vector<pair<int, int>> getAllIntersectingParams(Table);
+  pair<vector<int>, vector<int>> getAllNonIntersectingParams(Table);
+  Table intersectTables(Table, const vector<pair<int, int>> &intersection);
 
 private:
   vector<Parameter> headers;
