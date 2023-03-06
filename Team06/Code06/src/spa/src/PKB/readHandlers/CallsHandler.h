@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <memory>
 
-#include "../../qps/entities/Parameter.h"
+#include "../../QPS/entities/Parameter.h"
 #include "../storage/CallsStorage.h"
 
 class CallsHandler {

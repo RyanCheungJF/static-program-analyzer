@@ -1,5 +1,5 @@
-#include "../../qps/entities/Parameter.h"
-#include "../../qps/entities/Pattern.h"
+#include "../../QPS/entities/Parameter.h"
+#include "../../QPS/entities/Pattern.h"
 #include "../storage/PatternWithExprStorage.h"
 #include "../utils/utils.h"
 

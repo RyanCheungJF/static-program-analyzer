@@ -1,6 +1,6 @@
 #include <string>
 
-#include "../../../spa/src/qps/entities/Parameter.h"
+#include "../../../spa/src/QPS/entities/Parameter.h"
 
 class With {
 public:

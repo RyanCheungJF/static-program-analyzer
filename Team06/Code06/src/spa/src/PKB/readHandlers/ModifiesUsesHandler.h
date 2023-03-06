@@ -1,7 +1,7 @@
 #include <memory>
 
 #include "../../../src/utils/AppConstants.h"
-#include "../../qps/entities/Parameter.h"
+#include "../../QPS/entities/Parameter.h"
 #include "../storage/ModifiesUsesStorage.h"
 #include "../storage/StmtStorage.h"
 

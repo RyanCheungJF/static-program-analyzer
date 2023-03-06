@@ -1,5 +1,5 @@
 #include "QPS.h"
-// The main class used to instantiate and run the QPS
+// The main class used to instantiate and run the QPS.
 
 vector<string> QPS::processQueries(string queryString, ReadPKB &readPKB) {
   vector<string> finalResult;

@@ -8,8 +8,8 @@
 #include <vector>
 
 #include "../../unit_testing/src/stubs/With.h"
-#include "../qps/entities/Pattern.h"
-#include "../qps/entities/Relationship.h"
+#include "../QPS/entities/Pattern.h"
+#include "../QPS/entities/Relationship.h"
 #include "../utils/AppConstants.h"
 #include "readHandlers/AssignPatternHandler.h"
 #include "readHandlers/CallsHandler.h"
