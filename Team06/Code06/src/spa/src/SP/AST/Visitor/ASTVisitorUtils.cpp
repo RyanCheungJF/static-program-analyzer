@@ -202,7 +202,7 @@ void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, 
 }
 
 void connectNodesForCFG(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
-    StmtNum curr, StmtNum next) {
+                        StmtNum curr, StmtNum next) {
     cfg[curr]["children"].insert(next);
     cfg[next]["parents"].insert(curr);
 }
@@ -263,8 +263,8 @@ void checkCallStatementHelper(Statement* recurseStmt,
 }
 
 void validateNoCycles(std::vector<ProcName>& procedureNames,
-                      std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
-                      WritePKB* writePkb, ReadPKB* readPkb) {
+                      std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap, WritePKB* writePkb,
+                      ReadPKB* readPkb) {
     std::deque<ProcName> queue;
     std::unordered_map<ProcName, std::pair<int, std::unordered_set<ProcName>>> nodes;
     std::vector<ProcName> order;

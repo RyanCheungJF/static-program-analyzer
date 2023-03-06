@@ -44,7 +44,8 @@ void validateNoDuplicateProcedureName(std::vector<ProcName>& procedureNames);
 void validateCalledProceduresExist(std::vector<ProcName>& procedureNames,
                                    std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap);
 void validateNoCycles(std::vector<ProcName>& procedureNames,
-                      std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap, WritePKB* writePkb, ReadPKB* readPkb);
+                      std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap, WritePKB* writePkb,
+                      ReadPKB* readPkb);
 void recurseCallStatementHelper(Statement* recurseStmt,
                                 std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
                                 ProcName parentProcedure);
