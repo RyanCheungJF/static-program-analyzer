@@ -14,6 +14,39 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage,
     this->isTransitive = isTransitive;
 }
 
+
+std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, Parameter param2) {
+
+    std::string paramString1 = param1.getValue();
+    std::string paramString2 = param2.getValue();
+    ParameterType paramType1 = param1.getType();
+    ParameterType paramType2 = param2.getType();
+
+    bool isFixedIntParam1 = paramType1 == ParameterType::FIXED_INT;
+    bool isFixedIntParam2 = paramType2 == ParameterType::FIXED_INT;
+    bool isWildCardParam1 = paramType1 == ParameterType::WILDCARD || paramType1 == ParameterType::ASSIGN;
+    bool isWildCardParam2 = paramType2 == ParameterType::WILDCARD || paramType2 == ParameterType::ASSIGN;
+
+    if (isFixedIntParam1) {
+        if (isFixedIntParam2) {
+            return handleIntInt(param1, param2);
+        }
+        else if (isWildCardParam2) {
+            return handleIntWildcard(param1);
+        }
+    }
+    else if (isWildCardParam1) {
+        if (isFixedIntParam2) {
+            return handleWildcardInt(param2);
+        }
+        else if (isWildCardParam2) {
+            return handleWildcardWildcard();
+        }
+    }
+    return std::vector<std::vector<std::string>>();
+}
+
+
 //TODO: try a case with Affects(1, 1) where line 1 is v = v + 1
 std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
@@ -166,7 +199,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(Paramete
     }
     return res;
 }
-
 
 
 

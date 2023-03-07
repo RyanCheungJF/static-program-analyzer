@@ -30,13 +30,13 @@ private:
     std::vector<std::vector<std::string>> handleIntInt(Parameter param1, Parameter param2);
 
     // Affects(a1, 2) or Affects(_, 2)
-    std::vector<std::vector<std::string>> handleWildcardInt(Parameter param2); //todo
+    std::vector<std::vector<std::string>> handleWildcardInt(Parameter param2);
 
     // Affects(1, a2) or Affects(1, _)
-    std::vector<std::vector<std::string>> handleIntWildcard(Parameter param1); //todo
+    std::vector<std::vector<std::string>> handleIntWildcard(Parameter param1);
 
     // Affects(a1, a2) or Affects(_, _)
-    std::vector<std::vector<std::string>> handleWildcardWildcard(Parameter param1, Parameter param2); //todo
+    std::vector<std::vector<std::string>> handleWildcardWildcard(); //todo
 
     // TODO: Affects*
 
