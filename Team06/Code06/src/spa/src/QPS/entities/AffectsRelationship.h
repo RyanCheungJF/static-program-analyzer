@@ -7,11 +7,8 @@ using namespace std;
 
 class AffectsRelationship : public Relationship {
 public:
-  AffectsRelationship(vector<Parameter> &);
-  bool validateParams();
-
-private:
-  bool validateSyntax(vector<Parameter> &);
+    AffectsRelationship(vector<Parameter>&);
+    bool validateParams();
 };
 
 #endif // SPA_QPS_AFFECTSRELATIONSHIP_H

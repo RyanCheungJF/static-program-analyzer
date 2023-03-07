@@ -1,20 +1,19 @@
 #pragma once
 
-#include "../../../src/utils/AppConstants.h"
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
+#include "../../../src/utils/AppConstants.h"
+
 class ProcedureStorage {
 public:
-    virtual void writeProcedure(ProcName p, std::unordered_set<StmtNum> lines);
-    virtual bool checkProcedure(ProcName p, StmtNum num);
-    virtual std::unordered_set<StmtNum> getProcedureStatementNumbers(ProcName p);
+    void writeProcedure(ProcName p, std::unordered_set<StmtNum> lines);
+    bool checkProcedure(ProcName p, StmtNum num);
+    std::unordered_set<StmtNum> getProcedureStatementNumbers(ProcName p);
+    ProcName getProcedure(StmtNum num);
     std::unordered_set<ProcName> getProcNames();
-
-
-    virtual ProcName getProcedure(StmtNum num);
 
 private:
     /*

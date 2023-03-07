@@ -1,0 +1,50 @@
+1 - comment
+stmt s;
+Select s
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29
+5000
+2 - comment
+if i;
+Select i
+4, 24
+5000
+3 - comment
+while w;
+Select w
+18
+5000
+4 - comment
+read r;
+Select r
+1, 2, 3, 5, 7
+5000
+5 - comment
+print p;
+Select p
+10, 21, 27, 28
+5000
+6 - comment
+assign a;
+Select a
+6, 8, 12, 16, 17, 20, 22, 23, 25, 26, 29
+5000
+7 - comment
+call c;
+Select c
+9, 11, 13, 14, 15, 19
+5000
+8 - comment
+variable v;
+Select v
+p0licemAN, p0liceWahMan, pOl3icEwOM5N, read, rEaD, m0ArWeirdNaMe5AnDtH7sIsVer9Lon6AnDILov3Ch3rr1E2, i, N, x, y, a
+5000
+9 - comment
+constant c;
+Select c
+1, 5, 50, 2, 3
+5000
+10 - comment
+procedure p;
+Select p
+wEiRdNAmeS123, noindent, call
+5000

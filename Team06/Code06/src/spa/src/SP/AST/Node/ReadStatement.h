@@ -4,10 +4,10 @@
 
 class ReadStatement : public Statement {
 public:
-	Ent varName;
+    Ent varName;
 
-	ReadStatement();
-	ReadStatement(StmtNum stmtNum, Ent varName);
+    ReadStatement();
+    ReadStatement(StmtNum stmtNum, Ent varName);
 
-	void accept(ASTVisitor* visitor) override;
+    void accept(ASTVisitor* visitor) override;
 };

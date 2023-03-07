@@ -183,6 +183,63 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
     return std::vector<std::vector<std::string>>();
 }
 
+std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
+    Parameter param = w.syn;
+    ParameterType paramType = param.getType();
+    std::string attrType = w.attrType;
+    bool hasEquals = w.hasEquals;
+    std::string equalsValue = w.equalsValue;
+
+    std::vector<std::vector<std::string>> res;
+
+    if (Parameter::isStatementRef(param)) {
+        std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(param.getTypeString());
+        if (attrType == "procName") {
+            for (auto stmtNum : stmtNums) {
+                ProcName procName = procedureStorage->getProcedure(stmtNum);
+                res.push_back({std::to_string(stmtNum), procName});
+            }
+        }
+        // assumes that QPS is correct in only allowing varName for reads and prints,
+        // since reads and prints will only have 1 variable tied to them
+        else if (attrType == "varName") {
+            for (auto stmtNum : stmtNums) {
+                Ent var = *entityStorage->getEntities(stmtNum).begin();
+                res.push_back({std::to_string(stmtNum), var});
+            }
+        }
+        // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
+        else if (attrType == "stmtNum") {
+            for (auto stmtNum : stmtNums) {
+                res.push_back({std::to_string(stmtNum), std::to_string(stmtNum)});
+            }
+        }
+    }
+    // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
+    else if (paramType == ParameterType::CONSTANT) {
+        std::unordered_set<Const> consts = constantStorage->getConstNames();
+        for (auto constant : consts) {
+            res.push_back({std::to_string(constant), std::to_string(constant)});
+        }
+    }
+    // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
+    else if (paramType == ParameterType::VARIABLE) {
+        std::unordered_set<Ent> vars = entityStorage->getEntNames();
+        for (auto var : vars) {
+            res.push_back({var, var});
+        }
+    }
+    // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
+    else {
+        std::unordered_set<ProcName> procs = procedureStorage->getProcNames();
+        for (auto proc : procs) {
+            res.push_back({proc, proc});
+        }
+    }
+
+    return res;
+}
+
 bool PKB::checkStatement(Stmt stmt, StmtNum num) {
     return statementStorage->checkStatement(stmt, num);
 }
