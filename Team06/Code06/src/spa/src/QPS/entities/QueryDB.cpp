@@ -9,28 +9,26 @@ void QueryDB::insertTable(Table table) {
   // if so do an intersection
   vector<Parameter> inputHeaders = table.getHeaders();
   vector<Parameter> seenParameters;
-  vector<Table> newTableVector;
-  while (!tableVector->empty()) {
-    Table t = tableVector->back();
-    tableVector->pop_back();
+  vector<Table> oldTableVector = tableVector;
+  tableVector.clear();
+  while (!oldTableVector.empty()) {
+    Table t = oldTableVector.back();
+      oldTableVector.pop_back();
     vector<Parameter> intersection = table.getIntersectingParams(t);
     if (intersection.empty()) {
       // just insert the popped table into the newTableVector
-      newTableVector.push_back(t);
+        tableVector.push_back(t);
     } else {
       // intersect the two tables
-      table = table.intersectTables(t, intersection);
+      table = table.intersectTable(t, intersection);
     }
   }
-  newTableVector.push_back(table);
-  tableVector = &newTableVector;
+  tableVector.push_back(table);
 }
-
-// TODO: this function should be placed in Table instead of QueryDB
 
 
 bool QueryDB::hasParameter(Parameter &p) {
-  for (Table table : *tableVector) {
+  for (Table table : tableVector) {
     if (table.hasParameter(p)) {
       return true;
     }
@@ -39,18 +37,10 @@ bool QueryDB::hasParameter(Parameter &p) {
 }
 
 vector<string> QueryDB::fetch(Parameter p) {
-  int tableIndex;
-  int columnIndex;
-  for (int i = 0; i < tableVector->size(); i++) {
-    vector<Parameter> headers = (*tableVector)[i].getHeaders();
-    for (int j = 0; j < headers.size(); j++) {
-      if (headers[j] == p) {
-        tableIndex = i;
-        columnIndex = j;
-        break;
-      }
+    for(Table t : tableVector) {
+        if(t.hasParameter(p)) {
+            return t.extractColumn(p);
+        }
     }
-  }
-  Table table = (*tableVector)[tableIndex];
-  return table.extractColumn(columnIndex);
+    return {};
 }
