@@ -16,7 +16,7 @@ public:
                    std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
                    std::shared_ptr<ModifiesUsesStorage> usesStorage,
                    bool isTransitive);
-    std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2); //todo
+    std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
 
 private:
     std::shared_ptr<CFGStorage> cfgStorage;
