@@ -9,29 +9,22 @@ using namespace std;
 
 class Table {
 public:
-  // original implementation with vectors
-//  Table(vector<Parameter> &, vector<vector<string>> &);
-//  vector<Parameter> getHeaders();
-//  vector<vector<string>> getContent();
-//  Table selectColumns(vector<int> &);
-//  vector<string> extractColumn(int);
-//  Table extractDesignEntities();
-//  vector<pair<int, int>> getAllIntersectingParams(Table);
-//  pair<vector<int>, vector<int>> getAllNonIntersectingParams(Table);
-//  Table intersectTables(Table, const vector<pair<int, int>> &intersection);
-
-// implementation with unorderedMap
+    Table(vector<Parameter>, vector<vector<string>>);
+    Table extractDesignEntities();
+    Table selectColumns(vector<int> &);
     bool hasParameter(const Parameter&);
     vector<Parameter> getHeaders();
+    vector<vector<string>> getContent();
     vector<Parameter> getIntersectingParams(Table);
+    Table intersectTable(Table, const vector<Parameter>&);
+    vector<string> extractColumn(Parameter);
 
 private:
-  // original implementation with vectors
-//  vector<Parameter> headers;
-//  vector<vector<string>> content;
-
-// implementation using unorderedMap for headers with vector string for content.
-  unordered_map<Parameter, vector<string>> table;
+    vector<Parameter> headers;
+    vector<vector<string>> contents;
+    static vector<pair<int, int>> getIntersectingIndex(Table, Table);
+    static vector<vector<string>> intersectContent(vector<vector<string>>,vector<vector<string>>,const vector<pair<int,int>>&);
+    static vector<Parameter> intersectHeader(vector<Parameter>, vector<Parameter>, const vector<pair<int, int>>&);
 };
 
 #endif // SPA_TABLE_H

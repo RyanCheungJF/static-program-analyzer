@@ -2,7 +2,125 @@
 #include "qps/entities/Table.h"
 #include <string>
 #include <vector>
+#include <chrono>
+using namespace std::chrono;
 using namespace std;
+
+TEST_CASE("intersectTable / intersecting large tables / return true") {
+    vector<Parameter> h1 = {
+            Parameter("v", ParameterType::VARIABLE),
+            Parameter("s", ParameterType::STMT),
+            Parameter("vv", ParameterType::VARIABLE),
+            Parameter("s1", ParameterType::STMT),
+    };
+    vector<vector<string>> c1 = {
+            {"a", "1", "aa", "11"},
+            {"b", "2", "bb", "22"},
+            {"c", "3", "cc", "33"},
+            {"d", "4", "dd", "44"},
+            {"a", "5", "aa", "55"},
+            {"b", "6", "bb", "66"},
+            {"c", "7", "cc", "77"},
+            {"d", "8", "dd", "88"},
+            {"a", "11", "aa", "11"},
+            {"b", "22", "bb", "22"},
+            {"c", "33", "cc", "33"},
+            {"d", "44", "dd", "44"},
+            {"a", "55", "aa", "55"},
+            {"b", "66", "bb", "66"},
+            {"c", "77", "cc", "77"},
+            {"d", "88", "dd", "88"},
+            {"a", "1", "aaa", "11"},
+            {"b", "2", "bbb", "22"},
+            {"c", "3", "ccc", "33"},
+            {"d", "4", "ddd", "44"},
+            {"a", "5", "aaa", "55"},
+            {"b", "6", "bbb", "66"},
+            {"c", "7", "ccc", "77"},
+            {"d", "8", "ddd", "88"},
+            {"a", "11", "aaa", "11"},
+            {"b", "22", "bbb", "22"},
+            {"c", "33", "ccc", "33"},
+            {"d", "44", "ddd", "44"},
+            {"a", "55", "aaa", "55"},
+            {"b", "66", "bbb", "66"},
+            {"c", "77", "ccc", "77"},
+            {"d", "88", "ddd", "88"},
+    };
+    vector<Parameter> h2 = {
+            Parameter("v1", ParameterType::VARIABLE),
+            Parameter("s2", ParameterType::STMT),
+            Parameter("v", ParameterType::VARIABLE),
+            Parameter("ss", ParameterType::STMT)
+    };
+    vector<vector<string>> c2 = {
+            {"d", "1", "a", "11"},
+            {"e", "2", "b", "22"},
+            {"f", "3", "c", "33"},
+            {"g", "4", "d", "44"},
+            {"dd", "1", "a", "11"},
+            {"ee", "2", "b", "22"},
+            {"ff", "3", "c", "33"},
+            {"gg", "4", "d", "44"},
+            {"d", "1", "a", "111"},
+            {"e", "2", "b", "222"},
+            {"f", "3", "c", "333"},
+            {"g", "4", "d", "444"},
+            {"dd", "1", "a", "111"},
+            {"ee", "2", "b", "222"},
+            {"ff", "3", "c", "333"},
+            {"gg", "4", "d", "444"},
+            {"d", "11", "a", "11"},
+            {"e", "22", "b", "22"},
+            {"f", "33", "c", "33"},
+            {"g", "44", "d", "44"},
+            {"dd", "11", "a", "11"},
+            {"ee", "22", "b", "22"},
+            {"ff", "33", "c", "33"},
+            {"gg", "44", "d", "44"},
+            {"d", "11", "a", "111"},
+            {"e", "22", "b", "222"},
+            {"f", "33", "c", "333"},
+            {"g", "44", "d", "444"},
+            {"dd", "11", "a", "111"},
+            {"ee", "22", "b", "222"},
+            {"ff", "33", "c", "333"},
+            {"gg", "44", "d", "444"},
+    };
+    auto start = high_resolution_clock::now();
+    Table t1(h1, c1);
+    Table t2(h2,c2);
+    Table t3 = t1.intersectTable(t2, h1);
+    vector<Parameter> h3 = t3.getHeaders();
+    vector<vector<string>> c3 = t3.getContent();
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    cout << duration.count() << endl;
+    REQUIRE(true);
+}
+
+TEST_CASE("intersectTable / intersection of one parameter is working / return true") {
+    vector<Parameter> h1 = {Parameter("v", ParameterType::VARIABLE), Parameter("s", ParameterType::STMT)};
+    vector<vector<string>> c1 = {
+            {"a", "1"},
+            {"b", "2"},
+            {"c", "3"}
+    };
+    vector<Parameter> h2 = {Parameter("v1", ParameterType::VARIABLE), Parameter("s", ParameterType::STMT)};
+    vector<vector<string>> c2 = {
+            {"d", "1"},
+            {"e", "2"},
+            {"f", "4"}
+    };
+    Table t1(h1, c1);
+    Table t2(h2,c2);
+    Table t3 = t1.intersectTable(t2, h1);
+    vector<Parameter> h3 = t3.getHeaders();
+    vector<vector<string>> c3 = t3.getContent();
+    bool rightSize = h3.size() == 3 && c3.size() == 2;
+    bool rightHeaders = h3[0].getValue() == "v" && h3[1].getValue() == "v1" && h3[2].getValue() == "s";
+    REQUIRE((rightSize && rightHeaders));
+}
 
 TEST_CASE("getHeader / returns the correct vector of headers / return true") {
 
