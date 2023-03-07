@@ -36,7 +36,7 @@ private:
     std::vector<std::vector<std::string>> handleIntWildcard(StmtNum a1);
 
     // Affects(a1, a2) or Affects(_, _)
-    std::vector<std::vector<std::string>> handleWildcardWildcard(); //todo
+    std::vector<std::vector<std::string>> handleWildcardWildcard();
 
     // TODO: Affects*
 
