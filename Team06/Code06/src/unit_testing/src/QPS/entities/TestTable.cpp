@@ -90,13 +90,15 @@ TEST_CASE("intersectTable / intersecting large tables / return true") {
     auto start = high_resolution_clock::now();
     Table t1(h1, c1);
     Table t2(h2,c2);
-    Table t3 = t1.intersectTable(t2, h1);
+    Table t3 = t1.intersectTable(t2);
     vector<Parameter> h3 = t3.getHeaders();
     vector<vector<string>> c3 = t3.getContent();
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
-    cout << duration.count() << endl;
-    REQUIRE(true);
+    cout << "Time to intersect table: " << duration.count() << endl;
+    // Content size should be 8 * 8 * 4 = 256
+    bool correctSize = h3.size() == 7 && c3.size() == 256;
+    REQUIRE(correctSize);
 }
 
 TEST_CASE("intersectTable / intersection of one parameter is working / return true") {
@@ -114,7 +116,7 @@ TEST_CASE("intersectTable / intersection of one parameter is working / return tr
     };
     Table t1(h1, c1);
     Table t2(h2,c2);
-    Table t3 = t1.intersectTable(t2, h1);
+    Table t3 = t1.intersectTable(t2);
     vector<Parameter> h3 = t3.getHeaders();
     vector<vector<string>> c3 = t3.getContent();
     bool rightSize = h3.size() == 3 && c3.size() == 2;
