@@ -27,13 +27,13 @@ private:
     bool isTransitive;
 
     // Affects(1, 2)
-    std::vector<std::vector<std::string>> handleIntInt(Parameter param1, Parameter param2);
+    std::vector<std::vector<std::string>> handleIntInt(StmtNum a1, StmtNum a2);
 
     // Affects(a1, 2) or Affects(_, 2)
-    std::vector<std::vector<std::string>> handleWildcardInt(Parameter param2);
+    std::vector<std::vector<std::string>> handleWildcardInt(StmtNum a2);
 
     // Affects(1, a2) or Affects(1, _)
-    std::vector<std::vector<std::string>> handleIntWildcard(Parameter param1);
+    std::vector<std::vector<std::string>> handleIntWildcard(StmtNum a1);
 
     // Affects(a1, a2) or Affects(_, _)
     std::vector<std::vector<std::string>> handleWildcardWildcard(); //todo

@@ -48,11 +48,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
 
 
 //TODO: try a case with Affects(1, 1) where line 1 is v = v + 1
-std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(Parameter param1, Parameter param2) {
-    std::string paramString1 = param1.getValue();
-    std::string paramString2 = param2.getValue();
-    StmtNum a1 = stoi(paramString1);
-    StmtNum a2 = stoi(paramString2);
+std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, StmtNum a2) {
+    std::string paramString1 = std::to_string(a1);
+    std::string paramString2 = std::to_string(a2);
     ProcName proc1 = procStorage->getProcedure(a1);
     ProcName proc2 = procStorage->getProcedure(a2);
     std::vector<std::vector<std::string>> res;
@@ -86,9 +84,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(Parameter par
     return res;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(Parameter param2) {
-    std::string paramString2 = param2.getValue();
-    StmtNum a2 = stoi(paramString2);
+std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum a2) {
+    std::string paramString2 = std::to_string(a2);
     ProcName proc = procStorage->getProcedure(a2);
     std::vector<std::vector<std::string>> res;
 
@@ -143,9 +140,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(Paramete
     return res;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(Parameter param1) {
-    std::string paramString1 = param1.getValue();
-    StmtNum a1 = stoi(paramString1);
+std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum a1) {
+    std::string paramString1 = std::to_string(a1);
     ProcName proc = procStorage->getProcedure(a1);
     std::vector<std::vector<std::string>> res;
 
@@ -200,6 +196,28 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(Paramete
     return res;
 }
 
+std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
+    std::vector<std::vector<std::string>> res;
+
+    std::unordered_set<ProcName> allProcedures = procStorage->getProcNames();
+    for (ProcName proc : allProcedures) {
+        std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
+        std::unordered_set<StmtNum> assignStatements;
+        for (StmtNum num : statements) {
+            if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+                assignStatements.insert(num);
+            }
+        }
+
+        for (StmtNum a1 : assignStatements) {
+            std::vector<std::vector<std::string>> temp = handleIntWildcard(a1);
+            res.reserve(res.size() + temp.size());
+            std::move(temp.begin(), temp.end(), std::inserter(res, res.end()));
+            temp.clear(); //todo: this code might have memory management issues
+        }
+    }
+    return res;
+}
 
 
 
