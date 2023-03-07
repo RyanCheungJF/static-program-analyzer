@@ -14,13 +14,14 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage,
     this->isTransitive = isTransitive;
 }
 
+//TODO: try a case with Affects(1, 1) where line 1 is v = v + 1
 std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
     StmtNum a1 = stoi(paramString1);
     StmtNum a2 = stoi(paramString2);
-    ProcName proc1 = procStorage->getProcedure(stoi(paramString1));
-    ProcName proc2 = procStorage->getProcedure(stoi(paramString2));
+    ProcName proc1 = procStorage->getProcedure(a1);
+    ProcName proc2 = procStorage->getProcedure(a2);
     std::vector<std::vector<std::string>> res;
 
     if (proc1 == "INVALID" || proc2 == "INVALID") {
@@ -31,12 +32,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(Parameter par
 
     std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getEnt(a1);
     std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getEnt(a2);
-    std::unordered_set<Ent> commonVariables;
-    for (Ent e : variablesModifiedInA1) { //TODO: area for optimisation in Milestone 3. use the smaller set
-        if (variablesUsedInA2.find(e) != variablesUsedInA2.end()) {
-            commonVariables.insert(e);
-        }
-    }
+    std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
     if (commonVariables.empty()) {
         return res;
     }
@@ -46,34 +42,89 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(Parameter par
         return res;
     }
 
-    std::unordered_set<Ent> variablesModifiedInPath;
-    for (StmtNum num : controlFlowPath) {
-        std::unordered_set<Stmt> stmtTypes = stmtStorage->getStatementType(num);
-        // assignment, read, procedure call
-        if (stmtTypes.find(AppConstants::ASSIGN) != stmtTypes.end() ||
-                stmtTypes.find(AppConstants::READ) != stmtTypes.end() ||
-                stmtTypes.find(AppConstants::CALL) != stmtTypes.end()
-                ) {
-            std::unordered_set<Ent> variablesModifiedInCurrentLine = modifiesStorage->getEnt(num);
-            variablesModifiedInPath.insert(variablesModifiedInCurrentLine.begin(),variablesModifiedInCurrentLine.end());
-        }
-    }
-
+    std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
     for (Ent e : commonVariables) {
         if (variablesModifiedInPath.find(e) != variablesModifiedInPath.end()) {
             return res;
         }
     }
 
-    res.push_back({a1, a2});
+    res.push_back({paramString1, paramString2});
     return res;
-
-
 }
 
+std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(Parameter param2) {
+    std::string paramString2 = param2.getValue();
+    StmtNum a2 = stoi(paramString2);
+    ProcName proc = procStorage->getProcedure(a2);
+    std::vector<std::vector<std::string>> res;
+
+    if (proc == "INVALID") {
+        return res;
+    }
+    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
+    std::unordered_set<StmtNum> assignStatements;
+    for (StmtNum num : statements) {
+        if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+            assignStatements.insert(num);
+        }
+    }
+
+    std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getEnt(a2);
+    for (StmtNum a1 : assignStatements) {
+        std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getEnt(a1);
+        std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
+        if (commonVariables.empty()) {
+            continue;
+        }
+
+        std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
+        if (controlFlowPath.empty()) {
+            continue;
+        }
+
+        std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
+        if (a1 == a2) {
+            for (Ent e : commonVariables) {
+                if (variablesModifiedInPath.find(e) != variablesModifiedInPath.end()) {
+                    res.push_back({std::to_string(a1), paramString2});
+                    break;
+                }
+            }
+            continue;
+        }
+
+        bool isModified = false;
+        for (Ent e : commonVariables) {
+            if (variablesModifiedInPath.find(e) != variablesModifiedInPath.end()) {
+                isModified = true;
+            }
+        }
+
+        if (isModified) {
+            continue;
+        } else {
+            res.push_back({std::to_string(a1), paramString2});
+        }
+    }
+    return res;
+}
+
+
+
+
+
+
+
+//helper functions
 std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc) {
 
     std::unordered_set<StmtNum> res;
+    if (a1 == a2) {
+        res.insert(a1);
+        return res;
+    }
+
     std::deque<std::pair<std::unordered_set<StmtNum>, StmtNum>> queue;
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
 
@@ -99,4 +150,33 @@ std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1,
         }
     }
     return res;
+}
+
+std::unordered_set<Ent> AffectsHandler::getVariablesModifiedInControlFlowPath(std::unordered_set<StmtNum> controlFlowPath) {
+    std::unordered_set<Ent> variablesModifiedInPath;
+    for (StmtNum num : controlFlowPath) {
+        std::unordered_set<Stmt> stmtTypes = stmtStorage->getStatementType(num);
+
+        // assignment, read, procedure call
+        if (stmtTypes.find(AppConstants::ASSIGN) != stmtTypes.end() ||
+            stmtTypes.find(AppConstants::READ) != stmtTypes.end() ||
+            stmtTypes.find(AppConstants::CALL) != stmtTypes.end()
+                ) {
+            std::unordered_set<Ent> variablesModifiedInCurrentLine = modifiesStorage->getEnt(num);
+            variablesModifiedInPath.insert(variablesModifiedInCurrentLine.begin(),variablesModifiedInCurrentLine.end());
+        }
+    }
+    return variablesModifiedInPath;
+}
+
+std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<Ent> variablesModifiedInA1,
+                                                           std::unordered_set<Ent> variablesUsedInA2) {
+
+    std::unordered_set<Ent> commonVariables;
+    for (Ent e : variablesModifiedInA1) { //TODO: area for optimisation in Milestone 3. use the smaller set
+        if (variablesUsedInA2.find(e) != variablesUsedInA2.end()) {
+            commonVariables.insert(e);
+        }
+    }
+    return commonVariables;
 }
