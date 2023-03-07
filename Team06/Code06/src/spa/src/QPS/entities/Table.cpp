@@ -1,7 +1,3 @@
-//
-// Created by Faruq on 3/2/23.
-//
-
 #include "Table.h"
 
 #include <utility>
@@ -23,14 +19,13 @@ vector<vector<string>> Table::getContent() {
     return contents;
 }
 
-vector<Parameter> Table::getIntersectingParams(Table t) {
-    vector<Parameter> intersectingParams;
+bool Table::hasIntersectingParams(Table t) {
     for (const Parameter& p : t.getHeaders()) {
         if (this->hasParameter(p)) {
-            intersectingParams.push_back(p);
+            return true;
         }
     }
-    return intersectingParams;
+    return false;
 }
 
 vector<pair<int,int>> Table::getIntersectingIndex(Table t1, Table t2) {
@@ -127,7 +122,7 @@ vector<Parameter> Table::intersectHeader(vector<Parameter> h1, vector<Parameter>
 }
 
 
-Table Table::intersectTable(Table t, const vector<Parameter>& intersectingParams) {
+Table Table::intersectTable(Table t) {
     vector<vector<string>> c1 = contents;
     vector<vector<string>> c2 = t.getContent();
     vector<Parameter> h1 = headers;

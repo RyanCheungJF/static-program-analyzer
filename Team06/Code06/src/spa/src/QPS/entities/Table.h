@@ -15,8 +15,8 @@ public:
     bool hasParameter(const Parameter&);
     vector<Parameter> getHeaders();
     vector<vector<string>> getContent();
-    vector<Parameter> getIntersectingParams(Table);
-    Table intersectTable(Table, const vector<Parameter>&);
+    bool hasIntersectingParams(Table);
+    Table intersectTable(Table);
     vector<string> extractColumn(Parameter);
 
 private:

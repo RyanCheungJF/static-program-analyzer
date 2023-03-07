@@ -14,13 +14,12 @@ void QueryDB::insertTable(Table table) {
   while (!oldTableVector.empty()) {
     Table t = oldTableVector.back();
       oldTableVector.pop_back();
-    vector<Parameter> intersection = table.getIntersectingParams(t);
-    if (intersection.empty()) {
+    if (!table.hasIntersectingParams(t)) {
       // just insert the popped table into the newTableVector
         tableVector.push_back(t);
     } else {
       // intersect the two tables
-      table = table.intersectTable(t, intersection);
+      table = table.intersectTable(t);
     }
   }
   tableVector.push_back(table);
