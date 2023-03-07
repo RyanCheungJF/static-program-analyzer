@@ -203,8 +203,8 @@ void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, 
 
 void connectNodesForCFG(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
                         StmtNum curr, StmtNum next) {
-    cfg[curr]["children"].insert(next);
-    cfg[next]["parents"].insert(curr);
+    cfg[curr][AppConstants::CHILDREN].insert(next);
+    cfg[next][AppConstants::PARENTS].insert(curr);
 }
 
 void validateNoDuplicateProcedureName(std::vector<ProcName>& procedureNames) {

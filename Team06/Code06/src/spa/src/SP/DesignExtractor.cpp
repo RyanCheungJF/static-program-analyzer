@@ -22,7 +22,19 @@ void DesignExtractor::populatePKB() {
 void DesignExtractor::validateSemantics() {
     std::vector<ProcName> procedureNames;
     std::unordered_map<ProcName, std::unordered_set<ProcName>> procCallMap;
+    buildCallerCalleeTable(procedureNames, procCallMap);
 
+    try {
+        validateNoDuplicateProcedureName(procedureNames);
+        validateCalledProceduresExist(procedureNames, procCallMap);
+        validateNoCycles(procedureNames, procCallMap, writePkb, readPkb);
+    } catch (SemanticErrorException e) {
+        throw e;
+    }
+}
+
+void DesignExtractor::buildCallerCalleeTable(std::vector<ProcName>& procedureNames,
+                                             std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap) {
     for (const auto& procedure : ASTroot->procedureList) {
         procedureNames.push_back(procedure->procedureName);
         for (const auto& statement : procedure->getStatements()) {
@@ -33,14 +45,6 @@ void DesignExtractor::validateSemantics() {
                 recurseCallStatementHelper(statement.get(), procCallMap, procedure->procedureName);
             }
         }
-    }
-
-    try {
-        validateNoDuplicateProcedureName(procedureNames);
-        validateCalledProceduresExist(procedureNames, procCallMap);
-        validateNoCycles(procedureNames, procCallMap, writePkb, readPkb);
-    } catch (SemanticErrorException e) {
-        throw e;
     }
 }
 
