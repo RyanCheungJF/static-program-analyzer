@@ -29,15 +29,15 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
 
     if (isFixedIntParam1) {
         if (isFixedIntParam2) {
-            return handleIntInt(param1, param2);
+            return handleIntInt(stoi(param1.getValue()), stoi(param2.getValue()));
         }
         else if (isWildCardParam2) {
-            return handleIntWildcard(param1);
+            return handleIntWildcard(stoi(param1.getValue()));
         }
     }
     else if (isWildCardParam1) {
         if (isFixedIntParam2) {
-            return handleWildcardInt(param2);
+            return handleWildcardInt(stoi(param2.getValue()));
         }
         else if (isWildCardParam2) {
             return handleWildcardWildcard();
