@@ -110,6 +110,63 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(Paramete
     return res;
 }
 
+std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(Parameter param1) {
+    std::string paramString1 = param1.getValue();
+    StmtNum a1 = stoi(paramString1);
+    ProcName proc = procStorage->getProcedure(a1);
+    std::vector<std::vector<std::string>> res;
+
+    if (proc == "INVALID") {
+        return res;
+    }
+    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
+    std::unordered_set<StmtNum> assignStatements;
+    for (StmtNum num : statements) {
+        if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+            assignStatements.insert(num);
+        }
+    }
+
+    std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getEnt(a1);
+    for (StmtNum a2 : assignStatements) {
+        std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getEnt(a2);
+        std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
+        if (commonVariables.empty()) {
+            continue;
+        }
+
+        std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
+        if (controlFlowPath.empty()) {
+            continue;
+        }
+
+        std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
+        if (a1 == a2) {
+            for (Ent e : commonVariables) {
+                if (variablesModifiedInPath.find(e) != variablesModifiedInPath.end()) {
+                    res.push_back({paramString1, std::to_string(a2)});
+                    break;
+                }
+            }
+            continue;
+        }
+
+        bool isModified = false;
+        for (Ent e : commonVariables) {
+            if (variablesModifiedInPath.find(e) != variablesModifiedInPath.end()) {
+                isModified = true;
+            }
+        }
+
+        if (isModified) {
+            continue;
+        } else {
+            res.push_back({paramString1, std::to_string(a2)});
+        }
+    }
+    return res;
+}
+
 
 
 
