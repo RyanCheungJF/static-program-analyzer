@@ -6,6 +6,7 @@
 #include "../storage/CFGStorage.h"
 #include "../storage/ProcedureStorage.h"
 #include "../storage/StmtStorage.h"
+#include "AffectsHandler.h"
 
 ////TODO: MIGHT be buggy? would be good to have a formal proof
 // struct hashFunctionNextT
@@ -23,6 +24,8 @@ public:
     NextHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
                 std::shared_ptr<ProcedureStorage> procStorage, bool isTransitive);
     std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
+
+    friend class AffectsHandler;
 
 private:
     std::shared_ptr<CFGStorage> cfgStorage;
