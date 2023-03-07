@@ -2,7 +2,6 @@
 
 const string SyntaxException::ERROR_MESSAGE = "SyntaxError";
 
-SyntaxException::SyntaxException()
-{
-	this->errorMessage = ERROR_MESSAGE;
+SyntaxException::SyntaxException() {
+    this->errorMessage = ERROR_MESSAGE;
 }

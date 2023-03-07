@@ -1,13 +1,13 @@
+#include "../../QPS/entities/Pattern.h"
 #include "../storage/PatternStorage.h"
-#include "../../qps/entities/Pattern.h"
 
 class IfWhilePatternHandler {
 public:
-  IfWhilePatternHandler(std::shared_ptr<PatternStorage> patternStorage);
-  std::vector<std::vector<std::string>> handle(Pattern p);
+    IfWhilePatternHandler(std::shared_ptr<PatternStorage> patternStorage);
+    std::vector<std::vector<std::string>> handle(Pattern p);
 
 private:
-  std::shared_ptr<PatternStorage> patternStorage;
-  std::vector<std::vector<std::string>> handleVar(Ent ent);
-  std::vector<std::vector<std::string>> handleWildcard();
+    std::shared_ptr<PatternStorage> patternStorage;
+    std::vector<std::vector<std::string>> handleVar(Ent ent);
+    std::vector<std::vector<std::string>> handleWildcard();
 };
