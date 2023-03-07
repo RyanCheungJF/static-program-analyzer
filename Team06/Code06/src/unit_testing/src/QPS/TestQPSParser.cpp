@@ -1,21 +1,87 @@
-#include "catch.hpp"
-#include "qps/parser/QPSParser.h"
-#include "exceptions/SyntaxException.h"
-#include "exceptions/SemanticException.h"
 #include <string>
 
-TEST_CASE("parse / given valid string with such that clause / parse into correct vector of queries") {
-	string test = "stmt s; variable v    ;\n     Select v such that Follows (s, 1) ";
-	QPSParser qp;
-	vector<Query> queries = qp.parse(test);
-	REQUIRE(true);
+#include "QPS/parser/QPSParser.h"
+#include "catch.hpp"
+#include "exceptions/SemanticException.h"
+#include "exceptions/SyntaxException.h"
+
+TEST_CASE("parse / given valid string with such that clause / parse into "
+          "correct vector of queries") {
+    string test = "stmt s; variable v    ;\n     Select v such that Follows (s, 1) ";
+    QPSParser qp;
+    vector<Query> queries = qp.parse(test);
+    REQUIRE(true);
 }
 
-TEST_CASE("parse / given valid string with such that and pattern clause / parse into correct vector of queries") {
-	string test = "stmt s; variable v; assign a   ;\n     Select v such that Follows (s, 1) pattern a (v, _\"a + b\"_) ";
-	QPSParser qp;
-	vector<Query> queries = qp.parse(test);
-	REQUIRE(true);
+TEST_CASE("parse / given valid string with such that and pattern clause / "
+          "parse into correct vector of queries") {
+    string test = "stmt s; variable v; assign a   ;\n     Select v such that "
+                  "Follows (s, 1) pattern a (v, _\"a + b\"_) ";
+    QPSParser qp;
+    vector<Query> queries = qp.parse(test);
+    REQUIRE(true);
+}
+
+TEST_CASE("parse / create ifs pattern clause no issues / parse into correct "
+          "vector of queries") {
+    string test = "variable v; if a; Select v pattern a (v, _, _) ";
+    QPSParser qp;
+    vector<Query> queries = qp.parse(test);
+    REQUIRE(true);
+}
+
+TEST_CASE("parse / create ifs pattern clause last param is not a wildcard / "
+          "throws syntax error") {
+    string test = "variable v; if a; Select v pattern a (v, _, \"apple\") ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / assign pattern can only have 2 params (wild card) / throws "
+          "syntax error") {
+    string test = "variable v; assign a; Select v pattern a (v, _, _) ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / assign pattern can only have 2 params (synonym) / throws "
+          "syntax error") {
+    string test = "variable v; assign a; Select v pattern a (v, _, v) ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / while pattern can only have 2 params (wild card) / throws "
+          "syntax error") {
+    string test = "variable v; while while; Select v pattern while (v, _, _) ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / while pattern can only have 2 params (synonym) / throws "
+          "syntax error") {
+    string test = "variable v; while while; Select v pattern while (v, _, v) ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / ifs pattern can only have 3 params / throws syntax error") {
+    string test = "variable v; while while; Select v pattern while (v, _, _, _, _) ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / additional brackets / throws syntax error") {
+    string test = "variable v; while while; Select v pattern while ((v, _)) ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / create while pattern clause second param is not a wildcard "
+          "/ throws syntax error") {
+    string test = "variable v; while a; Select v pattern a (v, \"apple\") ";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
 }
 
 TEST_CASE("parse / missing select clause / throw error") {
@@ -42,43 +108,49 @@ TEST_CASE("parse / variable v; Select v such that Uses(_,_) / catch error") {
     CHECK_THROWS_AS(qp.parse(test), SemanticException);
 }
 
-TEST_CASE("splitQuery / splitting variable v; Select v; should give error / catch error") {
+TEST_CASE("splitQuery / splitting variable v; Select v; should give error / "
+          "catch error") {
     string test = "variable v; Select v ; ";
     QPSParser qp;
     CHECK_THROWS_AS(qp.splitQuery(test), SyntaxException);
 }
 
-TEST_CASE("splitQuery / splitting variable v;;Select c / still splits normally with empty string") {
+TEST_CASE("splitQuery / splitting variable v;;Select c / still splits normally "
+          "with empty string") {
     string test = "variable v; ;Select c  ";
     QPSParser qp;
     vector<string> vs = qp.splitQuery(test);
     CHECK(vs.size() == 3);
 }
 
-TEST_CASE("splitQuery / splitting ;;;;;;;;s / still splits normally with 9 empty strings") {
+TEST_CASE("splitQuery / splitting ;;;;;;;;s / still splits normally with 9 "
+          "empty strings") {
     string test = ";;;;;;;;s";
     QPSParser qp;
     vector<string> vs = qp.splitQuery(test);
     int count = 0;
-    for (string s:vs) {
+    for (string s : vs) {
         if (s != "s") {
             CHECK(s.empty());
-        } else {
+        }
+        else {
             count += 1;
         }
     }
     CHECK(count == 1);
 }
 
-TEST_CASE("splitQuery / given multiple clauses split by ; / vector of string split by ;") {
+TEST_CASE("splitQuery / given multiple clauses split by ; / vector of string "
+          "split by ;") {
     string test = "stmt s; variable v    ;\n     Select v such that Follows (s, 1) ";
     QPSParser qp;
-    vector<string> expected = { "stmt s", "variable v", "Select v such that Follows (s, 1)" };
+    vector<string> expected = {"stmt s", "variable v", "Select v such that Follows (s, 1)"};
     vector<string> output = qp.splitQuery(test);
     REQUIRE(expected == output);
 }
 
-TEST_CASE("checkSynonyms / the variable store contains all the required variables in query / no exceptions thrown") {
+TEST_CASE("checkSynonyms / the variable store contains all the required "
+          "variables in query / no exceptions thrown") {
 
     QPSParser qp;
     VariableStore vs;
@@ -91,7 +163,8 @@ TEST_CASE("checkSynonyms / the variable store contains all the required variable
     REQUIRE_NOTHROW(qp.checkSynonyms(&q, vs));
 }
 
-TEST_CASE("checkSynonyms / the variable store does not contain stmt / exception is thrown") {
+TEST_CASE("checkSynonyms / the variable store does not contain stmt / "
+          "exception is thrown") {
 
     QPSParser qp;
     VariableStore vs;
@@ -102,7 +175,8 @@ TEST_CASE("checkSynonyms / the variable store does not contain stmt / exception 
     REQUIRE_THROWS_AS(qp.checkSynonyms(&q, vs), SemanticException);
 }
 
-TEST_CASE("checkSynonyms / the variable store does not contain variable / exception is thrown") {
+TEST_CASE("checkSynonyms / the variable store does not contain variable / "
+          "exception is thrown") {
 
     QPSParser qp;
     VariableStore vs;
@@ -121,7 +195,8 @@ TEST_CASE("checkSynonyms / variable store is empty / exception is thrown") {
     REQUIRE_THROWS(qp.checkSynonyms(&q, vs));
 }
 
-TEST_CASE("checkSynonyms / the variable store contains more variable than needed / no exception is thrown") {
+TEST_CASE("checkSynonyms / the variable store contains more variable than "
+          "needed / no exception is thrown") {
 
     QPSParser qp;
     VariableStore vs;
@@ -146,7 +221,8 @@ TEST_CASE("checkSynonyms / the variable store contains more variable than needed
     REQUIRE_NOTHROW(qp.checkSynonyms(&q, vs));
 }
 
-TEST_CASE("checkSynonyms / the variable store has correct type but wrong synonym / exception is thrown") {
+TEST_CASE("checkSynonyms / the variable store has correct type but wrong "
+          "synonym / exception is thrown") {
 
     QPSParser qp;
     VariableStore vs;

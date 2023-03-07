@@ -11,7 +11,7 @@ procedure Example {
     z = z + x + i;
     call q;
     i = i - 1; }
-  call p; }
+  call p;}
 
 procedure p {
   if (x<1) then {

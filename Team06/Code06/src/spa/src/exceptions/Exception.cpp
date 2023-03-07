@@ -1,5 +1,6 @@
-#include <utility>
 #include "Exception.h"
+
+#include <utility>
 using namespace std;
 
 Exception::Exception() = default;

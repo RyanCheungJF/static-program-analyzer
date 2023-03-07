@@ -1,10 +1,12 @@
+#include <string>
+#include <vector>
+
 #include "catch.hpp"
 #include "qps/entities/QueryDB.h"
-#include <vector>
-#include <string>
 using namespace std;
 
-TEST_CASE("insertTable / insertion of two tables with intersection / return one table with 2 values ") {
+TEST_CASE("insertTable / insertion of two tables with intersection / return "
+          "one table with 2 values ") {
 
     QueryDB qdb;
     vector<vector<string>> content1 = {{"1"}, {"2"}, {"3"}};
@@ -16,10 +18,11 @@ TEST_CASE("insertTable / insertion of two tables with intersection / return one 
     qdb.insertTable(t2);
     vector<string> finalContent = qdb.fetch(params[0]);
 
-    REQUIRE(((finalContent[0] =="1" && (finalContent[1] =="2")) && finalContent.size() == 2));
+    REQUIRE(((finalContent[0] == "1" && (finalContent[1] == "2")) && finalContent.size() == 2));
 }
 
-TEST_CASE("insertTable / insertion of two tables without intersection / return two tables") {
+TEST_CASE("insertTable / insertion of two tables without intersection / return "
+          "two tables") {
 
     QueryDB qdb;
     vector<vector<string>> content1 = {{"1"}, {"2"}, {"3"}};
@@ -32,10 +35,12 @@ TEST_CASE("insertTable / insertion of two tables without intersection / return t
     qdb.insertTable(t2);
     vector<string> finalContent = qdb.fetch(params1[0]);
 
-    REQUIRE(((finalContent[0] =="1" && (finalContent[1] =="2") && (finalContent[2] == "3")) && finalContent.size() == 3));
+    REQUIRE(
+        ((finalContent[0] == "1" && (finalContent[1] == "2") && (finalContent[2] == "3")) && finalContent.size() == 3));
 }
 
-TEST_CASE("insertTable / insertion of three tables with intersection / return ONE table") {
+TEST_CASE("insertTable / insertion of three tables with intersection / return "
+          "ONE table") {
 
     QueryDB qdb;
     vector<vector<string>> content1 = {{"1", "x"}, {"2", "y"}, {"3", "y"}};
@@ -51,18 +56,9 @@ TEST_CASE("insertTable / insertion of three tables with intersection / return ON
     qdb.insertTable(t2);
     qdb.insertTable(t3);
     vector<string> finalContent = qdb.fetch(params1[0]);
-    vector<vector<string>> expectedCols = {
-            {"1", "2", "3"},
-            {"x", "y"},
-            {"4", "5"},
-            {"99"}
-    };
-    vector<Parameter> expectedParams = {
-            Parameter("s1", AppConstants::STMT),
-            Parameter("v", AppConstants::VARIABLE),
-            Parameter("s2", AppConstants::STMT),
-            Parameter("a", AppConstants::ASSIGN)
-    };
+    vector<vector<string>> expectedCols = {{"1", "2", "3"}, {"x", "y"}, {"4", "5"}, {"99"}};
+    vector<Parameter> expectedParams = {Parameter("s1", AppConstants::STMT), Parameter("v", AppConstants::VARIABLE),
+                                        Parameter("s2", AppConstants::STMT), Parameter("a", AppConstants::ASSIGN)};
     vector<string> aa = qdb.fetch(Parameter("s1", AppConstants::STMT));
     bool a = qdb.fetch(Parameter("s1", AppConstants::STMT)) == expectedCols[0];
     bool b = qdb.fetch(Parameter("v", AppConstants::VARIABLE)) == expectedCols[1];
@@ -71,7 +67,8 @@ TEST_CASE("insertTable / insertion of three tables with intersection / return ON
     REQUIRE((a && b && c && d));
 }
 
-TEST_CASE("insertTable / intersecting headers but non intersecting content / return ONE empty table") {
+TEST_CASE("insertTable / intersecting headers but non intersecting content / "
+          "return ONE empty table") {
 
     QueryDB qdb;
     vector<vector<string>> content1 = {{"1", "x"}, {"2", "y"}, {"3", "y"}};
@@ -87,18 +84,9 @@ TEST_CASE("insertTable / intersecting headers but non intersecting content / ret
     qdb.insertTable(t2);
     qdb.insertTable(t3);
     vector<string> finalContent = qdb.fetch(params1[0]);
-    vector<vector<string>> expectedCols = {
-            {},
-            {},
-            {},
-            {}
-    };
-    vector<Parameter> expectedParams = {
-            Parameter("s1", AppConstants::STMT),
-            Parameter("v", AppConstants::VARIABLE),
-            Parameter("s2", AppConstants::STMT),
-            Parameter("a", AppConstants::ASSIGN)
-    };
+    vector<vector<string>> expectedCols = {{}, {}, {}, {}};
+    vector<Parameter> expectedParams = {Parameter("s1", AppConstants::STMT), Parameter("v", AppConstants::VARIABLE),
+                                        Parameter("s2", AppConstants::STMT), Parameter("a", AppConstants::ASSIGN)};
     vector<string> aa = qdb.fetch(Parameter("s1", AppConstants::STMT));
     bool a = qdb.fetch(Parameter("s1", AppConstants::STMT)) == expectedCols[0];
     bool b = qdb.fetch(Parameter("v", AppConstants::VARIABLE)) == expectedCols[1];
@@ -107,7 +95,8 @@ TEST_CASE("insertTable / intersecting headers but non intersecting content / ret
     REQUIRE((a && b && c && d));
 }
 
-TEST_CASE("insertTable / third table intersects with first two tables / return ONE empty table") {
+TEST_CASE("insertTable / third table intersects with first two tables / return "
+          "ONE empty table") {
 
     QueryDB qdb;
     vector<vector<string>> content1 = {{"1", "x"}, {"2", "y"}, {"3", "y"}};
@@ -123,12 +112,7 @@ TEST_CASE("insertTable / third table intersects with first two tables / return O
     qdb.insertTable(t2);
     qdb.insertTable(t3);
     vector<string> finalContent = qdb.fetch(params1[0]);
-    vector<vector<string>> expectedCols = {
-            {"1", "2", "3"},
-            {"4", "5"},
-            {"x", "y"},
-            {"a", "b"}
-    };
+    vector<vector<string>> expectedCols = {{"1", "2", "3"}, {"4", "5"}, {"x", "y"}, {"a", "b"}};
     vector<string> aa = qdb.fetch(Parameter("s1", AppConstants::STMT));
     bool a = qdb.fetch(Parameter("s1", AppConstants::STMT)) == expectedCols[0];
     bool b = qdb.fetch(Parameter("s2", AppConstants::STMT)) == expectedCols[1];
@@ -137,7 +121,8 @@ TEST_CASE("insertTable / third table intersects with first two tables / return O
     REQUIRE((a && b && c && d));
 }
 
-TEST_CASE("insertTable / insert tables with empty content / tables can still be inserted without content") {
+TEST_CASE("insertTable / insert tables with empty content / tables can still "
+          "be inserted without content") {
 
     QueryDB qdb;
     vector<vector<string>> content1 = {};

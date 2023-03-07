@@ -10,16 +10,23 @@
 
 ### Additional Build Instructions
 
-1. To run the system tests, do check out the readme under the `Team06/Tests06/systemtests/` directory on the instructions to run the relevant files based on your operating system.
-2. To run your own custom test cases, please enter the directory where your AutoTester.exe resides in. Then, run the command `.\AutoTester.exe ..\Tests\Sample_source.txt ..\Tests\Sample_queries.txt ..\Tests\out.xml` to check that it is compiling where an <b>out.xml</b> will be produced. To have your own custom input, please feel free to edit the <i>Sample_queries.txt</i> and <i>Sample_source.txt</i>
-3. To view your results of the out.xml, run `python -m http.server {PORT}` where PORT can be any port number of your liking, such as `8000`. Go to your `localhost:{PORT}` in your browser, navigate and open the out.xml file.
+1. To run the system tests, do check out the readme under the `Team06/Tests06/systemtests/`
+   directory on the instructions to run the relevant files based on your operating system.
+   Alternatively, click [here](/Team06/Tests06/systemtests/README.md).
+2. To run your own custom test cases, please enter the directory where your AutoTester.exe resides in.
+   Then, run the command `.\AutoTester.exe ..\Tests\Sample_source.txt ..\Tests\Sample_queries.txt ..\Tests\out.xml`
+   to check that it is compiling where an <b>out.xml</b> will be produced.
+   To have your own custom input, please feel free to edit the <i>Sample_queries.txt</i> and <i>Sample_source.txt</i>
+3. To view your results of the out.xml, run `python -m http.server {PORT}`
+   where PORT can be any port number of your liking, such as `8000`. Go to your `localhost:{PORT}` in your browser,
+   navigate and open the out.xml file.
 
 ### Running Checkstyle
 
-To run checkstyle, first install the `clang-format` package.
+To run checkstyle, first install the `clang-format` package using `npm`.
 
 ```bash
-sudo apt-get install clang-format
+npm i
 ```
 
 Ensure that your `style.sh` script has executable permissions,

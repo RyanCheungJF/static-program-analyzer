@@ -1,5 +1,5 @@
+#include "QPS/QPSGrammarUtils.h"
 #include "catch.hpp"
-#include "qps/QPSGrammarUtils.h"
 using namespace std;
 
 // isName Test Cases
@@ -88,7 +88,8 @@ TEST_CASE("isSynonym / Multiple letter synonym / return true") {
     REQUIRE(isSynonym(name));
 }
 
-TEST_CASE("isSynonym / synonym is combination of upper and lower case / return true") {
+TEST_CASE("isSynonym / synonym is combination of upper and lower case / return "
+          "true") {
     string name = "APpLe";
     REQUIRE(isSynonym(name));
 }
@@ -103,7 +104,8 @@ TEST_CASE("isSynonym / synonym cannot start with a number / return false") {
     REQUIRE(!isSynonym(name));
 }
 
-TEST_CASE("isSynonym / synonym cannot contain non letters and numbers / return false") {
+TEST_CASE("isSynonym / synonym cannot contain non letters and numbers / return "
+          "false") {
     string name = "app_le";
     REQUIRE(!isSynonym(name));
 }
@@ -154,10 +156,10 @@ TEST_CASE("isSelect / empty string is not a select statement / return false") {
 
 // Check with LY on why select is strictly ^Select$
 
-//TEST_CASE("isSelect / Select ___ is a select statement / return true") {
-//    string s = "Select aaaaaaaaaaa";
-//    REQUIRE(isSelect(s));
-//}
+// TEST_CASE("isSelect / Select ___ is a select statement / return true") {
+//     string s = "Select aaaaaaaaaaa";
+//     REQUIRE(isSelect(s));
+// }
 
 TEST_CASE("isSelect / ___ Select is not a select statement / return false") {
     string s = "aaa Select";

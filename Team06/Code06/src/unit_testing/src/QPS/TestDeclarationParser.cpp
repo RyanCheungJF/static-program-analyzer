@@ -1,24 +1,25 @@
 //
 // Created by Faruq on 30/1/23.
 //
+#include "QPS/parser/DeclarationParser.h"
 #include "catch.hpp"
-#include "qps/parser/DeclarationParser.h"
-#include <iostream>
 using namespace std;
 
-TEST_CASE("parseDeclaration / stores two stmt declaration into store / store contains 2 declarations of same type") {
+TEST_CASE("parseDeclaration / stores two stmt declaration into store / store "
+          "contains 2 declarations of same type") {
     vector<string> declarations = {"stmt s1, s2", "call cl", "assign a"};
     VariableStore store = parseDeclarations(declarations);
-    //change this to an assertion
-    cout<< "store:\n" << store.toString();
+    // change this to an assertion
 }
 
-TEST_CASE("parseDeclaration / cannot store declaration with same name / throws exception") {
+TEST_CASE("parseDeclaration / cannot store declaration with same name / throws "
+          "exception") {
     vector<string> declarations = {"stmt s, s"};
     CHECK_THROWS(parseDeclarations(declarations));
 }
 
-TEST_CASE("parseDeclaration / cannot store declaration of diff types with same name / throws exception") {
-    vector<string> declarations = {"stmt s",  "assign s"};
+TEST_CASE("parseDeclaration / cannot store declaration of diff types with same "
+          "name / throws exception") {
+    vector<string> declarations = {"stmt s", "assign s"};
     CHECK_THROWS(parseDeclarations(declarations));
 }

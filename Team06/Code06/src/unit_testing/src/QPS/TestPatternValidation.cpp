@@ -1,5 +1,5 @@
+#include "QPS/QPSGrammarUtils.h"
 #include "catch.hpp"
-#include "qps/QPSGrammarUtils.h"
 using namespace std;
 
 TEST_CASE("isExprSpec / underscore is valid expr spec / return true") {
@@ -45,7 +45,8 @@ TEST_CASE("isExprSpec / \"a +   b -c * d\" is a valid expr spec / return true") 
     REQUIRE(isExprSpec("\"a +   b -c * d\""));
 }
 
-TEST_CASE("isExprSpec / \"a + (a) -  (((b) -c)) * d\" is a valid expr spec / return true") {
+TEST_CASE("isExprSpec / \"a + (a) -  (((b) -c)) * d\" is a valid expr spec / "
+          "return true") {
     REQUIRE(isExprSpec("\"a + (a) -  (((b) -c)) * d\""));
 }
 

@@ -1,0 +1,10 @@
+procedure A { 
+	x = x + 1;
+}
+
+procedure B {
+	y = y * 2;
+	read y;
+	call nonExistentProcedure;
+}
+
