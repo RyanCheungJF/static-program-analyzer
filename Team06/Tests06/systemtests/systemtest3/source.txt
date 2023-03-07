@@ -2,7 +2,7 @@ procedure One {
 	x = x + 1;
 	y = y + x;
 	z = x + y + c;
-	c = 12345
+	c = 12345;
 	while (z == x + y) {print c; c = c + 0;}
 	call Two;
 	call Three;

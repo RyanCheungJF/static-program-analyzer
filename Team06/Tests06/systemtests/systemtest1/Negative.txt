@@ -256,7 +256,7 @@ SyntaxError
 50 - invalid While Pattern, invalid first param
 while w; procedure p;
 Select w pattern w(p, _)
-SyntaxError
+SemanticError
 5000
 51 - invalid While Pattern, invalid second param
 while w; assign a;
@@ -301,5 +301,10 @@ SemanticError
 59 - invalid Calls* Relationship, invalid second param
 print pr; procedure p;
 Select p such that Calls*(p, pr)
+SemanticError
+5000
+60 - Calls only supported for procedure
+while w; procedure p;
+Select p such that Calls(w, "Tasty")
 SemanticError
 5000

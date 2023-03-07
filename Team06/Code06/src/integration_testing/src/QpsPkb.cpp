@@ -4,7 +4,7 @@
 #include "../../spa/src/PKB/ReadPKB.cpp"
 #include "../../spa/src/PKB/WritePKB.cpp"
 #include "../../spa/src/PKB/utils/utils.h"
-#include "../../spa/src/qps/QPS.h"
+#include "../../spa/src/QPS/QPS.h"
 #include "../../spa/src/utils/AppConstants.h"
 #include "catch.hpp"
 
@@ -41,7 +41,7 @@ PKB buildPkb() {
     //
     //   procedure end {
     // 13    print end;
-    //   }    
+    //   }
 
     unordered_set<int> mainProcNums = {1, 2, 3, 4, 5, 6};
     writePkb.setProcedure("main", mainProcNums);
@@ -522,7 +522,6 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
             REQUIRE(result.size() == 1);
             REQUIRE(exists(result, "main"));
         }
-        
     }
 
     SECTION("CallsT") {

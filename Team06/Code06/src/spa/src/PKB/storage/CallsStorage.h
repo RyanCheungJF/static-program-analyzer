@@ -1,20 +1,20 @@
 #pragma once
 
-#include "../../../src/utils/AppConstants.h"
 #include <iostream>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
+#include "../../../src/utils/AppConstants.h"
+
 class CallsStorage {
 public:
+    virtual void writeCallP(ProcName caller, std::unordered_set<ProcName> callees);
+    virtual std::unordered_set<ProcName> getCallees(ProcName caller);
+    virtual std::unordered_set<ProcName> getCallers(ProcName callee);
 
-  virtual void writeCallP(ProcName caller, std::unordered_set<ProcName> callees);
-  virtual std::unordered_set<ProcName> getCallees(ProcName caller);
-  virtual std::unordered_set<ProcName> getCallers(ProcName callee);
-
-  virtual std::unordered_set<ProcName> getAllCallers();
+    virtual std::unordered_set<ProcName> getAllCallers();
 
 private:
     /*
@@ -23,7 +23,7 @@ private:
      *  "proc2" | {"proc3", "proc4"}
      *  "proc3" | {"proc4"}
      */
-  std::unordered_map<ProcName , std::unordered_set<ProcName>> caller_callees;
+    std::unordered_map<ProcName, std::unordered_set<ProcName>> caller_callees;
 
     /*
      * Structure of table example below
@@ -31,5 +31,5 @@ private:
      *  "proc3" | {"proc2"}
      *  "proc4" | {"proc2", "proc3"}
      */
-  std::unordered_map<ProcName , std::unordered_set<ProcName>> callee_callers;
+    std::unordered_map<ProcName, std::unordered_set<ProcName>> callee_callers;
 };

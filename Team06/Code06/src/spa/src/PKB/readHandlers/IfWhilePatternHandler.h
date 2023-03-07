@@ -1,4 +1,4 @@
-#include "../../qps/entities/Pattern.h"
+#include "../../QPS/entities/Pattern.h"
 #include "../storage/PatternStorage.h"
 
 class IfWhilePatternHandler {

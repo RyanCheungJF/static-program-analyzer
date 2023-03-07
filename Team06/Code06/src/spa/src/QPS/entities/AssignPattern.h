@@ -4,8 +4,8 @@
 
 class AssignPattern : public Pattern {
 public:
-  AssignPattern(Parameter ps, Parameter er, string p);
-  bool validateParams();
+    AssignPattern(Parameter ps, Parameter er, string p);
+    bool validateParams();
 };
 
 #endif // SPA_ASSIGNPATTERN_H

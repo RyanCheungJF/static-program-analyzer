@@ -1,8 +1,8 @@
-#include "../../qps/entities/Parameter.h"
-#include "../storage/CallsStorage.h"
 #include <algorithm>
 #include <memory>
 
+#include "../../QPS/entities/Parameter.h"
+#include "../storage/CallsStorage.h"
 
 class CallsHandler {
 public:
@@ -23,6 +23,4 @@ private:
 
     // e.g. CallsT(_, _)
     std::vector<std::vector<std::string>> handleWildcardWildcard();
-
 };
-

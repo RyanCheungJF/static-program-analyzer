@@ -4,8 +4,9 @@
 
 #ifndef SPA_QPSGRAMMARUTILS_H
 #define SPA_QPSGRAMMARUTILS_H
-#include "QPS/parser/ParserUtil.h"
 #include <string>
+
+#include "QPS/parser/ParserUtil.h"
 using namespace std;
 
 // No need to package it into a class
@@ -16,10 +17,7 @@ bool isSynonym(string);
 bool isPattern(string);
 bool startsWithLetter(string);
 bool isSelect(string);
-bool isRelRef(string);
 bool isInteger(string);
-// bool isSelectClause(string);
-// bool isSuchThatClause(string);
 bool isDeclaration(string);
 bool isDesignEntity(string);
 pair<string, string> extractDesignEntity(string);
@@ -31,10 +29,6 @@ bool isExprSpec(string);
 bool isTerm(string);
 bool isExpr(string);
 bool isFactor(string);
-bool isFollows(string);
-bool isParent(string);
-bool isUses(string);
-bool isModifies(string);
 bool isFixedStringWithWildCard(string);
 bool hasCorrectRelRefOrPatternForm(string);
 

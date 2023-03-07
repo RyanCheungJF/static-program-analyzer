@@ -7,11 +7,8 @@ using namespace std;
 
 class FollowsTRelationship : public Relationship {
 public:
-  FollowsTRelationship(vector<Parameter> &);
-  bool validateParams();
-
-private:
-  bool validateSyntax(vector<Parameter> &);
+    FollowsTRelationship(vector<Parameter>&);
+    bool validateParams();
 };
 
 #endif // SPA_QPS_FOLLOWSTRELATIONSHIP_H
