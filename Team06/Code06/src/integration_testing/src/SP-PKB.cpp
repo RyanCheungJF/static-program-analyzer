@@ -91,8 +91,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
         REQUIRE(variables2Uses == expected2Uses);
 
         auto variables3Uses = readPKB.getUsesS(3);
-        auto expected3Uses = std::unordered_set<Ent>({});
-        REQUIRE(variables3Uses == expected3Uses);
+        REQUIRE(variables3Uses.empty());
 
         auto variables4Uses = readPKB.getUsesS(4);
         auto expected4Uses = std::unordered_set<Ent>({"z"});
@@ -674,6 +673,207 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
         std::sort(nextT3expected.begin(), nextT3expected.end());
         REQUIRE(nextT3actual == nextT3expected);
     }
+}
+
+TEST_CASE("SP-PKB Integration: Valid Source Program 3") {
+    SP testSP;
+    PKB testPKB;
+    WritePKB writePKB;
+    ReadPKB readPKB;
+    testPKB.initializePkb();
+    writePKB.setInstancePKB(testPKB);
+    readPKB.setInstancePKB(testPKB);
+
+    auto testDirectory = std::filesystem::path(INTEGRATION_TESTING_DIR);
+    for (int i = 0; i < 3; i++) {
+        testDirectory = testDirectory.parent_path();
+    }
+    testDirectory /= "Tests06/sp/sp-pkb/";
+    auto filePath = testDirectory.string() + "valid3.txt";
+    testSP.processFile(filePath, &writePKB, &readPKB);
+
+    SECTION("SP-PKB Integration: ModifiesP") {
+        auto procedureNames = readPKB.getAllProcedureNames();
+        auto expectedProcedureNames = std::unordered_set<Ent>({"A", "B", "C", "D", "E"});
+        REQUIRE(procedureNames == expectedProcedureNames);
+
+        auto variablesAModifies = readPKB.getModifiesP("A");
+        auto expectedAModifies = std::unordered_set<Ent>({"x", "a", "r", "o", "e"});
+        REQUIRE(variablesAModifies == expectedAModifies);
+
+        auto variablesBModifies = readPKB.getModifiesP("B");
+        auto expectedBModifies = std::unordered_set<Ent>({"a", "r", "o", "e"});
+        REQUIRE(variablesBModifies == expectedBModifies);
+
+        auto variablesCModifies = readPKB.getModifiesP("C");
+        auto expectedCModifies = std::unordered_set<Ent>({"a", "r", "o", "e"});
+        REQUIRE(variablesCModifies == expectedCModifies);
+
+        auto variablesDModifies = readPKB.getModifiesP("D");
+        auto expectedDModifies = std::unordered_set<Ent>({"a", "r", "o"});
+        REQUIRE(variablesDModifies == expectedDModifies);
+
+        auto variablesEModifies = readPKB.getModifiesP("E");
+        auto expectedEModifies = std::unordered_set<Ent>({"y", "h", "x", "a", "r", "o", "e"});
+        REQUIRE(variablesEModifies == expectedEModifies);
+    }
+
+    SECTION("SP-PKB Integration: ModifiesS") {
+        auto variables1Modifies = readPKB.getModifiesS(1);
+        auto expected1Modifies = std::unordered_set<Ent>({"a", "r", "o", "e"});
+        REQUIRE(variables1Modifies == expected1Modifies);
+
+        auto variables2Modifies = readPKB.getModifiesS(2);
+        auto expected2Modifies = std::unordered_set<Ent>({"x"});
+        REQUIRE(variables2Modifies == expected2Modifies);
+
+        auto variables3Modifies = readPKB.getModifiesS(3);
+        auto expected3Modifies = std::unordered_set<Ent>({"a", "r", "o", "e"});
+        REQUIRE(variables3Modifies == expected3Modifies);
+
+        auto variables4Modifies = readPKB.getModifiesS(4);
+        auto expected4Modifies = std::unordered_set<Ent>({"a", "r", "o", "e"});
+        REQUIRE(variables4Modifies == expected4Modifies);
+
+        auto variables5Modifies = readPKB.getModifiesS(5);
+        REQUIRE(variables5Modifies.empty());
+
+        auto variables6Modifies = readPKB.getModifiesS(6);
+        auto expected6Modifies = std::unordered_set<Ent>({"e"});
+        REQUIRE(variables6Modifies == expected6Modifies);
+
+        auto variables7Modifies = readPKB.getModifiesS(7);
+        auto expected7Modifies = std::unordered_set<Ent>({"a", "r", "o"});
+        REQUIRE(variables7Modifies == expected7Modifies);
+
+        auto variables8Modifies = readPKB.getModifiesS(8);
+        auto expected8Modifies = std::unordered_set<Ent>({"a", "r"});
+        REQUIRE(variables8Modifies == expected8Modifies);
+
+        auto variables9Modifies = readPKB.getModifiesS(9);
+        auto expected9Modifies = std::unordered_set<Ent>({"a"});
+        REQUIRE(variables9Modifies == expected9Modifies);
+
+        auto variables10Modifies = readPKB.getModifiesS(10);
+        auto expected10Modifies = std::unordered_set<Ent>({"r"});
+        REQUIRE(variables10Modifies == expected10Modifies);
+
+        auto variables11Modifies = readPKB.getModifiesS(11);
+        auto expected11Modifies = std::unordered_set<Ent>({"o"});
+        REQUIRE(variables11Modifies == expected11Modifies);
+
+        auto variables12Modifies = readPKB.getModifiesS(12);
+        auto expected12Modifies = std::unordered_set<Ent>({"y", "h"});
+        REQUIRE(variables12Modifies == expected12Modifies);
+
+        auto variables13Modifies = readPKB.getModifiesS(13);
+        auto expected13Modifies = std::unordered_set<Ent>({"y"});
+        REQUIRE(variables13Modifies == expected13Modifies);
+
+        auto variables14Modifies = readPKB.getModifiesS(14);
+        auto expected14Modifies = std::unordered_set<Ent>({"h"});
+        REQUIRE(variables14Modifies == expected14Modifies);
+
+        auto variables15Modifies = readPKB.getModifiesS(15);
+        auto expected15Modifies = std::unordered_set<Ent>({"x", "a", "r", "o", "e"});
+        REQUIRE(variables15Modifies == expected15Modifies);
+    }
+
+    SECTION("SP-PKB Integration: UsesP") {
+        auto variablesAUses = readPKB.getUsesP("A");
+        auto expectedAUses = std::unordered_set<Ent>({"k", "c", "t", "d", "b", "p"});
+        REQUIRE(variablesAUses == expectedAUses);
+
+        auto variablesBUses = readPKB.getUsesP("B");
+        auto expectedBUses = std::unordered_set<Ent>({"k", "c", "t", "d", "b", "p"});
+        REQUIRE(variablesBUses == expectedBUses);
+
+        auto variablesCUses = readPKB.getUsesP("C");
+        auto expectedCUses = std::unordered_set<Ent>({"k", "c", "t", "d", "b"});
+        REQUIRE(variablesCUses == expectedCUses);
+
+        auto variablesDUses = readPKB.getUsesP("D");
+        auto expectedDUses = std::unordered_set<Ent>({"c", "t", "d", "b"});
+        REQUIRE(variablesDUses == expectedDUses);
+
+        auto variablesEUses = readPKB.getUsesP("E");
+        auto expectedEUses = std::unordered_set<Ent>({"k", "c", "t", "d", "b", "a", "n", "v", "p"});
+        REQUIRE(variablesEUses == expectedEUses);
+    }
+
+    SECTION("SP-PKB Integration: UsesS") {
+        auto variables1Uses = readPKB.getUsesS(1);
+        auto expected1Uses = std::unordered_set<Ent>({"k", "c", "t", "d", "b", "p"});
+        REQUIRE(variables1Uses == expected1Uses);
+
+        auto variables2Uses = readPKB.getUsesS(2);
+        REQUIRE(variables2Uses.empty());
+
+        auto variables3Uses = readPKB.getUsesS(3);
+        auto expected3Uses = std::unordered_set<Ent>({"k", "c", "t", "d", "b"});
+        REQUIRE(variables3Uses == expected3Uses);
+
+        auto variables4Uses = readPKB.getUsesS(4);
+        auto expected4Uses = std::unordered_set<Ent>({"k", "c", "t", "d", "b"});
+        REQUIRE(variables4Uses == expected4Uses);
+
+        auto variables5Uses = readPKB.getUsesS(5);
+        auto expected5Uses = std::unordered_set<Ent>({"p"});
+        REQUIRE(variables5Uses == expected5Uses);
+
+        auto variables6Uses = readPKB.getUsesS(6);
+        auto expected6Uses = std::unordered_set<Ent>({"k"});
+        REQUIRE(variables6Uses == expected6Uses);
+
+        auto variables7Uses = readPKB.getUsesS(7);
+        auto expected7Uses = std::unordered_set<Ent>({"c", "t", "d", "b"});
+        REQUIRE(variables7Uses == expected7Uses);
+
+        auto variables8Uses = readPKB.getUsesS(8);
+        auto expected8Uses = std::unordered_set<Ent>({"c", "t", "d", "b"});
+        REQUIRE(variables8Uses == expected8Uses);
+
+        auto variables9Uses = readPKB.getUsesS(9);
+        auto expected9Uses = std::unordered_set<Ent>({"c", "d", "b"});
+        REQUIRE(variables9Uses == expected9Uses);
+
+        auto variables10Uses = readPKB.getUsesS(10);
+        REQUIRE(variables10Uses.empty());
+
+        auto variables11Uses = readPKB.getUsesS(11);
+        REQUIRE(variables11Uses.empty());
+
+        auto variables12Uses = readPKB.getUsesS(12);
+        auto expected12Uses = std::unordered_set<Ent>({"a", "n", "v"});
+        REQUIRE(variables12Uses == expected12Uses);
+
+        auto variables13Uses = readPKB.getUsesS(13);
+        REQUIRE(variables13Uses.empty());
+
+        auto variables14Uses = readPKB.getUsesS(14);
+        auto expected14Uses = std::unordered_set<Ent>({"n", "v"});
+        REQUIRE(variables14Uses == expected14Uses);
+
+        auto variables15Uses = readPKB.getUsesS(15);
+        auto expected15Uses = std::unordered_set<Ent>({"k", "c", "t", "d", "b", "p"});
+        REQUIRE(variables15Uses == expected15Uses);
+    }
+
+    SECTION("SP-PKB Integration: Follows") {}
+
+    SECTION("SP-PKB Integration: FollowsT") {}
+
+    SECTION("SP-PKB Integration: Parent") {}
+
+    SECTION("SP-PKB Integration: ParentT") {}
+    
+    SECTION("SP-PKB Integration: Calls") {}
+
+    SECTION("SP-PKB Integration: CallsT") {}
+
+    SECTION("SP-PKB Integration: CFG") {}
+
+    SECTION("SP-PKB Integration: Next") {}
 }
 
 TEST_CASE("Invalid Source Program") {
