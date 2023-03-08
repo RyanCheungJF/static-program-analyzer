@@ -24,13 +24,11 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
     auto filePath = testDirectory.string() + "valid1.txt";
     testSP.processFile(filePath, &writePKB, &readPKB);
 
-    SECTION("SP-PKB Integration: ModifiesS ModifiesP") {
-
+    SECTION("SP-PKB Integration: ModifiesP") {
         auto procedureNames = readPKB.getAllProcedureNames();
         auto expectedProcedureNames = std::unordered_set<Ent>({"A", "B", "C"});
         REQUIRE(procedureNames == expectedProcedureNames);
 
-        // Modifies
         auto variablesAModifies = readPKB.getModifiesP("A");
         auto expectedAModifies = std::unordered_set<Ent>({"x"});
         REQUIRE(variablesAModifies == expectedAModifies);
@@ -42,7 +40,9 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
         auto variablesCModifies = readPKB.getModifiesP("C");
         auto expectedCModifies = std::unordered_set<Ent>({"z", "y"});
         REQUIRE(variablesCModifies == expectedCModifies);
+    }
 
+    SECTION("SP-PKB Integration: ModifiesS") {
         auto variables1Modifies = readPKB.getModifiesS(1);
         auto expected1Modifies = std::unordered_set<Ent>({"x"});
         REQUIRE(variables1Modifies == expected1Modifies);
@@ -56,8 +56,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
         REQUIRE(variables3Modifies == expected3Modifies);
 
         auto variables4Modifies = readPKB.getModifiesS(4);
-        auto expected4Modifies = std::unordered_set<Ent>({});
-        REQUIRE(variables4Modifies == expected4Modifies);
+        REQUIRE(variables4Modifies.empty());
 
         auto variables5Modifies = readPKB.getModifiesS(5);
         auto expected5Modifies = std::unordered_set<Ent>({"y"});
@@ -68,9 +67,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
         REQUIRE(variables6Modifies == expected6Modifies);
     }
 
-    SECTION("SP-PKB Integration: UsesS UsesP") {
-
-        // Uses
+    SECTION("SP-PKB Integration: UsesP") {
         auto variablesAUses = readPKB.getUsesP("A");
         auto expectedAUses = std::unordered_set<Ent>({"x"});
         REQUIRE(variablesAUses == expectedAUses);
@@ -82,7 +79,9 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
         auto variablesCUses = readPKB.getUsesP("C");
         auto expectedCUses = std::unordered_set<Ent>({"z", "y"});
         REQUIRE(variablesCUses == expectedCUses);
+    }
 
+    SECTION("SP-PKB Integration: UsesS") {
         auto variables1Uses = readPKB.getUsesS(1);
         auto expected1Uses = std::unordered_set<Ent>({"x"});
         REQUIRE(variables1Uses == expected1Uses);
@@ -109,7 +108,6 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
     }
 
     SECTION("SP-PKB Integration: Follows") {
-        // Follows
         std::vector<Parameter> params1 = {Parameter("1", AppConstants::FIXED_INT),
                                           Parameter("2", AppConstants::FIXED_INT)};
         shared_ptr<Relationship> followsTest1 = Relationship::makeRelationship(AppConstants::FOLLOWS, params1);
@@ -162,7 +160,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
         shared_ptr<Relationship> followsTest10 = Relationship::makeRelationship(
             AppConstants::FOLLOWS, {Parameter("re", AppConstants::READ), Parameter("_", AppConstants::WILDCARD)});
         std::vector<std::vector<std::string>> follows10actual = readPKB.findRelationship(followsTest10);
-        REQUIRE(follows1actual.empty());
+        REQUIRE(follows10actual.empty());
 
         shared_ptr<Relationship> followsTest11 = Relationship::makeRelationship(
             AppConstants::FOLLOWS, {Parameter("_", AppConstants::WILDCARD), Parameter("re", AppConstants::READ)});
@@ -192,7 +190,6 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
     }
 
     SECTION("SP-PKB Integration: FollowsT") {
-        // FollowsT
         shared_ptr<Relationship> followsTTest1 = Relationship::makeRelationship(
             AppConstants::FOLLOWST, {Parameter("4", AppConstants::FIXED_INT), Parameter("_", AppConstants::WILDCARD)});
         std::vector<std::vector<std::string>> followsT1actual = readPKB.findRelationship(followsTTest1);
@@ -222,6 +219,26 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
         std::sort(followsT4actual.begin(), followsT4actual.end());
         std::sort(followsT4expected.begin(), followsT4expected.end());
         REQUIRE(followsT4expected == followsT4actual);
+    }
+
+    SECTION("SP-PKB Integration: Calls") {
+        shared_ptr<Relationship> callsTest1 = Relationship::makeRelationship(
+            AppConstants::CALLS, {Parameter("C", AppConstants::PROCEDURE), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> callsT1actual = readPKB.findRelationship(callsTest1);
+        std::vector<std::vector<std::string>> callsT1expected = {{"C", "B"}};
+        std::sort(callsT1actual.begin(), callsT1actual.end());
+        std::sort(callsT1expected.begin(), callsT1expected.end());
+        REQUIRE(callsT1actual == callsT1expected);
+    }
+
+    SECTION("SP-PKB Integration: CallsT") {
+        shared_ptr<Relationship> callsTTest1 = Relationship::makeRelationship(
+            AppConstants::CALLST, {Parameter("C", AppConstants::PROCEDURE), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> callsTT1actual = readPKB.findRelationship(callsTTest1);
+        std::vector<std::vector<std::string>> callsTT1expected = {{"C", "B"}};
+        std::sort(callsTT1actual.begin(), callsTT1actual.end());
+        std::sort(callsTT1expected.begin(), callsTT1expected.end());
+        REQUIRE(callsTT1actual == callsTT1expected);
     }
 
     SECTION("SP-PKB Integration: CFG") {
@@ -261,6 +278,226 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
     testDirectory /= "Tests06/sp/sp-pkb/";
     auto filePath = testDirectory.string() + "valid2.txt";
     testSP.processFile(filePath, &writePKB, &readPKB);
+
+    SECTION("SP-PKB Integration: ModifiesP") {
+        auto procedureNames = readPKB.getAllProcedureNames();
+        auto expectedProcedureNames = std::unordered_set<Ent>({"A", "B"});
+        REQUIRE(procedureNames == expectedProcedureNames);
+
+        auto variablesAModifies = readPKB.getModifiesP("A");
+        auto expectedAModifies = std::unordered_set<Ent>({"x", "y", "z"});
+        REQUIRE(variablesAModifies == expectedAModifies);
+
+        auto variablesBModifies = readPKB.getModifiesP("B");
+        auto expectedBModifies = std::unordered_set<Ent>({"z"});
+        REQUIRE(variablesBModifies == expectedBModifies);
+    }
+
+    SECTION("SP-PKB Integration: ModifiesS") {
+        auto variables1Modifies = readPKB.getModifiesS(1);
+        auto expected1Modifies = std::unordered_set<Ent>({"x"});
+        REQUIRE(variables1Modifies == expected1Modifies);
+
+        auto variables2Modifies = readPKB.getModifiesS(2);
+        auto expected2Modifies = std::unordered_set<Ent>({"y"});
+        REQUIRE(variables2Modifies == expected2Modifies);
+
+        auto variables3Modifies = readPKB.getModifiesS(3);
+        auto expected3Modifies = std::unordered_set<Ent>({"x", "y", "z"});
+        REQUIRE(variables3Modifies == expected3Modifies);
+
+        auto variables4Modifies = readPKB.getModifiesS(4);
+        auto expected4Modifies = std::unordered_set<Ent>({"x", "y"});
+        REQUIRE(variables4Modifies == expected4Modifies);
+
+        auto variables5Modifies = readPKB.getModifiesS(5);
+        auto expected5Modifies = std::unordered_set<Ent>({"y"});
+        REQUIRE(variables5Modifies == expected5Modifies);
+
+        auto variables6Modifies = readPKB.getModifiesS(6);
+        auto expected6Modifies = std::unordered_set<Ent>({"x"});
+        REQUIRE(variables6Modifies == expected6Modifies);
+
+        auto variables7Modifies = readPKB.getModifiesS(7);
+        auto expected7Modifies = std::unordered_set<Ent>({"x", "y", "z"});
+        REQUIRE(variables7Modifies == expected7Modifies);
+
+        auto variables8Modifies = readPKB.getModifiesS(8);
+        auto expected8Modifies = std::unordered_set<Ent>({"y"});
+        REQUIRE(variables8Modifies == expected8Modifies);
+
+        auto variables9Modifies = readPKB.getModifiesS(9);
+        auto expected9Modifies = std::unordered_set<Ent>({"x"});
+        REQUIRE(variables9Modifies == expected9Modifies);
+
+        auto variables10Modifies = readPKB.getModifiesS(10);
+        auto expected10Modifies = std::unordered_set<Ent>({"z"});
+        REQUIRE(variables10Modifies == expected10Modifies);
+
+        auto variables11Modifies = readPKB.getModifiesS(11);
+        auto expected11Modifies = std::unordered_set<Ent>({"z"});
+        REQUIRE(variables11Modifies == expected11Modifies);
+    }
+
+    SECTION("SP-PKB Integration: UsesP") {
+        auto variablesAUses = readPKB.getUsesP("A");
+        auto expectedAUses = std::unordered_set<Ent>({"x", "y"});
+        REQUIRE(variablesAUses == expectedAUses);
+
+        auto variablesBUses = readPKB.getUsesP("B");
+        REQUIRE(variablesBUses.empty());
+    }
+
+    SECTION("SP-PKB Integration: UsesS") {
+        auto variables1Uses = readPKB.getUsesS(1);
+        REQUIRE(variables1Uses.empty());
+
+        auto variables2Uses = readPKB.getUsesS(2);
+        REQUIRE(variables2Uses.empty());
+
+        auto variables3Uses = readPKB.getUsesS(3);
+        auto expected3Uses = std::unordered_set<Ent>({"x", "y"});
+        REQUIRE(variables3Uses == expected3Uses);
+
+        auto variables4Uses = readPKB.getUsesS(4);
+        auto expected4Uses = std::unordered_set<Ent>({"x", "y"});
+        REQUIRE(variables4Uses == expected4Uses);
+
+        auto variables5Uses = readPKB.getUsesS(5);
+        auto expected5Uses = std::unordered_set<Ent>({"y"});
+        REQUIRE(variables5Uses == expected5Uses);
+
+        auto variables6Uses = readPKB.getUsesS(6);
+        auto expected6Uses = std::unordered_set<Ent>({"x"});
+        REQUIRE(variables6Uses == expected6Uses);
+
+        auto variables7Uses = readPKB.getUsesS(7);
+        auto expected7Uses = std::unordered_set<Ent>({"x", "y"});
+        REQUIRE(variables7Uses == expected7Uses);
+
+        auto variables8Uses = readPKB.getUsesS(8);
+        auto expected8Uses = std::unordered_set<Ent>({"y"});
+        REQUIRE(variables8Uses == expected8Uses);
+
+        auto variables9Uses = readPKB.getUsesS(9);
+        auto expected9Uses = std::unordered_set<Ent>({"x", "y"});
+        REQUIRE(variables9Uses == expected9Uses);
+
+        auto variables10Uses = readPKB.getUsesS(10);
+        REQUIRE(variables10Uses.empty());
+
+        auto variables11Uses = readPKB.getUsesS(11);
+        REQUIRE(variables11Uses.empty());
+    }
+
+    SECTION("SP-PKB Integration: Follows") {
+        shared_ptr<Relationship> followsTest1 = Relationship::makeRelationship(
+            AppConstants::FOLLOWS, {Parameter("1", AppConstants::FIXED_INT), Parameter("2", AppConstants::FIXED_INT)});
+        std::vector<std::vector<std::string>> follows1actual = readPKB.findRelationship(followsTest1);
+        std::vector<std::vector<std::string>> follows1expected = {{"1", "2"}};
+        REQUIRE(follows1actual == follows1expected);
+
+        shared_ptr<Relationship> followsTest2 = Relationship::makeRelationship(
+            AppConstants::FOLLOWS, {Parameter("2", AppConstants::FIXED_INT), Parameter("3", AppConstants::FIXED_INT)});
+        std::vector<std::vector<std::string>> follows2actual = readPKB.findRelationship(followsTest2);
+        std::vector<std::vector<std::string>> follows2expected = {{"2", "3"}};
+        REQUIRE(follows2expected == follows2actual);
+
+        shared_ptr<Relationship> followsTest3 = Relationship::makeRelationship(
+            AppConstants::FOLLOWS, {Parameter("3", AppConstants::FIXED_INT), Parameter("4", AppConstants::FIXED_INT)});
+        std::vector<std::vector<std::string>> follows3actual = readPKB.findRelationship(followsTest3);
+        REQUIRE(follows3actual.empty());
+
+        shared_ptr<Relationship> followsTest4 = Relationship::makeRelationship(
+            AppConstants::FOLLOWS, {Parameter("4", AppConstants::FIXED_INT), Parameter("7", AppConstants::FIXED_INT)});
+        std::vector<std::vector<std::string>> follows4actual = readPKB.findRelationship(followsTest4);
+        std::vector<std::vector<std::string>> follows4expected = {{"4", "7"}};
+        REQUIRE(follows4expected == follows4actual);
+
+        shared_ptr<Relationship> followsTest5 = Relationship::makeRelationship(
+            AppConstants::FOLLOWS, {Parameter("4", AppConstants::FIXED_INT), Parameter("5", AppConstants::FIXED_INT)});
+        std::vector<std::vector<std::string>> follows5actual = readPKB.findRelationship(followsTest5);
+        REQUIRE(follows5actual.empty());
+
+        shared_ptr<Relationship> followsTest6 = Relationship::makeRelationship(
+            AppConstants::FOLLOWS, {Parameter("5", AppConstants::FIXED_INT), Parameter("6", AppConstants::FIXED_INT)});
+        std::vector<std::vector<std::string>> follows6actual = readPKB.findRelationship(followsTest5);
+        REQUIRE(follows6actual.empty());
+
+        shared_ptr<Relationship> followsTest7 = Relationship::makeRelationship(
+            AppConstants::FOLLOWS, {Parameter("4", AppConstants::FIXED_INT), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> follows7actual = readPKB.findRelationship(followsTest7);
+        std::vector<std::vector<std::string>> follows7expected = {{"4", "7"}};
+        REQUIRE(follows7expected == follows7actual);
+
+        shared_ptr<Relationship> followsTest8 = Relationship::makeRelationship(
+            AppConstants::FOLLOWS, {Parameter("_", AppConstants::WILDCARD), Parameter("9", AppConstants::FIXED_INT)});
+        std::vector<std::vector<std::string>> follows8actual = readPKB.findRelationship(followsTest8);
+        std::vector<std::vector<std::string>> follows8expected = {{"8", "9"}};
+        REQUIRE(follows8expected == follows8actual);
+
+        shared_ptr<Relationship> followsTest9 = Relationship::makeRelationship(
+            AppConstants::FOLLOWS, {Parameter("_", AppConstants::WILDCARD), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> follows9actual = readPKB.findRelationship(followsTest9);
+        std::vector<std::vector<std::string>> follows9expected = {
+            {"1", "2"}, {"2", "3"}, {"4", "7"}, {"8", "9"}, {"9", "10"}};
+        std::sort(follows9actual.begin(), follows9actual.end());
+        std::sort(follows9expected.begin(), follows9expected.end());
+        REQUIRE(follows9expected == follows9actual);
+
+        shared_ptr<Relationship> followsTest10 = Relationship::makeRelationship(
+            AppConstants::FOLLOWS, {Parameter("re", AppConstants::READ), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> follows10actual = readPKB.findRelationship(followsTest10);
+        std::vector<std::vector<std::string>> follows10expected = {{"1", "2"}, {"2", "3"}};
+        std::sort(follows10actual.begin(), follows10actual.end());
+        std::sort(follows10expected.begin(), follows10expected.end());
+        REQUIRE(follows10actual == follows10expected);
+
+        shared_ptr<Relationship> followsTest11 = Relationship::makeRelationship(
+            AppConstants::FOLLOWS, {Parameter("_", AppConstants::WILDCARD), Parameter("re", AppConstants::READ)});
+        std::vector<std::vector<std::string>> follows11actual = readPKB.findRelationship(followsTest11);
+        std::vector<std::vector<std::string>> follows11expected = {{"1", "2"}};
+        std::sort(follows11actual.begin(), follows11actual.end());
+        std::sort(follows11expected.begin(), follows11expected.end());
+        REQUIRE(follows11expected == follows11actual);
+
+        shared_ptr<Relationship> followsTest12 = Relationship::makeRelationship(
+            AppConstants::FOLLOWS, {Parameter("_", AppConstants::WILDCARD), Parameter("ca", AppConstants::CALL)});
+        std::vector<std::vector<std::string>> follows12actual = readPKB.findRelationship(followsTest12);
+        std::vector<std::vector<std::string>> follows12expected = {{"9", "10"}};
+        REQUIRE(follows12expected == follows12actual);
+
+        shared_ptr<Relationship> followsTest13 = Relationship::makeRelationship(
+            AppConstants::FOLLOWS, {Parameter("as", AppConstants::ASSIGN), Parameter("s", AppConstants::STMT)});
+        std::vector<std::vector<std::string>> follows13actual = readPKB.findRelationship(followsTest13);
+        std::vector<std::vector<std::string>> follows13expected = {{"8", "9"}, {"9", "10"}};
+        REQUIRE(follows13expected == follows13actual);
+    }
+
+    SECTION("SP-PKB Integration: FollowsT") {
+        shared_ptr<Relationship> followsTTest1 = Relationship::makeRelationship(
+            AppConstants::FOLLOWST, {Parameter("4", AppConstants::FIXED_INT), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> followsT1actual = readPKB.findRelationship(followsTTest1);
+        std::vector<std::vector<std::string>> followsT1expected = {{"4", "7"}};
+        std::sort(followsT1actual.begin(), followsT1actual.end());
+        std::sort(followsT1expected.begin(), followsT1expected.end());
+        REQUIRE(followsT1expected == followsT1actual);
+
+        shared_ptr<Relationship> followsTTest2 = Relationship::makeRelationship(
+            AppConstants::FOLLOWST, {Parameter("1", AppConstants::FIXED_INT), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> followsT2actual = readPKB.findRelationship(followsTTest2);
+        std::vector<std::vector<std::string>> followsT2expected = {{"1", "2"}, {"1", "3"}};
+        REQUIRE(followsT2expected == followsT2actual);
+
+        shared_ptr<Relationship> followsTTest3 = Relationship::makeRelationship(
+            AppConstants::FOLLOWST, {Parameter("s", AppConstants::STMT), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> followsT3actual = readPKB.findRelationship(followsTTest3);
+        std::vector<std::vector<std::string>> followsT3expected = {{"1", "2"},  {"1", "3"}, {"2", "3"}, {"4", "7"},
+                                                                   {"8", "10"}, {"8", "9"}, {"9", "10"}};
+        std::sort(followsT3actual.begin(), followsT3actual.end());
+        std::sort(followsT3expected.begin(), followsT3expected.end());
+        REQUIRE(followsT3expected == followsT3actual);
+    }
 
     SECTION("SP-PKB Integration: Parent") {
         shared_ptr<Relationship> parentTest1 = Relationship::makeRelationship(
@@ -339,6 +576,26 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
         std::sort(parentT5actual.begin(), parentT5actual.end());
         std::sort(parentT5expected.begin(), parentT5expected.end());
         REQUIRE(parentT5expected == parentT5actual);
+    }
+
+    SECTION("SP-PKB Integration: Calls") {
+        shared_ptr<Relationship> callsTest1 = Relationship::makeRelationship(
+            AppConstants::CALLS, {Parameter("A", AppConstants::PROCEDURE), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> callsT1actual = readPKB.findRelationship(callsTest1);
+        std::vector<std::vector<std::string>> callsT1expected = {{"A", "B"}};
+        std::sort(callsT1actual.begin(), callsT1actual.end());
+        std::sort(callsT1expected.begin(), callsT1expected.end());
+        REQUIRE(callsT1actual == callsT1expected);
+    }
+
+    SECTION("SP-PKB Integration: CallsT") {
+        shared_ptr<Relationship> callsTTest1 = Relationship::makeRelationship(
+            AppConstants::CALLST, {Parameter("A", AppConstants::PROCEDURE), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> callsTT1actual = readPKB.findRelationship(callsTTest1);
+        std::vector<std::vector<std::string>> callsTT1expected = {{"A", "B"}};
+        std::sort(callsTT1actual.begin(), callsTT1actual.end());
+        std::sort(callsTT1expected.begin(), callsTT1expected.end());
+        REQUIRE(callsTT1actual == callsTT1expected);
     }
 
     SECTION("SP-PKB Integration: CFG") {
