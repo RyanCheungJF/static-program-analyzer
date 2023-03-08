@@ -2,6 +2,7 @@
 #define SPA_QPS_RELATIONSHIP_H
 #include "./utils/AppConstants.h"
 #include "Parameter.h"
+#include "SyntaxValidator.h"
 #include <string>
 #include <vector>
 
@@ -27,7 +28,7 @@ class Relationship {
 public:
   static shared_ptr<Relationship> makeRelationship(string type,
                                                    vector<Parameter> params);
-  virtual bool validateParams() = 0;
+  bool validateParams();
   RelationshipType type;
   vector<Parameter> params;
   Relationship();
@@ -42,6 +43,9 @@ public:
 
 private:
   static const unordered_map<string, RelationshipType> stringToTypeMap;
+  static const unordered_map<RelationshipType,
+                             shared_ptr<SyntaxValidator<Relationship>>>
+      typeToSyntaxValidatorMap;
   static RelationshipType stringToType(string);
 };
 

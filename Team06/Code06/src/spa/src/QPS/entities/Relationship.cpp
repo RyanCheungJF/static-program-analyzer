@@ -67,6 +67,9 @@ bool Relationship::operator==(const Relationship &r) const {
 
 RelationshipType Relationship::getType() { return type; }
 
+// TODO: implement this
+bool Relationship::validateParams() { return false; }
+
 Relationship::Relationship() { type = RelationshipType::UNKNOWN; }
 
 bool Relationship::validateSyntaxStmtStmt(vector<Parameter> &ps) {
@@ -130,3 +133,6 @@ const unordered_map<string, RelationshipType> Relationship::stringToTypeMap = {
     {AppConstants::CALLST, RelationshipType::CALLST},
     {AppConstants::AFFECTS, RelationshipType::AFFECTS},
     {AppConstants::AFFECTST, RelationshipType::AFFECTST}};
+
+const unordered_map<RelationshipType, SyntaxValidator<Relationship>*>
+    typeToSyntaxValidatorMap;
