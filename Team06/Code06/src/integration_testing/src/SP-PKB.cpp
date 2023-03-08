@@ -260,6 +260,29 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
         REQUIRE(cfgC[6]["parents"] == std::unordered_set({5}));
         REQUIRE(cfgC[6]["children"].empty());
     }
+
+    SECTION("SP-PKB Integration: Next") {
+        shared_ptr<Relationship> nextTest1 = Relationship::makeRelationship(
+            AppConstants::NEXT, {Parameter("1", AppConstants::FIXED_INT), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> nextT1actual = readPKB.findRelationship(nextTest1);
+        REQUIRE(nextT1actual.empty());
+
+        shared_ptr<Relationship> nextTest2 = Relationship::makeRelationship(
+            AppConstants::NEXT, {Parameter("2", AppConstants::FIXED_INT), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> nextT2actual = readPKB.findRelationship(nextTest2);
+        std::vector<std::vector<std::string>> nextT2expected = {{"2", "3"}};
+        std::sort(nextT2actual.begin(), nextT2actual.end());
+        std::sort(nextT2expected.begin(), nextT2expected.end());
+        REQUIRE(nextT2actual == nextT2expected);
+
+        shared_ptr<Relationship> nextTest3 = Relationship::makeRelationship(
+            AppConstants::NEXT, {Parameter("_", AppConstants::WILDCARD), Parameter("6", AppConstants::FIXED_INT)});
+        std::vector<std::vector<std::string>> nextT3actual = readPKB.findRelationship(nextTest3);
+        std::vector<std::vector<std::string>> nextT3expected = {{"5", "6"}};
+        std::sort(nextT3actual.begin(), nextT3actual.end());
+        std::sort(nextT3expected.begin(), nextT3expected.end());
+        REQUIRE(nextT3actual == nextT3expected);
+    }
 }
 
 TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
@@ -624,6 +647,32 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
         auto cfgB = readPKB.getCFG("B");
         REQUIRE(cfgA[11]["parents"].empty());
         REQUIRE(cfgA[11]["children"].empty());
+    }
+
+    SECTION("SP-PKB Integration: Next") {
+        shared_ptr<Relationship> nextTest1 = Relationship::makeRelationship(
+            AppConstants::NEXT, {Parameter("7", AppConstants::FIXED_INT), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> nextT1actual = readPKB.findRelationship(nextTest1);
+        std::vector<std::vector<std::string>> nextT1expected = {{"7", "3"}, {"7", "8"}};
+        std::sort(nextT1actual.begin(), nextT1actual.end());
+        std::sort(nextT1expected.begin(), nextT1expected.end());
+        REQUIRE(nextT1actual == nextT1expected);
+
+        shared_ptr<Relationship> nextTest2 = Relationship::makeRelationship(
+            AppConstants::NEXT, {Parameter("3", AppConstants::FIXED_INT), Parameter("_", AppConstants::WILDCARD)});
+        std::vector<std::vector<std::string>> nextT2actual = readPKB.findRelationship(nextTest2);
+        std::vector<std::vector<std::string>> nextT2expected = {{"3", "4"}};
+        std::sort(nextT2actual.begin(), nextT2actual.end());
+        std::sort(nextT2expected.begin(), nextT2expected.end());
+        REQUIRE(nextT2actual == nextT2expected);
+
+        shared_ptr<Relationship> nextTest3 = Relationship::makeRelationship(
+            AppConstants::NEXT, {Parameter("_", AppConstants::WILDCARD), Parameter("7", AppConstants::FIXED_INT)});
+        std::vector<std::vector<std::string>> nextT3actual = readPKB.findRelationship(nextTest3);
+        std::vector<std::vector<std::string>> nextT3expected = {{"10", "7"}, {"6", "7"}, {"5", "7"}};
+        std::sort(nextT3actual.begin(), nextT3actual.end());
+        std::sort(nextT3expected.begin(), nextT3expected.end());
+        REQUIRE(nextT3actual == nextT3expected);
     }
 }
 
