@@ -39,9 +39,6 @@ public:
   vector<Parameter> getParameters();
   RelationshipType getType();
   bool operator==(const Relationship &) const;
-  bool validateSyntaxStmtStmt(vector<Parameter> &);
-  bool validateSyntaxEntityEntity(vector<Parameter> &);
-  bool validateSyntaxStmtProcEntity(vector<Parameter> &);
 
 private:
   static const unordered_map<string, RelationshipType> stringToTypeMap;
@@ -52,7 +49,6 @@ private:
                              vector<unordered_set<ParameterType>>>
       typeToParameterTypes;
   static RelationshipType stringToType(string);
-
 };
 
 #endif // !SPA_QPS_RELATIONSHIP_H

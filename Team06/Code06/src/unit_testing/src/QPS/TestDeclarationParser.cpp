@@ -15,11 +15,11 @@ TEST_CASE("parseDeclaration / stores two stmt declaration into store / store "
 TEST_CASE("parseDeclaration / cannot store declaration with same name / throws "
           "exception") {
   vector<string> declarations = {"stmt s, s"};
-  CHECK_THROWS(parseDeclarations(declarations));
+  CHECK_THROWS_AS(parseDeclarations(declarations), SemanticException);
 }
 
 TEST_CASE("parseDeclaration / cannot store declaration of diff types with same "
           "name / throws exception") {
   vector<string> declarations = {"stmt s", "assign s"};
-  CHECK_THROWS(parseDeclarations(declarations));
+  CHECK_THROWS_AS(parseDeclarations(declarations), SemanticException);
 }

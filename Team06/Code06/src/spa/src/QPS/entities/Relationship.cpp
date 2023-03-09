@@ -57,46 +57,6 @@ Relationship::Relationship(RelationshipType t, vector<Parameter> &ps) {
   params = ps;
 }
 
-bool Relationship::validateSyntaxStmtStmt(vector<Parameter> &ps) {
-  if (ps.size() != NUM_OF_PARAMS) {
-    return false;
-  }
-  if (!Parameter::isSyntacticStatementRef(ps[0])) {
-    return false;
-  }
-  if (!Parameter::isSyntacticStatementRef(ps[1])) {
-    return false;
-  }
-  return true;
-}
-
-bool Relationship::validateSyntaxEntityEntity(vector<Parameter> &ps) {
-  if (ps.size() != NUM_OF_PARAMS) {
-    return false;
-  }
-  if (!Parameter::isSyntacticEntityRef(ps[0])) {
-    return false;
-  }
-  if (!Parameter::isSyntacticEntityRef(ps[1])) {
-    return false;
-  }
-  return true;
-}
-
-bool Relationship::validateSyntaxStmtProcEntity(vector<Parameter> &ps) {
-  if (ps.size() != NUM_OF_PARAMS) {
-    return false;
-  }
-  if (!Parameter::isSyntacticStatementRef(ps[0]) &&
-      !Parameter::isProcedure(ps[0])) {
-    return false;
-  }
-  if (!Parameter::isSyntacticEntityRef(ps[1])) {
-    return false;
-  }
-  return true;
-}
-
 RelationshipType Relationship::stringToType(string s) {
   auto iter = Relationship::stringToTypeMap.find(s);
   if (iter == stringToTypeMap.end()) {
@@ -192,7 +152,7 @@ const unordered_map<RelationshipType, vector<unordered_set<ParameterType>>>
          {
              {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT,
               ParameterType::WHILE, ParameterType::IF, ParameterType::ASSIGN,
-              ParameterType::FIXED_INT, ParameterType::WILDCARD,
+              ParameterType::FIXED_INT,
               ParameterType::CALL, ParameterType::PROCEDURE,
               ParameterType::FIXED_STRING},
              {ParameterType::VARIABLE, ParameterType::FIXED_STRING,
@@ -202,7 +162,7 @@ const unordered_map<RelationshipType, vector<unordered_set<ParameterType>>>
          {
              {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT,
               ParameterType::WHILE, ParameterType::IF, ParameterType::ASSIGN,
-              ParameterType::FIXED_INT, ParameterType::WILDCARD,
+              ParameterType::FIXED_INT,
               ParameterType::CALL, ParameterType::PROCEDURE,
               ParameterType::FIXED_STRING},
              {ParameterType::VARIABLE, ParameterType::FIXED_STRING,
