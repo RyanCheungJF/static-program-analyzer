@@ -106,16 +106,11 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string> &wordList,
     // bad select parameter
     throw SyntaxException();
   }
-
-  Parameter param(wordList[1], AppConstants::SYNONYM);
+  Parameter param = Parameter::makeParameter(wordList[1], AppConstants::SYNONYM);
   params.push_back(param);
   return params;
 }
 
-/*
-Currently capable of parsing one condition after such that, with 2 params
-use loops for extensibility
-*/
 vector<shared_ptr<Relationship>>
 SelectQueryParser::parseSuchThatClause(vector<string> &wordList, int start,
                                        int end) {

@@ -22,7 +22,7 @@ enum class ParameterType {
   WILDCARD,
   FIXED_INT,
   FIXED_STRING,
-  FIXED_STRING_WITH_WILDCARD,
+  EXPR_SPEC,
   UNKNOWN
 };
 
@@ -37,6 +37,8 @@ public:
   Parameter(string, ParameterType, string);
   Parameter(const Parameter &);
   Parameter();
+  static Parameter makeParameter(string);
+  static Parameter makeParameter(string, string);
   static bool isSyntacticEntityRef(Parameter &);
   static bool isEntityRef(Parameter &);
   static bool isSyntacticStatementRef(Parameter &);
@@ -49,7 +51,6 @@ public:
   bool isUncheckedSynonym();
   void updateSynonymType(ParameterType);
   string getTypeString() const;
-  bool isEqualTo(Parameter);
   bool operator==(const Parameter &) const;
 
   static ParameterType guessParameterType(string);
