@@ -227,6 +227,66 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
 // O((V + E) * pNc)
 //sort the assignment statements and do DFS / queue using Affects()
 
+std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(StmtNum a1, StmtNum a2) {
+    std::string paramString1 = std::to_string(a1);
+    std::string paramString2 = std::to_string(a2);
+    ProcName proc1 = procStorage->getProcedure(a1);
+    ProcName proc2 = procStorage->getProcedure(a2);
+    std::vector<std::vector<std::string>> res;
+
+    if (proc1 == "INVALID" || proc2 == "INVALID") {
+        return res;
+    } else if (proc1 != proc2) {
+        return res;
+    }
+
+
+    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
+    std::unordered_set<StmtNum> assignStatements; //todo: area for optimisation. get this at compile time
+    for (StmtNum num : statements) {
+        if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+            assignStatements.insert(num);
+        }
+    }
+
+    std::deque<std::pair<StmtNum, StmtNum>> queue;
+    for (StmtNum num : assignStatements) {
+        if (num == a1 || num == a2){
+            continue;
+        }
+        queue.push_back({a1, num});
+    }
+
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
+    while (!queue.empty()) {
+        std::pair<StmtNum, StmtNum> curr = queue.front();
+        queue.pop_front();
+        std::vector<std::vector<std::string>> val = handleIntInt(curr.first, curr.second);
+        if (val.empty()) {
+            continue;
+        }
+
+        if (stoi(val[0][1]) == a2) {
+            res.push_back({std::to_string(a1), std::to_string(a2)});
+            return res;
+        }
+
+        seen.insert(curr);
+        if (curr.first == a1) {
+            queue.push_front({curr.second, a2}); // greedy
+        }
+
+        for (StmtNum num : assignStatements) {
+            if (num == a1 || num == a2 ||
+                num == curr.second || //todo: maybe might need to delete this check to allow for Affects(1, 1)
+                seen.find({curr.second, num}) != seen.end()) {
+                continue;
+            }
+            queue.push_front({curr.second, num});
+        }
+    }
+    return res;
+}
 
 
 

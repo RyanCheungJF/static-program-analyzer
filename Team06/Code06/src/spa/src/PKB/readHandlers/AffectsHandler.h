@@ -1,12 +1,25 @@
 #include <algorithm>
 #include <memory>
 #include <queue>
+#include <set>
 
 #include "../../qps/entities/Parameter.h"
 #include "../storage/CFGStorage.h"
 #include "../storage/ProcedureStorage.h"
 #include "../storage/ModifiesUsesStorage.h"
 #include "../storage/StmtStorage.h"
+
+//TODO: MIGHT be buggy? would be good to have a formal proof
+ struct hashFunctionAffectsT
+{
+     size_t operator()(const std::pair<int, int> &x) const
+     {
+         return x.first*31 + x.second;
+//         std::size_t h1 = std::hash<double>{}(x.first);
+//         std::size_t h2 = std::hash<double>{}(x.second);
+//         return h1 ^ h2;
+     }
+ };
 
 class AffectsHandler {
 public:
