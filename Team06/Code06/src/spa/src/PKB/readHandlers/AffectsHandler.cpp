@@ -241,19 +241,31 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
     }
 
 
+    //all assignment statements in the procedure
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
-    std::unordered_set<StmtNum> assignStatements; //todo: area for optimisation. get this at compile time
+    std::unordered_set<StmtNum> allAssignStatements; //todo: area for optimisation. get this at compile time
     for (StmtNum num : statements) {
         if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+            allAssignStatements.insert(num);
+        }
+    }
+
+    //get control flow path between a1 and a2
+    std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc1);
+    if (controlFlowPath.empty()) {
+        return res;
+    }
+
+    // filter to get relevant assign statements
+    std::unordered_set<StmtNum> assignStatements;
+    for (StmtNum num : allAssignStatements) {
+        if (controlFlowPath.find(num) != controlFlowPath.end()) {
             assignStatements.insert(num);
         }
     }
 
     std::deque<std::pair<StmtNum, StmtNum>> queue;
     for (StmtNum num : assignStatements) {
-        if (num == a1 || num == a2){
-            continue;
-        }
         queue.push_back({a1, num});
     }
 
