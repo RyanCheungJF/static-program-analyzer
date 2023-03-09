@@ -5,7 +5,8 @@ StmtNum visitLastStatementHelper(Statement* statement) {
         auto statementList = ifStmt->elseStmtList.get();
         return checkLastStatementHelper(statementList);
     }
-    else if (auto whileStmt = CAST_TO(WhileStatement, statement)) {
+
+    if (auto whileStmt = CAST_TO(WhileStatement, statement)) {
         auto statementList = whileStmt->stmtList.get();
         return checkLastStatementHelper(statementList);
     }
@@ -89,7 +90,7 @@ void populateUsesModifies(WritePKB* writePKB, ReadPKB* readPKB) {
 
 void processCallStatements(WritePKB* writePKB, ReadPKB* readPKB) {
     auto callStatements = readPKB->getCallStatements();
-    for (auto callStmt : callStatements) {
+    for (std::pair<StmtNum, ProcName> callStmt : callStatements) {
         /* Could be possible I handled the call statement in the recursion, so I
            check if there's anything. If one of them is empty, it means I handled it
            in the recursion. Only if both are empty, means I might not have handled it. */
@@ -288,9 +289,9 @@ void validateNoCycles(std::vector<ProcName>& procedureNames,
     }
 
     while (queue.size() > 0) {
-        auto proc = queue.front();
+        ProcName proc = queue.front();
         queue.pop_front();
-        for (auto callerProc : nodes[proc].second) {
+        for (Ent callerProc : nodes[proc].second) {
             nodes[callerProc].first -= 1;
             if (nodes[callerProc].first == 0) {
                 queue.push_back(callerProc);

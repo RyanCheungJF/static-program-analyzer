@@ -1,6 +1,6 @@
 #include "IfStatement.h"
 
-IfStatement::IfStatement() : condExpr(), thenStmtList(), elseStmtList(){};
+IfStatement::IfStatement() : condExpr(), thenStmtList(), elseStmtList() {};
 
 IfStatement::IfStatement(StmtNum stmtNum, std::unique_ptr<ConditionalExpression> condExpr,
                          std::unique_ptr<StatementList> thenStmtList, std::unique_ptr<StatementList> elseStmtList) {

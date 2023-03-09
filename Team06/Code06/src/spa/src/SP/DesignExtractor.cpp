@@ -1,6 +1,6 @@
 #include "DesignExtractor.h"
 
-DesignExtractor::DesignExtractor() : ASTroot(), writePkb(0), readPkb(0) {}
+DesignExtractor::DesignExtractor() : ASTroot(), writePkb(), readPkb() {}
 
 DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writePKB, ReadPKB* readPKB)
     : ASTroot(std::move(root)), writePkb(writePKB), readPkb(readPKB) {}
