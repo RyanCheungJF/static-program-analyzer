@@ -22,7 +22,7 @@ enum class ParameterType {
   WILDCARD,
   FIXED_INT,
   FIXED_STRING,
-  FIXED_STRING_WITH_WILDCARD,
+  EXPR_SPEC,
   UNKNOWN
 };
 
@@ -34,6 +34,8 @@ public:
   Parameter(string, ParameterType);
   Parameter(const Parameter &);
   Parameter();
+  static Parameter makeParameter(string);
+  static Parameter makeParameter(string, string);
   static bool isSyntacticEntityRef(Parameter &);
   static bool isEntityRef(Parameter &);
   static bool isSyntacticStatementRef(Parameter &);

@@ -104,7 +104,7 @@ TEST_CASE("extractDesignEntities / test constant, procedure and "
   vector<Parameter> headers = {
       Parameter("c", AppConstants::CONSTANT),
       Parameter("proc", AppConstants::PROCEDURE),
-      Parameter("_\"a\"_", AppConstants::FIXED_STRING_WTIH_WILDCARD)};
+      Parameter("_\"a\"_", AppConstants::EXPR_SPEC)};
   vector<vector<string>> content = {{"999", "main", "x+a"}};
   Table table(headers, content);
   Table t = table.extractDesignEntities();

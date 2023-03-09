@@ -40,7 +40,7 @@ bool hasBalancedBrackets(string s) {
 }
 
 bool hasCorrectRelRefOrPatternForm(string s) {
-  bool regexMatched = regex_match(s, regex("^[a-zA-Z].*\(.*,.*\)$"));
+  bool regexMatched = regex_match(s, regex("^[a-zA-Z].*\(.*\)$"));
   bool bracketBalanced = hasBalancedBrackets(s);
   return regexMatched && bracketBalanced;
 }
