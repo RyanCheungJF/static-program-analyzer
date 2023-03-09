@@ -1,4 +1,5 @@
 #include "Parameter.h"
+#include "../syntaxValidator/ParamSyntaxValidator.h"
 
 string Parameter::getValue() { return value; }
 
@@ -22,6 +23,21 @@ Parameter::Parameter(const Parameter &p) {
 Parameter::Parameter() {
   type = ParameterType::UNKNOWN;
   value = "";
+}
+
+Parameter Parameter::makeParameter(string val) {
+  ParamSyntaxValidator paramSynVal;
+  ParameterType type = guessParameterType(val);
+  Parameter p(removeCharFromString(val, '\"'), type);
+  paramSynVal.validate(p);
+  return p;
+}
+
+Parameter Parameter::makeParameter(string val, string type) {
+  ParamSyntaxValidator paramSynVal;
+  Parameter p(removeCharFromString(val, '\"'), type);
+  paramSynVal.validate(p);
+  return p;
 }
 
 bool Parameter::isSyntacticStatementRef(Parameter &p) {
@@ -76,7 +92,6 @@ bool Parameter::isFixedIntOrWildCard(Parameter &p) {
          p.type == ParameterType::WILDCARD;
 }
 
-
 bool Parameter::isUncheckedSynonym() { return type == ParameterType::SYNONYM; }
 
 void Parameter::updateSynonymType(ParameterType pt) {
@@ -118,6 +133,9 @@ ParameterType Parameter::guessParameterType(string s) {
   if (isWildCard(s)) {
     return ParameterType::WILDCARD;
   }
+  if (isExprSpec(s)) {
+    return ParameterType::EXPR_SPEC;
+  }
   return ParameterType::UNKNOWN;
 }
 
@@ -140,6 +158,5 @@ const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
     {AppConstants::WILDCARD, ParameterType::WILDCARD},
     {AppConstants::FIXED_INT, ParameterType::FIXED_INT},
     {AppConstants::FIXED_STRING, ParameterType::FIXED_STRING},
-    {AppConstants::FIXED_STRING_WTIH_WILDCARD,
-     ParameterType::FIXED_STRING_WITH_WILDCARD},
+    {AppConstants::EXPR_SPEC, ParameterType::EXPR_SPEC},
 };
