@@ -25,9 +25,7 @@ Relationship::makeRelationship(string type, vector<Parameter> params) {
       make_shared<Relationship>(Relationship(rType, params));
   shared_ptr<SyntaxValidator<Relationship>> validator =
       Relationship::typeToSyntaxValidatorMap.at(rType);
-  if (!(validator->validate(*relptr))) {
-    throw SyntaxException();
-  };
+  validator->validate(*relptr);
   return relptr;
 }
 
