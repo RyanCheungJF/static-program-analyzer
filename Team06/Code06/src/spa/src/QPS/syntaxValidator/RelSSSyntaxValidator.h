@@ -2,7 +2,7 @@
 #define SPA_QPS_RELSSSYNTAXVALIDATOR_H
 
 #include "SyntaxValidator.h"
-#include "Relationship.h"
+#include "../entities/Relationship.h"
 
 // Validates relationships with parameters of type Stmt Stmt
 class RelSSSyntaxValidator : public SyntaxValidator<Relationship> {

@@ -2,7 +2,7 @@
 #define SPA_QPS_RELATIONSHIP_H
 #include "./utils/AppConstants.h"
 #include "Parameter.h"
-#include "SyntaxValidator.h"
+#include "../syntaxValidator/SyntaxValidator.h"
 #include <string>
 #include <vector>
 #include <unordered_set>
