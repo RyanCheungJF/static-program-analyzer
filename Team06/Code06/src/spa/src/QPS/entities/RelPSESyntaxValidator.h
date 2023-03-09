@@ -8,6 +8,7 @@
 class RelPSESyntaxValidator : public SyntaxValidator<Relationship> {
 public:
   bool validate(Relationship &);
+  RelPSESyntaxValidator();
 };
 
 #endif // !SPA_QPS_RELPSESYNTAXVALIDATOR_H
