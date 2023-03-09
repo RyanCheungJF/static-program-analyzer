@@ -357,6 +357,60 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitiv
     return res;
 }
 
+std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitive(StmtNum a2) {
+    std::string paramString2 = std::to_string(a2);
+    ProcName proc2 = procStorage->getProcedure(a2);
+    std::vector<std::vector<std::string>> res;
+
+    if (proc2 == "INVALID") {
+        return res;
+    }
+
+    std::vector<std::vector<std::string>> allValidAffects = handleIntWildcard(a2);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
+    for (std::vector<std::string> p : allValidAffects) {
+        hashmap[stoi(p[1])].insert(stoi(p[0]));
+    }
+
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
+    std::deque<std::pair<StmtNum, StmtNum>> queue;
+    for (StmtNum num : hashmap[a2]) {
+        queue.push_back({a2, num});
+    }
+
+    //do the first hop
+    while (!queue.empty()) {
+        std::pair<StmtNum, StmtNum> curr = queue.front();
+        queue.pop_front();
+        seen.insert(curr);
+
+        for (StmtNum num : hashmap[curr.second]) {
+            queue.push_back({curr.second, num});
+        }
+    }
+
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
+    while (!queue.empty()) {
+        std::pair<StmtNum, StmtNum> curr = queue.front();
+        queue.pop_front();
+        if (seen.find(curr) != seen.end()) {
+            continue;
+        }
+        seen.insert(curr);
+        temp.insert({curr.second, a2});
+
+        for (StmtNum num : hashmap[curr.second]) {
+            queue.push_back({curr.second, num});
+        }
+    }
+
+    for (std::pair<StmtNum, StmtNum> p : temp) {
+        res.push_back({std::to_string(p.first), std::to_string(p.second)});
+    }
+    return res;
+
+}
+
 
 
 
