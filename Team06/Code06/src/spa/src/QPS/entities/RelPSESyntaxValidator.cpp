@@ -14,3 +14,5 @@ bool RelPSESyntaxValidator::validate(Relationship &rel) {
   }
   return true;
 }
+
+RelPSESyntaxValidator::RelPSESyntaxValidator() {}

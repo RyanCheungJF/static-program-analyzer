@@ -1,4 +1,4 @@
-#include "SSRelSyntaxValidator.h"
+#include "RelSSSyntaxValidator.h"
 
 bool RelSSSyntaxValidator::validate(Relationship &rel)
 {
@@ -14,3 +14,5 @@ bool RelSSSyntaxValidator::validate(Relationship &rel)
   }
   return true;
 }
+
+RelSSSyntaxValidator::RelSSSyntaxValidator() {}

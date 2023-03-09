@@ -5,6 +5,7 @@
 #include "SyntaxValidator.h"
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 using namespace std;
 
@@ -33,6 +34,7 @@ public:
   vector<Parameter> params;
   Relationship();
   Relationship(const Relationship &);
+  Relationship(RelationshipType, vector<Parameter> &);
   vector<Parameter *> getAllUncheckedSynonyms();
   vector<Parameter> getParameters();
   RelationshipType getType();
@@ -46,7 +48,11 @@ private:
   static const unordered_map<RelationshipType,
                              shared_ptr<SyntaxValidator<Relationship>>>
       typeToSyntaxValidatorMap;
+  static const unordered_map<RelationshipType,
+                             vector<unordered_set<ParameterType>>>
+      typeToParameterTypes;
   static RelationshipType stringToType(string);
+
 };
 
 #endif // !SPA_QPS_RELATIONSHIP_H
