@@ -1,19 +1,7 @@
 #include "Relationship.h"
-#include "AffectsRelationship.h"
-#include "AffectsTRelationship.h"
-#include "CallsRelationship.h"
-#include "CallsTRelationship.h"
-#include "FollowsRelationship.h"
-#include "FollowsTRelationship.h"
-#include "ModifiesRelationship.h"
-#include "NextRelationship.h"
-#include "NextTRelationship.h"
-#include "ParentRelationship.h"
-#include "ParentTRelationship.h"
 #include "RelEESyntaxValidator.h"
 #include "RelPSESyntaxValidator.h"
 #include "RelSSSyntaxValidator.h"
-#include "UsesRelationship.h"
 
 shared_ptr<Relationship>
 Relationship::makeRelationship(string type, vector<Parameter> params) {
