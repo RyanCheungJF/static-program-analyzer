@@ -38,7 +38,15 @@ private:
     // Affects(a1, a2) or Affects(_, _)
     std::vector<std::vector<std::string>> handleWildcardWildcard();
 
-    // TODO: Affects*
+
+    // Affects*(1, 2)
+    std::vector<std::vector<std::string>> handleIntIntTransitive(StmtNum a1, StmtNum a2); // TODO
+    // Affects*(a1, 2) or Affects*(_, 2)
+    std::vector<std::vector<std::string>> handleWildcardIntTransitive(StmtNum a2); // TODO
+    // Affects*(1, a2) or Affects*(1, _)
+    std::vector<std::vector<std::string>> handleIntWildcardTransitive(StmtNum a1); // TODO
+    // Affects*(a1, a2) or Affects*(_, _)
+    std::vector<std::vector<std::string>> handleWildcardWildcardTransitive(); // TODO
 
 
     // helper methods
@@ -47,5 +55,13 @@ private:
     std::unordered_set<Ent> getVariablesModifiedInControlFlowPath(std::unordered_set<StmtNum> controlFlowPath);
 
     std::unordered_set<Ent> getCommonVariables(std::unordered_set<Ent> variablesModifiedInA1, std::unordered_set<Ent> variablesUsedInA2);
+
+    std::vector<std::vector<std::string>> handleNonTransitive(Parameter param1, Parameter param2,
+                                                              bool isFixedIntParam1, bool isFixedIntParam2,
+                                                              bool isWildCardParam1, bool isWildCardParam2);
+    std::vector<std::vector<std::string>> handleTransitive(Parameter param1, Parameter param2,
+                                                           bool isFixedIntParam1, bool isFixedIntParam2,
+                                                           bool isWildCardParam1, bool isWildCardParam2);
+
 
 };
