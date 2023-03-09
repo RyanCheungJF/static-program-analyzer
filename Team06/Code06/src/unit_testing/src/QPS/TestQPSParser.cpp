@@ -194,7 +194,7 @@ TEST_CASE("checkSynonyms / variable store is empty / exception is thrown") {
   VariableStore vs;
   SelectQueryParser sqp;
   Query q = sqp.parse("Select s");
-  REQUIRE_THROWS(qp.checkSynonyms(&q, vs));
+  REQUIRE_THROWS_AS(qp.checkSynonyms(&q, vs), SemanticException);
 }
 
 TEST_CASE("checkSynonyms / the variable store contains more variable than "
@@ -242,5 +242,5 @@ TEST_CASE("checkSynonyms / the variable store has correct type but wrong "
   vs.insertVariable(p7);
   vs.insertVariable(p8);
   Query q = sqp.parse("Select s such that Modifies(s, v)");
-  REQUIRE_THROWS(qp.checkSynonyms(&q, vs));
+  REQUIRE_THROWS_AS(qp.checkSynonyms(&q, vs), SemanticException);
 }
