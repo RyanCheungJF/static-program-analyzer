@@ -94,7 +94,7 @@ vector<pair<int, int>> QueryDB::getAllIntersectingParams(Table t1, Table t2) {
   vector<pair<int, int>> intersection;
   for (int i = 0; i < t1Head.size(); i++) {
     for (int j = 0; j < t2Head.size(); j++) {
-      if (t1Head[i].isEqualTo(t2Head[j])) {
+      if (t1Head[i] == t2Head[j]) {
         intersection.emplace_back(i, j);
       }
     }
@@ -138,7 +138,7 @@ bool QueryDB::hasParameter(Parameter &p) {
   for (Table table : tableVector) {
     vector<Parameter> headers = table.getHeaders();
     for (Parameter param : headers) {
-      if (param.isEqualTo(p)) {
+      if (param == p) {
         return true;
       }
     }
@@ -152,7 +152,7 @@ vector<string> QueryDB::fetch(Parameter p) {
   for (int i = 0; i < tableVector.size(); i++) {
     vector<Parameter> headers = tableVector[i].getHeaders();
     for (int j = 0; j < headers.size(); j++) {
-      if (headers[j].isEqualTo(p)) {
+      if (headers[j] == p) {
         tableIndex = i;
         columnIndex = j;
         break;

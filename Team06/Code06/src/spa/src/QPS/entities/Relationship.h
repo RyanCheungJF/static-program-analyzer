@@ -52,7 +52,7 @@ private:
                              vector<unordered_set<ParameterType>>>
       typeToParameterTypes;
   static RelationshipType stringToType(string);
-
+  static const int NUM_OF_PARAMS = 2;
 };
 
 #endif // !SPA_QPS_RELATIONSHIP_H
