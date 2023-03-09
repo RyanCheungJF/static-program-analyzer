@@ -9,17 +9,34 @@
 #include "../storage/ModifiesUsesStorage.h"
 #include "../storage/StmtStorage.h"
 
+int cantor(int a, int b) {
+    return (a + b + 1) * (a + b) / 2 + b;
+}
+int hashAlgoForTuple(int a, int b, int c) {
+    return cantor(a, cantor(b, c));
+}
+
+
+struct hashFunctionTuple
+{
+    size_t operator()(const std::tuple<int, int, int> x) const
+    {
+        return hashAlgoForTuple(get<0>(x), get<1>(x), get<2>(x));
+    }
+};
+
+
 //TODO: MIGHT be buggy? would be good to have a formal proof
  struct hashFunctionAffectsT
 {
      size_t operator()(const std::pair<int, int> &x) const
      {
-         return x.first*31 + x.second;
+         return x.first*31 + x.second; //todo: is this wrong?
 //         std::size_t h1 = std::hash<double>{}(x.first);
 //         std::size_t h2 = std::hash<double>{}(x.second);
 //         return h1 ^ h2;
      }
- };
+};
 
 class AffectsHandler {
 public:

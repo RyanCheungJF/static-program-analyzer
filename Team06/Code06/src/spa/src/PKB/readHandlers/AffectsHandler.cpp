@@ -408,7 +408,57 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
         res.push_back({std::to_string(p.first), std::to_string(p.second)});
     }
     return res;
+}
 
+std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTransitive() {
+
+    std::vector<std::vector<std::string>> res;
+    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
+    for (std::vector<std::string> p : allValidAffects) {
+        hashmap[stoi(p[0])].insert(stoi(p[1]));
+    }
+
+    std::unordered_set<std::tuple<StmtNum, StmtNum, StmtNum>, hashFunctionTuple> seen;
+    std::deque<std::tuple<StmtNum, StmtNum, StmtNum>> queue;
+    for (auto kv : hashmap) {
+        StmtNum a1 = kv.first;
+        std::unordered_set<StmtNum> nums = kv.second;
+        for (StmtNum num : nums) {
+            queue.push_back({a1, a1, num});
+        }
+    }
+
+    //do the first hop
+    while (!queue.empty()) {
+        std::tuple<StmtNum, StmtNum, StmtNum> curr = queue.front();
+        queue.pop_front();
+        seen.insert(curr);
+
+        for (StmtNum num : hashmap[get<2>(curr)]) {
+            queue.push_back({get<0>(curr), get<2>(curr), num});
+        }
+    }
+
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
+    while (!queue.empty()) {
+        std::tuple<StmtNum, StmtNum, StmtNum> curr = queue.front();
+        queue.pop_front();
+        if (seen.find(curr) != seen.end()) {
+            continue;
+        }
+        seen.insert(curr);
+        temp.insert({get<0>(curr), get<2>(curr)});
+
+        for (StmtNum num : hashmap[get<2>(curr)]) {
+            queue.push_back({get<0>(curr), get<2>(curr), num});
+        }
+    }
+
+    for (std::pair<StmtNum, StmtNum> p : temp) {
+        res.push_back({std::to_string(p.first), std::to_string(p.second)});
+    }
+    return res;
 }
 
 
