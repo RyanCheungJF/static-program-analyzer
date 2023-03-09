@@ -1,8 +1,6 @@
 #include "FollowsExtractorVisitor.h"
 
-FollowsExtractorVisitor::FollowsExtractorVisitor(WritePKB* writePKB) {
-    writeApi = writePKB;
-}
+FollowsExtractorVisitor::FollowsExtractorVisitor(WritePKB* writePKB) : writeApi(writePKB) {}
 
 void FollowsExtractorVisitor::visitProgram(Program* program) {}
 void FollowsExtractorVisitor::visitProcedure(Procedure* procedure) {}

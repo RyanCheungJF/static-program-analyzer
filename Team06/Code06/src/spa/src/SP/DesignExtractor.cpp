@@ -1,12 +1,9 @@
 #include "DesignExtractor.h"
 
-DesignExtractor::DesignExtractor() : ASTroot() {}
+DesignExtractor::DesignExtractor() : ASTroot(), writePkb(0), readPkb(0) {}
 
-DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writePKB, ReadPKB* readPKB) {
-    ASTroot = std::move(root);
-    writePkb = writePKB;
-    readPkb = readPKB;
-}
+DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writePKB, ReadPKB* readPKB)
+    : ASTroot(std::move(root)), writePkb(writePKB), readPkb(readPKB) {}
 
 void DesignExtractor::populatePKB() {
     try {

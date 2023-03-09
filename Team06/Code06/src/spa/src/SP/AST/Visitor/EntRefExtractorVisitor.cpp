@@ -1,8 +1,6 @@
 #include "EntRefExtractorVisitor.h"
 
-EntRefExtractorVisitor::EntRefExtractorVisitor(WritePKB* writePKB) {
-    writeApi = writePKB;
-}
+EntRefExtractorVisitor::EntRefExtractorVisitor(WritePKB* writePKB) : writeApi(writePKB) {}
 
 void EntRefExtractorVisitor::visitProgram(Program* program) {}
 void EntRefExtractorVisitor::visitProcedure(Procedure* procedure) {}

@@ -1,8 +1,6 @@
 #include "ParentExtractorVisitor.h"
 
-ParentExtractorVisitor::ParentExtractorVisitor(WritePKB* writePKB) {
-    writeApi = writePKB;
-}
+ParentExtractorVisitor::ParentExtractorVisitor(WritePKB* writePKB) : writeApi(writePKB) {}
 
 void ParentExtractorVisitor::visitProgram(Program* program) {}
 void ParentExtractorVisitor::visitProcedure(Procedure* procedure) {}

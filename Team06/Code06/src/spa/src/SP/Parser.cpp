@@ -107,7 +107,7 @@ std::string Parser::parseStatementHelper(std::deque<Token>& tokens) {
     if (!tokens.front().isType(TokenType::NAME)) {
         throw SyntaxErrorException("Expected proc_name/var_name in statement, but got -> " + tokens.front().value);
     }
-    auto name = tokens.front().value;
+    std::string name = tokens.front().value;
     tokens.pop_front(); // Pop proc_name/var_name
 
     if (!tokens.front().isType(TokenType::SEMICOLON)) {
@@ -300,6 +300,9 @@ std::unique_ptr<Expression> Parser::parseRelationalFactor(std::deque<Token>& tok
         }
         else if (tokens.front().isType(TokenType::NAME)) {
             return parseVariable(tokens);
+        }
+        else {
+            throw SyntaxErrorException("Unexpected token when parsing relational factor");
         }
     }
     else {

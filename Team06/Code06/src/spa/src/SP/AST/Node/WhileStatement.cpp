@@ -1,6 +1,6 @@
 #include "WhileStatement.h"
 
-WhileStatement::WhileStatement(){};
+WhileStatement::WhileStatement() : condExpr(), stmtList(){};
 
 WhileStatement::WhileStatement(StmtNum stmtNum, std::unique_ptr<ConditionalExpression> condExpr,
                                std::unique_ptr<StatementList> stmtList) {

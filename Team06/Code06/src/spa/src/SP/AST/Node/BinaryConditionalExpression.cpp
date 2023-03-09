@@ -1,6 +1,6 @@
 #include "BinaryConditionalExpression.h"
 
-BinaryConditionalExpression::BinaryConditionalExpression() {}
+BinaryConditionalExpression::BinaryConditionalExpression() : condOperator(), lhs(), rhs() {}
 
 BinaryConditionalExpression::BinaryConditionalExpression(Operator condOperator,
                                                          std::unique_ptr<ConditionalExpression> lhs,
