@@ -1,7 +1,7 @@
 #include "Relationship.h"
-#include "RelEESyntaxValidator.h"
-#include "RelPSESyntaxValidator.h"
-#include "RelSSSyntaxValidator.h"
+#include "../syntaxValidator/RelEESyntaxValidator.h"
+#include "../syntaxValidator/RelPSESyntaxValidator.h"
+#include "../syntaxValidator/RelSSSyntaxValidator.h"
 
 shared_ptr<Relationship>
 Relationship::makeRelationship(string type, vector<Parameter> params) {
