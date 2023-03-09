@@ -240,7 +240,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
         return res;
     }
 
-
     //all assignment statements in the procedure
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
     std::unordered_set<StmtNum> allAssignStatements; //todo: area for optimisation. get this at compile time
@@ -256,7 +255,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
         return res;
     }
 
-    // filter to get relevant assign statements
+    // filter to get only assign statements in the control path
     std::unordered_set<StmtNum> assignStatements;
     for (StmtNum num : allAssignStatements) {
         if (controlFlowPath.find(num) != controlFlowPath.end()) {
@@ -264,6 +263,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
         }
     }
 
+    // hop until we reach a2. else loop terminates once it has seen all pairs (prevent infinite loop)
     std::deque<std::pair<StmtNum, StmtNum>> queue;
     for (StmtNum num : assignStatements) {
         queue.push_back({a1, num});
@@ -283,19 +283,76 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
             return res;
         }
 
+        if (seen.find(curr) != seen.end()) {
+            continue;
+        }
         seen.insert(curr);
+
         if (curr.first == a1) {
             queue.push_front({curr.second, a2}); // greedy
         }
 
         for (StmtNum num : assignStatements) {
-            if (num == a1 || num == a2 ||
-                num == curr.second || //todo: maybe might need to delete this check to allow for Affects(1, 1)
-                seen.find({curr.second, num}) != seen.end()) {
+            if (num == a1 || num == a2
+//                || num == curr.second //todo: might not need this? or need for Affects(1, 1)
+                ) {
                 continue;
             }
             queue.push_front({curr.second, num});
         }
+    }
+    return res;
+}
+
+std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitive(StmtNum a1) {
+    std::string paramString1 = std::to_string(a1);
+    ProcName proc1 = procStorage->getProcedure(a1);
+    std::vector<std::vector<std::string>> res;
+
+    if (proc1 == "INVALID") {
+        return res;
+    }
+
+    std::vector<std::vector<std::string>> allValidAffects = handleIntWildcard(a1);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
+    for (std::vector<std::string> p : allValidAffects) {
+        hashmap[stoi(p[0])].insert(stoi(p[1]));
+    }
+
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
+    std::deque<std::pair<StmtNum, StmtNum>> queue;
+    for (StmtNum num : hashmap[a1]) {
+        queue.push_back({a1, num});
+    }
+
+    //do the first hop
+    while (!queue.empty()) {
+        std::pair<StmtNum, StmtNum> curr = queue.front();
+        queue.pop_front();
+        seen.insert(curr);
+
+        for (StmtNum num : hashmap[curr.second]) {
+            queue.push_back({curr.second, num});
+        }
+    }
+
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
+    while (!queue.empty()) {
+        std::pair<StmtNum, StmtNum> curr = queue.front();
+        queue.pop_front();
+        if (seen.find(curr) != seen.end()) {
+            continue;
+        }
+        seen.insert(curr);
+        temp.insert({a1, curr.second});
+
+        for (StmtNum num : hashmap[curr.second]) {
+            queue.push_back({curr.second, num});
+        }
+    }
+
+    for (std::pair<StmtNum, StmtNum> p : temp) {
+        res.push_back({std::to_string(p.first), std::to_string(p.second)});
     }
     return res;
 }
