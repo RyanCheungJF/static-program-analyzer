@@ -1,7 +1,7 @@
 #ifndef SPA_QPS_RELPSESYNTAXVALIDATOR_H
 #define SPA_QPS_RELPSESYNTAXVALIDATOR_H
 
-#include "Relationship.h"
+#include "SyntaxValidator.h"
 #include "../entities/Relationship.h"
 
 // Validates relationships with parameters of type Procedure/Stmt Entity

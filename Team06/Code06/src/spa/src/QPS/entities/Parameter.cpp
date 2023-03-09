@@ -53,6 +53,30 @@ bool Parameter::isDsgEntity(Parameter &p) {
   return isDesignEntity(p.getTypeString());
 }
 
+bool Parameter::isSyntacticEntityRef(Parameter &p) {
+  return p.type == ParameterType::SYNONYM || isEntityRef(p) || isProcedure(p);
+}
+
+bool Parameter::isEntityRef(Parameter &p) {
+  return p.type == ParameterType::VARIABLE || isFixedStringOrWildcard(p);
+}
+
+bool Parameter::isPatternSyn(Parameter &p) {
+  return p.type == ParameterType::ASSIGN || p.type == ParameterType::WHILE ||
+         p.type == ParameterType::IF;
+}
+
+bool Parameter::isFixedStringOrWildcard(Parameter &p) {
+  return p.type == ParameterType::FIXED_STRING ||
+         p.type == ParameterType::WILDCARD;
+}
+
+bool Parameter::isFixedIntOrWildCard(Parameter &p) {
+  return p.type == ParameterType::FIXED_INT ||
+         p.type == ParameterType::WILDCARD;
+}
+
+
 bool Parameter::isUncheckedSynonym() { return type == ParameterType::SYNONYM; }
 
 void Parameter::updateSynonymType(ParameterType pt) {
@@ -61,14 +85,6 @@ void Parameter::updateSynonymType(ParameterType pt) {
         "Error: Parameter.updateSynonymType parameter is not a synonym.");
   }
   type = pt;
-}
-
-bool Parameter::isSyntacticEntityRef(Parameter &p) {
-  return p.type == ParameterType::SYNONYM || isEntityRef(p) || isProcedure(p);
-}
-
-bool Parameter::isEntityRef(Parameter &p) {
-  return p.type == ParameterType::VARIABLE || isFixedStringOrWildcard(p);
 }
 
 // TODO: IF NOT FOUND, MAY WANT TO THROW ERROR
@@ -107,21 +123,6 @@ ParameterType Parameter::guessParameterType(string s) {
 
 bool Parameter::operator==(const Parameter &p) const {
   return type == p.type && value == p.value;
-}
-
-bool Parameter::isPatternSyn(Parameter &p) {
-  return p.type == ParameterType::ASSIGN || p.type == ParameterType::WHILE ||
-         p.type == ParameterType::IF;
-}
-
-bool Parameter::isFixedStringOrWildcard(Parameter &p) {
-  return p.type == ParameterType::FIXED_STRING ||
-         p.type == ParameterType::WILDCARD;
-}
-
-bool Parameter::isFixedIntOrWildCard(Parameter &p) {
-  return p.type == ParameterType::FIXED_INT ||
-         p.type == ParameterType::WILDCARD;
 }
 
 const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
