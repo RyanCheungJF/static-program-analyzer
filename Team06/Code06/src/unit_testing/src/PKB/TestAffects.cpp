@@ -32,8 +32,6 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
      *
      * Valid Affects relationships:
      * (2, 5), (3, 6), (6, 9), (6, 10), (8, 2), (9, 3)
-     * Present: (2, 5), (6, 9), (8, 2), (9, 3), (3, 6), (7, 8)
-     * Missing:
      */
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph1 = {
         {1, {
@@ -168,13 +166,22 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
         REQUIRE(unit_testing_utils::equals(expected2, res2));
     }
 
-    SECTION("Affects(6, _)") {
+    SECTION("Affects(int, _)") {
         std::vector<Parameter> params1 = {Parameter("6", AppConstants::FIXED_INT),
                                           Parameter("_", AppConstants::WILDCARD)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTS, params1);
         std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
         std::vector<std::vector<std::string>> expected1 = {{"6", "9"}};
 //        REQUIRE(expected1 == res1);
+        REQUIRE(unit_testing_utils::equals(expected1, res1));
+    }
+
+    SECTION("Affects(_, int)") {
+        std::vector<Parameter> params1 = {Parameter("_", AppConstants::WILDCARD),
+                                          Parameter("3", AppConstants::FIXED_INT)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTS, params1);
+        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected1 = {{"9", "3"}};
         REQUIRE(unit_testing_utils::equals(expected1, res1));
     }
 
@@ -186,21 +193,13 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
         std::vector<std::vector<std::string>> expected1 = { { "2", "5" }, { "6", "9" }, { "7", "8" }, { "8", "2" }, { "9", "3" }, { "3", "6" } };
 //        REQUIRE(expected1 == res1);
         REQUIRE(unit_testing_utils::equals(expected1, res1));
+
+        std::vector<Parameter> params2 = {Parameter("aa", AppConstants::ASSIGN),
+                                          Parameter("_", AppConstants::WILDCARD)};
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTS, params2);
+        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
+        std::vector<std::vector<std::string>> expected2 = { { "2", "5" }, { "6", "9" }, { "7", "8" }, { "8", "2" }, { "9", "3" }, { "3", "6" } };
+        REQUIRE(unit_testing_utils::equals(expected2, res2));
     }
-
-
-//    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph2 = {
-//        {9, {{AppConstants::PARENTS, {11}}, {AppConstants::CHILDREN, {10}}}},
-//        {10, {{AppConstants::PARENTS, {9}}, {AppConstants::CHILDREN, {11}}}},
-//        {11, {{AppConstants::PARENTS, {10}}, {AppConstants::CHILDREN, {12, 9}}}},
-//        {12, {{AppConstants::PARENTS, {10}}, {AppConstants::CHILDREN, {}}}}};
-//
-//    ProcName proc2 = "proc2";
-//    writePkb.writeCFG(proc2, graph2);
-//    writePkb.setStatement("while", 9);
-//    writePkb.setStatement("assign", 10);
-//    writePkb.setStatement("assign", 11);
-//    writePkb.setStatement("print", 12);
-//    writePkb.setProcedure(proc2, {9, 10, 11, 12});
 
 }
