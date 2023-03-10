@@ -1,16 +1,4 @@
-#include "QPS/entities/AffectsRelationship.h"
-#include "QPS/entities/AffectsTRelationship.h"
-#include "QPS/entities/CallsRelationship.h"
-#include "QPS/entities/CallsTRelationship.h"
-#include "QPS/entities/FollowsRelationship.h"
-#include "QPS/entities/FollowsTRelationship.h"
-#include "QPS/entities/ModifiesRelationship.h"
-#include "QPS/entities/NextRelationship.h"
-#include "QPS/entities/NextTRelationship.h"
-#include "QPS/entities/ParentRelationship.h"
-#include "QPS/entities/ParentTRelationship.h"
 #include "QPS/entities/Relationship.h"
-#include "QPS/entities/UsesRelationship.h"
 #include "catch.hpp"
 
 TEST_CASE("makeRelationship / empty relationship type string / throws error") {
@@ -36,6 +24,7 @@ TEST_CASE("makeRelationship / follows relationship, with correct params / "
           "returns relationship object with correct fields and types") {
 
   string typeInput = AppConstants::FOLLOWS;
+  RelationshipType relType = RelationshipType::FOLLOWS;
   Parameter p1("a", AppConstants::SYNONYM);
   Parameter p2("1", AppConstants::FIXED_INT);
   Parameter p3("_", AppConstants::WILDCARD);
@@ -45,15 +34,15 @@ TEST_CASE("makeRelationship / follows relationship, with correct params / "
 
   shared_ptr<Relationship> output =
       Relationship::makeRelationship(typeInput, inputParameters);
-  FollowsRelationship expected(inputParameters);
+  Relationship expected(relType, inputParameters);
   CHECK(expected == *output);
   shared_ptr<Relationship> output2 =
       Relationship::makeRelationship(typeInput, inputParameters2);
-  FollowsRelationship expected2(inputParameters2);
+  Relationship expected2(relType, inputParameters2);
   CHECK(expected2 == *output2);
   shared_ptr<Relationship> output3 =
       Relationship::makeRelationship(typeInput, inputParameters3);
-  FollowsRelationship expected3(inputParameters3);
+  Relationship expected3(relType, inputParameters3);
   CHECK(expected3 == *output3);
 }
 
@@ -105,6 +94,7 @@ TEST_CASE(
     "makeRelationship / FollowsT relationship / return relationship object") {
 
   string typeInput = AppConstants::FOLLOWST;
+  RelationshipType relType = RelationshipType::FOLLOWST;
   Parameter p1("a", AppConstants::SYNONYM);
   Parameter p2("1", AppConstants::FIXED_INT);
   Parameter p3("_", AppConstants::WILDCARD);
@@ -114,15 +104,15 @@ TEST_CASE(
 
   shared_ptr<Relationship> output =
       Relationship::makeRelationship(typeInput, inputParameters);
-  FollowsTRelationship expected(inputParameters);
+  Relationship expected(relType, inputParameters);
   CHECK(expected == *output);
   shared_ptr<Relationship> output2 =
       Relationship::makeRelationship(typeInput, inputParameters2);
-  FollowsTRelationship expected2(inputParameters2);
+  Relationship expected2(relType, inputParameters2);
   CHECK(expected2 == *output2);
   shared_ptr<Relationship> output3 =
       Relationship::makeRelationship(typeInput, inputParameters3);
-  FollowsTRelationship expected3(inputParameters3);
+  Relationship expected3(relType, inputParameters3);
   CHECK(expected3 == *output3);
 }
 
@@ -170,6 +160,7 @@ TEST_CASE(
     "makeRelationship / Parent relationship / return relationship object") {
 
   string typeInput = AppConstants::PARENT;
+  RelationshipType relType = RelationshipType::PARENT;
   Parameter p1("a", AppConstants::SYNONYM);
   Parameter p2("1", AppConstants::FIXED_INT);
   Parameter p3("_", AppConstants::WILDCARD);
@@ -179,15 +170,15 @@ TEST_CASE(
 
   shared_ptr<Relationship> output =
       Relationship::makeRelationship(typeInput, inputParameters);
-  ParentRelationship expected(inputParameters);
+  Relationship expected(relType, inputParameters);
   CHECK(expected == *output);
   shared_ptr<Relationship> output2 =
       Relationship::makeRelationship(typeInput, inputParameters2);
-  ParentRelationship expected2(inputParameters2);
+  Relationship expected2(relType, inputParameters2);
   CHECK(expected2 == *output2);
   shared_ptr<Relationship> output3 =
       Relationship::makeRelationship(typeInput, inputParameters3);
-  ParentRelationship expected3(inputParameters3);
+  Relationship expected3(relType, inputParameters3);
   CHECK(expected3 == *output3);
 }
 
@@ -235,6 +226,7 @@ TEST_CASE(
     "makeRelationship / ParentT relationship / return relationship object") {
 
   string typeInput = AppConstants::PARENTT;
+  RelationshipType relType = RelationshipType::PARENTT;
   Parameter p1("a", AppConstants::SYNONYM);
   Parameter p2("1", AppConstants::FIXED_INT);
   Parameter p3("_", AppConstants::WILDCARD);
@@ -244,15 +236,15 @@ TEST_CASE(
 
   shared_ptr<Relationship> output =
       Relationship::makeRelationship(typeInput, inputParameters);
-  ParentTRelationship expected(inputParameters);
+  Relationship expected(relType, inputParameters);
   CHECK(expected == *output);
   shared_ptr<Relationship> output2 =
       Relationship::makeRelationship(typeInput, inputParameters2);
-  ParentTRelationship expected2(inputParameters2);
+  Relationship expected2(relType, inputParameters2);
   CHECK(expected2 == *output2);
   shared_ptr<Relationship> output3 =
       Relationship::makeRelationship(typeInput, inputParameters3);
-  ParentTRelationship expected3(inputParameters3);
+  Relationship expected3(relType, inputParameters3);
   CHECK(expected3 == *output3);
 }
 
@@ -299,6 +291,7 @@ TEST_CASE("makeRelationship / ParentT relationship, less than 2 parameter / "
 TEST_CASE("makeRelationship / Uses relationship / return relationship object") {
 
   string typeInput = AppConstants::USES;
+  RelationshipType relType = RelationshipType::USES;
   Parameter p1("a", AppConstants::SYNONYM);
   Parameter p2("_", AppConstants::WILDCARD);
   Parameter p3("ent_ref", AppConstants::FIXED_STRING);
@@ -310,15 +303,15 @@ TEST_CASE("makeRelationship / Uses relationship / return relationship object") {
 
   shared_ptr<Relationship> output =
       Relationship::makeRelationship(typeInput, inputParameters);
-  UsesRelationship expected(inputParameters);
+  Relationship expected(relType, inputParameters);
   CHECK(expected == *output);
   shared_ptr<Relationship> output2 =
       Relationship::makeRelationship(typeInput, inputParameters2);
-  UsesRelationship expected2(inputParameters2);
+  Relationship expected2(relType, inputParameters2);
   CHECK(expected2 == *output2);
   shared_ptr<Relationship> output3 =
       Relationship::makeRelationship(typeInput, inputParameters3);
-  UsesRelationship expected3(inputParameters3);
+  Relationship expected3(relType, inputParameters3);
   CHECK(expected3 == *output3);
 }
 
@@ -366,6 +359,7 @@ TEST_CASE(
     "makeRelationship / Modifies relationship / return relationship object") {
 
   string typeInput = AppConstants::MODIFIES;
+  RelationshipType relType = RelationshipType::MODIFIES;
   Parameter p1("a", AppConstants::SYNONYM);
   Parameter p2("_", AppConstants::WILDCARD);
   Parameter p3("ent_ref", AppConstants::FIXED_STRING);
@@ -377,15 +371,15 @@ TEST_CASE(
 
   shared_ptr<Relationship> output =
       Relationship::makeRelationship(typeInput, inputParameters);
-  ModifiesRelationship expected(inputParameters);
+  Relationship expected(relType, inputParameters);
   CHECK(expected == *output);
   shared_ptr<Relationship> output2 =
       Relationship::makeRelationship(typeInput, inputParameters2);
-  ModifiesRelationship expected2(inputParameters2);
+  Relationship expected2(relType, inputParameters2);
   CHECK(expected2 == *output2);
   shared_ptr<Relationship> output3 =
       Relationship::makeRelationship(typeInput, inputParameters3);
-  ModifiesRelationship expected3(inputParameters3);
+  Relationship expected3(relType, inputParameters3);
   CHECK(expected3 == *output3);
 }
 
@@ -431,6 +425,7 @@ TEST_CASE("makeRelationship / Modifies relationship, less than 2 parameter / "
 
 TEST_CASE("makeRelationship / Next relationship / return relationship object") {
   string typeInput = AppConstants::NEXT;
+  RelationshipType relType = RelationshipType::NEXT;
   Parameter p1("a", AppConstants::SYNONYM);
   Parameter p2("_", AppConstants::WILDCARD);
   Parameter p3("1", AppConstants::FIXED_INT);
@@ -441,15 +436,15 @@ TEST_CASE("makeRelationship / Next relationship / return relationship object") {
 
   shared_ptr<Relationship> output =
       Relationship::makeRelationship(typeInput, inputParameters);
-  NextRelationship expected(inputParameters);
+  Relationship expected(relType, inputParameters);
   CHECK(expected == *output);
   shared_ptr<Relationship> output2 =
       Relationship::makeRelationship(typeInput, inputParameters2);
-  NextRelationship expected2(inputParameters2);
+  Relationship expected2(relType, inputParameters2);
   CHECK(expected2 == *output2);
   shared_ptr<Relationship> output3 =
       Relationship::makeRelationship(typeInput, inputParameters3);
-  NextRelationship expected3(inputParameters3);
+  Relationship expected3(relType, inputParameters3);
   CHECK(expected3 == *output3);
 }
 
@@ -496,6 +491,7 @@ TEST_CASE("makeRelationship / Next relationship, less than 2 parameter / "
 TEST_CASE(
     "makeRelationship / NextT relationship / return relationship object") {
   string typeInput = AppConstants::NEXTT;
+  RelationshipType relType = RelationshipType::NEXTT;
   Parameter p1("a", AppConstants::SYNONYM);
   Parameter p2("_", AppConstants::WILDCARD);
   Parameter p3("1", AppConstants::FIXED_INT);
@@ -506,15 +502,15 @@ TEST_CASE(
 
   shared_ptr<Relationship> output =
       Relationship::makeRelationship(typeInput, inputParameters);
-  NextTRelationship expected(inputParameters);
+  Relationship expected(relType, inputParameters);
   CHECK(expected == *output);
   shared_ptr<Relationship> output2 =
       Relationship::makeRelationship(typeInput, inputParameters2);
-  NextTRelationship expected2(inputParameters2);
+  Relationship expected2(relType, inputParameters2);
   CHECK(expected2 == *output2);
   shared_ptr<Relationship> output3 =
       Relationship::makeRelationship(typeInput, inputParameters3);
-  NextTRelationship expected3(inputParameters3);
+  Relationship expected3(relType, inputParameters3);
   CHECK(expected3 == *output3);
 }
 
@@ -561,6 +557,7 @@ TEST_CASE("makeRelationship / NextT relationship, less than 2 parameter / "
 TEST_CASE(
     "makeRelationship / Calls relationship / return relationship object") {
   string typeInput = AppConstants::CALLS;
+  RelationshipType relType = RelationshipType::CALLS;
   Parameter p1("a", AppConstants::SYNONYM);
   Parameter p2("_", AppConstants::WILDCARD);
   Parameter p3("ent_ref", AppConstants::FIXED_STRING);
@@ -571,15 +568,15 @@ TEST_CASE(
 
   shared_ptr<Relationship> output =
       Relationship::makeRelationship(typeInput, inputParameters);
-  CallsRelationship expected(inputParameters);
+  Relationship expected(relType, inputParameters);
   CHECK(expected == *output);
   shared_ptr<Relationship> output2 =
       Relationship::makeRelationship(typeInput, inputParameters2);
-  CallsRelationship expected2(inputParameters2);
+  Relationship expected2(relType, inputParameters2);
   CHECK(expected2 == *output2);
   shared_ptr<Relationship> output3 =
       Relationship::makeRelationship(typeInput, inputParameters3);
-  CallsRelationship expected3(inputParameters3);
+  Relationship expected3(relType, inputParameters3);
   CHECK(expected3 == *output3);
 }
 
@@ -626,6 +623,7 @@ TEST_CASE("makeRelationship / Calls relationship, less than 2 parameter / "
 TEST_CASE(
     "makeRelationship / CallsT relationship / return relationship object") {
   string typeInput = AppConstants::CALLST;
+  RelationshipType relType = RelationshipType::CALLST;
   Parameter p1("a", AppConstants::SYNONYM);
   Parameter p2("_", AppConstants::WILDCARD);
   Parameter p3("ent_ref", AppConstants::FIXED_STRING);
@@ -636,15 +634,15 @@ TEST_CASE(
 
   shared_ptr<Relationship> output =
       Relationship::makeRelationship(typeInput, inputParameters);
-  CallsTRelationship expected(inputParameters);
+  Relationship expected(relType, inputParameters);
   CHECK(expected == *output);
   shared_ptr<Relationship> output2 =
       Relationship::makeRelationship(typeInput, inputParameters2);
-  CallsTRelationship expected2(inputParameters2);
+  Relationship expected2(relType, inputParameters2);
   CHECK(expected2 == *output2);
   shared_ptr<Relationship> output3 =
       Relationship::makeRelationship(typeInput, inputParameters3);
-  CallsTRelationship expected3(inputParameters3);
+  Relationship expected3(relType, inputParameters3);
   CHECK(expected3 == *output3);
 }
 
@@ -691,6 +689,7 @@ TEST_CASE("makeRelationship / CallsT relationship, less than 2 parameter / "
 TEST_CASE(
     "makeRelationship / Affects relationship / return relationship object") {
   string typeInput = AppConstants::AFFECTS;
+  RelationshipType relType = RelationshipType::AFFECTS;
   Parameter p1("a", AppConstants::SYNONYM);
   Parameter p2("_", AppConstants::WILDCARD);
   Parameter p3("stmt_ref", AppConstants::FIXED_INT);
@@ -701,15 +700,15 @@ TEST_CASE(
 
   shared_ptr<Relationship> output =
       Relationship::makeRelationship(typeInput, inputParameters);
-  AffectsRelationship expected(inputParameters);
+  Relationship expected(relType, inputParameters);
   CHECK(expected == *output);
   shared_ptr<Relationship> output2 =
       Relationship::makeRelationship(typeInput, inputParameters2);
-  AffectsRelationship expected2(inputParameters2);
+  Relationship expected2(relType, inputParameters2);
   CHECK(expected2 == *output2);
   shared_ptr<Relationship> output3 =
       Relationship::makeRelationship(typeInput, inputParameters3);
-  AffectsRelationship expected3(inputParameters3);
+  Relationship expected3(relType, inputParameters3);
   CHECK(expected3 == *output3);
 }
 
@@ -756,6 +755,7 @@ TEST_CASE("makeRelationship / Affects relationship, less than 2 parameter / "
 TEST_CASE(
     "makeRelationship / AffectsT relationship / return relationship object") {
   string typeInput = AppConstants::AFFECTST;
+  RelationshipType relType = RelationshipType::AFFECTST;
   Parameter p1("a", AppConstants::SYNONYM);
   Parameter p2("_", AppConstants::WILDCARD);
   Parameter p3("stmt_ref", AppConstants::FIXED_INT);
@@ -766,15 +766,15 @@ TEST_CASE(
 
   shared_ptr<Relationship> output =
       Relationship::makeRelationship(typeInput, inputParameters);
-  AffectsTRelationship expected(inputParameters);
+  Relationship expected(relType, inputParameters);
   CHECK(expected == *output);
   shared_ptr<Relationship> output2 =
       Relationship::makeRelationship(typeInput, inputParameters2);
-  AffectsTRelationship expected2(inputParameters2);
+  Relationship expected2(relType, inputParameters2);
   CHECK(expected2 == *output2);
   shared_ptr<Relationship> output3 =
       Relationship::makeRelationship(typeInput, inputParameters3);
-  AffectsTRelationship expected3(inputParameters3);
+  Relationship expected3(relType, inputParameters3);
   CHECK(expected3 == *output3);
 }
 
