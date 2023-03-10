@@ -44,11 +44,11 @@ PKB buildPkb() {
     //   }
 
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> mainCFG = {
-        {1, {{AppConstants::PARENTS, {}}, {AppConstants::CHILDREN, {2, 3}}}},
+        {1, {{AppConstants::PARENTS, {}}, {AppConstants::CHILDREN, {2}}}},
         {2, {{AppConstants::PARENTS, {1}}, {AppConstants::CHILDREN, {3}}}},
-        {3, {{AppConstants::PARENTS, {1, 2}}, {AppConstants::CHILDREN, {4, 5}}}},
-        {4, {{AppConstants::PARENTS, {3}}, {AppConstants::CHILDREN, {3, 5}}}},
-        {5, {{AppConstants::PARENTS, {3}}, {AppConstants::CHILDREN, {3}}}},
+        {3, {{AppConstants::PARENTS, {2, 5}}, {AppConstants::CHILDREN, {4, 6}}}},
+        {4, {{AppConstants::PARENTS, {3}}, {AppConstants::CHILDREN, {5}}}},
+        {5, {{AppConstants::PARENTS, {4}}, {AppConstants::CHILDREN, {3}}}},
         {6, {{AppConstants::PARENTS, {3}}, {AppConstants::CHILDREN, {}}}}};
 
     writePkb.writeCFG("main", mainCFG);
@@ -640,9 +640,8 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
 			Select s such that Next(1, s))";
 
             result = qps.processQueries(query, readPkb);
-            REQUIRE(result.size() == 2);
+            REQUIRE(result.size() == 1);
             REQUIRE(exists(result, "2"));
-            REQUIRE(exists(result, "3"));
         }
 
         SECTION("syn, syn") {
