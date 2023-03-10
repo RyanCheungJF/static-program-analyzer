@@ -9,20 +9,27 @@
 #include "../storage/ModifiesUsesStorage.h"
 #include "../storage/StmtStorage.h"
 
-int cantor(int a, int b) {
-    return (a + b + 1) * (a + b) / 2 + b;
-}
-int hashAlgoForTuple(int a, int b, int c) {
-    return cantor(a, cantor(b, c));
-}
+
 
 
 struct hashFunctionTuple
 {
-    size_t operator()(const std::tuple<int, int, int> x) const
+    int cantor(int a, int b) {
+        return (a + b + 1) * (a + b) / 2 + b;
+    }
+    int hashAlgoForTuple(int a, int b, int c) {
+        return cantor(a, cantor(b, c));
+    }
+
+    size_t operator()(const std::tuple<int, int, int> x)
     {
         return hashAlgoForTuple(get<0>(x), get<1>(x), get<2>(x));
     }
+
+//    size_t operator()(const std::tuple<int, int, int> x) const
+//    {
+//        return hashAlgoForTuple(get<0>(x), get<1>(x), get<2>(x));
+//    }
 };
 
 

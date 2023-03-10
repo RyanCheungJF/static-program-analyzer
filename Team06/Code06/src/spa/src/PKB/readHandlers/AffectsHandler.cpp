@@ -61,7 +61,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
         return res;
     }
 
-    // Affects(1, 1)
     std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc1);
     if (controlFlowPath.empty()) {
         return res;

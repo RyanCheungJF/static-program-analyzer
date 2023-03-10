@@ -16,6 +16,7 @@
 #include "readHandlers/FollowsParentHandler.h"
 #include "readHandlers/ModifiesUsesHandler.h"
 #include "readHandlers/NextHandler.h"
+#include "readHandlers/AffectsHandler.h"
 #include "readHandlers/ifWhilePatternHandler.h"
 #include "storage/CFGStorage.h"
 #include "storage/CallStorage.h"
@@ -181,6 +182,6 @@ private:
     std::unordered_map<RelationshipType, std::shared_ptr<CallsStorage>> callsMap = {{RelationshipType::CALLS, NULL},
                                                                                     {RelationshipType::CALLST, NULL}};
 
-    std::unordered_map<RelationshipType, std::shared_ptr<CallsStorage>> nextMap = {{RelationshipType::NEXT, NULL},
-                                                                                   {RelationshipType::NEXTT, NULL}};
+    std::unordered_set<RelationshipType> nextMap = {RelationshipType::NEXT, RelationshipType::NEXTT};
+    std::unordered_set<RelationshipType> affectsMap = {RelationshipType::AFFECTS, RelationshipType::AFFECTST};
 };

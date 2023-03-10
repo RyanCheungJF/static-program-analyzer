@@ -32,11 +32,13 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
      *
      * Valid Affects relationships:
      * (2, 5), (3, 6), (6, 9), (6, 10), (7, 8), (8, 2), (9, 3), (9, 11)
+     * Present: (2, 5), (6, 9), (8, 2), (9, 3), (3, 6)
+     * Missing: (6, 10), (7, 8), (9, 11)
      */
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph1 = {
         {1, {
                 {AppConstants::PARENTS, {9}},
-                {AppConstants::CHILDREN, {2}}
+                {AppConstants::CHILDREN, {2, 10}}
             }
         },
         {2, {
@@ -76,11 +78,11 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
         },
         {9, {
                     {AppConstants::PARENTS, {8}},
-                    {AppConstants::CHILDREN, {1, 10}}
+                    {AppConstants::CHILDREN, {1}}
             }
         },
         {10, {
-                    {AppConstants::PARENTS, {9}},
+                    {AppConstants::PARENTS, {1}},
                     {AppConstants::CHILDREN, {11}}
             }
         },
@@ -133,8 +135,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
     writePkb.setModifiesS(7, {"v"});
     writePkb.setModifiesS(8, {"v"});
     writePkb.setModifiesS(9, {"x"});
-    writePkb.setModifiesS(10, {"y"});
-    writePkb.setModifiesS(11, {"x"});
+    writePkb.setModifiesS(10, {});
+    writePkb.setModifiesS(11, {});
     writePkb.setModifiesP("proc1", {"y", "x", "v"});
 
     writePkb.setUsesS(1, {"a", "b"});
@@ -146,9 +148,45 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
     writePkb.setUsesS(7, {});
     writePkb.setUsesS(8, {"v"});
     writePkb.setUsesS(9, {"y"});
-    writePkb.setUsesS(10, {});
-    writePkb.setUsesS(11, {});
+    writePkb.setUsesS(10, {"y"});
+    writePkb.setUsesS(11, {"x"});
     writePkb.setUsesP("proc1", {"a", "b", "y", "x", "v"});
+
+    SECTION("Affects(int, int)") {
+        std::vector<Parameter> params1 = {Parameter("6", AppConstants::FIXED_INT),
+                                          Parameter("10", AppConstants::FIXED_INT)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTS, params1);
+        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected1 = {{"6", "10"}};
+        REQUIRE(unit_testing_utils::equals(expected1, res1));
+
+        std::vector<Parameter> params2 = {Parameter("2", AppConstants::FIXED_INT),
+                                          Parameter("3", AppConstants::FIXED_INT)};
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTS, params2);
+        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
+        std::vector<std::vector<std::string>> expected2 = {};
+        REQUIRE(unit_testing_utils::equals(expected2, res2));
+    }
+
+    SECTION("Affects(6, _)") {
+        std::vector<Parameter> params1 = {Parameter("6", AppConstants::FIXED_INT),
+                                          Parameter("_", AppConstants::WILDCARD)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTS, params1);
+        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected1 = {{"6", "9"}, {"6", "10"}};
+        REQUIRE(expected1 == res1);
+//        REQUIRE(unit_testing_utils::equals(expected1, res1));
+    }
+
+//    SECTION("Affects(_, _)") {
+//        std::vector<Parameter> params1 = {Parameter("_", AppConstants::WILDCARD),
+//                                          Parameter("_", AppConstants::WILDCARD)};
+//        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTS, params1);
+//        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+//        std::vector<std::vector<std::string>> expected1 = {{"2", "5"}};
+//        REQUIRE(expected1 == res1);
+//        REQUIRE(unit_testing_utils::equals(expected1, res1));
+//    }
 
 
 //    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph2 = {
