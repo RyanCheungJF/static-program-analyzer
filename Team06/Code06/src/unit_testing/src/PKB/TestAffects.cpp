@@ -11,32 +11,10 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    /*
-     * while (a != b) { //1
-     *     y = v + 1; //2
-     *     x = x + 3; //3
-     *     if (x == y) then { //4
-     *         v = y + 3; //5
-     *     } else {
-     *         y = x + 3; //6
-     *     }
-     *     v = 2 + 1; //7
-     *     v = v + 1; //8
-     *     x = y + 3; //9
-     * }
-     * print y; //10
-     * print x; //11
-     * call proc2; //12 which uses x but does not modifies x [should still be false]
-     * call proc3 //13 which uses and modifies x [definitely false]
-     * x = y + 3; //14
-     *
-     * Valid Affects relationships:
-     * (2, 5), (3, 6), (6, 9), (6, 10), (8, 2), (9, 3)
-     */
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph1 = {
         {1, {
-                {AppConstants::PARENTS, {9}},
-                {AppConstants::CHILDREN, {2, 10}}
+                {AppConstants::PARENTS, {19}},
+                {AppConstants::CHILDREN, {2, 20}}
             }
         },
         {2, {
@@ -76,11 +54,11 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
         },
         {9, {
                     {AppConstants::PARENTS, {8}},
-                    {AppConstants::CHILDREN, {1}}
+                    {AppConstants::CHILDREN, {10}}
             }
         },
         {10, {
-                    {AppConstants::PARENTS, {1}},
+                    {AppConstants::PARENTS, {9}},
                     {AppConstants::CHILDREN, {11}}
             }
         },
@@ -101,10 +79,73 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
         },
         {14, {
                      {AppConstants::PARENTS, {13}},
+                     {AppConstants::CHILDREN, {15}}
+             }
+        },
+        {15, {
+                     {AppConstants::PARENTS, {14}},
+                     {AppConstants::CHILDREN, {16}}
+             }
+        },
+        {16, {
+                     {AppConstants::PARENTS, {15}},
+                     {AppConstants::CHILDREN, {17}}
+             }
+        },
+        {17, {
+                     {AppConstants::PARENTS, {16}},
+                     {AppConstants::CHILDREN, {18}}
+             }
+        },
+        {18, {
+                     {AppConstants::PARENTS, {17}},
+                     {AppConstants::CHILDREN, {19}}
+             }
+        },
+        {18, {
+                     {AppConstants::PARENTS, {17}},
+                     {AppConstants::CHILDREN, {19}}
+             }
+        },
+        {19, {
+                     {AppConstants::PARENTS, {18}},
+                     {AppConstants::CHILDREN, {1}}
+             }
+        },
+        {20, {
+                     {AppConstants::PARENTS, {1}},
                      {AppConstants::CHILDREN, {}}
              }
         }
     };
+    /*
+     * while (a != b) { //1
+     *     y = v + 1; //2
+     *     x = x + 3; //3
+     *     if (x == y) then { //4
+     *         v = y + 3; //5
+     *     } else {
+     *         y = x + 3; //6
+     *     }
+     *     v = 2 + 1; //7
+     *     v = v + 1; //8
+     *     x = y + 3; //9
+     *     c = 4 + 1; //10
+     *     d = c + 1; //11
+     *     f = e + 1; //12
+     *     e = g + 1; //13
+     *     a = a + 1; //14
+     *     read b; //15
+     *     call proc2; //16, modifies c
+     *     print d; //17
+     *     d = d + 1; //18
+     *     h = h + 1; // 19
+     * }
+     * i = h + 1; //20
+     *
+     * Valid Affects relationships:
+     * (2, 5), (3, 6), (6, 9), (8, 2), (9, 3), (10, 11), (11, 18) (13, 12), (14, 14), (19, 19), (19, 20)
+     */
 
     ProcName proc1 = "proc1";
     writePkb.writeCFG(proc1, graph1);
@@ -117,12 +158,18 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
     writePkb.setStatement("assign", 7);
     writePkb.setStatement("assign", 8);
     writePkb.setStatement("assign", 9);
-    writePkb.setStatement("print", 10);
-    writePkb.setStatement("print", 11);
-    writePkb.setStatement("call", 12);
-    writePkb.setStatement("call", 13);
+    writePkb.setStatement("assign", 10);
+    writePkb.setStatement("assign", 11);
+    writePkb.setStatement("assign", 12);
+    writePkb.setStatement("assign", 13);
     writePkb.setStatement("assign", 14);
-    writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14});
+    writePkb.setStatement("read", 15);
+    writePkb.setStatement("call", 16);
+    writePkb.setStatement("print", 17);
+    writePkb.setStatement("assign", 18);
+    writePkb.setStatement("assign", 19);
+    writePkb.setStatement("assign", 20);
+    writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20});
     
     writePkb.setModifiesS(1, {"y", "x", "v"});
     writePkb.setModifiesS(2, {"y"});
@@ -133,9 +180,18 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
     writePkb.setModifiesS(7, {"v"});
     writePkb.setModifiesS(8, {"v"});
     writePkb.setModifiesS(9, {"x"});
-    writePkb.setModifiesS(10, {});
-    writePkb.setModifiesS(11, {});
-    writePkb.setModifiesP("proc1", {"y", "x", "v"});
+    writePkb.setModifiesS(10, {"c"});
+    writePkb.setModifiesS(11, {"d"});
+    writePkb.setModifiesS(12, {"f"});
+    writePkb.setModifiesS(13, {"e"});
+    writePkb.setModifiesS(14, {"a"});
+    writePkb.setModifiesS(15, {"b"});
+    writePkb.setModifiesS(16, {"c"});
+//    writePkb.setModifiesS(17, {});
+    writePkb.setModifiesS(18, {"d"});
+    writePkb.setModifiesS(19, {"h"});
+    writePkb.setModifiesS(20, {"i"});
+    writePkb.setModifiesP("proc1", {"y", "x", "v", "c", "d", "f", "e" "a", "b", "h"});
 
     writePkb.setUsesS(1, {"a", "b"});
     writePkb.setUsesS(2, {"v"});
@@ -146,9 +202,16 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
     writePkb.setUsesS(7, {});
     writePkb.setUsesS(8, {"v"});
     writePkb.setUsesS(9, {"y"});
-    writePkb.setUsesS(10, {"y"});
-    writePkb.setUsesS(11, {"x"});
-    writePkb.setUsesP("proc1", {"a", "b", "y", "x", "v"});
+//    writePkb.setUsesS(10, {});
+    writePkb.setUsesS(11, {"c"});
+    writePkb.setUsesS(12, {"e"});
+    writePkb.setUsesS(13, {"g"});
+    writePkb.setUsesS(14, {"a"});
+    writePkb.setUsesS(17, {"d"});
+    writePkb.setUsesS(18, {"d"});
+    writePkb.setUsesS(19, {"h"});
+    writePkb.setUsesS(20, {"h"});
+    writePkb.setUsesP("proc1", {"a", "b", "y", "x", "v", "c", "e", "g", "d", "h"});
 
     SECTION("Affects(int, int)") {
         std::vector<Parameter> params1 = {Parameter("6", AppConstants::FIXED_INT),
