@@ -129,7 +129,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         return handler.handle(param1, param2);
     }
     else if (nextMap.find(type) != nextMap.end()) {
-        NextHandler handler(cfgStorage, statementStorage, procedureStorage);
+        NextHandler handler(cfgStorage, statementStorage, procedureStorage, type == RelationshipType::NEXTT);
         return handler.handle(param1, param2);
     }
     return std::vector<std::vector<std::string>>();
