@@ -106,7 +106,8 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string> &wordList,
     // bad select parameter
     throw SyntaxException();
   }
-  Parameter param = Parameter::makeParameter(wordList[1], AppConstants::SYNONYM);
+  Parameter param =
+      Parameter::makeParameter(wordList[1], AppConstants::SYNONYM);
   params.push_back(param);
   return params;
 }
@@ -127,7 +128,8 @@ SelectQueryParser::parseSuchThatClause(vector<string> &wordList, int start,
   }
 
   int curIndex = start + 2;
-
+  // Duplicate logic as pattern, may want to extract out
+  // vector<string> SplitClauseByAnds(vector<string> wordList, function<bool(string)> formChecker)
   vector<int> ands = findAnds(wordList, start, end);
   vector<string> unparsedRelRef;
   string condString = "";
@@ -148,22 +150,26 @@ SelectQueryParser::parseSuchThatClause(vector<string> &wordList, int start,
     condString += wordList[curIndex];
     curIndex++;
   }
+  if (!hasCorrectRelRefOrPatternForm(condString)) {
+    throw SyntaxException();
+  }
   unparsedRelRef.push_back(condString);
+  // Duplicate til here
 
-  vector<tuple<string, string, string, string>> relRefParams;
+  vector<tuple<string, vector<string>>> relRefParams;
   for (int i = 0; i < unparsedRelRef.size(); i++) {
-    relRefParams.push_back(extractParameters(unparsedRelRef[i]));
+    relRefParams.push_back(extractParameters(unparsedRelRef[i], "(", ")", ","));
   }
 
-  for (tuple<string, string, string, string> t : relRefParams) {
-    string rel, param1, param2;
-    tie(rel, param1, param2, std::ignore) = t;
-
-    Parameter p1(removeCharFromString(param1, '\"'),
-                 Parameter::guessParameterType(param1));
-    Parameter p2(removeCharFromString(param2, '\"'),
-                 Parameter::guessParameterType(param2));
-    vector<Parameter> params{p1, p2};
+  for (int i = 0; i < relRefParams.size(); i++) {
+    string rel;
+    vector<string> paramStrings;
+    vector<Parameter> params;
+    tie(rel, paramStrings) = relRefParams.at(i);
+    for (string pString : paramStrings) {
+      Parameter p = Parameter::makeParameter(pString);
+      params.push_back(p);
+    }
     res.push_back(Relationship::makeRelationship(rel, params));
   }
 
@@ -185,7 +191,7 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string> &wordList,
   }
 
   int curIndex = start + 1;
-
+  //Duplicate logic as such that, may want to extract out
   vector<int> ands = findAnds(wordList, start, end);
   vector<string> unparsedPatterns;
   string condString;
@@ -206,16 +212,29 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string> &wordList,
     condString += wordList[curIndex];
     curIndex++;
   }
+  if (!hasCorrectRelRefOrPatternForm(condString)) {
+    throw SyntaxException();
+  }
   unparsedPatterns.push_back(condString);
+  //Duplicate til here
 
-  vector<tuple<string, string, string, string>> patternParams;
+  vector<tuple<string, vector<string>>> patternParams;
   for (const auto &unparsedPattern : unparsedPatterns) {
-    patternParams.push_back(extractParameters(unparsedPattern));
+    patternParams.push_back(extractParameters(unparsedPattern, "(", ")", ","));
   }
 
-  for (tuple<string, string, string, string> t : patternParams) {
+  for (tuple<string, vector<string>> t : patternParams) {
     string patternDsgEntString, entRefString, patternString, ifsString;
-    tie(patternDsgEntString, entRefString, patternString, ifsString) = t;
+    vector<string> paramStrings;
+    tie(patternDsgEntString, paramStrings) = t;
+    //Do these validations using a pattern validator
+    try {
+      entRefString = paramStrings.at(0);
+      patternString = paramStrings.at(1);
+      ifsString = paramStrings.size() == 3 ? paramStrings.at(2) : "";
+    } catch (out_of_range e) {
+      throw SyntaxException();
+    }
     if (!isSynonym(patternDsgEntString)) {
       throw SyntaxException();
     }

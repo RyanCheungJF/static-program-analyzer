@@ -1,5 +1,5 @@
-#include "catch.hpp"
 #include "QPS/parser/ParserUtil.h"
+#include "catch.hpp"
 using namespace std;
 
 TEST_CASE("FindSuchThat / such that present  / original wordlist not modified "
@@ -69,53 +69,46 @@ TEST_CASE("stringToWordList / string with consecutive spaces / return wordlist "
   REQUIRE(expected == output);
 }
 
-TEST_CASE("extractParameters / one clause / return vector with one tuple") {
+TEST_CASE("extractParameters / one clause / return expected") {
   string input = "a(sd,\"x*y\")";
-  tuple<string, string, string, string> expectedTuple("a", "sd", "\"x*y\"", "");
+  tuple<string, vector<string>> expectedTuple("a", {"sd", "\"x*y\""});
 
-  tuple<string, string, string, string> output = extractParameters(input);
+  tuple<string, vector<string>> output =
+      extractParameters(input, "(", ")", ",");
   REQUIRE(expectedTuple == output);
 }
 
 TEST_CASE("extractParameters / one clause with brackets in third parameter / "
-          "return vector with one tuple") {
+          "return expected") {
   string input = "a(sd,\"(x*y)+(z*y)\")";
-  tuple<string, string, string, string> expectedTuple("a", "sd",
-                                                      "\"(x*y)+(z*y)\"", "");
-  tuple<string, string, string, string> output = extractParameters(input);
+  tuple<string, vector<string>> expectedTuple("a", {"sd", "\"(x*y)+(z*y)\""});
+  tuple<string, vector<string>> output =
+      extractParameters(input, "(", ")", ",");
   REQUIRE(expectedTuple == output);
 }
 
-TEST_CASE("extractParameters / pattern string with wild cards / return vector "
-          "with one tuple") {
+TEST_CASE("extractParameters / pattern string with wild cards / return expected") {
   string input = "a(sd,_\"(x*y)+(z*y)\"_)";
-  tuple<string, string, string, string> expectedTuple("a", "sd",
-                                                      "_\"(x*y)+(z*y)\"_", "");
-  tuple<string, string, string, string> output = extractParameters(input);
+  tuple<string, vector<string>> expectedTuple("a", {"sd", "_\"(x*y)+(z*y)\"_"});
+  tuple<string, vector<string>> output = extractParameters(input, "(", ")", ",");
+  REQUIRE(expectedTuple == output);
+}
+
+TEST_CASE("extractParameters / one clause / return expected ") {
+  string input = "a(sd\"x*y\")";
+  tuple<string, vector<string>> expectedTuple("a", {"sd\"x*y\""});
+  tuple<string, vector<string>> output =
+      extractParameters(input, "(", ")", ",");
   REQUIRE(expectedTuple == output);
 }
 
 TEST_CASE(
-    "extractParameters / one clause with no closing bracket / throws error") {
-  string input = "a(sd,\"x*y\"";
-  REQUIRE_THROWS(extractParameters(input));
-}
-
-TEST_CASE("extractParameters / one clause with no comma / throws error") {
-  string input = "a(sd\"x*y\")";
-  REQUIRE_THROWS(extractParameters(input));
-}
-
-TEST_CASE(
-    "extractParameters / one clause with no opening bracket / throws error") {
-  string input = "asd,\"x*y\")";
-  REQUIRE_THROWS(extractParameters(input));
-}
-
-TEST_CASE(
-    "extractParameters / one clause with not proper format / throws error") {
-  string input = "asd,\"x*y\"";
-  REQUIRE_THROWS(extractParameters(input));
+    "extractParameters / no outerParam, different braces/ return expected") {
+  string input = "<asd,\"x*y\">";
+  tuple<string, vector<string>> expectedTuple("", {"asd", "\"x*y\""});
+  tuple<string, vector<string>> output =
+      extractParameters(input, "<", ">", ",");
+  REQUIRE(expectedTuple == output);
 }
 
 TEST_CASE("extractSubStringUntilDelimiter / empty string, non-empty delimiter, "

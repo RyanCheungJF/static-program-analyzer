@@ -60,81 +60,28 @@ vector<int> findAnds(const vector<string> &wordList, int start, int end) {
   return ands;
 }
 
-tuple<string, string, string, string> extractParameters(string s) {
-  tuple<string, string, string, string> res;
+// assumes the string is of the correct form:
+// ^.*{containerStart}.*{containerEnd}$
+tuple<string, vector<string>> extractParameters(string s, string containerStart,
+                                                string containerEnd,
+                                                string delimiter) {
+  tuple<string, vector<string>> res;
   int endOfString = s.size();
   int curIndex = 0;
-  string param1 = "";
-  string param2 = "";
-  string param3 = "";
-  string param4 = "";
-  int bracCount = 0;
-  char curChar = '\0';
+  string outerParam = "";
+  vector<string> innerParams;
+  tie(outerParam, curIndex) =
+      extractSubStringUntilDelimiter(s, curIndex, containerStart);
+  string innerParamsString =
+      s.substr(curIndex, endOfString - curIndex - containerEnd.size());
+  endOfString = innerParamsString.size();
+  curIndex = 0;
   while (curIndex < endOfString) {
-    curChar = s[curIndex];
-    if (curChar == '(') {
-      bracCount++;
-      break;
-    }
-    param1 += curChar;
-    curIndex++;
+    string curParam;
+    tie(curParam, curIndex) = extractSubStringUntilDelimiter(innerParamsString, curIndex, delimiter);
+    innerParams.push_back(curParam);
   }
-  curIndex++;
-  while (curIndex < endOfString) {
-    curChar = s[curIndex];
-    if (curChar == ',') {
-      break;
-    }
-    param2 += curChar;
-    curIndex++;
-  }
-  curIndex++;
-  while (curIndex < endOfString) {
-    curChar = s[curIndex];
-    if (curChar == ',') {
-      curIndex++;
-      if (curIndex == endOfString - 1) {
-        // for the case of "(v,_,)"
-        throw SyntaxException();
-      }
-      break;
-    }
-    if (curChar == '(') {
-      bracCount++;
-    }
-    if (curChar == ')') {
-      bracCount--;
-      if (bracCount == 0) {
-        curIndex++;
-        break;
-      }
-    }
-    param3 += curChar;
-    curIndex++;
-  }
-
-  while (curIndex < endOfString) {
-    curChar = s[curIndex];
-    if (curChar == '(') {
-      bracCount++;
-    }
-    if (curChar == ')') {
-      bracCount--;
-      if (bracCount == 0) {
-        curIndex++;
-        break;
-      }
-    }
-    param4 += curChar;
-    curIndex++;
-  }
-
-  if (param1 == "" || param2 == "" || param3 == "" ||
-      !(param4 == "" || param4 == "_") || curIndex != endOfString ||
-      curChar != ')') {
-    throw SyntaxException();
-  }
-  res = make_tuple(param1, param2, param3, param4);
+  res = {outerParam, innerParams};
   return res;
 }
 
@@ -161,7 +108,7 @@ tuple<string, size_t> extractSubStringUntilDelimiter(const string &original,
   }
   size_t length = end - start;
   string substr = original.substr(start, length);
-  return tuple<string, int>(substr, end + 1);
+  return tuple<string, int>(substr, end + delimiter.size());
 }
 
 vector<string> stringToWordList(string s) {
