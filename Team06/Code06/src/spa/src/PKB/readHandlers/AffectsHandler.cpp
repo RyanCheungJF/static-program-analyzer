@@ -419,25 +419,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
         StmtNum a1 = kv.first;
         std::unordered_set<StmtNum> nums = kv.second;
         for (StmtNum num : nums) {
-            firstHopQueue.push_back({a1, a1, num});
-        }
-    }
-
-    //do the first hop
-    while (!firstHopQueue.empty()) {
-        std::tuple<StmtNum, StmtNum, StmtNum> curr = firstHopQueue.front();
-        firstHopQueue.pop_front();
-        seen.insert(curr);
-
-        unordered_set<StmtNum> nextNodes = hashmap[get<0>(curr)];
-        if (nextNodes.find(get<0>(curr)) != nextNodes.end()) {
-            for (StmtNum num : nextNodes) {
-                temp.insert({get<0>(curr), num});
-            }
-        } else {
-            for (StmtNum num : hashmap[get<2>(curr)]) {
-                queue.push_back({get<0>(curr), get<2>(curr), num});
-            }
+            queue.push_back({a1, a1, num});
         }
     }
 

@@ -151,14 +151,17 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects*") {
      * (14, 14), (19, 19), (19, 20)
      *
      * Valid Affects* relationships:
-     * (3, 9), (3, 3),
-     * (6, 3), (6, 6)
-     * (7, 2), (7, 5)
-     * (8, 5)
-     * (9, 6), (9, 9)
-     * (10, 18)
+     * (2, 5)
+     * (3, 6), (3, 9), (3, 3),
+     * (6, 9), (6, 3), (6, 6)
+     * (7, 8), (7, 2), (7, 5)
+     * (8, 2), (8, 5)
+     * (9, 3), (9, 6), (9, 9)
+     * (10, 11), (10, 18)
+     * (11, 18)
+     * (13, 12)
      * (14, 14)
-     * (19, 20)
+     * (19, 19), (19, 20)
      */
 
     ProcName proc1 = "proc1";
@@ -315,12 +318,15 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects*") {
                                           Parameter("_", AppConstants::WILDCARD)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTST, params1);
         std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
-        std::vector<std::vector<std::string>> expected1 = { { "3", "9" }, { "3", "3" },
-                                                            { "6", "3" }, { "6", "6" },
-                                                            {"7", "2"}, { "7", "5" },
-                                                            { "8", "5" },
-                                                            { "9", "6" }, { "9", "9" },
-                                                            { "10", "18" },
+        std::vector<std::vector<std::string>> expected1 = { { "2", "5" },
+                                                            { "3", "6" }, { "3", "9" }, { "3", "3" },
+                                                            { "6", "9" }, { "6", "3" }, { "6", "6" },
+                                                            {"7", "8"}, {"7", "2"}, { "7", "5" },
+                                                            { "8", "2" }, { "8", "5" },
+                                                            { "9", "3" }, { "9", "6" }, { "9", "9" },
+                                                            { "10", "11" },  { "10", "18" },
+                                                            { "11", "18" },
+                                                            { "13", "12" },
                                                             { "14", "14" },
                                                             { "19", "19" }, { "19", "20" }
         };
