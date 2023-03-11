@@ -107,13 +107,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
         }
 
         std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
-        if (a1 == a2) {
-            for (Ent e : commonVariables) {
-                if (variablesModifiedInPath.find(e) != variablesModifiedInPath.end()) {
-                    res.push_back({std::to_string(a1), paramString2});
-                    break;
-                }
-            }
+        if ((a1 == a2) && variablesModifiedInPath.empty() && (commonVariables.size() == 1)) {  //O(1) since there is really only 1 element
+            res.push_back({std::to_string(a1), paramString2});
             continue;
         }
 
@@ -163,13 +158,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
         }
 
         std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
-        if (a1 == a2) {
-            for (Ent e : commonVariables) {
-                if (variablesModifiedInPath.find(e) != variablesModifiedInPath.end()) {
-                    res.push_back({paramString1, std::to_string(a2)});
-                    break;
-                }
-            }
+        if ((a1 == a2) && variablesModifiedInPath.empty() && (commonVariables.size() == 1)) {  //O(1) since there is really only 1 element
+            res.push_back({paramString1, std::to_string(a2)});
             continue;
         }
 
@@ -476,7 +466,7 @@ std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1,
     while (!queue.empty()) {
         std::pair<std::unordered_set<StmtNum>, StmtNum> curr = queue.front();
         queue.pop_front();
-        if (curr.second == a2) {
+        if (curr.second == a2 && !(curr.first.empty())) {
             std::unordered_set<StmtNum> path = curr.first;
             path.erase(a1);
             res.insert(path.begin(), path.end());
