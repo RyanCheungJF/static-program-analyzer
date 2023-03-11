@@ -55,26 +55,23 @@ void visitExprHelper(Expression* expr, std::unordered_set<Ent>& variables, std::
 void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
     if (const auto ifStmt = CAST_TO(IfStatement, recurseStmt)) {
         ifStmt->thenStmtList->accept(visitor);
-        for (const auto& statement : ifStmt->getThenStatements()) {
-            checkStatementHelper(statement.get(), visitor);
-        }
+        checkStatementHelper(ifStmt->getThenStatements(), visitor);
+
         ifStmt->elseStmtList->accept(visitor);
-        for (const auto& statement : ifStmt->getElseStatements()) {
-            checkStatementHelper(statement.get(), visitor);
-        }
+        checkStatementHelper(ifStmt->getElseStatements(), visitor);
     }
     else if (const auto whileStmt = CAST_TO(WhileStatement, recurseStmt)) {
         whileStmt->stmtList->accept(visitor);
-        for (const auto& statement : whileStmt->getStatements()) {
-            checkStatementHelper(statement.get(), visitor);
-        }
+        checkStatementHelper(whileStmt->getStatements(), visitor);
     }
 }
 
-void checkStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
-    recurseStmt->accept(visitor);
-    if (isContainerStatement(recurseStmt)) {
-        recurseStatementHelper(recurseStmt, visitor);
+void checkStatementHelper(std::vector<std::unique_ptr<Statement>>& statements, ASTVisitor* visitor) {
+    for (const auto& statement : statements) {
+        statement->accept(visitor);
+        if (isContainerStatement(statement.get())) {
+            recurseStatementHelper(statement.get(), visitor);
+        }
     }
 }
 
@@ -169,7 +166,6 @@ void processProcedures(WritePKB* writePKB, ReadPKB* readPKB) {
 void buildCFG(Procedure* proc, WritePKB* writePKB, ReadPKB* readPKB) {
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> cfg;
     buildCFGHelper(cfg, proc->statementList.get(), 0);
-    auto test = readPKB->getProcedureStatementNumbers(proc->procedureName);
     writePKB->writeCFG(proc->procedureName, cfg);
 }
 
@@ -238,28 +234,24 @@ void recurseCallStatementHelper(Statement* recurseStmt,
                                 std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
                                 ProcName parentProcedure) {
     if (const auto ifStmt = CAST_TO(IfStatement, recurseStmt)) {
-        for (const auto& statement : ifStmt->getThenStatements()) {
-            checkCallStatementHelper(statement.get(), procCallMap, parentProcedure);
-        }
-        for (const auto& statement : ifStmt->getElseStatements()) {
-            checkCallStatementHelper(statement.get(), procCallMap, parentProcedure);
-        }
+        checkCallStatementHelper(ifStmt->getThenStatements(), procCallMap, parentProcedure);
+        checkCallStatementHelper(ifStmt->getElseStatements(), procCallMap, parentProcedure);
     }
     else if (const auto whileStmt = CAST_TO(WhileStatement, recurseStmt)) {
-        for (const auto& statement : whileStmt->getStatements()) {
-            checkCallStatementHelper(statement.get(), procCallMap, parentProcedure);
-        }
+        checkCallStatementHelper(whileStmt->getStatements(), procCallMap, parentProcedure);
     }
 }
 
-void checkCallStatementHelper(Statement* recurseStmt,
+void checkCallStatementHelper(std::vector<std::unique_ptr<Statement>>& statements,
                               std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
                               ProcName parentProcedure) {
-    if (const auto callStmt = CAST_TO(CallStatement, recurseStmt)) {
-        procCallMap[parentProcedure].insert(callStmt->procName);
-    }
-    if (isContainerStatement(recurseStmt)) {
-        recurseCallStatementHelper(recurseStmt, procCallMap, parentProcedure);
+    for (const auto& statement : statements) {
+        if (const auto callStmt = CAST_TO(CallStatement, statement.get())) {
+            procCallMap[parentProcedure].insert(callStmt->procName);
+        }
+        if (isContainerStatement(statement.get())) {
+            recurseCallStatementHelper(statement.get(), procCallMap, parentProcedure);
+        }
     }
 }
 
