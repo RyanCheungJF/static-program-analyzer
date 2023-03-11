@@ -325,7 +325,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
         std::vector<Parameter> params4 = {Parameter("_", AppConstants::WILDCARD),
                                           Parameter("_", AppConstants::WILDCARD)};
         shared_ptr<Relationship> rs4 = Relationship::makeRelationship(AppConstants::AFFECTS, params4);
-        std::vector<std::vector<std::string>> res4 = readPkb.findRelationship(rs2);
+        std::vector<std::vector<std::string>> res4 = readPkb.findRelationship(rs4);
         REQUIRE(unit_testing_utils::equals(expected1, res4));
     }
 
