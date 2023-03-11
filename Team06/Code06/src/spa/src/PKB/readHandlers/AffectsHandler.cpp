@@ -54,6 +54,17 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
         return res;
     }
 
+    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
+    std::unordered_set<StmtNum> assignStatements;
+    for (StmtNum num : statements) {
+        if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+            assignStatements.insert(num);
+        }
+    }
+    if (assignStatements.find(a1) == assignStatements.end() ||  assignStatements.find(a2) == assignStatements.end()) {
+        return res;
+    }
+
     std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getEnt(a1);
     std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getEnt(a2);
     std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
@@ -91,6 +102,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
         if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
             assignStatements.insert(num);
         }
+    }
+    if (assignStatements.find(a2) == assignStatements.end()) {
+        return res;
     }
 
     std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getEnt(a2);
@@ -142,6 +156,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
         if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
             assignStatements.insert(num);
         }
+    }
+    if (assignStatements.find(a1) == assignStatements.end()) {
+        return res;
     }
 
     std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getEnt(a1);
@@ -203,20 +220,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
     return res;
 }
 
-// todo: affects*
-//Affects*(1, 4) => Affects(1, 2) && Affects(2, 3) && Affects(3, 4)
-// => Affects(1, 4)
-// => Affects(1, 2) && Affects(2, 4)
-// Affects*(1, 10)
-// getPath 1 to 10 => {2, 3. 5}
-// => get assign statements => {2, 3}
-// Affects(1, 2) && Affects(2, 10)
-// Affects(1, 3) && Affects(3, 10)
-// Affects(1, 10)
 
-// O((V + E) * pNc)
-//sort the assignment statements and do DFS / queue using Affects()
-
+// Affects*
 std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(StmtNum a1, StmtNum a2) {
     std::string paramString1 = std::to_string(a1);
     std::string paramString2 = std::to_string(a2);
