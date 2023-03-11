@@ -235,31 +235,18 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
         return res;
     }
 
-    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
-    std::deque<std::pair<StmtNum, StmtNum>> firstHopQueue;
-    std::deque<std::pair<StmtNum, StmtNum>> queue;
-    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
 
     // build hop graph
+    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
     for (std::vector<std::string> p : allValidAffects) {
         hashmap[stoi(p[0])].insert(stoi(p[1]));
     }
 
-    // add to first hop
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
+    std::deque<std::pair<StmtNum, StmtNum>> queue;
     for (StmtNum num : hashmap[a1]) {
-        firstHopQueue.push_back({a1, num});
-    }
-
-    //do the first hop
-    while (!firstHopQueue.empty()) {
-        std::pair<StmtNum, StmtNum> curr = firstHopQueue.front();
-        firstHopQueue.pop_front();
-        seen.insert(curr);
-
-        for (StmtNum num : hashmap[curr.second]) {
-            queue.push_back({curr.second, num});
-        }
+        queue.push_back({a1, num});
     }
 
     // hop until we reach a2. else loop terminates once it has seen all pairs (prevent infinite loop)
@@ -281,12 +268,12 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
         }
         seen.insert(curr);
 
-        if (curr.first == a1) {
-            queue.push_front({curr.second, a2}); // greedy
-        }
-
         for (StmtNum num : hashmap[curr.second]) {
             queue.push_front({curr.second, num});
+        }
+
+        if (curr.first == a1) {
+            queue.push_front({curr.second, a2}); // greedy
         }
     }
     return res;
