@@ -35,7 +35,7 @@ void DesignExtractor::buildCallerCalleeTable(std::vector<ProcName>& procedureNam
     for (const auto& procedure : ASTroot->procedureList) {
         procedureNames.push_back(procedure->procedureName);
         for (const auto& statement : procedure->getStatements()) {
-            if (auto i = CAST_TO(CallStatement, statement.get())) {
+            if (const auto i = CAST_TO(CallStatement, statement.get())) {
                 procCallMap[procedure->procedureName].insert(i->procName);
             }
             if (isContainerStatement(statement.get())) {

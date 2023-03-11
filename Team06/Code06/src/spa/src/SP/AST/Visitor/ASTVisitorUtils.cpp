@@ -1,12 +1,12 @@
 #include "ASTVisitorUtils.h"
 
 StmtNum visitLastStatementHelper(Statement* statement) {
-    if (auto ifStmt = CAST_TO(IfStatement, statement)) {
+    if (const auto ifStmt = CAST_TO(IfStatement, statement)) {
         auto statementList = ifStmt->elseStmtList.get();
         return checkLastStatementHelper(statementList);
     }
 
-    if (auto whileStmt = CAST_TO(WhileStatement, statement)) {
+    if (const auto whileStmt = CAST_TO(WhileStatement, statement)) {
         auto statementList = whileStmt->stmtList.get();
         return checkLastStatementHelper(statementList);
     }
@@ -26,34 +26,34 @@ StmtNum checkLastStatementHelper(StatementList* stmtList) {
 
 void visitCondExprHelper(ConditionalExpression* condExpr, std::unordered_set<Ent>& variables,
                          std::unordered_set<Const>& constants) {
-    if (auto notCondExpr = CAST_TO(NotConditionalExpression, condExpr)) {
+    if (const auto notCondExpr = CAST_TO(NotConditionalExpression, condExpr)) {
         visitCondExprHelper(notCondExpr->condExpr.get(), variables, constants);
     }
-    else if (auto binCondExpr = CAST_TO(BinaryConditionalExpression, condExpr)) {
+    else if (const auto binCondExpr = CAST_TO(BinaryConditionalExpression, condExpr)) {
         visitCondExprHelper(binCondExpr->lhs.get(), variables, constants);
         visitCondExprHelper(binCondExpr->rhs.get(), variables, constants);
     }
-    else if (auto relExpr = CAST_TO(RelationalExpression, condExpr)) {
+    else if (const auto relExpr = CAST_TO(RelationalExpression, condExpr)) {
         visitExprHelper(relExpr->lhs.get(), variables, constants);
         visitExprHelper(relExpr->rhs.get(), variables, constants);
     }
 }
 
 void visitExprHelper(Expression* expr, std::unordered_set<Ent>& variables, std::unordered_set<Const>& constants) {
-    if (auto mathExpr = CAST_TO(MathExpression, expr)) {
+    if (const auto mathExpr = CAST_TO(MathExpression, expr)) {
         visitExprHelper(mathExpr->lhs.get(), variables, constants);
         visitExprHelper(mathExpr->rhs.get(), variables, constants);
     }
-    else if (auto constant = CAST_TO(Constant, expr)) {
+    else if (const auto constant = CAST_TO(Constant, expr)) {
         constants.insert(constant->value);
     }
-    else if (auto variable = CAST_TO(Variable, expr)) {
+    else if (const auto variable = CAST_TO(Variable, expr)) {
         variables.insert(variable->name);
     }
 }
 
 void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
-    if (auto ifStmt = CAST_TO(IfStatement, recurseStmt)) {
+    if (const auto ifStmt = CAST_TO(IfStatement, recurseStmt)) {
         ifStmt->thenStmtList->accept(visitor);
         for (const auto& statement : ifStmt->getThenStatements()) {
             checkStatementHelper(statement.get(), visitor);
@@ -63,7 +63,7 @@ void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor) {
             checkStatementHelper(statement.get(), visitor);
         }
     }
-    else if (auto whileStmt = CAST_TO(WhileStatement, recurseStmt)) {
+    else if (const auto whileStmt = CAST_TO(WhileStatement, recurseStmt)) {
         whileStmt->stmtList->accept(visitor);
         for (const auto& statement : whileStmt->getStatements()) {
             checkStatementHelper(statement.get(), visitor);
@@ -180,7 +180,7 @@ void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, 
         StmtNum currStmtNum = stmtList->getStmtNumForStmtIdx(i);
         StmtNum nextStmtNum = currStmtNum != lastStmtNum ? stmtList->getStmtNumForStmtIdx(i + 1) : 0;
 
-        if (auto ifStmt = CAST_TO(IfStatement, stmtList->getStmtForStmtIdx(i))) {
+        if (const auto ifStmt = CAST_TO(IfStatement, stmtList->getStmtForStmtIdx(i))) {
             connectNodesForCFG(cfg, currStmtNum, ifStmt->getFirstStmtNumForThen());
             connectNodesForCFG(cfg, currStmtNum, ifStmt->getFirstStmtNumForElse());
             buildCFGHelper(cfg, ifStmt->thenStmtList.get(), nextStmtNum == 0 ? loopedStmtNum : nextStmtNum);
@@ -195,7 +195,7 @@ void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, 
             }
         }
 
-        if (auto whileStmt = CAST_TO(WhileStatement, stmtList->getStmtForStmtIdx(i))) {
+        if (const auto whileStmt = CAST_TO(WhileStatement, stmtList->getStmtForStmtIdx(i))) {
             connectNodesForCFG(cfg, currStmtNum, whileStmt->getFirstStmtNumForList());
             buildCFGHelper(cfg, whileStmt->stmtList.get(), currStmtNum);
         }
@@ -237,7 +237,7 @@ void validateCalledProceduresExist(std::vector<ProcName>& procedureNames,
 void recurseCallStatementHelper(Statement* recurseStmt,
                                 std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
                                 ProcName parentProcedure) {
-    if (auto ifStmt = CAST_TO(IfStatement, recurseStmt)) {
+    if (const auto ifStmt = CAST_TO(IfStatement, recurseStmt)) {
         for (const auto& statement : ifStmt->getThenStatements()) {
             checkCallStatementHelper(statement.get(), procCallMap, parentProcedure);
         }
@@ -245,7 +245,7 @@ void recurseCallStatementHelper(Statement* recurseStmt,
             checkCallStatementHelper(statement.get(), procCallMap, parentProcedure);
         }
     }
-    else if (auto whileStmt = CAST_TO(WhileStatement, recurseStmt)) {
+    else if (const auto whileStmt = CAST_TO(WhileStatement, recurseStmt)) {
         for (const auto& statement : whileStmt->getStatements()) {
             checkCallStatementHelper(statement.get(), procCallMap, parentProcedure);
         }
@@ -255,7 +255,7 @@ void recurseCallStatementHelper(Statement* recurseStmt,
 void checkCallStatementHelper(Statement* recurseStmt,
                               std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
                               ProcName parentProcedure) {
-    if (auto callStmt = CAST_TO(CallStatement, recurseStmt)) {
+    if (const auto callStmt = CAST_TO(CallStatement, recurseStmt)) {
         procCallMap[parentProcedure].insert(callStmt->procName);
     }
     if (isContainerStatement(recurseStmt)) {
