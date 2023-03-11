@@ -315,15 +315,16 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitiv
     }
 
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
+    std::deque<std::pair<StmtNum, StmtNum>> firstHopQueue;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
     for (StmtNum num : hashmap[a1]) {
-        queue.push_back({a1, num});
+        firstHopQueue.push_back({a1, num});
     }
 
     //do the first hop
-    while (!queue.empty()) {
-        std::pair<StmtNum, StmtNum> curr = queue.front();
-        queue.pop_front();
+    while (!firstHopQueue.empty()) {
+        std::pair<StmtNum, StmtNum> curr = firstHopQueue.front();
+        firstHopQueue.pop_front();
         seen.insert(curr);
 
         for (StmtNum num : hashmap[curr.second]) {
@@ -368,15 +369,16 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
     }
 
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
+    std::deque<std::pair<StmtNum, StmtNum>> firstHopQueue;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
     for (StmtNum num : hashmap[a2]) {
-        queue.push_back({a2, num});
+        firstHopQueue.push_back({a2, num});
     }
 
     //do the first hop
     while (!queue.empty()) {
-        std::pair<StmtNum, StmtNum> curr = queue.front();
-        queue.pop_front();
+        std::pair<StmtNum, StmtNum> curr = firstHopQueue.front();
+        firstHopQueue.pop_front();
         seen.insert(curr);
 
         for (StmtNum num : hashmap[curr.second]) {
@@ -415,19 +417,20 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
     }
 
     std::unordered_set<std::tuple<StmtNum, StmtNum, StmtNum>, hashFunctionTuple> seen;
+    std::deque<std::tuple<StmtNum, StmtNum, StmtNum>> firstHopQueue;
     std::deque<std::tuple<StmtNum, StmtNum, StmtNum>> queue;
     for (auto kv : hashmap) {
         StmtNum a1 = kv.first;
         std::unordered_set<StmtNum> nums = kv.second;
         for (StmtNum num : nums) {
-            queue.push_back({a1, a1, num});
+            firstHopQueue.push_back({a1, a1, num});
         }
     }
 
     //do the first hop
-    while (!queue.empty()) {
-        std::tuple<StmtNum, StmtNum, StmtNum> curr = queue.front();
-        queue.pop_front();
+    while (!firstHopQueue.empty()) {
+        std::tuple<StmtNum, StmtNum, StmtNum> curr = firstHopQueue.front();
+        firstHopQueue.pop_front();
         seen.insert(curr);
 
         for (StmtNum num : hashmap[get<2>(curr)]) {
