@@ -412,6 +412,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
     std::unordered_set<std::tuple<StmtNum, StmtNum, StmtNum>, hashFunctionTuple> seen;
     std::deque<std::tuple<StmtNum, StmtNum, StmtNum>> firstHopQueue;
     std::deque<std::tuple<StmtNum, StmtNum, StmtNum>> queue;
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
+
+    // build the hop graph
     for (auto kv : hashmap) {
         StmtNum a1 = kv.first;
         std::unordered_set<StmtNum> nums = kv.second;
@@ -426,12 +429,18 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
         firstHopQueue.pop_front();
         seen.insert(curr);
 
-        for (StmtNum num : hashmap[get<2>(curr)]) {
-            queue.push_back({get<0>(curr), get<2>(curr), num});
+        unordered_set<StmtNum> nextNodes = hashmap[get<0>(curr)];
+        if (nextNodes.find(get<0>(curr)) != nextNodes.end()) {
+            for (StmtNum num : nextNodes) {
+                temp.insert({get<0>(curr), num});
+            }
+        } else {
+            for (StmtNum num : hashmap[get<2>(curr)]) {
+                queue.push_back({get<0>(curr), get<2>(curr), num});
+            }
         }
     }
 
-    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
     while (!queue.empty()) {
         std::tuple<StmtNum, StmtNum, StmtNum> curr = queue.front();
         queue.pop_front();
