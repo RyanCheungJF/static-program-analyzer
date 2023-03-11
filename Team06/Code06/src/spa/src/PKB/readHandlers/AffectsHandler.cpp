@@ -1,11 +1,9 @@
 #include "AffectsHandler.h"
 
-AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage,
-                               std::shared_ptr<StmtStorage> stmtStorage,
+AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
                                std::shared_ptr<ProcedureStorage> procStorage,
                                std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
-                               std::shared_ptr<ModifiesUsesStorage> usesStorage,
-                               bool isTransitive) {
+                               std::shared_ptr<ModifiesUsesStorage> usesStorage, bool isTransitive) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
     this->procStorage = procStorage;
@@ -13,7 +11,6 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage,
     this->usesStorage = usesStorage;
     this->isTransitive = isTransitive;
 }
-
 
 std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, Parameter param2) {
 
@@ -28,19 +25,16 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
     bool isWildCardParam2 = paramType2 == ParameterType::WILDCARD || paramType2 == ParameterType::ASSIGN;
 
     if (isTransitive) {
-        return handleTransitive(param1, param2,
-                                isFixedIntParam1, isFixedIntParam2,
-                                isWildCardParam1, isWildCardParam2);
-    } else {
-        return handleNonTransitive(param1, param2,
-                                   isFixedIntParam1, isFixedIntParam2,
-                                   isWildCardParam1, isWildCardParam2);
+        return handleTransitive(param1, param2, isFixedIntParam1, isFixedIntParam2, isWildCardParam1, isWildCardParam2);
     }
-
+    else {
+        return handleNonTransitive(param1, param2, isFixedIntParam1, isFixedIntParam2, isWildCardParam1,
+                                   isWildCardParam2);
+    }
 }
 
-
-//TODO: try a case with Affects(1, 1) where line 1 is v = v + 1. use a case where there is a while loop back to it and no while loop
+// TODO: try a case with Affects(1, 1) where line 1 is v = v + 1. use a case where there is a while loop back to it and
+// no while loop
 std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, StmtNum a2) {
     std::string paramString1 = std::to_string(a1);
     std::string paramString2 = std::to_string(a2);
@@ -50,7 +44,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
 
     if (proc1 == "INVALID" || proc2 == "INVALID") {
         return res;
-    } else if (proc1 != proc2) {
+    }
+    else if (proc1 != proc2) {
         return res;
     }
 
@@ -61,7 +56,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
             assignStatements.insert(num);
         }
     }
-    if (assignStatements.find(a1) == assignStatements.end() ||  assignStatements.find(a2) == assignStatements.end()) {
+    if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
         return res;
     }
 
@@ -97,7 +92,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
         return res;
     }
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
-    std::unordered_set<StmtNum> assignStatements; //todo: area for optimisation. get this at compile time
+    std::unordered_set<StmtNum> assignStatements; // todo: area for optimisation. get this at compile time
     for (StmtNum num : statements) {
         if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
             assignStatements.insert(num);
@@ -121,7 +116,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
         }
 
         std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
-        if ((a1 == a2) && variablesModifiedInPath.empty() && (commonVariables.size() == 1)) {  //O(1) since there is really only 1 element
+        if ((a1 == a2) && variablesModifiedInPath.empty() &&
+            (commonVariables.size() == 1)) { // O(1) since there is really only 1 element
             res.push_back({std::to_string(a1), paramString2});
             continue;
         }
@@ -135,7 +131,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
 
         if (isModified) {
             continue;
-        } else {
+        }
+        else {
             res.push_back({std::to_string(a1), paramString2});
         }
     }
@@ -151,7 +148,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
         return res;
     }
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
-    std::unordered_set<StmtNum> assignStatements; //todo: area for optimisation. get this at compile time
+    std::unordered_set<StmtNum> assignStatements; // todo: area for optimisation. get this at compile time
     for (StmtNum num : statements) {
         if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
             assignStatements.insert(num);
@@ -175,7 +172,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
         }
 
         std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
-        if ((a1 == a2) && variablesModifiedInPath.empty() && (commonVariables.size() == 1)) {  //O(1) since there is really only 1 element
+        if ((a1 == a2) && variablesModifiedInPath.empty() &&
+            (commonVariables.size() == 1)) { // O(1) since there is really only 1 element
             res.push_back({paramString1, std::to_string(a2)});
             continue;
         }
@@ -190,7 +188,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
 
         if (isModified) {
             continue;
-        } else {
+        }
+        else {
             res.push_back({paramString1, std::to_string(a2)});
         }
     }
@@ -203,9 +202,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
     std::unordered_set<ProcName> allProcedures = procStorage->getProcNames();
     for (ProcName proc : allProcedures) {
         std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
-        std::unordered_set<StmtNum> assignStatements; //todo: area for optimisation. get this at compile time
+        std::unordered_set<StmtNum> assignStatements; // todo: area for optimisation. get this at compile time
         for (StmtNum num : statements) {
-            if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+            if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) !=
+                stmtStorage->getStatementType(num).end()) {
                 assignStatements.insert(num);
             }
         }
@@ -214,12 +214,11 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
             std::vector<std::vector<std::string>> temp = handleIntWildcard(a1);
             res.reserve(res.size() + temp.size());
             std::move(temp.begin(), temp.end(), std::inserter(res, res.end()));
-            temp.clear(); //todo: this code might have memory management issues
+            temp.clear(); // todo: this code might have memory management issues
         }
     }
     return res;
 }
-
 
 // Affects*
 std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(StmtNum a1, StmtNum a2) {
@@ -231,10 +230,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
 
     if (proc1 == "INVALID" || proc2 == "INVALID") {
         return res;
-    } else if (proc1 != proc2) {
+    }
+    else if (proc1 != proc2) {
         return res;
     }
-
 
     // build hop graph
     std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
@@ -407,17 +406,16 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
     return res;
 }
 
-
-
-
-//helper functions
+// helper functions
 std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc) {
 
     std::unordered_set<StmtNum> res;
     std::deque<std::pair<std::unordered_set<StmtNum>, StmtNum>> queue;
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph = cfgStorage->getGraph(proc);
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
+        cfgStorage->getGraph(proc);
 
-    std::pair<std::unordered_set<StmtNum>, StmtNum> p = {{}, a1}; // TOOO: WILL THIS LEAD TO AN ERROR? THE WAY WE DECLARE PAIR
+    std::pair<std::unordered_set<StmtNum>, StmtNum> p = {
+        {}, a1}; // TOOO: WILL THIS LEAD TO AN ERROR? THE WAY WE DECLARE PAIR
     queue.push_back(p);
     while (!queue.empty()) {
         std::pair<std::unordered_set<StmtNum>, StmtNum> curr = queue.front();
@@ -427,21 +425,23 @@ std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1,
             path.erase(a1);
             res.insert(path.begin(), path.end());
             continue;
-        } else if (curr.first.find(curr.second) != curr.first.end()) {
+        }
+        else if (curr.first.find(curr.second) != curr.first.end()) {
             continue;
         }
 
         curr.first.insert(curr.second);
         std::unordered_set<StmtNum> children = graph[curr.second][AppConstants::CHILDREN];
         for (StmtNum child : children) {
-            std::unordered_set<StmtNum> nxtPath (curr.first);
+            std::unordered_set<StmtNum> nxtPath(curr.first);
             queue.push_back({nxtPath, child});
         }
     }
     return res;
 }
 
-std::unordered_set<Ent> AffectsHandler::getVariablesModifiedInControlFlowPath(std::unordered_set<StmtNum> controlFlowPath) {
+std::unordered_set<Ent>
+AffectsHandler::getVariablesModifiedInControlFlowPath(std::unordered_set<StmtNum> controlFlowPath) {
     std::unordered_set<Ent> variablesModifiedInPath;
     for (StmtNum num : controlFlowPath) {
         std::unordered_set<Stmt> stmtTypes = stmtStorage->getStatementType(num);
@@ -449,10 +449,10 @@ std::unordered_set<Ent> AffectsHandler::getVariablesModifiedInControlFlowPath(st
         // assignment, read, procedure call
         if (stmtTypes.find(AppConstants::ASSIGN) != stmtTypes.end() ||
             stmtTypes.find(AppConstants::READ) != stmtTypes.end() ||
-            stmtTypes.find(AppConstants::CALL) != stmtTypes.end()
-                ) {
+            stmtTypes.find(AppConstants::CALL) != stmtTypes.end()) {
             std::unordered_set<Ent> variablesModifiedInCurrentLine = modifiesStorage->getEnt(num);
-            variablesModifiedInPath.insert(variablesModifiedInCurrentLine.begin(),variablesModifiedInCurrentLine.end());
+            variablesModifiedInPath.insert(variablesModifiedInCurrentLine.begin(),
+                                           variablesModifiedInCurrentLine.end());
         }
     }
     return variablesModifiedInPath;
@@ -462,7 +462,7 @@ std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<En
                                                            std::unordered_set<Ent> variablesUsedInA2) {
 
     std::unordered_set<Ent> commonVariables;
-    for (Ent e : variablesModifiedInA1) { //TODO: area for optimisation. use the smaller set
+    for (Ent e : variablesModifiedInA1) { // TODO: area for optimisation. use the smaller set
         if (variablesUsedInA2.find(e) != variablesUsedInA2.end()) {
             commonVariables.insert(e);
         }
@@ -472,7 +472,8 @@ std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<En
 
 std::vector<std::vector<std::string>> AffectsHandler::handleNonTransitive(Parameter param1, Parameter param2,
                                                                           bool isFixedIntParam1, bool isFixedIntParam2,
-                                                                          bool isWildCardParam1, bool isWildCardParam2) {
+                                                                          bool isWildCardParam1,
+                                                                          bool isWildCardParam2) {
     if (isFixedIntParam1) {
         if (isFixedIntParam2) {
             return handleIntInt(stoi(param1.getValue()), stoi(param2.getValue()));
