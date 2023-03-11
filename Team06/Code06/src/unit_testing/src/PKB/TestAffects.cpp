@@ -109,10 +109,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
     writePkb.setModifiesS(18, {"d"});
     writePkb.setModifiesS(19, {"h"});
     writePkb.setModifiesS(20, {"i"});
-    writePkb.setModifiesP("proc1", {"y", "x", "v", "c", "d", "f",
-                                    "e"
-                                    "a",
-                                    "b", "h"});
+    writePkb.setModifiesP("proc1", {"y", "x", "v", "c", "d", "f", "e", "a", "b", "h"});
 
     writePkb.setUsesS(1, {"a", "b"});
     writePkb.setUsesS(2, {"v"});
