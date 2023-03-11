@@ -301,31 +301,20 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitiv
         return res;
     }
 
-    std::vector<std::vector<std::string>> allValidAffects = handleIntWildcard(a1);
+    // build hop graph
+    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
     for (std::vector<std::string> p : allValidAffects) {
-        hashmap[stoi(p[0])].insert(stoi(p[1]));
+        hashmap[stoi(p[1])].insert(stoi(p[0]));
     }
 
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
-    std::deque<std::pair<StmtNum, StmtNum>> firstHopQueue;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
-    for (StmtNum num : hashmap[a1]) {
-        firstHopQueue.push_back({a1, num});
-    }
-
-    //do the first hop
-    while (!firstHopQueue.empty()) {
-        std::pair<StmtNum, StmtNum> curr = firstHopQueue.front();
-        firstHopQueue.pop_front();
-        seen.insert(curr);
-
-        for (StmtNum num : hashmap[curr.second]) {
-            queue.push_back({curr.second, num});
-        }
-    }
-
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
+    for (StmtNum num : hashmap[a1]) {
+        queue.push_back({a1, num});
+    }
+
     while (!queue.empty()) {
         std::pair<StmtNum, StmtNum> curr = queue.front();
         queue.pop_front();
