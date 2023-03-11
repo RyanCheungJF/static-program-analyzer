@@ -33,7 +33,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects*") {
         {18, {{AppConstants::PARENTS, {17}}, {AppConstants::CHILDREN, {19}}}},
         {19, {{AppConstants::PARENTS, {18}}, {AppConstants::CHILDREN, {1}}}},
         {20, {{AppConstants::PARENTS, {1}}, {AppConstants::CHILDREN, {}}}}};
-    // TODO: add a 3 hop relationship
+
     /*
      * while (a != b) { //1
      *     y = v + 1; //2
