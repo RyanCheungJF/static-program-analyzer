@@ -235,36 +235,34 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
         return res;
     }
 
-    //all assignment statements in the procedure
-    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
-    std::unordered_set<StmtNum> allAssignStatements; //todo: area for optimisation. get this at compile time
-    for (StmtNum num : statements) {
-        if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
-            allAssignStatements.insert(num);
-        }
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
+    std::deque<std::pair<StmtNum, StmtNum>> firstHopQueue;
+    std::deque<std::pair<StmtNum, StmtNum>> queue;
+    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
+
+    // build hop graph
+    for (std::vector<std::string> p : allValidAffects) {
+        hashmap[stoi(p[0])].insert(stoi(p[1]));
     }
 
-    //get control flow path between a1 and a2
-    std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc1);
-    if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2 || a1 == a2)) {
-        return res;
+    // add to first hop
+    for (StmtNum num : hashmap[a1]) {
+        firstHopQueue.push_back({a1, num});
     }
 
-    // filter to get only assign statements in the control path
-    std::unordered_set<StmtNum> assignStatements;
-    for (StmtNum num : allAssignStatements) {
-        if (controlFlowPath.find(num) != controlFlowPath.end()) {
-            assignStatements.insert(num);
+    //do the first hop
+    while (!firstHopQueue.empty()) {
+        std::pair<StmtNum, StmtNum> curr = firstHopQueue.front();
+        firstHopQueue.pop_front();
+        seen.insert(curr);
+
+        for (StmtNum num : hashmap[curr.second]) {
+            queue.push_back({curr.second, num});
         }
     }
 
     // hop until we reach a2. else loop terminates once it has seen all pairs (prevent infinite loop)
-    std::deque<std::pair<StmtNum, StmtNum>> queue;
-    for (StmtNum num : assignStatements) {
-        queue.push_back({a1, num});
-    }
-
-    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     while (!queue.empty()) {
         std::pair<StmtNum, StmtNum> curr = queue.front();
         queue.pop_front();
@@ -287,12 +285,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
             queue.push_front({curr.second, a2}); // greedy
         }
 
-        for (StmtNum num : assignStatements) {
-            if (num == a1 || num == a2
-//                || num == curr.second //todo: might not need this? or need for Affects(1, 1)
-                ) {
-                continue;
-            }
+        for (StmtNum num : hashmap[curr.second]) {
             queue.push_front({curr.second, num});
         }
     }
