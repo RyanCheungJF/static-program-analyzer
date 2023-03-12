@@ -16,7 +16,7 @@ vector<int> findAnds(const vector<string> &wordList, int start, int end);
 tuple<string, vector<string>> extractParameters(string s, string containerStart,
                                                 string containerEnd,
                                                 string delimiter);
-tuple<string, size_t> extractSubStringUntilDelimiter(const string &original,
+tuple<string, size_t, bool> extractSubStringUntilDelimiter(const string &original,
                                                      int start,
                                                      string delimiter);
 vector<string> stringToWordList(string s);

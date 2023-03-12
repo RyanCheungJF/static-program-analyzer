@@ -162,6 +162,7 @@ SelectQueryParser::parseSuchThatClause(vector<string> &wordList, int start,
   }
 
   for (int i = 0; i < relRefParams.size(); i++) {
+    //construct relations based on extracted params, can consider extracting
     string rel;
     vector<string> paramStrings;
     vector<Parameter> params;
@@ -171,6 +172,7 @@ SelectQueryParser::parseSuchThatClause(vector<string> &wordList, int start,
       params.push_back(p);
     }
     res.push_back(Relationship::makeRelationship(rel, params));
+    //construction ends here
   }
 
   return res;
@@ -223,39 +225,27 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string> &wordList,
     patternParams.push_back(extractParameters(unparsedPattern, "(", ")", ","));
   }
 
+
   for (tuple<string, vector<string>> t : patternParams) {
-    string patternDsgEntString, entRefString, patternString, ifsString;
+    // construct patterns based on extracted params
+    string patternDsgEntString, entRefString;
     vector<string> paramStrings;
     tie(patternDsgEntString, paramStrings) = t;
-    //Do these validations using a pattern validator
-    try {
-      entRefString = paramStrings.at(0);
-      patternString = paramStrings.at(1);
-      ifsString = paramStrings.size() == 3 ? paramStrings.at(2) : "";
-    } catch (out_of_range e) {
+    if (paramStrings.size() < 1) {
       throw SyntaxException();
     }
-    if (!isSynonym(patternDsgEntString)) {
-      throw SyntaxException();
+    entRefString = paramStrings[0];
+    Parameter patternSyn = Parameter::makeParameter(patternDsgEntString);
+    Parameter entRef = Parameter::makeParameter(entRefString);
+    vector<string> exprSpecs;
+    for (int i = 1; i < paramStrings.size(); i++) {
+      exprSpecs.push_back(paramStrings[i]);
     }
+     //construction ends here
+    res.push_back(Pattern::makePattern(patternSyn, entRef, exprSpecs));
 
-    if (!isEntRef(entRefString)) {
-      throw SyntaxException();
-    }
-
-    if (!isExprSpec(patternString)) {
-      throw SyntaxException();
-    }
-    Parameter patternDsgEnt(patternDsgEntString, ParameterType::SYNONYM);
-    Parameter entRef(removeCharFromString(entRefString, '\"'),
-                     Parameter::guessParameterType(entRefString));
-    Parameter ifParam("", ParameterType::UNKNOWN);
-    if (!ifsString.empty()) {
-      ifParam = *new Parameter("", ParameterType::WILDCARD);
-    }
-    res.emplace_back(patternDsgEnt, entRef,
-                     removeCharFromString(patternString, '\"'), ifParam);
   }
+
   return res;
 }
 

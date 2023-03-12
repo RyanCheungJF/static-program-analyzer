@@ -98,14 +98,12 @@ TEST_CASE(
   REQUIRE((t.getHeaders().size() == 1 && t.getHeaders()[0].getValue() == "cl"));
 }
 
-TEST_CASE("extractDesignEntities / test constant, procedure and "
-          "fixed_string_with_wildcard") {
+TEST_CASE("extractDesignEntities / test constant, procedure and") {
 
   vector<Parameter> headers = {
       Parameter("c", AppConstants::CONSTANT),
-      Parameter("proc", AppConstants::PROCEDURE),
-      Parameter("_\"a\"_", AppConstants::EXPR_SPEC)};
-  vector<vector<string>> content = {{"999", "main", "x+a"}};
+      Parameter("proc", AppConstants::PROCEDURE)};
+  vector<vector<string>> content = {{"999", "main"}};
   Table table(headers, content);
   Table t = table.extractDesignEntities();
   REQUIRE((t.getHeaders().size() == 2 && t.getHeaders()[0].getValue() == "c" &&

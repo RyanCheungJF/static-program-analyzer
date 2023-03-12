@@ -70,15 +70,23 @@ tuple<string, vector<string>> extractParameters(string s, string containerStart,
   int curIndex = 0;
   string outerParam = "";
   vector<string> innerParams;
-  tie(outerParam, curIndex) =
+  bool found = false;
+  tie(outerParam, curIndex, found) =
       extractSubStringUntilDelimiter(s, curIndex, containerStart);
+  if (!found) {
+    throw InternalException("ParserUtil.extractParameters: containerStart not found");
+  }
   string innerParamsString =
       s.substr(curIndex, endOfString - curIndex - containerEnd.size());
   endOfString = innerParamsString.size();
   curIndex = 0;
   while (curIndex < endOfString) {
     string curParam;
-    tie(curParam, curIndex) = extractSubStringUntilDelimiter(innerParamsString, curIndex, delimiter);
+    tie(curParam, curIndex, found) = extractSubStringUntilDelimiter(innerParamsString, curIndex, delimiter);
+    if (found && curIndex == innerParamsString.size()) {
+      //end of string with delimiter at the end
+      throw SyntaxException();
+    }
     innerParams.push_back(curParam);
   }
   res = {outerParam, innerParams};
@@ -90,7 +98,7 @@ string removeCharFromString(string s, char c) {
   return s;
 }
 
-tuple<string, size_t> extractSubStringUntilDelimiter(const string &original,
+tuple<string, size_t, bool> extractSubStringUntilDelimiter(const string &original,
                                                      int start,
                                                      string delimiter) {
   if (delimiter == "") {
@@ -103,12 +111,12 @@ tuple<string, size_t> extractSubStringUntilDelimiter(const string &original,
   }
   size_t end = original.find(delimiter, start);
   if (end == string::npos) {
-    return tuple<string, int>(original.substr(start, original.size()),
-                              original.size());
+    return tuple<string, int, bool>(original.substr(start, original.size()),
+                              original.size(), false);
   }
   size_t length = end - start;
   string substr = original.substr(start, length);
-  return tuple<string, int>(substr, end + delimiter.size());
+  return tuple<string, int, bool>(substr, end + delimiter.size(), true);
 }
 
 vector<string> stringToWordList(string s) {
