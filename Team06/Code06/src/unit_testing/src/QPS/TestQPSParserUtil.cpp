@@ -154,8 +154,59 @@ TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty "
   string inputDelimiter = ",";
   int start = 0;
 
-  tuple<string, size_t> expected{inputString, inputString.size()};
-  tuple<string, size_t> output =
+  tuple<string, size_t, bool> expected{inputString, inputString.size(), false};
+  tuple<string, size_t, bool> output =
+      extractSubStringUntilDelimiter(inputString, start, inputDelimiter);
+  CHECK(expected == output);
+}
+
+TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty "
+          "delimiter present, start = 0 / return tuple with expected substring and next starting position") {
+  string inputStringFront = "helloMyName,";
+  string inputStringBack = " is johnny ";
+  string inputString = inputStringFront + inputStringBack;
+  string expectedString = "helloMyName";
+  string inputDelimiter = ",";
+  int start = 0;
+
+  tuple<string, size_t, bool> expected{expectedString, inputStringFront.size(), true};
+  tuple<string, size_t, bool> output =
+      extractSubStringUntilDelimiter(inputString, start, inputDelimiter);
+  CHECK(expected == output);
+}
+
+TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty "
+          "delimiter present multiple times, start = 0 / return tuple with expected substring "
+          "and next starting position") {
+  string inputStringFront = "helloMyName,";
+  string inputStringBack = " is, johnny ";
+  string inputString = inputStringFront + inputStringBack;
+  string expectedString = "helloMyName";
+  string inputDelimiter = ",";
+  int start = 0;
+
+  tuple<string, size_t, bool> expected{expectedString, inputStringFront.size(),
+                                       true};
+  tuple<string, size_t, bool> output =
+      extractSubStringUntilDelimiter(inputString, start, inputDelimiter);
+  CHECK(expected == output);
+}
+
+TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty "
+          "delimiter present multiple times, start after first delimiter / return tuple with "
+          "expected substring "
+          "and next starting position") {
+  string inputStringFront = "helloMyName,";
+  string inputStringMiddle = " is,";
+  string inputStringBack = " johnny ";
+  string inputString = inputStringFront + inputStringMiddle + inputStringBack;
+  string expectedString = " is";
+  string inputDelimiter = ",";
+  int start = inputStringFront.size();
+
+  tuple<string, size_t, bool> expected{expectedString, inputStringFront.size() + inputStringMiddle.size(),
+                                       true};
+  tuple<string, size_t, bool> output =
       extractSubStringUntilDelimiter(inputString, start, inputDelimiter);
   CHECK(expected == output);
 }

@@ -48,7 +48,8 @@ vector<string> QPSParser::splitQuery(string qpsQuery) {
   int start = 0;
   while (start != qpsQuery.size()) {
     string clause;
-    tie(clause, start) =
+    bool found;
+    tie(clause, start, found) =
         extractSubStringUntilDelimiter(qpsQuery, start, delimiter);
     clause = trim(clause);
     clauses.push_back(clause);
