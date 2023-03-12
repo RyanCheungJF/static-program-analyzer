@@ -116,9 +116,15 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     vector<Parameter> params = rs->getParameters();
     Parameter param1 = params[0];
     Parameter param2 = params[1];
+    std::vector<std::vector<std::string>> cachedResult = cache.findResult(rs);
+    if (!cachedResult.empty()) {
+        return cachedResult;
+    }
     if (followsParentMap.find(type) != followsParentMap.end()) {
         FollowsParentHandler handler(followsParentMap.at(type), statementStorage);
-        return handler.handle(param1, param2);
+        std::vector<std::vector<std::string>> result = handler.handle(param1, param2);
+        cache.addResult(rs, result);
+        return result;
     }
     else if (modifiesUsesMap.find(type) != modifiesUsesMap.end()) {
         ModifiesUsesHandler handler(modifiesUsesMap.at(type), statementStorage);
