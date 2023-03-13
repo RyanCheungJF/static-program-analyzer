@@ -81,7 +81,6 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next*") {
         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
         std::vector<std::vector<std::string>> expected = {{"1", "5"}, {"2", "5"}, {"3", "5"}, {"4", "5"}};
         REQUIRE(unit_testing_utils::equals(expected, res));
-        //        REQUIRE(expected == res);
     }
 
     SECTION("Next*(stmt, int)") {
