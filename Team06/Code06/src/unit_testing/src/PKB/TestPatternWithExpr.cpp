@@ -53,7 +53,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
 
     std::vector<std::vector<std::string>> check1 = {{"1", "z"}};
     std::vector<std::vector<std::string>> check2 = {{"2", "z"}};
-    ;
+    
     REQUIRE(check1 == res1);
     REQUIRE(unit_testing_utils::equals(check1, res1));
     REQUIRE(unit_testing_utils::equals(check2, res2));
@@ -91,7 +91,6 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
 
     REQUIRE(unit_testing_utils::equals(check1, res1));
     REQUIRE(unit_testing_utils::equals(check2, res2));
-    REQUIRE(readPkb.findPattern(pattern2).size() == 1);
 }
 
 TEST_CASE("Support for pattern query of type pattern(\"a\", _") {

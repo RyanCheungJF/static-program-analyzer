@@ -117,45 +117,42 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     Parameter param1 = params[0];
     Parameter param2 = params[1];
 
-    std::vector<std::vector<std::string>> cachedResult = relationshipCache.findResult(rs);
-    if (!cachedResult.empty()) {
-        return cachedResult;
+    std::vector<std::vector<std::string>> res = relationshipCache.findResult(rs);
+    if (!res.empty()) {
+        return res;
     }
 
-    std::vector<std::vector<std::string>> result;
 
     if (followsParentMap.find(type) != followsParentMap.end()) {
         FollowsParentHandler handler(followsParentMap.at(type), statementStorage);
-        result = handler.handle(param1, param2);
+        res = handler.handle(param1, param2);
     }
     else if (modifiesUsesMap.find(type) != modifiesUsesMap.end()) {
         ModifiesUsesHandler handler(modifiesUsesMap.at(type), statementStorage);
-        result = handler.handle(param1, param2);
+        res = handler.handle(param1, param2);
     }
     else if (callsMap.find(type) != callsMap.end()) {
         CallsHandler handler(callsMap.at(type));
-        result = handler.handle(param1, param2);
+        res = handler.handle(param1, param2);
     }
     else if (nextMap.find(type) != nextMap.end()) {
         NextHandler handler(cfgStorage, statementStorage, procedureStorage, type == RelationshipType::NEXTT);
-        result = handler.handle(param1, param2);
+        res = handler.handle(param1, param2);
     }
-    if (!result.empty()) {  
-        relationshipCache.addResult(rs, result);
+    if (!res.empty()) {  
+        relationshipCache.addResult(rs, res);
     }
 
-    return result;
+    return res;
 }
 
-std::vector<std::string> PKB::findDesignEntities(Parameter p) {
-    std::vector<std::string> res;
-    
+std::vector<std::string> PKB::findDesignEntities(Parameter p) { 
     std::shared_ptr<Parameter> param = std::make_shared<Parameter>(p);
     std::string typeString = param->getTypeString();
 
-    std::vector<std::string> cachedResult = parameterCache.findResult(param);
-    if (!cachedResult.empty()) {
-        return cachedResult;
+    std::vector<std::string> res = parameterCache.findResult(param);
+    if (!res.empty()) {
+        return res;
     }
 
     if (p.getType() == ParameterType::PROCEDURE) {
@@ -191,20 +188,28 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
 }
 
 std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
+    std::shared_ptr<Pattern> pattern = std::make_shared<Pattern>(p);
+    std::vector<std::vector<std::string>> res = patternCache.findResult(pattern);
+    if (!res.empty()) {
+        return res;
+    }
+
     // TODO: This violates LoD. Needs QPS to have a getPatternType() function
     ParameterType type = p.getPatternSyn()->getType();
 
     if (type == ParameterType::ASSIGN) {
         AssignPatternHandler handler(assignPatternStorage);
-        return handler.handle(p);
+        res = handler.handle(p);
     }
     else if (ifWhilePatternMap.find(type) != ifWhilePatternMap.end()) {
         IfWhilePatternHandler handler(ifWhilePatternMap.at(type));
-
-        return handler.handle(p);
+        res = handler.handle(p);
+    }
+    if (!res.empty()) {
+        patternCache.addResult(pattern, res);
     }
 
-    return std::vector<std::vector<std::string>>();
+    return res;
 }
 
 std::vector<std::vector<std::string>> PKB::findAttribute(With w) {

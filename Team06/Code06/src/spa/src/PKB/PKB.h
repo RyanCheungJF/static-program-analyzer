@@ -31,6 +31,7 @@
 #include "utils/AppConstants.h"
 #include "cache/RelationshipCache.h"
 #include "cache/ParameterCache.h"
+#include "cache/PatternCache.h"
 
 class PKB : AppConstants {
 
@@ -170,6 +171,7 @@ private:
 
     RelationshipCache relationshipCache;
     ParameterCache parameterCache;
+    PatternCache patternCache;
 
 
     std::unordered_map<RelationshipType, std::shared_ptr<FollowsParentStorage>> followsParentMap = {
