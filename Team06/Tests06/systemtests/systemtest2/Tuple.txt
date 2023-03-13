@@ -1,0 +1,15 @@
+1 - comment
+while w; if i; read r1, r2;
+Select <r1, i> such that Parent(i, r1) and Next(r1, r2)
+5 4
+5000
+2 - comment
+if i; while w;
+Select <w, i> such that Follows(1, 2)
+18 24, 18 4
+5000
+3 - comment
+if i; while w;
+Select <w, i> such that Next(8, 9)
+none
+5000
