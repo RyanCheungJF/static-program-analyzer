@@ -24,7 +24,7 @@ struct hashFunctionTuple {
 
 struct hashFunctionAffectsT {
     size_t operator()(const std::pair<int, int>& x) const {
-        return x.first * 31 + x.second;
+        return (x.first << 31) ^ x.second;
     }
 };
 
