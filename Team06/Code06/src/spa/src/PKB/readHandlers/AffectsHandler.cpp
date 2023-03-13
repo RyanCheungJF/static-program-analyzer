@@ -222,8 +222,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
 
 // Affects*
 std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(StmtNum a1, StmtNum a2) {
-    std::string paramString1 = std::to_string(a1);
-    std::string paramString2 = std::to_string(a2);
     ProcName proc1 = procStorage->getProcedure(a1);
     ProcName proc2 = procStorage->getProcedure(a2);
     std::vector<std::vector<std::string>> res;
@@ -252,12 +250,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
     while (!queue.empty()) {
         std::pair<StmtNum, StmtNum> curr = queue.front();
         queue.pop_front();
-        std::vector<std::vector<std::string>> val = handleIntInt(curr.first, curr.second);
-        if (val.empty()) {
-            continue;
-        }
 
-        if (stoi(val[0][1]) == a2) {
+        if (curr.second == a2) {
             res.push_back({std::to_string(a1), std::to_string(a2)});
             return res;
         }
@@ -270,16 +264,11 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
         for (StmtNum num : hashmap[curr.second]) {
             queue.push_front({curr.second, num});
         }
-
-        if (curr.first == a1) {
-            queue.push_front({curr.second, a2}); // greedy
-        }
     }
     return res;
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitive(StmtNum a1) {
-    std::string paramString1 = std::to_string(a1);
     ProcName proc1 = procStorage->getProcedure(a1);
     std::vector<std::vector<std::string>> res;
 
@@ -322,7 +311,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitiv
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitive(StmtNum a2) {
-    std::string paramString2 = std::to_string(a2);
     ProcName proc2 = procStorage->getProcedure(a2);
     std::vector<std::vector<std::string>> res;
 
@@ -414,8 +402,7 @@ std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1,
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
         cfgStorage->getGraph(proc);
 
-    std::pair<std::unordered_set<StmtNum>, StmtNum> p = {
-        {}, a1}; // TOOO: WILL THIS LEAD TO AN ERROR? THE WAY WE DECLARE PAIR
+    std::pair<std::unordered_set<StmtNum>, StmtNum> p = {{}, a1};
     queue.push_back(p);
     while (!queue.empty()) {
         std::pair<std::unordered_set<StmtNum>, StmtNum> curr = queue.front();
