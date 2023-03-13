@@ -11,14 +11,15 @@ class Table {
 public:
     Table(vector<Parameter>, vector<vector<string>>);
     Table extractDesignEntities();
-    Table selectColumns(vector<int> &);
     bool hasParameter(const Parameter&);
     vector<Parameter> getHeaders();
     vector<vector<string>> getContent();
     bool hasIntersectingParams(Table);
     Table intersectTable(Table);
-    vector<string> extractColumn(Parameter);
-
+    Table extractColumns(vector<int> &);
+    Table extractColumns(vector<Parameter>);
+    Table cartesianProduct(Table);
+    vector<string> getResult();
 private:
     vector<Parameter> headers;
     vector<vector<string>> contents;

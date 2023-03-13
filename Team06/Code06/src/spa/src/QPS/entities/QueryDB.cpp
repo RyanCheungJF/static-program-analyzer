@@ -45,35 +45,38 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB &readPKB) {
             absentParams.push_back(param);
         }
     }
+    Table extracted = extractColumns(presentParams);
     for (Parameter param : absentParams) {
         vector<string> content = readPKB.findDesignEntities(param);
         vector<Parameter> paramVec = {param};
         vector<vector<string>> contentVec = {content};
         Table table(paramVec, contentVec);
-        // TODO: waste of time. this can be improved.
-        insertTable(table);
+        extracted.cartesianProduct(table);
     }
-    return extractColumns(params);
-//  int tableIndex;
-//  int columnIndex;
-//  for (int i = 0; i < tableVector.size(); i++) {
-//    vector<Parameter> headers = tableVector[i].getHeaders();
-//    for (int j = 0; j < headers.size(); j++) {
-//      if (headers[j] == p) {
-//        tableIndex = i;
-//        columnIndex = j;
-//        break;
-//      }
-//    }
-//  }
-//  Table table = tableVector[tableIndex];
-//  return table.extractColumn(columnIndex);
+    return extracted.getResult();
 }
 
-vector<string> QueryDB::extractColumns(vector<Parameter> params) {
-
+Table QueryDB::extractColumns(vector<Parameter> params) {
+    // Assumes that each table has unique headers.
+    vector<Table> temp;
     for (Table table : tableVector) {
         vector<Parameter> headers = table.getHeaders();
-
+        vector<Parameter> paramsVec;
+        for (Parameter param : headers) {
+            if (find(params.begin(),params.end(),param) != params.end()) {
+                paramsVec.push_back(param);
+            }
+        }
+        Table extracted = table.extractColumns(paramsVec);
+        temp.push_back(extracted);
+    }
+    if (temp.size() == 1) {
+        return temp[0];
+    } else {
+        Table t = temp[0];
+        for (int i = 1; i < temp.size(); i++) {
+            t.cartesianProduct(temp[i]);
+        }
+        return t;
     }
 }

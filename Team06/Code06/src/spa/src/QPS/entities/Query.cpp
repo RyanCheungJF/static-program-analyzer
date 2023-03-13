@@ -9,6 +9,9 @@ vector<string> Query::evaluate(ReadPKB &readPKB) {
   // that the variables are correctly instantiated.
   // TODO : refactor this into its individual components. function getting too long
   QueryDB queryDb = QueryDB();
+  vector<string> emptyVec = {};
+  vector<string> falseVec = {"false"};
+  vector<string> trueVec = {"true"};
   for (shared_ptr<Relationship> relation : relations) {
     // Run an PKB API call for each relationship.
     // Taking the example of select s1 follows(s1, s2)
@@ -16,7 +19,9 @@ vector<string> Query::evaluate(ReadPKB &readPKB) {
     vector<Parameter> params = relation->getParameters();
     Table table(params, response);
     if (response.empty()) {
-        return {};
+        return selectParameters.size() == 1
+               && selectParameters[0].getType()==ParameterType::BOOLEAN
+               ? falseVec : emptyVec;
     }
     // This will remove wild cards and FIXED INT from the table.
     table = table.extractDesignEntities();
@@ -32,20 +37,18 @@ vector<string> Query::evaluate(ReadPKB &readPKB) {
     vector<Parameter> headers{*patternSyn, *entRef};
     Table table(headers, response);
     if (response.empty()) {
-        return {};
+        return selectParameters.size() == 1
+        && selectParameters[0].getType()==ParameterType::BOOLEAN
+        ? falseVec : emptyVec;
     }
     // This will remove wild cards and FIXED INT from the table.
     table = table.extractDesignEntities();
     queryDb.insertTable(table);
   }
-  // TODO: logic for shit here.
-  return queryDb.fetch(selectParameters, readPKB);
-//  if (queryDb.hasParameter(selectParameters[0])) {
-//    return queryDb.fetch(selectParameters[0]);
-//  } else {
-//    vector<string> res = readPKB.findDesignEntities(selectParameters[0]);
-//    return res;
-//  }
+  // TODO: Add separate logic for BOOLEAN because there is no need to store any table if return value is boolean.
+    return selectParameters.size() == 1
+           && selectParameters[0].getType()==ParameterType::BOOLEAN
+           ? trueVec : queryDb.fetch(selectParameters, readPKB);
 }
 
 Query::Query() {}
