@@ -30,7 +30,6 @@ public:
     inline static const std::string WILDCARD = "wildcard";
     inline static const std::string FIXED_INT = "fixed_int";
     inline static const std::string FIXED_STRING = "fixed_string";
-    inline static const std::string EXPR_SPEC = "expr_spec";
 
     // relationships
     inline static const std::string FOLLOWS = "Follows";

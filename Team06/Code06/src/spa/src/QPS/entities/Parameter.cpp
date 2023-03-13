@@ -133,9 +133,6 @@ ParameterType Parameter::guessParameterType(string s) {
   if (isWildCard(s)) {
     return ParameterType::WILDCARD;
   }
-  if (isExprSpec(s)) {
-    return ParameterType::EXPR_SPEC;
-  }
   return ParameterType::UNKNOWN;
 }
 
@@ -158,5 +155,4 @@ const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
     {AppConstants::WILDCARD, ParameterType::WILDCARD},
     {AppConstants::FIXED_INT, ParameterType::FIXED_INT},
     {AppConstants::FIXED_STRING, ParameterType::FIXED_STRING},
-    {AppConstants::EXPR_SPEC, ParameterType::EXPR_SPEC},
 };
