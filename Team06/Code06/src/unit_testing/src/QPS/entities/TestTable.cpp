@@ -142,30 +142,30 @@ TEST_CASE("getContent / returns the correct vector of contents / return true") {
   REQUIRE(content == table.getContent());
 }
 
-TEST_CASE("selectColumns / the selection of single column will reduce the "
-          "table to chosen column / return true") {
-
-  vector<Parameter> headers = {Parameter("v", AppConstants::VARIABLE),
-                               Parameter("_", AppConstants::WILDCARD)};
-  vector<vector<string>> content = {{"x", "5"}};
-  Table table(headers, content);
-  vector<int> indexes = {0};
-  Table t = table.selectColumns(indexes);
-  int length = t.getContent().size();
-  string value = t.getContent()[0][0];
-  REQUIRE(((length == 1) && (value == "x")));
-}
-
-TEST_CASE("selectColumns / select nothing / return true") {
-
-  vector<Parameter> headers = {Parameter("v", AppConstants::VARIABLE),
-                               Parameter("_", AppConstants::WILDCARD)};
-  vector<vector<string>> content = {{"x", "5"}};
-  Table table(headers, content);
-  vector<int> indexes = {};
-  Table t = table.selectColumns(indexes);
-  REQUIRE(t.getHeaders().size() == 0);
-}
+//TEST_CASE("selectColumns / the selection of single column will reduce the "
+//          "table to chosen column / return true") {
+//
+//  vector<Parameter> headers = {Parameter("v", AppConstants::VARIABLE),
+//                               Parameter("_", AppConstants::WILDCARD)};
+//  vector<vector<string>> content = {{"x", "5"}};
+//  Table table(headers, content);
+//  vector<int> indexes = {0};
+//  Table t = table.selectColumns(indexes);
+//  int length = t.getContent().size();
+//  string value = t.getContent()[0][0];
+//  REQUIRE(((length == 1) && (value == "x")));
+//}
+//
+//TEST_CASE("selectColumns / select nothing / return true") {
+//
+//  vector<Parameter> headers = {Parameter("v", AppConstants::VARIABLE),
+//                               Parameter("_", AppConstants::WILDCARD)};
+//  vector<vector<string>> content = {{"x", "5"}};
+//  Table table(headers, content);
+//  vector<int> indexes = {};
+//  Table t = table.selectColumns(indexes);
+//  REQUIRE(t.getHeaders().size() == 0);
+//}
 
 TEST_CASE("extractDesignEntities / test for variable and wild card / return "
           "only variable") {

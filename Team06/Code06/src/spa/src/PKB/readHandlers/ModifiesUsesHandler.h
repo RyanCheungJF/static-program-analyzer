@@ -1,5 +1,5 @@
 #include "../storage/ModifiesUsesStorage.h"
-#include "../../qps/entities/Parameter.h"
+#include "../../QPS/entities/Parameter.h"
 #include "../storage/StmtStorage.h"
 #include "../../../src/utils/AppConstants.h"
 #include <memory>
