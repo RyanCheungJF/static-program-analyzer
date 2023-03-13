@@ -59,7 +59,7 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
             if ((char)file.peek() == '=') {
                 tokenValue += (char)(file.get());
             }
-                tokens.push_back(Token(TokenType::RELATIONAL_OPR, tokenValue));
+            tokens.push_back(Token(TokenType::RELATIONAL_OPR, tokenValue));
         }
         else if ((char)file.peek() == AppConstants::PLUS || (char)file.peek() == AppConstants::MINUS) { // Handle +, -
             tokenValue += (char)(file.get());
