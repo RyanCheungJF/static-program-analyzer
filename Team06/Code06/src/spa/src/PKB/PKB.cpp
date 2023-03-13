@@ -151,32 +151,34 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
 
 std::vector<std::string> PKB::findDesignEntities(Parameter p) {
     std::shared_ptr<Parameter> param = std::make_shared<Parameter>(p);
-    std::string typeString = param->getTypeString();
 
     std::vector<std::string> res = parameterCache.findResult(param);
     if (!res.empty()) {
         return res;
     }
+    
+    ParameterType type = p.getType();
 
-    if (p.getType() == ParameterType::PROCEDURE) {
+    if (type == ParameterType::PROCEDURE) {
         std::unordered_set<ProcName> procs = procedureStorage->getProcNames();
         for (auto proc : procs) {
             res.push_back(proc);
         }
     }
-    else if (p.getType() == ParameterType::CONSTANT) {
+    else if (type == ParameterType::CONSTANT) {
         std::unordered_set<Const> constants = constantStorage->getConstNames();
         for (auto constant : constants) {
             res.push_back(to_string(constant));
         }
     }
-    else if (p.getType() == ParameterType::VARIABLE) {
+    else if (type == ParameterType::VARIABLE) {
         std::unordered_set<Ent> vars = entityStorage->getEntNames();
         for (auto var : vars) {
             res.push_back(var);
         }
     }
     else if (p.isStatementRef(p)) {
+        std::string typeString = param->getTypeString();
         std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(typeString);
         for (auto stmtNum : stmtNums) {
             res.push_back(to_string(stmtNum));
