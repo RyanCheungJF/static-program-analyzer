@@ -122,7 +122,6 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         return res;
     }
 
-
     if (followsParentMap.find(type) != followsParentMap.end()) {
         FollowsParentHandler handler(followsParentMap.at(type), statementStorage);
         res = handler.handle(param1, param2);
@@ -139,14 +138,18 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         NextHandler handler(cfgStorage, statementStorage, procedureStorage, type == RelationshipType::NEXTT);
         res = handler.handle(param1, param2);
     }
-    if (!res.empty()) {  
+    else if (affectsMap.find(type) != affectsMap.end()) {
+        AffectsHandler handler(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
+                               type == RelationshipType::AFFECTST);
+        res = handler.handle(param1, param2);
+    }
+    if (!res.empty()) {
         relationshipCache.addResult(rs, res);
     }
-
     return res;
 }
 
-std::vector<std::string> PKB::findDesignEntities(Parameter p) { 
+std::vector<std::string> PKB::findDesignEntities(Parameter p) {
     std::shared_ptr<Parameter> param = std::make_shared<Parameter>(p);
     std::string typeString = param->getTypeString();
 
