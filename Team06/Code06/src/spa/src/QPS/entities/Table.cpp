@@ -20,7 +20,8 @@ vector<vector<string>> Table::getContent() {
 }
 
 bool Table::hasIntersectingParams(Table t) {
-    for (const Parameter& p : t.getHeaders()) {
+    vector<Parameter> headers = t.getHeaders();
+    for (const Parameter& p : headers) {
         if (this->hasParameter(p)) {
             return true;
         }
