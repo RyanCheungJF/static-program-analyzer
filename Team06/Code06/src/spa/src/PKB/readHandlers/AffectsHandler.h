@@ -10,14 +10,14 @@
 #include "../storage/StmtStorage.h"
 
 struct hashFunctionTuple {
-    int cantor(int a, int b) {
+    int cantor(int a, int b) const {
         return (a + b + 1) * (a + b) / 2 + b;
     }
-    int hashAlgoForTuple(int a, int b, int c) {
+    int hashAlgoForTuple(int a, int b, int c) const {
         return cantor(a, cantor(b, c));
     }
 
-    size_t operator()(const std::tuple<int, int, int>& x) {
+    size_t operator()(const std::tuple<int, int, int>& x) const {
         return hashAlgoForTuple(get<0>(x), get<1>(x), get<2>(x));
     }
 };
