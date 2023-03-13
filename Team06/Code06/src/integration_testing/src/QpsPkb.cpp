@@ -595,31 +595,6 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
         }
     }
 
-    //  procedure main {
-    // 1     x = 1;
-    // 2     call sub;
-    // 3	 while (y == x) {
-    // 4         y = x + 2;
-    // 5		    read y;
-    //       }
-    // 6     x = x + 2;
-    //  }
-    //
-    //   procedure sub {
-    // 7     print x;
-    // 8     y = x + 2;
-    // 9     if (count > 0) then {
-    // 10         read x;
-    //       } else {
-    // 11         z = x * y;
-    //       }
-    // 12    call end;
-    //   }
-    //
-    //   procedure end {
-    // 13    print end;
-    //   }
-
     SECTION("Next") {
         SECTION("syn, wildcard") {
             string query = R"(
@@ -696,6 +671,54 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
             REQUIRE(exists(result, "3"));
             REQUIRE(exists(result, "4"));
             REQUIRE(exists(result, "5"));
+        }
+    }
+
+    SECTION("Affects") {
+        SECTION("int, syn") {
+            string query = R"(
+			assign a;
+			Select a such that Affects(1, a))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 2);
+            REQUIRE(exists(result, "4"));
+            REQUIRE(exists(result, "6"));
+        }
+
+        SECTION("syn, wildcard") {
+            string query = R"(
+			assign a;
+			Select a such that Affects(a, _))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 2);
+            REQUIRE(exists(result, "1"));
+            REQUIRE(exists(result, "8"));
+        }
+    }
+
+    SECTION("AffectsT") {
+        SECTION("syn, int") {
+            string query = R"(
+			assign a;
+			Select a such that Affects*(a, 11))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 1);
+            REQUIRE(exists(result, "8"));
+        }
+
+        SECTION("syn, syn") {
+            string query = R"(
+			assign a1, a2;
+			Select a2 such that Affects*(a1, a2))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 3);
+            REQUIRE(exists(result, "4"));
+            REQUIRE(exists(result, "6"));
+            REQUIRE(exists(result, "11"));
         }
     }
 }
