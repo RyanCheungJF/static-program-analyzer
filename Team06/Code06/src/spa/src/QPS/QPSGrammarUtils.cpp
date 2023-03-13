@@ -29,11 +29,15 @@ bool startsWithLetter(string s) { return regex_match(s, regex("^[a-zA-Z].*")); }
 
 bool hasBalancedBrackets(string s) {
   int balance = 0;
-  for (char c : s) {
+  for (int i = 0; i < s.size(); i++) {
+    char c = s[i];
     if (c == '(') {
       balance += 1;
     } else if (c == ')') {
       balance -= 1;
+    }
+    if (balance < 0) {
+      return false;
     }
   }
   return balance == 0;

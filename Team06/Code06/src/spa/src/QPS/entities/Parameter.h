@@ -22,7 +22,6 @@ enum class ParameterType {
   WILDCARD,
   FIXED_INT,
   FIXED_STRING,
-  EXPR_SPEC,
   UNKNOWN
 };
 
