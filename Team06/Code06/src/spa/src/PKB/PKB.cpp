@@ -116,34 +116,48 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     vector<Parameter> params = rs->getParameters();
     Parameter param1 = params[0];
     Parameter param2 = params[1];
-    std::vector<std::vector<std::string>> cachedResult = cache.findResult(rs);
+
+    std::vector<std::vector<std::string>> cachedResult = relationshipCache.findResult(rs);
     if (!cachedResult.empty()) {
         return cachedResult;
     }
+
+    std::vector<std::vector<std::string>> result;
+
     if (followsParentMap.find(type) != followsParentMap.end()) {
         FollowsParentHandler handler(followsParentMap.at(type), statementStorage);
-        std::vector<std::vector<std::string>> result = handler.handle(param1, param2);
-        cache.addResult(rs, result);
-        return result;
+        result = handler.handle(param1, param2);
     }
     else if (modifiesUsesMap.find(type) != modifiesUsesMap.end()) {
         ModifiesUsesHandler handler(modifiesUsesMap.at(type), statementStorage);
-        return handler.handle(param1, param2);
+        result = handler.handle(param1, param2);
     }
     else if (callsMap.find(type) != callsMap.end()) {
         CallsHandler handler(callsMap.at(type));
-        return handler.handle(param1, param2);
+        result = handler.handle(param1, param2);
     }
     else if (nextMap.find(type) != nextMap.end()) {
         NextHandler handler(cfgStorage, statementStorage, procedureStorage, type == RelationshipType::NEXTT);
-        return handler.handle(param1, param2);
+        result = handler.handle(param1, param2);
     }
-    return std::vector<std::vector<std::string>>();
+    if (!result.empty()) {  
+        relationshipCache.addResult(rs, result);
+    }
+
+    return result;
 }
 
 std::vector<std::string> PKB::findDesignEntities(Parameter p) {
     std::vector<std::string> res;
-    std::string typeString = p.getTypeString();
+    
+    std::shared_ptr<Parameter> param = std::make_shared<Parameter>(p);
+    std::string typeString = param->getTypeString();
+
+    std::vector<std::string> cachedResult = parameterCache.findResult(param);
+    if (!cachedResult.empty()) {
+        return cachedResult;
+    }
+
     if (p.getType() == ParameterType::PROCEDURE) {
         std::unordered_set<ProcName> procs = procedureStorage->getProcNames();
         for (auto proc : procs) {
@@ -167,6 +181,10 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
         for (auto stmtNum : stmtNums) {
             res.push_back(to_string(stmtNum));
         }
+    }
+
+    if (!res.empty()) {
+        parameterCache.addResult(param, res);
     }
 
     return res;
