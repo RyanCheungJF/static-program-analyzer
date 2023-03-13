@@ -1,3 +1,4 @@
+#include "../../QPS/entities/Relationship.h"
 #include "Cache.h"
 
 struct relationshipHash {
@@ -5,7 +6,7 @@ struct relationshipHash {
         std::size_t h1 = std::hash<RelationshipType>{}(rs->getType());
         std::size_t h2 = std::hash<std::string>{}(rs->getParameters()[0].getValue());
         std::size_t h3 = std::hash<std::string>{}(rs->getParameters()[1].getValue());
-        /*   std::cout << (((h1 ^ (h2 << 1)) >> 1) ^ (h3 << 1)) << endl;*/
+        
         return ((h1 ^ (h2 << 1)) >> 1) ^ (h3 << 1);
     }
 };
@@ -20,5 +21,5 @@ struct relationshipEquals {
     }
 };
 
-class RelationshipCache : public Cache<Relationship, relationshipHash, relationshipEquals> {
-};
+class RelationshipCache
+    : public Cache<Relationship, std::vector<std::vector<std::string>>, relationshipHash, relationshipEquals> {};

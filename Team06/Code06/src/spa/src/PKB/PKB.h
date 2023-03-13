@@ -30,7 +30,7 @@
 #include "storage/StmtStorage.h"
 #include "utils/AppConstants.h"
 #include "cache/RelationshipCache.h"
-#include "cache/Cache.h"
+#include "cache/ParameterCache.h"
 
 class PKB : AppConstants {
 
@@ -168,7 +168,9 @@ private:
     std::shared_ptr<CallsStorage> callsTStorage;
     std::shared_ptr<CFGStorage> cfgStorage;
 
-    RelationshipCache cache;
+    RelationshipCache relationshipCache;
+    ParameterCache parameterCache;
+
 
     std::unordered_map<RelationshipType, std::shared_ptr<FollowsParentStorage>> followsParentMap = {
         {RelationshipType::FOLLOWS, NULL},
