@@ -13,6 +13,14 @@ TEST_CASE("parse / given valid string with such that clause / parse into "
   REQUIRE(true);
 }
 
+TEST_CASE("parse / select tuple parses without errors / parses without errors and valid tuple values") {
+    string test =
+            "stmt s; variable v;\n Select <s ,  g ,  q , asd   ,v> such that Follows (s, 1) ";
+    QPSParser qp;
+    vector<Query> queries = qp.parse(test);
+    REQUIRE(true);
+}
+
 TEST_CASE("parse / given valid string with such that and pattern clause / "
           "parse into correct vector of queries") {
   string test = "stmt s; variable v; assign a   ;\n     Select v such that "

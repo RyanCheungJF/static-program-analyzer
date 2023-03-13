@@ -5,6 +5,7 @@
 #ifndef SPA_VARIABLESTORE_H
 #define SPA_VARIABLESTORE_H
 #include "entities/Parameter.h"
+#include "QPSGrammarUtils.h"
 #include "exceptions/SemanticException.h"
 #include <string>
 #include <unordered_map>

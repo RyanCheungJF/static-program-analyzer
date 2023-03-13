@@ -30,6 +30,7 @@ private:
                                                        int start, int end);
   vector<Pattern> parsePatternClause(vector<string> &wordList, int start,
                                      int end);
+  vector<Parameter> extractSelectTuple(vector<string> &wordList, int start, int end);
   vector<ClauseType> getAllClauseTypes();
 };
 

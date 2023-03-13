@@ -4,6 +4,7 @@
 
 #ifndef SPA_QUERYDB_H
 #define SPA_QUERYDB_H
+#include "PKB/ReadPKB.h"
 #include "Parameter.h"
 #include "Table.h"
 #include <string>
@@ -14,10 +15,11 @@ public:
   QueryDB();
   void insertTable(Table);
   bool hasParameter(Parameter &);
-  vector<string> fetch(Parameter);
+  vector<string> fetch(vector<Parameter>, ReadPKB&);
 
 private:
   vector<Table> tableVector;
+  vector<string> extractColumns(vector<Parameter>);
 };
 
 #endif // SPA_QUERYDB_H

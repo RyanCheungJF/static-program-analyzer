@@ -7,8 +7,8 @@
 vector<string> Query::evaluate(ReadPKB &readPKB) {
   // I am going to assume here that since the object has been created it means
   // that the variables are correctly instantiated.
+  // TODO : refactor this into its individual components. function getting too long
   QueryDB queryDb = QueryDB();
-  bool isFalseQuery = false;
   for (shared_ptr<Relationship> relation : relations) {
     // Run an PKB API call for each relationship.
     // Taking the example of select s1 follows(s1, s2)
@@ -16,7 +16,7 @@ vector<string> Query::evaluate(ReadPKB &readPKB) {
     vector<Parameter> params = relation->getParameters();
     Table table(params, response);
     if (response.empty()) {
-      isFalseQuery = true;
+        return {};
     }
     // This will remove wild cards and FIXED INT from the table.
     table = table.extractDesignEntities();
@@ -32,21 +32,20 @@ vector<string> Query::evaluate(ReadPKB &readPKB) {
     vector<Parameter> headers{*patternSyn, *entRef};
     Table table(headers, response);
     if (response.empty()) {
-      isFalseQuery = true;
+        return {};
     }
     // This will remove wild cards and FIXED INT from the table.
     table = table.extractDesignEntities();
     queryDb.insertTable(table);
   }
-  if (isFalseQuery) {
-    return {};
-  }
-  if (queryDb.hasParameter(selectParameters[0])) {
-    return queryDb.fetch(selectParameters[0]);
-  } else {
-    vector<string> res = readPKB.findDesignEntities(selectParameters[0]);
-    return res;
-  }
+  // TODO: logic for shit here.
+  return queryDb.fetch(selectParameters, readPKB);
+//  if (queryDb.hasParameter(selectParameters[0])) {
+//    return queryDb.fetch(selectParameters[0]);
+//  } else {
+//    vector<string> res = readPKB.findDesignEntities(selectParameters[0]);
+//    return res;
+//  }
 }
 
 Query::Query() {}

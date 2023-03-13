@@ -23,7 +23,11 @@ bool VariableStore::hasVariable(Parameter p) {
 
 bool VariableStore::updateSynonym(Parameter *synP) {
   if (!hasVariable(*synP)) {
-    return false;
+      if (isBoolean(synP->getValue())) {
+          synP->updateSynonymType(ParameterType::BOOLEAN);
+          return true;
+      }
+      return false;
   }
   ParameterType synType = getType(*synP);
   synP->updateSynonymType(synType);
