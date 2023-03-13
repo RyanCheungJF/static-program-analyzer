@@ -25,10 +25,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
     bool isWildCardParam2 = paramType2 == ParameterType::WILDCARD || paramType2 == ParameterType::ASSIGN;
 
     if (isTransitive) {
-        return handleTransitive(param1, param2, isFixedIntParam1, isFixedIntParam2, isWildCardParam1, isWildCardParam2);
+        return handleTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2, isWildCardParam1, isWildCardParam2);
     }
     else {
-        return handleNonTransitive(param1, param2, isFixedIntParam1, isFixedIntParam2, isWildCardParam1,
+        return handleNonTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2, isWildCardParam1,
                                    isWildCardParam2);
     }
 }
@@ -457,21 +457,21 @@ std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<En
     return commonVariables;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleNonTransitive(Parameter param1, Parameter param2,
+std::vector<std::vector<std::string>> AffectsHandler::handleNonTransitive(std::string param1value, std::string param2value,
                                                                           bool isFixedIntParam1, bool isFixedIntParam2,
                                                                           bool isWildCardParam1,
                                                                           bool isWildCardParam2) {
     if (isFixedIntParam1) {
         if (isFixedIntParam2) {
-            return handleIntInt(stoi(param1.getValue()), stoi(param2.getValue()));
+            return handleIntInt(stoi(param1value), stoi(param2value));
         }
         else if (isWildCardParam2) {
-            return handleIntWildcard(stoi(param1.getValue()));
+            return handleIntWildcard(stoi(param1value));
         }
     }
     else if (isWildCardParam1) {
         if (isFixedIntParam2) {
-            return handleWildcardInt(stoi(param2.getValue()));
+            return handleWildcardInt(stoi(param2value));
         }
         else if (isWildCardParam2) {
             return handleWildcardWildcard();
@@ -480,20 +480,20 @@ std::vector<std::vector<std::string>> AffectsHandler::handleNonTransitive(Parame
     return std::vector<std::vector<std::string>>();
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(Parameter param1, Parameter param2,
+std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(std::string param1value, std::string param2value,
                                                                        bool isFixedIntParam1, bool isFixedIntParam2,
                                                                        bool isWildCardParam1, bool isWildCardParam2) {
     if (isFixedIntParam1) {
         if (isFixedIntParam2) {
-            return handleIntIntTransitive(stoi(param1.getValue()), stoi(param2.getValue()));
+            return handleIntIntTransitive(stoi(param1value), stoi(param2value));
         }
         else if (isWildCardParam2) {
-            return handleIntWildcardTransitive(stoi(param1.getValue()));
+            return handleIntWildcardTransitive(stoi(param1value));
         }
     }
     else if (isWildCardParam1) {
         if (isFixedIntParam2) {
-            return handleWildcardIntTransitive(stoi(param2.getValue()));
+            return handleWildcardIntTransitive(stoi(param2value));
         }
         else if (isWildCardParam2) {
             return handleWildcardWildcardTransitive();

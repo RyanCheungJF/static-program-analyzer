@@ -72,10 +72,10 @@ private:
     std::unordered_set<Ent> getCommonVariables(std::unordered_set<Ent> variablesModifiedInA1,
                                                std::unordered_set<Ent> variablesUsedInA2);
 
-    std::vector<std::vector<std::string>> handleNonTransitive(Parameter param1, Parameter param2, bool isFixedIntParam1,
-                                                              bool isFixedIntParam2, bool isWildCardParam1,
-                                                              bool isWildCardParam2);
-    std::vector<std::vector<std::string>> handleTransitive(Parameter param1, Parameter param2, bool isFixedIntParam1,
-                                                           bool isFixedIntParam2, bool isWildCardParam1,
-                                                           bool isWildCardParam2);
+    std::vector<std::vector<std::string>> handleNonTransitive(std::string param1value, std::string param2value,
+                                                              bool isFixedIntParam1, bool isFixedIntParam2,
+                                                              bool isWildCardParam1, bool isWildCardParam2);
+    std::vector<std::vector<std::string>> handleTransitive(std::string param1value, std::string param2value,
+                                                           bool isFixedIntParam1, bool isFixedIntParam2,
+                                                           bool isWildCardParam1, bool isWildCardParam2);
 };
