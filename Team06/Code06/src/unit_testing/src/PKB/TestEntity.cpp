@@ -1,5 +1,5 @@
-#include "catch.hpp"
 #include "../../../spa/src/PKB/storage/EntityStorage.h"
+#include "catch.hpp"
 
 TEST_CASE("Checks that write and read works for entityStorage") {
     EntityStorage es;
@@ -10,12 +10,11 @@ TEST_CASE("Checks that write and read works for entityStorage") {
     std::unordered_set<StmtNum> statementNums = es.getEntityStmtNums(e);
 
     REQUIRE(statementNums.size() == 3);
-    REQUIRE(statementNums.find(3) != statementNums.end()); //3 is present
-    REQUIRE(statementNums.find(6) != statementNums.end()); //6 is present
-    REQUIRE(statementNums.find(9) != statementNums.end()); //9 is present
-    REQUIRE(statementNums.find(12) == statementNums.end()); //12 is not present
+    REQUIRE(statementNums.find(3) != statementNums.end());  // 3 is present
+    REQUIRE(statementNums.find(6) != statementNums.end());  // 6 is present
+    REQUIRE(statementNums.find(9) != statementNums.end());  // 9 is present
+    REQUIRE(statementNums.find(12) == statementNums.end()); // 12 is not present
 }
-
 
 TEST_CASE("Check that if an entity does not appear in the source code, it should return an empty set") {
     EntityStorage es;
@@ -23,7 +22,7 @@ TEST_CASE("Check that if an entity does not appear in the source code, it should
     std::unordered_set<StmtNum> statementNums = es.getEntityStmtNums(e);
 
     REQUIRE(statementNums.empty());
-    REQUIRE(statementNums.find(3) == statementNums.end()); //3 is not present
+    REQUIRE(statementNums.find(3) == statementNums.end()); // 3 is not present
 }
 
 TEST_CASE("Check that given query for an entity and a statementNumber that it appears in, it returns true") {
@@ -39,4 +38,3 @@ TEST_CASE("Check that if an entity does not exist, it returns false") {
     EntityStorage es;
     REQUIRE(!es.checkEntity("v", 4));
 }
-

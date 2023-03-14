@@ -4,8 +4,6 @@ void ConstantStorage::writeConstant(StmtNum num, std::unordered_set<Const> const
     stmtNum_constant[num].insert(constants.begin(), constants.end());
     for (Const c : constants) {
         constant_stmtNum[c].insert(num);
-    }
-    for (Const c : constants) {
         constNames.insert(c);
     }
 }

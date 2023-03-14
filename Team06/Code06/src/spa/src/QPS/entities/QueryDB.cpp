@@ -1,7 +1,7 @@
 #include "QueryDB.h"
 
 QueryDB::QueryDB() {
-  // Creates the QueryDB object
+    // Creates the QueryDB object
 }
 
 void QueryDB::insertTable(Table table) {
@@ -31,8 +31,7 @@ bool QueryDB::hasParameter(Parameter &p) {
     if (table.hasParameter(p)) {
       return true;
     }
-  }
-  return false;
+    return false;
 }
 
 vector<string> QueryDB::fetch(Parameter p) {

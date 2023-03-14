@@ -1,6 +1,5 @@
-#include "catch.hpp"
 #include "../../../spa/src/PKB/storage/ModifiesUsesStorage.h"
-
+#include "catch.hpp"
 
 TEST_CASE("ModifiesUsesStorage: writeS") {
     ModifiesUsesStorage us;
@@ -145,4 +144,3 @@ TEST_CASE("ModifiesUsesStorage: writeP") {
         REQUIRE(find(res.second.begin(), res.second.end(), "z") == res.second.end());
     }
 }
-

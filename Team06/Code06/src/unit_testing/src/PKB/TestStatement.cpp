@@ -1,11 +1,10 @@
-#include "catch.hpp"
 #include "../../../spa/src/PKB/storage/StmtStorage.h"
 #include "../utils/utils.h"
+#include "catch.hpp"
 
 using namespace unit_testing_utils;
 
 TEST_CASE("Check that all statements are recorded in StmtStorage") {
-
 
     StmtStorage sts;
 
@@ -21,7 +20,6 @@ TEST_CASE("Check that all statements are recorded in StmtStorage") {
 TEST_CASE("Check that a statement does not appear in the source code, StmtStorage should return an empty set") {
     StmtStorage sts;
 
-
     Stmt s = AppConstants::IF;
     std::unordered_set<StmtNum> statementNums = sts.getStatementNumbers(s);
     REQUIRE(statementNums.empty());
@@ -29,7 +27,6 @@ TEST_CASE("Check that a statement does not appear in the source code, StmtStorag
 
 TEST_CASE("Check that given query for a statement and a statementNumber that it appears in, it returns true") {
     StmtStorage sts;
-
 
     Stmt s = AppConstants::IF;
     sts.writeStatement(s, 3);
@@ -54,13 +51,11 @@ TEST_CASE("Check that given a Stmt and its StmtNum, a query for an non-existent 
 TEST_CASE("StmtStorage: getStatementNumbers(Stmt s): stmt") {
     StmtStorage sts;
 
-
     Stmt stmt = AppConstants::STMT;
 
     SECTION("getStatementNumbers(Stmt s): empty storage") {
         std::unordered_set<StmtNum> statementNums = sts.getStatementNumbers(stmt);
         REQUIRE(statementNums.empty());
-
     }
     Stmt s1 = AppConstants::IF;
     std::unordered_set<StmtNum> lines1 = {3, 6, 9};
@@ -95,7 +90,7 @@ TEST_CASE("StmtStorage: getStatementNumbers(Stmt s): stmt") {
 
     SECTION("getStatementNumbers(Stmt s): non-empty storage") {
         std::unordered_set<StmtNum> statementNums = sts.getStatementNumbers(stmt);
-        std::unordered_set<StmtNum> expected = {3,6,9,17,22,24,5,7,9,4,8,18,20,23};
+        std::unordered_set<StmtNum> expected = {3, 6, 9, 17, 22, 24, 5, 7, 9, 4, 8, 18, 20, 23};
         REQUIRE(unit_testing_utils::equals(expected, statementNums));
     }
 }

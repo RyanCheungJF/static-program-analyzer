@@ -1,0 +1,55 @@
+1 - comment
+stmt p;
+Select p such that Next*(1, p)
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+5000
+2 - comment
+stmt p;
+Select p such that Next*(p, 29)
+none
+5000
+3 - comment
+stmt p;
+Select p such that Next*(p, 21)
+13, 14, 15, 16, 17, 18, 19, 20
+5000
+4 - comment
+stmt p;
+Select p such that Next*(24, p)
+25, 26, 27, 28
+5000
+5 - comment
+stmt s;
+Select s such that Next*(25, 26)
+none
+5000
+6 - comment
+stmt s;
+Select s such that Next*(8, 1)
+none
+5000
+7 - comment
+stmt s; while w; if i; call c; print p; read r;
+Select c such that Next(4, c)
+9, 11
+5000
+8 - comment
+stmt s; while w; if i; call c; print p; read r;
+Select c such that Next(5, c)
+11
+5000
+9 - comment
+stmt s; while w; if i; call c; print p; read r;
+Select p such that Next(1, p)
+10
+5000
+10 - comment
+stmt s; while w; if i; call c; print p; read r;
+Select i such that Next(1, i)
+4
+5000
+11 - comment
+stmt s; while w; if i; call c; print p; read r;
+Select w such that Next(1, w)
+none
+5000

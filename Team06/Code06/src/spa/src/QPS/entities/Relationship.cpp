@@ -28,14 +28,12 @@ vector<Parameter *> Relationship::getAllUncheckedSynonyms() {
     if (params.at(i).isUncheckedSynonym()) {
       synonyms.push_back(&params.at(i));
     }
-  }
-  return synonyms;
+    throw SyntaxException();
 }
 
-vector<Parameter> Relationship::getParameters() { return params; }
-
-bool Relationship::operator==(const Relationship &r) const {
-  return type == r.type && params == r.params;
+Relationship::Relationship(const Relationship& r) {
+    type = r.type;
+    params = r.params;
 }
 
 RelationshipType Relationship::getType() { return type; }
@@ -58,11 +56,11 @@ Relationship::Relationship(RelationshipType t, vector<Parameter> &ps) {
 }
 
 RelationshipType Relationship::stringToType(string s) {
-  auto iter = Relationship::stringToTypeMap.find(s);
-  if (iter == stringToTypeMap.end()) {
-    return RelationshipType::UNKNOWN;
-  }
-  return iter->second;
+    auto iter = Relationship::stringToTypeMap.find(s);
+    if (iter == stringToTypeMap.end()) {
+        return RelationshipType::UNKNOWN;
+    }
+    return iter->second;
 }
 
 const unordered_map<string, RelationshipType> Relationship::stringToTypeMap = {

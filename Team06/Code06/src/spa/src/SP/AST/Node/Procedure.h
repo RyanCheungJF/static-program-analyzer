@@ -6,10 +6,15 @@
 class Procedure : public ASTNode {
 public:
     ProcName procedureName;
-	std::unique_ptr<StatementList> statementList;
+    std::unique_ptr<StatementList> statementList;
 
-	Procedure();
-	Procedure(ProcName procedureName, std::unique_ptr<StatementList> statementList);
+    Procedure();
+    Procedure(ProcName procedureName, std::unique_ptr<StatementList> statementList);
 
-	void accept(ASTVisitor* visitor) override;
+    Statement* getLastStatement();
+    StmtNum getLastStatementNumber();
+    StmtNum getFirstStatementNumber();
+    std::vector<std::unique_ptr<Statement>>& getStatements();
+
+    void accept(ASTVisitor* visitor) override;
 };

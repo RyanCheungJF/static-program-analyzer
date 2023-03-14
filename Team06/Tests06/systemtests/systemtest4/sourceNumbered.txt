@@ -1,0 +1,642 @@
+// DO NOT USE THIS FILE TO TEST!
+// this file is purely for visualization/ debugging purposes without whitespaces
+// to make your life easier :-)
+
+procedure a {
+	a = 1;	// 1
+	b = 2;	// 2
+	c = 3;	// 3
+	d = 4;	// 4
+	e = 5;	// 5
+	f = 6;	// 6
+	g = 7;	// 7
+	h = 8;	// 8
+	i = 9;	// 9
+	j = 10;	// 10
+	k = 11;	// 11
+	l = 12;	// 12
+	m = 13;	// 13
+	n = 14;	// 14
+	o = 15;	// 15
+	p = 16;	// 16
+	q = 17;	// 17
+	r = 18;	// 18
+	s = 19;	// 19
+	t = 20;	// 20
+	u = 21;	// 21
+	v = 22;	// 22
+	w = 23;	// 23
+	x = 24;	// 24
+	y = 25;	// 25
+	z = 26;	// 26
+	print a;	// 27
+	read b;	// 28
+	call c;	// 29
+	print d;	// 30
+	read e;	// 31
+	call f;	// 32
+	print g;	// 33
+	read h;	// 34
+	call i;	// 35
+	print j;	// 36
+	read k;	// 37
+	call l;	// 38
+	print m;	// 39
+	read n;	// 40
+	call o;	// 41
+	print p;	// 42
+	read q;	// 43
+	call r;	// 44
+	print s;	// 45
+	read t;	// 46
+	call u;	// 47
+	print v;	// 48
+	read w;	// 49
+	call x;	// 50
+	abc = a + b * c;	// 51
+	print y;	// 52
+	def = 100000000;	// 53
+	read z;	// 54
+} 
+
+procedure b {
+	call c;	// 55
+}
+
+procedure c {
+	x = 0;	// 56
+	y = 1;	// 57
+	while (x < 260) {	// 58
+		while (x < 250) {	// 59
+			while (x < 240) {	// 60
+				while (x < 230) {	// 61
+					while (x < 220) {	// 62
+						while (x < 210) {	// 63
+							while (x < 200) {	// 64
+								while (x < 190) {	// 65
+									while (x < 180) {	// 66
+										while (x < 170) {	// 67
+											while (x < 160) {	// 68
+												while (x < 150) {	// 69
+													while (x < 140) {	// 70
+														while (x < 130) {	// 71
+															while (x < 120) {	// 72
+																while (x < 110) {	// 73
+																	while (x < 100) {	// 74
+																		if (x % 2 == 0) then {	// 75
+																			while (y > 0) {	// 76
+																				y = y - 1;	// 77
+																			}
+																		} else {
+																			while (y > 1) {	// 78
+																				y = 1 + y - 2;	// 79
+																			}
+																		}
+																		while (x < 90) {	// 80
+																			while (x < 80) {	// 81
+																				x = x + 1;	// 82
+																				print x;	// 83
+																			}
+																			x = x + 1;	// 84
+																		}
+																		x = x + 1;	// 85
+																	}
+																	x = x + 1;	// 86
+																}
+																x = x + 1;	//87
+															}
+															x = x + 1;	// 88
+														}
+														x = x + 1;	// 89
+													}
+													x = x + 1;	// 90
+												}
+												x = x + 1;	// 91
+											}
+											x = x + 1;	// 92
+										}
+										x = x + 1;	// 93
+									}
+									x = x + 1;	// 94
+								}
+								x = x + 1;	// 95
+							}
+							x = x + 1;	// 96
+						}
+						x = x + 1;	// 97
+					}
+					x = x + 1;	// 98
+				}
+				x = x + 1;	// 99
+			}
+			x = x + 1;	// 100
+		}
+		x = x + 1;	// 101
+	}
+	x = x + 1;	// 102
+	print x;	// 103
+	call k;	// 104
+}
+
+procedure d {
+	a = 1;	// 105
+	b = 0;	// 106
+	mul = a * b;	// 107
+	div = b / a;	// 108
+	call b;	// 109
+	sum = a + b;	// 110
+	call c;	// 111
+	minus = a - b;	// 112
+	call e;	// 113
+	mod = a % b;	// 114
+	if (add == mod) then {	// 115
+		c = mod * mod + sum * mul / div - minus;	// 116
+		if((!(b * c / div >= 2147483647)) && ((mul * mul < mul + 1) || (a * (mul + a) - (div - mod) /2 + c % mod != minus))) then {	// 117
+			a = 0;	// 118
+			b = 1;	// 119
+			c = 2;	// 120
+		} else {
+			c = 2;	// 121
+			b = 1;	// 122
+			a = 0;	// 123
+		}
+		print a;	// 124
+		print b;	// 125
+		print c;	// 126
+	} else {
+		a = a + 1;	// 127
+		b = b - 1;	// 128
+		c = c * 1;	// 129
+	}
+	minus = minus + minus;	// 130
+	add = add - add;	// 131
+	div = mul / mul;	// 132
+	mul = div * div;	// 133
+	mod = mul % div;	// 134
+	read mul;	// 135
+	read mod;	// 136
+	read add;	// 137
+	read minus;	// 138
+	print mul;	// 139
+	a = a + b;	// 140
+	b = b - a;	// 141
+	print mod;	// 142
+	print add;	// 143
+	print mul;	// 144
+	NULL = 4;	// 145
+	null = 3;	// 146
+	deadlock = 1;	// 147
+	mutex = 0;	// 148
+	read sheMo;	// 149
+	semaphore = sheMo + NULL;	// 150
+} 
+
+procedure e {
+	darren = 7;	// 151
+	bestTeamLead = 1;	// 152
+	if (bestTeamLead == 1) then {	// 153
+		print Success;	// 154
+	} else {
+		print blameFaruq;	// 155
+	}
+	faruQ = 6;	// 156
+	langYuan = 666;	// 157
+	bestfriendsforever = 672;	// 158
+	if (faruQ + langYuan == bestfriendsforever) then {	// 159
+		print iPityLangYuan;	// 160
+	} else {
+		print langYuanLetsOutASighOfRelief;	// 161
+	}
+	ryan = 0;	// 162
+	calvin = 1;	// 163
+	carries = 999;	// 164
+	if (calvin + carries > ryan) then {	// 165
+		read true;	// 166
+	} else {
+		read false;	// 167
+	}
+	xingWei = 996;	// 168
+	loves = 1;	// 169
+	if (xingWei + loves > 996) then {	// 170
+		xingWei = 997;	// 171
+	} else {
+		socialCredit = 0;	// 172
+		xingWei = socialCredit - 999;	// 173
+	}
+	percentile = 100;	// 174
+	sheeHui = 99 % percentile;	// 175
+	topStudent = 1;	// 176
+	if (sheeHui == topStudent) then {	// 177
+		read mustMakeUseOfFullOneHour;	// 178
+		read pleaseGiveHints;	// 179
+		read thisIsNotACallForHelp;	// 180
+		read okMaybeItIs;	// 181
+		read ifSoDRYdrinkWater;	// 182
+	} else {
+		read letHerGoAfter15Minutes;	// 183
+	}
+	profG = 1;	// 184
+	weSimp = (1 * 100 + (2) - 2) / 100;	// 185
+	if (weSimp == p) then {	// 186
+		read pleaseGiveLangYuanAFYP;	// 187
+	} else {
+		read sweIsMyPassion;	// 188
+	}
+	idkwhatelsetoput = 5;	// 189
+	veryhardtocomeuptwith500lines = 1;	// 190
+	whydoessimplehave500lines = 0;	// 191
+	whatislife = 1;	// 192
+	wowitsonly143am = 0;	// 193
+	alwayshungry = 1;	// 194
+}
+
+
+procedure f {
+	while (itis > raining) {	// 195
+		umbrella = 1;	// 196
+		read weatherreport;	// 197
+		call e;	// 198
+		if (sun == out) then {	// 199
+			can = actually - go + out;	// 200
+			print ifnot;	// 201
+			walk = run;	// 202
+		} else {
+			read ineedajob;	// 203
+			job = jobless;	// 204
+			jobless = job;	// 205
+			unemployed = unemployed;	//206
+			while (unemployed > 1) {	// 207
+				try = grind + leetcode;	// 208
+				take = holiday % in / australia;	// 209
+				price = 123 * planeTicket + 1000;	// 210
+			}
+			print iNeedajob;	// 211
+		}
+		read coke;	// 212
+		while (((pepsi > sprite) && (pepsi > coke)) || (pepsi > pepsi)) {	// 213
+			read pepsi;	// 214
+			call z;	// 215
+			pepsi = weight * 100 + 1 / 1 + isthisthebestdrink;	// 216
+			or = could + this + be + fanta;	// 217
+			coke = overrated;	// 218
+		}
+	}
+	yakult = 7;	// 219
+	vitagen = trashtaste - 10000;	// 220
+	yakult = yakult % 3 * 126 / 2;	// 221
+	wow = i;	// 222
+	wow = am;	// 223
+	wow = hungry;	// 224
+	wow = its;	// 225
+	wow = a156am;	// 226
+	wow = are;	// 227
+	wow = there;	// 228
+	wow = noodles;	// 229
+}
+
+procedure g {
+	read storybook;	// 230
+	print once;	// 231
+	upon = a + time;	// 232
+	print thereWasAPig;	// 233
+	this = pig + name + was + peppa;	// 234
+	if (peppa != pepper) then {	// 235
+		print weCatchPeppa;	// 236
+		while (peppa > notCaught) {	// 237
+			try = catchPeppa;	// 238
+		}
+		if (notCaught == 1) then {	// 239
+			print retire;	// 240
+			print retireFromFarming;	// 241
+		} else {
+			notCaught = 0;	// 242
+		}
+		killPeppa = yes;	// 243
+		whatToDoWithPeppa = good + question;	// 244
+		if (makeCharSiew > whatToDoWithPeppa) then {	// 245
+			read cookBook;	// 246
+			x = 1 + y + z / 2 % 3 + 4 * 5;	// 247
+			marinate = with + bestSauce;	// 248
+			peppa = charSiew;	// 249
+			peppa = god + tier + peppa;	// 250
+			peppa = delicious;	// 251
+		} else {	
+			peppa = big + L;	// 252
+			peppa = peppa - shaoRou;	// 253
+		}
+	} else {
+		print servePeppa;	// 254
+		peppa = served;	// 255
+		read withSaltAndButter;	// 256
+		read waiter;	// 257
+		call x;	// 258
+		peppa = eaten;	// 259
+		peppa = peppa + yum + pepper + yum;	// 260
+	}
+}
+
+procedure h {
+	print oneLiner;	// 261
+}
+
+procedure i {
+	call h;	// 262	
+	call h;	// 263
+	call h;	// 264
+}
+
+procedure j {
+	print oneLiner;	// 265
+	read twoLiner;	// 266
+}
+
+procedure k {
+	print oneLiner;	// 267
+	read twoLiner;	// 268
+	bark = woof;	// 269
+}
+
+procedure l {
+	call i;	// 270
+	meow = cat;	// 271
+	call j;	// 272
+	why = are + there + no + cup + noodles;	// 273
+	call k;	// 274
+}
+
+procedure m {
+	read TopThreeTypeOfDogs;	// 275
+	if (TOPONE != corgis) then {	// 276
+		print youreTrolling;	// 277
+	} else {
+		print respectGained;	// 278
+		if (TOPTWO != goldies) then {	// 279
+			print youDontHaveAHeart;	// 280
+			badPerson = you + 999;	// 281
+		} else {
+			print hachoo;	// 282
+		}
+	}
+	if (TOPTHREE != samoyeds) then {	// 283
+		print areYouACatPerson;	// 284
+	} else {
+		print yourSoulIsAsWhiteAsSamoyeds;	// 285
+	}
+	while (cassie > play) {	// 286
+		sleep = notSleep;	// 287
+	}
+}
+
+procedure n {
+	if = if;	// 288
+	chatGPT = 0;	// 289
+	chatGPT = me + feed - fake % info;	// 290
+	bestLanguage = c;	// 291
+	c = c + plus;	// 292
+	c = c + plus;	// 293
+}
+
+procedure o {
+	whenIAm = 50;	// 294
+	IwantaParrot = true;	// 295
+	parrot = 777;	// 296
+	parrot = parrot * talk;	// 297
+	read talk;	// 298
+	print walk;	// 299
+	my = parrot + can + talk + to + me;	// 300
+	i = can + take;	// 301
+	parrot = for * 1 * parrot;	// 302
+	parrot = walks / 1 / parrot;	// 303
+	parrots = pretty;	// 304
+	i = will + train;	// 305
+	i = my + parrot + to + attack + people;	// 306
+	read bestParrot;	// 307
+	print true;	// 308
+	if ((i > i) || ((i == i) && (i * i % i == 0))) then {	// 309
+		print please;	// 310
+		read buymeaparrot;	// 311
+	} else {	
+		print ok;	// 312
+		read getmeacarrot;	// 313
+	}
+	print end;	// 314
+}
+
+procedure p {
+	carrot = good;	// 315
+	call o;	// 316
+	carrot = eyesight - 50;	// 317
+	carrot = veg;	// 318
+	veges = carrot;	// 319
+	vege = carrot;	// 320
+	waA = coW;	// 321
+	one = 2;	// 322
+	two = 3;	// 323
+	three = 4;	// 324
+	four = one + two - 1;	// 325
+}
+
+procedure q {
+	q = 1;	// 326
+	Q = 2;	// 327
+	qQ = 3;	// 328
+	qQQ = 4;	// 329
+	qQQQQQ = 5;	// 330
+	QQQQQQQQQQQqqq = 6;	// 331
+	QQQQQQQqQqQQq = 7;	// 332
+	qQq = 8;	// 333
+	qQQqqqqqQ = 9;	// 334
+	QqqqQq = 10;	// 335
+	qQQqqQQ = 11;	// 336
+	QqQ = 12;	// 337
+	QQ = 13;	// 338
+	QQQ = 14;	// 339
+	qq = 15;	// 340
+	qqq = 16;	// 341
+	QqQq = 17;	// 342
+	qQQQQQQQQQQQQQQQQQqqQQ = 18;	// 343
+	starfish = 19;	// 344
+	QQQQQQQQQqqqQQQQ = 20;	// 345
+	QQqqQqQQQQqqQQ = 22;	// 346
+	QqQqQQqQqQqqqq = 23;	// 347
+	QqqQqQQqQq = 24;	// 348
+	qQqqqQqqQqQQQqQq = 25;	// 349
+	qQqqqQqqqQq = 26;	// 350
+}
+
+procedure r {
+	call q;	// 351
+	r = 1;	// 352
+	rr = 2;	// 353
+	rrr = 3;	// 354
+	ry = 4;	// 355
+	rya = 5;	// 356
+	ryan = basic + name;	// 357
+	bryan = fake + ryan;	// 358
+	brian = why;	// 359
+}
+
+procedure s {
+	s = 1;	// 360
+	ss = 2;	// 361
+	sss = 3;	// 362
+	ssss = 4;	// 363
+	sssss = 5;	// 364
+	ssssss = 6;	// 365
+	sssssss = 7;	// 366
+	ssssssss = 8;	// 367
+	sssssssss = 9;	// 368
+	ssssssssss = 10;	// 369
+	sssssssssss = 11;	// 370
+	ssssssssssss = 12;	// 371
+	sssssssssssss = 13;	// 372
+	ssssssssssssss = 14;	// 373
+	sssssssssssssss = 15;	// 374
+	ssssssssssssssss = 16;	// 375
+	sssssssssssssss =  17;	// 376
+	ssssssssssssss = 18;	// 377
+	sssssssssssss = 19;	// 378
+	ssssssssssss = 20;	// 379
+	sssssssssss = 21;	// 380
+	ssssssssss = 22;	// 381
+	sssssssss = 23;	// 382
+	ssssssss = 24;	// 383
+	sssssss = 25;	// 384
+	ssssss = 26;	// 385
+	sssss = 27;	// 386
+	ssss = 28;	// 387
+	sss = 29;	// 388
+	ss = 30;	// 389
+	s = 31;	// 390
+}
+
+procedure t {
+	tea = i + love + tea;	// 391
+	read tea;	// 392
+	print tea;	// 393
+	print coffeeSucks;	// 394
+	print eew;	// 395
+	tea = please + buy + me + tea;	// 396
+	print please;	// 397
+	call s;	// 398
+	print please;	// 399
+	read please;	// 400
+	tea = deck + used + to + have + best + tea;	// 401
+	print whenItWasThatOneGuy;	// 402
+	print nowItsNotTheSame;	// 403
+	read tragicStory;	// 404
+	cueSadMusic = 1;	// 405
+	print nowThereAreMultiplePeople;	// 406
+	tea = not + hitting + the - same;	// 407
+	tea = I * miss / my % tea;	// 408
+	tea = tea;	// 409
+	print tea;	// 410
+	read tea;	// 411
+	tea = bestTea;	// 412
+}
+
+procedure u {
+	i9 = x7;	// 413
+	a1 = az;	// 414
+	b2 = x6;	// 415
+	g7 = j8;	// 416
+	a2 = x7 + i9;	// 417
+	print a1;	// 418
+	v2 = d0 + f1;	// 419
+	read g6;	// 420
+	m7 = q1;	// 421
+}
+
+procedure v {
+	vroom = vrooom * 3;	// 422
+	wasd = zxcv;	// 423
+	read ppp;	// 424
+	call h;	// 425
+	print fff;	// 426
+}
+
+procedure w {
+	read h;	// 427
+	hi = h + faruq;	// 428
+	hi = h + ly;	// 429
+	hi = h + xw;	// 430
+	hi = h + darho;	// 431
+	hi = h + calvin;	// 432
+	hi = h + ryan;	// 433
+	bye = bye * 2;	// 434
+}
+
+procedure x { 
+	kkk = jjj + 111;	// 435
+	www = xxx + yyy;	// 436
+	read hj8kp9jasd321jfjllf;	// 437
+}
+
+procedure y {
+	AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA = 1;	// 438
+	aaa = 2;	// 439
+}
+
+procedure z {
+	call u;	// 440
+	print sal;	// 441
+	call w;	// 442
+	read p0mp0m;	// 443
+	call y;	// 444
+	call u;	// 445
+	print sal;	// 446
+	call w;	// 447
+	read p0mp0m;	// 448
+	call y;	// 449
+	call u;	// 450
+	print sal;	// 451
+	call w;	// 452
+	read p0mp0m;	// 453
+	call y;	// 454
+	call u;	// 455
+	print sal;	// 456
+	call w;	// 457
+	read p0mp0m;	// 458
+	call y;	// 459
+	call u;	// 460
+	print sal;	// 461
+	call w;	// 462
+	read p0mp0m;	// 463
+	call y;	// 464
+	call u;	// 465
+	print sal;	// 466
+	call w;	// 467
+	read p0mp0m;	// 468
+	call y;	// 469
+	call x;	// 470
+	call u;	// 471
+	print sal;	// 472
+	call w;	// 473
+	read p0mp0m;	// 474
+	call y;	// 475
+	call u;	// 476
+	print sal;	// 477
+	call w;	// 478
+	read p0mp0m;	// 479
+	call y;	// 480
+	call u;	// 481
+	print sal;	// 482
+	call w;	// 483
+	read p0mp0m;	// 484
+	call y;	// 485
+	call u;	// 486
+	print sal;	// 487
+	call w;	// 488	
+	read p0mp0m;	// 489
+	call y;	// 490
+	call u;	// 491
+	print sal;	// 492
+	call w;	// 493
+	read p0mp0m;	// 494
+	call y;	// 495
+	call u;	// 496
+	print sal;	// 497
+	call w;	// 498
+	read p0mp0m;	// 499
+	call y;	// 500
+}

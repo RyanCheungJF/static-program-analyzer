@@ -1,10 +1,11 @@
 #ifndef SPA_QPS_PARAMETER_H
 #define SPA_QPS_PARAMETER_H
-#include "../../../src/utils/AppConstants.h"
-#include "exceptions/InternalException.h"
-#include "QPS/QPSGrammarUtils.h"
 #include <string>
 #include <unordered_map>
+
+#include "../../../src/utils/AppConstants.h"
+#include "QPS/QPSGrammarUtils.h"
+#include "exceptions/InternalException.h"
 using namespace std;
 
 enum class ParameterType {
@@ -49,13 +50,13 @@ public:
   string getTypeString() const;
   bool operator==(const Parameter &) const;
 
-  static ParameterType guessParameterType(string);
+    static ParameterType guessParameterType(string);
 
 private:
-  const static unordered_map<string, ParameterType> stringToTypeMap;
-  static ParameterType stringToType(string);
-  string value;
-  ParameterType type;
+    const static unordered_map<string, ParameterType> stringToTypeMap;
+    static ParameterType stringToType(string);
+    string value;
+    ParameterType type;
 };
 
 #endif

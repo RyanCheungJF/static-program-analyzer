@@ -7,22 +7,25 @@
 #include <vector>
 #include <unordered_set>
 
+#include "./utils/AppConstants.h"
+#include "Parameter.h"
+
 using namespace std;
 
 enum class RelationshipType {
-  FOLLOWS,
-  FOLLOWST,
-  PARENT,
-  PARENTT,
-  USES,
-  MODIFIES,
-  NEXT,
-  NEXTT,
-  CALLS,
-  CALLST,
-  AFFECTS,
-  AFFECTST,
-  UNKNOWN
+    FOLLOWS,
+    FOLLOWST,
+    PARENT,
+    PARENTT,
+    USES,
+    MODIFIES,
+    NEXT,
+    NEXTT,
+    CALLS,
+    CALLST,
+    AFFECTS,
+    AFFECTST,
+    UNKNOWN
 };
 
 class Relationship {

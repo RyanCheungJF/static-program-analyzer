@@ -11,53 +11,53 @@ const string THAT = "that";
 const string PATTERN = "pattern";
 const string AND = "and";
 
-vector<int> findSuchThat(const vector<string> &wordList) {
-  vector<int> suchThatStarts;
-  for (int i = 0; i < wordList.size(); i++) {
-    if (SUCH != wordList[i]) {
-      continue;
+vector<int> findSuchThat(const vector<string>& wordList) {
+    vector<int> suchThatStarts;
+    for (int i = 0; i < wordList.size(); i++) {
+        if (SUCH != wordList[i]) {
+            continue;
+        }
+        if (i == wordList.size() - 1) {
+            continue;
+        }
+        if (THAT != wordList[i + 1]) {
+            continue;
+        }
+        suchThatStarts.push_back(i);
     }
-    if (i == wordList.size() - 1) {
-      continue;
-    }
-    if (THAT != wordList[i + 1]) {
-      continue;
-    }
-    suchThatStarts.push_back(i);
-  }
 
-  return suchThatStarts;
+    return suchThatStarts;
 }
 
-vector<int> findPattern(const vector<string> &wordList) {
-  vector<int> patternStarts;
-  for (int i = 0; i < wordList.size(); i++) {
-    if (PATTERN != wordList[i]) {
-      continue;
+vector<int> findPattern(const vector<string>& wordList) {
+    vector<int> patternStarts;
+    for (int i = 0; i < wordList.size(); i++) {
+        if (PATTERN != wordList[i]) {
+            continue;
+        }
+        if (i == wordList.size() - 1) {
+            continue;
+        }
+        if (!startsWithLetter(wordList[i + 1])) {
+            continue;
+        }
+        patternStarts.push_back(i);
     }
-    if (i == wordList.size() - 1) {
-      continue;
-    }
-    if (!startsWithLetter(wordList[i + 1])) {
-      continue;
-    }
-    patternStarts.push_back(i);
-  }
-  return patternStarts;
+    return patternStarts;
 }
 
-vector<int> findAnds(const vector<string> &wordList, int start, int end) {
-  vector<int> ands;
-  for (int i = start; i < end; i++) {
-    if (AND != wordList[i]) {
-      continue;
+vector<int> findAnds(const vector<string>& wordList, int start, int end) {
+    vector<int> ands;
+    for (int i = start; i < end; i++) {
+        if (AND != wordList[i]) {
+            continue;
+        }
+        if (i == wordList.size() - 1) {
+            continue;
+        }
+        ands.push_back(i);
     }
-    if (i == wordList.size() - 1) {
-      continue;
-    }
-    ands.push_back(i);
-  }
-  return ands;
+    return ands;
 }
 
 // assumes the string is of the correct form:
@@ -94,8 +94,8 @@ tuple<string, vector<string>> extractParameters(string s, string containerStart,
 }
 
 string removeCharFromString(string s, char c) {
-  s.erase(remove(s.begin(), s.end(), c), s.end());
-  return s;
+    s.erase(remove(s.begin(), s.end(), c), s.end());
+    return s;
 }
 
 tuple<string, size_t, bool> extractSubStringUntilDelimiter(const string &original,
@@ -120,44 +120,47 @@ tuple<string, size_t, bool> extractSubStringUntilDelimiter(const string &origina
 }
 
 vector<string> stringToWordList(string s) {
-  vector<string> wordList;
-  stringstream ss(s);
-  string word;
-  while (ss >> word) {
-    wordList.push_back(word);
-  }
-  return wordList;
+    vector<string> wordList;
+    stringstream ss(s);
+    string word;
+    while (ss >> word) {
+        wordList.push_back(word);
+    }
+    return wordList;
 }
 
-string ltrim(const std::string &s) {
-  size_t start = s.find_first_not_of(WHITESPACE);
-  return (start == std::string::npos) ? "" : s.substr(start);
+string ltrim(const std::string& s) {
+    size_t start = s.find_first_not_of(WHITESPACE);
+    return (start == std::string::npos) ? "" : s.substr(start);
 }
 
-string rtrim(const std::string &s) {
-  size_t end = s.find_last_not_of(WHITESPACE);
-  return (end == std::string::npos) ? "" : s.substr(0, end + 1);
+string rtrim(const std::string& s) {
+    size_t end = s.find_last_not_of(WHITESPACE);
+    return (end == std::string::npos) ? "" : s.substr(0, end + 1);
 }
 
-string trim(const std::string &s) { return rtrim(ltrim(s)); }
+string trim(const std::string& s) {
+    return rtrim(ltrim(s));
+}
 
 vector<string> stringToWordListByDelimiter(string original, string delimiter) {
-  vector<string> wordList;
-  size_t length = original.length();
-  while (length != 0) {
-    size_t index = original.find(delimiter);
-    if (index == string::npos) {
-      wordList.push_back(trim(original));
-      break;
+    vector<string> wordList;
+    size_t length = original.length();
+    while (length != 0) {
+        size_t index = original.find(delimiter);
+        if (index == string::npos) {
+            wordList.push_back(trim(original));
+            break;
+        }
+        string word = original.substr(0, index);
+        wordList.push_back(trim(word));
+        if (index + 1 < length) {
+            original = original.substr(index + 1, length);
+            length = original.length();
+        }
+        else {
+            break;
+        }
     }
-    string word = original.substr(0, index);
-    wordList.push_back(trim(word));
-    if (index + 1 < length) {
-      original = original.substr(index + 1, length);
-      length = original.length();
-    } else {
-      break;
-    }
-  }
-  return wordList;
+    return wordList;
 }

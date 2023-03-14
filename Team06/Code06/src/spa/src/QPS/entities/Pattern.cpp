@@ -36,9 +36,13 @@ Pattern Pattern::makePattern(Parameter p, Parameter ent, vector<string> &es) {
   return processedPat;
 }
 
-Parameter *Pattern::getPatternSyn() { return &patternSyn; }
+Parameter* Pattern::getPatternSyn() {
+    return &patternSyn;
+}
 
-Parameter *Pattern::getEntRef() { return &entRef; }
+Parameter* Pattern::getEntRef() {
+    return &entRef;
+}
 
 vector<string> Pattern::getExprSpecs() { return exprSpecs; }
 
