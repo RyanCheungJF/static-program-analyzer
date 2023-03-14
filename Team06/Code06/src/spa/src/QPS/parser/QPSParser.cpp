@@ -40,28 +40,27 @@ vector<Query> QPSParser::parse(string qpsQuery) {
 }
 
 vector<string> QPSParser::splitQuery(string qpsQuery) {
-  qpsQuery = trim(qpsQuery);
-  // Check if the last term is a semicolon.
-  bool endsWithSemicolon = false;
-  if (qpsQuery.back() == ';') {
-    endsWithSemicolon = true;
-  }
-  string delimiter = ";";
-  vector<string> clauses;
-  int start = 0;
-  while (start != qpsQuery.size()) {
-    string clause;
-    bool found;
-    tie(clause, start, found) =
-        extractSubStringUntilDelimiter(qpsQuery, start, delimiter);
-    clause = trim(clause);
-    clauses.push_back(clause);
-  }
-  if (endsWithSemicolon) {
-    // select clause ends with semicolon
-    throw SyntaxException();
-  }
-  return clauses;
+    qpsQuery = trim(qpsQuery);
+    // Check if the last term is a semicolon.
+    bool endsWithSemicolon = false;
+    if (qpsQuery.back() == ';') {
+        endsWithSemicolon = true;
+    }
+    string delimiter = ";";
+    vector<string> clauses;
+    int start = 0;
+    while (start != qpsQuery.size()) {
+        string clause;
+        bool found;
+        tie(clause, start, found) = extractSubStringUntilDelimiter(qpsQuery, start, delimiter);
+        clause = trim(clause);
+        clauses.push_back(clause);
+    }
+    if (endsWithSemicolon) {
+        // select clause ends with semicolon
+        throw SyntaxException();
+    }
+    return clauses;
 }
 
 void QPSParser::checkSynonyms(Query* query, VariableStore varStore) {

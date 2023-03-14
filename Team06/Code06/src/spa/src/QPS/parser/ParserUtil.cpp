@@ -62,35 +62,32 @@ vector<int> findAnds(const vector<string>& wordList, int start, int end) {
 
 // assumes the string is of the correct form:
 // ^.*{containerStart}.*{containerEnd}$
-tuple<string, vector<string>> extractParameters(string s, string containerStart,
-                                                string containerEnd,
+tuple<string, vector<string>> extractParameters(string s, string containerStart, string containerEnd,
                                                 string delimiter) {
-  tuple<string, vector<string>> res;
-  int endOfString = s.size();
-  int curIndex = 0;
-  string outerParam = "";
-  vector<string> innerParams;
-  bool found = false;
-  tie(outerParam, curIndex, found) =
-      extractSubStringUntilDelimiter(s, curIndex, containerStart);
-  if (!found) {
-    throw InternalException("ParserUtil.extractParameters: containerStart not found");
-  }
-  string innerParamsString =
-      s.substr(curIndex, endOfString - curIndex - containerEnd.size());
-  endOfString = innerParamsString.size();
-  curIndex = 0;
-  while (curIndex < endOfString) {
-    string curParam;
-    tie(curParam, curIndex, found) = extractSubStringUntilDelimiter(innerParamsString, curIndex, delimiter);
-    if (found && curIndex == innerParamsString.size()) {
-      //end of string with delimiter at the end
-      throw SyntaxException();
+    tuple<string, vector<string>> res;
+    int endOfString = s.size();
+    int curIndex = 0;
+    string outerParam = "";
+    vector<string> innerParams;
+    bool found = false;
+    tie(outerParam, curIndex, found) = extractSubStringUntilDelimiter(s, curIndex, containerStart);
+    if (!found) {
+        throw InternalException("ParserUtil.extractParameters: containerStart not found");
     }
-    innerParams.push_back(curParam);
-  }
-  res = {outerParam, innerParams};
-  return res;
+    string innerParamsString = s.substr(curIndex, endOfString - curIndex - containerEnd.size());
+    endOfString = innerParamsString.size();
+    curIndex = 0;
+    while (curIndex < endOfString) {
+        string curParam;
+        tie(curParam, curIndex, found) = extractSubStringUntilDelimiter(innerParamsString, curIndex, delimiter);
+        if (found && curIndex == innerParamsString.size()) {
+            // end of string with delimiter at the end
+            throw SyntaxException();
+        }
+        innerParams.push_back(curParam);
+    }
+    res = {outerParam, innerParams};
+    return res;
 }
 
 string removeCharFromString(string s, char c) {
@@ -98,25 +95,20 @@ string removeCharFromString(string s, char c) {
     return s;
 }
 
-tuple<string, size_t, bool> extractSubStringUntilDelimiter(const string &original,
-                                                     int start,
-                                                     string delimiter) {
-  if (delimiter == "") {
-    throw InternalException(
-        "Error: ParserUtils.extractSubStringUntilDelimiter bad delimiter");
-  }
-  if (start < 0 || start >= original.size()) {
-    throw InternalException(
-        "Error: ParserUtils.extractSubStringUntilDelimiter bad start");
-  }
-  size_t end = original.find(delimiter, start);
-  if (end == string::npos) {
-    return tuple<string, int, bool>(original.substr(start, original.size()),
-                              original.size(), false);
-  }
-  size_t length = end - start;
-  string substr = original.substr(start, length);
-  return tuple<string, int, bool>(substr, end + delimiter.size(), true);
+tuple<string, size_t, bool> extractSubStringUntilDelimiter(const string& original, int start, string delimiter) {
+    if (delimiter == "") {
+        throw InternalException("Error: ParserUtils.extractSubStringUntilDelimiter bad delimiter");
+    }
+    if (start < 0 || start >= original.size()) {
+        throw InternalException("Error: ParserUtils.extractSubStringUntilDelimiter bad start");
+    }
+    size_t end = original.find(delimiter, start);
+    if (end == string::npos) {
+        return tuple<string, int, bool>(original.substr(start, original.size()), original.size(), false);
+    }
+    size_t length = end - start;
+    string substr = original.substr(start, length);
+    return tuple<string, int, bool>(substr, end + delimiter.size(), true);
 }
 
 vector<string> stringToWordList(string s) {

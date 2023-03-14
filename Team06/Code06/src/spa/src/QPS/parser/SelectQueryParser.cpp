@@ -83,144 +83,135 @@ vector<tuple<ClauseType, int, int>> SelectQueryParser::getClausePositions(map<Cl
 /*
 assumes start and end won't be -1 i.e. select clause must exist
 */
-vector<Parameter> SelectQueryParser::parseSelectClause(vector<string> &wordList,
-                                                       int start, int end) {
-  vector<Parameter> params;
-  if (end - start != 2) {
-    // select clause does not exist
-    throw SyntaxException();
-  }
-  if (!isSelect(wordList[start])) {
-    throw InternalException("Error: SelectQueryParser.parseSelectClause bad "
-                            "start position for wordList");
-  }
-  if (!isSynonym(wordList[end - (size_t)1])) {
-    // bad select parameter
-    throw SyntaxException();
-  }
-  Parameter param =
-      Parameter::makeParameter(wordList[1], AppConstants::SYNONYM);
-  params.push_back(param);
-  return params;
-}
-
-vector<shared_ptr<Relationship>>
-SelectQueryParser::parseSuchThatClause(vector<string> &wordList, int start,
-                                       int end) {
-  vector<shared_ptr<Relationship>> res;
-  if (start == -1 && end == -1) {
-    return res;
-  }
-  if (end <= start) {
-    throw InternalException("Error: SelectQueryParser.parseSuchThatClause bad "
-                            "start position and end position");
-  }
-  if (end - start < 3) {
-    throw SyntaxException();
-  }
-
-  int curIndex = start + 2;
-  vector<string> unparsedRelRef =
-      splitClauseByAnds(wordList, curIndex, end, hasCorrectRelRefOrPatternForm);
-  vector<tuple<string, vector<string>>> relRefParams;
-  for (int i = 0; i < unparsedRelRef.size(); i++) {
-    relRefParams.push_back(extractParameters(unparsedRelRef[i], "(", ")", ","));
-  }
-
-  for (int i = 0; i < relRefParams.size(); i++) {
-    // construct relations based on extracted params, can consider extracting
-    string rel;
-    vector<string> paramStrings;
+vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList, int start, int end) {
     vector<Parameter> params;
-    tie(rel, paramStrings) = relRefParams.at(i);
-    for (string pString : paramStrings) {
-      Parameter p = Parameter::makeParameter(pString);
-      params.push_back(p);
+    if (end - start != 2) {
+        // select clause does not exist
+        throw SyntaxException();
     }
-    res.push_back(Relationship::makeRelationship(rel, params));
-    // construction ends here
-  }
-
-  return res;
+    if (!isSelect(wordList[start])) {
+        throw InternalException("Error: SelectQueryParser.parseSelectClause bad "
+                                "start position for wordList");
+    }
+    if (!isSynonym(wordList[end - (size_t)1])) {
+        // bad select parameter
+        throw SyntaxException();
+    }
+    Parameter param = Parameter::makeParameter(wordList[1], AppConstants::SYNONYM);
+    params.push_back(param);
+    return params;
 }
 
-vector<Pattern> SelectQueryParser::parsePatternClause(vector<string> &wordList,
-                                                      int start, int end) {
-  vector<Pattern> res;
-  if (start == -1 && end == -1) {
+vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<string>& wordList, int start, int end) {
+    vector<shared_ptr<Relationship>> res;
+    if (start == -1 && end == -1) {
+        return res;
+    }
+    if (end <= start) {
+        throw InternalException("Error: SelectQueryParser.parseSuchThatClause bad "
+                                "start position and end position");
+    }
+    if (end - start < 3) {
+        throw SyntaxException();
+    }
+
+    int curIndex = start + 2;
+    vector<string> unparsedRelRef = splitClauseByAnds(wordList, curIndex, end, hasCorrectRelRefOrPatternForm);
+    vector<tuple<string, vector<string>>> relRefParams;
+    for (int i = 0; i < unparsedRelRef.size(); i++) {
+        relRefParams.push_back(extractParameters(unparsedRelRef[i], "(", ")", ","));
+    }
+
+    for (int i = 0; i < relRefParams.size(); i++) {
+        // construct relations based on extracted params, can consider extracting
+        string rel;
+        vector<string> paramStrings;
+        vector<Parameter> params;
+        tie(rel, paramStrings) = relRefParams.at(i);
+        for (string pString : paramStrings) {
+            Parameter p = Parameter::makeParameter(pString);
+            params.push_back(p);
+        }
+        res.push_back(Relationship::makeRelationship(rel, params));
+        // construction ends here
+    }
+
     return res;
-  }
-  if (end <= start) {
-    throw InternalException("Error: SelectQueryParser.parsePatternClause bad "
-                            "start position and end position");
-  }
-  if (end - start < 2) {
-    throw SyntaxException();
-  }
+}
 
-  int curIndex = start + 1;
-  vector<string> unparsedPatterns =
-      splitClauseByAnds(wordList, curIndex, end, hasCorrectRelRefOrPatternForm);
-
-  vector<tuple<string, vector<string>>> patternParams;
-  for (const auto &unparsedPattern : unparsedPatterns) {
-    patternParams.push_back(extractParameters(unparsedPattern, "(", ")", ","));
-  }
-
-  for (tuple<string, vector<string>> t : patternParams) {
-    // construct patterns based on extracted params
-    string patternDsgEntString, entRefString;
-    vector<string> paramStrings;
-    tie(patternDsgEntString, paramStrings) = t;
-    if (paramStrings.size() < 1) {
-      throw SyntaxException();
+vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, int start, int end) {
+    vector<Pattern> res;
+    if (start == -1 && end == -1) {
+        return res;
     }
-    entRefString = paramStrings[0];
-    Parameter patternSyn = Parameter::makeParameter(patternDsgEntString);
-    Parameter entRef = Parameter::makeParameter(entRefString);
-    vector<string> exprSpecs;
-    for (int i = 1; i < paramStrings.size(); i++) {
-      exprSpecs.push_back(paramStrings[i]);
+    if (end <= start) {
+        throw InternalException("Error: SelectQueryParser.parsePatternClause bad "
+                                "start position and end position");
     }
-    // construction ends here
-    res.push_back(Pattern::makePattern(patternSyn, entRef, exprSpecs));
-  }
+    if (end - start < 2) {
+        throw SyntaxException();
+    }
 
-  return res;
+    int curIndex = start + 1;
+    vector<string> unparsedPatterns = splitClauseByAnds(wordList, curIndex, end, hasCorrectRelRefOrPatternForm);
+
+    vector<tuple<string, vector<string>>> patternParams;
+    for (const auto& unparsedPattern : unparsedPatterns) {
+        patternParams.push_back(extractParameters(unparsedPattern, "(", ")", ","));
+    }
+
+    for (tuple<string, vector<string>> t : patternParams) {
+        // construct patterns based on extracted params
+        string patternDsgEntString, entRefString;
+        vector<string> paramStrings;
+        tie(patternDsgEntString, paramStrings) = t;
+        if (paramStrings.size() < 1) {
+            throw SyntaxException();
+        }
+        entRefString = paramStrings[0];
+        Parameter patternSyn = Parameter::makeParameter(patternDsgEntString);
+        Parameter entRef = Parameter::makeParameter(entRefString);
+        vector<string> exprSpecs;
+        for (int i = 1; i < paramStrings.size(); i++) {
+            exprSpecs.push_back(paramStrings[i]);
+        }
+        // construction ends here
+        res.push_back(Pattern::makePattern(patternSyn, entRef, exprSpecs));
+    }
+
+    return res;
 }
 
 vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
     return vector<ClauseType>{SELECT, SUCH_THAT, PATTERN, WITH};
 }
 
-vector<string>
-SelectQueryParser::splitClauseByAnds(vector<string> &wordList, int start,
-                                     int end,
-                                     function<bool(string)> formChecker) {
-  vector<int> ands = findAnds(wordList, start, end);
-  vector<string> res;
-  string condString = "";
-  int curIndex = start;
-  for (int i = 0; i < ands.size(); i++) {
-    for (int j = curIndex; j < ands[i]; j++) {
-      condString += wordList[j];
+vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, int start, int end,
+                                                    function<bool(string)> formChecker) {
+    vector<int> ands = findAnds(wordList, start, end);
+    vector<string> res;
+    string condString = "";
+    int curIndex = start;
+    for (int i = 0; i < ands.size(); i++) {
+        for (int j = curIndex; j < ands[i]; j++) {
+            condString += wordList[j];
+        }
+        if (!formChecker(condString)) {
+            curIndex = ands[i];
+            continue;
+        }
+        res.push_back(condString);
+        condString = "";
+        curIndex = ands[i] + 1;
+    }
+
+    while (curIndex < end) {
+        condString += wordList[curIndex];
+        curIndex++;
     }
     if (!formChecker(condString)) {
-      curIndex = ands[i];
-      continue;
+        throw SyntaxException();
     }
     res.push_back(condString);
-    condString = "";
-    curIndex = ands[i] + 1;
-  }
-
-  while (curIndex < end) {
-    condString += wordList[curIndex];
-    curIndex++;
-  }
-  if (!formChecker(condString)) {
-    throw SyntaxException();
-  }
-  res.push_back(condString);
-  return res;
+    return res;
 }

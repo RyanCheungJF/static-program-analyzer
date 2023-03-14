@@ -3,18 +3,19 @@
 using namespace std;
 
 vector<Parameter> declarationToParameter(string s) {
-  // The string should look something like "stmt s1, s2" at this point
-  vector<Parameter> paramList;
-  if (isDesignEntity(s)) {
-    string designEntity, synonyms;
-    tie(designEntity, synonyms) = extractDesignEntity(s);
-    vector<string> synonymList = stringToWordListByDelimiter(synonyms, ",");
-    for (const string &synonym : synonymList) {
-      if (!isSynonym(synonym)) {
-        throw SyntaxException();
-      }
-      Parameter p = Parameter::makeParameter(synonym, designEntity);
-      paramList.push_back(p);
+    // The string should look something like "stmt s1, s2" at this point
+    vector<Parameter> paramList;
+    if (isDesignEntity(s)) {
+        string designEntity, synonyms;
+        tie(designEntity, synonyms) = extractDesignEntity(s);
+        vector<string> synonymList = stringToWordListByDelimiter(synonyms, ",");
+        for (const string& synonym : synonymList) {
+            if (!isSynonym(synonym)) {
+                throw SyntaxException();
+            }
+            Parameter p = Parameter::makeParameter(synonym, designEntity);
+            paramList.push_back(p);
+        }
     }
     else {
         // is not a design entity

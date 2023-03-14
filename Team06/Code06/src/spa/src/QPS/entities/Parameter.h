@@ -9,46 +9,46 @@
 using namespace std;
 
 enum class ParameterType {
-  STMT,
-  READ,
-  PRINT,
-  CALL,
-  WHILE,
-  IF,
-  ASSIGN,
-  VARIABLE,
-  CONSTANT,
-  PROCEDURE,
-  SYNONYM,
-  WILDCARD,
-  FIXED_INT,
-  FIXED_STRING,
-  UNKNOWN
+    STMT,
+    READ,
+    PRINT,
+    CALL,
+    WHILE,
+    IF,
+    ASSIGN,
+    VARIABLE,
+    CONSTANT,
+    PROCEDURE,
+    SYNONYM,
+    WILDCARD,
+    FIXED_INT,
+    FIXED_STRING,
+    UNKNOWN
 };
 
 class Parameter {
 public:
-  string getValue();
-  ParameterType getType() const;
-  Parameter(string, string);
-  Parameter(string, ParameterType);
-  Parameter(const Parameter &);
-  Parameter();
-  static Parameter makeParameter(string);
-  static Parameter makeParameter(string, string);
-  static bool isSyntacticEntityRef(Parameter &);
-  static bool isEntityRef(Parameter &);
-  static bool isSyntacticStatementRef(Parameter &);
-  static bool isStatementRef(Parameter &);
-  static bool isProcedure(Parameter &);
-  static bool isDsgEntity(Parameter &);
-  static bool isPatternSyn(Parameter &);
-  static bool isFixedStringOrWildcard(Parameter &);
-  static bool isFixedIntOrWildCard(Parameter &);
-  bool isUncheckedSynonym();
-  void updateSynonymType(ParameterType);
-  string getTypeString() const;
-  bool operator==(const Parameter &) const;
+    string getValue();
+    ParameterType getType() const;
+    Parameter(string, string);
+    Parameter(string, ParameterType);
+    Parameter(const Parameter&);
+    Parameter();
+    static Parameter makeParameter(string);
+    static Parameter makeParameter(string, string);
+    static bool isSyntacticEntityRef(Parameter&);
+    static bool isEntityRef(Parameter&);
+    static bool isSyntacticStatementRef(Parameter&);
+    static bool isStatementRef(Parameter&);
+    static bool isProcedure(Parameter&);
+    static bool isDsgEntity(Parameter&);
+    static bool isPatternSyn(Parameter&);
+    static bool isFixedStringOrWildcard(Parameter&);
+    static bool isFixedIntOrWildCard(Parameter&);
+    bool isUncheckedSynonym();
+    void updateSynonymType(ParameterType);
+    string getTypeString() const;
+    bool operator==(const Parameter&) const;
 
     static ParameterType guessParameterType(string);
 

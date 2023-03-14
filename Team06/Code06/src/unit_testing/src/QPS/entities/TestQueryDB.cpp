@@ -1,6 +1,8 @@
 #include <string>
 #include <vector>
-#include "qps/entities/Table.h"
+#include "QPS/entities/Table.h"
+#include "catch.hpp"
+#include "QPS/entities/QueryDB.h"
 #include <chrono>
 using namespace std::chrono;
 using namespace std;

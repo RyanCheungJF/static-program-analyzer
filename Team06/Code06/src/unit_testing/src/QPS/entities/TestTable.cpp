@@ -212,9 +212,8 @@ TEST_CASE("extractDesignEntities / test for call and fixed_string / returns call
 
 TEST_CASE("extractDesignEntities / test constant, procedure and") {
 
-    vector<Parameter> headers = {Parameter("c", AppConstants::CONSTANT), Parameter("proc", AppConstants::PROCEDURE),
-                                 Parameter("_\"a\"_", AppConstants::FIXED_STRING_WTIH_WILDCARD)};
-    vector<vector<string>> content = {{"999", "main", "x+a"}};
+    vector<Parameter> headers = {Parameter("c", AppConstants::CONSTANT), Parameter("proc", AppConstants::PROCEDURE),};
+    vector<vector<string>> content = {{"999", "main"}};
     Table table(headers, content);
     Table t = table.extractDesignEntities();
     REQUIRE(

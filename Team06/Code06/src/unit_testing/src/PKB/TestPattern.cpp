@@ -90,23 +90,18 @@ TEST_CASE("Test If/While Pattern on WritePKB and ReadPKB") {
     SECTION("if(\"x\", _, _)") {
         Parameter param1 = Parameter("if", AppConstants::IF);
         Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
-        string param3 = "_";
-        Parameter param4 = Parameter("_", AppConstants::WILDCARD);
-        Pattern pattern = Pattern(param1, param2, param3, param4);
-
-    Parameter param1;
-    Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
-    vector<string> exprSpecs1 = {"a + b / c"};
-    vector<string> exprSpecs2 = {"z * 5"};
-    Pattern pattern1 = Pattern(param1, param2, exprSpecs1);
-    Pattern pattern2 = Pattern(param1, param2, exprSpecs2);
-
+        vector<string> exprSpecs = {"_", "_"};
+        Pattern pattern = Pattern(param1, param2, exprSpecs);
+        std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern);
+        std::vector<std::vector<std::string>> expected = {{"1", "z"}, {"2", "z"}};
+        REQUIRE(res.size() == 2);
+        REQUIRE(equals(res, expected));
+    }
     SECTION("while(v, _)") {
         Parameter param1 = Parameter("while", AppConstants::WHILE);
         Parameter param2 = Parameter("v", AppConstants::VARIABLE);
-        string param3 = "_";
-        Parameter param4 = Parameter("_", AppConstants::WILDCARD);
-        Pattern pattern = Pattern(param1, param2, param3, param4);
+        vector<string> exprSpecs = {"_"};
+        Pattern pattern = Pattern(param1, param2, exprSpecs);
 
         std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern);
         std::vector<std::vector<std::string>> expected = {{"1", "x"}, {"1", "y"}, {"1", "z"}, {"2", "z"}};
@@ -117,9 +112,8 @@ TEST_CASE("Test If/While Pattern on WritePKB and ReadPKB") {
     SECTION("if(_, _, _)") {
         Parameter param1 = Parameter("if", AppConstants::IF);
         Parameter param2 = Parameter("_", AppConstants::WILDCARD);
-        string param3 = "_";
-        Parameter param4 = Parameter("_", AppConstants::WILDCARD);
-        Pattern pattern = Pattern(param1, param2, param3, param4);
+        vector<string> exprSpecs = {"_", "_"};
+        Pattern pattern = Pattern(param1, param2, exprSpecs);
 
         std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern);
         std::vector<std::vector<std::string>> expected = {{"1", "x"}, {"1", "y"}, {"1", "z"}, {"2", "z"}};
@@ -130,9 +124,8 @@ TEST_CASE("Test If/While Pattern on WritePKB and ReadPKB") {
     SECTION("while(\"non-exist\", _, _)") {
         Parameter param1 = Parameter("while", AppConstants::WHILE);
         Parameter param2 = Parameter("non-exist", AppConstants::FIXED_STRING);
-        string param3 = "_";
-        Parameter param4 = Parameter("_", AppConstants::WILDCARD);
-        Pattern pattern = Pattern(param1, param2, param3, param4);
+        vector<string> exprSpecs = {"_", "_"};
+        Pattern pattern = Pattern(param1, param2, exprSpecs);
 
         std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern);
         REQUIRE(res.size() == 0);
