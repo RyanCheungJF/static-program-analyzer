@@ -128,41 +128,15 @@ SelectQueryParser::parseSuchThatClause(vector<string> &wordList, int start,
   }
 
   int curIndex = start + 2;
-  // Duplicate logic as pattern, may want to extract out
-  // vector<string> SplitClauseByAnds(vector<string> wordList, function<bool(string)> formChecker)
-  vector<int> ands = findAnds(wordList, start, end);
-  vector<string> unparsedRelRef;
-  string condString = "";
-  for (int i = 0; i < ands.size(); i++) {
-    for (int j = curIndex; j < ands[i]; j++) {
-      condString += wordList[j];
-    }
-    if (!hasCorrectRelRefOrPatternForm(condString)) {
-      curIndex = ands[i];
-      continue;
-    }
-    unparsedRelRef.push_back(condString);
-    condString = "";
-    curIndex = ands[i] + 1;
-  }
-
-  while (curIndex < end) {
-    condString += wordList[curIndex];
-    curIndex++;
-  }
-  if (!hasCorrectRelRefOrPatternForm(condString)) {
-    throw SyntaxException();
-  }
-  unparsedRelRef.push_back(condString);
-  // Duplicate til here
-
+  vector<string> unparsedRelRef =
+      splitClauseByAnds(wordList, curIndex, end, hasCorrectRelRefOrPatternForm);
   vector<tuple<string, vector<string>>> relRefParams;
   for (int i = 0; i < unparsedRelRef.size(); i++) {
     relRefParams.push_back(extractParameters(unparsedRelRef[i], "(", ")", ","));
   }
 
   for (int i = 0; i < relRefParams.size(); i++) {
-    //construct relations based on extracted params, can consider extracting
+    // construct relations based on extracted params, can consider extracting
     string rel;
     vector<string> paramStrings;
     vector<Parameter> params;
@@ -172,7 +146,7 @@ SelectQueryParser::parseSuchThatClause(vector<string> &wordList, int start,
       params.push_back(p);
     }
     res.push_back(Relationship::makeRelationship(rel, params));
-    //construction ends here
+    // construction ends here
   }
 
   return res;
@@ -193,38 +167,15 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string> &wordList,
   }
 
   int curIndex = start + 1;
-  //Duplicate logic as such that, may want to extract out
-  vector<int> ands = findAnds(wordList, start, end);
-  vector<string> unparsedPatterns;
-  string condString;
-  for (int i = 0; i < ands.size(); i++) {
-    for (int j = curIndex; j < ands[i]; j++) {
-      condString += wordList[j];
-    }
-    if (!hasCorrectRelRefOrPatternForm(condString)) {
-      curIndex = ands[i];
-      continue;
-    }
-    unparsedPatterns.push_back(condString);
-    condString = "";
-    curIndex = ands[i] + 1;
-  }
-
-  while (curIndex < end) {
-    condString += wordList[curIndex];
-    curIndex++;
-  }
-  if (!hasCorrectRelRefOrPatternForm(condString)) {
-    throw SyntaxException();
-  }
-  unparsedPatterns.push_back(condString);
-  //Duplicate til here
+  // Duplicate logic as such that, may want to extract out
+  vector<string> unparsedPatterns =
+      splitClauseByAnds(wordList, curIndex, end, hasCorrectRelRefOrPatternForm);
+  // Duplicate til here
 
   vector<tuple<string, vector<string>>> patternParams;
   for (const auto &unparsedPattern : unparsedPatterns) {
     patternParams.push_back(extractParameters(unparsedPattern, "(", ")", ","));
   }
-
 
   for (tuple<string, vector<string>> t : patternParams) {
     // construct patterns based on extracted params
@@ -241,9 +192,8 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string> &wordList,
     for (int i = 1; i < paramStrings.size(); i++) {
       exprSpecs.push_back(paramStrings[i]);
     }
-     //construction ends here
+    // construction ends here
     res.push_back(Pattern::makePattern(patternSyn, entRef, exprSpecs));
-
   }
 
   return res;
@@ -251,4 +201,36 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string> &wordList,
 
 vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
   return vector<ClauseType>{SELECT, SUCH_THAT, PATTERN, WITH};
+}
+
+vector<string>
+SelectQueryParser::splitClauseByAnds(vector<string> &wordList, int start,
+                                     int end,
+                                     function<bool(string)> formChecker) {
+  vector<int> ands = findAnds(wordList, start, end);
+  vector<string> res;
+  string condString = "";
+  int curIndex = start;
+  for (int i = 0; i < ands.size(); i++) {
+    for (int j = curIndex; j < ands[i]; j++) {
+      condString += wordList[j];
+    }
+    if (!formChecker(condString)) {
+      curIndex = ands[i];
+      continue;
+    }
+    res.push_back(condString);
+    condString = "";
+    curIndex = ands[i] + 1;
+  }
+
+  while (curIndex < end) {
+    condString += wordList[curIndex];
+    curIndex++;
+  }
+  if (!formChecker(condString)) {
+    throw SyntaxException();
+  }
+  res.push_back(condString);
+  return res;
 }
