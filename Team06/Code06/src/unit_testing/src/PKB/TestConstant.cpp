@@ -9,10 +9,6 @@ TEST_CASE("Checks that write and read works for constantStorage") {
     cs.writeConstant(9, {c});
     std::unordered_set<StmtNum> statementNums = cs.getConstantStmtNums(c);
 
-    for (auto i : statementNums) {
-        std::cout << i;
-    }
-
     REQUIRE(statementNums.size() == 3);
     REQUIRE(statementNums.find(4) != statementNums.end());  // 4 is present
     REQUIRE(statementNums.find(8) != statementNums.end());  // 8 is present

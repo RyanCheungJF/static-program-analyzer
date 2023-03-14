@@ -1,6 +1,6 @@
 #include "PrintStatement.h"
 
-PrintStatement::PrintStatement() {}
+PrintStatement::PrintStatement() : varName() {}
 
 PrintStatement::PrintStatement(StmtNum stmtNum, Ent varName) {
     this->statementNumber = stmtNum;

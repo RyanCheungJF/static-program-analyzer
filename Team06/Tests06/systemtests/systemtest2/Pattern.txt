@@ -23,3 +23,28 @@ assign a;
 Select a pattern a("REEE", _)
 none
 5000
+6 - comment
+if if; while w; variable v;
+Select if pattern if("p0licemAN", _, _)
+4
+5000
+7 - comment
+if if; while w; variable v;
+Select if pattern if("==", _, _)
+SyntaxError
+5000
+8 - comment
+if if; while w; variable v;
+Select if pattern if("p0liceWahMan", _, _)
+4
+5000
+9 - comment
+if if; while w; variable v;
+Select if pattern if("p0liceWahMan", "read", "print")
+SyntaxError
+5000
+10 - comment
+if if; while w; variable v;
+Select if pattern if(_, _, _)
+4, 24
+5000
