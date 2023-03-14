@@ -7,20 +7,20 @@ using namespace std;
 
 class Pattern {
 public:
-    Parameter patternSyn;
-    Parameter entRef;
-    vector<string> exprSpecs;
-    Pattern();
-    Pattern(const Pattern&);
-    Pattern(Parameter, Parameter, vector<string>&);
-    static Pattern makePattern(Parameter, Parameter, vector<string>&);
-    Parameter* getPatternSyn();
-    Parameter* getEntRef();
-    vector<string> getExprSpecs();
-    bool validateParams();
+  Parameter patternSyn;
+  Parameter entRef;
+  vector<string> exprSpecs;
+  Pattern();
+  Pattern(const Pattern &);
+  Pattern(Parameter, Parameter, vector<string> &);
+  static Pattern makePattern(Parameter, Parameter, vector<string> &);
+  Parameter *getPatternSyn();
+  Parameter *getEntRef();
+  vector<string> getExprSpecs();
+  bool validateParams();
 
 private:
-    static const unordered_map<int, shared_ptr<SyntaxValidator<Pattern>>> paramCountToValidatorMap;
+  static const unordered_map<int, shared_ptr<SyntaxValidator<Pattern>>> paramCountToValidatorMap;
 };
 
 #endif // SPQ_QPS_PATTERN_H

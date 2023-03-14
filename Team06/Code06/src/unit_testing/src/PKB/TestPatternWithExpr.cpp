@@ -55,8 +55,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
 
     std::vector<std::vector<std::string>> check1 = {{"1", "z"}};
     std::vector<std::vector<std::string>> check2 = {{"2", "z"}};
-    ;
-    REQUIRE(check1 == res1);
+    
     REQUIRE(unit_testing_utils::equals(check1, res1));
     REQUIRE(unit_testing_utils::equals(check2, res2));
 }
@@ -95,7 +94,6 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
 
     REQUIRE(unit_testing_utils::equals(check1, res1));
     REQUIRE(unit_testing_utils::equals(check2, res2));
-    REQUIRE(readPkb.findPattern(pattern2).size() == 1);
 }
 
 TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
@@ -118,8 +116,8 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
 
     Parameter param1 = Parameter("a", AppConstants::ASSIGN);
     Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
-    vector<string> exprSpecs1 = {"_"};
-    Pattern pattern1 = Pattern(param1, param2, exprSpecs1);
+    vector<string> exprSpecs = {"_"};
+    Pattern pattern1 = Pattern(param1, param2, exprSpecs);
 
     std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern1);
 

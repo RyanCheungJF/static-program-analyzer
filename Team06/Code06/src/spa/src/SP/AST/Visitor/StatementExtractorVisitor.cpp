@@ -1,8 +1,6 @@
 #include "StatementExtractorVisitor.h"
 
-StatementExtractorVisitor::StatementExtractorVisitor(WritePKB* writePKB) {
-    writeApi = writePKB;
-}
+StatementExtractorVisitor::StatementExtractorVisitor(WritePKB* writePKB) : writeApi(writePKB) {}
 
 void StatementExtractorVisitor::visitProgram(Program* program) {}
 void StatementExtractorVisitor::visitProcedure(Procedure* procedure) {}

@@ -50,6 +50,8 @@ public:
     inline static const std::string ELSE = "else";
     inline static const std::string AND = "&&";
     inline static const std::string OR = "||";
+    inline static const std::string EQUALS = "==";
+    inline static const std::string NOT_EQUALS = "!=";
     inline static const char NOT = '!';
     inline static const char GREATER = '>';
     inline static const char LESS = '<';
@@ -63,6 +65,9 @@ public:
     inline static const char LEFT_PARENTHESIS = '(';
     inline static const char RIGHT_PARENTHESIS = ')';
     inline static const char SEMICOLON = ';';
+    inline static const char EQUAL_SIGN = '=';
+    inline static const char AMPERSAND = '&';
+    inline static const char VERTICAL_BAR = '|';
 
     // CFG-related
     inline static const std::string PARENTS = "parents";

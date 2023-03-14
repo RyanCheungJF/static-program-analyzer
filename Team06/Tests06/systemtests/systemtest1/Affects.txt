@@ -1,0 +1,60 @@
+1 - comment
+assign a;
+Select a such that Affects(24, 25)
+none
+5000
+2 - comment
+assign a;
+Select a such that Affects(41, 17)
+none
+5000
+3 - comment
+assign a; call c;
+Select c such that Affects(17, 41)
+4
+5000
+4 - comment
+assign a; call c;
+Select c such that Affects(28, 38)
+4
+5000
+5 - comment
+assign a; call c;
+Select c such that Affects(41, 41)
+4
+5000
+6 - comment
+assign a; call c;
+Select c such that Affects(30, 30)
+none
+5000
+7 - comment
+variable v;
+Select v such that Affects(20, 35)
+b
+5000
+8 - comment
+variable v;
+Select v such that Affects(26, 26)
+a
+5000
+9 - comment
+variable v;
+Select v such that Affects(39, 39)
+none
+5000
+10 - comment
+assign a; call c;
+Select c such that Affects(12, 18)
+none
+5000
+11 - comment
+assign a; call c;
+Select c such that Affects(18, 12)
+none
+5000
+12 - comment
+assign a; call c; variable v;
+Select v such that Affects(38, 39)
+while
+5000

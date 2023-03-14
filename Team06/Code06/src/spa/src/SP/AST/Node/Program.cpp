@@ -1,6 +1,6 @@
 #include "Program.h"
 
-Program::Program() {}
+Program::Program() : procedureList() {}
 
 Program::Program(std::vector<std::unique_ptr<Procedure>> procedureList) {
     this->procedureList = std::move(procedureList);

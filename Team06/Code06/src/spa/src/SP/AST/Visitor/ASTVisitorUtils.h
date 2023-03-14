@@ -24,7 +24,7 @@
 StmtNum visitLastStatementHelper(Statement* statement);
 StmtNum checkLastStatementHelper(StatementList* stmtList);
 void recurseStatementHelper(Statement* recurseStmt, ASTVisitor* visitor);
-void checkStatementHelper(Statement* recurseStmt, ASTVisitor* visitor);
+void checkStatementHelper(std::vector<std::unique_ptr<Statement>>& statements, ASTVisitor* visitor);
 void visitCondExprHelper(ConditionalExpression* condExpr, std::unordered_set<Ent>& variables,
                          std::unordered_set<Const>& constants);
 void visitExprHelper(Expression* expr, std::unordered_set<Ent>& variables, std::unordered_set<Const>& constants);
@@ -49,7 +49,7 @@ void validateNoCycles(std::vector<ProcName>& procedureNames,
 void recurseCallStatementHelper(Statement* recurseStmt,
                                 std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
                                 ProcName parentProcedure);
-void checkCallStatementHelper(Statement* recurseStmt,
+void checkCallStatementHelper(std::vector<std::unique_ptr<Statement>>& statements,
                               std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
                               ProcName parentProcedure);
 void populateCallsTable(std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,

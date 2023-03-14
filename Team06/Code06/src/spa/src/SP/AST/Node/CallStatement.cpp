@@ -1,6 +1,6 @@
 #include "CallStatement.h"
 
-CallStatement::CallStatement() {}
+CallStatement::CallStatement() : procName() {}
 
 CallStatement::CallStatement(StmtNum stmtNum, ProcName procName) {
     this->statementNumber = stmtNum;
