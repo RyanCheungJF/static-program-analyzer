@@ -3,8 +3,6 @@
 #include <string>
 #include <vector>
 #include "QPS/entities/Table.h"
-#include <chrono>
-using namespace std::chrono;
 using namespace std;
 
 TEST_CASE("insertTable / inserting large table / return true") {
@@ -88,16 +86,22 @@ TEST_CASE("insertTable / inserting large table / return true") {
             {"ff", "33", "c", "333"},
             {"gg", "44", "d", "444"},
     };
-    auto start = high_resolution_clock::now();
     Table t1(h1, c1);
     Table t2(h2,c2);
     QueryDB qdb;
     qdb.insertTable(t1);
     qdb.insertTable(t2);
-    auto stop = high_resolution_clock::now();
-    auto duration = duration_cast<microseconds>(stop - start);
-    cout << duration.count() << endl;
-    REQUIRE(true);
+    ReadPKB readPKB;
+    vector<string> content = qdb.fetch({
+       Parameter("v", ParameterType::VARIABLE),
+       Parameter("s", ParameterType::STMT),
+       Parameter("vv", ParameterType::VARIABLE),
+       Parameter("s1", ParameterType::STMT),
+       Parameter("v1", ParameterType::VARIABLE),
+       Parameter("s2", ParameterType::STMT),
+       Parameter("ss", ParameterType::STMT)
+    }, readPKB);
+    REQUIRE(content.size() == 256);
 }
 
 //TEST_CASE("insertTable / insertion of two tables with intersection / return "

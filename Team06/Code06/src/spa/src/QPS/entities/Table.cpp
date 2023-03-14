@@ -48,13 +48,16 @@ Table Table::cartesianProduct(Table table) {
     vector<Parameter> h2 = table.getHeaders();
     vector<vector<string>> c1 = this->getContent();
     vector<vector<string>> c2 = table.getContent();
+    vector<vector<string>> c3;
     h1.insert(h1.end(), h2.begin(), h2.end());
-    for(vector<string> row1 : c1) {
+    for(const vector<string>& row1 : c1) {
         for (vector<string> row2 : c2) {
-            c1.insert(c1.end(), c2.begin(), c2.end());
+            vector<string> dupRow(row1);
+            dupRow.insert(dupRow.end(), row2.begin(), row2.end());
+            c3.push_back(dupRow);
         }
     }
-    return *this;
+    return Table{h1, c3};
 }
 
 vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector<vector<string>> c2, const vector<pair<int, int>>& intersectingIndexes) {
