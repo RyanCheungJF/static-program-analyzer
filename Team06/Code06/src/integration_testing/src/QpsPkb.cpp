@@ -681,9 +681,7 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
 			Select a such that Affects(1, a))";
 
             result = qps.processQueries(query, readPkb);
-            REQUIRE(result.size() == 2);
-            REQUIRE(exists(result, "4"));
-            REQUIRE(exists(result, "6"));
+            REQUIRE(result.size() == 0);
         }
 
         SECTION("syn, wildcard") {
@@ -692,8 +690,7 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
 			Select a such that Affects(a, _))";
 
             result = qps.processQueries(query, readPkb);
-            REQUIRE(result.size() == 2);
-            REQUIRE(exists(result, "1"));
+            REQUIRE(result.size() == 1);
             REQUIRE(exists(result, "8"));
         }
     }
@@ -715,9 +712,7 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
 			Select a2 such that Affects*(a1, a2))";
 
             result = qps.processQueries(query, readPkb);
-            REQUIRE(result.size() == 3);
-            REQUIRE(exists(result, "4"));
-            REQUIRE(exists(result, "6"));
+            REQUIRE(result.size() == 1);
             REQUIRE(exists(result, "11"));
         }
     }

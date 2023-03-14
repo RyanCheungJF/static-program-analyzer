@@ -207,15 +207,12 @@ const unordered_map<RelationshipType, vector<unordered_set<ParameterType>>>
         {RelationshipType::AFFECTS,
          {
              {ParameterType::WILDCARD, ParameterType::ASSIGN,
-              ParameterType::FIXED_STRING},
-             {ParameterType::WILDCARD, ParameterType::ASSIGN,
-              ParameterType::FIXED_STRING},
+              ParameterType::FIXED_INT},
+             {ParameterType::WILDCARD, ParameterType::ASSIGN, ParameterType::FIXED_INT},
          }},
         {RelationshipType::AFFECTST,
          {
-             {ParameterType::WILDCARD, ParameterType::ASSIGN,
-              ParameterType::FIXED_STRING},
-             {ParameterType::WILDCARD, ParameterType::ASSIGN,
-              ParameterType::FIXED_STRING},
+             {ParameterType::WILDCARD, ParameterType::ASSIGN, ParameterType::FIXED_INT},
+             {ParameterType::WILDCARD, ParameterType::ASSIGN, ParameterType::FIXED_INT},
          }},
 };
