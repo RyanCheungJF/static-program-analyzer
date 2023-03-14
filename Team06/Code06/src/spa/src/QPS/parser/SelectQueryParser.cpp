@@ -167,10 +167,8 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string> &wordList,
   }
 
   int curIndex = start + 1;
-  // Duplicate logic as such that, may want to extract out
   vector<string> unparsedPatterns =
       splitClauseByAnds(wordList, curIndex, end, hasCorrectRelRefOrPatternForm);
-  // Duplicate til here
 
   vector<tuple<string, vector<string>>> patternParams;
   for (const auto &unparsedPattern : unparsedPatterns) {
