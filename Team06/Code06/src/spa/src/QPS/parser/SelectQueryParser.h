@@ -1,10 +1,11 @@
 #ifndef SPA_SELECTCLAUSEPARSER_H
 #define SPA_SELECTCLAUSEPARSER_H
 #include "ParserUtil.h"
-#include "exceptions/Exception.h"
 #include "QPS/entities/Query.h"
 #include "QPS/entities/Relationship.h"
+#include "exceptions/Exception.h"
 #include <algorithm>
+#include <functional>
 #include <map>
 #include <sstream>
 #include <string>
@@ -31,6 +32,8 @@ private:
   vector<Pattern> parsePatternClause(vector<string> &wordList, int start,
                                      int end);
   vector<ClauseType> getAllClauseTypes();
+  vector<string> splitClauseByAnds(vector<string> &wordList, int start, int end,
+                                   function<bool(string)> formChecker);
 };
 
 #endif // SPA_SELECTCLAUSEPARSER_H
