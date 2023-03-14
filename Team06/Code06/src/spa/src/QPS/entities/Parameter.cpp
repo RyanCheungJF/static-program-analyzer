@@ -43,7 +43,6 @@ Parameter Parameter::makeParameter(string val, string type) {
 
 bool Parameter::isSyntacticStatementRef(Parameter &p) {
   return p.type == ParameterType::SYNONYM || isStatementRef(p);
->>>>>>>>> Temporary merge branch 2
 }
 
 bool Parameter::isStatementRef(Parameter &p) {
