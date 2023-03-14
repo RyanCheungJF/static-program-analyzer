@@ -64,6 +64,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
      * i = h + 1; //20
      * call proc2; //21
      * j = j + 1; //22
+     *
+     *
      * Valid Affects relationships:
      * (2, 5), (3, 6), (6, 9),
      * (7, 8), (8, 2), (9, 3),
@@ -73,7 +75,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
      *
      *
      * proc2:
-     * j = j + 1; //22
+     * j = j + 1; //23
      *
      */
 
@@ -98,12 +100,16 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
     writePkb.setStatement("assign", 14);
     writePkb.setStatement("read", 15);
     writePkb.setStatement("call", 16);
+    writePkb.setCall(16, proc2);
     writePkb.setStatement("print", 17);
     writePkb.setStatement("assign", 18);
     writePkb.setStatement("assign", 19);
     writePkb.setStatement("assign", 20);
-    writePkb.setStatement("assign", 21);
+    writePkb.setStatement("call", 21);
+    writePkb.setCall(21, proc2);
     writePkb.setStatement("assign", 22);
+    writePkb.setStatement("assign", 23);
+
     writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22});
     writePkb.setProcedure(proc2, {23});
 
@@ -127,7 +133,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
     writePkb.setModifiesS(18, {"d"});
     writePkb.setModifiesS(19, {"h"});
     writePkb.setModifiesS(20, {"i"});
-    writePkb.setModifiesS(21, {"j"});
+//    writePkb.setModifiesS(21, {});
     writePkb.setModifiesS(22, {"j"});
     writePkb.setModifiesP(proc1, {"y", "x", "v", "c", "d", "f", "e", "a", "b", "h", "j"});
     writePkb.setModifiesS(23, {"j"});
@@ -151,7 +157,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
     writePkb.setUsesS(18, {"d"});
     writePkb.setUsesS(19, {"h"});
     writePkb.setUsesS(20, {"h"});
-    writePkb.setUsesS(21, {"j"});
+//    writePkb.setUsesS(21, {});
     writePkb.setUsesS(22, {"j"});
     writePkb.setUsesP(proc1, {"a", "b", "y", "x", "v", "c", "e", "g", "d", "h", "j"});
     writePkb.setUsesS(23, {"j"});
@@ -177,6 +183,14 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
         shared_ptr<Relationship> rs3 = Relationship::makeRelationship(AppConstants::AFFECTS, params3);
         std::vector<std::vector<std::string>> res3 = readPkb.findRelationship(rs3);
         REQUIRE(res3.empty());
+
+        std::vector<Parameter> params4 = {Parameter("22", AppConstants::FIXED_INT),
+                                          Parameter("22", AppConstants::FIXED_INT)};
+        shared_ptr<Relationship> rs4 = Relationship::makeRelationship(AppConstants::AFFECTS, params4);
+        std::vector<std::vector<std::string>> res4 = readPkb.findRelationship(rs4);
+        std::vector<std::vector<std::string>> expected4 = {};
+        REQUIRE(expected4 == res4);
+
     }
 
     SECTION("Affects(int, _)") {
@@ -254,6 +268,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
         std::vector<std::vector<std::string>> expected1 = {{"2", "5"},   {"3", "6"},   {"6", "9"},   {"7", "8"},
                                                            {"8", "2"},   {"9", "3"},   {"10", "11"}, {"11", "18"},
                                                            {"13", "12"}, {"14", "14"}, {"19", "20"}, {"19", "19"}};
+//        REQUIRE(expected1 == res1);
         REQUIRE(unit_testing_utils::equals(expected1, res1));
 
         std::vector<Parameter> params2 = {Parameter("aa", AppConstants::ASSIGN),
