@@ -1,0 +1,125 @@
+1 - Synonym name p cannot be declared more than once
+procedure p, p;
+Select p such that Calls(p, "A")
+SemanticError
+5000
+2 - Synonym name not declared
+procedure p;
+Select p such that Calls(p1, "A")
+SemanticError
+5000
+3 - Missing ; from declaration
+procedure p
+Select p such that Calls(p, "A")
+SyntaxError
+5000
+4 - Missing quotation marks for procedure name
+procedure p;
+Select p such that Calls(p, A)
+SemanticError
+5000
+5 - _ as synonym name 
+procedure _;
+Select p such that Calls(p, _)
+SyntaxError
+5000
+6 - a123! as synonym name 
+procedure a123!;
+Select a123! such that Calls(a123!, _)
+SyntaxError
+5000
+7 - Leading zero for stmtRef
+stmt s;
+Select s such that Follows(01, s)
+SyntaxError
+5000
+8 - procedure as synonym name 
+procedure procedure;
+Select procedure such that Calls(procedure, _)
+A, B, C, D, F
+5000
+9 - Select as synonym name 
+procedure Select;
+Select Select such that Calls(Select, _)
+A, B, C, D, F
+5000
+10 - a123 as synonym name 
+procedure a123;
+Select a123 such that Calls(a123, _)
+A, B, C, D, F
+5000
+11 - syn-assign not synonym of an assignment
+read a;
+Select a pattern a(_, "x")
+SemanticError
+5000
+12 - First argument for Modifies is _
+variable v;
+Select v such that Modifies(_, "x")
+SemanticError
+5000
+13 - First argument for Uses is _
+variable v;
+Select v such that Uses(_, "x")
+SemanticError
+5000
+14 - Procedure as argument for Follows
+procedure p;
+Select p such that Follows(p, _)
+SemanticError
+5000
+15 - Variable as argument for Follows*
+variable v;
+Select v such that Follows*(_, v)
+SemanticError
+5000
+16 - Constant as argument for Follows
+constant c;
+Select c such that Follows(_, c)
+SemanticError
+5000
+17 - Procedure as argument for Parent
+procedure p;
+Select p such that Parent(p, _)
+SemanticError
+5000
+18 - Variable as argument for Parent*
+variable v;
+Select v such that Parent*(_, v)
+SemanticError
+5000
+19 - Constant as argument for Parent
+constant c;
+Select c such that Parent(_, c)
+SemanticError
+5000
+20 - Procedure as RHS argument for Uses
+procedure p; stmt s;
+Select s such that Uses(s, p)
+SemanticError
+5000
+21 - Statement as RHS argument for Uses
+read r; stmt s;
+Select r such that Uses(r, s)
+SemanticError
+5000
+22 - Variable as LHS argument for Uses
+variable v;
+Select v such that Uses(v, _)
+SemanticError
+5000
+23 - Procedure as RHS argument for Modifies
+procedure p; stmt s;
+Select s such that Modifies(s, p)
+SemanticError
+5000
+24 - Statement as RHS argument for Modifies
+read r; stmt s;
+Select r such that Modifies(r, s)
+SemanticError
+5000
+25 - Constant as LHS argument for Modifies
+constant c;
+Select c such that Modifies(c, _)
+SemanticError
+5000

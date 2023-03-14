@@ -1,12 +1,9 @@
 #include "DesignExtractor.h"
 
-DesignExtractor::DesignExtractor() : ASTroot() {}
+DesignExtractor::DesignExtractor() : ASTroot(), writePkb(), readPkb() {}
 
-DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writePKB, ReadPKB* readPKB) {
-    ASTroot = std::move(root);
-    writePkb = writePKB;
-    readPkb = readPKB;
-}
+DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writePKB, ReadPKB* readPKB)
+    : ASTroot(std::move(root)), writePkb(writePKB), readPkb(readPKB) {}
 
 void DesignExtractor::populatePKB() {
     try {
@@ -22,18 +19,7 @@ void DesignExtractor::populatePKB() {
 void DesignExtractor::validateSemantics() {
     std::vector<ProcName> procedureNames;
     std::unordered_map<ProcName, std::unordered_set<ProcName>> procCallMap;
-
-    for (const auto& procedure : ASTroot->procedureList) {
-        procedureNames.push_back(procedure->procedureName);
-        for (const auto& statement : procedure->getStatements()) {
-            if (auto i = CAST_TO(CallStatement, statement.get())) {
-                procCallMap[procedure->procedureName].insert(i->procName);
-            }
-            if (isContainerStatement(statement.get())) {
-                recurseCallStatementHelper(statement.get(), procCallMap, procedure->procedureName);
-            }
-        }
-    }
+    buildCallerCalleeTable(procedureNames, procCallMap);
 
     try {
         validateNoDuplicateProcedureName(procedureNames);
@@ -41,6 +27,21 @@ void DesignExtractor::validateSemantics() {
         validateNoCycles(procedureNames, procCallMap, writePkb, readPkb);
     } catch (SemanticErrorException e) {
         throw e;
+    }
+}
+
+void DesignExtractor::buildCallerCalleeTable(std::vector<ProcName>& procedureNames,
+                                             std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap) {
+    for (const auto& procedure : ASTroot->procedureList) {
+        procedureNames.push_back(procedure->procedureName);
+        for (const auto& statement : procedure->getStatements()) {
+            if (const auto i = CAST_TO(CallStatement, statement.get())) {
+                procCallMap[procedure->procedureName].insert(i->procName);
+            }
+            if (isContainerStatement(statement.get())) {
+                recurseCallStatementHelper(statement.get(), procCallMap, procedure->procedureName);
+            }
+        }
     }
 }
 

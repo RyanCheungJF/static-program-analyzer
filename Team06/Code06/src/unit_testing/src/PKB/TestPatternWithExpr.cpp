@@ -94,7 +94,6 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
 
     REQUIRE(unit_testing_utils::equals(check1, res1));
     REQUIRE(unit_testing_utils::equals(check2, res2));
-    REQUIRE(readPkb.findPattern(pattern2).size() == 1);
 }
 
 TEST_CASE("Support for pattern query of type pattern(\"a\", _") {

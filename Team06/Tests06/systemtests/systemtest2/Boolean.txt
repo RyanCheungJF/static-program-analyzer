@@ -1,0 +1,15 @@
+1 - comment
+call c;
+Select BOOLEAN such that Calls("wEiRdNAmeS123", "call")
+TRUE
+5000
+2 - comment
+while w;
+Select BOOLEAN pattern w("i", _)
+TRUE
+5000
+3 - comment
+procedure p;
+Select BOOLEAN such that Calls*("call", p)
+FALSE
+5000

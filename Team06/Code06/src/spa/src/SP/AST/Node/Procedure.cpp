@@ -1,6 +1,6 @@
 #include "Procedure.h"
 
-Procedure::Procedure() {}
+Procedure::Procedure() : procedureName(), statementList() {}
 
 Procedure::Procedure(ProcName procedureName, std::unique_ptr<StatementList> statementList) {
     this->procedureName = procedureName;

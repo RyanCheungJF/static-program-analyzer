@@ -1,7 +1,7 @@
 procedure A {
     read x;
     read y;
-	while (x > y) {
+    while (x > y) {
         if (x == 0) then {
             y = y - 1;
         } else {

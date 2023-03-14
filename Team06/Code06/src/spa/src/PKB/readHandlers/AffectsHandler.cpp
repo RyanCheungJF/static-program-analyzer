@@ -25,11 +25,12 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
     bool isWildCardParam2 = paramType2 == ParameterType::WILDCARD || paramType2 == ParameterType::ASSIGN;
 
     if (isTransitive) {
-        return handleTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2, isWildCardParam1, isWildCardParam2);
+        return handleTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2,
+                                isWildCardParam1, isWildCardParam2);
     }
     else {
-        return handleNonTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2, isWildCardParam1,
-                                   isWildCardParam2);
+        return handleNonTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2,
+                                   isWildCardParam1, isWildCardParam2);
     }
 }
 
@@ -52,7 +53,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
     std::unordered_set<StmtNum> assignStatements;
     for (StmtNum num : statements) {
-        if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+        std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
+        if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
             assignStatements.insert(num);
         }
     }
@@ -94,7 +96,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
     std::unordered_set<StmtNum> assignStatements; // todo: area for optimisation. get this at compile time
     for (StmtNum num : statements) {
-        if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+        std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
+        if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
             assignStatements.insert(num);
         }
     }
@@ -150,7 +153,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
     std::unordered_set<StmtNum> assignStatements; // todo: area for optimisation. get this at compile time
     for (StmtNum num : statements) {
-        if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+        std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
+        if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
             assignStatements.insert(num);
         }
     }
@@ -204,8 +208,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
         std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
         std::unordered_set<StmtNum> assignStatements; // todo: area for optimisation. get this at compile time
         for (StmtNum num : statements) {
-            if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) !=
-                stmtStorage->getStatementType(num).end()) {
+            std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
+            if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
                 assignStatements.insert(num);
             }
         }
@@ -457,10 +461,9 @@ std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<En
     return commonVariables;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleNonTransitive(std::string param1value, std::string param2value,
-                                                                          bool isFixedIntParam1, bool isFixedIntParam2,
-                                                                          bool isWildCardParam1,
-                                                                          bool isWildCardParam2) {
+std::vector<std::vector<std::string>>
+AffectsHandler::handleNonTransitive(std::string param1value, std::string param2value, bool isFixedIntParam1,
+                                    bool isFixedIntParam2, bool isWildCardParam1, bool isWildCardParam2) {
     if (isFixedIntParam1) {
         if (isFixedIntParam2) {
             return handleIntInt(stoi(param1value), stoi(param2value));

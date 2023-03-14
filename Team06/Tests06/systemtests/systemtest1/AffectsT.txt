@@ -1,0 +1,15 @@
+1 - comment
+assign a; call c;
+Select c such that Affects*(13, 16)
+4
+5000
+2 - comment
+assign a; call c;
+Select c such that Affects*(12, 16)
+4
+5000
+3 - comment
+assign a; call c; variable v;
+Select v such that Affects*(28, 38)
+while
+5000

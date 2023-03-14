@@ -7,6 +7,7 @@
 class ParentExtractorVisitor : public ASTVisitor {
 private:
     WritePKB* writeApi;
+    void parentTHelper(Statement* statement);
 
 public:
     ParentExtractorVisitor(WritePKB* writePKB);

@@ -1,6 +1,6 @@
 #include "StatementList.h"
 
-StatementList::StatementList() {}
+StatementList::StatementList() : statements() {}
 
 StatementList::StatementList(std::vector<std::unique_ptr<Statement>> statements) {
     this->statements = std::move(statements);

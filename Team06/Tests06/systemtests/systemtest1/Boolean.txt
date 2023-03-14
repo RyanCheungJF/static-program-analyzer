@@ -1,0 +1,20 @@
+1 - comment
+call c;
+Select BOOLEAN such that Next*(1, 16)
+TRUE
+5000
+2 - comment
+call c; procedure p;
+Select BOOLEAN such that Calls(p, "conditionalSpam")
+TRUE
+5000
+3 - comment
+call c; procedure p;
+Select BOOLEAN such that Calls(p, "arithmetic")
+FALSE
+5000
+4 - comment
+assign a;
+Select BOOLEAN pattern a(_, _" ((c - y) - z) "_))
+FALSE
+5000
