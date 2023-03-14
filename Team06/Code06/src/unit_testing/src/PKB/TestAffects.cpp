@@ -32,7 +32,12 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
         {18, {{AppConstants::PARENTS, {17}}, {AppConstants::CHILDREN, {19}}}},
         {18, {{AppConstants::PARENTS, {17}}, {AppConstants::CHILDREN, {19}}}},
         {19, {{AppConstants::PARENTS, {18}}, {AppConstants::CHILDREN, {1}}}},
-        {20, {{AppConstants::PARENTS, {1}}, {AppConstants::CHILDREN, {}}}}};
+        {20, {{AppConstants::PARENTS, {1}}, {AppConstants::CHILDREN, {21}}}},
+        {21, {{AppConstants::PARENTS, {20}}, {AppConstants::CHILDREN, {22}}}},
+        {22, {{AppConstants::PARENTS, {21}}, {AppConstants::CHILDREN, {}}}}};
+
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph2 = {
+            {23, {{AppConstants::PARENTS, {}}, {AppConstants::CHILDREN, {}}}}};
     /*
      * while (a != b) { //1
      *     y = v + 1; //2
@@ -57,16 +62,26 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
      *     h = h + 1; // 19
      * }
      * i = h + 1; //20
-     *
+     * call proc2; //21
+     * j = j + 1; //22
      * Valid Affects relationships:
      * (2, 5), (3, 6), (6, 9),
      * (7, 8), (8, 2), (9, 3),
      * (10, 11), (11, 18) (13, 12),
      * (14, 14), (19, 19), (19, 20)
+     *
+     *
+     *
+     * proc2:
+     * j = j + 1; //22
+     *
      */
 
     ProcName proc1 = "proc1";
+    ProcName proc2 = "proc2";
     writePkb.writeCFG(proc1, graph1);
+    writePkb.writeCFG(proc2, graph2);
+
     writePkb.setStatement("while", 1);
     writePkb.setStatement("assign", 2);
     writePkb.setStatement("assign", 3);
@@ -87,7 +102,10 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
     writePkb.setStatement("assign", 18);
     writePkb.setStatement("assign", 19);
     writePkb.setStatement("assign", 20);
-    writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20});
+    writePkb.setStatement("assign", 21);
+    writePkb.setStatement("assign", 22);
+    writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22});
+    writePkb.setProcedure(proc2, {23});
 
     writePkb.setModifiesS(1, {"y", "x", "v"});
     writePkb.setModifiesS(2, {"y"});
@@ -109,7 +127,11 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
     writePkb.setModifiesS(18, {"d"});
     writePkb.setModifiesS(19, {"h"});
     writePkb.setModifiesS(20, {"i"});
-    writePkb.setModifiesP("proc1", {"y", "x", "v", "c", "d", "f", "e", "a", "b", "h"});
+    writePkb.setModifiesS(21, {"j"});
+    writePkb.setModifiesS(22, {"j"});
+    writePkb.setModifiesP(proc1, {"y", "x", "v", "c", "d", "f", "e", "a", "b", "h", "j"});
+    writePkb.setModifiesS(23, {"j"});
+    writePkb.setModifiesP(proc2, {"j"});
 
     writePkb.setUsesS(1, {"a", "b"});
     writePkb.setUsesS(2, {"v"});
@@ -129,7 +151,11 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
     writePkb.setUsesS(18, {"d"});
     writePkb.setUsesS(19, {"h"});
     writePkb.setUsesS(20, {"h"});
-    writePkb.setUsesP("proc1", {"a", "b", "y", "x", "v", "c", "e", "g", "d", "h"});
+    writePkb.setUsesS(21, {"j"});
+    writePkb.setUsesS(22, {"j"});
+    writePkb.setUsesP(proc1, {"a", "b", "y", "x", "v", "c", "e", "g", "d", "h", "j"});
+    writePkb.setUsesS(23, {"j"});
+    writePkb.setUsesP(proc2, {"j"});
 
     SECTION("Affects(int, int)") {
         std::vector<Parameter> params1 = {Parameter("6", AppConstants::FIXED_INT),
@@ -181,6 +207,13 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects") {
         std::vector<std::vector<std::string>> res4 = readPkb.findRelationship(rs4);
         std::vector<std::vector<std::string>> expected4 = {};
         REQUIRE(expected4 == res4);
+
+        std::vector<Parameter> params5 = {Parameter("21", AppConstants::FIXED_INT),
+                                          Parameter("_", AppConstants::WILDCARD)};
+        shared_ptr<Relationship> rs5 = Relationship::makeRelationship(AppConstants::AFFECTS, params5);
+        std::vector<std::vector<std::string>> res5 = readPkb.findRelationship(rs5);
+        std::vector<std::vector<std::string>> expected5 = {};
+        REQUIRE(expected5 == res5);
     }
 
     SECTION("Affects(_, int)") {
