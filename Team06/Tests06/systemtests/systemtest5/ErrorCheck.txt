@@ -123,3 +123,8 @@ constant c;
 Select c such that Modifies(c, _)
 SemanticError
 5000
+26 - Extra '_'
+procedure p;
+Select p such that Modifies(p, __)
+SyntaxError
+5000

@@ -1,0 +1,90 @@
+1 - stmt as parameter
+procedure p; stmt s;
+Select p such that Calls*(p, s)
+SemanticError
+5000
+2 - read as parameter
+procedure p; read r;
+Select p such that Calls*(r, p)
+SemanticError
+5000
+3 - constant as parameter
+procedure p; constant c;
+Select p such that Calls*(p, c)
+SemanticError
+5000
+4 - while as parameter
+procedure p; while w;
+Select p such that Calls*(p, w)
+SemanticError
+5000
+5 - if as parameter
+procedure p; if i;
+Select p such that Calls*(p, i)
+SemanticError
+5000
+6 - assign as parameter
+procedure p; assign a;
+Select p such that Calls*(a, p)
+SemanticError
+5000
+7 - Wildcard for both parameters
+procedure p;
+Select p such that Calls*(_, _)
+A, B, C, D, E, F, G
+5000
+8 - Wildcard for left parameter
+procedure p;
+Select p such that Calls*(_, p)
+B, D, E, F, G
+5000
+9 - Wildcard for right parameter
+procedure p;
+Select p such that Calls*(p, _)
+A, B, C, D, F
+5000
+10 - Check for procedure that calls* itself
+procedure p;
+Select p such that Calls*(p, p)
+none
+5000
+11 - Procedure calls* non-existing procedure
+procedure p;
+Select p such that Calls*(p, "Nonexistent")
+none
+5000
+12 - Non-existent procedure calls* procedure
+procedure p;
+Select p such that Calls*("Nonexistent", p)
+none
+5000
+13 - Check what procedure calls* B
+procedure p;
+Select p such that Calls*(p, "B")
+A
+5000
+14 - Check what procedure calls* E
+procedure p;
+Select p such that Calls*(p, "E")
+A, D, C, B
+5000
+15 - Check what procedure calls* G
+procedure p;
+Select p such that Calls*(p, "G")
+A, B, F, C
+5000
+16 - Check which procedures is called* by A
+procedure p;
+Select p such that Calls*("A", p)
+B, E, F, D, G
+5000
+17 - Check which procedures is called* by D
+procedure p;
+Select p such that Calls*("D", p)
+E
+5000
+18 - Check which procedures is called* by F
+procedure p;
+Select p such that Calls*("F", p)
+G
+5000
