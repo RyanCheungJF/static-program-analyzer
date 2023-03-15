@@ -81,4 +81,10 @@ private:
 
 
     std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted);
+
+    std::unordered_set<StmtNum> getAssignStatements(std::unordered_set<StmtNum> allProcStatements);
+
+    bool isModifiedInControlFlowPath(std::unordered_set<Ent> commonVariables,
+                                     std::unordered_set<Ent> variablesModifiedInPath);
+
 };

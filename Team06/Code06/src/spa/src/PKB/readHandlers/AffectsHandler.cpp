@@ -49,14 +49,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     }
 
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
-    std::unordered_set<StmtNum> assignStatements;
-    for (StmtNum num : statements) {
-        std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
-        if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
-            assignStatements.insert(num);
-        }
-    }
-
+    std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
     if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
         return res;
     }
@@ -74,10 +67,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     }
 
     std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
-    for (Ent e : commonVariables) {
-        if (variablesModifiedInPath.find(e) != variablesModifiedInPath.end()) {
-            return res;
-        }
+    bool isModified = isModifiedInControlFlowPath(commonVariables, variablesModifiedInPath);
+    if (isModified) {
+        return res;
     }
 
     res.push_back({paramString1, paramString2});
@@ -93,13 +85,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
         return res;
     }
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
-    std::unordered_set<StmtNum> assignStatements; // todo: area for optimisation. get this at compile time
-    for (StmtNum num : statements) {
-        std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
-        if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
-            assignStatements.insert(num);
-        }
-    }
+    std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
     if (assignStatements.find(a2) == assignStatements.end()) {
         return res;
     }
@@ -128,17 +114,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
             continue;
         }
 
-        bool isModified = false;
-        for (Ent e : commonVariables) {
-            if (variablesModifiedInPath.find(e) != variablesModifiedInPath.end()) {
-                isModified = true;
-            }
-        }
-
+        bool isModified = isModifiedInControlFlowPath(commonVariables, variablesModifiedInPath);
         if (isModified) {
             continue;
-        }
-        else {
+        } else {
             res.push_back({std::to_string(a1), paramString2});
         }
     }
@@ -154,14 +133,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
         return res;
     }
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
-    std::unordered_set<StmtNum> assignStatements; // todo: area for optimisation. get this at compile time
-    for (StmtNum num : statements) {
-        std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
-        if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
-            assignStatements.insert(num);
-        }
-    }
-
+    std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
     if (assignStatements.find(a1) == assignStatements.end()) {
         return res;
     }
@@ -190,14 +162,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
             continue;
         }
 
-        bool isModified = false;
-        for (Ent e : commonVariables) {
-            if (variablesModifiedInPath.find(e) != variablesModifiedInPath.end()) {
-                isModified = true;
-                break;
-            }
-        }
-
+        bool isModified = isModifiedInControlFlowPath(commonVariables, variablesModifiedInPath);
         if (isModified) {
             continue;
         }
@@ -214,13 +179,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
     std::unordered_set<ProcName> allProcedures = procStorage->getProcNames();
     for (ProcName proc : allProcedures) {
         std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
-        std::unordered_set<StmtNum> assignStatements; // todo: area for optimisation. get this at compile time
-        for (StmtNum num : statements) {
-            std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
-            if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
-                assignStatements.insert(num);
-            }
-        }
+        std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
 
         for (StmtNum a1 : assignStatements) {
             std::vector<std::vector<std::string>> temp = handleIntWildcard(a1);
@@ -494,4 +453,27 @@ std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffects
         isInverted ? hashmap[stoi(p[1])].insert(stoi(p[0])) : hashmap[stoi(p[0])].insert(stoi(p[1]));
     }
     return hashmap;
+}
+
+std::unordered_set<StmtNum> AffectsHandler::getAssignStatements(std::unordered_set<StmtNum> allProcStatements) {
+
+    std::unordered_set<StmtNum> assignStatements; // todo: area for optimisation. get this at compile time
+    for (StmtNum num : allProcStatements) {
+        std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
+        if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
+            assignStatements.insert(num);
+        }
+    }
+    return assignStatements;
+
+}
+
+bool AffectsHandler::isModifiedInControlFlowPath(std::unordered_set<Ent> commonVariables,
+                                                 std::unordered_set<Ent> variablesModifiedInPath) {
+    for (Ent e : commonVariables) {
+        if (variablesModifiedInPath.find(e) != variablesModifiedInPath.end()) {
+            return true;
+        }
+    }
+    return false;
 }
