@@ -34,8 +34,10 @@ std::vector<std::vector<std::string>> NextHandler::handle(Parameter param1, Para
 std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
-    ProcName proc1 = procStorage->getProcedure(stoi(paramString1));
-    ProcName proc2 = procStorage->getProcedure(stoi(paramString2));
+    StmtNum n1 = stoi(paramString1);
+    StmtNum n2 = stoi(paramString2);
+    ProcName proc1 = procStorage->getProcedure(n1);
+    ProcName proc2 = procStorage->getProcedure(n2);
     std::vector<std::vector<std::string>> res;
 
     if (proc1 == "INVALID" || proc2 == "INVALID") {
@@ -47,8 +49,8 @@ std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1
 
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
         cfgStorage->getGraph(proc1);
-    if (graph[stoi(paramString1)][AppConstants::CHILDREN].find(stoi(paramString2)) !=
-        graph[stoi(paramString1)][AppConstants::CHILDREN].end()) {
+    if (graph[n1][AppConstants::CHILDREN].find(n2) !=
+        graph[n1][AppConstants::CHILDREN].end()) {
         res.push_back({paramString1, paramString2});
     }
     return res;
@@ -57,7 +59,8 @@ std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1
 // returns {param1Num, sNum}
 std::vector<std::vector<std::string>> NextHandler::handleIntWildcard(Parameter param1) {
     std::string paramString1 = param1.getValue();
-    ProcName proc1 = procStorage->getProcedure(stoi(paramString1));
+    StmtNum n1 = stoi(paramString1);
+    ProcName proc1 = procStorage->getProcedure(n1);
     std::vector<std::vector<std::string>> res;
 
     if (proc1 == "INVALID") {
@@ -66,7 +69,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntWildcard(Parameter p
 
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
         cfgStorage->getGraph(proc1);
-    std::unordered_set<StmtNum> children = graph[stoi(paramString1)][AppConstants::CHILDREN];
+    std::unordered_set<StmtNum> children = graph[n1][AppConstants::CHILDREN];
     for (StmtNum child : children) {
         res.push_back({paramString1, std::to_string(child)});
     }
@@ -76,7 +79,8 @@ std::vector<std::vector<std::string>> NextHandler::handleIntWildcard(Parameter p
 // returns {sNum, param2Num}
 std::vector<std::vector<std::string>> NextHandler::handleWildcardInt(Parameter param2) {
     std::string paramString2 = param2.getValue();
-    ProcName proc2 = procStorage->getProcedure(stoi(paramString2));
+    StmtNum n2 = stoi(paramString2);
+    ProcName proc2 = procStorage->getProcedure(n2);
     std::vector<std::vector<std::string>> res;
 
     if (proc2 == "INVALID") {
@@ -85,7 +89,7 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardInt(Parameter p
 
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
         cfgStorage->getGraph(proc2);
-    std::unordered_set<StmtNum> parents = graph[stoi(paramString2)][AppConstants::PARENTS];
+    std::unordered_set<StmtNum> parents = graph[n2][AppConstants::PARENTS];
     for (StmtNum parent : parents) {
         res.push_back({std::to_string(parent), paramString2});
     }
@@ -96,8 +100,9 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardInt(Parameter p
 std::vector<std::vector<std::string>> NextHandler::handleStmttypeInt(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
+    StmtNum n2 = stoi(paramString2);
     Stmt type = param1.getTypeString();
-    ProcName proc = procStorage->getProcedure(stoi(paramString2));
+    ProcName proc = procStorage->getProcedure(n2);
     std::vector<std::vector<std::string>> res;
 
     if (proc == "INVALID") {
@@ -107,7 +112,7 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeInt(Parameter p
     std::unordered_set<StmtNum> stmttypeLines = stmtStorage->getStatementNumbers(type);
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
         cfgStorage->getGraph(proc);
-    std::unordered_set<StmtNum> parents = graph[stoi(paramString2)][AppConstants::PARENTS];
+    std::unordered_set<StmtNum> parents = graph[n2][AppConstants::PARENTS];
     for (StmtNum parent : parents) {
         if (stmttypeLines.find(parent) != stmttypeLines.end()) {
             res.push_back({std::to_string(parent), paramString2});
@@ -120,8 +125,9 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeInt(Parameter p
 std::vector<std::vector<std::string>> NextHandler::handleIntStmttype(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
+    StmtNum n1 = stoi(paramString1);
     Stmt type = param2.getTypeString();
-    ProcName proc = procStorage->getProcedure(stoi(paramString1));
+    ProcName proc = procStorage->getProcedure(n1);
     std::vector<std::vector<std::string>> res;
 
     if (proc == "INVALID") {
@@ -131,7 +137,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntStmttype(Parameter p
     std::unordered_set<StmtNum> stmttypeLines = stmtStorage->getStatementNumbers(type);
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
         cfgStorage->getGraph(proc);
-    std::unordered_set<StmtNum> children = graph[stoi(paramString1)][AppConstants::CHILDREN];
+    std::unordered_set<StmtNum> children = graph[n1][AppConstants::CHILDREN];
     for (StmtNum child : children) {
         if (stmttypeLines.find(child) != stmttypeLines.end()) {
             res.push_back({paramString1, std::to_string(child)});
@@ -260,8 +266,10 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcard() {
 std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
-    ProcName proc1 = procStorage->getProcedure(stoi(paramString1));
-    ProcName proc2 = procStorage->getProcedure(stoi(paramString2));
+    StmtNum n1 = stoi(paramString1);
+    StmtNum n2 = stoi(paramString2);
+    ProcName proc1 = procStorage->getProcedure(n1);
+    ProcName proc2 = procStorage->getProcedure(n1);
     std::vector<std::vector<std::string>> res;
 
     if (proc1 == "INVALID" || proc2 == "INVALID") {
@@ -274,12 +282,12 @@ std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parame
     std::deque<std::vector<StmtNum>> queue;
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
         cfgStorage->getGraph(proc1);
-    for (StmtNum child : graph[stoi(paramString1)][AppConstants::CHILDREN]) {
-        if (child == stoi(paramString2)) {
+    for (StmtNum child : graph[n1][AppConstants::CHILDREN]) {
+        if (child == n2) {
             res.push_back({paramString1, paramString2});
             return res;
         }
-        queue.push_back({stoi(paramString1), child});
+        queue.push_back({n1, child});
     }
 
     std::unordered_set<StmtNum> seen;
@@ -292,7 +300,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parame
         }
         seen.insert(curr[1]);
 
-        if (curr[1] == stoi(paramString2)) {
+        if (curr[1] == n2) {
             res.push_back({paramString1, paramString2});
             return res;
         }
@@ -307,7 +315,8 @@ std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parame
 // returns {param1Num, sNum}
 std::vector<std::vector<std::string>> NextHandler::handleIntWildcardTransitive(Parameter param1) {
     std::string paramString1 = param1.getValue();
-    ProcName proc1 = procStorage->getProcedure(stoi(paramString1));
+    StmtNum n1 = stoi(paramString1);
+    ProcName proc1 = procStorage->getProcedure(n1);
     std::vector<std::vector<std::string>> res;
     if (proc1 == "INVALID") {
         return res;
@@ -316,8 +325,8 @@ std::vector<std::vector<std::string>> NextHandler::handleIntWildcardTransitive(P
     std::deque<std::vector<StmtNum>> queue;
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
         cfgStorage->getGraph(proc1);
-    for (StmtNum child : graph[stoi(paramString1)][AppConstants::CHILDREN]) {
-        queue.push_back({stoi(paramString1), child});
+    for (StmtNum child : graph[n1][AppConstants::CHILDREN]) {
+        queue.push_back({n1, child});
     }
 
     std::unordered_set<StmtNum> seen;
@@ -341,7 +350,8 @@ std::vector<std::vector<std::string>> NextHandler::handleIntWildcardTransitive(P
 // returns {sNum, param2Num}
 std::vector<std::vector<std::string>> NextHandler::handleWildcardIntTransitive(Parameter param2) {
     std::string paramString2 = param2.getValue();
-    ProcName proc = procStorage->getProcedure(stoi(paramString2));
+    StmtNum n2 = stoi(paramString2);
+    ProcName proc = procStorage->getProcedure(n2);
     std::vector<std::vector<std::string>> res;
     if (proc == "INVALID") {
         return res;
@@ -350,8 +360,8 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardIntTransitive(P
     std::deque<std::vector<StmtNum>> queue;
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
         cfgStorage->getGraph(proc);
-    for (StmtNum parent : graph[stoi(paramString2)][AppConstants::PARENTS]) {
-        queue.push_back({parent, stoi(paramString2)});
+    for (StmtNum parent : graph[n2][AppConstants::PARENTS]) {
+        queue.push_back({parent, n2});
     }
 
     std::unordered_set<StmtNum> seen;
@@ -376,8 +386,9 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardIntTransitive(P
 std::vector<std::vector<std::string>> NextHandler::handleStmttypeIntTransitive(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
+    StmtNum n2 = stoi(paramString2);
     Stmt type = param1.getTypeString();
-    ProcName proc = procStorage->getProcedure(stoi(paramString2));
+    ProcName proc = procStorage->getProcedure(n2);
     std::vector<std::vector<std::string>> res;
 
     if (proc == "INVALID") {
@@ -388,8 +399,8 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeIntTransitive(P
     std::deque<std::vector<StmtNum>> queue;
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
         cfgStorage->getGraph(proc);
-    for (StmtNum parent : graph[stoi(paramString2)][AppConstants::PARENTS]) {
-        queue.push_back({parent, stoi(paramString2)});
+    for (StmtNum parent : graph[n2][AppConstants::PARENTS]) {
+        queue.push_back({parent, n2});
     }
 
     std::unordered_set<StmtNum> seen;
@@ -417,8 +428,9 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeIntTransitive(P
 std::vector<std::vector<std::string>> NextHandler::handleIntStmttypeTransitive(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
+    StmtNum n1 = stoi(paramString1);
     Stmt type = param2.getTypeString();
-    ProcName proc = procStorage->getProcedure(stoi(paramString1));
+    ProcName proc = procStorage->getProcedure(n1);
     std::vector<std::vector<std::string>> res;
 
     if (proc == "INVALID") {
@@ -429,8 +441,8 @@ std::vector<std::vector<std::string>> NextHandler::handleIntStmttypeTransitive(P
     std::deque<std::vector<StmtNum>> queue;
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
         cfgStorage->getGraph(proc);
-    for (StmtNum child : graph[stoi(paramString1)][AppConstants::CHILDREN]) {
-        queue.push_back({stoi(paramString1), child});
+    for (StmtNum child : graph[n1][AppConstants::CHILDREN]) {
+        queue.push_back({n1, child});
     }
 
     std::unordered_set<StmtNum> seen;
