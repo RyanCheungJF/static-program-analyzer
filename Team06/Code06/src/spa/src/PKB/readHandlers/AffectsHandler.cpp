@@ -34,8 +34,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
     }
 }
 
-// TODO: try a case with Affects(1, 1) where line 1 is v = v + 1. use a case where there is a while loop back to it and
-// no while loop
 std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, StmtNum a2) {
     std::string paramString1 = std::to_string(a1);
     std::string paramString2 = std::to_string(a2);
@@ -71,9 +69,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     }
 
     std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc1);
-    if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2
-//    || a1 == a2
-    )) {
+    if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2)) {
         return res;
     }
 
@@ -121,9 +117,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
         }
 
         std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
-        if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2
-//        || a1 == a2
-        )) {
+        if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2)) {
             continue;
         }
 
@@ -185,9 +179,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
         }
 
         std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
-        if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2
-//        || a1 == a2
-        )) {
+        if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2)) {
             continue;
         }
 
@@ -293,7 +285,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitiv
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
-    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
     for (StmtNum num : hashmap[a1]) {
         queue.push_back({a1, num});
     }
@@ -305,15 +296,15 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitiv
             continue;
         }
         seen.insert(curr);
-        temp.insert({a1, curr.second});
 
         for (StmtNum num : hashmap[curr.second]) {
             queue.push_back({curr.second, num});
         }
     }
 
-    for (std::pair<StmtNum, StmtNum> p : temp) {
-        res.push_back({std::to_string(p.first), std::to_string(p.second)});
+    std::string param1string = std::to_string(a1);
+    for (std::pair<StmtNum, StmtNum> p : seen) {
+        res.push_back({param1string, std::to_string(p.second)});
     }
     return res;
 }
@@ -329,7 +320,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(true);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
-    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
     for (StmtNum num : hashmap[a2]) {
         queue.push_back({num, a2});
     }
@@ -341,15 +331,15 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
             continue;
         }
         seen.insert(curr);
-        temp.insert({curr.first, a2});
 
         for (StmtNum num : hashmap[curr.first]) {
             queue.push_back({num, curr.first});
         }
     }
 
-    for (std::pair<StmtNum, StmtNum> p : temp) {
-        res.push_back({std::to_string(p.first), std::to_string(p.second)});
+    std::string param2string = std::to_string(a2);
+    for (std::pair<StmtNum, StmtNum> p : seen) {
+        res.push_back({std::to_string(p.first), param2string});
     }
     return res;
 }
@@ -360,7 +350,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
 
     std::unordered_set<std::tuple<StmtNum, StmtNum, StmtNum>, hashFunctionTuple> seen;
     std::deque<std::tuple<StmtNum, StmtNum, StmtNum>> queue;
-    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
 
     for (auto kv : hashmap) {
         StmtNum a1 = kv.first;
@@ -377,15 +366,14 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
             continue;
         }
         seen.insert(curr);
-        temp.insert({get<0>(curr), get<2>(curr)});
 
         for (StmtNum num : hashmap[get<2>(curr)]) {
             queue.push_back({get<0>(curr), get<2>(curr), num});
         }
     }
 
-    for (std::pair<StmtNum, StmtNum> p : temp) {
-        res.push_back({std::to_string(p.first), std::to_string(p.second)});
+    for (std::tuple<StmtNum, StmtNum, StmtNum> curr : seen) {
+        res.push_back({std::to_string(get<0>(curr)), std::to_string(get<2>(curr))});
     }
     return res;
 }
