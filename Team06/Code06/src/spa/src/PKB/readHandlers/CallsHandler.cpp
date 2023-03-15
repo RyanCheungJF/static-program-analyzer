@@ -9,6 +9,11 @@ std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcname(Param
     std::string callee = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
+    // based on the fact that there are no cycles in the source code
+    if (caller == callee) {
+        return res;
+    }
+
     std::unordered_set<ProcName> callees = callsStorage->getCallees(caller);
     if (callees.find(callee) != callees.end()) {
         res.push_back({caller, callee});
