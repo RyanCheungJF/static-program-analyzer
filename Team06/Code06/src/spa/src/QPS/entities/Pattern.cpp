@@ -1,4 +1,5 @@
 #include "Pattern.h"
+
 #include "../syntaxValidator/PatThreeParamSyntaxValidator.h"
 #include "../syntaxValidator/PatTwoParamSyntaxValidator.h"
 
@@ -10,10 +11,10 @@ Pattern::Pattern(const Pattern &p) {
   exprSpecs = p.exprSpecs;
 }
 
-Pattern::Pattern(Parameter p, Parameter ent, vector<string> &es) {
-  patternSyn = p;
-  entRef = ent;
-  exprSpecs = es;
+Pattern::Pattern(Parameter p, Parameter ent, vector<string>& es) {
+    patternSyn = p;
+    entRef = ent;
+    exprSpecs = es;
 }
 
 Pattern Pattern::makePattern(Parameter p, Parameter ent, vector<string> &es) {
@@ -40,7 +41,9 @@ Parameter *Pattern::getPatternSyn() { return &patternSyn; }
 
 Parameter *Pattern::getEntRef() { return &entRef; }
 
-vector<string> Pattern::getExprSpecs() { return exprSpecs; }
+vector<string> Pattern::getExprSpecs() {
+    return exprSpecs;
+}
 
 bool Pattern::validateParams() {
   ParameterType patternType = patternSyn.getType();
@@ -64,8 +67,7 @@ shared_ptr<SyntaxValidator<Pattern>> patTwoParamVal =
 shared_ptr<SyntaxValidator<Pattern>> patThreeParamVal =
     make_shared<PatThreeParamSyntaxValidator>(PatThreeParamSyntaxValidator());
 
-const unordered_map<int, shared_ptr<SyntaxValidator<Pattern>>>
-    Pattern::paramCountToValidatorMap = {
-        {2, patTwoParamVal},
-        {3, patThreeParamVal},
+const unordered_map<int, shared_ptr<SyntaxValidator<Pattern>>> Pattern::paramCountToValidatorMap = {
+    {2, patTwoParamVal},
+    {3, patThreeParamVal},
 };

@@ -62,8 +62,7 @@ vector<int> findAnds(const vector<string> &wordList, int start, int end) {
 
 // assumes the string is of the correct form:
 // ^.*{containerStart}.*{containerEnd}$
-tuple<string, vector<string>> extractParameters(string s, string containerStart,
-                                                string containerEnd,
+tuple<string, vector<string>> extractParameters(string s, string containerStart, string containerEnd,
                                                 string delimiter) {
   tuple<string, vector<string>> res;
   int endOfString = s.size();
