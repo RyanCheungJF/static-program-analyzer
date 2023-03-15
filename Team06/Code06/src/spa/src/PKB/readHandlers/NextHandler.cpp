@@ -625,8 +625,8 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcardTransit
 }
 
 // helper functions
-std::unordered_map<ProcName, std::unordered_set<StmtNum>>
-NextHandler::getProcedureLines(std::unordered_set<StmtNum> statementNumbers) {
+std::unordered_map<ProcName, std::unordered_set<StmtNum>> NextHandler::getProcedureLines(
+        std::unordered_set<StmtNum> statementNumbers) {
     std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines;
     for (StmtNum num : statementNumbers) {
         ProcName proc = procStorage->getProcedure(num);

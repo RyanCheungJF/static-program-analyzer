@@ -7,16 +7,6 @@
 #include "../storage/ProcedureStorage.h"
 #include "../storage/StmtStorage.h"
 
-////TODO: MIGHT be buggy? would be good to have a formal proof
-// struct hashFunctionNextT
-//{
-//     size_t operator()(const std::pair<int, int> &x) const
-//     {
-//         std::size_t h1 = std::hash<double>{}(x.first);
-//         std::size_t h2 = std::hash<double>{}(x.second);
-//         return h1 ^ h2;
-//     }
-// };
 
 class NextHandler {
 public:

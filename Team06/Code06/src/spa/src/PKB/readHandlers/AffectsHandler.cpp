@@ -253,13 +253,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
         return res;
     }
 
-    // build hop graph
-    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
-    for (std::vector<std::string> p : allValidAffects) {
-        hashmap[stoi(p[0])].insert(stoi(p[1]));
-    }
-
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
     for (StmtNum num : hashmap[a1]) {
@@ -296,13 +290,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitiv
         return res;
     }
 
-    // build hop graph
-    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
-    for (std::vector<std::string> p : allValidAffects) {
-        hashmap[stoi(p[0])].insert(stoi(p[1]));
-    }
-
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
@@ -338,13 +326,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
         return res;
     }
 
-    // build hop graph
-    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
-    for (std::vector<std::string> p : allValidAffects) {
-        hashmap[stoi(p[1])].insert(stoi(p[0]));
-    }
-
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(true);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
@@ -374,13 +356,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTransitive() {
     std::vector<std::vector<std::string>> res;
-
-    // build the hop graph
-    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
-    for (std::vector<std::string> p : allValidAffects) {
-        hashmap[stoi(p[0])].insert(stoi(p[1]));
-    }
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false);
 
     std::unordered_set<std::tuple<StmtNum, StmtNum, StmtNum>, hashFunctionTuple> seen;
     std::deque<std::tuple<StmtNum, StmtNum, StmtNum>> queue;
@@ -519,4 +495,15 @@ std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(std::stri
         }
     }
     return std::vector<std::vector<std::string>>();
+}
+
+std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffectsGraph(bool isInverted) {
+
+    // build the hop graph
+    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
+    for (std::vector<std::string> p : allValidAffects) {
+        isInverted ? hashmap[stoi(p[1])].insert(stoi(p[0])) : hashmap[stoi(p[0])].insert(stoi(p[1]));
+    }
+    return hashmap;
 }

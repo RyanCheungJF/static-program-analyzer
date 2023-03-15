@@ -78,4 +78,7 @@ private:
     std::vector<std::vector<std::string>> handleTransitive(std::string param1value, std::string param2value,
                                                            bool isFixedIntParam1, bool isFixedIntParam2,
                                                            bool isWildCardParam1, bool isWildCardParam2);
+
+
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted);
 };
