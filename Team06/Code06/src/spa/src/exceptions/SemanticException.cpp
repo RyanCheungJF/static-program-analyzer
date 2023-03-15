@@ -3,5 +3,5 @@
 const string SemanticException::ERROR_MESSAGE = "SemanticError";
 
 SemanticException::SemanticException() {
-	this->errorMessage = ERROR_MESSAGE;
+    this->errorMessage = ERROR_MESSAGE;
 }

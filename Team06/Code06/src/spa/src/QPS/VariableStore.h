@@ -4,21 +4,22 @@
 
 #ifndef SPA_VARIABLESTORE_H
 #define SPA_VARIABLESTORE_H
-#include "entities/Parameter.h"
-#include "exceptions/SemanticException.h"
 #include <string>
 #include <unordered_map>
+
+#include "entities/Parameter.h"
+#include "exceptions/SemanticException.h"
 using namespace std;
 
 class VariableStore {
 public:
-  VariableStore();
-  ParameterType getType(Parameter);
-  void insertVariable(Parameter);
-  bool hasVariable(Parameter);
-  bool updateSynonym(Parameter *);
-  string toString();
-  unordered_map<string, Parameter> store;
+    VariableStore();
+    ParameterType getType(Parameter);
+    void insertVariable(Parameter);
+    bool hasVariable(Parameter);
+    bool updateSynonym(Parameter*);
+    string toString();
+    unordered_map<string, Parameter> store;
 };
 
 #endif // SPA_VARIABLESTORE_H

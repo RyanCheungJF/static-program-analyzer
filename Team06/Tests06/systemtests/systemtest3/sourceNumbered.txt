@@ -1,0 +1,61 @@
+// DO NOT USE THIS FILE TO TEST!
+// this file is purely for visualization/ debugging purposes without whitespaces
+// to make your life easier :-)
+
+procedure One {
+	x = x + 1;	// 1
+	y = y + x;	// 2
+	z = x + y + c;	// 3
+	c = 12345	// 4
+	while (z == x + y) {	// 5
+		print c;	// 6
+		c = c + 0;	// 7
+	}
+	call Two;	// 8
+	call Three;		// 9
+	call Four;	// 10
+}
+
+procedure Two {
+	y = x + 2;	// 11
+	a = 999 + c;	// 12
+	b = a + y * x / z;	// 13
+	c = 1 + 2;	// 14
+	read b;		// 15
+	if (b != c) then {	// 16
+		call Three;		// 17
+		call Four;	// 18
+	} else { 
+		a = b;	// 19
+	}
+}
+
+procedure Three {
+	d = 100;	// 20
+	e = d;	// 21
+	call Six;	// 22
+}
+
+procedure Four {
+	print d;	// 23
+	print e;	// 24
+	call Three; // 25
+	call Five;	// 26
+}
+
+procedure Five {
+	if (x == y) then {	// 27
+		read d;		// 28
+		print e;	// 29
+	} else { 
+		if (y == z) then {	// 30
+			call Six;	// 31
+		} else {
+			call Three;	// 32
+		}
+	}
+}
+
+procedure Six {
+	print endpoint;	// 33
+}

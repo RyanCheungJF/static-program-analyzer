@@ -1,11 +1,12 @@
 #pragma once
-#include <vector>
-#include <utility>
+#include <deque>
+#include <iostream>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <string>
-#include <iostream>
-#include <deque>
+#include <utility>
+#include <vector>
+
 #include "../../../src/utils/AppConstants.h"
 
 class ModifiesUsesStorage {
@@ -28,5 +29,4 @@ private:
 
     std::unordered_map<ProcName, std::unordered_set<Ent>> procName_entities;
     std::unordered_map<Ent, std::unordered_set<ProcName>> entities_procName;
-
 };

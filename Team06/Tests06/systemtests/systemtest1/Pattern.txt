@@ -133,3 +133,33 @@ assign a;
 Select a pattern a("xyz", _)
 none
 5000
+26 - comment
+if if;
+Select if pattern if("a", _, _)
+31
+5000
+27 - comment
+if if; variable v;
+Select v pattern if(v, _, _)
+a, A, if, N
+5000
+28 - comment
+if if; variable v;
+Select v pattern if("while", _, _)
+none
+5000
+29 - comment
+while w;
+Select w pattern w("while", _)
+30
+5000
+30 - comment
+while w; variable v;
+Select v pattern w(v, _)
+i, thisIsAVeryLongNameAndILikeApples, c, while, b, B
+5000
+31 - comment
+while w;
+Select w pattern w("else", _)
+none
+5000

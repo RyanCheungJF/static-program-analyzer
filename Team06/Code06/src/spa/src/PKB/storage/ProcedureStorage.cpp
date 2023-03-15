@@ -1,11 +1,11 @@
 #include "ProcedureStorage.h"
 
 void ProcedureStorage::writeProcedure(ProcName p, std::unordered_set<StmtNum> lines) {
-    for (StmtNum line: lines) {
+    for (StmtNum line : lines) {
         proc_stmtNum[p].insert(line);
+        stmtNum_proc[line] = p;
     }
     procedures.insert(p);
-    return;
 }
 
 bool ProcedureStorage::checkProcedure(ProcName p, StmtNum num) {
@@ -27,4 +27,11 @@ std::unordered_set<StmtNum> ProcedureStorage::getProcedureStatementNumbers(ProcN
 
 std::unordered_set<ProcName> ProcedureStorage::getProcNames() {
     return procedures;
+}
+
+ProcName ProcedureStorage::getProcedure(StmtNum num) {
+    if (stmtNum_proc.find(num) == stmtNum_proc.end()) {
+        return "INVALID";
+    }
+    return stmtNum_proc[num];
 }

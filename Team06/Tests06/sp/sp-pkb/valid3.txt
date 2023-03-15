@@ -1,0 +1,32 @@
+procedure A {
+    call B;
+    read x;
+    call C;
+}
+
+procedure B {
+    call C;
+    print p;
+}
+
+procedure C {
+    e = 3 + k;
+    call D;
+}
+
+procedure D {
+    while (t == 3) {
+	a = b + c + d;
+        r = 3;
+    }
+    o = 2;
+}
+
+procedure E {
+    if (a <= 2) then {
+	y = 3;
+    } else {
+        h = n + v - 3;
+    }
+    call A;
+}

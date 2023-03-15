@@ -1,0 +1,14 @@
+procedure A { 
+	x = x + 1;
+	call B;
+}
+
+procedure B {
+	y = y * 2;
+	read y;
+	call C;
+}
+
+procedure C {
+	call A;
+}

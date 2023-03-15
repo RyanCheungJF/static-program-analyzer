@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -29,7 +30,6 @@ public:
     inline static const std::string WILDCARD = "wildcard";
     inline static const std::string FIXED_INT = "fixed_int";
     inline static const std::string FIXED_STRING = "fixed_string";
-    inline static const std::string EXPR_SPEC = "expr_spec";
 
     // synonym attributes
     inline static const std::string PROCNAME = "procName";
@@ -56,6 +56,8 @@ public:
     inline static const std::string ELSE = "else";
     inline static const std::string AND = "&&";
     inline static const std::string OR = "||";
+    inline static const std::string EQUALS = "==";
+    inline static const std::string NOT_EQUALS = "!=";
     inline static const char NOT = '!';
     inline static const char GREATER = '>';
     inline static const char LESS = '<';
@@ -69,4 +71,11 @@ public:
     inline static const char LEFT_PARENTHESIS = '(';
     inline static const char RIGHT_PARENTHESIS = ')';
     inline static const char SEMICOLON = ';';
+    inline static const char EQUAL_SIGN = '=';
+    inline static const char AMPERSAND = '&';
+    inline static const char VERTICAL_BAR = '|';
+
+    // CFG-related
+    inline static const std::string PARENTS = "parents";
+    inline static const std::string CHILDREN = "children";
 };

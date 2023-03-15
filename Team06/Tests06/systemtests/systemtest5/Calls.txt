@@ -1,0 +1,65 @@
+1 - Design entity declared twice
+procedure p; procedure p1;
+Select p such that Calls(p, p1)
+A, B, C, D, F
+5000
+2 - Incorrect spelling of Calls
+procedure p;
+Select p such that Call(p, "A")
+SyntaxError
+5000
+3 - Lowercase Calls
+procedure p;
+Select p such that calls(p, "A")
+SyntaxError
+5000
+4 - BOOLEAN as synonym name 
+procedure BOOLEAN, p;
+Select BOOLEAN such that Calls(p, BOOLEAN)
+B, D, E, F, G
+5000
+5 - stmt as parameter
+procedure p; stmt s;
+Select p such that Calls(p, s)
+SemanticError
+5000
+6 - read as parameter
+procedure p; read r;
+Select p such that Calls(r, p)
+SemanticError
+5000
+7 - constant as parameter
+procedure p; constant c;
+Select p such that Calls(p, c)
+SemanticError
+5000
+8 - while as parameter
+procedure p; while w;
+Select p such that Calls(p, w)
+SemanticError
+5000
+9 - if as parameter
+procedure p; if i;
+Select p such that Calls(p, i)
+SemanticError
+5000
+10 - Wildcard for both parameters
+procedure p;
+Select p such that Calls(_, _)
+A, B, C, D, E, F, G
+5000
+11 - Wildcard for left parameter
+procedure p;
+Select p such that Calls(_, p)
+B, D, E, F, G
+5000
+12 - Wildcard for right parameter
+procedure p;
+Select p such that Calls(p, _)
+A, B, C, D, F
+5000
+13 - Check for procedure that calls itself
+procedure p;
+Select p such that Calls(p, p)
+none
+5000

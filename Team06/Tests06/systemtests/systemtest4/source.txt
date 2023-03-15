@@ -1,0 +1,637 @@
+procedure a {
+	a = 1;
+	b = 2;
+	c = 3;
+	d = 4;
+	e = 5;
+	f = 6;
+	g = 7;
+	h = 8;
+	i = 9;
+	j = 10;
+	k = 11;
+	l = 12;
+	m = 13;
+	n = 14;
+	o = 15;
+	p = 16;
+	q = 17;
+	r = 18;
+	s = 19;
+	t = 20;
+	u = 21;
+	v = 22;
+	w = 23;
+	x = 24;
+	y = 25;
+	z = 26;
+	print a;
+	read b;
+	call c;
+	print d;
+	read e;
+	call f;
+	print g;
+	read h;
+	call i;
+	print j;
+	read k;
+	call l;
+	print m;
+	read n;
+	call o;
+	print p;
+	read q;
+	call r;
+	print s;
+	read t;
+	call u;
+	print v;
+	read w;
+	call x;
+	abc = a + b * c;
+	print y;
+	def = 100000000;
+	read z;
+} 
+
+procedure b {
+	call c;
+}
+
+procedure c {
+	x = 0;
+	y = 1;
+	while (x < 260) {
+		while (x < 250) {
+			while (x < 240) {
+				while (x < 230) {
+					while (x < 220) {
+						while (x < 210) {
+							while (x < 200) {
+								while (x < 190) {
+									while (x < 180) {
+										while (x < 170) {
+											while (x < 160) {
+												while (x < 150) {
+													while (x < 140) {
+														while (x < 130) {
+															while (x < 120) {
+																while (x < 110) {
+																	while (x < 100) {
+																		if (x % 2 == 0) then {
+																			while (y > 0) {
+																				y = y - 1;
+																			}
+																		} else {
+																			while (y > 1) {
+																				y = 1 + y - 2;
+																			}
+																		}
+																		while (x < 90) {
+																			while (x < 80) {
+																				x = x + 1;
+																				print x;
+																			}
+																			x = x + 1;
+																		}
+																		x = x + 1;
+																	}
+																	x = x + 1;
+																}
+																x = x + 1;
+															}
+															x = x + 1;
+														}
+														x = x + 1;
+													}
+													x = x + 1;
+												}
+												x = x + 1;
+											}
+											x = x + 1;
+										}
+										x = x + 1;
+									}
+									x = x + 1;
+								}
+								x = x + 1;
+							}
+							x = x + 1;
+						}
+						x = x + 1;
+					}
+					x = x + 1;
+				}
+				x = x + 1;
+			}
+			x = x + 1;
+		}
+		x = x + 1;
+	}
+	x = x + 1;
+	print x;
+	call k;
+}
+
+procedure d{
+	a = 1;
+	b = 0;
+	mul = a * b;
+	div = b / a;
+	call b;
+	sum = a + b;
+	call c;
+	minus = a - b;
+	call e;
+	mod = a % b;
+	if(  add       ==   mod )  then{
+		c = mod * mod + sum * mul / div - minus;
+		if((!(b * c / div >= 2147483647)) && ((mul * mul < mul + 1) || (a * (mul + a) - (div - mod) /2 + c % mod != minus)))then {
+			a = 0;
+			b = 1;
+			c = 2;
+		} else {
+			c = 2;
+			b = 1;
+			a = 0;
+		}
+		print a;
+		print b;
+		print c;
+	} else {
+		a = a + 1;
+		b = b - 1;
+		c = c * 1;
+	}
+	minus = minus + minus;
+	add = add - add;
+	div = mul / mul;
+	mul = div * div;
+	mod = mul % div;
+	read mul;
+	read mod;
+	read add;
+	read minus;
+	print mul;
+	a = a + b;
+	b = b - a;
+	print mod;
+	print add;
+	print mul;
+	NULL = 4;
+	null = 3;
+	deadlock = 1;
+	mutex = 0;
+	read sheMo;
+	semaphore = sheMo + NULL;
+}
+
+procedure e {
+	darren = 7;
+	bestTeamLead = 1;
+	if (bestTeamLead==1) then {
+		print Success;
+	} else {
+		print blameFaruq;
+	}
+	faruQ = 6;
+	langYuan = 666;
+	bestfriendsforever = 672;
+	if (faruQ + langYuan == bestfriendsforever) then {
+		print iPityLangYuan;
+	} else {
+		print langYuanLetsOutASighOfRelief;
+	}
+	ryan = 0;
+	calvin = 1;
+	carries = 999;
+	if (calvin + carries > ryan) then {
+		read true;
+	} else {
+		read false;
+	}
+	xingWei = 996;
+	loves = 1;
+	if (xingWei + loves > 996) then {
+		xingWei = 997;
+	} else {
+		socialCredit = 0;
+		xingWei = socialCredit - 999;
+	}
+	percentile = 100;
+	sheeHui = 99 % percentile;
+	topStudent = 1;
+	if (sheeHui == topStudent) then {
+		read mustMakeUseOfFullOneHour;
+		read pleaseGiveHints;
+		read thisIsNotACallForHelp;
+		read okMaybeItIs;
+		read ifSoDRYdrinkWater;
+	} else {
+		read letHerGoAfter15Minutes;
+	}
+	profG = 1;
+	weSimp = (1 * 100 + (2) - 2) / 100;
+	if (weSimp == p) then {
+		read pleaseGiveLangYuanAFYP;
+	} else {
+		read sweIsMyPassion;
+	}
+	idkwhatelsetoput = 5;
+	veryhardtocomeuptwith500lines = 1;
+	whydoessimplehave500lines = 0;
+	whatislife = 1;
+	wowitsonly143am = 0;
+	alwayshungry = 1;
+}
+
+procedure f {
+	while (itis > raining) {
+		umbrella = 1;
+		read weatherreport;
+		call e;
+		if (sun == out) then {
+			can = actually - go + out;
+			print ifnot;
+			walk = run;
+		} else {
+			read ineedajob;
+			job = jobless;
+			jobless = job;
+			unemployed = unemployed;
+			while (unemployed > 1) {
+				try = grind + leetcode;
+				take = holiday % in / australia;
+				price = 123 * planeTicket + 1000;
+			}
+			print iNeedajob;
+		}
+		read coke;
+		while (((pepsi > sprite) && (pepsi > coke)) || (pepsi > pepsi)) {
+			read pepsi;
+			call z;
+			pepsi = weight * 100 + 1 / 1 + isthisthebestdrink;
+			or = could + this + be + fanta;
+			coke = overrated;
+		}
+	}
+	yakult = 7;
+	vitagen = trashtaste - 10000;
+	yakult = yakult % 3 * 126 / 2;
+	wow = i;
+	wow = am;
+	wow = hungry;
+	wow = its;
+	wow = a156am;
+	wow = are;
+	wow = there;
+	wow = noodles;
+}
+
+procedure g {
+	read storybook;
+	print once;
+	upon = a + time;
+	print thereWasAPig;
+	this = pig + name + was + peppa;
+	if (peppa != pepper) then {
+		print weCatchPeppa;
+		while (peppa > notCaught) {
+			try = catchPeppa;
+		}
+		if (notCaught == 1) then {
+			print retire;
+			print retireFromFarming;
+		} else {
+			notCaught = 0;
+		}
+		killPeppa = yes;
+		whatToDoWithPeppa = good + question;
+		if (makeCharSiew > whatToDoWithPeppa) then {
+			read cookBook;
+			x = 1 + y + z / 2 % 3 + 4 * 5;
+			marinate = with + bestSauce;
+			peppa = charSiew;
+			peppa = god + tier + peppa;
+			peppa = delicious;
+		} else {
+			peppa = big + L;
+			peppa = peppa - shaoRou;
+		}
+	} else {
+		print servePeppa;
+		peppa = served;
+		read withSaltAndButter;
+		read waiter;
+		call x;
+		peppa = eaten;
+		peppa = peppa + yum + pepper + yum;
+	}
+}
+
+procedure h {
+	print oneLiner;
+}
+
+procedure i {
+	call h;
+	call h;
+	call h;
+}
+
+procedure j {
+	print oneLiner;
+	read twoLiner;
+}
+
+procedure k {
+	print oneLiner;
+	read twoLiner;
+	bark = woof;
+}
+
+procedure l {
+	call i;
+	meow = cat;
+	call j;
+	why = are + there + no + cup + noodles;
+	call k;
+}
+
+procedure m {
+	read TopThreeTypeOfDogs;
+	if (TOPONE != corgis) then {
+		print youreTrolling;
+	} else {
+		print respectGained;
+		if (TOPTWO != goldies) then {
+			print youDontHaveAHeart;
+			badPerson = you + 999;
+		} else {
+			print hachoo;
+		}
+	}
+	if (TOPTHREE != samoyeds) then {
+		print areYouACatPerson;
+	} else {
+		print yourSoulIsAsWhiteAsSamoyeds;
+	}
+	while (cassie > play) {
+		sleep = notSleep;
+	}
+}
+
+procedure n {
+	if = if;
+	chatGPT = 0;
+	chatGPT = me + feed - fake % info;
+	bestLanguage = c;
+	c = c + plus;
+	c = c + plus;
+}
+
+procedure o {
+	whenIAm = 50;
+	IwantaParrot = true;
+	parrot = 777;
+	parrot = parrot * talk;
+	read talk;
+	print walk;
+	my = parrot + can + talk + to + me;
+	i = can + take;
+	parrot = for * 1 * parrot;
+	parrot = walks / 1 / parrot;
+	parrots = pretty;
+	i = will + train;
+	i = my + parrot + to + attack + people;
+	read bestParrot;
+	print true;
+	if ((i > i) || ((i == i) && (i * i % i == 0))) then {
+		print please;
+		read buymeaparrot;
+	} else {
+		print ok;
+		read getmeacarrot;
+	}
+	print end;
+}
+
+procedure p {
+	carrot = good;
+	call o;
+	carrot = eyesight - 50;
+	carrot = veg;
+	veges = carrot;
+	vege = carrot;
+	waA = coW;
+	one = 2;
+	two = 3;
+	three = 4;
+	four = one + two - 1;
+}
+
+procedure q {
+	q = 1;
+	Q = 2;
+	qQ = 3;
+	qQQ = 4;
+	qQQQQQ = 5;
+	QQQQQQQQQQQqqq = 6;
+	QQQQQQQqQqQQq = 7;
+	qQq = 8;
+	qQQqqqqqQ = 9;
+	QqqqQq = 10;
+	qQQqqQQ = 11;
+	QqQ = 12;
+	QQ = 13;
+	QQQ = 14;
+	qq = 15;
+	qqq = 16;
+	QqQq = 17;
+	qQQQQQQQQQQQQQQQQQqqQQ = 18;
+	starfish = 19;
+	QQQQQQQQQqqqQQQQ = 20;
+	QQqqQqQQQQqqQQ = 22;
+	QqQqQQqQqQqqqq = 23;
+	QqqQqQQqQq = 24;
+	qQqqqQqqQqQQQqQq = 25;
+	qQqqqQqqqQq = 26;
+}
+
+procedure r {
+	call q;
+	r = 1;
+	rr = 2;
+	rrr = 3;
+	ry = 4;
+	rya = 5;
+	ryan = basic + name;
+	bryan = fake + ryan;
+	brian = why;
+}
+
+procedure s {
+	s = 1;
+	ss = 2;
+	sss = 3;
+	ssss = 4;
+	sssss = 5;
+	ssssss = 6;
+	sssssss = 7;
+	ssssssss = 8;
+	sssssssss = 9;
+	ssssssssss = 10;
+	sssssssssss = 11;
+	ssssssssssss = 12;
+	sssssssssssss = 13;
+	ssssssssssssss = 14;
+	sssssssssssssss = 15;
+	ssssssssssssssss = 16;
+	sssssssssssssss =  17;
+	ssssssssssssss = 18;
+	sssssssssssss = 19;
+	ssssssssssss = 20;
+	sssssssssss = 21;
+	ssssssssss = 22;
+	sssssssss = 23;
+	ssssssss = 24;
+	sssssss = 25;
+	ssssss = 26;
+	sssss = 27;
+	ssss = 28;
+	sss = 29;
+	ss = 30;
+	s = 31;
+}
+
+procedure t {
+	tea = i + love + tea;
+	read tea;
+	print tea;
+	print coffeeSucks;
+	print eew;
+	tea = please + buy + me + tea;
+	print please;
+	call s;
+	print please;
+	read please;
+	tea = deck + used + to + have + best + tea;
+	print whenItWasThatOneGuy;
+	print nowItsNotTheSame;
+	read tragicStory;
+	cueSadMusic = 1;
+	print nowThereAreMultiplePeople;
+	tea = not + hitting + the - same;
+	tea = I * miss / my % tea;
+	tea = tea;
+	print tea;
+	read tea;
+	tea = bestTea;
+}
+
+procedure u {
+	i9 = x7;
+	a1 = az;
+	b2 = x6;
+	g7 = j8;
+	a2 = x7 + i9;
+	print a1;
+	v2 = d0 + f1;
+	read g6;
+	m7 = q1;
+}
+
+procedure v {
+	vroom = vrooom * 3;
+	wasd = zxcv;
+	read ppp;
+	call h;
+	print fff;
+}
+
+procedure w {
+	read h;
+	hi = h + faruq;
+	hi = h + ly;
+	hi = h + xw;
+	hi = h + darho;
+	hi = h + calvin;
+	hi = h + ryan;
+	bye = bye * 2;
+}
+
+procedure x { 
+	kkk = jjj + 111;
+	www = xxx + yyy;
+	read hj8kp9jasd321jfjllf;
+}
+
+procedure y {
+	AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA = 1;
+	aaa = 2;
+}
+
+procedure z {
+	call u;
+	print sal;
+	call w;
+	read p0mp0m;
+	call y;
+	call u;	
+	print sal;	
+	call w;	
+	read p0mp0m;
+	call y;
+	call u;
+	print sal;
+	call w;
+	read p0mp0m;
+	call y;	
+	call u;
+	print sal;
+	call w;
+	read p0mp0m;
+	call y;
+	call u;
+	print sal;
+	call w;
+	read p0mp0m;
+	call y;
+	call u;
+	print sal;
+	call w;
+	read p0mp0m;
+	call y;
+	call x;
+	call u;
+	print sal;	
+	call w;	
+	read p0mp0m;
+	call y;
+	call u;	
+	print sal;
+	call w;	
+	read p0mp0m;
+	call y;
+	call u;
+	print sal;
+	call w;	
+	read p0mp0m;
+	call y;
+	call u;	
+	print sal;
+	call w;	
+	read p0mp0m;
+	call y;
+	call u;
+	print sal;
+	call w;
+	read p0mp0m;
+	call y;
+	call u;
+	print sal;
+	call w;
+	read p0mp0m;
+	call y;
+}

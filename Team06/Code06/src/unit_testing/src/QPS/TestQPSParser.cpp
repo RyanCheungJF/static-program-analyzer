@@ -38,10 +38,10 @@ TEST_CASE("parse / create ifs pattern clause last param is not a wildcard / "
 }
 
 TEST_CASE("parse / assign pattern can only have 2 params (wild card) / throws "
-          "syntax error") {
+          "semantic error") {
   string test = "variable v; assign a; Select v pattern a (v, _, _) ";
   QPSParser qp;
-  CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+  CHECK_THROWS_AS(qp.parse(test), SemanticException);
 }
 
 TEST_CASE("parse / assign pattern can only have 2 params (synonym) / throws "
@@ -52,10 +52,10 @@ TEST_CASE("parse / assign pattern can only have 2 params (synonym) / throws "
 }
 
 TEST_CASE("parse / while pattern can only have 2 params (wild card) / throws "
-          "syntax error") {
+          "semantic error") {
   string test = "variable v; while while; Select v pattern while (v, _, _) ";
   QPSParser qp;
-  CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+  CHECK_THROWS_AS(qp.parse(test), SemanticException);
 }
 
 TEST_CASE("parse / while pattern can only have 2 params (synonym) / throws "
@@ -79,10 +79,10 @@ TEST_CASE("parse / additional brackets / throws syntax error") {
 }
 
 TEST_CASE("parse / create while pattern clause second param is not a wildcard "
-          "/ throws syntax error") {
+          "/ throws semantic error") {
   string test = "variable v; while a; Select v pattern a (v, \"apple\") ";
   QPSParser qp;
-  CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+  CHECK_THROWS_AS(qp.parse(test), SemanticException);
 }
 
 TEST_CASE("parse / missing select clause / throw error") {

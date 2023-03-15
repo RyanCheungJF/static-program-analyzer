@@ -1,4 +1,5 @@
 #include "Parameter.h"
+
 #include "../syntaxValidator/ParamSyntaxValidator.h"
 
 string Parameter::getValue() { return value; }
@@ -36,18 +37,18 @@ Parameter::Parameter() {
 }
 
 Parameter Parameter::makeParameter(string val) {
-  ParamSyntaxValidator paramSynVal;
-  ParameterType type = guessParameterType(val);
-  Parameter p(removeCharFromString(val, '\"'), type);
-  paramSynVal.validate(p);
-  return p;
+    ParamSyntaxValidator paramSynVal;
+    ParameterType type = guessParameterType(val);
+    Parameter p(removeCharFromString(val, '\"'), type);
+    paramSynVal.validate(p);
+    return p;
 }
 
 Parameter Parameter::makeParameter(string val, string type) {
-  ParamSyntaxValidator paramSynVal;
-  Parameter p(removeCharFromString(val, '\"'), type);
-  paramSynVal.validate(p);
-  return p;
+    ParamSyntaxValidator paramSynVal;
+    Parameter p(removeCharFromString(val, '\"'), type);
+    paramSynVal.validate(p);
+    return p;
 }
 
 bool Parameter::isSyntacticStatementRef(Parameter &p) {
@@ -83,23 +84,20 @@ bool Parameter::isSyntacticEntityRef(Parameter &p) {
   return p.type == ParameterType::SYNONYM || isEntityRef(p) || isProcedure(p);
 }
 
-bool Parameter::isEntityRef(Parameter &p) {
-  return p.type == ParameterType::VARIABLE || isFixedStringOrWildcard(p);
+bool Parameter::isEntityRef(Parameter& p) {
+    return p.type == ParameterType::VARIABLE || isFixedStringOrWildcard(p);
 }
 
-bool Parameter::isPatternSyn(Parameter &p) {
-  return p.type == ParameterType::ASSIGN || p.type == ParameterType::WHILE ||
-         p.type == ParameterType::IF;
+bool Parameter::isPatternSyn(Parameter& p) {
+    return p.type == ParameterType::ASSIGN || p.type == ParameterType::WHILE || p.type == ParameterType::IF;
 }
 
-bool Parameter::isFixedStringOrWildcard(Parameter &p) {
-  return p.type == ParameterType::FIXED_STRING ||
-         p.type == ParameterType::WILDCARD;
+bool Parameter::isFixedStringOrWildcard(Parameter& p) {
+    return p.type == ParameterType::FIXED_STRING || p.type == ParameterType::WILDCARD;
 }
 
-bool Parameter::isFixedIntOrWildCard(Parameter &p) {
-  return p.type == ParameterType::FIXED_INT ||
-         p.type == ParameterType::WILDCARD;
+bool Parameter::isFixedIntOrWildCard(Parameter& p) {
+    return p.type == ParameterType::FIXED_INT || p.type == ParameterType::WILDCARD;
 }
 
 bool Parameter::isUncheckedSynonym() { return type == ParameterType::SYNONYM; }
@@ -151,9 +149,6 @@ ParameterType Parameter::guessParameterType(string s) {
   if (isWildCard(s)) {
     return ParameterType::WILDCARD;
   }
-  if (isExprSpec(s)) {
-    return ParameterType::EXPR_SPEC;
-  }
   return ParameterType::UNKNOWN;
 }
 
@@ -176,7 +171,6 @@ const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
     {AppConstants::WILDCARD, ParameterType::WILDCARD},
     {AppConstants::FIXED_INT, ParameterType::FIXED_INT},
     {AppConstants::FIXED_STRING, ParameterType::FIXED_STRING},
-    {AppConstants::EXPR_SPEC, ParameterType::EXPR_SPEC},
 };
 
 const unordered_map<string, AttributeType> Parameter::stringToAttributeMap = {

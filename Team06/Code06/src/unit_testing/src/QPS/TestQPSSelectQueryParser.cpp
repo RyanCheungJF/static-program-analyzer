@@ -94,7 +94,7 @@ TEST_CASE("parse / single ifs pattern clause, with third parameter not wild "
   CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
 }
 
-TEST_CASE("parse / missing third  / expect syntax error") {
+TEST_CASE("parse / missing third  / syntax Error") {
   // The third parameter MUST be a wild card if it exists.
   string input = "Select s pattern ifs(v, _,)";
   SelectQueryParser sqp;

@@ -1,12 +1,12 @@
-#include "catch.hpp"
-#include "../../../spa/src/PKB/WritePKB.h"
 #include "../../../spa/src/PKB/ReadPKB.h"
+#include "../../../spa/src/PKB/WritePKB.h"
 #include "../utils/utils.h"
+#include "catch.hpp"
 
 using namespace unit_testing_utils;
 
 TEST_CASE("Check writes and reads to/from ParentStorage") {
-    ParentStorage par;
+    FollowsParentStorage par;
 
     par.write(1, 2);
     REQUIRE(par.exists(1, 2));
@@ -19,13 +19,13 @@ TEST_CASE("Check writes and reads to/from ParentStorage") {
 }
 
 TEST_CASE("Tests for getting children") {
-    ParentStorage par;
+    FollowsParentStorage par;
 
     par.write(1, 2);
     par.write(1, 3);
 
     std::unordered_set<StmtNum> res = par.getRightWildcard(1);
-    std::unordered_set<StmtNum> check{ 2, 3 };
+    std::unordered_set<StmtNum> check{2, 3};
     REQUIRE(unit_testing_utils::equals(check, res));
 
     res = par.getRightWildcard(2);
@@ -36,12 +36,12 @@ TEST_CASE("Tests for getting children") {
 }
 
 TEST_CASE("Tests for getting parent") {
-    ParentStorage par;
+    FollowsParentStorage par;
 
     par.write(1, 2);
 
     std::unordered_set<StmtNum> res = par.getLeftWildcard(2);
-    std::unordered_set<StmtNum> check{ 1 };
+    std::unordered_set<StmtNum> check{1};
     REQUIRE(unit_testing_utils::equals(check, res));
 
     res = par.getLeftWildcard(1);
@@ -52,7 +52,6 @@ TEST_CASE("Tests for getting parent") {
 }
 
 TEST_CASE("Checks for cases e.g. Parent(1, assign)") {
-
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -75,11 +74,10 @@ TEST_CASE("Checks for cases e.g. Parent(1, assign)") {
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
-    REQUIRE(contains(res, { "1", "2" }));
+    REQUIRE(contains(res, {"1", "2"}));
 }
 
 TEST_CASE("Checks for cases e.g. Parent(while, assign)") {
-
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -103,11 +101,10 @@ TEST_CASE("Checks for cases e.g. Parent(while, assign)") {
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
-    REQUIRE(contains(res, { "1", "3" }));
+    REQUIRE(contains(res, {"1", "3"}));
 }
 
 TEST_CASE("Checks for cases e.g. Parent(_, stmt)") {
-
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -130,6 +127,6 @@ TEST_CASE("Checks for cases e.g. Parent(_, stmt)") {
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 2);
-    REQUIRE(contains(res, { "1", "2" }));
-    REQUIRE(contains(res, { "1", "3" }));
+    REQUIRE(contains(res, {"1", "2"}));
+    REQUIRE(contains(res, {"1", "3"}));
 }

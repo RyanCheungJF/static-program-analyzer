@@ -50,7 +50,8 @@ vector<string> QPSParser::splitQuery(string qpsQuery) {
       throw SyntaxException();
     }
     string clause;
-    tie(clause, start) =
+    bool found;
+    tie(clause, start, found) =
         extractSubStringUntilDelimiter(qpsQuery, start, delimiter);
     clause = trim(clause);
     clauses.push_back(clause);

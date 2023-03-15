@@ -1,0 +1,9 @@
+procedure A { 
+	x = x + 1;
+}
+
+procedure A {
+	y = y * 2;
+	read y;
+}
+

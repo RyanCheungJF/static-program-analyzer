@@ -1,11 +1,11 @@
 #include "Constant.h"
 
-Constant::Constant() {}
+Constant::Constant() : value() {}
 
 Constant::Constant(Const value) {
-	this->value = value;
+    this->value = value;
 }
 
 void Constant::accept(ASTVisitor* visitor) {
-	visitor->visitExpression(this);
+    visitor->visitExpression(this);
 }
