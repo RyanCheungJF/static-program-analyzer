@@ -190,8 +190,9 @@ vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
 Parameter SelectQueryParser::parseParameter(string paramString) {
   string paramName;
   int index;
-  tie(paramName, index) = extractSubStringUntilDelimiter(paramString, 0, ".");
-  if (index == -1) {
+  bool found;
+  tie(paramName, index, found) = extractSubStringUntilDelimiter(paramString, 0, ".");
+  if (!found) {
     return Parameter(removeCharFromString(paramName, '\"'),
                      Parameter::guessParameterType(paramName));
   }

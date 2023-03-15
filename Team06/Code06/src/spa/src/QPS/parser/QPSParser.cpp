@@ -43,22 +43,23 @@ vector<string> QPSParser::splitQuery(string qpsQuery) {
     qpsQuery = trim(qpsQuery);
     // Check if the last term is a semicolon.
     if (qpsQuery.back() == ';') {
-        throw SyntaxException();
+    throw SyntaxException();
     }
     string delimiter = ";";
     vector<string> clauses;
     int start = 0;
-    while (start != -1) {
+    bool found;
+    do {
         if (start >= qpsQuery.length()) {
             throw SyntaxException();
         }
         string clause;
-        bool found;
+
         tie(clause, start, found) =
             extractSubStringUntilDelimiter(qpsQuery, start, delimiter);
         clause = trim(clause);
         clauses.push_back(clause);
-    }
+    } while (found);
     return clauses;
 }
 
