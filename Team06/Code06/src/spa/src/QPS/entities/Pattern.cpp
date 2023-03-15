@@ -66,6 +66,11 @@ bool Pattern::validateParams() {
     }
 }
 
+ParameterType Pattern::getPatternType()
+{
+    return patternSyn.getType();
+}
+
 shared_ptr<SyntaxValidator<Pattern>> patTwoParamVal =
     make_shared<PatTwoParamSyntaxValidator>(PatTwoParamSyntaxValidator());
 shared_ptr<SyntaxValidator<Pattern>> patThreeParamVal =
