@@ -1,9 +1,10 @@
 #ifndef SPA_TABLE_H
 #define SPA_TABLE_H
-#include "Parameter.h"
 #include <string>
 #include <unordered_map>
 #include <vector>
+
+#include "Parameter.h"
 
 using namespace std;
 
