@@ -46,6 +46,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
 
     writePkb.setCalls("proc1", {"proc2"});
     writePkb.setCalls("proc2", {"proc3"});
+
     writePkb.setCallsT("proc1", {"proc2", "proc3"});
     writePkb.setCallsT("proc2", {"proc3"});
 
@@ -138,4 +139,24 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
         vector<vector<string>> expected = {{"proc1", "proc2"}, {"proc1", "proc3"}, {"proc2", "proc3"}};
         REQUIRE(equals(res, expected));
     }
+
+//    SECTION("Calls(p, p)") {
+//        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
+//                                          Parameter("p", AppConstants::PROCEDURE)};
+//        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
+//
+//        auto res = readPkb.findRelationship(rs1);
+//        vector<vector<string>> expected = {};
+//        REQUIRE(equals(res, expected));
+//    }
+//
+//    SECTION("Calls*(p, p)") {
+//        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
+//                                          Parameter("p", AppConstants::PROCEDURE)};
+//        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
+//
+//        auto res = readPkb.findRelationship(rs1);
+//        vector<vector<string>> expected = {};
+//        REQUIRE(equals(res, expected));
+//    }
 }

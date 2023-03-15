@@ -58,6 +58,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
             assignStatements.insert(num);
         }
     }
+
     if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
         return res;
     }
@@ -70,7 +71,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     }
 
     std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc1);
-    if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2 || a1 == a2)) {
+    if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2
+//    || a1 == a2
+    )) {
         return res;
     }
 
@@ -107,6 +110,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
 
     std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getEnt(a2);
     for (StmtNum a1 : assignStatements) {
+        if (procStorage->getProcedure(a1) != procStorage->getProcedure(a2)) {
+            continue;
+        }
+
         std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getEnt(a1);
         std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
         if (commonVariables.empty()) {
@@ -114,7 +121,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
         }
 
         std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
-        if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2 || a1 == a2)) {
+        if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2
+//        || a1 == a2
+        )) {
             continue;
         }
 
@@ -158,12 +167,17 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
             assignStatements.insert(num);
         }
     }
+
     if (assignStatements.find(a1) == assignStatements.end()) {
         return res;
     }
 
     std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getEnt(a1);
     for (StmtNum a2 : assignStatements) {
+        if (procStorage->getProcedure(a1) != procStorage->getProcedure(a2)) {
+            continue;
+        }
+
         std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getEnt(a2);
         std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
         if (commonVariables.empty()) {
@@ -171,7 +185,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
         }
 
         std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
-        if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2 || a1 == a2)) {
+        if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2
+//        || a1 == a2
+        )) {
             continue;
         }
 

@@ -86,15 +86,14 @@ TEST_CASE("Test Pattern Cache") {
     // Pattern a("z", "_b / c_")
     Parameter param1 = Parameter("a", AppConstants::ASSIGN);
     Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
-    vector<string> exprSpecs1 = {"_b / c_"};
-    Pattern p1 = Pattern(param1, param2, exprSpecs1);
+    vector<string> exprSpecs = {"_b / c_"};
+    Pattern p1 = Pattern(param1, param2, exprSpecs);
 
     // Pattern if("z", _, _)
     Parameter param3 = Parameter("if", AppConstants::IF);
     Parameter param4 = Parameter("z", AppConstants::FIXED_STRING);
-    Parameter param5 = Parameter("_", AppConstants::WILDCARD);
-    vector<string> exprSpecs2 = {"_", "_"};
-    Pattern p2 = Pattern(param3, param4, exprSpecs2);
+    exprSpecs = {"_", "_"};
+    Pattern p2 = Pattern(param3, param4, exprSpecs);
 
     shared_ptr<Pattern> pattern1 = make_shared<Pattern>(p1);
     shared_ptr<Pattern> pattern2 = make_shared<Pattern>(p2);
@@ -106,10 +105,9 @@ TEST_CASE("Test Pattern Cache") {
     SECTION("Cache hit, Assign pattern") {
         Parameter param6 = Parameter("a", AppConstants::ASSIGN);
         Parameter param7 = Parameter("z", AppConstants::FIXED_STRING);
-        vector<string> exprSpecs3 = {"_b / c_"};
-        Pattern p3 = Pattern(param6, param7, exprSpecs3);
+        vector<string> exprSpecs = {"_b / c_"};
+        Pattern p3 = Pattern(param6, param7, exprSpecs);
         shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
-        
 
         vector<vector<string>> res = cache.findResult(pattern3);
         vector<vector<string>> expected = {{"1", "z"}};
@@ -120,8 +118,8 @@ TEST_CASE("Test Pattern Cache") {
     SECTION("Cache hit, If pattern") {
         Parameter param6 = Parameter("if", AppConstants::IF);
         Parameter param7 = Parameter("z", AppConstants::FIXED_STRING);
-        vector<string> exprSpecs3 = {"_", "_"};
-        Pattern p3 = Pattern(param6, param7, exprSpecs3);
+        vector<string> exprSpecs = {"_", "_"};
+        Pattern p3 = Pattern(param6, param7, exprSpecs);
         shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
 
         vector<vector<string>> res = cache.findResult(pattern3);
@@ -133,8 +131,8 @@ TEST_CASE("Test Pattern Cache") {
     SECTION("Cache miss, Assign pattern") {
         Parameter param6 = Parameter("a", AppConstants::ASSIGN);
         Parameter param7 = Parameter("z", AppConstants::FIXED_STRING);
-        vector<string> exprSpecs3 = {"b / c"};
-        Pattern p3 = Pattern(param6, param7, exprSpecs3);
+        vector<string> exprSpecs = {"b / c"};
+        Pattern p3 = Pattern(param6, param7, exprSpecs);
         shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
 
         vector<vector<string>> res = cache.findResult(pattern3);
@@ -146,8 +144,8 @@ TEST_CASE("Test Pattern Cache") {
     SECTION("Cache miss, Assign pattern") {
         Parameter param6 = Parameter("while", AppConstants::WHILE);
         Parameter param7 = Parameter("z", AppConstants::FIXED_STRING);
-        vector<string> exprSpecs3 = {"_"};
-        Pattern p3 = Pattern(param6, param7, exprSpecs3);
+        vector<string> exprSpecs = {"_"};
+        Pattern p3 = Pattern(param6, param7, exprSpecs);
         shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
 
         vector<vector<string>> res = cache.findResult(pattern3);
