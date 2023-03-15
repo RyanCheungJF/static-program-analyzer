@@ -1,8 +1,9 @@
 #include "StmtStorage.h"
 
 void StmtStorage::writeStatement(Stmt s, StmtNum line) {
-    stmt_stmtNum[s].insert(line);
-    return;
+  stmt_stmtNum[s].insert(line);
+    stmtNum_stmt[line].insert(s);
+  return;
 }
 
 bool StmtStorage::checkStatement(Stmt stmt, StmtNum num) {
@@ -30,4 +31,12 @@ std::unordered_set<StmtNum> StmtStorage::getStatementNumbers(Stmt s) {
         return emptySet;
     }
     return stmt_stmtNum.at(s);
+}
+
+std::unordered_set<Stmt> StmtStorage::getStatementType(StmtNum num) {
+    if (stmtNum_stmt.find(num) == stmtNum_stmt.end()) {
+        std::unordered_set<Stmt> emptySet;
+        return emptySet;
+    }
+    return stmtNum_stmt.at(num);
 }

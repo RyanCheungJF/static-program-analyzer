@@ -9,9 +9,10 @@
 
 class StmtStorage {
 public:
-    virtual void writeStatement(Stmt s, StmtNum line);
-    virtual bool checkStatement(Stmt stmt, StmtNum num);
-    virtual std::unordered_set<StmtNum> getStatementNumbers(Stmt s);
+  virtual void writeStatement(Stmt s, StmtNum line);
+  virtual bool checkStatement(Stmt stmt, StmtNum num);
+  virtual std::unordered_set<StmtNum> getStatementNumbers(Stmt s);
+  virtual std::unordered_set<Stmt> getStatementType(StmtNum num);
 
 private:
     /*

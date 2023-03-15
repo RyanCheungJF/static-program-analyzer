@@ -11,6 +11,7 @@
 #include "../QPS/entities/Pattern.h"
 #include "../QPS/entities/Relationship.h"
 #include "../utils/AppConstants.h"
+#include "readHandlers/AffectsHandler.h"
 #include "readHandlers/AssignPatternHandler.h"
 #include "readHandlers/CallsHandler.h"
 #include "readHandlers/FollowsParentHandler.h"
@@ -29,6 +30,9 @@
 #include "storage/ProcedureStorage.h"
 #include "storage/StmtStorage.h"
 #include "utils/AppConstants.h"
+#include "cache/RelationshipCache.h"
+#include "cache/ParameterCache.h"
+#include "cache/PatternCache.h"
 
 class PKB : AppConstants {
 
@@ -163,6 +167,11 @@ private:
     std::shared_ptr<CallsStorage> callsTStorage;
     std::shared_ptr<CFGStorage> cfgStorage;
 
+    RelationshipCache relationshipCache;
+    ParameterCache parameterCache;
+    PatternCache patternCache;
+
+
     std::unordered_map<RelationshipType, std::shared_ptr<FollowsParentStorage>> followsParentMap = {
         {RelationshipType::FOLLOWS, NULL},
         {RelationshipType::FOLLOWST, NULL},
@@ -178,6 +187,6 @@ private:
     std::unordered_map<RelationshipType, std::shared_ptr<CallsStorage>> callsMap = {{RelationshipType::CALLS, NULL},
                                                                                     {RelationshipType::CALLST, NULL}};
 
-    std::unordered_map<RelationshipType, std::shared_ptr<CallsStorage>> nextMap = {{RelationshipType::NEXT, NULL},
-                                                                                   {RelationshipType::NEXTT, NULL}};
+    std::unordered_set<RelationshipType> nextMap = {RelationshipType::NEXT, RelationshipType::NEXTT};
+    std::unordered_set<RelationshipType> affectsMap = {RelationshipType::AFFECTS, RelationshipType::AFFECTST};
 };
