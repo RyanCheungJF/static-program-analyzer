@@ -10,18 +10,9 @@ ParameterType Parameter::getType() const {
     return type;
 }
 
-
-
-
 Parameter::Parameter() {
     type = ParameterType::UNKNOWN;
     value = "";
-    attribute = AttributeType::NONE;
-}
-
-Parameter::Parameter(string v, string t) {
-    value = v;
-    type = stringToType(t);
     attribute = AttributeType::NONE;
 }
 
@@ -31,10 +22,10 @@ Parameter::Parameter(string v, ParameterType t) {
     attribute = AttributeType::NONE;
 }
 
-Parameter::Parameter(string v, ParameterType t, string a) {
+Parameter::Parameter(string v, ParameterType t, AttributeType a) {
     value = v;
     type = t;
-    attribute = stringToAttribute(a);
+    attribute = a;
 }
 
 Parameter::Parameter(const Parameter& p) {
@@ -42,7 +33,6 @@ Parameter::Parameter(const Parameter& p) {
     type = p.type;
     attribute = p.attribute;
 }
-
 
 Parameter Parameter::makeParameter(string val) {
     ParamSyntaxValidator paramSynVal;
@@ -52,9 +42,11 @@ Parameter Parameter::makeParameter(string val) {
     return p;
 }
 
-Parameter Parameter::makeParameter(string val, string type) {
+Parameter Parameter::makeParameter(string val, string attr) {
     ParamSyntaxValidator paramSynVal;
-    Parameter p(removeCharFromString(val, '\"'), type);
+    ParameterType type = guessParameterType(val);
+    AttributeType attribute = stringToAttribute(attr);
+    Parameter p(removeCharFromString(val, '\"'), type, attribute);
     paramSynVal.validate(p);
     return p;
 }
@@ -111,6 +103,10 @@ bool Parameter::isUncheckedSynonym() {
     return type == ParameterType::SYNONYM;
 }
 
+bool Parameter::hasValidAttributeType() {
+    return Parameter::typeToAttributeTypes.at(type).count(attribute) == 1 || attribute == AttributeType::NONE;
+}
+
 void Parameter::updateSynonymType(ParameterType pt) {
     if (type != ParameterType::SYNONYM) {
         throw InternalException("Error: Parameter.updateSynonymType parameter is not a synonym.");
@@ -118,21 +114,20 @@ void Parameter::updateSynonymType(ParameterType pt) {
     type = pt;
 }
 
-// TODO: IF NOT FOUND, MAY WANT TO THROW ERROR
 ParameterType Parameter::stringToType(string s) {
     auto iter = Parameter::stringToTypeMap.find(s);
     if (iter == stringToTypeMap.end()) {
-        return ParameterType::UNKNOWN;
+        throw SyntaxException();
     }
     return iter->second;
 }
 
-AttributeType Parameter::stringToAttribute(string s) { 
-  auto iter = Parameter::stringToAttributeMap.find(s);
-  if (iter == stringToAttributeMap.end()) {
-    throw SyntaxException();
-  }
-  return iter->second;
+AttributeType Parameter::stringToAttribute(string s) {
+    auto iter = Parameter::stringToAttributeMap.find(s);
+    if (iter == stringToAttributeMap.end()) {
+        throw SyntaxException();
+    }
+    return iter->second;
 }
 
 string Parameter::getTypeString() const {
@@ -160,8 +155,8 @@ ParameterType Parameter::guessParameterType(string s) {
     return ParameterType::UNKNOWN;
 }
 
-bool Parameter::operator==(const Parameter &p) const {
-  return type == p.type && value == p.value && attribute == p.attribute;
+bool Parameter::operator==(const Parameter& p) const {
+    return type == p.type && value == p.value && attribute == p.attribute;
 }
 
 const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
@@ -179,4 +174,21 @@ const unordered_map<string, AttributeType> Parameter::stringToAttributeMap = {
     {AppConstants::VARNAME, AttributeType::VARNAME},
     {AppConstants::VALUE, AttributeType::VALUE},
     {AppConstants::STMTNO, AttributeType::STMTNO},
+};
+
+const unordered_map<ParameterType, unordered_set<AttributeType>> Parameter::typeToAttributeTypes = {
+    {ParameterType::STMT, {AttributeType::STMTNO}},
+    {ParameterType::READ, {AttributeType::STMTNO, AttributeType::VARNAME}},
+    {ParameterType::PRINT, {AttributeType::STMTNO, AttributeType::VARNAME}},
+    {ParameterType::CALL, {AttributeType::STMTNO, AttributeType::PROCNAME}},
+    {ParameterType::WHILE, {AttributeType::STMTNO}},
+    {ParameterType::IF, {AttributeType::STMTNO}},
+    {ParameterType::ASSIGN, {AttributeType::STMTNO}},
+    {ParameterType::VARIABLE, {AttributeType::VARNAME}},
+    {ParameterType::CONSTANT, {AttributeType::VALUE}},
+    {ParameterType::PROCEDURE, {AttributeType::PROCNAME}},
+    {ParameterType::SYNONYM, {}},
+    {ParameterType::WILDCARD, {}},
+    {ParameterType::FIXED_INT, {}},
+    {ParameterType::FIXED_STRING, {}},
 };

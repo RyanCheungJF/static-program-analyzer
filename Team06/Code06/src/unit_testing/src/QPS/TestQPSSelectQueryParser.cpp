@@ -178,7 +178,7 @@ TEST_CASE(
   string inputString = inputName + "." + inputAttribute;
 
   Parameter expected =
-      Parameter(inputName, ParameterType::SYNONYM, AppConstants::PROCNAME);
+      Parameter(inputName, ParameterType::SYNONYM, AttributeType::PROCNAME);
   Parameter output = sqp.parseParameter(inputString);
 
   CHECK(expected == output);
@@ -193,6 +193,17 @@ TEST_CASE("parseParameter / correct synonym, ends with ., no attribute / "
 
   CHECK_THROWS_AS(sqp.parseParameter(inputString), SyntaxException);
 }
+
+TEST_CASE("parseParameter / only . / "
+    "throws error") {
+    SelectQueryParser sqp;
+    string inputName = "";
+    string inputAttribute = "";
+    string inputString = inputName + "." + inputAttribute;
+
+    CHECK_THROWS_AS(sqp.parseParameter(inputString), SyntaxException);
+}
+
 
 TEST_CASE(
     "parseParameter / correct synonym, invalid attribute string / "
@@ -214,4 +225,29 @@ TEST_CASE(
   string inputString = inputName + "." + inputAttribute;
 
   CHECK_THROWS_AS(sqp.parseParameter(inputString), SyntaxException);
+}
+
+TEST_CASE("parse / select clause parameter with valid attributes / return query") {
+    string input = "Select s.stmt#";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / select clause parameter with invalid attributes / throw syntax error") {
+    string input = "Select s.invalidAttribute";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
+TEST_CASE("parse / select clause parameter with . but no attributes / throw syntax error") {
+    string input = "Select s.";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
+TEST_CASE("parse / select clause only . / throw syntax error") {
+    string input = "Select .";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
 }

@@ -93,11 +93,11 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
         throw InternalException("Error: SelectQueryParser.parseSelectClause bad "
                                 "start position for wordList");
     }
-    if (!isSynonym(wordList[end - (size_t)1])) {
+    if (!isElem(wordList[start + (size_t)1])) {
         // bad select parameter
         throw SyntaxException();
     }
-    Parameter param = Parameter::makeParameter(wordList[1], AppConstants::SYNONYM);
+    Parameter param = parseParameter(wordList[start + (size_t)1]);
     params.push_back(param);
     return params;
 }
@@ -193,12 +193,10 @@ Parameter SelectQueryParser::parseParameter(string paramString) {
   bool found;
   tie(paramName, index, found) = extractSubStringUntilDelimiter(paramString, 0, ".");
   if (!found) {
-    return Parameter(removeCharFromString(paramName, '\"'),
-                     Parameter::guessParameterType(paramName));
+      return Parameter::makeParameter(paramName);
   }
   string attributeType = paramString.substr(index, paramString.length() - index);
-  return Parameter(removeCharFromString(paramName, '\"'),
-                   Parameter::guessParameterType(paramName), attributeType);
+  return Parameter::makeParameter(paramName, attributeType);
 }
 vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, int start, int end,
                                                     function<bool(string)> formChecker) {

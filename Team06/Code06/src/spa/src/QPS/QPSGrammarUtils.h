@@ -31,5 +31,7 @@ bool isExpr(string);
 bool isFactor(string);
 bool isFixedStringWithWildCard(string);
 bool hasCorrectRelRefOrPatternForm(string);
+bool isElem(string);
+bool isAttrRef(string);
 
 #endif // SPA_QPSGRAMMARUTILS_H

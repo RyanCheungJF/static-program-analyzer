@@ -43,8 +43,8 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
     writePkb.writePattern(lhs, 1, std::move(line1rhs));
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
-    Parameter param1 = Parameter("a", AppConstants::ASSIGN);
-    Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
+    Parameter param1 = Parameter("a", ParameterType::ASSIGN);
+    Parameter param2 = Parameter("z", ParameterType::FIXED_STRING);
     vector<string> exprSpecs1 = {"a + b / c"};
     vector<string> exprSpecs2 = {"z * 5"};
     Pattern pattern1 = Pattern(param1, param2, exprSpecs1);
@@ -79,8 +79,8 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
     writePkb.writePattern(lhs, 1, std::move(line1rhs));
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
-    Parameter param1 = Parameter("a", AppConstants::ASSIGN);
-    Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
+    Parameter param1 = Parameter("a", ParameterType::ASSIGN);
+    Parameter param2 = Parameter("z", ParameterType::FIXED_STRING);
     vector<string> exprSpecs1 = {"_b / c_"};
     vector<string> exprSpecs2 = {"_5_"};
     Pattern pattern1 = Pattern(param1, param2, exprSpecs1);
@@ -114,8 +114,8 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
     writePkb.writePattern(lhs, 1, std::move(line1rhs));
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
-    Parameter param1 = Parameter("a", AppConstants::ASSIGN);
-    Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
+    Parameter param1 = Parameter("a", ParameterType::ASSIGN);
+    Parameter param2 = Parameter("z", ParameterType::FIXED_STRING);
     vector<string> exprSpecs = {"_"};
     Pattern pattern1 = Pattern(param1, param2, exprSpecs);
 
@@ -144,8 +144,8 @@ TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
     writePkb.writePattern(lhs, 1, std::move(line1rhs));
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
-    Parameter param1 = Parameter("a", AppConstants::ASSIGN);
-    Parameter param2 = Parameter("_", AppConstants::WILDCARD);
+    Parameter param1 = Parameter("a", ParameterType::ASSIGN);
+    Parameter param2 = Parameter("_", ParameterType::WILDCARD);
     vector<string> exprSpecs1 = {"a + b / c"};
     vector<string> exprSpecs2 = {"z * 5"};
     vector<string> exprSpecs3 = {"z"};
@@ -184,8 +184,8 @@ TEST_CASE("Support for Select v pattern a (v, _)\'") {
     writePkb.writePattern(lhs, 1, std::move(line1rhs));
     writePkb.writePattern(lhs, 2, std::move(line2rhs));
 
-    Parameter param1 = Parameter("a", AppConstants::ASSIGN);
-    Parameter param2 = Parameter("v", AppConstants::VARIABLE);
+    Parameter param1 = Parameter("a", ParameterType::ASSIGN);
+    Parameter param2 = Parameter("v", ParameterType::VARIABLE);
     vector<string> exprSpecs = {"_"};
     Pattern pattern = Pattern(param1, param2, exprSpecs);
 

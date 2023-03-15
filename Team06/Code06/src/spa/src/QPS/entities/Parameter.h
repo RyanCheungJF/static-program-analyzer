@@ -2,6 +2,7 @@
 #define SPA_QPS_PARAMETER_H
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "../../../src/utils/AppConstants.h"
 #include "QPS/QPSGrammarUtils.h"
@@ -32,9 +33,8 @@ class Parameter {
 public:
     string getValue();
     ParameterType getType() const;
-    Parameter(string, string);
     Parameter(string, ParameterType);
-    Parameter(string, ParameterType, string);
+    Parameter(string, ParameterType, AttributeType);
     Parameter(const Parameter&);
     Parameter();
     static Parameter makeParameter(string);
@@ -48,7 +48,9 @@ public:
     static bool isPatternSyn(Parameter&);
     static bool isFixedStringOrWildcard(Parameter&);
     static bool isFixedIntOrWildCard(Parameter&);
+    static ParameterType stringToType(string);
     bool isUncheckedSynonym();
+    bool hasValidAttributeType();
     void updateSynonymType(ParameterType);
     string getTypeString() const;
     bool operator==(const Parameter&) const;
@@ -58,7 +60,7 @@ public:
 private:
     const static unordered_map<string, ParameterType> stringToTypeMap;
     const static unordered_map<string, AttributeType> stringToAttributeMap;
-    static ParameterType stringToType(string);
+    const static unordered_map<ParameterType, unordered_set<AttributeType>> Parameter::typeToAttributeTypes;
     static AttributeType stringToAttribute(string);
     string value;
     ParameterType type;

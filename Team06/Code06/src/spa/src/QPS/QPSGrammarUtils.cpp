@@ -216,3 +216,11 @@ bool isFactor(string s) {
     }
     return isName(s) || isInteger(s);
 }
+
+bool isElem(string s) {
+    return isSynonym(s) || isAttrRef(s);
+}
+
+bool isAttrRef(string s) {
+    return regex_match(s, regex("^[a-zA-Z][a-zA-Z0-9]*\.(procName|varName|value|stmt#)$"));
+}
