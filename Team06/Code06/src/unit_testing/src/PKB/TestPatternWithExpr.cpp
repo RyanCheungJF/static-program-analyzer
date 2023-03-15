@@ -45,16 +45,17 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
 
     Parameter param1 = Parameter("a", AppConstants::ASSIGN);
     Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
-    Pattern pattern1 = Pattern(param1, param2, "a + b / c");
-    Pattern pattern2 = Pattern(param1, param2, "z * 5");
+    vector<string> exprSpecs1 = {"a + b / c"};
+    vector<string> exprSpecs2 = {"z * 5"};
+    Pattern pattern1 = Pattern(param1, param2, exprSpecs1);
+    Pattern pattern2 = Pattern(param1, param2, exprSpecs2);
 
     std::vector<std::vector<std::string>> res1 = readPkb.findPattern(pattern1);
     std::vector<std::vector<std::string>> res2 = readPkb.findPattern(pattern2);
 
     std::vector<std::vector<std::string>> check1 = {{"1", "z"}};
     std::vector<std::vector<std::string>> check2 = {{"2", "z"}};
-    ;
-    REQUIRE(check1 == res1);
+    
     REQUIRE(unit_testing_utils::equals(check1, res1));
     REQUIRE(unit_testing_utils::equals(check2, res2));
 }
@@ -80,8 +81,10 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
 
     Parameter param1 = Parameter("a", AppConstants::ASSIGN);
     Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
-    Pattern pattern1 = Pattern(param1, param2, "_b / c_");
-    Pattern pattern2 = Pattern(param1, param2, "_5_");
+    vector<string> exprSpecs1 = {"_b / c_"};
+    vector<string> exprSpecs2 = {"_5_"};
+    Pattern pattern1 = Pattern(param1, param2, exprSpecs1);
+    Pattern pattern2 = Pattern(param1, param2, exprSpecs2);
 
     std::vector<std::vector<std::string>> res1 = readPkb.findPattern(pattern1);
     std::vector<std::vector<std::string>> res2 = readPkb.findPattern(pattern2);
@@ -91,7 +94,6 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _\"v\"_)") {
 
     REQUIRE(unit_testing_utils::equals(check1, res1));
     REQUIRE(unit_testing_utils::equals(check2, res2));
-    REQUIRE(readPkb.findPattern(pattern2).size() == 1);
 }
 
 TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
@@ -114,7 +116,8 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", _") {
 
     Parameter param1 = Parameter("a", AppConstants::ASSIGN);
     Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
-    Pattern pattern1 = Pattern(param1, param2, "_");
+    vector<string> exprSpecs = {"_"};
+    Pattern pattern1 = Pattern(param1, param2, exprSpecs);
 
     std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern1);
 
@@ -143,9 +146,12 @@ TEST_CASE("Support for pattern query of type pattern(_, \"v\")") {
 
     Parameter param1 = Parameter("a", AppConstants::ASSIGN);
     Parameter param2 = Parameter("_", AppConstants::WILDCARD);
-    Pattern pattern1 = Pattern(param1, param2, "a + b / c");
-    Pattern pattern2 = Pattern(param1, param2, "z * 5");
-    Pattern pattern3 = Pattern(param1, param2, "z");
+    vector<string> exprSpecs1 = {"a + b / c"};
+    vector<string> exprSpecs2 = {"z * 5"};
+    vector<string> exprSpecs3 = {"z"};
+    Pattern pattern1 = Pattern(param1, param2, exprSpecs1);
+    Pattern pattern2 = Pattern(param1, param2, exprSpecs2);
+    Pattern pattern3 = Pattern(param1, param2, exprSpecs3);
 
     std::vector<std::vector<std::string>> res1 = readPkb.findPattern(pattern1);
     std::vector<std::vector<std::string>> res2 = readPkb.findPattern(pattern2);
@@ -180,7 +186,8 @@ TEST_CASE("Support for Select v pattern a (v, _)\'") {
 
     Parameter param1 = Parameter("a", AppConstants::ASSIGN);
     Parameter param2 = Parameter("v", AppConstants::VARIABLE);
-    Pattern pattern = Pattern(param1, param2, "_");
+    vector<string> exprSpecs = {"_"};
+    Pattern pattern = Pattern(param1, param2, exprSpecs);
 
     std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern);
     std::vector<std::vector<std::string>> check = {{"1", "z"}, {"2", "z"}};

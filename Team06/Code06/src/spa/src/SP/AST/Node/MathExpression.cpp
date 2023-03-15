@@ -1,6 +1,6 @@
 #include "MathExpression.h"
 
-MathExpression::MathExpression() {}
+MathExpression::MathExpression() : mathOperator(), lhs(), rhs() {}
 
 MathExpression::MathExpression(Operator mathOperator, std::unique_ptr<Expression> lhs,
                                std::unique_ptr<Expression> rhs) {

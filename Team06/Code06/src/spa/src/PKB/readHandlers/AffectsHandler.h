@@ -10,21 +10,21 @@
 #include "../storage/StmtStorage.h"
 
 struct hashFunctionTuple {
-    int cantor(int a, int b) {
+    int cantor(int a, int b) const {
         return (a + b + 1) * (a + b) / 2 + b;
     }
-    int hashAlgoForTuple(int a, int b, int c) {
+    int hashAlgoForTuple(int a, int b, int c) const {
         return cantor(a, cantor(b, c));
     }
 
-    size_t operator()(const std::tuple<int, int, int> x) {
+    size_t operator()(const std::tuple<int, int, int>& x) const {
         return hashAlgoForTuple(get<0>(x), get<1>(x), get<2>(x));
     }
 };
 
 struct hashFunctionAffectsT {
     size_t operator()(const std::pair<int, int>& x) const {
-        return x.first * 31 + x.second;
+        return (x.first << 31) ^ x.second;
     }
 };
 
@@ -72,10 +72,10 @@ private:
     std::unordered_set<Ent> getCommonVariables(std::unordered_set<Ent> variablesModifiedInA1,
                                                std::unordered_set<Ent> variablesUsedInA2);
 
-    std::vector<std::vector<std::string>> handleNonTransitive(Parameter param1, Parameter param2, bool isFixedIntParam1,
-                                                              bool isFixedIntParam2, bool isWildCardParam1,
-                                                              bool isWildCardParam2);
-    std::vector<std::vector<std::string>> handleTransitive(Parameter param1, Parameter param2, bool isFixedIntParam1,
-                                                           bool isFixedIntParam2, bool isWildCardParam1,
-                                                           bool isWildCardParam2);
+    std::vector<std::vector<std::string>> handleNonTransitive(std::string param1value, std::string param2value,
+                                                              bool isFixedIntParam1, bool isFixedIntParam2,
+                                                              bool isWildCardParam1, bool isWildCardParam2);
+    std::vector<std::vector<std::string>> handleTransitive(std::string param1value, std::string param2value,
+                                                           bool isFixedIntParam1, bool isFixedIntParam2,
+                                                           bool isWildCardParam1, bool isWildCardParam2);
 };

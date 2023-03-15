@@ -1,6 +1,6 @@
 #include "AssignStatement.h"
 
-AssignStatement::AssignStatement() {}
+AssignStatement::AssignStatement() : varName(), expr() {}
 
 AssignStatement::AssignStatement(StmtNum stmtNum, Ent varName, std::unique_ptr<Expression> expr) {
     this->statementNumber = stmtNum;

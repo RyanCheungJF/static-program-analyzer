@@ -36,12 +36,12 @@ Select c
 8 - comment
 variable v;
 Select v
-p0licemAN, p0liceWahMan, pOl3icEwOM5N, read, rEaD, m0ArWeirdNaMe5AnDtH7sIsVer9Lon6AnDILov3Ch3rr1E2, i, N, x, y, a
+p0licemAN, p0liceWahMan, pOl3icEwOM5N, read, rEaD, m0ArWeirdNaMe5AnDtH7sIsVer9Lon6AnDILov3Ch3rr1E2, i, N, x, y, a, print, rEEE
 5000
 9 - comment
 constant c;
 Select c
-1, 5, 50, 2, 3
+1, 5, 50, 2, 3, 8
 5000
 10 - comment
 procedure p;

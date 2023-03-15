@@ -25,11 +25,12 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
     bool isWildCardParam2 = paramType2 == ParameterType::WILDCARD || paramType2 == ParameterType::ASSIGN;
 
     if (isTransitive) {
-        return handleTransitive(param1, param2, isFixedIntParam1, isFixedIntParam2, isWildCardParam1, isWildCardParam2);
+        return handleTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2,
+                                isWildCardParam1, isWildCardParam2);
     }
     else {
-        return handleNonTransitive(param1, param2, isFixedIntParam1, isFixedIntParam2, isWildCardParam1,
-                                   isWildCardParam2);
+        return handleNonTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2,
+                                   isWildCardParam1, isWildCardParam2);
     }
 }
 
@@ -52,10 +53,12 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
     std::unordered_set<StmtNum> assignStatements;
     for (StmtNum num : statements) {
-        if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+        std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
+        if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
             assignStatements.insert(num);
         }
     }
+
     if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
         return res;
     }
@@ -68,7 +71,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     }
 
     std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc1);
-    if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2 || a1 == a2)) {
+    if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2
+//    || a1 == a2
+    )) {
         return res;
     }
 
@@ -94,7 +99,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
     std::unordered_set<StmtNum> assignStatements; // todo: area for optimisation. get this at compile time
     for (StmtNum num : statements) {
-        if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+        std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
+        if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
             assignStatements.insert(num);
         }
     }
@@ -104,6 +110,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
 
     std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getEnt(a2);
     for (StmtNum a1 : assignStatements) {
+        if (procStorage->getProcedure(a1) != procStorage->getProcedure(a2)) {
+            continue;
+        }
+
         std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getEnt(a1);
         std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
         if (commonVariables.empty()) {
@@ -111,7 +121,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
         }
 
         std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
-        if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2 || a1 == a2)) {
+        if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2
+//        || a1 == a2
+        )) {
             continue;
         }
 
@@ -150,16 +162,22 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
     std::unordered_set<StmtNum> assignStatements; // todo: area for optimisation. get this at compile time
     for (StmtNum num : statements) {
-        if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+        std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
+        if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
             assignStatements.insert(num);
         }
     }
+
     if (assignStatements.find(a1) == assignStatements.end()) {
         return res;
     }
 
     std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getEnt(a1);
     for (StmtNum a2 : assignStatements) {
+        if (procStorage->getProcedure(a1) != procStorage->getProcedure(a2)) {
+            continue;
+        }
+
         std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getEnt(a2);
         std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
         if (commonVariables.empty()) {
@@ -167,7 +185,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
         }
 
         std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
-        if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2 || a1 == a2)) {
+        if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2
+//        || a1 == a2
+        )) {
             continue;
         }
 
@@ -204,8 +224,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
         std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
         std::unordered_set<StmtNum> assignStatements; // todo: area for optimisation. get this at compile time
         for (StmtNum num : statements) {
-            if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) !=
-                stmtStorage->getStatementType(num).end()) {
+            std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
+            if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
                 assignStatements.insert(num);
             }
         }
@@ -222,8 +242,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
 
 // Affects*
 std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(StmtNum a1, StmtNum a2) {
-    std::string paramString1 = std::to_string(a1);
-    std::string paramString2 = std::to_string(a2);
     ProcName proc1 = procStorage->getProcedure(a1);
     ProcName proc2 = procStorage->getProcedure(a2);
     std::vector<std::vector<std::string>> res;
@@ -252,12 +270,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
     while (!queue.empty()) {
         std::pair<StmtNum, StmtNum> curr = queue.front();
         queue.pop_front();
-        std::vector<std::vector<std::string>> val = handleIntInt(curr.first, curr.second);
-        if (val.empty()) {
-            continue;
-        }
 
-        if (stoi(val[0][1]) == a2) {
+        if (curr.second == a2) {
             res.push_back({std::to_string(a1), std::to_string(a2)});
             return res;
         }
@@ -270,16 +284,11 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
         for (StmtNum num : hashmap[curr.second]) {
             queue.push_front({curr.second, num});
         }
-
-        if (curr.first == a1) {
-            queue.push_front({curr.second, a2}); // greedy
-        }
     }
     return res;
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitive(StmtNum a1) {
-    std::string paramString1 = std::to_string(a1);
     ProcName proc1 = procStorage->getProcedure(a1);
     std::vector<std::vector<std::string>> res;
 
@@ -291,7 +300,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitiv
     std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
     for (std::vector<std::string> p : allValidAffects) {
-        hashmap[stoi(p[1])].insert(stoi(p[0]));
+        hashmap[stoi(p[0])].insert(stoi(p[1]));
     }
 
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
@@ -322,7 +331,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitiv
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitive(StmtNum a2) {
-    std::string paramString2 = std::to_string(a2);
     ProcName proc2 = procStorage->getProcedure(a2);
     std::vector<std::vector<std::string>> res;
 
@@ -341,7 +349,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
     std::deque<std::pair<StmtNum, StmtNum>> queue;
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
     for (StmtNum num : hashmap[a2]) {
-        queue.push_back({a2, num});
+        queue.push_back({num, a2});
     }
 
     while (!queue.empty()) {
@@ -351,10 +359,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
             continue;
         }
         seen.insert(curr);
-        temp.insert({curr.second, a2});
+        temp.insert({curr.first, a2});
 
-        for (StmtNum num : hashmap[curr.second]) {
-            queue.push_back({curr.second, num});
+        for (StmtNum num : hashmap[curr.first]) {
+            queue.push_back({num, curr.first});
         }
     }
 
@@ -414,8 +422,7 @@ std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1,
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
         cfgStorage->getGraph(proc);
 
-    std::pair<std::unordered_set<StmtNum>, StmtNum> p = {
-        {}, a1}; // TOOO: WILL THIS LEAD TO AN ERROR? THE WAY WE DECLARE PAIR
+    std::pair<std::unordered_set<StmtNum>, StmtNum> p = {{}, a1};
     queue.push_back(p);
     while (!queue.empty()) {
         std::pair<std::unordered_set<StmtNum>, StmtNum> curr = queue.front();
@@ -470,21 +477,20 @@ std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<En
     return commonVariables;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleNonTransitive(Parameter param1, Parameter param2,
-                                                                          bool isFixedIntParam1, bool isFixedIntParam2,
-                                                                          bool isWildCardParam1,
-                                                                          bool isWildCardParam2) {
+std::vector<std::vector<std::string>>
+AffectsHandler::handleNonTransitive(std::string param1value, std::string param2value, bool isFixedIntParam1,
+                                    bool isFixedIntParam2, bool isWildCardParam1, bool isWildCardParam2) {
     if (isFixedIntParam1) {
         if (isFixedIntParam2) {
-            return handleIntInt(stoi(param1.getValue()), stoi(param2.getValue()));
+            return handleIntInt(stoi(param1value), stoi(param2value));
         }
         else if (isWildCardParam2) {
-            return handleIntWildcard(stoi(param1.getValue()));
+            return handleIntWildcard(stoi(param1value));
         }
     }
     else if (isWildCardParam1) {
         if (isFixedIntParam2) {
-            return handleWildcardInt(stoi(param2.getValue()));
+            return handleWildcardInt(stoi(param2value));
         }
         else if (isWildCardParam2) {
             return handleWildcardWildcard();
@@ -493,20 +499,20 @@ std::vector<std::vector<std::string>> AffectsHandler::handleNonTransitive(Parame
     return std::vector<std::vector<std::string>>();
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(Parameter param1, Parameter param2,
+std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(std::string param1value, std::string param2value,
                                                                        bool isFixedIntParam1, bool isFixedIntParam2,
                                                                        bool isWildCardParam1, bool isWildCardParam2) {
     if (isFixedIntParam1) {
         if (isFixedIntParam2) {
-            return handleIntIntTransitive(stoi(param1.getValue()), stoi(param2.getValue()));
+            return handleIntIntTransitive(stoi(param1value), stoi(param2value));
         }
         else if (isWildCardParam2) {
-            return handleIntWildcardTransitive(stoi(param1.getValue()));
+            return handleIntWildcardTransitive(stoi(param1value));
         }
     }
     else if (isWildCardParam1) {
         if (isFixedIntParam2) {
-            return handleWildcardIntTransitive(stoi(param2.getValue()));
+            return handleWildcardIntTransitive(stoi(param2value));
         }
         else if (isWildCardParam2) {
             return handleWildcardWildcardTransitive();
