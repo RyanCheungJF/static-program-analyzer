@@ -190,7 +190,7 @@ Select w1 such that Follows*(24, w1)
 5000
 39 - stmt number, call
 stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
-Select c such that Follows*(3, c1)
+Select c1 such that Follows*(3, c1)
 4
 5000
 40 - stmt number, stmt (1)
