@@ -31,7 +31,7 @@ std::unordered_set<ProcName> ProcedureStorage::getProcNames() {
 
 ProcName ProcedureStorage::getProcedure(StmtNum num) {
     if (stmtNum_proc.find(num) == stmtNum_proc.end()) {
-        return "INVALID";
+        return AppConstants::PROCEDURE_DOES_NOT_EXIST;
     }
     return stmtNum_proc[num];
 }
