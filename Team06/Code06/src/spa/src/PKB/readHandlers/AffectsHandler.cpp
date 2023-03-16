@@ -62,13 +62,22 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     }
 
     std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc1);
-    if (controlFlowPath.empty() && (!(a1 + 1 == a2 || a1 - 1 == a2)
-        || ((stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 1).end())
-            && (stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) == stmtStorage->getStatementType(a2 - 1).end()))
-        || ((stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 1).end())
-            && (stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) == stmtStorage->getStatementType(a1 - 1).end()))
-    )) {
-        return res;
+    if (controlFlowPath.empty()) {
+
+        if (!(a1 + 1 == a2 || a1 - 1 == a2)) {
+            return res;
+        }
+
+        //means they are consecutive
+        if ((stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 1).end())
+            && (stmtStorage->getStatementType(a2 - 2).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 2).end())) {
+            return res;
+        }
+
+        if ((stmtStorage->getStatementType(a1 - 2).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 2).end())
+            && (stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 1).end())) {
+            return res;
+        }
     }
 
     std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
@@ -108,13 +117,20 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
         }
 
         std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
-        if (controlFlowPath.empty() && (!(a1 + 1 == a2 || a1 - 1 == a2)
-            || ((stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 1).end())
-                && (stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) == stmtStorage->getStatementType(a2 - 1).end()))
-            || ((stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 1).end())
-                && (stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) == stmtStorage->getStatementType(a1 - 1).end()))
-        )) {
-            continue;
+        if (controlFlowPath.empty()) {
+            if (!(a1 + 1 == a2 || a1 - 1 == a2)) {
+                continue;
+            }
+            //means they are consecutive
+            if ((stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 1).end())
+                && (stmtStorage->getStatementType(a2 - 2).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 2).end())) {
+                continue;
+            }
+
+            if ((stmtStorage->getStatementType(a1 - 2).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 2).end())
+                && (stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 1).end())) {
+                continue;
+            }
         }
 
         std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
@@ -161,13 +177,20 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
         }
 
         std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
-        if (controlFlowPath.empty() && (!(a1 + 1 == a2 || a1 - 1 == a2)
-            || ((stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 1).end())
-                && (stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) == stmtStorage->getStatementType(a2 - 1).end()))
-            || ((stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 1).end())
-                && (stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) == stmtStorage->getStatementType(a1 - 1).end()))
-        )) {
-            continue;
+        if (controlFlowPath.empty()) {
+            if (!(a1 + 1 == a2 || a1 - 1 == a2)) {
+                continue;
+            }
+            //means they are consecutive
+            if ((stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 1).end())
+                && (stmtStorage->getStatementType(a2 - 2).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 2).end())) {
+                continue;
+            }
+
+            if ((stmtStorage->getStatementType(a1 - 2).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 2).end())
+                && (stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 1).end())) {
+                continue;
+            }
         }
 
         std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
