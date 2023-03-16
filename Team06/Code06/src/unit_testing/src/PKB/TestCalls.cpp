@@ -140,23 +140,23 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
         REQUIRE(equals(res, expected));
     }
 
-//    SECTION("Calls(p, p)") {
-//        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
-//                                          Parameter("p", AppConstants::PROCEDURE)};
-//        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
-//
-//        auto res = readPkb.findRelationship(rs1);
-//        vector<vector<string>> expected = {};
-//        REQUIRE(equals(res, expected));
-//    }
-//
-//    SECTION("Calls*(p, p)") {
-//        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
-//                                          Parameter("p", AppConstants::PROCEDURE)};
-//        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
-//
-//        auto res = readPkb.findRelationship(rs1);
-//        vector<vector<string>> expected = {};
-//        REQUIRE(equals(res, expected));
-//    }
+    //    SECTION("Calls(p, p)") {
+    //        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
+    //                                          Parameter("p", AppConstants::PROCEDURE)};
+    //        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
+    //
+    //        auto res = readPkb.findRelationship(rs1);
+    //        vector<vector<string>> expected = {};
+    //        REQUIRE(equals(res, expected));
+    //    }
+    //
+    //    SECTION("Calls*(p, p)") {
+    //        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
+    //                                          Parameter("p", AppConstants::PROCEDURE)};
+    //        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
+    //
+    //        auto res = readPkb.findRelationship(rs1);
+    //        vector<vector<string>> expected = {};
+    //        REQUIRE(equals(res, expected));
+    //    }
 }

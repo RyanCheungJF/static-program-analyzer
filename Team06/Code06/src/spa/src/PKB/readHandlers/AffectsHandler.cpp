@@ -72,8 +72,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
 
     std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc1);
     if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2
-//    || a1 == a2
-    )) {
+                                     //    || a1 == a2
+                                     )) {
         return res;
     }
 
@@ -122,8 +122,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
 
         std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
         if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2
-//        || a1 == a2
-        )) {
+                                         //        || a1 == a2
+                                         )) {
             continue;
         }
 
@@ -186,8 +186,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
 
         std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
         if (controlFlowPath.empty() && !(a1 + 1 == a2 || a1 - 1 == a2
-//        || a1 == a2
-        )) {
+                                         //        || a1 == a2
+                                         )) {
             continue;
         }
 

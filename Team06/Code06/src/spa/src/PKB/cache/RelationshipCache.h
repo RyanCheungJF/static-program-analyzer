@@ -6,7 +6,7 @@ struct relationshipHash {
         std::size_t h1 = std::hash<RelationshipType>{}(rs->getType());
         std::size_t h2 = std::hash<std::string>{}(rs->getParameters()[0].getValue());
         std::size_t h3 = std::hash<std::string>{}(rs->getParameters()[1].getValue());
-        
+
         return ((h1 ^ (h2 << 1)) >> 1) ^ (h3 << 1);
     }
 };
