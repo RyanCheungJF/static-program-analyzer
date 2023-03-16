@@ -40,7 +40,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1
     ProcName proc2 = procStorage->getProcedure(n2);
     std::vector<std::vector<std::string>> res;
 
-    if (proc1 == "INVALID" || proc2 == "INVALID") {
+    if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST || proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
     else if (proc1 != proc2) {
@@ -63,7 +63,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntWildcard(Parameter p
     ProcName proc1 = procStorage->getProcedure(n1);
     std::vector<std::vector<std::string>> res;
 
-    if (proc1 == "INVALID") {
+    if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
 
@@ -83,7 +83,7 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardInt(Parameter p
     ProcName proc2 = procStorage->getProcedure(n2);
     std::vector<std::vector<std::string>> res;
 
-    if (proc2 == "INVALID") {
+    if (proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
 
@@ -105,7 +105,7 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeInt(Parameter p
     ProcName proc = procStorage->getProcedure(n2);
     std::vector<std::vector<std::string>> res;
 
-    if (proc == "INVALID") {
+    if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
 
@@ -130,7 +130,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntStmttype(Parameter p
     ProcName proc = procStorage->getProcedure(n1);
     std::vector<std::vector<std::string>> res;
 
-    if (proc == "INVALID") {
+    if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
 
@@ -272,7 +272,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parame
     ProcName proc2 = procStorage->getProcedure(n1);
     std::vector<std::vector<std::string>> res;
 
-    if (proc1 == "INVALID" || proc2 == "INVALID") {
+    if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST || proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
     else if (proc1 != proc2) {
@@ -318,7 +318,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntWildcardTransitive(P
     StmtNum n1 = stoi(paramString1);
     ProcName proc1 = procStorage->getProcedure(n1);
     std::vector<std::vector<std::string>> res;
-    if (proc1 == "INVALID") {
+    if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
 
@@ -353,7 +353,7 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardIntTransitive(P
     StmtNum n2 = stoi(paramString2);
     ProcName proc = procStorage->getProcedure(n2);
     std::vector<std::vector<std::string>> res;
-    if (proc == "INVALID") {
+    if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
 
@@ -391,7 +391,7 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeIntTransitive(P
     ProcName proc = procStorage->getProcedure(n2);
     std::vector<std::vector<std::string>> res;
 
-    if (proc == "INVALID") {
+    if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
 
@@ -433,7 +433,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntStmttypeTransitive(P
     ProcName proc = procStorage->getProcedure(n1);
     std::vector<std::vector<std::string>> res;
 
-    if (proc == "INVALID") {
+    if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
 

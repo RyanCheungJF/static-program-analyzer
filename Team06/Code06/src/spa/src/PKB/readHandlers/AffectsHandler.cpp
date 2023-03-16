@@ -41,7 +41,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     ProcName proc2 = procStorage->getProcedure(a2);
     std::vector<std::vector<std::string>> res;
 
-    if (proc1 == "INVALID" || proc2 == "INVALID") {
+    if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST || proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
     else if (proc1 != proc2) {
@@ -81,7 +81,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
     ProcName proc = procStorage->getProcedure(a2);
     std::vector<std::vector<std::string>> res;
 
-    if (proc == "INVALID") {
+    if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
@@ -129,7 +129,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
     ProcName proc = procStorage->getProcedure(a1);
     std::vector<std::vector<std::string>> res;
 
-    if (proc == "INVALID") {
+    if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
@@ -197,7 +197,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
     ProcName proc2 = procStorage->getProcedure(a2);
     std::vector<std::vector<std::string>> res;
 
-    if (proc1 == "INVALID" || proc2 == "INVALID") {
+    if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST || proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
     else if (proc1 != proc2) {
@@ -235,19 +235,19 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
 
 std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitive(StmtNum a1) {
     ProcName proc1 = procStorage->getProcedure(a1);
-    if (proc1 == "INVALID") {
+    if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return {};
     }
-    return bfsTraversalOneWildcard(a1, NULL);
+    return bfsTraversalOneWildcard(a1, AppConstants::NOT_USED_FIELD);
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitive(StmtNum a2) {
     ProcName proc2 = procStorage->getProcedure(a2);
-    if (proc2 == "INVALID") {
+    if (proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return {};
     }
 
-    return bfsTraversalOneWildcard(NULL, a2);
+    return bfsTraversalOneWildcard(AppConstants::NOT_USED_FIELD, a2);
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTransitive() {
@@ -427,7 +427,7 @@ bool AffectsHandler::isModifiedInControlFlowPath(std::unordered_set<Ent> commonV
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(StmtNum a1, StmtNum a2) {
-    bool isIntWildcard = a2 == NULL;
+    bool isIntWildcard = a2 == AppConstants::NOT_USED_FIELD;
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(!isIntWildcard);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
