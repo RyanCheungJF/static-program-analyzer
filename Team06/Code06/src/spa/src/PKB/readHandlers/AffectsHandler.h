@@ -84,4 +84,6 @@ private:
     bool isModifiedInControlFlowPath(std::unordered_set<Ent> commonVariables,
                                      std::unordered_set<Ent> variablesModifiedInPath);
 
+    std::vector<std::vector<std::string>> bfsTraversalOneWildcard(StmtNum a1, StmtNum a2);
+
 };

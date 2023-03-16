@@ -235,72 +235,19 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
 
 std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitive(StmtNum a1) {
     ProcName proc1 = procStorage->getProcedure(a1);
-    std::vector<std::vector<std::string>> res;
-
     if (proc1 == "INVALID") {
-        return res;
+        return {};
     }
-
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false);
-    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
-    std::deque<std::pair<StmtNum, StmtNum>> queue;
-    for (StmtNum num : hashmap[a1]) {
-        queue.push_back({a1, num});
-    }
-
-    while (!queue.empty()) {
-        std::pair<StmtNum, StmtNum> curr = queue.front();
-        queue.pop_front();
-        if (seen.find(curr) != seen.end()) {
-            continue;
-        }
-        seen.insert(curr);
-
-        for (StmtNum num : hashmap[curr.second]) {
-            queue.push_back({curr.second, num});
-        }
-    }
-
-    std::string param1string = std::to_string(a1);
-    for (std::pair<StmtNum, StmtNum> p : seen) {
-        res.push_back({param1string, std::to_string(p.second)});
-    }
-    return res;
+    return bfsTraversalOneWildcard(a1, NULL);
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitive(StmtNum a2) {
     ProcName proc2 = procStorage->getProcedure(a2);
-    std::vector<std::vector<std::string>> res;
-
     if (proc2 == "INVALID") {
-        return res;
+        return {};
     }
 
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(true);
-    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
-    std::deque<std::pair<StmtNum, StmtNum>> queue;
-    for (StmtNum num : hashmap[a2]) {
-        queue.push_back({num, a2});
-    }
-
-    while (!queue.empty()) {
-        std::pair<StmtNum, StmtNum> curr = queue.front();
-        queue.pop_front();
-        if (seen.find(curr) != seen.end()) {
-            continue;
-        }
-        seen.insert(curr);
-
-        for (StmtNum num : hashmap[curr.first]) {
-            queue.push_back({num, curr.first});
-        }
-    }
-
-    std::string param2string = std::to_string(a2);
-    for (std::pair<StmtNum, StmtNum> p : seen) {
-        res.push_back({std::to_string(p.first), param2string});
-    }
-    return res;
+    return bfsTraversalOneWildcard(NULL, a2);
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTransitive() {
@@ -477,4 +424,37 @@ bool AffectsHandler::isModifiedInControlFlowPath(std::unordered_set<Ent> commonV
         }
     }
     return false;
+}
+
+std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(StmtNum a1, StmtNum a2) {
+    bool isIntWildcard = a2 == NULL;
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(!isIntWildcard);
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
+    std::deque<std::pair<StmtNum, StmtNum>> queue;
+
+    //add from initial starting node
+    for (StmtNum num : (isIntWildcard ? hashmap[a1] : hashmap[a2])) {
+        isIntWildcard ? queue.push_back({a1, num}) : queue.push_back({num, a2});
+    }
+
+    //traverse until we see all possible combinations
+    while (!queue.empty()) {
+        std::pair<StmtNum, StmtNum> curr = queue.front();
+        queue.pop_front();
+        if (seen.find(curr) != seen.end()) {
+            continue;
+        }
+        seen.insert(curr);
+
+        for (StmtNum num : (isIntWildcard ? hashmap[curr.second] : hashmap[curr.first])) {
+            isIntWildcard ? queue.push_back({curr.second, num}) : queue.push_back({num, curr.first});
+        }
+    }
+
+    std::vector<std::vector<std::string>> res;
+    std::string paramString = (isIntWildcard ? std::to_string(a1) : std::to_string(a2));
+    for (std::pair<StmtNum, StmtNum> p : seen) {
+        isIntWildcard ? res.push_back({paramString, std::to_string(p.second)}) : res.push_back({std::to_string(p.first), paramString});
+    }
+    return res;
 }
