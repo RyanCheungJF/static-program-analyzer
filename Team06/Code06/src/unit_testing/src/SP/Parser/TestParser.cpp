@@ -355,7 +355,6 @@ TEST_CASE("Invalid Source Program") {
         } catch (SyntaxErrorException e) {
             errorMessage = e.what();
         }
-
         REQUIRE(errorMessage.find("Unexpected token when parsing statement") != std::string::npos);
     }
 

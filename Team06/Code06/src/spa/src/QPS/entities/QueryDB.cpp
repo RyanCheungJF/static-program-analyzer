@@ -60,11 +60,16 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB &readPKB) {
     if (!presentParams.empty()) {
         initialTable = initialTable.isEmptyTable()
                 ? extractColumns(presentParams)
-                : initialTable = initialTable.cartesianProduct(extractColumns(presentParams));
+                : initialTable = extractColumns(presentParams).cartesianProduct(initialTable);
     }
     if (hasEmptyTable()) {
         initialTable = emptyTable;
     }
+    return params[0].getType() == ParameterType::BOOLEAN
+        ? hasEmptyTable()
+            ? falseVec
+            : trueVec
+        : initialTable.getResult();
     return params[0].getType() == ParameterType::BOOLEAN
         ? initialTable.isEmptyTable()
             ? tableVector.empty() // empty tableVector means no clauses

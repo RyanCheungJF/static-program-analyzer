@@ -326,8 +326,8 @@ TEST_CASE("Single Select Query") {
         Select <s, v>)";
         result = qps.processQueries(query, readPkb);
         // gives cartesian product of stmt and variables
-        // final size = 11 * 4 = 44
-        REQUIRE(result.size() == 44);
+        // final size = 13 * 5 = 65
+        REQUIRE(result.size() == 65);
     }
 
     SECTION("Select <statement, variable, BOOLEAN>") {
@@ -1082,7 +1082,7 @@ TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
         Select <s1, s2, v> such that Follows(s1, s2))";
 
         result = qps.processQueries(query, readPkb);
-        REQUIRE(result.size() == 20);
+        REQUIRE(result.size() == 25);
         REQUIRE(exists(result, "1 2 x"));
         REQUIRE(exists(result, "2 3 x"));
         REQUIRE(exists(result, "4 5 x"));
@@ -1103,6 +1103,11 @@ TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
         REQUIRE(exists(result, "4 5 count"));
         REQUIRE(exists(result, "7 8 count"));
         REQUIRE(exists(result, "8 9 count"));
+        REQUIRE(exists(result, "1 2 end"));
+        REQUIRE(exists(result, "2 3 end"));
+        REQUIRE(exists(result, "4 5 end"));
+        REQUIRE(exists(result, "7 8 end"));
+        REQUIRE(exists(result, "8 9 end"));
     }
 
     SECTION("non empty clauses with select BOOLEAN") {
