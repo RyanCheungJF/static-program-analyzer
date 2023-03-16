@@ -63,8 +63,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
 
     std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc1);
     if (controlFlowPath.empty() && (!(a1 + 1 == a2 || a1 - 1 == a2)
-        || (stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 1).end())
-        || (stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 1).end())
+        || ((stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 1).end())
+            && (stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) == stmtStorage->getStatementType(a2 - 1).end()))
+        || ((stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 1).end())
+            && (stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) == stmtStorage->getStatementType(a1 - 1).end()))
     )) {
         return res;
     }
@@ -107,8 +109,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum 
 
         std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
         if (controlFlowPath.empty() && (!(a1 + 1 == a2 || a1 - 1 == a2)
-            || (stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 1).end())
-            || (stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 1).end())
+            || ((stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 1).end())
+                && (stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) == stmtStorage->getStatementType(a2 - 1).end()))
+            || ((stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 1).end())
+                && (stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) == stmtStorage->getStatementType(a1 - 1).end()))
         )) {
             continue;
         }
@@ -158,8 +162,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
 
         std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc);
         if (controlFlowPath.empty() && (!(a1 + 1 == a2 || a1 - 1 == a2)
-            || (stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 1).end())
-            || (stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 1).end())
+            || ((stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 1).end())
+                && (stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) == stmtStorage->getStatementType(a2 - 1).end()))
+            || ((stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 1).end())
+                && (stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) == stmtStorage->getStatementType(a1 - 1).end()))
         )) {
             continue;
         }
