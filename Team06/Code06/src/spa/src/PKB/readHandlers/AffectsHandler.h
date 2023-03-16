@@ -76,7 +76,6 @@ private:
                                                            bool isFixedIntParam1, bool isFixedIntParam2,
                                                            bool isWildCardParam1, bool isWildCardParam2);
 
-
     std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted);
 
     std::unordered_set<StmtNum> getAssignStatements(std::unordered_set<StmtNum> allProcStatements);
@@ -86,4 +85,5 @@ private:
 
     std::vector<std::vector<std::string>> bfsTraversalOneWildcard(StmtNum a1, StmtNum a2);
 
+    bool checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2);
 };

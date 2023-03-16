@@ -7,7 +7,6 @@
 #include "../storage/ProcedureStorage.h"
 #include "../storage/StmtStorage.h"
 
-
 class NextHandler {
 public:
     NextHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,

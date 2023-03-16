@@ -39,11 +39,10 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects*") {
         {24, {{AppConstants::PARENTS, {23}}, {AppConstants::CHILDREN, {26}}}},
         {25, {{AppConstants::PARENTS, {23}}, {AppConstants::CHILDREN, {26}}}},
         {26, {{AppConstants::PARENTS, {24, 25}}, {AppConstants::CHILDREN, {27}}}},
-        {27, {{AppConstants::PARENTS, {26}}, {AppConstants::CHILDREN, {}}}}
-    };
+        {27, {{AppConstants::PARENTS, {26}}, {AppConstants::CHILDREN, {}}}}};
 
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph2 = {
-            {28, {{AppConstants::PARENTS, {}}, {AppConstants::CHILDREN, {}}}}};
+        {28, {{AppConstants::PARENTS, {}}, {AppConstants::CHILDREN, {}}}}};
     /*
      * while (a != b) { //1
      *     y = v + 1; //2
@@ -139,7 +138,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects*") {
     writePkb.setStatement("print", 26);
     writePkb.setStatement("print", 27);
 
-    writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27});
+    writePkb.setProcedure(
+        proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27});
     writePkb.setStatement("assign", 28);
     writePkb.setProcedure(proc2, {28});
 
@@ -163,7 +163,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects*") {
     writePkb.setModifiesS(18, {"d"});
     writePkb.setModifiesS(19, {"h"});
     writePkb.setModifiesS(20, {"i"});
-//    writePkb.setModifiesS(21, {});
+    //    writePkb.setModifiesS(21, {});
     writePkb.setModifiesS(22, {"j"});
     writePkb.setModifiesS(23, {"k", "l"});
     writePkb.setModifiesS(24, {"k"});
@@ -191,7 +191,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects*") {
     writePkb.setUsesS(18, {"d"});
     writePkb.setUsesS(19, {"h"});
     writePkb.setUsesS(20, {"h"});
-//    writePkb.setUsesS(21, {});
+    //    writePkb.setUsesS(21, {});
     writePkb.setUsesS(22, {"j"});
     writePkb.setUsesS(23, {"k", "l"});
     writePkb.setUsesS(24, {"l"});
@@ -237,7 +237,6 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects*") {
         std::vector<std::vector<std::string>> res5 = readPkb.findRelationship(rs5);
         std::vector<std::vector<std::string>> expected5 = {};
         REQUIRE(expected5 == res5);
-
     }
 
     SECTION("Affects(int, _)") {
@@ -315,7 +314,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects*") {
         std::vector<std::vector<std::string>> expected1 = {{"2", "5"},   {"3", "6"},   {"6", "9"},   {"7", "8"},
                                                            {"8", "2"},   {"9", "3"},   {"10", "11"}, {"11", "18"},
                                                            {"13", "12"}, {"14", "14"}, {"19", "20"}, {"19", "19"}};
-//        REQUIRE(expected1 == res1);
+        //        REQUIRE(expected1 == res1);
         REQUIRE(unit_testing_utils::equals(expected1, res1));
 
         std::vector<Parameter> params2 = {Parameter("aa", AppConstants::ASSIGN),
@@ -425,9 +424,9 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects*") {
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTST, params1);
         std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
         std::vector<std::vector<std::string>> expected1 = {
-                {"2", "5"},   {"3", "6"},   {"3", "9"},   {"3", "3"},   {"6", "9"},   {"6", "3"},  {"6", "6"}, {"7", "8"},
-                {"7", "2"},   {"7", "5"},   {"8", "2"},   {"8", "5"},   {"9", "3"},   {"9", "6"},  {"9", "9"}, {"10", "11"},
-                {"10", "18"}, {"11", "18"}, {"13", "12"}, {"14", "14"}, {"19", "19"}, {"19", "20"}};
+            {"2", "5"},   {"3", "6"},   {"3", "9"},   {"3", "3"},   {"6", "9"},   {"6", "3"},  {"6", "6"}, {"7", "8"},
+            {"7", "2"},   {"7", "5"},   {"8", "2"},   {"8", "5"},   {"9", "3"},   {"9", "6"},  {"9", "9"}, {"10", "11"},
+            {"10", "18"}, {"11", "18"}, {"13", "12"}, {"14", "14"}, {"19", "19"}, {"19", "20"}};
         REQUIRE(unit_testing_utils::equals(expected1, res1));
 
         std::vector<Parameter> params2 = {Parameter("aa", AppConstants::ASSIGN),

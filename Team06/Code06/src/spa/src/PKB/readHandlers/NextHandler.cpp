@@ -49,8 +49,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1
 
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
         cfgStorage->getGraph(proc1);
-    if (graph[n1][AppConstants::CHILDREN].find(n2) !=
-        graph[n1][AppConstants::CHILDREN].end()) {
+    if (graph[n1][AppConstants::CHILDREN].find(n2) != graph[n1][AppConstants::CHILDREN].end()) {
         res.push_back({paramString1, paramString2});
     }
     return res;
@@ -637,8 +636,8 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcardTransit
 }
 
 // helper functions
-std::unordered_map<ProcName, std::unordered_set<StmtNum>> NextHandler::getProcedureLines(
-        std::unordered_set<StmtNum> statementNumbers) {
+std::unordered_map<ProcName, std::unordered_set<StmtNum>>
+NextHandler::getProcedureLines(std::unordered_set<StmtNum> statementNumbers) {
     std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines;
     for (StmtNum num : statementNumbers) {
         ProcName proc = procStorage->getProcedure(num);
