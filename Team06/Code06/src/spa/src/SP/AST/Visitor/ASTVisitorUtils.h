@@ -32,8 +32,6 @@ void populateUsesModifies(WritePKB* writePKB, ReadPKB* readPKB, std::vector<Proc
 void processProcedures(WritePKB* writePKB, ReadPKB* readPKB, std::vector<ProcName> order);
 void processContainerStatements(WritePKB* writePKB, ReadPKB* readPKB);
 bool isContainerStatement(Statement* statement);
-std::vector<std::unordered_set<Ent>> handleCallStmt(WritePKB* writePKB, ReadPKB* readPKB,
-                                                    std::pair<StmtNum, ProcName> callStmt);
 void buildCFG(Procedure* proc, WritePKB* writePKB, ReadPKB* readPKB);
 void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
                     StatementList* stmtList, StmtNum loopedStmtNum);
