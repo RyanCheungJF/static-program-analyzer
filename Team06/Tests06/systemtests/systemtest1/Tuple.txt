@@ -1,0 +1,10 @@
+1 - comment
+while w1, w2, w3;
+Select <w1, w2, w2> such that Parent*(w1, w2) and Parent*(w2, w3)
+25 27 30, 27 30 34
+5000
+2 - comment
+procedure p, q; variable v;
+Select <p.procName, q, v> such that Modifies(p, v) and Calls(p, q)
+arithmetic conditionalSpam z, arithmetic conditionalSpam y, arithmetic conditionalSpam x, arithmetic conditionalSpam w, arithmetic conditionalSpam o, arithmetic conditionalSpam a, arithmetic conditionalSpam b, arithmetic conditionalSpam k, arithmetic conditionalSpam j, arithmetic conditionalSpam i
+5000

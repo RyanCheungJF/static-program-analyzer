@@ -20,16 +20,11 @@ std::unique_ptr<Program> Parser::parseProgram(std::deque<Token> tokens) {
 
 std::unique_ptr<Procedure> Parser::parseProcedure(std::deque<Token>& tokens) {
     // Rule: 'procedure' proc_name '{' stmtLst '}'
-    if (!tokens.front().isType(TokenType::NAME) || !tokens.front().hasValue(AppConstants::PROCEDURE)) {
-        throw SyntaxErrorException("Expected 'procedure' keyword, but got -> " + tokens.front().value);
-    }
-    tokens.pop_front();
+    assertTypeAndValue(tokens, TokenType::NAME, AppConstants::PROCEDURE,
+                       "Expected 'procedure' keyword, but got -> " + tokens.front().value);
 
-    if (!tokens.front().isType(TokenType::NAME)) {
-        throw SyntaxErrorException("Expected valid 'proc_name', but got -> " + tokens.front().value);
-    }
     ProcName procedureName = tokens.front().value;
-    tokens.pop_front();
+    assertType(tokens, TokenType::NAME, "Expected valid 'proc_name', but got -> " + tokens.front().value);
 
     auto statementList = checkBracesForStatementList(tokens);
 
@@ -37,17 +32,10 @@ std::unique_ptr<Procedure> Parser::parseProcedure(std::deque<Token>& tokens) {
 }
 
 std::unique_ptr<StatementList> Parser::checkBracesForStatementList(std::deque<Token>& tokens) {
-    if (!tokens.front().isType(TokenType::LEFT_BRACE)) {
-        throw SyntaxErrorException("Expected '{' before statement list, but got -> " + tokens.front().value);
-    }
-    tokens.pop_front();
-
+    assertType(tokens, TokenType::LEFT_BRACE, "Expected '{' before statement list, but got -> " + tokens.front().value);
     auto statementList = parseStatementList(tokens);
+    assertType(tokens, TokenType::RIGHT_BRACE, "Expected '}' after statement list, but got -> " + tokens.front().value);
 
-    if (!tokens.front().isType(TokenType::RIGHT_BRACE)) {
-        throw SyntaxErrorException("Expected '}' after statement list, but got -> " + tokens.front().value);
-    }
-    tokens.pop_front();
     return statementList;
 }
 
@@ -71,7 +59,7 @@ std::unique_ptr<Statement> Parser::parseStatement(std::deque<Token>& tokens) {
     // Rule: read | print | call | while | if | assign
     /* Variable names can be keywords/terminals. Thus, we handle the assign
        statements first, if there is an equal operator, we know to parse it as an
-       assign statement. E.g. read = read + 1;*/
+       assign statement. E.g. read = read + 1; */
     if (tokens.front().isType(TokenType::NAME)) {
         if (tokens.at(ParserConstants::NEXT_TOKEN_IDX).isType(TokenType::ASSIGN)) { // Assign Statement
             return parseAssignStatement(tokens);
@@ -104,16 +92,10 @@ std::string Parser::parseStatementHelper(std::deque<Token>& tokens) {
     // The logic for parsing call, read, & print statement are the same.
     tokens.pop_front(); // Pop 'keyword'
 
-    if (!tokens.front().isType(TokenType::NAME)) {
-        throw SyntaxErrorException("Expected proc_name/var_name in statement, but got -> " + tokens.front().value);
-    }
-    auto name = tokens.front().value;
-    tokens.pop_front(); // Pop proc_name/var_name
+    std::string name = tokens.front().value;
+    assertType(tokens, TokenType::NAME, "Expected proc_name/var_name in statement, but got -> " + tokens.front().value);
 
-    if (!tokens.front().isType(TokenType::SEMICOLON)) {
-        throw SyntaxErrorException("Expected ; at end of statement, but got -> " + tokens.front().value);
-    }
-    tokens.pop_front(); // Pop ;
+    assertType(tokens, TokenType::SEMICOLON, "Expected ; at end of statement, but got -> " + tokens.front().value);
 
     return name;
 }
@@ -121,21 +103,18 @@ std::string Parser::parseStatementHelper(std::deque<Token>& tokens) {
 std::unique_ptr<ReadStatement> Parser::parseReadStatement(std::deque<Token>& tokens) {
     // Rule: 'read' var_name';'
     Ent varName = parseStatementHelper(tokens);
-
     return std::make_unique<ReadStatement>(currStatementNumber++, varName);
 }
 
 std::unique_ptr<PrintStatement> Parser::parsePrintStatement(std::deque<Token>& tokens) {
     // Rule: 'print' var_name';'
     Ent varName = parseStatementHelper(tokens);
-
     return std::make_unique<PrintStatement>(currStatementNumber++, varName);
 }
 
 std::unique_ptr<CallStatement> Parser::parseCallStatement(std::deque<Token>& tokens) {
     // Rule: 'call' proc_name';'
     ProcName procName = parseStatementHelper(tokens);
-
     return std::make_unique<CallStatement>(currStatementNumber++, procName);
 }
 
@@ -148,11 +127,8 @@ std::unique_ptr<WhileStatement> Parser::parseWhileStatement(std::deque<Token>& t
 
     tokens.pop_front(); // Pop 'while'
 
-    // Parse conditional expr
-    auto condExpr = checkParenthesesForCondExpr(tokens);
-
-    // Parse stmtList
-    auto stmtList = checkBracesForStatementList(tokens);
+    auto condExpr = checkParenthesesForCondExpr(tokens); // Parse conditional expr
+    auto stmtList = checkBracesForStatementList(tokens); // Parse stmtList
 
     return std::make_unique<WhileStatement>(stmtNum, std::move(condExpr), std::move(stmtList));
 }
@@ -164,24 +140,17 @@ std::unique_ptr<IfStatement> Parser::parseIfStatement(std::deque<Token>& tokens)
 
     tokens.pop_front(); // Pop 'if'
 
-    // Parse conditional expr
-    auto condExpr = checkParenthesesForCondExpr(tokens);
+    auto condExpr = checkParenthesesForCondExpr(tokens); // Parse conditional expr
 
-    if (!tokens.front().isType(TokenType::NAME) || !tokens.front().hasValue(AppConstants::THEN)) {
-        throw SyntaxErrorException("Expected 'then' in if statement, but got -> " + tokens.front().value);
-    }
-    tokens.pop_front(); // Pop 'then'
+    assertTypeAndValue(tokens, TokenType::NAME, AppConstants::THEN,
+                       "Expected 'then' in if statement, but got -> " + tokens.front().value);
 
-    // Parse stmtList
-    auto thenStmtList = checkBracesForStatementList(tokens);
+    auto thenStmtList = checkBracesForStatementList(tokens); // Parse stmtList
 
-    if (!tokens.front().isType(TokenType::NAME) || !tokens.front().hasValue(AppConstants::ELSE)) {
-        throw SyntaxErrorException("Expected 'else' in if statement, but got -> " + tokens.front().value);
-    }
-    tokens.pop_front(); // Pop 'else'
+    assertTypeAndValue(tokens, TokenType::NAME, AppConstants::ELSE,
+                       "Expected 'else' in if statement, but got -> " + tokens.front().value);
 
-    // Parse stmtList
-    auto elseStmtList = checkBracesForStatementList(tokens);
+    auto elseStmtList = checkBracesForStatementList(tokens); // Parse stmtList
 
     return std::make_unique<IfStatement>(stmtNum, std::move(condExpr), std::move(thenStmtList),
                                          std::move(elseStmtList));
@@ -196,34 +165,27 @@ std::unique_ptr<AssignStatement> Parser::parseAssignStatement(std::deque<Token>&
 
     auto expr = parseExpression(tokens);
 
-    if (!tokens.front().isType(TokenType::SEMICOLON)) {
-        throw SyntaxErrorException("Expected ';' at end of assign statement, but got -> " + tokens.front().value);
-    }
-    tokens.pop_front(); // Pop ;
+    assertType(tokens, TokenType::SEMICOLON,
+               "Expected ';' at end of assign statement, but got -> " + tokens.front().value);
 
     return std::make_unique<AssignStatement>(currStatementNumber++, varName, std::move(expr));
 }
 
 std::unique_ptr<ConditionalExpression> Parser::checkParenthesesForCondExpr(std::deque<Token>& tokens) {
-    if (!tokens.front().isType(TokenType::LEFT_PARENTHESIS)) {
-        throw SyntaxErrorException("Expected '(' before conditional expression, but got -> " + tokens.front().value);
-    }
-    tokens.pop_front(); // Pop '('
+    assertType(tokens, TokenType::LEFT_PARENTHESIS,
+               "Expected '(' before conditional expression, but got -> " + tokens.front().value);
 
     auto condExpr = parseConditionalExpression(tokens);
 
-    if (!tokens.front().isType(TokenType::RIGHT_PARENTHESIS)) {
-        throw SyntaxErrorException("Expected ')' after conditional expression, but got -> " + tokens.front().value);
-    }
-    tokens.pop_front(); // Pop ')'
+    assertType(tokens, TokenType::RIGHT_PARENTHESIS,
+               "Expected ')' after conditional expression, but got -> " + tokens.front().value);
 
     return condExpr;
 }
 
 std::unique_ptr<ConditionalExpression> Parser::parseConditionalExpression(std::deque<Token>& tokens) {
     /* Rule: rel_expr | '!' '(' cond_expr ')' | '(' cond_expr ')' '&&' '('cond_expr ')' |
-            '(' cond_expr ')' '||' '(' cond_expr ')'
-    */
+            '(' cond_expr ')' '||' '(' cond_expr ')' */
     if (tokens.front().isType(TokenType::NOT)) { // '!' '(' path
         tokens.pop_front();                      // Pop '!'
 
@@ -260,12 +222,9 @@ std::unique_ptr<ConditionalExpression> Parser::parseBinaryConditionalExpression(
 
     auto lhs = checkParenthesesForCondExpr(tokens);
 
-    if (!tokens.front().isType(TokenType::BINARY_LOGICAL_OPR)) {
-        throw SyntaxErrorException("Expected '&&' or '||' in binary conditional expression, but got -> " +
-                                   tokens.front().value);
-    }
     Operator condOperator = tokens.front().value;
-    tokens.pop_front(); // Pop '&&' or '||'
+    assertType(tokens, TokenType::BINARY_LOGICAL_OPR,
+               "Expected '&&' or '||' in binary conditional expression, but got -> " + tokens.front().value);
 
     auto rhs = checkParenthesesForCondExpr(tokens);
 
@@ -275,18 +234,15 @@ std::unique_ptr<ConditionalExpression> Parser::parseBinaryConditionalExpression(
 std::unique_ptr<ConditionalExpression> Parser::parseRelationalExpression(std::deque<Token>& tokens) {
     /* Rule: rel_factor '>' rel_factor | rel_factor '>=' rel_factor |
              rel_factor '<' rel_factor | rel_factor '<=' rel_factor |
-             rel_factor '==' rel_factor | rel_factor '!=' rel_factor
-    */
+             rel_factor '==' rel_factor | rel_factor '!=' rel_factor */
     auto lhs = parseRelationalFactor(tokens);
 
-    if (!tokens.front().isType(TokenType::RELATIONAL_OPR)) {
-        throw SyntaxErrorException("Expected a comparator in relational expression, but got -> " +
-                                   tokens.front().value);
-    }
     Operator relationalOperator = tokens.front().value;
-    tokens.pop_front(); // Pop relational comparator
+    assertType(tokens, TokenType::RELATIONAL_OPR,
+               "Expected a comparator in relational expression, but got -> " + tokens.front().value);
 
     auto rhs = parseRelationalFactor(tokens);
+
     return std::make_unique<RelationalExpression>(relationalOperator, std::move(lhs), std::move(rhs));
 }
 
@@ -301,6 +257,9 @@ std::unique_ptr<Expression> Parser::parseRelationalFactor(std::deque<Token>& tok
         else if (tokens.front().isType(TokenType::NAME)) {
             return parseVariable(tokens);
         }
+        else {
+            throw SyntaxErrorException("Unexpected token when parsing relational factor");
+        }
     }
     else {
         return parseExpression(tokens);
@@ -311,8 +270,7 @@ std::unique_ptr<Expression> Parser::parseExpression(std::deque<Token>& tokens) {
     /* Rule: expr: expr '+' term | expr '-' term | term
      * After eliminating left recursion:
      *    expr: term(expr')
-     *    expr': '+' term(expr') | '-' term(expr') | epsilon
-     */
+     *    expr': '+' term(expr') | '-' term(expr') | epsilon */
     auto lhs = parseTerm(tokens);
 
     if (tokens.front().isType(TokenType::EXPR_ARITH_OPR)) {
@@ -330,8 +288,7 @@ std::unique_ptr<Expression> Parser::parseTerm(std::deque<Token>& tokens) {
     /* Rule: term '*' factor | term '/' factor | term '%' factor | factor
      * After eliminating left recursion:
      *    term: factor(term')
-     *    term': '*' factor(term') | '/' factor(term') | '%' factor(term') | epsilon
-     */
+     *    term': '*' factor(term') | '/' factor(term') | '%' factor(term') | epsilon */
     auto lhs = parseFactor(tokens);
 
     if (tokens.front().isType(TokenType::TERM_ARITH_OPR)) {
@@ -358,10 +315,7 @@ std::unique_ptr<Expression> Parser::parseFactor(std::deque<Token>& tokens) {
 
         auto expression = parseExpression(tokens);
 
-        if (!tokens.front().isType(TokenType::RIGHT_PARENTHESIS)) {
-            throw SyntaxErrorException("Expected ')' in factor, but got -> " + tokens.front().value);
-        }
-        tokens.pop_front(); // Pop ')'
+        assertType(tokens, TokenType::RIGHT_PARENTHESIS, "Expected ')' in factor, but got -> " + tokens.front().value);
 
         return expression;
     }
@@ -382,4 +336,19 @@ std::unique_ptr<Expression> Parser::parseVariable(std::deque<Token>& tokens) {
     Ent value = tokens.front().value;
     tokens.pop_front();
     return std::make_unique<Variable>(value);
+}
+
+void Parser::assertTypeAndValue(std::deque<Token>& tokens, TokenType type, std::string value,
+                                std::string exceptionMsg) {
+    if (!tokens.front().isType(type) || !tokens.front().hasValue(value)) {
+        throw SyntaxErrorException(exceptionMsg);
+    }
+    tokens.pop_front();
+}
+
+void Parser::assertType(std::deque<Token>& tokens, TokenType type, std::string exceptionMsg) {
+    if (!tokens.front().isType(type)) {
+        throw SyntaxErrorException(exceptionMsg);
+    }
+    tokens.pop_front();
 }

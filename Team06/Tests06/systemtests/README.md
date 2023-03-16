@@ -81,6 +81,22 @@ E.g: To run `systemtest1`,
 
 5.  Visit `localhost:{PORT_OF_YOUR_CHOICE}` to view the test results.
 
+### _Diagrams_
+
+The Control Flow Graphs for each system test can be found here for reference:
+
+_systemtest1_
+
+![](/Team06/Tests06/systemtests/systemtest1/systest1cfg.png)
+
+_systemtest2_
+
+![](/Team06/Tests06/systemtests/systemtest2/systest2cfg.png)
+
+_systemtest3_
+
+![](/Team06/Tests06/systemtests/systemtest3/systest3cfg.png)
+
 ### _Todo_
 
 - Tell which test cases are failing without going through them one by one

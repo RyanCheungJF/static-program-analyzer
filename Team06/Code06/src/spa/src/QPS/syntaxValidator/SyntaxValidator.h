@@ -4,6 +4,6 @@ template <class T>
 
 class SyntaxValidator {
 public:
-  virtual bool validate(T &val) = 0;
+    virtual bool validate(T& val) = 0;
 };
 #endif // !SPA_QPS_SYNTAXVALIDATOR_H

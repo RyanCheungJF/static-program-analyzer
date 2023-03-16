@@ -11,7 +11,7 @@ none
 3 - comment
 stmt p;
 Select p such that Next*(p, 21)
-13, 14, 15, 16, 17, 18, 19, 20
+13, 14, 15, 16, 17, 18, 19, 20, 21
 5000
 4 - comment
 stmt p;
@@ -30,26 +30,26 @@ none
 5000
 7 - comment
 stmt s; while w; if i; call c; print p; read r;
-Select c such that Next(4, c)
+Select c such that Next*(4, c)
 9, 11
 5000
 8 - comment
 stmt s; while w; if i; call c; print p; read r;
-Select c such that Next(5, c)
+Select c such that Next*(5, c)
 11
 5000
 9 - comment
 stmt s; while w; if i; call c; print p; read r;
-Select p such that Next(1, p)
+Select p such that Next*(1, p)
 10
 5000
 10 - comment
 stmt s; while w; if i; call c; print p; read r;
-Select i such that Next(1, i)
+Select i such that Next*(1, i)
 4
 5000
 11 - comment
 stmt s; while w; if i; call c; print p; read r;
-Select w such that Next(1, w)
+Select w such that Next*(1, w)
 none
 5000

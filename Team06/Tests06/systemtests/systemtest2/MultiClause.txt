@@ -1,0 +1,5 @@
+1 - comment
+procedure p; read r1, r2; if i; variable v; assign a1, a2;
+Select <r1, r2, a1, a2> such that Follows(r1, a1) and Follows(a1, r2) and Follows*(r1, a2) and Next*(i, a2) and Parent(i, r1) and Parent(i, r2)
+5 7 read rEEE
+5000

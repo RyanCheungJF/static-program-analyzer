@@ -18,6 +18,8 @@ private:
     void extractInfo();
     void extractCFG();
     void validateSemantics();
+    void buildCallerCalleeTable(std::vector<ProcName>& procedureNames,
+                                std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap);
 
 public:
     DesignExtractor();

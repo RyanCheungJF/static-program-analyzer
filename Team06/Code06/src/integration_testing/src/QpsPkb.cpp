@@ -21,10 +21,10 @@ PKB buildPkb() {
     //  procedure main {
     // 1     x = 1;
     // 2     call sub;
-    // 3	    while (y == x) {
+    // 3	 while (y == x) {
     // 4         y = x + 2;
     // 5		    read y;
-    //      }
+    //       }
     // 6     x = x + 2;
     //  }
     //
@@ -41,7 +41,32 @@ PKB buildPkb() {
     //
     //   procedure end {
     // 13    print end;
-    //   }    
+    //   }
+
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> mainCFG = {
+        {1, {{AppConstants::PARENTS, {}}, {AppConstants::CHILDREN, {2}}}},
+        {2, {{AppConstants::PARENTS, {1}}, {AppConstants::CHILDREN, {3}}}},
+        {3, {{AppConstants::PARENTS, {2, 5}}, {AppConstants::CHILDREN, {4, 6}}}},
+        {4, {{AppConstants::PARENTS, {3}}, {AppConstants::CHILDREN, {5}}}},
+        {5, {{AppConstants::PARENTS, {4}}, {AppConstants::CHILDREN, {3}}}},
+        {6, {{AppConstants::PARENTS, {3}}, {AppConstants::CHILDREN, {}}}}};
+
+    writePkb.writeCFG("main", mainCFG);
+
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> subCFG = {
+        {7, {{AppConstants::PARENTS, {}}, {AppConstants::CHILDREN, {8, 9}}}},
+        {8, {{AppConstants::PARENTS, {7}}, {AppConstants::CHILDREN, {9}}}},
+        {9, {{AppConstants::PARENTS, {7, 8}}, {AppConstants::CHILDREN, {10, 11}}}},
+        {10, {{AppConstants::PARENTS, {9}}, {AppConstants::CHILDREN, {12}}}},
+        {11, {{AppConstants::PARENTS, {9}}, {AppConstants::CHILDREN, {12}}}},
+        {12, {{AppConstants::PARENTS, {10, 11}}, {AppConstants::CHILDREN, {}}}}};
+
+    writePkb.writeCFG("sub", subCFG);
+
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> endCFG = {
+        {13, {{AppConstants::PARENTS, {}}, {AppConstants::CHILDREN, {}}}}};
+
+    writePkb.writeCFG("end", endCFG);
 
     unordered_set<int> mainProcNums = {1, 2, 3, 4, 5, 6};
     writePkb.setProcedure("main", mainProcNums);
@@ -522,7 +547,6 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
             REQUIRE(result.size() == 1);
             REQUIRE(exists(result, "main"));
         }
-        
     }
 
     SECTION("CallsT") {
@@ -568,6 +592,128 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
             REQUIRE(result.size() == 2);
             REQUIRE(exists(result, "main"));
             REQUIRE(exists(result, "sub"));
+        }
+    }
+
+    SECTION("Next") {
+        SECTION("syn, wildcard") {
+            string query = R"(
+			assign a;
+			Select a such that Next(a, _))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 4);
+            REQUIRE(exists(result, "1"));
+            REQUIRE(exists(result, "4"));
+            REQUIRE(exists(result, "8"));
+            REQUIRE(exists(result, "11"));
+        }
+
+        SECTION("int, syn") {
+            string query = R"(
+			stmt s;
+			Select s such that Next(1, s))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 1);
+            REQUIRE(exists(result, "2"));
+        }
+
+        SECTION("syn, syn") {
+            string query = R"(
+			stmt s; assign a;
+			Select s such that Next(s, a))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(exists(result, "3"));
+            REQUIRE(exists(result, "7"));
+            REQUIRE(exists(result, "9"));
+        }
+    }
+
+    SECTION("NextT") {
+        SECTION("syn, wildcard") {
+            string query = R"(
+			assign a;
+			Select a such that Next*(a, _))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 4);
+            REQUIRE(exists(result, "1"));
+            REQUIRE(exists(result, "4"));
+            REQUIRE(exists(result, "8"));
+            REQUIRE(exists(result, "11"));
+        }
+
+        SECTION("int, syn") {
+            string query = R"(
+			stmt s;
+			Select s such that Next*(1, s))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 5);
+            REQUIRE(exists(result, "2"));
+            REQUIRE(exists(result, "3"));
+            REQUIRE(exists(result, "4"));
+            REQUIRE(exists(result, "5"));
+            REQUIRE(exists(result, "6"));
+        }
+
+        SECTION("syn, int") {
+            string query = R"(
+			stmt s;
+			Select s such that Next*(s, 3))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 5);
+            REQUIRE(exists(result, "1"));
+            REQUIRE(exists(result, "2"));
+            REQUIRE(exists(result, "3"));
+            REQUIRE(exists(result, "4"));
+            REQUIRE(exists(result, "5"));
+        }
+    }
+
+    SECTION("Affects") {
+        SECTION("int, syn") {
+            string query = R"(
+			assign a;
+			Select a such that Affects(1, a))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 0);
+        }
+
+        SECTION("syn, wildcard") {
+            string query = R"(
+			assign a;
+			Select a such that Affects(a, _))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 1);
+            REQUIRE(exists(result, "8"));
+        }
+    }
+
+    SECTION("AffectsT") {
+        SECTION("syn, int") {
+            string query = R"(
+			assign a;
+			Select a such that Affects*(a, 11))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 1);
+            REQUIRE(exists(result, "8"));
+        }
+
+        SECTION("syn, syn") {
+            string query = R"(
+			assign a1, a2;
+			Select a2 such that Affects*(a1, a2))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 1);
+            REQUIRE(exists(result, "11"));
         }
     }
 }
