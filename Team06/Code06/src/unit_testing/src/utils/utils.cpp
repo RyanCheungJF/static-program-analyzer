@@ -1,7 +1,13 @@
 #include "utils.h"
 
 bool unit_testing_utils::contains(std::vector<std::vector<std::string>> result, std::vector<std::string> item) {
-	return find(result.begin(), result.end(), item) != result.end();
+    return find(result.begin(), result.end(), item) != result.end();
+}
+
+bool unit_testing_utils::equals(std::vector<std::string> expected, std::vector<std::string> actual) {
+    std::sort(actual.begin(), actual.end());
+    std::sort(expected.begin(), expected.end());
+    return expected == actual;
 }
 
 bool unit_testing_utils::equals(std::vector<int> expected, std::vector<int> actual) {
@@ -38,6 +44,32 @@ bool unit_testing_utils::equals(std::unordered_set<int> param1, std::unordered_s
 
 bool unit_testing_utils::equals(std::vector<std::vector<std::string>> expected,
                                 std::vector<std::vector<std::string>> actual) {
+    std::sort(actual.begin(), actual.end());
+    std::sort(expected.begin(), expected.end());
+    return expected == actual;
+}
+
+bool unit_testing_utils::equals(std::unordered_set<std::string> expectedSet,
+                                std::unordered_set<std::string> actualSet) {
+
+    std::vector<std::string> actual;
+    for (auto i : actualSet) {
+        actual.push_back(i);
+    }
+
+    std::vector<std::string> expected;
+    for (auto i : expectedSet) {
+        expected.push_back(i);
+    }
+
+    std::sort(actual.begin(), actual.end());
+    std::sort(expected.begin(), expected.end());
+    return expected == actual;
+}
+
+bool unit_testing_utils::equals(std::vector<std::pair<std::string, std::string>> expected,
+                                std::vector<std::pair<std::string, std::string>> actual) {
+
     std::sort(actual.begin(), actual.end());
     std::sort(expected.begin(), expected.end());
     return expected == actual;

@@ -1,14 +1,15 @@
 #pragma once
 
 #include <iostream>
+
 #include "Expression.h"
 
 class Variable : public Expression {
 public:
-	Ent name;
+    Ent name;
 
-	Variable();
-	Variable(Ent name);
+    Variable();
+    Variable(Ent name);
 
-	void accept(ASTVisitor* visitor) override;
+    void accept(ASTVisitor* visitor) override;
 };

@@ -1,9 +1,10 @@
 #ifndef SPA_TABLE_H
 #define SPA_TABLE_H
-#include "Parameter.h"
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include <vector>
+
+#include "Parameter.h"
 
 using namespace std;
 
@@ -25,7 +26,8 @@ private:
     vector<Parameter> headers;
     vector<vector<string>> contents;
     static vector<pair<int, int>> getIntersectingIndex(Table, Table);
-    static vector<vector<string>> intersectContent(vector<vector<string>>,vector<vector<string>>,const vector<pair<int,int>>&);
+    static vector<vector<string>> intersectContent(vector<vector<string>>, vector<vector<string>>,
+                                                   const vector<pair<int, int>>&);
     static vector<Parameter> intersectHeader(vector<Parameter>, vector<Parameter>, const vector<pair<int, int>>&);
 };
 

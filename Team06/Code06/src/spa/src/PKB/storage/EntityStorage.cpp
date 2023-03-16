@@ -4,9 +4,6 @@ void EntityStorage::writeEntity(StmtNum num, std::unordered_set<Ent> entities) {
     stmtNum_ent[num].insert(entities.begin(), entities.end());
     for (Ent e : entities) {
         ent_stmtNum[e].insert(num);
-    }
-
-    for (Ent e : entities) {
         entNames.insert(e);
     }
 }
@@ -26,6 +23,14 @@ std::unordered_set<StmtNum> EntityStorage::getEntityStmtNums(Ent e) {
         return emptySet;
     }
     return ent_stmtNum.at(e);
+}
+
+std::unordered_set<Ent> EntityStorage::getEntities(StmtNum num) {
+    if (stmtNum_ent.find(num) == stmtNum_ent.end()) {
+        std::unordered_set<Ent> emptySet;
+        return emptySet;
+    }
+    return stmtNum_ent.at(num);
 }
 
 std::unordered_set<std::string> EntityStorage::getEntNames() {

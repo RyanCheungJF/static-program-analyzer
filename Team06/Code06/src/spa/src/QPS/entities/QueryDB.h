@@ -4,11 +4,12 @@
 
 #ifndef SPA_QUERYDB_H
 #define SPA_QUERYDB_H
+#include <string>
+#include <vector>
+
 #include "PKB/ReadPKB.h"
 #include "Parameter.h"
 #include "Table.h"
-#include <string>
-#include <vector>
 
 class QueryDB {
 public:

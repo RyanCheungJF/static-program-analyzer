@@ -1,7 +1,7 @@
 #include "QueryDB.h"
 
 QueryDB::QueryDB() {
-  // Creates the QueryDB object
+    // Creates the QueryDB object
 }
 
 void QueryDB::insertTable(Table table) {
@@ -26,14 +26,13 @@ void QueryDB::insertTable(Table table) {
   tableVector.push_back(table);
 }
 
-
-bool QueryDB::hasParameter(Parameter &p) {
-  for (Table table : tableVector) {
-    if (table.hasParameter(p)) {
-      return true;
+bool QueryDB::hasParameter(Parameter& p) {
+    for (Table table : tableVector) {
+        if (table.hasParameter(p)) {
+            return true;
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB &readPKB) {

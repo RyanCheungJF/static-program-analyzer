@@ -6,8 +6,8 @@
 
 class PatThreeParamSyntaxValidator : public SyntaxValidator<Pattern> {
 public:
-  bool validate(Pattern &);
-  PatThreeParamSyntaxValidator();
+    bool validate(Pattern&);
+    PatThreeParamSyntaxValidator();
 };
 
 #endif // !SPA_QPS_PATTHREEPARAMSYNTAXVALIDATOR_H

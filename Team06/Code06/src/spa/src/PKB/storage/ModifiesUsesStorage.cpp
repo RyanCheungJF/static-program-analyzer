@@ -15,14 +15,16 @@ void ModifiesUsesStorage::writeP(ProcName name, std::unordered_set<Ent> entities
 }
 
 bool ModifiesUsesStorage::exists(StmtNum num, Ent var) {
-    if (stmtNum_entities.find(num) == stmtNum_entities.end()) return false;
+    if (stmtNum_entities.find(num) == stmtNum_entities.end())
+        return false;
 
     std::unordered_set<Ent> entities = stmtNum_entities[num];
     return entities.find(var) != entities.end();
 }
 
 bool ModifiesUsesStorage::exists(ProcName proc, Ent var) {
-    if (procName_entities.find(proc) == procName_entities.end()) return false;
+    if (procName_entities.find(proc) == procName_entities.end())
+        return false;
 
     std::unordered_set<Ent> entities = procName_entities[proc];
     return entities.find(var) != entities.end();
@@ -69,7 +71,7 @@ std::pair<std::vector<StmtNum>, std::vector<std::string>> ModifiesUsesStorage::g
             entities.push_back(entity);
         }
     }
-    return { stmtNums, entities };
+    return {stmtNums, entities};
 }
 
 std::pair<std::vector<std::string>, std::vector<std::string>> ModifiesUsesStorage::getAllProcEntPairs() {
@@ -81,5 +83,5 @@ std::pair<std::vector<std::string>, std::vector<std::string>> ModifiesUsesStorag
             entities.push_back(entity);
         }
     }
-    return { procs, entities };
+    return {procs, entities};
 }

@@ -51,64 +51,63 @@ vector<string> Query::evaluate(ReadPKB &readPKB) {
 
 Query::Query() {}
 
-Query::Query(const Query &q) {
-  for (int i = 0; i < q.relations.size(); i++) {
-  }
-  relations = q.relations;
-  selectParameters = q.selectParameters;
-  patterns = q.patterns;
+Query::Query(const Query& q) {
+    for (int i = 0; i < q.relations.size(); i++) {
+    }
+    relations = q.relations;
+    selectParameters = q.selectParameters;
+    patterns = q.patterns;
 }
 
-Query::Query(vector<Parameter> &ss, vector<shared_ptr<Relationship>> &rs,
-             vector<Pattern> &ps) {
-  selectParameters = ss;
-  relations = rs;
-  patterns = ps;
+Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector<Pattern>& ps) {
+    selectParameters = ss;
+    relations = rs;
+    patterns = ps;
 }
 
-vector<Parameter *> Query::getAllUncheckedSynonyms() {
-  vector<Parameter *> synonyms;
-  for (int i = 0; i < selectParameters.size(); i++) {
-    if (selectParameters.at(i).isUncheckedSynonym()) {
-      synonyms.push_back(&selectParameters.at(i));
+vector<Parameter*> Query::getAllUncheckedSynonyms() {
+    vector<Parameter*> synonyms;
+    for (int i = 0; i < selectParameters.size(); i++) {
+        if (selectParameters.at(i).isUncheckedSynonym()) {
+            synonyms.push_back(&selectParameters.at(i));
+        }
     }
-  }
-  for (int i = 0; i < relations.size(); i++) {
-    vector<Parameter *> relSyns = (*relations.at(i)).getAllUncheckedSynonyms();
-    for (int j = 0; j < relSyns.size(); j++) {
-      synonyms.push_back(relSyns.at(j));
+    for (int i = 0; i < relations.size(); i++) {
+        vector<Parameter*> relSyns = (*relations.at(i)).getAllUncheckedSynonyms();
+        for (int j = 0; j < relSyns.size(); j++) {
+            synonyms.push_back(relSyns.at(j));
+        }
     }
-  }
-  for (int i = 0; i < patterns.size(); i++) {
-    Parameter *entRef = patterns.at(i).getEntRef();
-    Parameter *patternSyn = patterns.at(i).getPatternSyn();
-    if (entRef->getType() == ParameterType::SYNONYM) {
-      synonyms.push_back(entRef);
+    for (int i = 0; i < patterns.size(); i++) {
+        Parameter* entRef = patterns.at(i).getEntRef();
+        Parameter* patternSyn = patterns.at(i).getPatternSyn();
+        if (entRef->getType() == ParameterType::SYNONYM) {
+            synonyms.push_back(entRef);
+        }
+        if (patternSyn->getType() == ParameterType::SYNONYM) {
+            synonyms.push_back(patternSyn);
+        }
     }
-    if (patternSyn->getType() == ParameterType::SYNONYM) {
-      synonyms.push_back(patternSyn);
-    }
-  }
-  return synonyms;
+    return synonyms;
 }
 
 bool Query::validateAllParameters() {
-  for (Pattern p : patterns) {
-    if (!p.validateParams()) {
-      return false;
+    for (Pattern p : patterns) {
+        if (!p.validateParams()) {
+            return false;
+        }
     }
-  }
 
-  for (shared_ptr<Relationship> r : relations) {
-    if (!(*r).validateParams()) {
-      return false;
+    for (shared_ptr<Relationship> r : relations) {
+        if (!(*r).validateParams()) {
+            return false;
+        }
     }
-  }
 
-  for (Parameter p : selectParameters) {
-      if (selectParameters.size() > 1 && p.getType() == ParameterType::BOOLEAN) {
-          throw SyntaxException();
-      }
-  }
-  return true;
+    for (Parameter p : selectParameters) {
+        if (selectParameters.size() > 1 && p.getType() == ParameterType::BOOLEAN) {
+            throw SyntaxException();
+        }
+    }
+    return true;
 }

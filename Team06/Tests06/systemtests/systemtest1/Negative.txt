@@ -208,3 +208,123 @@ variable v;
 Select v such that Modifies(_, v)
 SemanticError
 5000
+41 - procedure for second argument of Uses
+procedure p;
+Select v such that Uses(1, p)
+SemanticError
+5000
+42 - procedure for second argument of Modifies
+procedure p;
+Select v such that Modifies(1, p)
+SemanticError
+5000
+43 - invalid If Pattern, invalid first param
+if if; assign a;
+Select if pattern if(a, _, _)
+SemanticError
+5000
+44 invalid If pattern, invalid first param
+if if; procedure p;
+Select if pattern if(p, _, _)
+SemanticError
+5000
+45 - invalid If Pattern, invalid second param
+if if; assign a;
+Select if pattern if("x", "invalid", _)
+SyntaxError
+5000
+46 - invalid If Pattern, invalid second param
+if if; assign a;
+Select if pattern if("x", a, _)
+SyntaxError
+5000
+47 - invalid If Pattern, invalid third param
+if if; assign a;
+Select if pattern if("x", _, "invalid")
+SyntaxError
+5000
+48 - invalid If Pattern, invalid third param
+if if; procedure p;
+Select if pattern if("x", _, p)
+SyntaxError
+5000
+49 - invalid While Pattern, extra param
+while w;
+Select w pattern w("x", _, _)
+SyntaxError
+5000
+50 - invalid While Pattern, invalid first param
+while w; procedure p;
+Select w pattern w(p, _)
+SemanticError
+5000
+51 - invalid While Pattern, invalid second param
+while w; assign a;
+Select w pattern w("x", "invalid")
+SyntaxError
+5000
+52 - invalid Calls Relationship, invalid first param
+variable v; procedure p;
+Select p such that Calls(v, p)
+SemanticError
+5000
+53 - invalid Calls Relationship, invalid first param
+stmt s; procedure p;
+Select p such that Calls(s, p)
+SemanticError
+5000
+54 - invalid Calls Relationship, invalid second param
+variable v; procedure p;
+Select p such that Calls(p, v)
+SemanticError
+5000
+55 - invalid Calls Relationship, invalid second param
+print pr; procedure p;
+Select p such that Calls(p, pr)
+SemanticError
+5000
+56 - invalid Calls* Relationship, invalid first param
+variable v; procedure p;
+Select p such that Calls*(v, p)
+SemanticError
+5000
+57 - invalid Calls* Relationship, invalid first param
+stmt s; procedure p;
+Select p such that Calls*(s, p)
+SemanticError
+5000
+58 - invalid Calls* Relationship, invalid second param
+variable v; procedure p;
+Select p such that Calls*(p, v)
+SemanticError
+5000
+59 - invalid Calls* Relationship, invalid second param
+print pr; procedure p;
+Select p such that Calls*(p, pr)
+SemanticError
+5000
+60 - Calls only supported for procedure
+while w; procedure p;
+Select p such that Calls(w, "Tasty")
+SemanticError
+5000
+61 - while pattern with insufficient args
+while w;
+Select w pattern w("x")
+SyntaxError
+5000
+62 - if pattern with additional args
+while w; if i;
+Select i pattern i("x", _, _, _)
+SyntaxError
+5000
+63 - invalid first arg for if pattern, even though it is a string
+if i;
+Select i pattern i("+", _, _)
+SyntaxError
+5000
+64 - invalid first arg for if pattern, even though it is a string
+if i;
+Select i pattern i("9o0", _, _)
+SyntaxError
+5000

@@ -1,13 +1,13 @@
-#include "catch.hpp"
-#include "../../../spa/src/PKB/WritePKB.h"
 #include "../../../spa/src/PKB/ReadPKB.h"
+#include "../../../spa/src/PKB/WritePKB.h"
 #include "../utils/utils.h"
+#include "catch.hpp"
 
 using namespace std;
 using namespace unit_testing_utils;
 
 TEST_CASE("Check that all followers are recorded in the followee") {
-    FollowsTStorage fts;
+    FollowsParentStorage fts;
 
     std::unordered_set<StmtNum> followers = {2, 3, 4};
     fts.write(1, followers);
@@ -19,7 +19,7 @@ TEST_CASE("Check that all followers are recorded in the followee") {
 }
 
 TEST_CASE("Check that a follower is not recorded as a followee") {
-    FollowsTStorage fts;
+    FollowsParentStorage fts;
 
     std::unordered_set<StmtNum> followers = {2};
     fts.write(1, followers);
@@ -28,7 +28,7 @@ TEST_CASE("Check that a follower is not recorded as a followee") {
 }
 
 TEST_CASE("Check that all of the followers of each followee is accurate, even with duplicate entries") {
-    FollowsTStorage fts;
+    FollowsParentStorage fts;
     std::unordered_set<StmtNum> followers_1 = {2, 3, 4, 4, 3, 4};
     std::unordered_set<StmtNum> followers_2 = {3, 4, 4, 3, 4};
     fts.write(1, followers_1);
@@ -44,7 +44,7 @@ TEST_CASE("Check that all of the followers of each followee is accurate, even wi
 }
 
 TEST_CASE("Check that all of the followees of each follower is accurate, even with duplicate entries") {
-    FollowsTStorage fts;
+    FollowsParentStorage fts;
     std::unordered_set<StmtNum> followers1 = {2, 3, 3, 4};
     std::unordered_set<StmtNum> followers2 = {3, 4};
     std::unordered_set<StmtNum> followers3 = {4};
@@ -53,18 +53,17 @@ TEST_CASE("Check that all of the followees of each follower is accurate, even wi
     fts.write(3, followers3);
 
     std::unordered_set<StmtNum> actual1 = fts.getLeftWildcard(2);
-    std::unordered_set<StmtNum> expected1 = { 1 };
+    std::unordered_set<StmtNum> expected1 = {1};
     REQUIRE(unit_testing_utils::equals(expected1, actual1));
 
     std::unordered_set<StmtNum> actual2 = fts.getLeftWildcard(3);
-    std::unordered_set<StmtNum> expected2 = { 1, 2 };
+    std::unordered_set<StmtNum> expected2 = {1, 2};
     REQUIRE(unit_testing_utils::equals(expected2, actual2));
 
     std::unordered_set<StmtNum> actual3 = fts.getLeftWildcard(4);
-    std::unordered_set<StmtNum> expected3 = { 1, 2, 3};
+    std::unordered_set<StmtNum> expected3 = {1, 2, 3};
     REQUIRE(unit_testing_utils::equals(expected3, actual3));
 }
-
 
 TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
 
@@ -93,7 +92,6 @@ TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
 
 TEST_CASE("Checks that a non-existent FollowsT relationship returns an empty vector from ReadPKB") {
 
-
     WritePKB writePkb;
     ReadPKB readPkb;
     PKB pkb;
@@ -117,7 +115,6 @@ TEST_CASE("Checks that a non-existent FollowsT relationship returns an empty vec
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(1, assign)") {
-
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -144,12 +141,11 @@ TEST_CASE("Checks for cases e.g. Follows*(1, assign)") {
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 2);
-    REQUIRE(contains(res, { "1", "2" }));
-    REQUIRE(contains(res, { "1", "3" }));
+    REQUIRE(contains(res, {"1", "2"}));
+    REQUIRE(contains(res, {"1", "3"}));
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(1, _)") {
-
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -176,13 +172,12 @@ TEST_CASE("Checks for cases e.g. Follows*(1, _)") {
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 3);
-    REQUIRE(contains(res, { "1", "2" }));
-    REQUIRE(contains(res, { "1", "3" }));
-    REQUIRE(contains(res, { "1", "4" }));
+    REQUIRE(contains(res, {"1", "2"}));
+    REQUIRE(contains(res, {"1", "3"}));
+    REQUIRE(contains(res, {"1", "4"}));
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
-
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -208,11 +203,10 @@ TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
-    REQUIRE(contains(res, { "1", "3" }));
+    REQUIRE(contains(res, {"1", "3"}));
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
-
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -239,12 +233,11 @@ TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 2);
-    REQUIRE(contains(res, { "1", "2" }));
-    REQUIRE(contains(res, { "1", "3" }));
+    REQUIRE(contains(res, {"1", "2"}));
+    REQUIRE(contains(res, {"1", "3"}));
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
-
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -271,18 +264,15 @@ TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
     params.push_back(param2);
     shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWST, params);
 
-
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 4);
-    REQUIRE(contains(res, { "1", "2" }));
-    REQUIRE(contains(res, { "1", "3" }));
-    REQUIRE(contains(res, { "1", "4" }));
-    REQUIRE(contains(res, { "2", "3" }));
+    REQUIRE(contains(res, {"1", "2"}));
+    REQUIRE(contains(res, {"1", "3"}));
+    REQUIRE(contains(res, {"1", "4"}));
+    REQUIRE(contains(res, {"2", "3"}));
 }
 
-
 TEST_CASE("Checks for cases e.g. Follows*(_, 3)") {
-
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -308,12 +298,11 @@ TEST_CASE("Checks for cases e.g. Follows*(_, 3)") {
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 2);
-    REQUIRE(contains(res, { "1", "3" }));
-    REQUIRE(contains(res, { "2", "3" }));
+    REQUIRE(contains(res, {"1", "3"}));
+    REQUIRE(contains(res, {"2", "3"}));
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(_, call)") {
-
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -341,11 +330,10 @@ TEST_CASE("Checks for cases e.g. Follows*(_, call)") {
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 1);
-    REQUIRE(contains(res, { "1", "2" }));
+    REQUIRE(contains(res, {"1", "2"}));
 }
 
 TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
-
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -371,8 +359,7 @@ TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
     REQUIRE(res.size() == 3);
-    REQUIRE(contains(res, { "1", "2" }));
-    REQUIRE(contains(res, { "1", "3" }));
-    REQUIRE(contains(res, { "2", "3" }));
+    REQUIRE(contains(res, {"1", "2"}));
+    REQUIRE(contains(res, {"1", "3"}));
+    REQUIRE(contains(res, {"2", "3"}));
 }
-

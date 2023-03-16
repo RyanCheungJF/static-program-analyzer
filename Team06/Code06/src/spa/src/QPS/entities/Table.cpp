@@ -29,14 +29,14 @@ bool Table::hasIntersectingParams(Table t) {
     return false;
 }
 
-vector<pair<int,int>> Table::getIntersectingIndex(Table t1, Table t2) {
+vector<pair<int, int>> Table::getIntersectingIndex(Table t1, Table t2) {
     vector<Parameter> h1 = t1.getHeaders();
     vector<Parameter> h2 = t2.getHeaders();
-    vector<pair<int,int>> result;
+    vector<pair<int, int>> result;
     for (int i = 0; i < h1.size(); i++) {
         for (int j = 0; j < h2.size(); j++) {
             if (h1[i] == h2[j]) {
-                result.emplace_back(i,j);
+                result.emplace_back(i, j);
             }
         }
     }
@@ -60,16 +60,18 @@ Table Table::cartesianProduct(Table table) {
     return Table{h1, c3};
 }
 
-vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector<vector<string>> c2, const vector<pair<int, int>>& intersectingIndexes) {
+vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector<vector<string>> c2,
+                                               const vector<pair<int, int>>& intersectingIndexes) {
     unordered_multimap<string, int> hashmap;
     // we will use "value+value" as the key to the hashmap
     // depending on how many values in the intersectingIndex vector.
-    for(int i = 0; i < c1.size(); i++) {
+    for (int i = 0; i < c1.size(); i++) {
         string key;
-        for(pair<int, int> intersectingIndex : intersectingIndexes) {
+        for (pair<int, int> intersectingIndex : intersectingIndexes) {
             if (key.empty()) {
                 key += c1[i][intersectingIndex.first];
-            } else {
+            }
+            else {
                 key += "+" + c1[i][intersectingIndex.first];
             }
         }
@@ -82,10 +84,11 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
     }
     for (int i = 0; i < c2.size(); i++) {
         string key;
-        for(pair<int, int> intersectingIndex : intersectingIndexes) {
+        for (pair<int, int> intersectingIndex : intersectingIndexes) {
             if (key.empty()) {
                 key += c2[i][intersectingIndex.second];
-            } else {
+            }
+            else {
                 key += "+" + c2[i][intersectingIndex.second];
             }
         }
@@ -93,10 +96,10 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
         for (auto it = range.first; it != range.second; ++it) {
             vector<vector<string>>::value_type row;
             // Insert values to row
-            row.insert(row.end(),c1[it->second].begin(),c1[it->second].end());
-            row.insert(row.end(),c2[i].begin(),c2[i].end());
+            row.insert(row.end(), c1[it->second].begin(), c1[it->second].end());
+            row.insert(row.end(), c2[i].begin(), c2[i].end());
             for (int k = int(indexesToRemove.size()); k > 0; k--) {
-                row.erase(row.begin() + indexesToRemove[k-1]);
+                row.erase(row.begin() + indexesToRemove[k - 1]);
             }
             // Push the row
             result.push_back(row);
@@ -105,9 +108,10 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
     return result;
 }
 
-vector<Parameter> Table::intersectHeader(vector<Parameter> h1, vector<Parameter> h2, const vector<pair<int,int>>& intersectingIndexes) {
+vector<Parameter> Table::intersectHeader(vector<Parameter> h1, vector<Parameter> h2,
+                                         const vector<pair<int, int>>& intersectingIndexes) {
     vector<Parameter> newHeader;
-    for(int i = 0; i < h1.size(); i++) {
+    for (int i = 0; i < h1.size(); i++) {
         bool isIntersect = false;
         for (pair<int, int> inter : intersectingIndexes) {
             if (inter.first == i) {
@@ -122,13 +126,12 @@ vector<Parameter> Table::intersectHeader(vector<Parameter> h1, vector<Parameter>
     return newHeader;
 }
 
-
 Table Table::intersectTable(Table t) {
     vector<vector<string>> c1 = contents;
     vector<vector<string>> c2 = t.getContent();
     vector<Parameter> h1 = headers;
     vector<Parameter> h2 = t.getHeaders();
-    vector<pair<int,int>> intersectingIndexes = getIntersectingIndex(*this, std::move(t));
+    vector<pair<int, int>> intersectingIndexes = getIntersectingIndex(*this, std::move(t));
     vector<vector<string>> newContent = intersectContent(c1, c2, intersectingIndexes);
     vector<Parameter> newHeader = intersectHeader(h1, h2, intersectingIndexes);
     return Table{newHeader, newContent};
@@ -156,8 +159,7 @@ Table Table::extractColumns(vector<int> &indexes) {
         for (int index : indexes) {
             newEntry.push_back(entry[index]);
         }
-        if (find(newContent.begin(), newContent.end(), newEntry) ==
-            newContent.end()) {
+        if (find(newContent.begin(), newContent.end(), newEntry) == newContent.end()) {
             newContent.push_back(newEntry);
         }
     }
