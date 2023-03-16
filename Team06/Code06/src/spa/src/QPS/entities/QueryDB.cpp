@@ -36,28 +36,41 @@ bool QueryDB::hasParameter(Parameter &p) {
 }
 
 vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB &readPKB) {
+    // It is assumed here that none of the Tables in tableVector
+    // is an empty table. Any empty tables should not have been inserted.
     vector<Parameter> presentParams;
     vector<Parameter> absentParams;
+    vector<Table> tempStore;
     for (Parameter param : params) {
         if (this->hasParameter(param)) {
             presentParams.push_back(param);
         } else {
-            absentParams.push_back(param);
+            vector<string> content = readPKB.findDesignEntities(param);
+            vector<Parameter> paramVec = {param};
+            vector<vector<string>> contentVec = {};
+            for (string c : content) {
+                contentVec.push_back({c});
+            }
+            Table table(paramVec, contentVec);
+            tempStore.push_back(table);
         }
     }
-    Table extracted = extractColumns(presentParams);
-    for (Parameter param : absentParams) {
-        vector<string> content = readPKB.findDesignEntities(param);
-        vector<Parameter> paramVec = {param};
-        vector<vector<string>> contentVec = {content};
-        Table table(paramVec, contentVec);
-        extracted.cartesianProduct(table);
+    Table initialTable({}, {{}});
+    if (presentParams.empty()) {
+        initialTable = tempStore[0];
+        tempStore.erase(tempStore.begin());
+    } else {
+        initialTable = extractColumns(presentParams);
     }
-    return extracted.getResult();
+    for (Table t : tempStore) {
+        initialTable = initialTable.cartesianProduct(t);
+    }
+    return initialTable.getResult();
 }
 
 Table QueryDB::extractColumns(vector<Parameter> params) {
     // Assumes that each table has unique headers.
+    assert(!params.empty());
     vector<Table> temp;
     for (Table table : tableVector) {
         vector<Parameter> headers = table.getHeaders();

@@ -164,6 +164,10 @@ Table Table::extractColumns(vector<int> &indexes) {
     return Table{newHeader, newContent};
 }
 
+bool Table::isEmptyTable() {
+    return headers.empty() && contents.size() == 1 && contents[0].empty();
+}
+
 Table Table::extractColumns(vector<Parameter> params) {
     // Assume that all the params called is confirmed to be present in the table
     vector<int> indexes;

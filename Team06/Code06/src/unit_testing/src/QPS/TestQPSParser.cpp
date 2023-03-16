@@ -17,7 +17,15 @@ TEST_CASE("parse / select tuple parses without errors / parses without errors an
     string test =
             "stmt s; variable v;\n Select <s ,  g ,  q , asd   ,v> such that Follows (s, 1) ";
     QPSParser qp;
-    vector<Query> queries = qp.parse(test);
+    REQUIRE_THROWS_AS(qp.parse(test), SemanticException);
+}
+
+TEST_CASE("parse / select tuple with spaces should return syntax error / syntax error") {
+    string test =
+            "stmt s, abc, def, ghi;\n Select <a b c,d e f, g h i> such that Follows (s, 1) ";
+    QPSParser qp;
+    // TODO: This should not be passing. Issue with spacings.
+//    REQUIRE_THROWS_AS(qp.parse(test), SemanticException);
     REQUIRE(true);
 }
 

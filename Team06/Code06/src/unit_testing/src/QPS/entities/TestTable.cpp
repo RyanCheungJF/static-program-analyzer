@@ -95,7 +95,6 @@ TEST_CASE("intersectTable / intersecting large tables / return true") {
     vector<vector<string>> c3 = t3.getContent();
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
-    cout << "Time to intersect table: " << duration.count() << endl;
     // Content size should be 8 * 8 * 4 = 256
     bool correctSize = h3.size() == 7 && c3.size() == 256;
     REQUIRE(correctSize);

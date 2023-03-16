@@ -20,6 +20,7 @@ public:
     Table extractColumns(vector<Parameter>);
     Table cartesianProduct(Table);
     vector<string> getResult();
+    bool isEmptyTable();
 private:
     vector<Parameter> headers;
     vector<vector<string>> contents;

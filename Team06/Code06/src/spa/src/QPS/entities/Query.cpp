@@ -25,7 +25,9 @@ vector<string> Query::evaluate(ReadPKB &readPKB) {
     }
     // This will remove wild cards and FIXED INT from the table.
     table = table.extractDesignEntities();
-    queryDb.insertTable(table);
+    if (!table.isEmptyTable()) {
+        queryDb.insertTable(table);
+    }
   }
 
   for (Pattern pattern : patterns) {
@@ -105,6 +107,12 @@ bool Query::validateAllParameters() {
     if (!(*r).validateParams()) {
       return false;
     }
+  }
+
+  for (Parameter p : selectParameters) {
+      if (selectParameters.size() > 1 && p.getType() == ParameterType::BOOLEAN) {
+          throw SyntaxException();
+      }
   }
   return true;
 }

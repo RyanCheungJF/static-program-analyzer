@@ -265,6 +265,30 @@ TEST_CASE("Single Select Query") {
 		REQUIRE(exists(result, "1"));
 		REQUIRE(exists(result, "2"));
 	}
+
+    SECTION("Select BOOLEAN") {
+        string query = R"(Select BOOLEAN)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE((result[0] == "true" && result.size() == 1));
+    }
+
+    SECTION("Select <statement, variable>") {
+        string query = R"(
+        stmt s; variable v;
+        Select <s, v>)";
+        result = qps.processQueries(query, readPkb);
+        // gives cartesian product of stmt and variables
+        // final size = 11 * 4 = 44
+        REQUIRE(result.size() == 44);
+    }
+
+    SECTION("Select <statement, variable, BOOLEAN>") {
+        string query = R"(
+        stmt s; variable v;
+        Select <s, v, BOOLEAN>)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result[0] == "SyntaxError");
+    }
 }
 
 TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
@@ -621,7 +645,7 @@ TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
 			Select a such that Parent(1, 2) pattern a(v, _"x"_))";
 
 			result = qps.processQueries(query, readPkb);
-			REQUIRE(result.size() == 0);
+			REQUIRE(result.empty());
 		}
 
 		SECTION("Both clauses are empty/false") {
