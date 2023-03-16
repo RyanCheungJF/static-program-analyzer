@@ -5,52 +5,48 @@
 #include "Query.h"
 
 vector<string> Query::evaluate(ReadPKB &readPKB) {
-  // I am going to assume here that since the object has been created it means
-  // that the variables are correctly instantiated.
-  // TODO : refactor this into its individual components. function getting too long
-  QueryDB queryDb = QueryDB();
-  vector<string> emptyVec = {};
-  vector<string> falseVec = {"false"};
-  vector<string> trueVec = {"true"};
-  for (shared_ptr<Relationship> relation : relations) {
-    // Run an PKB API call for each relationship.
-    // Taking the example of select s1 follows(s1, s2)
-    vector<vector<string>> response = readPKB.findRelationship(relation);
-    vector<Parameter> params = relation->getParameters();
-    Table table(params, response);
-    if (response.empty()) {
-        return selectParameters.size() == 1
-               && selectParameters[0].getType()==ParameterType::BOOLEAN
-               ? falseVec : emptyVec;
+    // I am going to assume here that since the object has been created it means
+    // that the variables are correctly instantiated.
+    QueryDB queryDb = QueryDB();
+    Table emptyTable({},{});
+    for (shared_ptr<Relationship> relation : relations) {
+        // Run an PKB API call for each relationship.
+        // Taking the example of select s1 follows(s1, s2)
+        vector<vector<string>> response = readPKB.findRelationship(relation);
+        vector<Parameter> params = relation->getParameters();
+        Table table(params, response);
+        if (response.empty()) {
+            queryDb.insertTable(emptyTable);
+            break;
+        }
+        // clauses that are just fixed ints or wild cards will just be
+        // taken as true and not be inserted into the tableVec
+        table = table.extractDesignEntities();
+        if (!table.isEmptyTable()) {
+            queryDb.insertTable(table);
+        }
     }
-    // This will remove wild cards and FIXED INT from the table.
-    table = table.extractDesignEntities();
-    if (!table.isEmptyTable()) {
-        queryDb.insertTable(table);
-    }
-  }
 
-  for (Pattern pattern : patterns) {
+    for (Pattern pattern : patterns) {
     // Run an PKB API call for each relationship.
     // Taking the example of select s1 follows(s1, s2)
-    vector<vector<string>> response = readPKB.findPattern(pattern);
-    Parameter *patternSyn = pattern.getPatternSyn();
-    Parameter *entRef = pattern.getEntRef();
-    vector<Parameter> headers{*patternSyn, *entRef};
-    Table table(headers, response);
-    if (response.empty()) {
-        return selectParameters.size() == 1
-        && selectParameters[0].getType()==ParameterType::BOOLEAN
-        ? falseVec : emptyVec;
+        vector<vector<string>> response = readPKB.findPattern(pattern);
+        Parameter *patternSyn = pattern.getPatternSyn();
+        Parameter *entRef = pattern.getEntRef();
+        vector<Parameter> headers{*patternSyn, *entRef};
+        Table table(headers, response);
+        if (response.empty()) {
+            queryDb.insertTable(emptyTable);
+            break;
+        }
+        // This will remove wild cards and FIXED INT from the table.
+        table = table.extractDesignEntities();
+        if (!table.isEmptyTable()) {
+            queryDb.insertTable(table);
+        }
     }
-    // This will remove wild cards and FIXED INT from the table.
-    table = table.extractDesignEntities();
-    queryDb.insertTable(table);
-  }
-  // TODO: Add separate logic for BOOLEAN because there is no need to store any table if return value is boolean.
-    return selectParameters.size() == 1
-           && selectParameters[0].getType()==ParameterType::BOOLEAN
-           ? trueVec : queryDb.fetch(selectParameters, readPKB);
+    vector<string> res = queryDb.fetch(selectParameters, readPKB);
+    return res;
 }
 
 Query::Query() {}

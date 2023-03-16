@@ -22,6 +22,7 @@ void QueryDB::insertTable(Table table) {
       table = table.intersectTable(t);
     }
   }
+  // This may push empty tables into the tableVector
   tableVector.push_back(table);
 }
 
@@ -36,15 +37,13 @@ bool QueryDB::hasParameter(Parameter &p) {
 }
 
 vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB &readPKB) {
-    // It is assumed here that none of the Tables in tableVector
-    // is an empty table. Any empty tables should not have been inserted.
     vector<Parameter> presentParams;
     vector<Parameter> absentParams;
-    vector<Table> tempStore;
+    Table initialTable = emptyTable;
     for (Parameter param : params) {
         if (this->hasParameter(param)) {
             presentParams.push_back(param);
-        } else {
+        } else if (param.getType() != ParameterType::BOOLEAN){
             vector<string> content = readPKB.findDesignEntities(param);
             vector<Parameter> paramVec = {param};
             vector<vector<string>> contentVec = {};
@@ -52,20 +51,37 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB &readPKB) {
                 contentVec.push_back({c});
             }
             Table table(paramVec, contentVec);
-            tempStore.push_back(table);
+            if (initialTable.isEmptyTable()) {
+                initialTable = table;
+            } else {
+                initialTable = initialTable.cartesianProduct(table);
+            }
         }
     }
-    Table initialTable({}, {{}});
-    if (presentParams.empty()) {
-        initialTable = tempStore[0];
-        tempStore.erase(tempStore.begin());
-    } else {
-        initialTable = extractColumns(presentParams);
+    if (!presentParams.empty()) {
+        initialTable = initialTable.isEmptyTable()
+                ? extractColumns(presentParams)
+                : initialTable = initialTable.cartesianProduct(extractColumns(presentParams));
     }
-    for (Table t : tempStore) {
-        initialTable = initialTable.cartesianProduct(t);
+    if (hasEmptyTable()) {
+        initialTable = emptyTable;
     }
-    return initialTable.getResult();
+    return params[0].getType() == ParameterType::BOOLEAN
+        ? initialTable.isEmptyTable()
+            ? tableVector.empty() // empty tableVector means no clauses
+                ? trueVec
+                : falseVec
+            : trueVec
+        : initialTable.getResult();
+}
+
+bool QueryDB::hasEmptyTable() {
+    for (Table t : tableVector) {
+        if (t.isEmptyTable()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 Table QueryDB::extractColumns(vector<Parameter> params) {
@@ -80,6 +96,7 @@ Table QueryDB::extractColumns(vector<Parameter> params) {
                 paramsVec.push_back(param);
             }
         }
+        if (paramsVec.empty()) {continue;}
         Table extracted = table.extractColumns(paramsVec);
         temp.push_back(extracted);
     }

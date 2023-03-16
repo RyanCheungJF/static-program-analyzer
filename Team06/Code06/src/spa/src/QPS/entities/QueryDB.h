@@ -12,14 +12,19 @@
 
 class QueryDB {
 public:
-  QueryDB();
-  void insertTable(Table);
-  vector<string> fetch(vector<Parameter>, ReadPKB&);
+    QueryDB();
+    void insertTable(Table);
+    vector<string> fetch(vector<Parameter>, ReadPKB&);
+    vector<string> emptyVec = {};
+    vector<string> falseVec = {"FALSE"};
+    vector<string> trueVec = {"TRUE"};
+    Table emptyTable = Table({}, {});
 
 private:
-  vector<Table> tableVector;
-  Table extractColumns(vector<Parameter>);
-  bool hasParameter(Parameter&);
+    vector<Table> tableVector;
+    Table extractColumns(vector<Parameter>);
+    bool hasEmptyTable();
+    bool hasParameter(Parameter&);
 };
 
 #endif // SPA_QUERYDB_H

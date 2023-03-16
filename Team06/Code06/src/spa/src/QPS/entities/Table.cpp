@@ -165,7 +165,7 @@ Table Table::extractColumns(vector<int> &indexes) {
 }
 
 bool Table::isEmptyTable() {
-    return headers.empty() && contents.size() == 1 && contents[0].empty();
+    return contents.empty();
 }
 
 Table Table::extractColumns(vector<Parameter> params) {

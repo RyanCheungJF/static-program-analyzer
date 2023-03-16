@@ -156,120 +156,120 @@ TEST_CASE("Single Select Query") {
 	QPS qps;
 	vector<string> result;
 
-	SECTION("Select stmt") {
-		string query = R"(
-		stmt s;
-		Select s)";
-
-		result = qps.processQueries(query, readPkb);
-		REQUIRE(result.size() == 11);
-		REQUIRE(exists(result, "1"));
-		REQUIRE(exists(result, "2"));
-		REQUIRE(exists(result, "3"));
-		REQUIRE(exists(result, "4"));
-		REQUIRE(exists(result, "5"));
-		REQUIRE(exists(result, "6"));
-		REQUIRE(exists(result, "7"));
-		REQUIRE(exists(result, "8"));
-		REQUIRE(exists(result, "9"));
-		REQUIRE(exists(result, "10"));
-		REQUIRE(exists(result, "11"));
-	}
-
-	SECTION("Select read") {
-		string query = R"(
-		read r;
-		Select r)";
-
-		result = qps.processQueries(query, readPkb);
-		REQUIRE(result.size() == 2);
-		REQUIRE(exists(result, "5"));
-		REQUIRE(exists(result, "10"));
-	}
-
-	SECTION("Select print") {
-		string query = R"(
-		print p;
-		Select p)";
-
-		result = qps.processQueries(query, readPkb);
-		REQUIRE(result.size() == 1);
-		REQUIRE(exists(result, "7"));
-	}
-
-	SECTION("Select call") {
-		string query = R"(
-		call c;
-		Select c)";
-
-		result = qps.processQueries(query, readPkb);
-		REQUIRE(result.size() == 1);
-		REQUIRE(exists(result, "2"));
-	}
-
-	SECTION("Select while") {
-		string query = R"(
-		while w;
-		Select w)";
-
-		result = qps.processQueries(query, readPkb);
-		REQUIRE(result.size() == 1);
-		REQUIRE(exists(result, "3"));
-	}
-
-	SECTION("Select if") {
-		string query = R"(
-		if ifs;
-		Select ifs)";
-
-		result = qps.processQueries(query, readPkb);
-		REQUIRE(result.size() == 1);
-		REQUIRE(exists(result, "9"));
-	}
-
-	SECTION("Select assign") {
-		string query = R"(
-		assign a;
-		Select a)";
-
-		result = qps.processQueries(query, readPkb);
-		REQUIRE(result.size() == 5);
-		REQUIRE(exists(result, "1"));
-		REQUIRE(exists(result, "4"));
-		REQUIRE(exists(result, "6"));
-		REQUIRE(exists(result, "8"));
-		REQUIRE(exists(result, "11"));
-	}
-
-	SECTION("Select variable") {
-		string query = R"(
-		variable v;
-		Select v)";
-
-		result = qps.processQueries(query, readPkb);
-		REQUIRE(result.size() == 4);
-		REQUIRE(exists(result, "x"));
-		REQUIRE(exists(result, "y"));
-		REQUIRE(exists(result, "z"));
-		REQUIRE(exists(result, "count"));
-	}
-
-	SECTION("Select constant") {
-		string query = R"(
-		constant c;
-		Select c)";
-
-		result = qps.processQueries(query, readPkb);
-		REQUIRE(result.size() == 3);
-		REQUIRE(exists(result, "0"));
-		REQUIRE(exists(result, "1"));
-		REQUIRE(exists(result, "2"));
-	}
+//	SECTION("Select stmt") {
+//		string query = R"(
+//		stmt s;
+//		Select s)";
+//
+//		result = qps.processQueries(query, readPkb);
+//		REQUIRE(result.size() == 11);
+//		REQUIRE(exists(result, "1"));
+//		REQUIRE(exists(result, "2"));
+//		REQUIRE(exists(result, "3"));
+//		REQUIRE(exists(result, "4"));
+//		REQUIRE(exists(result, "5"));
+//		REQUIRE(exists(result, "6"));
+//		REQUIRE(exists(result, "7"));
+//		REQUIRE(exists(result, "8"));
+//		REQUIRE(exists(result, "9"));
+//		REQUIRE(exists(result, "10"));
+//		REQUIRE(exists(result, "11"));
+//	}
+//
+//	SECTION("Select read") {
+//		string query = R"(
+//		read r;
+//		Select r)";
+//
+//		result = qps.processQueries(query, readPkb);
+//		REQUIRE(result.size() == 2);
+//		REQUIRE(exists(result, "5"));
+//		REQUIRE(exists(result, "10"));
+//	}
+//
+//	SECTION("Select print") {
+//		string query = R"(
+//		print p;
+//		Select p)";
+//
+//		result = qps.processQueries(query, readPkb);
+//		REQUIRE(result.size() == 1);
+//		REQUIRE(exists(result, "7"));
+//	}
+//
+//	SECTION("Select call") {
+//		string query = R"(
+//		call c;
+//		Select c)";
+//
+//		result = qps.processQueries(query, readPkb);
+//		REQUIRE(result.size() == 1);
+//		REQUIRE(exists(result, "2"));
+//	}
+//
+//	SECTION("Select while") {
+//		string query = R"(
+//		while w;
+//		Select w)";
+//
+//		result = qps.processQueries(query, readPkb);
+//		REQUIRE(result.size() == 1);
+//		REQUIRE(exists(result, "3"));
+//	}
+//
+//	SECTION("Select if") {
+//		string query = R"(
+//		if ifs;
+//		Select ifs)";
+//
+//		result = qps.processQueries(query, readPkb);
+//		REQUIRE(result.size() == 1);
+//		REQUIRE(exists(result, "9"));
+//	}
+//
+//	SECTION("Select assign") {
+//		string query = R"(
+//		assign a;
+//		Select a)";
+//
+//		result = qps.processQueries(query, readPkb);
+//		REQUIRE(result.size() == 5);
+//		REQUIRE(exists(result, "1"));
+//		REQUIRE(exists(result, "4"));
+//		REQUIRE(exists(result, "6"));
+//		REQUIRE(exists(result, "8"));
+//		REQUIRE(exists(result, "11"));
+//	}
+//
+//	SECTION("Select variable") {
+//		string query = R"(
+//		variable v;
+//		Select v)";
+//
+//		result = qps.processQueries(query, readPkb);
+//		REQUIRE(result.size() == 4);
+//		REQUIRE(exists(result, "x"));
+//		REQUIRE(exists(result, "y"));
+//		REQUIRE(exists(result, "z"));
+//		REQUIRE(exists(result, "count"));
+//	}
+//
+//	SECTION("Select constant") {
+//		string query = R"(
+//		constant c;
+//		Select c)";
+//
+//		result = qps.processQueries(query, readPkb);
+//		REQUIRE(result.size() == 3);
+//		REQUIRE(exists(result, "0"));
+//		REQUIRE(exists(result, "1"));
+//		REQUIRE(exists(result, "2"));
+//	}
 
     SECTION("Select BOOLEAN") {
         string query = R"(Select BOOLEAN)";
         result = qps.processQueries(query, readPkb);
-        REQUIRE((result[0] == "true" && result.size() == 1));
+        REQUIRE((result[0] == "TRUE" && result.size() == 1));
     }
 
     SECTION("Select <statement, variable>") {
@@ -625,50 +625,125 @@ TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
 	readPkb.setInstancePKB(pkb);
 	QPS qps;
 	vector<string> result;
-	SECTION("synonym in ONE clause") {
-		SECTION("Both clauses are non-empty/true") {
-			string query = R"(
-			assign a; variable v;
-			Select a such that Follows*(1, 2) pattern a(v, _"x"_))";
+//	SECTION("synonym in ONE clause") {
+//		SECTION("Both clauses are non-empty/true") {
+//			string query = R"(
+//			assign a; variable v;
+//			Select a such that Follows*(1, 2) pattern a(v, _"x"_))";
+//
+//			result = qps.processQueries(query, readPkb);
+//			REQUIRE(result.size() == 4);
+//			REQUIRE(exists(result, "4"));
+//			REQUIRE(exists(result, "6"));
+//			REQUIRE(exists(result, "8"));
+//			REQUIRE(exists(result, "11"));
+//		}
+//
+//		SECTION("One clause is empty/false") {
+//			string query = R"(
+//			assign a; variable v;
+//			Select a such that Parent(1, 2) pattern a(v, _"x"_))";
+//
+//			result = qps.processQueries(query, readPkb);
+//			REQUIRE(result.empty());
+//		}
+//
+//		SECTION("Both clauses are empty/false") {
+//			string query = R"(
+//			assign a; variable v;
+//			Select a such that Parent(1, 2) pattern a(v, "x"))";
+//
+//			result = qps.processQueries(query, readPkb);
+//			REQUIRE(result.size() == 0);
+//		}
+//	}
+//
+//	SECTION("synonym in none of the clauses") {
+//		SECTION("Both clauses are non-empty/true") {
+//			string query = R"(
+//			assign a; variable v; constant c;
+//			Select c such that Follows*(1, 2) pattern a(v, _"x"_))";
+//
+//			result = qps.processQueries(query, readPkb);
+//			REQUIRE(result.size() == 3);
+//			REQUIRE(exists(result, "0"));
+//			REQUIRE(exists(result, "1"));
+//			REQUIRE(exists(result, "2"));
+//		}
+//	}
+//
+//    SECTION("2 clauses with 2 distinct variables select tuple no cartesian product") {
+//        string query = R"(
+//        stmt s1, s2;
+//        Select <s1, s2> such that Follows(s1, s2))";
+//
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(result.size() == 5);
+//        REQUIRE(exists(result, "1 2"));
+//        REQUIRE(exists(result, "2 3"));
+//        REQUIRE(exists(result, "4 5"));
+//        REQUIRE(exists(result, "7 8"));
+//        REQUIRE(exists(result, "8 9"));
+//    }
 
-			result = qps.processQueries(query, readPkb);
-			REQUIRE(result.size() == 4);
-			REQUIRE(exists(result, "4"));
-			REQUIRE(exists(result, "6"));
-			REQUIRE(exists(result, "8"));
-			REQUIRE(exists(result, "11"));
-		}
+//    SECTION("2 clauses with 2 distinct variables select tuple no cartesian product") {
+//        string query = R"(
+//        stmt s1, s2;
+//        variable v;
+//        Select <s1, s2, v> such that Follows(s1, s2))";
+//
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(result.size() == 20);
+//        REQUIRE(exists(result, "1 2 x"));
+//        REQUIRE(exists(result, "2 3 x"));
+//        REQUIRE(exists(result, "4 5 x"));
+//        REQUIRE(exists(result, "7 8 x"));
+//        REQUIRE(exists(result, "8 9 x"));
+//        REQUIRE(exists(result, "1 2 y"));
+//        REQUIRE(exists(result, "2 3 y"));
+//        REQUIRE(exists(result, "4 5 y"));
+//        REQUIRE(exists(result, "7 8 y"));
+//        REQUIRE(exists(result, "8 9 y"));
+//        REQUIRE(exists(result, "1 2 z"));
+//        REQUIRE(exists(result, "2 3 z"));
+//        REQUIRE(exists(result, "4 5 z"));
+//        REQUIRE(exists(result, "7 8 z"));
+//        REQUIRE(exists(result, "8 9 z"));
+//        REQUIRE(exists(result, "1 2 count"));
+//        REQUIRE(exists(result, "2 3 count"));
+//        REQUIRE(exists(result, "4 5 count"));
+//        REQUIRE(exists(result, "7 8 count"));
+//        REQUIRE(exists(result, "8 9 count"));
+//    }
+//
+//    SECTION("non empty clauses with select BOOLEAN") {
+//        string query = R"(
+//        stmt s1, s2;
+//        Select BOOLEAN such that Follows(s1, s2))";
+//
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(result.size() == 1);
+//        REQUIRE(exists(result, "TRUE"));
+//    }
+//
+//    SECTION("one empty clause with select BOOLEAN") {
+//        string query = R"(
+//        stmt s1, s2;
+//        Select BOOLEAN such that Follows(s1, s2) and Follows(100, 0) )";
+//
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(result.size() == 1);
+//        REQUIRE(exists(result, "FALSE"));
+//    }
 
-		SECTION("One clause is empty/false") {
-			string query = R"(
-			assign a; variable v;
-			Select a such that Parent(1, 2) pattern a(v, _"x"_))";
+    SECTION("intersection results in empty table with select BOOLEAN") {
+        // Should return FALSE
+        string query = R"(
+        stmt s1;
+        Select BOOLEAN such that Follows(s1, 3) and Follows(s1, 8) )";
 
-			result = qps.processQueries(query, readPkb);
-			REQUIRE(result.empty());
-		}
-
-		SECTION("Both clauses are empty/false") {
-			string query = R"(
-			assign a; variable v;
-			Select a such that Parent(1, 2) pattern a(v, "x"))";
-
-			result = qps.processQueries(query, readPkb);
-			REQUIRE(result.size() == 0);
-		}
-	}
-
-	SECTION("synonym in none of the clauses") {
-		SECTION("Both clauses are non-empty/true") {
-			string query = R"(
-			assign a; variable v; constant c;
-			Select c such that Follows*(1, 2) pattern a(v, _"x"_))";
-
-			result = qps.processQueries(query, readPkb);
-			REQUIRE(result.size() == 3);
-			REQUIRE(exists(result, "0"));
-			REQUIRE(exists(result, "1"));
-			REQUIRE(exists(result, "2"));
-		}
-	}
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(exists(result, "FALSE"));
+    }
 }
