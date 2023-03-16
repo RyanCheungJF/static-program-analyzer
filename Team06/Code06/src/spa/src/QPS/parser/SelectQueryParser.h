@@ -1,6 +1,7 @@
 #ifndef SPA_SELECTCLAUSEPARSER_H
 #define SPA_SELECTCLAUSEPARSER_H
 #include <algorithm>
+#include <functional>
 #include <map>
 #include <sstream>
 #include <string>
@@ -33,6 +34,7 @@ private:
     vector<shared_ptr<Relationship>> parseSuchThatClause(vector<string>& wordList, int start, int end);
     vector<Pattern> parsePatternClause(vector<string>& wordList, int start, int end);
     vector<ClauseType> getAllClauseTypes();
+    vector<string> splitClauseByAnds(vector<string>& wordList, int start, int end, function<bool(string)> formChecker);
 };
 
 #endif // SPA_SELECTCLAUSEPARSER_H
