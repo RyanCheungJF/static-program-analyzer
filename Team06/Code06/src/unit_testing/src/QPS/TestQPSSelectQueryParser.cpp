@@ -159,3 +159,47 @@ TEST_CASE("parse / multiple such that clauses with dummy ands and true ands/ "
   Query q = sqp.parse(input);
   CHECK(true);
 }
+
+TEST_CASE("parse / space in between parameter name / throws syntax error") {
+    string input = "Select s s";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
+TEST_CASE("parse / space in between parameter name in such that clause / throws syntax error") {
+    string input = "Select s such that Follows(s s, d)";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
+TEST_CASE("parse / space in between relationship name in such that clause / throws syntax error") {
+    string input = "Select s such that F o l l ows(s s, d)";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
+TEST_CASE("parse / space in between parameter name in pattern clause / throws syntax error") {
+    string input = "Select s pattern a(v s, \"expr\")";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
+TEST_CASE("parse / space in between pattern-syn in pattern clause / throws syntax error") {
+    string input = "Select s pattern a s(v, _)";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
+TEST_CASE("parse / valid space in between expr spec in pattern clause / expr_spec in parsed query doesn't contain space") {
+    string input = "Select s pattern a(v, \"a + v + z \")";
+    string expectedExprSpec = "a+v+z";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(q.patterns[0].exprSpecs[0] == expectedExprSpec);
+}
+
+TEST_CASE("parse / invalid space in between expr spec in pattern clause / throws syntax error") {
+    string input = "Select s pattern a(v, \"v z\")";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}

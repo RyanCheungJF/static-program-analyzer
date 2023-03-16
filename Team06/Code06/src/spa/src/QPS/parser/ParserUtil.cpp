@@ -84,9 +84,9 @@ tuple<string, vector<string>> extractParameters(string s, string containerStart,
             // end of string with delimiter at the end
             throw SyntaxException();
         }
-        innerParams.push_back(curParam);
+        innerParams.push_back(trim(curParam));
     }
-    res = {outerParam, innerParams};
+    res = {trim(outerParam), innerParams};
     return res;
 }
 
