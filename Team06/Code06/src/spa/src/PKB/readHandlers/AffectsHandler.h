@@ -45,24 +45,21 @@ private:
 
     // Affects(1, 2)
     std::vector<std::vector<std::string>> handleIntInt(StmtNum a1, StmtNum a2);
-
     // Affects(a1, 2) or Affects(_, 2)
     std::vector<std::vector<std::string>> handleWildcardInt(StmtNum a2);
-
     // Affects(1, a2) or Affects(1, _)
     std::vector<std::vector<std::string>> handleIntWildcard(StmtNum a1);
-
     // Affects(a1, a2) or Affects(_, _)
     std::vector<std::vector<std::string>> handleWildcardWildcard();
 
     // Affects*(1, 2)
-    std::vector<std::vector<std::string>> handleIntIntTransitive(StmtNum a1, StmtNum a2); // TODO
+    std::vector<std::vector<std::string>> handleIntIntTransitive(StmtNum a1, StmtNum a2);
     // Affects*(a1, 2) or Affects*(_, 2)
-    std::vector<std::vector<std::string>> handleWildcardIntTransitive(StmtNum a2); // TODO
+    std::vector<std::vector<std::string>> handleWildcardIntTransitive(StmtNum a2);
     // Affects*(1, a2) or Affects*(1, _)
-    std::vector<std::vector<std::string>> handleIntWildcardTransitive(StmtNum a1); // TODO
+    std::vector<std::vector<std::string>> handleIntWildcardTransitive(StmtNum a1);
     // Affects*(a1, a2) or Affects*(_, _)
-    std::vector<std::vector<std::string>> handleWildcardWildcardTransitive(); // TODO
+    std::vector<std::vector<std::string>> handleWildcardWildcardTransitive();
 
     // helper methods
     std::unordered_set<StmtNum> getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc);
@@ -78,4 +75,15 @@ private:
     std::vector<std::vector<std::string>> handleTransitive(std::string param1value, std::string param2value,
                                                            bool isFixedIntParam1, bool isFixedIntParam2,
                                                            bool isWildCardParam1, bool isWildCardParam2);
+
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted);
+
+    std::unordered_set<StmtNum> getAssignStatements(std::unordered_set<StmtNum> allProcStatements);
+
+    bool isModifiedInControlFlowPath(std::unordered_set<Ent> commonVariables,
+                                     std::unordered_set<Ent> variablesModifiedInPath);
+
+    std::vector<std::vector<std::string>> bfsTraversalOneWildcard(StmtNum a1, StmtNum a2);
+
+    bool checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2);
 };
