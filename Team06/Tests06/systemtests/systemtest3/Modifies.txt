@@ -1,0 +1,190 @@
+1 - stmt, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select s such that Modifies(s, v)
+1, 2, 3, 11, 4, 12, 7, 13, 14, 19, 20, 21, 16, 27, 30, 5, 8, 25, 17, 9, 26, 18, 10, 32, 15, 28
+5000
+2 - read, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select r such that Modifies(r, v)
+15, 28
+5000
+3 - print, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select pn such that Modifies(pn, v)
+none
+5000
+4 - call, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select c such that Modifies(c, v)
+8, 25, 17, 9, 26, 18, 10, 32
+5000
+5 - while, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select w such that Modifies(w, v)
+5
+5000
+6 - if, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select i such that Modifies(i, v)
+16, 27, 30
+5000
+7 - assign, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select a such that Modifies(a, v)
+1, 2, 11, 3, 12, 7, 13, 19, 21, 4, 14, 20
+5000
+8 - procedure, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select p such that Modifies(p, v)
+One, Two, Three, Four, Five
+5000
+9 - stmt number, var synonym (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select v such that Modifies(2, v)
+y
+5000
+10 - stmt number, var synonym (2)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select v such that Modifies(8, v)
+y, a, b, c, d, e
+5000
+11 - print, var ident
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select pn such that Modifies(pn, "e")
+none
+5000
+12 - call, var ident
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select c such that Modifies(c, "x")
+none
+5000
+13 - while, var ident (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select w such that Modifies(w, "z")
+none
+5000
+14 - while, var ident (2)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select w such that Modifies(w, "c")
+5
+5000
+15 - while, var ident (3)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select w such that Modifies(w, "x + y")
+SyntaxError
+5000
+16 - if, var ident (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select i such that Modifies(i, "b")
+none
+5000
+17 - if, var ident (2)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select i such that Modifies(i, "d")
+16, 27, 30
+5000
+18 - if, var ident (3)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select i such that Modifies(i, "b != c")
+SyntaxError
+5000
+19 - assign, var ident
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select a such that Modifies(a, "a")
+12, 19
+5000
+20 - procedure, var ident
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select p such that Modifies(p, "a")
+One, Two
+5000
+21 - procedure, var ident (2)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select p such that Modifies(p, "endpoint")
+none
+5000
+22 - procedure, var ident (3)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select p such that Modifies(p, "end  point")
+SyntaxError
+5000
+23 - stmt, var ident (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select s such that Modifies(s, "c")
+4, 7, 14, 8, 5
+5000
+24 - stmt, var ident (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select s such that Modifies(s, "C")
+none
+5000
+25 - read, var ident
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select r such that Modifies(r, "d")
+28
+5000
+26 - stmt number, var ident (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select w such that Modifies(8, "a")
+5
+5000
+27 - stmt number, var ident (2)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select v such that Modifies(1, "1")
+SyntaxError
+5000
+28 - stmt, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select s such that Modifies(s, _)
+1, 2, 3, 11, 4, 12, 7, 13, 14, 19, 20, 21, 16, 27, 30, 5, 8, 25, 17, 9, 26, 18, 10, 32, 15, 28
+5000
+29 - read, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select r such that Modifies(r, _)
+15, 28
+5000
+30 - print, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select pn such that Modifies(pn, _)
+none
+5000
+31 - call, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select c such that Modifies(c, _)
+8, 25, 17, 9, 26, 18, 10, 32
+5000
+32 - while, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select w such that Modifies(w, _)
+5
+5000
+33 - if, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select i such that Modifies(i, _)
+16, 27, 30
+5000
+34 - assign, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select a such that Modifies(a, _)
+1, 2, 11, 3, 12, 7, 13, 19, 21, 4, 14, 20
+5000
+35 - procedure, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select p such that Modifies(p, _)
+One, Two, Three, Four, Five
+5000
+36 - stmt number, wildcard (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select v such that Modifies(2, _)
+x, c, y, z, a, b, d, e, endpoint
+5000
+37 - stmt number, wildcard (2)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select v such that Modifies(8, _)
+x, c, y, z, a, b, d, e, endpoint
+5000
+38 - Modifies*
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select v such that Modifies*(8, _)
+SyntaxError
+5000
