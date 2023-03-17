@@ -1,10 +1,10 @@
 #include "PKB.h"
 
 void PKB::initializePkb() {
-    this->followsStorage = std::make_shared<FollowsParentStorage>();
-    this->followsTStorage = std::make_shared<FollowsParentStorage>();
-    this->parentStorage = std::make_shared<FollowsParentStorage>();
-    this->parentTStorage = std::make_shared<FollowsParentStorage>();
+    this->followsStorage = std::make_shared<RelationshipStorage<StmtNum, StmtNum>>();
+    this->followsTStorage = std::make_shared<RelationshipStorage<StmtNum, StmtNum>>();
+    this->parentStorage = std::make_shared<RelationshipStorage<StmtNum, StmtNum>>();
+    this->parentTStorage = std::make_shared<RelationshipStorage<StmtNum, StmtNum>>();
     this->statementStorage = std::make_shared<StmtStorage>();
     this->entityStorage = std::make_shared<EntityStorage>();
     this->procedureStorage = std::make_shared<ProcedureStorage>();
@@ -16,8 +16,8 @@ void PKB::initializePkb() {
     this->usesStorage = std::make_shared<ModifiesUsesStorage>();
     this->modifiesStorage = std::make_shared<ModifiesUsesStorage>();
     this->cfgStorage = std::make_shared<CFGStorage>();
-    this->callsStorage = std::make_shared<CallsStorage>();
-    this->callsTStorage = std::make_shared<CallsStorage>();
+    this->callsStorage = std::make_shared<RelationshipStorage<Ent, Ent>>();
+    this->callsTStorage = std::make_shared<RelationshipStorage<Ent, Ent>>();
 
     this->followsParentMap[RelationshipType::FOLLOWS] = followsStorage;
     this->followsParentMap[RelationshipType::FOLLOWST] = followsTStorage;
@@ -71,23 +71,23 @@ void PKB::setCall(StmtNum callLine, ProcName procedure_being_called) {
 }
 
 void PKB::setCalls(ProcName caller, std::unordered_set<ProcName> callees) {
-    callsStorage->writeCallP(caller, callees);
+    callsStorage->write(caller, callees);
 }
 
 void PKB::setCallsT(ProcName caller, std::unordered_set<ProcName> callees) {
-    callsTStorage->writeCallP(caller, callees);
+    callsTStorage->write(caller, callees);
 }
 
 void PKB::setUsesS(StmtNum num, std::unordered_set<Ent> entities) {
-    usesStorage->writeS(num, entities);
+    usesStorage->write(num, entities);
 }
 
 void PKB::setUsesP(ProcName name, std::unordered_set<Ent> entities) {
-    usesStorage->writeP(name, entities);
+    usesStorage->write(name, entities);
 }
 
 void PKB::setModifiesS(StmtNum num, std::unordered_set<Ent> entities) {
-    modifiesStorage->writeS(num, entities);
+    modifiesStorage->write(num, entities);
 }
 
 void PKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {

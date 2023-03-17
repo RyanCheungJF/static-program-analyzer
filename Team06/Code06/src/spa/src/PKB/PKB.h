@@ -31,6 +31,7 @@
 #include "storage/PatternStorage.h"
 #include "storage/PatternWithExprStorage.h"
 #include "storage/ProcedureStorage.h"
+#include "storage/RelationshipStorage.h"
 #include "storage/StmtStorage.h"
 #include "utils/AppConstants.h"
 
@@ -130,7 +131,8 @@ public:
     std::unordered_set<Ent> getModifiesP(ProcName name);
 
     // returns the name of the procedure being called on line number s
-    // if line s is not a call statement, it returns a pair {AppConstants::NOT_USED_FIELD, AppConstants::PROCEDURE_DOES_NOT_EXIST}
+    // if line s is not a call statement, it returns a pair {AppConstants::NOT_USED_FIELD,
+    // AppConstants::PROCEDURE_DOES_NOT_EXIST}
     std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
 
     // returns all statement numbers for if statement
@@ -150,10 +152,6 @@ public:
 
 private:
     // STATEMENTS
-    std::shared_ptr<FollowsParentStorage> followsStorage;
-    std::shared_ptr<FollowsParentStorage> followsTStorage;
-    std::shared_ptr<FollowsParentStorage> parentStorage;
-    std::shared_ptr<FollowsParentStorage> parentTStorage;
     std::shared_ptr<StmtStorage> statementStorage;
     std::shared_ptr<EntityStorage> entityStorage;
     std::shared_ptr<ProcedureStorage> procedureStorage;
@@ -164,17 +162,21 @@ private:
     std::shared_ptr<CallStorage> callStorage;
 
     // RELATIONSHIPS
+    std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> followsStorage;
+    std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> followsTStorage;
+    std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> parentStorage;
+    std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> parentTStorage;
     std::shared_ptr<ModifiesUsesStorage> usesStorage;
     std::shared_ptr<ModifiesUsesStorage> modifiesStorage;
-    std::shared_ptr<CallsStorage> callsStorage;
-    std::shared_ptr<CallsStorage> callsTStorage;
+    std::shared_ptr<RelationshipStorage<Ent, Ent>> callsStorage;
+    std::shared_ptr<RelationshipStorage<Ent, Ent>> callsTStorage;
     std::shared_ptr<CFGStorage> cfgStorage;
 
     RelationshipCache relationshipCache;
     ParameterCache parameterCache;
     PatternCache patternCache;
 
-    std::unordered_map<RelationshipType, std::shared_ptr<FollowsParentStorage>> followsParentMap = {
+    std::unordered_map<RelationshipType, std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>>> followsParentMap = {
         {RelationshipType::FOLLOWS, NULL},
         {RelationshipType::FOLLOWST, NULL},
         {RelationshipType::PARENT, NULL},
@@ -186,8 +188,8 @@ private:
     std::unordered_map<ParameterType, std::shared_ptr<PatternStorage>> ifWhilePatternMap = {
         {ParameterType::IF, NULL}, {ParameterType::WHILE, NULL}};
 
-    std::unordered_map<RelationshipType, std::shared_ptr<CallsStorage>> callsMap = {{RelationshipType::CALLS, NULL},
-                                                                                    {RelationshipType::CALLST, NULL}};
+    std::unordered_map<RelationshipType, std::shared_ptr<RelationshipStorage<Ent, Ent>>> callsMap = {
+        {RelationshipType::CALLS, NULL}, {RelationshipType::CALLST, NULL}};
 
     std::unordered_set<RelationshipType> nextMap = {RelationshipType::NEXT, RelationshipType::NEXTT};
     std::unordered_set<RelationshipType> affectsMap = {RelationshipType::AFFECTS, RelationshipType::AFFECTST};
