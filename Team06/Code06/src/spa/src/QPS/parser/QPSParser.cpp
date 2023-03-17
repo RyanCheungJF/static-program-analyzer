@@ -8,32 +8,34 @@
 QPSParser::QPSParser() {}
 
 vector<Query> QPSParser::parse(string qpsQuery) {
-  // split the code
-  vector<string> queryStatements = splitQuery(qpsQuery);
-  SelectQueryParser selectQueryParser;
-  vector<Query> queryVec;
-  VariableStore vStore;
-  vector<string> declarations;
-  for (string queryStatement : queryStatements) {
-    if (isDeclaration(queryStatement)) {
-      declarations.push_back(queryStatement);
-    } else if (isSelect(queryStatement)) {
-      Query query = selectQueryParser.parse(queryStatement);
-      // TODO: actually why does this even exist? its always only one i think
-      queryVec.push_back(query);
-    } else {
-      throw SyntaxException();
+    // split the code
+    vector<string> queryStatements = splitQuery(qpsQuery);
+    SelectQueryParser selectQueryParser;
+    vector<Query> queryVec;
+    VariableStore vStore;
+    vector<string> declarations;
+    for (string queryStatement : queryStatements) {
+        if (isDeclaration(queryStatement)) {
+            declarations.push_back(queryStatement);
+        }
+        else if (isSelect(queryStatement)) {
+            Query query = selectQueryParser.parse(queryStatement);
+            // TODO: actually why does this even exist? its always only one i think
+            queryVec.push_back(query);
+        }
+        else {
+            throw SyntaxException();
+        }
     }
-  }
-  if (queryVec.empty()) {
-    // no select query
-    throw SyntaxException();
-  }
-  vStore = parseDeclarations(declarations);
-  // need to do it this way cos dealing with pointer
-  for (int i = 0; i < queryVec.size(); i++) {
-    checkSynonyms(&queryVec.at(i), vStore);
-  }
+    if (queryVec.empty()) {
+        // no select query
+        throw SyntaxException();
+    }
+    vStore = parseDeclarations(declarations);
+    // need to do it this way cos dealing with pointer
+    for (int i = 0; i < queryVec.size(); i++) {
+        checkSynonyms(&queryVec.at(i), vStore);
+    }
 
     return queryVec;
 }

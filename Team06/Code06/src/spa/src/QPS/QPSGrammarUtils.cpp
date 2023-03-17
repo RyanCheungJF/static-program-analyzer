@@ -23,9 +23,13 @@ bool isSynonym(string s) {
     return isIdent(s);
 }
 
-bool isTupleStart(string s) { return s[0] == '<'; }
+bool isTupleStart(string s) {
+    return s[0] == '<';
+}
 
-bool isBoolean(string s) { return s == "BOOLEAN"; }
+bool isBoolean(string s) {
+    return s == "BOOLEAN";
+}
 
 bool isInteger(string integer) {
     return regex_match(integer, regex("^0$|^[1-9][0-9]*$"));

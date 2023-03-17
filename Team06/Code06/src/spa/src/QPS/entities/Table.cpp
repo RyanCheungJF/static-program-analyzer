@@ -50,7 +50,7 @@ Table Table::cartesianProduct(Table table) {
     vector<vector<string>> c2 = table.getContent();
     vector<vector<string>> c3;
     h1.insert(h1.end(), h2.begin(), h2.end());
-    for(const vector<string>& row1 : c1) {
+    for (const vector<string>& row1 : c1) {
         for (vector<string> row2 : c2) {
             vector<string> dupRow(row1);
             dupRow.insert(dupRow.end(), row2.begin(), row2.end());
@@ -147,7 +147,7 @@ Table Table::extractDesignEntities() {
     return extractColumns(indexes);
 }
 
-Table Table::extractColumns(vector<int> &indexes) {
+Table Table::extractColumns(vector<int>& indexes) {
     vector<vector<string>> newContent;
     vector<Parameter> newHeader;
     // I do not believe that there will be a case where the tables are empty.

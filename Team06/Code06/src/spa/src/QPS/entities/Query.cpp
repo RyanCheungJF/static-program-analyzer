@@ -4,11 +4,11 @@
 
 #include "Query.h"
 
-vector<string> Query::evaluate(ReadPKB &readPKB) {
+vector<string> Query::evaluate(ReadPKB& readPKB) {
     // I am going to assume here that since the object has been created it means
     // that the variables are correctly instantiated.
     QueryDB queryDb = QueryDB();
-    Table emptyTable({},{});
+    Table emptyTable({}, {});
     for (shared_ptr<Relationship> relation : relations) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
@@ -28,11 +28,11 @@ vector<string> Query::evaluate(ReadPKB &readPKB) {
     }
 
     for (Pattern pattern : patterns) {
-    // Run an PKB API call for each relationship.
-    // Taking the example of select s1 follows(s1, s2)
+        // Run an PKB API call for each relationship.
+        // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findPattern(pattern);
-        Parameter *patternSyn = pattern.getPatternSyn();
-        Parameter *entRef = pattern.getEntRef();
+        Parameter* patternSyn = pattern.getPatternSyn();
+        Parameter* entRef = pattern.getEntRef();
         vector<Parameter> headers{*patternSyn, *entRef};
         Table table(headers, response);
         if (response.empty()) {

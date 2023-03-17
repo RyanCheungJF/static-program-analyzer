@@ -22,17 +22,17 @@ bool VariableStore::hasVariable(Parameter p) {
     return !(store.find(p.getValue()) == store.end());
 }
 
-bool VariableStore::updateSynonym(Parameter *synP) {
-  if (!hasVariable(*synP)) {
-      if (isBoolean(synP->getValue())) {
-          synP->updateSynonymType(ParameterType::BOOLEAN);
-          return true;
-      }
-      return false;
-  }
-  ParameterType synType = getType(*synP);
-  synP->updateSynonymType(synType);
-  return true;
+bool VariableStore::updateSynonym(Parameter* synP) {
+    if (!hasVariable(*synP)) {
+        if (isBoolean(synP->getValue())) {
+            synP->updateSynonymType(ParameterType::BOOLEAN);
+            return true;
+        }
+        return false;
+    }
+    ParameterType synType = getType(*synP);
+    synP->updateSynonymType(synType);
+    return true;
 }
 
 string VariableStore::toString() {

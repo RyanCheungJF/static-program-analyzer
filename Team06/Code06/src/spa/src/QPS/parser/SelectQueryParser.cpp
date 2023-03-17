@@ -80,14 +80,14 @@ vector<tuple<ClauseType, int, int>> SelectQueryParser::getClausePositions(map<Cl
     return res;
 }
 
-vector<Parameter> SelectQueryParser::extractSelectTuple(vector<string> &wordList, int start, int end) {
+vector<Parameter> SelectQueryParser::extractSelectTuple(vector<string>& wordList, int start, int end) {
     string tupleString;
     vector<Parameter> params;
     for (start; start < end; start++) {
         // recreates tuple string with whitespace removed
         tupleString += wordList[start];
     }
-    if(tupleString.back() != '>') {
+    if (tupleString.back() != '>') {
         throw SyntaxException();
     }
     // gets rid of <>
@@ -107,30 +107,29 @@ vector<Parameter> SelectQueryParser::extractSelectTuple(vector<string> &wordList
 /*
 assumes start and end won't be -1 i.e. select clause must exist
 */
-vector<Parameter> SelectQueryParser::parseSelectClause(vector<string> &wordList,
-                                                       int start, int end) {
-  vector<Parameter> params;
-  if (end - start < 2) {
-    // select clause does not exist
+vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList, int start, int end) {
+    vector<Parameter> params;
+    if (end - start < 2) {
+        // select clause does not exist
+        throw SyntaxException();
+    }
+    if (!isSelect(wordList[start])) {
+        throw InternalException("Error: SelectQueryParser.parseSelectClause bad "
+                                "start position for wordList");
+    }
+    start = start + 1;
+    if (isTupleStart(wordList[start])) {
+        // it is a tuple select clause
+        params = extractSelectTuple(wordList, start, end);
+        return params;
+    }
+    else if (isSynonym(wordList[start])) {
+        // single select parameter
+        Parameter param = Parameter::makeParameter(wordList[1], AppConstants::SYNONYM);
+        params.push_back(param);
+        return params;
+    }
     throw SyntaxException();
-  }
-  if (!isSelect(wordList[start])) {
-    throw InternalException("Error: SelectQueryParser.parseSelectClause bad "
-                            "start position for wordList");
-  }
-  start = start + 1;
-  if (isTupleStart(wordList[start])) {
-      // it is a tuple select clause
-      params = extractSelectTuple(wordList, start, end);
-      return params;
-  }
-  else if (isSynonym(wordList[start])) {
-    // single select parameter
-      Parameter param = Parameter::makeParameter(wordList[1], AppConstants::SYNONYM);
-      params.push_back(param);
-      return params;
-  }
-  throw SyntaxException();
 }
 
 vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<string>& wordList, int start, int end) {

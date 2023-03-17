@@ -9,23 +9,23 @@
 using namespace std;
 
 enum class ParameterType {
-  STMT,
-  READ,
-  PRINT,
-  CALL,
-  WHILE,
-  IF,
-  ASSIGN,
-  VARIABLE,
-  CONSTANT,
-  PROCEDURE,
-  SYNONYM,
-  WILDCARD,
-  FIXED_INT,
-  FIXED_STRING,
-  EXPR_SPEC,
-  BOOLEAN,
-  UNKNOWN
+    STMT,
+    READ,
+    PRINT,
+    CALL,
+    WHILE,
+    IF,
+    ASSIGN,
+    VARIABLE,
+    CONSTANT,
+    PROCEDURE,
+    SYNONYM,
+    WILDCARD,
+    FIXED_INT,
+    FIXED_STRING,
+    EXPR_SPEC,
+    BOOLEAN,
+    UNKNOWN
 };
 
 class Parameter {

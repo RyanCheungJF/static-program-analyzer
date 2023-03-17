@@ -7,8 +7,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "entities/Parameter.h"
 #include "QPSGrammarUtils.h"
+#include "entities/Parameter.h"
 #include "exceptions/SemanticException.h"
 using namespace std;
 
