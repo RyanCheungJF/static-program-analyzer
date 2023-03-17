@@ -8,3 +8,4 @@ cd ../systemtest4
 call run.bat
 cd ../systemtest5
 call run.bat
+cd ..

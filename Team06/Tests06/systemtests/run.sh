@@ -10,3 +10,4 @@ cd ../systemtest4/
 bash run.sh
 cd systemtest5/
 bash run.sh
+cd ..
