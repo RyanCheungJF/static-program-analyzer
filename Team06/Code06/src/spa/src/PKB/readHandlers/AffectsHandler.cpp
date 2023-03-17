@@ -349,6 +349,7 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
     bool isIntWildcard = a2 == AppConstants::NOT_USED_FIELD;
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(!isIntWildcard);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
 
     // add from initial starting node
@@ -365,8 +366,13 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
         }
         seen.insert(curr);
 
-        for (StmtNum num : (isIntWildcard ? hashmap[curr.second] : hashmap[curr.first])) {
-            isIntWildcard ? queue.push_back({curr.second, num}) : queue.push_back({num, curr.first});
+        unordered_set<StmtNum> nextNodes = (isIntWildcard ? hashmap[curr.second] : hashmap[curr.first]);
+        for (StmtNum num : nextNodes) {
+            if (isIntWildcard) {
+                queue.push_back({curr.second, num});
+            } else {
+                queue.push_back({num, curr.first});
+            }
         }
     }
 
