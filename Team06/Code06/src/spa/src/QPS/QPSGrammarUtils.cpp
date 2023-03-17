@@ -41,19 +41,23 @@ bool startsWithLetter(string s) {
 
 bool hasBalancedBrackets(string s) {
     int balance = 0;
-    for (char c : s) {
+    for (int i = 0; i < s.size(); i++) {
+        char c = s[i];
         if (c == '(') {
             balance += 1;
         }
         else if (c == ')') {
             balance -= 1;
         }
+        if (balance < 0) {
+            return false;
+        }
     }
     return balance == 0;
 }
 
 bool hasCorrectRelRefOrPatternForm(string s) {
-    bool regexMatched = regex_match(s, regex("^[a-zA-Z].*\(.*,.*\)$"));
+    bool regexMatched = regex_match(s, regex("^[a-zA-Z].*\(.*\)$"));
     bool bracketBalanced = hasBalancedBrackets(s);
     return regexMatched && bracketBalanced;
 }

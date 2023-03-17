@@ -97,16 +97,11 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
         // bad select parameter
         throw SyntaxException();
     }
-    // TODO: replace with synonym type rather than string
-    Parameter param(wordList[1], AppConstants::SYNONYM);
+    Parameter param = Parameter::makeParameter(wordList[1], AppConstants::SYNONYM);
     params.push_back(param);
     return params;
 }
 
-/*
-Currently capable of parsing one condition after such that, with 2 params
-use loops for extensibility
-*/
 vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<string>& wordList, int start, int end) {
     vector<shared_ptr<Relationship>> res;
     if (start == -1 && end == -1) {
@@ -121,42 +116,25 @@ vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<s
     }
 
     int curIndex = start + 2;
+    vector<string> unparsedRelRef = splitClauseByAnds(wordList, curIndex, end, hasCorrectRelRefOrPatternForm);
 
-    vector<int> ands = findAnds(wordList, start, end);
-    vector<string> unparsedRelRef;
-    string condString = "";
-    for (int i = 0; i < ands.size(); i++) {
-        for (int j = curIndex; j < ands[i]; j++) {
-            condString += wordList[j];
-        }
-        if (!hasCorrectRelRefOrPatternForm(condString)) {
-            curIndex = ands[i];
-            continue;
-        }
-        unparsedRelRef.push_back(condString);
-        condString = "";
-        curIndex = ands[i] + 1;
-    }
-
-    while (curIndex < end) {
-        condString += wordList[curIndex];
-        curIndex++;
-    }
-    unparsedRelRef.push_back(condString);
-
-    vector<tuple<string, string, string, string>> relRefParams;
+    vector<tuple<string, vector<string>>> relRefParams;
     for (int i = 0; i < unparsedRelRef.size(); i++) {
-        relRefParams.push_back(extractParameters(unparsedRelRef[i]));
+        relRefParams.push_back(extractParameters(unparsedRelRef[i], "(", ")", ","));
     }
 
-    for (tuple<string, string, string, string> t : relRefParams) {
-        string rel, param1, param2;
-        tie(rel, param1, param2, std::ignore) = t;
-
-        Parameter p1(removeCharFromString(param1, '\"'), Parameter::guessParameterType(param1));
-        Parameter p2(removeCharFromString(param2, '\"'), Parameter::guessParameterType(param2));
-        vector<Parameter> params{p1, p2};
+    for (int i = 0; i < relRefParams.size(); i++) {
+        // construct relations based on extracted params, can consider extracting
+        string rel;
+        vector<string> paramStrings;
+        vector<Parameter> params;
+        tie(rel, paramStrings) = relRefParams.at(i);
+        for (string pString : paramStrings) {
+            Parameter p = Parameter::makeParameter(pString);
+            params.push_back(p);
+        }
         res.push_back(Relationship::makeRelationship(rel, params));
+        // construction ends here
     }
 
     return res;
@@ -176,19 +154,54 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
     }
 
     int curIndex = start + 1;
+    vector<string> unparsedPatterns = splitClauseByAnds(wordList, curIndex, end, hasCorrectRelRefOrPatternForm);
 
+    vector<tuple<string, vector<string>>> patternParams;
+    for (const auto& unparsedPattern : unparsedPatterns) {
+        patternParams.push_back(extractParameters(unparsedPattern, "(", ")", ","));
+    }
+
+    for (tuple<string, vector<string>> t : patternParams) {
+        // construct patterns based on extracted params
+        string patternDsgEntString, entRefString;
+        vector<string> paramStrings;
+        tie(patternDsgEntString, paramStrings) = t;
+        if (paramStrings.size() < 1) {
+            throw SyntaxException();
+        }
+        entRefString = paramStrings[0];
+        Parameter patternSyn = Parameter::makeParameter(patternDsgEntString);
+        Parameter entRef = Parameter::makeParameter(entRefString);
+        vector<string> exprSpecs;
+        for (int i = 1; i < paramStrings.size(); i++) {
+            exprSpecs.push_back(paramStrings[i]);
+        }
+        // construction ends here
+        res.push_back(Pattern::makePattern(patternSyn, entRef, exprSpecs));
+    }
+
+    return res;
+}
+
+vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
+    return vector<ClauseType>{SELECT, SUCH_THAT, PATTERN, WITH};
+}
+
+vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, int start, int end,
+                                                    function<bool(string)> formChecker) {
     vector<int> ands = findAnds(wordList, start, end);
-    vector<string> unparsedPatterns;
-    string condString;
+    vector<string> res;
+    string condString = "";
+    int curIndex = start;
     for (int i = 0; i < ands.size(); i++) {
         for (int j = curIndex; j < ands[i]; j++) {
             condString += wordList[j];
         }
-        if (!hasCorrectRelRefOrPatternForm(condString)) {
+        if (!formChecker(condString)) {
             curIndex = ands[i];
             continue;
         }
-        unparsedPatterns.push_back(condString);
+        res.push_back(condString);
         condString = "";
         curIndex = ands[i] + 1;
     }
@@ -197,38 +210,9 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
         condString += wordList[curIndex];
         curIndex++;
     }
-    unparsedPatterns.push_back(condString);
-
-    vector<tuple<string, string, string, string>> patternParams;
-    for (const auto& unparsedPattern : unparsedPatterns) {
-        patternParams.push_back(extractParameters(unparsedPattern));
+    if (!formChecker(condString)) {
+        throw SyntaxException();
     }
-
-    for (tuple<string, string, string, string> t : patternParams) {
-        string patternDsgEntString, entRefString, patternString, ifsString;
-        tie(patternDsgEntString, entRefString, patternString, ifsString) = t;
-        if (!isSynonym(patternDsgEntString)) {
-            throw SyntaxException();
-        }
-
-        if (!isEntRef(entRefString)) {
-            throw SyntaxException();
-        }
-
-        if (!isExprSpec(patternString)) {
-            throw SyntaxException();
-        }
-        Parameter patternDsgEnt(patternDsgEntString, ParameterType::SYNONYM);
-        Parameter entRef(removeCharFromString(entRefString, '\"'), Parameter::guessParameterType(entRefString));
-        Parameter ifParam("", ParameterType::UNKNOWN);
-        if (!ifsString.empty()) {
-            ifParam = *new Parameter("", ParameterType::WILDCARD);
-        }
-        res.emplace_back(patternDsgEnt, entRef, removeCharFromString(patternString, '\"'), ifParam);
-    }
+    res.push_back(condString);
     return res;
-}
-
-vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
-    return vector<ClauseType>{SELECT, SUCH_THAT, PATTERN, WITH};
 }

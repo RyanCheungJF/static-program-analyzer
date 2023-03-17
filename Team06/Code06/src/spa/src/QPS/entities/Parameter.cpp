@@ -1,5 +1,7 @@
 #include "Parameter.h"
 
+#include "../syntaxValidator/ParamSyntaxValidator.h"
+
 string Parameter::getValue() {
     return value;
 }
@@ -26,6 +28,21 @@ Parameter::Parameter(const Parameter& p) {
 Parameter::Parameter() {
     type = ParameterType::UNKNOWN;
     value = "";
+}
+
+Parameter Parameter::makeParameter(string val) {
+    ParamSyntaxValidator paramSynVal;
+    ParameterType type = guessParameterType(val);
+    Parameter p(removeCharFromString(val, '\"'), type);
+    paramSynVal.validate(p);
+    return p;
+}
+
+Parameter Parameter::makeParameter(string val, string type) {
+    ParamSyntaxValidator paramSynVal;
+    Parameter p(removeCharFromString(val, '\"'), type);
+    paramSynVal.validate(p);
+    return p;
 }
 
 bool Parameter::isSyntacticStatementRef(Parameter& p) {
@@ -56,6 +73,26 @@ bool Parameter::isDsgEntity(Parameter& p) {
     return isDesignEntity(p.getTypeString());
 }
 
+bool Parameter::isSyntacticEntityRef(Parameter& p) {
+    return p.type == ParameterType::SYNONYM || isEntityRef(p) || isProcedure(p);
+}
+
+bool Parameter::isEntityRef(Parameter& p) {
+    return p.type == ParameterType::VARIABLE || isFixedStringOrWildcard(p);
+}
+
+bool Parameter::isPatternSyn(Parameter& p) {
+    return p.type == ParameterType::ASSIGN || p.type == ParameterType::WHILE || p.type == ParameterType::IF;
+}
+
+bool Parameter::isFixedStringOrWildcard(Parameter& p) {
+    return p.type == ParameterType::FIXED_STRING || p.type == ParameterType::WILDCARD;
+}
+
+bool Parameter::isFixedIntOrWildCard(Parameter& p) {
+    return p.type == ParameterType::FIXED_INT || p.type == ParameterType::WILDCARD;
+}
+
 bool Parameter::isUncheckedSynonym() {
     return type == ParameterType::SYNONYM;
 }
@@ -65,14 +102,6 @@ void Parameter::updateSynonymType(ParameterType pt) {
         throw InternalException("Error: Parameter.updateSynonymType parameter is not a synonym.");
     }
     type = pt;
-}
-
-bool Parameter::isSyntacticEntityRef(Parameter& p) {
-    return p.type == ParameterType::SYNONYM || isEntityRef(p) || isProcedure(p);
-}
-
-bool Parameter::isEntityRef(Parameter& p) {
-    return p.type == ParameterType::VARIABLE || isFixedStringOrWildcard(p);
 }
 
 // TODO: IF NOT FOUND, MAY WANT TO THROW ERROR
@@ -113,32 +142,12 @@ bool Parameter::operator==(const Parameter& p) const {
     return type == p.type && value == p.value;
 }
 
-bool Parameter::isPatternSyn(Parameter& p) {
-    return p.type == ParameterType::ASSIGN || p.type == ParameterType::WHILE || p.type == ParameterType::IF;
-}
-
-bool Parameter::isFixedStringOrWildcard(Parameter& p) {
-    return p.type == ParameterType::FIXED_STRING || p.type == ParameterType::WILDCARD;
-}
-
-bool Parameter::isFixedIntOrWildCard(Parameter& p) {
-    return p.type == ParameterType::FIXED_INT || p.type == ParameterType::WILDCARD;
-}
-
 const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
-    {AppConstants::STMT, ParameterType::STMT},
-    {AppConstants::READ, ParameterType::READ},
-    {AppConstants::PRINT, ParameterType::PRINT},
-    {AppConstants::CALL, ParameterType::CALL},
-    {AppConstants::WHILE, ParameterType::WHILE},
-    {AppConstants::IF, ParameterType::IF},
-    {AppConstants::ASSIGN, ParameterType::ASSIGN},
-    {AppConstants::VARIABLE, ParameterType::VARIABLE},
-    {AppConstants::CONSTANT, ParameterType::CONSTANT},
-    {AppConstants::PROCEDURE, ParameterType::PROCEDURE},
-    {AppConstants::SYNONYM, ParameterType::SYNONYM},
-    {AppConstants::WILDCARD, ParameterType::WILDCARD},
-    {AppConstants::FIXED_INT, ParameterType::FIXED_INT},
-    {AppConstants::FIXED_STRING, ParameterType::FIXED_STRING},
-    {AppConstants::FIXED_STRING_WTIH_WILDCARD, ParameterType::FIXED_STRING_WITH_WILDCARD},
+    {AppConstants::STMT, ParameterType::STMT},           {AppConstants::READ, ParameterType::READ},
+    {AppConstants::PRINT, ParameterType::PRINT},         {AppConstants::CALL, ParameterType::CALL},
+    {AppConstants::WHILE, ParameterType::WHILE},         {AppConstants::IF, ParameterType::IF},
+    {AppConstants::ASSIGN, ParameterType::ASSIGN},       {AppConstants::VARIABLE, ParameterType::VARIABLE},
+    {AppConstants::CONSTANT, ParameterType::CONSTANT},   {AppConstants::PROCEDURE, ParameterType::PROCEDURE},
+    {AppConstants::SYNONYM, ParameterType::SYNONYM},     {AppConstants::WILDCARD, ParameterType::WILDCARD},
+    {AppConstants::FIXED_INT, ParameterType::FIXED_INT}, {AppConstants::FIXED_STRING, ParameterType::FIXED_STRING},
 };
