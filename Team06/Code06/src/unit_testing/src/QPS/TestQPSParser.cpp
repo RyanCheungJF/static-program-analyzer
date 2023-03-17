@@ -13,7 +13,7 @@ TEST_CASE("parse / given valid string with such that clause / parse into "
     REQUIRE(true);
 }
 
-TEST_CASE("parse / select tuple parses without errors / parses without errors and valid tuple values") {
+TEST_CASE("parse / select tuple, variables not declared / Semantic Error") {
     string test = "stmt s; variable v;\n Select <s ,  g ,  q , asd   ,v> such that Follows (s, 1) ";
     QPSParser qp;
     REQUIRE_THROWS_AS(qp.parse(test), SemanticException);
@@ -28,9 +28,14 @@ TEST_CASE("parse / no closing > / SyntaxError") {
 TEST_CASE("parse / select tuple with spaces should return syntax error / syntax error") {
     string test = "stmt s, abc, def, ghi;\n Select <a b c,d e f, g h i> such that Follows (s, 1) ";
     QPSParser qp;
-    // TODO: This should not be passing. Issue with spacings.
-    //    REQUIRE_THROWS_AS(qp.parse(test), SemanticException);
+    REQUIRE_THROWS_AS(qp.parse(test), SyntaxException);
     REQUIRE(true);
+}
+
+TEST_CASE("parse / select multiple params without tuple / syntax error") {
+    string test = "stmt s1, s2;\n Select s1 s2 such that Follows (s1, 1)";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(test), SyntaxException);
 }
 
 TEST_CASE("parse / given valid string with such that and pattern clause / "
