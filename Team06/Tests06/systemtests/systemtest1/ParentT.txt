@@ -573,3 +573,38 @@ stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign
 Select c1 such that Parent*(a, c1)
 none
 5000
+116 - same stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select s such that Parent*(s, s)
+none
+5000
+117 - same read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Parent*(r, r)
+none
+5000
+118- same print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Parent*(pn, pn)
+none
+5000
+119 - same call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Parent*(c, c)
+none
+5000
+120 - same while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Parent*(w, w)
+none
+5000
+121 - same if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Parent*(i, i)
+none
+5000
+122 - same assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Parent*(a, a)
+none
+5000
