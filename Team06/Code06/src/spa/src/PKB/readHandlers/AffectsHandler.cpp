@@ -251,11 +251,17 @@ std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<En
                                                            std::unordered_set<Ent> variablesUsedInA2) {
 
     std::unordered_set<Ent> commonVariables;
-    for (Ent e : variablesModifiedInA1) { // TODO: area for optimisation. use the smaller set
+    for (Ent e : variablesModifiedInA1) { // O(1) since there is really only 1 element
         if (variablesUsedInA2.find(e) != variablesUsedInA2.end()) {
             commonVariables.insert(e);
         }
     }
+
+//    for (Ent e : variablesUsedInA2) { // O(1) since there is really only 1 element
+//        if (variablesModifiedInA1.find(e) != variablesModifiedInA1.end()) {
+//            commonVariables.insert(e);
+//        }
+//    }
     return commonVariables;
 }
 
@@ -398,7 +404,7 @@ bool AffectsHandler::checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2) {
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWildcard(StmtNum a1input, StmtNum a2input) {
-    bool isIntWildcard = a2input == AppConstants::NOT_USED_FIELD;
+    bool isIntWildcard = (a2input == AppConstants::NOT_USED_FIELD);
     std::string paramString = isIntWildcard ? std::to_string(a1input) : std::to_string(a2input);
     StmtNum currA = isIntWildcard ? a1input : a2input;
     ProcName proc = procStorage->getProcedure(currA);
@@ -426,7 +432,8 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
             continue;
         }
 
-        std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(currA, otherA, proc);
+        std::unordered_set<StmtNum> controlFlowPath = isIntWildcard ? getControlFlowPathIntInt(currA, otherA, proc) :
+                                                      getControlFlowPathIntInt(otherA, currA, proc);
         if (controlFlowPath.empty() && !checkDirectlyAfterEachOther(currA, otherA)) {
             continue;
         }
