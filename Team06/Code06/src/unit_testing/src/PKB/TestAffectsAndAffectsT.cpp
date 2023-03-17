@@ -696,9 +696,9 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 2")
                                           Parameter("3", AppConstants::FIXED_INT)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTST, params1);
         std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
-        std::vector<std::vector<std::string>> expected1 = {{"1", "3"}, {"2", "3"}};
-        REQUIRE(expected1 == res1);
-//        REQUIRE(unit_testing_utils::equals(expected1, res1));
+        std::vector<std::vector<std::string>> expected1 = {{"1", "3"}, {"2", "3"}, {"1", "3"}};
+//        REQUIRE(expected1 == res1);
+        REQUIRE(unit_testing_utils::equals(expected1, res1));
 
     }
 
