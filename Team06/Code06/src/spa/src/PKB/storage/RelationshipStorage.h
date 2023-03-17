@@ -11,7 +11,8 @@ public:
     bool exists(T leftItem, U rightItems);
     std::unordered_set<U> getRightItems(T leftItem);
     std::unordered_set<T> getLeftItems(U rightItem);
-    std::pair<std::vector<T>, std::vector<U>> getAllPairs();
+    std::unordered_set<T> getAllLeftItems();
+    std::unordered_set<U> getAllRightItems();
 
 protected:
     std::unordered_map<T, std::unordered_set<U>> leftToRightMap;

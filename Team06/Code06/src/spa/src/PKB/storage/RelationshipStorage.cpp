@@ -35,17 +35,20 @@ template <typename T, typename U> std::unordered_set<T> RelationshipStorage<T, U
     return rightToLeftMap[rightItem];
 }
 
-template <typename T, typename U> std::pair<std::vector<T>, std::vector<U>> RelationshipStorage<T, U>::getAllPairs() {
-    std::vector<T> allLeftItems;
-    std::vector<U> allRightItems;
+template <typename T, typename U> std::unordered_set<T> RelationshipStorage<T, U>::getAllLeftItems() {
+    std::unordered_set<T> res;
     for (auto row : leftToRightMap) {
-        T leftItem = row.first;
-        for (auto rightItem : row.second) {
-            allLeftItems.push_back(leftItem);
-            allRightItems.push_back(rightItem);
-        }
+        res.insert(row.first);
     }
-    return {allLeftItems, allRightItems};
+    return res;
+}
+
+template <typename T, typename U> std::unordered_set<U> RelationshipStorage<T, U>::getAllRightItems() {
+    std::unordered_set<U> res;
+    for (auto row : rightToLeftMap) {
+        res.insert(row.first);
+    }
+    return res;
 }
 
 template class RelationshipStorage<StmtNum, StmtNum>;
