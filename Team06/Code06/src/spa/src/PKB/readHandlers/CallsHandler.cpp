@@ -1,6 +1,6 @@
 #include "CallsHandler.h"
 
-CallsHandler::CallsHandler(std::shared_ptr<CallsStorage> callsStorage) {
+CallsHandler::CallsHandler(std::shared_ptr<RelationshipStorage<Ent, Ent>> callsStorage) {
     this->callsStorage = callsStorage;
 }
 
@@ -14,7 +14,7 @@ std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcname(Param
         return res;
     }
 
-    std::unordered_set<ProcName> callees = callsStorage->getCallees(caller);
+    std::unordered_set<ProcName> callees = callsStorage->getRightItems(caller);
     if (callees.find(callee) != callees.end()) {
         res.push_back({caller, callee});
     }
