@@ -1,32 +1,22 @@
 #pragma once
-#include <deque>
-#include <iostream>
-#include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <utility>
-#include <vector>
 
 #include "../../../src/utils/AppConstants.h"
+#include "RelationshipStorage.h"
 
-class ModifiesUsesStorage {
+class ModifiesUsesStorage : public RelationshipStorage<StmtNum, Ent>, public RelationshipStorage<Ent, Ent> {
+
 public:
-    void writeS(StmtNum num, std::unordered_set<Ent> entities);
-    void writeP(ProcName proc, std::unordered_set<Ent> entities);
-
-    bool exists(StmtNum num, Ent var);
-    bool exists(ProcName proc, Ent var);
-    std::unordered_set<Ent> getEnt(StmtNum num);
-    std::unordered_set<Ent> getEnt(ProcName proc);
-    std::unordered_set<StmtNum> getStmtsFromEnt(Ent var);
-    std::unordered_set<ProcName> getProcsFromEnt(Ent var);
-    std::pair<std::vector<StmtNum>, std::vector<std::string>> getAllStmtEntPairs();
-    std::pair<std::vector<std::string>, std::vector<std::string>> getAllProcEntPairs();
-
-private:
-    std::unordered_map<StmtNum, std::unordered_set<Ent>> stmtNum_entities;
-    std::unordered_map<Ent, std::unordered_set<StmtNum>> entities_stmtNum;
-
-    std::unordered_map<ProcName, std::unordered_set<Ent>> procName_entities;
-    std::unordered_map<Ent, std::unordered_set<ProcName>> entities_procName;
+    using RelationshipStorage<StmtNum, Ent>::write;
+    using RelationshipStorage<Ent, Ent>::write;
+    using RelationshipStorage<StmtNum, Ent>::exists;
+    using RelationshipStorage<Ent, Ent>::exists;
+    using RelationshipStorage<StmtNum, Ent>::getLeftItems;
+    using RelationshipStorage<StmtNum, Ent>::getRightItems;
+    using RelationshipStorage<Ent, Ent>::getRightItems;
+    std::unordered_set<StmtNum> getStmtNums(Ent ent);
+    std::unordered_set<Ent> getProcs(Ent ent);
+    std::unordered_set<Ent> getAllProcs();
+    std::unordered_set<StmtNum> getAllStmtNums();
 };
