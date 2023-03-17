@@ -33,5 +33,6 @@ bool isFixedStringWithWildCard(string);
 bool hasCorrectRelRefOrPatternForm(string);
 bool isElem(string);
 bool isAttrRef(string);
+bool isAttribute(string);
 
 #endif // SPA_QPSGRAMMARUTILS_H

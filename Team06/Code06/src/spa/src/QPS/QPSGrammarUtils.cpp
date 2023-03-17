@@ -222,5 +222,21 @@ bool isElem(string s) {
 }
 
 bool isAttrRef(string s) {
-    return regex_match(s, regex("^[a-zA-Z][a-zA-Z0-9]*\.(procName|varName|value|stmt#)$"));
+    string delimiter = ".";
+    bool found;
+    int nextStart;
+    string name, attribute;
+    tie(name, nextStart, found) = extractSubStringUntilDelimiter(s, 0, delimiter);
+    if (!found) {
+        return false;
+    }
+    if (nextStart >= s.size()) {
+        return false;
+    }
+    attribute = s.substr(nextStart, s.size() - nextStart - 1);
+    return isSynonym(name) && isAttribute(attribute);
+}
+
+bool isAttribute(string s) {
+    return regex_match(s, regex("^(procName | varName | value | stmt#)$"));
 }
