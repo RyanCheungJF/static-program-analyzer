@@ -66,8 +66,7 @@ bool Pattern::validateParams() {
     }
 }
 
-ParameterType Pattern::getPatternType()
-{
+ParameterType Pattern::getPatternType() {
     return patternSyn.getType();
 }
 

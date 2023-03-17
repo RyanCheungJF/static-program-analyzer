@@ -13,6 +13,7 @@
 #include "QueryDB.h"
 #include "Relationship.h"
 #include "Table.h"
+#include "exceptions/SyntaxException.h"
 
 using namespace std;
 
