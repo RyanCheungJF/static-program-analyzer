@@ -1,6 +1,7 @@
+#include <iostream>
+
 #include "../../QPS/entities/Pattern.h"
 #include "Cache.h"
-#include <iostream>
 
 struct patternHash {
     std::size_t operator()(shared_ptr<Pattern> const& pattern) const {

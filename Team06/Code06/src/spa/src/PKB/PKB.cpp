@@ -156,7 +156,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
     if (!res.empty()) {
         return res;
     }
-    
+
     ParameterType type = p.getType();
 
     if (type == ParameterType::PROCEDURE) {

@@ -11,6 +11,9 @@
 #include "../QPS/entities/Pattern.h"
 #include "../QPS/entities/Relationship.h"
 #include "../utils/AppConstants.h"
+#include "cache/ParameterCache.h"
+#include "cache/PatternCache.h"
+#include "cache/RelationshipCache.h"
 #include "readHandlers/AffectsHandler.h"
 #include "readHandlers/AssignPatternHandler.h"
 #include "readHandlers/CallsHandler.h"
@@ -30,9 +33,6 @@
 #include "storage/ProcedureStorage.h"
 #include "storage/StmtStorage.h"
 #include "utils/AppConstants.h"
-#include "cache/RelationshipCache.h"
-#include "cache/ParameterCache.h"
-#include "cache/PatternCache.h"
 
 class PKB : AppConstants {
 
@@ -173,7 +173,6 @@ private:
     RelationshipCache relationshipCache;
     ParameterCache parameterCache;
     PatternCache patternCache;
-
 
     std::unordered_map<RelationshipType, std::shared_ptr<FollowsParentStorage>> followsParentMap = {
         {RelationshipType::FOLLOWS, NULL},
