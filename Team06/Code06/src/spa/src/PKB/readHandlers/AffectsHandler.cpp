@@ -467,14 +467,20 @@ bool AffectsHandler::checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2) {
         return false;
     }
 
+    std::unordered_set<Stmt> oneLineBeforeA1Stmt = stmtStorage->getStatementType(a1 - 1);
+    std::unordered_set<Stmt> twoLinesBeforeA2Stmt = stmtStorage->getStatementType(a2 - 2);
+
+    std::unordered_set<Stmt> twoLinesBeforeA1Stmt = stmtStorage->getStatementType(a1 - 2);
+    std::unordered_set<Stmt> oneLineBeforeA2Stmt = stmtStorage->getStatementType(a2 - 1);
+
     // means they are consecutive in terms of numbers, but might still be part of different if-else branches
-    if ((stmtStorage->getStatementType(a1 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 1).end()) &&
-        (stmtStorage->getStatementType(a2 - 2).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 2).end())) {
+    if ((oneLineBeforeA1Stmt.find(AppConstants::IF) != oneLineBeforeA1Stmt.end()) &&
+        (twoLinesBeforeA2Stmt.find(AppConstants::IF) != twoLinesBeforeA2Stmt.end())) {
         return false;
     }
 
-    if ((stmtStorage->getStatementType(a1 - 2).find(AppConstants::IF) != stmtStorage->getStatementType(a1 - 2).end()) &&
-        (stmtStorage->getStatementType(a2 - 1).find(AppConstants::IF) != stmtStorage->getStatementType(a2 - 1).end())) {
+    if ((twoLinesBeforeA1Stmt.find(AppConstants::IF) != twoLinesBeforeA1Stmt.end()) &&
+        (oneLineBeforeA2Stmt.find(AppConstants::IF) != oneLineBeforeA2Stmt.end())) {
         return false;
     }
 
