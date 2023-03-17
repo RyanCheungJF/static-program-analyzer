@@ -66,27 +66,28 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects*") {
      *     d = d + 1; //18
      *     h = h + 1; // 19
      * }
-     * i = h + 1; //20
+     * i = h + 1 + i; //20
      * call proc2; //21
      * j = j + 1; //22
      * if (k != l) then { //23
      *     k = l; //24
      * } else {
      *     l = k; //25
+     *     m = i; //26
      * }
-     * print k; //26
-     * print l; //27
+     * print k; //27
+     * print l; //28
      *
      *
      * proc2:
-     * j = j + 1; //28
+     * j = j + 1; //29
      *
      * Valid Affects relationships:
      * (2, 5), (3, 6), (6, 9),
      * (7, 8), (8, 2), (9, 3),
      * (10, 11), (11, 18) (13, 12),
      * (14, 14), (19, 19), (19, 20)
-     *
+     * (20, 26)
      *
      * Valid Affects* relationships:
      * (2, 5)
@@ -99,8 +100,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects*") {
      * (11, 18)
      * (13, 12)
      * (14, 14)
-     * (19, 19), (19, 20)
-     *
+     * (19, 19), (19, 20), (19, 26)
+     * (20, 26)
      */
 
     ProcName proc1 = "proc1";
@@ -135,8 +136,9 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects*") {
     writePkb.setStatement("if", 23);
     writePkb.setStatement("assign", 24);
     writePkb.setStatement("assign", 25);
-    writePkb.setStatement("print", 26);
+    writePkb.setStatement("assign", 26);
     writePkb.setStatement("print", 27);
+    writePkb.setStatement("print", 28);
 
     writePkb.setProcedure(
         proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27});
@@ -168,9 +170,10 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects*") {
     writePkb.setModifiesS(23, {"k", "l"});
     writePkb.setModifiesS(24, {"k"});
     writePkb.setModifiesS(25, {"l"});
-    writePkb.setModifiesP(proc1, {"y", "x", "v", "c", "d", "f", "e", "a", "b", "h", "j", "k", "l"});
+    writePkb.setModifiesS(26, {"m"});
+    writePkb.setModifiesP(proc1, {"y", "x", "v", "c", "d", "f", "e", "a", "b", "h", "j", "k", "l", "m", "i"});
 
-    writePkb.setModifiesS(28, {"j"});
+    writePkb.setModifiesS(29, {"j"});
     writePkb.setModifiesP(proc2, {"j"});
 
     writePkb.setUsesS(1, {"a", "b"});
@@ -190,17 +193,18 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects*") {
     writePkb.setUsesS(17, {"d"});
     writePkb.setUsesS(18, {"d"});
     writePkb.setUsesS(19, {"h"});
-    writePkb.setUsesS(20, {"h"});
+    writePkb.setUsesS(20, {"h", "i"});
     //    writePkb.setUsesS(21, {});
     writePkb.setUsesS(22, {"j"});
     writePkb.setUsesS(23, {"k", "l"});
     writePkb.setUsesS(24, {"l"});
     writePkb.setUsesS(25, {"k"});
-    writePkb.setUsesS(26, {"k"});
-    writePkb.setUsesS(27, {"l"});
-    writePkb.setUsesP(proc1, {"a", "b", "y", "x", "v", "c", "e", "g", "d", "h", "j", "k", "l"});
+    writePkb.setUsesS(26, {"i"});
+    writePkb.setUsesS(27, {"k"});
+    writePkb.setUsesS(28, {"l"});
+    writePkb.setUsesP(proc1, {"a", "b", "y", "x", "v", "c", "e", "g", "d", "h", "j", "k", "l", "i"});
 
-    writePkb.setUsesS(28, {"j"});
+    writePkb.setUsesS(29, {"j"});
     writePkb.setUsesP(proc2, {"j"});
 
     SECTION("Affects(int, int)") {
