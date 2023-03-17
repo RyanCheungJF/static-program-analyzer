@@ -16,5 +16,5 @@ Select a such that Affects(7, a)
 4 - comment
 assign a;
 Select a such that Affects(13, a)
-19
+none
 5000

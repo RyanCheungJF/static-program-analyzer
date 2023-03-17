@@ -11,5 +11,5 @@ Select a such that Affects*(a, 3)
 3 - comment
 assign a;
 Select a such that Affects*(a, 19)
-13, 12, 11
+none
 5000
