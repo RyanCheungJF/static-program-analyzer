@@ -28,9 +28,7 @@ TEST_CASE("parse / no closing > / SyntaxError") {
 TEST_CASE("parse / select tuple with spaces should return syntax error / syntax error") {
     string test = "stmt s, abc, def, ghi;\n Select <a b c,d e f, g h i> such that Follows (s, 1) ";
     QPSParser qp;
-    // TODO: This should not be passing. Issue with spacings.
-    //    REQUIRE_THROWS_AS(qp.parse(test), SemanticException);
-    REQUIRE(true);
+    REQUIRE_THROWS_AS(qp.parse(test), SyntaxException);
 }
 
 TEST_CASE("parse / given valid string with such that and pattern clause / "

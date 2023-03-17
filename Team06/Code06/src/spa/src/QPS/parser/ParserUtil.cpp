@@ -60,10 +60,9 @@ vector<int> findAnds(const vector<string>& wordList, int start, int end) {
     return ands;
 }
 
-// assumes the string is of the correct form:
-// ^.*{containerStart}.*{containerEnd}$
 tuple<string, vector<string>> extractParameters(string s, string containerStart, string containerEnd,
                                                 string delimiter) {
+    s = trim(s);
     tuple<string, vector<string>> res;
     int endOfString = s.size();
     int curIndex = 0;
@@ -72,7 +71,10 @@ tuple<string, vector<string>> extractParameters(string s, string containerStart,
     bool found = false;
     tie(outerParam, curIndex, found) = extractSubStringUntilDelimiter(s, curIndex, containerStart);
     if (!found) {
-        throw InternalException("ParserUtil.extractParameters: containerStart not found");
+        throw SyntaxException();
+    }
+    if (!(s.substr(endOfString - containerEnd.size(), containerEnd.size()) == containerEnd)) {
+        throw SyntaxException();
     }
     string innerParamsString = s.substr(curIndex, endOfString - curIndex - containerEnd.size());
     endOfString = innerParamsString.size();
