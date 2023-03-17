@@ -3,12 +3,14 @@
 AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
                                std::shared_ptr<ProcedureStorage> procStorage,
                                std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
-                               std::shared_ptr<ModifiesUsesStorage> usesStorage, bool isTransitive) {
+                               std::shared_ptr<ModifiesUsesStorage> usesStorage,
+                               std::shared_ptr<FollowsParentStorage> parentTStorage, bool isTransitive) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
     this->procStorage = procStorage;
     this->modifiesStorage = modifiesStorage;
     this->usesStorage = usesStorage;
+    this->parentTStorage = parentTStorage;
     this->isTransitive = isTransitive;
 }
 
@@ -379,17 +381,49 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
 
 bool AffectsHandler::checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2) {
 
+    //if they are not consecutive
     if (!(a1 + 1 == a2 || a1 - 1 == a2)) {
         return false;
     }
 
+    // means they are consecutive in terms of numbers, but might still be part of different if-else branches
+
+    //check if they are in a common while loop
+    std::unordered_set<StmtNum> a1Parents = parentTStorage->getLeftWildcard(a1);
+    std::unordered_set<StmtNum> a2Parents = parentTStorage->getLeftWildcard(a2);
+    for (StmtNum n : a1Parents) {
+        if (a2Parents.find(n) != a2Parents.end()) {
+            return false;
+        }
+    }
+
+    //given they are not in a while loop, a2 MUST come after a1
+    if (a2 < a1) {
+        return false;
+    }
+
+    //the 2 lines are in an if-else block
+    /*
+     * case1
+     * if (...) then {
+     *     a1;
+     * } else {
+     *     a2;
+     * }
+     *
+     * case2 [WHICH SHOULD NOT BE POSSIBLE IF THEY ARE NOT IN WHILE LOOPS TO BEGIN WITH]
+     * if (...) then {
+     *     a2;
+     * } else {
+     *     a1;
+     * }
+     */
     std::unordered_set<Stmt> oneLineBeforeA1Stmt = stmtStorage->getStatementType(a1 - 1);
     std::unordered_set<Stmt> twoLinesBeforeA2Stmt = stmtStorage->getStatementType(a2 - 2);
 
     std::unordered_set<Stmt> twoLinesBeforeA1Stmt = stmtStorage->getStatementType(a1 - 2);
     std::unordered_set<Stmt> oneLineBeforeA2Stmt = stmtStorage->getStatementType(a2 - 1);
 
-    // means they are consecutive in terms of numbers, but might still be part of different if-else branches
     if ((oneLineBeforeA1Stmt.find(AppConstants::IF) != oneLineBeforeA1Stmt.end()) &&
         (twoLinesBeforeA2Stmt.find(AppConstants::IF) != twoLinesBeforeA2Stmt.end())) {
         return false;
