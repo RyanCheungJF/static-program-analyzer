@@ -86,4 +86,6 @@ private:
     std::vector<std::vector<std::string>> bfsTraversalOneWildcard(StmtNum a1, StmtNum a2);
 
     bool checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2);
+
+    std::vector<std::vector<std::string>> nonTransitiveOneIntOneWildcard(StmtNum a1, StmtNum a2);
 };
