@@ -54,9 +54,6 @@ std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard() {
 }
 
 std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Parameter param2) {
-
-    std::string paramString1 = param1.getValue();
-    std::string paramString2 = param2.getValue();
     ParameterType paramType1 = param1.getType();
     ParameterType paramType2 = param2.getType();
     bool isProcnameParam1 = paramType1 == ParameterType::FIXED_STRING;

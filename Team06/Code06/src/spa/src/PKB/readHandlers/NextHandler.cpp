@@ -9,9 +9,6 @@ NextHandler::NextHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr
 }
 
 std::vector<std::vector<std::string>> NextHandler::handle(Parameter param1, Parameter param2) {
-
-    std::string paramString1 = param1.getValue();
-    std::string paramString2 = param2.getValue();
     ParameterType paramType1 = param1.getType();
     ParameterType paramType2 = param2.getType();
 
@@ -97,7 +94,6 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardInt(Parameter p
 
 // returns {param1Num, lineNum}
 std::vector<std::vector<std::string>> NextHandler::handleStmttypeInt(Parameter param1, Parameter param2) {
-    std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
     StmtNum n2 = stoi(paramString2);
     Stmt type = param1.getTypeString();
@@ -123,7 +119,6 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeInt(Parameter p
 // returns {lineNum, param2Num}
 std::vector<std::vector<std::string>> NextHandler::handleIntStmttype(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
-    std::string paramString2 = param2.getValue();
     StmtNum n1 = stoi(paramString1);
     Stmt type = param2.getTypeString();
     ProcName proc = procStorage->getProcedure(n1);
@@ -147,7 +142,6 @@ std::vector<std::vector<std::string>> NextHandler::handleIntStmttype(Parameter p
 
 // returns {param1Num, sNum}
 std::vector<std::vector<std::string>> NextHandler::handleStmttypeWildcard(Parameter param1) {
-    std::string paramString1 = param1.getValue();
     Stmt type = param1.getTypeString();
     std::vector<std::vector<std::string>> res;
 
@@ -171,7 +165,6 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeWildcard(Parame
 
 // returns {sNum, param2Num}
 std::vector<std::vector<std::string>> NextHandler::handleWildcardStmttype(Parameter param2) {
-    std::string paramString2 = param2.getValue();
     Stmt type = param2.getTypeString();
     std::vector<std::vector<std::string>> res;
 
@@ -194,8 +187,6 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardStmttype(Parame
 }
 
 std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parameter param1, Parameter param2) {
-    std::string paramString1 = param1.getValue();
-    std::string paramString2 = param2.getValue();
     Stmt type1 = param1.getTypeString();
     Stmt type2 = param2.getTypeString();
     std::vector<std::vector<std::string>> res;
@@ -383,7 +374,6 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardIntTransitive(P
 
 // returns {param1Num, lineNum}
 std::vector<std::vector<std::string>> NextHandler::handleStmttypeIntTransitive(Parameter param1, Parameter param2) {
-    std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
     StmtNum n2 = stoi(paramString2);
     Stmt type = param1.getTypeString();
@@ -413,7 +403,7 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeIntTransitive(P
         seen.insert(curr[0]);
 
         if (stmttypeLines.find(curr[0]) != stmttypeLines.end()) {
-            res.push_back({std::to_string(curr[0]), std::to_string(curr[1])});
+            res.push_back({std::to_string(curr[0]), paramString2});
         }
 
         for (StmtNum parent : graph[curr[0]][AppConstants::PARENTS]) {
@@ -426,7 +416,6 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeIntTransitive(P
 // returns {lineNum, param2Num}
 std::vector<std::vector<std::string>> NextHandler::handleIntStmttypeTransitive(Parameter param1, Parameter param2) {
     std::string paramString1 = param1.getValue();
-    std::string paramString2 = param2.getValue();
     StmtNum n1 = stoi(paramString1);
     Stmt type = param2.getTypeString();
     ProcName proc = procStorage->getProcedure(n1);
@@ -454,7 +443,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntStmttypeTransitive(P
         }
         seen.insert(curr[1]);
         if (stmttypeLines.find(curr[1]) != stmttypeLines.end()) {
-            res.push_back({std::to_string(curr[0]), std::to_string(curr[1])});
+            res.push_back({paramString1, std::to_string(curr[1])});
         }
 
         for (StmtNum child : graph[curr[1]][AppConstants::CHILDREN]) {
@@ -466,7 +455,6 @@ std::vector<std::vector<std::string>> NextHandler::handleIntStmttypeTransitive(P
 
 // returns {param1Num, sNum}
 std::vector<std::vector<std::string>> NextHandler::handleStmttypeWildcardTransitive(Parameter param1) {
-    std::string paramString1 = param1.getValue();
     Stmt type = param1.getTypeString();
     std::vector<std::vector<std::string>> res;
 
@@ -509,7 +497,6 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeWildcardTransit
 
 // returns {sNum, param2Num}
 std::vector<std::vector<std::string>> NextHandler::handleWildcardStmttypeTransitive(Parameter param2) {
-    std::string paramString1 = param2.getValue();
     Stmt type = param2.getTypeString();
     std::vector<std::vector<std::string>> res;
 
@@ -552,8 +539,6 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardStmttypeTransit
 
 std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransitive(Parameter param1,
                                                                                     Parameter param2) {
-    std::string paramString1 = param1.getValue();
-    std::string paramString2 = param2.getValue();
     Stmt type = param1.getTypeString();
     Stmt type2 = param2.getTypeString();
     std::unordered_set<StmtNum> stmttypeLines2 = stmtStorage->getStatementNumbers(type2);

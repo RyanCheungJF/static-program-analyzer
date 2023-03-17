@@ -83,7 +83,6 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynSyn(Paramet
 }
 
 std::vector<std::vector<std::string>> FollowsParentHandler::handleSynWildcard(Parameter param1) {
-    std::string paramString1 = param1.getValue();
     std::vector<std::vector<std::string>> res;
 
     std::unordered_set<StmtNum> typedStmtNums = stmtStorage->getStatementNumbers(param1.getTypeString());
@@ -111,7 +110,6 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardInt(Pa
 }
 
 std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardSyn(Parameter param2) {
-    std::string paramString2 = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
     std::unordered_set<StmtNum> typedStmtNums = stmtStorage->getStatementNumbers(param2.getTypeString());
@@ -137,9 +135,6 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardWildca
 }
 
 std::vector<std::vector<std::string>> FollowsParentHandler::handle(Parameter param1, Parameter param2) {
-
-    std::string paramString1 = param1.getValue();
-    std::string paramString2 = param2.getValue();
     ParameterType paramType1 = param1.getType();
     ParameterType paramType2 = param2.getType();
     bool isIntParam1 = paramType1 == ParameterType::FIXED_INT;
