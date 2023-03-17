@@ -54,8 +54,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
         return res;
     }
 
-    std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getEnt(a1);
-    std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getEnt(a2);
+    std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getRightItems(a1);
+    std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getRightItems(a2);
     std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
     if (commonVariables.empty()) {
         return res;
@@ -239,7 +239,7 @@ AffectsHandler::getVariablesModifiedInControlFlowPath(std::unordered_set<StmtNum
         if (stmtTypes.find(AppConstants::ASSIGN) != stmtTypes.end() ||
             stmtTypes.find(AppConstants::READ) != stmtTypes.end() ||
             stmtTypes.find(AppConstants::CALL) != stmtTypes.end()) {
-            std::unordered_set<Ent> variablesModifiedInCurrentLine = modifiesStorage->getEnt(num);
+            std::unordered_set<Ent> variablesModifiedInCurrentLine = modifiesStorage->getRightItems(num);
             variablesModifiedInPath.insert(variablesModifiedInCurrentLine.begin(),
                                            variablesModifiedInCurrentLine.end());
         }
@@ -414,13 +414,15 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
         return res;
     }
 
-    std::unordered_set<Ent> variablesInCurrA = isIntWildcard ? modifiesStorage->getEnt(currA) : usesStorage->getEnt(currA);
+    std::unordered_set<Ent> variablesInCurrA =
+        isIntWildcard ? modifiesStorage->getRightItems(currA) : usesStorage->getRightItems(currA);
     for (StmtNum otherA : assignStatements) {
         if (procStorage->getProcedure(currA) != procStorage->getProcedure(otherA)) {
             continue;
         }
 
-        std::unordered_set<Ent> variablesInOtherA = isIntWildcard ? usesStorage->getEnt(otherA) : modifiesStorage->getEnt(otherA);
+        std::unordered_set<Ent> variablesInOtherA =
+            isIntWildcard ? usesStorage->getRightItems(otherA) : modifiesStorage->getRightItems(otherA);
         std::unordered_set<Ent> commonVariables = getCommonVariables(variablesInCurrA, variablesInOtherA);
         if (commonVariables.empty()) {
             continue;

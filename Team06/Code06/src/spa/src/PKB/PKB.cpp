@@ -91,7 +91,7 @@ void PKB::setModifiesS(StmtNum num, std::unordered_set<Ent> entities) {
 }
 
 void PKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {
-    modifiesStorage->writeP(name, entities);
+    modifiesStorage->write(name, entities);
 }
 
 void PKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer) {
@@ -291,19 +291,19 @@ std::unordered_set<ProcName> PKB::getAllProcedureNames() {
 }
 
 std::unordered_set<Ent> PKB::getUsesS(StmtNum num) {
-    return usesStorage->getEnt(num);
+    return usesStorage->getRightItems(num);
 }
 
 std::unordered_set<Ent> PKB::getUsesP(ProcName name) {
-    return usesStorage->getEnt(name);
+    return usesStorage->getRightItems(name);
 }
 
 std::unordered_set<Ent> PKB::getModifiesS(StmtNum num) {
-    return modifiesStorage->getEnt(num);
+    return modifiesStorage->getRightItems(num);
 }
 
 std::unordered_set<Ent> PKB::getModifiesP(ProcName name) {
-    return modifiesStorage->getEnt(name);
+    return modifiesStorage->getRightItems(name);
 }
 
 std::unordered_set<StmtNum> PKB::getIfStatementNumbers() {
@@ -315,7 +315,7 @@ std::unordered_set<StmtNum> PKB::getWhileStatementNumbers() {
 }
 
 std::unordered_set<StmtNum> PKB::getContainedStatements(StmtNum containerNum) {
-    return parentTStorage->getRightWildcard(containerNum);
+    return parentTStorage->getRightItems(containerNum);
 }
 
 std::pair<StmtNum, ProcName> PKB::getCallStmt(StmtNum s) {
@@ -323,7 +323,7 @@ std::pair<StmtNum, ProcName> PKB::getCallStmt(StmtNum s) {
 }
 
 std::unordered_set<ProcName> PKB::getCallsT(ProcName p) {
-    return callsTStorage->getCallees(p);
+    return callsTStorage->getRightItems(p);
 }
 
 std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> PKB::getCFG(ProcName name) {

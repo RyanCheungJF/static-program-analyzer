@@ -128,14 +128,10 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardSyn(Pa
 
 std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardWildcard() {
     std::vector<std::vector<std::string>> res;
-
-    std::pair<std::vector<StmtNum>, std::vector<StmtNum>> stmtNumsArrayPair = rlStorage->getAllPairs();
-    std::vector<StmtNum> leftStmtNums = stmtNumsArrayPair.first;
-    std::vector<StmtNum> rightStmtNums = stmtNumsArrayPair.second;
-    for (int i = 0; i < leftStmtNums.size(); i++) {
-        std::string leftNumString = to_string(leftStmtNums[i]);
-        std::string rightNumString = to_string(rightStmtNums[i]);
-        res.push_back({leftNumString, rightNumString});
+    for (auto followee : rlStorage->getAllLeftItems()) {
+        for (auto follower : rlStorage->getRightItems(followee)) {
+            res.push_back({std::to_string(followee), std::to_string(follower)});
+        }
     }
     return res;
 }
