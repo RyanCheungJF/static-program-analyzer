@@ -23,7 +23,6 @@
 #include "readHandlers/ifWhilePatternHandler.h"
 #include "storage/CFGStorage.h"
 #include "storage/CallStorage.h"
-#include "storage/ConstantStorage.h"
 #include "storage/EntityStorage.h"
 #include "storage/ModifiesUsesStorage.h"
 #include "storage/PatternStorage.h"
