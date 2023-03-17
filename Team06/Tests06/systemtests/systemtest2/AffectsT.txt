@@ -31,5 +31,5 @@ Select a such that Affects*(a, 25)
 7 - comment
 assign a;
 Select a such that Affects*(a, 26)
-22, 23, 25
+22
 5000
