@@ -4,7 +4,8 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shar
                                std::shared_ptr<ProcedureStorage> procStorage,
                                std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
                                std::shared_ptr<ModifiesUsesStorage> usesStorage,
-                               std::shared_ptr<FollowsParentStorage> parentTStorage, bool isTransitive) {
+                               std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> parentTStorage,
+                               bool isTransitive) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
     this->procStorage = procStorage;
@@ -389,8 +390,8 @@ bool AffectsHandler::checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2) {
     // means they are consecutive in terms of numbers, but might still be part of different if-else branches
 
     //check if they are in a common while loop
-    std::unordered_set<StmtNum> a1Parents = parentTStorage->getLeftWildcard(a1);
-    std::unordered_set<StmtNum> a2Parents = parentTStorage->getLeftWildcard(a2);
+    std::unordered_set<StmtNum> a1Parents = parentTStorage->getLeftItems(a1);
+    std::unordered_set<StmtNum> a2Parents = parentTStorage->getLeftItems(a2);
     for (StmtNum n : a1Parents) {
         if (a2Parents.find(n) != a2Parents.end()) {
             return false;

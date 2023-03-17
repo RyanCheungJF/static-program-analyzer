@@ -8,7 +8,7 @@
 #include "../storage/ModifiesUsesStorage.h"
 #include "../storage/ProcedureStorage.h"
 #include "../storage/StmtStorage.h"
-#include "../storage/FollowsParentStorage.h"
+#include "../storage/RelationshipStorage.h"
 
 struct hashFunctionTuple {
     int cantor(int a, int b) const {
@@ -34,7 +34,7 @@ public:
     AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
                    std::shared_ptr<ProcedureStorage> procStorage, std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
                    std::shared_ptr<ModifiesUsesStorage> usesStorage,
-                   std::shared_ptr<FollowsParentStorage> parentTStorage, bool isTransitive);
+                   std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> parentTStorage, bool isTransitive);
     std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
 
 private:
@@ -43,7 +43,7 @@ private:
     std::shared_ptr<ProcedureStorage> procStorage;
     std::shared_ptr<ModifiesUsesStorage> modifiesStorage;
     std::shared_ptr<ModifiesUsesStorage> usesStorage;
-    std::shared_ptr<FollowsParentStorage> parentTStorage;
+    std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> parentTStorage;
     bool isTransitive;
 
     // Affects(1, 2)

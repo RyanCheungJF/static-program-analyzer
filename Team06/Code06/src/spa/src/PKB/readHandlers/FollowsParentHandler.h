@@ -2,7 +2,6 @@
 #include <memory>
 
 #include "../../QPS/entities/Parameter.h"
-#include "../storage/FollowsParentStorage.h"
 #include "../storage/RelationshipStorage.h"
 #include "../storage/StmtStorage.h"
 
