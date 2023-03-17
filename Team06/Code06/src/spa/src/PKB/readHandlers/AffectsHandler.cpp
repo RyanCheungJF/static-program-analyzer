@@ -468,8 +468,13 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
 
         std::unordered_set<StmtNum> controlFlowPath = isIntWildcard ? getControlFlowPathIntInt(currA, otherA, proc) :
                                                       getControlFlowPathIntInt(otherA, currA, proc);
-        if (controlFlowPath.empty() && !checkDirectlyAfterEachOther(currA, otherA)) {
-            continue;
+
+        if (controlFlowPath.empty()) {
+            if (isIntWildcard && !checkDirectlyAfterEachOther(currA, otherA)) {
+                continue;
+            } else if (!isIntWildcard && !checkDirectlyAfterEachOther(otherA, currA)) {
+                continue;
+            }
         }
 
         std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
