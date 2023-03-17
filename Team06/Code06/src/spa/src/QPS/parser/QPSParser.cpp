@@ -20,6 +20,7 @@ vector<Query> QPSParser::parse(string qpsQuery) {
         }
         else if (isSelect(queryStatement)) {
             Query query = selectQueryParser.parse(queryStatement);
+            // TODO: actually why does this even exist? its always only one i think
             queryVec.push_back(query);
         }
         else {
