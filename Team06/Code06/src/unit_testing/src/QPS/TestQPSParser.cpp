@@ -19,6 +19,12 @@ TEST_CASE("parse / select tuple parses without errors / parses without errors an
     REQUIRE_THROWS_AS(qp.parse(test), SemanticException);
 }
 
+TEST_CASE("parse / no closing > / SyntaxError") {
+    string test = "stmt s; variable v;\n Select <s, a such that Follows (s, 1) ";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
 TEST_CASE("parse / select tuple with spaces should return syntax error / syntax error") {
     string test = "stmt s, abc, def, ghi;\n Select <a b c,d e f, g h i> such that Follows (s, 1) ";
     QPSParser qp;

@@ -70,12 +70,6 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
     }
     return params[0].getType() == ParameterType::BOOLEAN ? hasEmptyTable() ? falseVec : trueVec
                                                          : initialTable.getResult();
-    return params[0].getType() == ParameterType::BOOLEAN
-               ? initialTable.isEmptyTable() ? tableVector.empty() // empty tableVector means no clauses
-                                                   ? trueVec
-                                                   : falseVec
-                                             : trueVec
-               : initialTable.getResult();
 }
 
 bool QueryDB::hasEmptyTable() {

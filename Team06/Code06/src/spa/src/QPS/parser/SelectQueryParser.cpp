@@ -120,7 +120,20 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
     start = start + 1;
     if (isTupleStart(wordList[start])) {
         // it is a tuple select clause
-        params = extractSelectTuple(wordList, start, end);
+        vector<string> paramStrings;
+        string tupleString;
+        for (start; start < end; start++) {
+            // recreates tuple string with whitespace removed
+            tupleString += wordList[start];
+        }
+        tie(ignore, paramStrings) = extractParameters(tupleString, "<", ">", ",");
+        for (string synonym : paramStrings) {
+            if (!isSynonym(synonym)) {
+                throw SyntaxException();
+            }
+            Parameter param = Parameter::makeParameter(synonym, AppConstants::SYNONYM);
+            params.push_back(param);
+        }
         return params;
     }
     else if (isSynonym(wordList[start])) {

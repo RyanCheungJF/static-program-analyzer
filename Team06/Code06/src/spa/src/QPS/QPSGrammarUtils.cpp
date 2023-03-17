@@ -5,7 +5,6 @@
 #include "QPSGrammarUtils.h"
 
 #include <algorithm>
-#include <iostream>
 #include <regex>
 #include <string>
 
@@ -28,7 +27,7 @@ bool isTupleStart(string s) {
 }
 
 bool isBoolean(string s) {
-    return s == "BOOLEAN";
+    return s == AppConstants::BOOLEAN;
 }
 
 bool isInteger(string integer) {
