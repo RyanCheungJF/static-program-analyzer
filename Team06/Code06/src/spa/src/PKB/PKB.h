@@ -151,12 +151,9 @@ public:
 private:
     // STATEMENTS
     std::shared_ptr<StmtStorage> statementStorage;
-    std::shared_ptr<EntityStorage> entityStorage;
     std::shared_ptr<ProcedureStorage> procedureStorage;
-    std::shared_ptr<ConstantStorage> constantStorage;
-    std::shared_ptr<PatternWithExprStorage> assignPatternStorage;
-    std::shared_ptr<PatternStorage> ifPatternStorage;
-    std::shared_ptr<PatternStorage> whilePatternStorage;
+    std::shared_ptr<EntityStorage<Ent>> entityStorage;
+    std::shared_ptr<EntityStorage<Const>> constantStorage;
     std::shared_ptr<CallStorage> callStorage;
 
     // RELATIONSHIPS
@@ -169,6 +166,11 @@ private:
     std::shared_ptr<RelationshipStorage<Ent, Ent>> callsStorage;
     std::shared_ptr<RelationshipStorage<Ent, Ent>> callsTStorage;
     std::shared_ptr<CFGStorage> cfgStorage;
+
+    // PATTERNS
+    std::shared_ptr<PatternWithExprStorage> assignPatternStorage;
+    std::shared_ptr<PatternStorage> ifPatternStorage;
+    std::shared_ptr<PatternStorage> whilePatternStorage;
 
     RelationshipCache relationshipCache;
     ParameterCache parameterCache;

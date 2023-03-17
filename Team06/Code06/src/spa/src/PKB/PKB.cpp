@@ -6,9 +6,9 @@ void PKB::initializePkb() {
     this->parentStorage = std::make_shared<RelationshipStorage<StmtNum, StmtNum>>();
     this->parentTStorage = std::make_shared<RelationshipStorage<StmtNum, StmtNum>>();
     this->statementStorage = std::make_shared<StmtStorage>();
-    this->entityStorage = std::make_shared<EntityStorage>();
     this->procedureStorage = std::make_shared<ProcedureStorage>();
-    this->constantStorage = std::make_shared<ConstantStorage>();
+    this->entityStorage = std::make_shared<EntityStorage<Ent>>();
+    this->constantStorage = std::make_shared<EntityStorage<Const>>();
     this->assignPatternStorage = std::make_shared<PatternWithExprStorage>();
     this->ifPatternStorage = std::make_shared<PatternStorage>();
     this->whilePatternStorage = std::make_shared<PatternStorage>();
@@ -63,7 +63,7 @@ void PKB::setEntity(StmtNum num, std::unordered_set<Ent> entities) {
 }
 
 void PKB::setConstant(StmtNum num, std::unordered_set<Const> constants) {
-    constantStorage->writeConstant(num, constants);
+    constantStorage->writeEntity(num, constants);
 }
 
 void PKB::setCall(StmtNum callLine, ProcName procedure_being_called) {
@@ -166,7 +166,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
         }
     }
     else if (type == ParameterType::CONSTANT) {
-        std::unordered_set<Const> constants = constantStorage->getConstNames();
+        std::unordered_set<Const> constants = constantStorage->getEntNames();
         for (auto constant : constants) {
             res.push_back(to_string(constant));
         }
@@ -251,7 +251,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
     }
     // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
     else if (paramType == ParameterType::CONSTANT) {
-        std::unordered_set<Const> consts = constantStorage->getConstNames();
+        std::unordered_set<Const> consts = constantStorage->getEntNames();
         for (auto constant : consts) {
             res.push_back({std::to_string(constant), std::to_string(constant)});
         }
