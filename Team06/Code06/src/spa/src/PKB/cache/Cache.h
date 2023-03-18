@@ -17,6 +17,10 @@ public:
         return cache[key];
     }
 
+    void clearCache() {
+        cache.clear();
+    }
+
 private:
     std::unordered_map<std::shared_ptr<T>, valueType, hash, equals> cache;
 };
