@@ -1,0 +1,5 @@
+4 - comment
+assign a;
+Select a such that Affects(74, a)
+none
+5000

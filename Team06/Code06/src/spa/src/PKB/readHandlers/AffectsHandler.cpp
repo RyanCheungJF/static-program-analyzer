@@ -221,7 +221,7 @@ std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1,
             std::unordered_set<StmtNum> path = curr.first;
             path.erase(a1);
             res.insert(path.begin(), path.end());
-            continue;
+            return res;
         }
         else if (curr.first.find(curr.second) != curr.first.end()) {
             continue;
@@ -236,7 +236,7 @@ std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1,
             queue.push_back({nxtPath, child});
         }
     }
-    return res;
+    return {};
 }
 
 std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<Ent> variablesModifiedInA1,
@@ -437,15 +437,13 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
         return res;
     }
 
-    std::unordered_set<Ent> variablesInCurrA =
-        isIntWildcard ? modifiesStorage->getEnt(currA) : usesStorage->getEnt(currA);
+    std::unordered_set<Ent> variablesInCurrA = isIntWildcard ? modifiesStorage->getEnt(currA) : usesStorage->getEnt(currA);
     for (StmtNum otherA : assignStatements) {
         if (procStorage->getProcedure(currA) != procStorage->getProcedure(otherA)) {
             continue;
         }
 
-        std::unordered_set<Ent> variablesInOtherA =
-            isIntWildcard ? usesStorage->getEnt(otherA) : modifiesStorage->getEnt(otherA);
+        std::unordered_set<Ent> variablesInOtherA = isIntWildcard ? usesStorage->getEnt(otherA) : modifiesStorage->getEnt(otherA);
         std::unordered_set<Ent> commonVariables = getCommonVariables(variablesInCurrA, variablesInOtherA);
         if (commonVariables.empty()) {  // O(1) since there is really only 1 element
             continue;
@@ -454,26 +452,43 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
         std::unordered_set<StmtNum> controlFlowPath = isIntWildcard ? getControlFlowPathIntInt(currA, otherA, proc, commonVariables)
                                                                     : getControlFlowPathIntInt(otherA, currA, proc, commonVariables);
 
-        if (controlFlowPath.empty()) {
-            if (isIntWildcard && !checkDirectlyAfterEachOther(currA, otherA) &&
-                !checkHaveCommonWhileLoop(currA, otherA)) {
-                continue;
-            }
-            else if (!isIntWildcard && !checkDirectlyAfterEachOther(otherA, currA) &&
-                     !checkHaveCommonWhileLoop(otherA, currA)) {
-                continue;
-            }
-        }
 
-        if (currA == otherA) {
+
+        bool consec = isIntWildcard ? checkDirectlyAfterEachOther(currA, otherA) : checkDirectlyAfterEachOther(otherA, currA);
+        bool insideCommonWhile = isIntWildcard ? checkHaveCommonWhileLoop(currA, otherA) : checkHaveCommonWhileLoop(otherA, currA);
+
+        if (controlFlowPath.empty()) {
+            if (consec) {
             isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
                           : res.push_back({std::to_string(otherA), paramString});
             continue;
-        }
+            }
 
-        isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
-                      : res.push_back({std::to_string(otherA), paramString});
+//            if (isIntWildcard && !checkDirectlyAfterEachOther(currA, otherA) &&
+//                !checkHaveCommonWhileLoop(currA, otherA) && (currA != otherA)) {
+//                continue;
+//            }
+//            else if (!isIntWildcard && !checkDirectlyAfterEachOther(otherA, currA) &&
+//                     !checkHaveCommonWhileLoop(otherA, currA) && (currA != otherA)) {
+//                continue;
+//            }
+
+//            isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
+//                          : res.push_back({std::to_string(otherA), paramString});
+
+        } else {
+            if (currA == otherA) {
+                isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
+                              : res.push_back({std::to_string(otherA), paramString});
+                continue;
+            }
+
+            isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
+                          : res.push_back({std::to_string(otherA), paramString});
+
+        }
     }
+
     return res;
 }
 
