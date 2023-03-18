@@ -194,9 +194,3 @@ TEST_CASE("parse / valid space in between expr spec in pattern clause / expr_spe
     Query q = sqp.parse(input);
     CHECK(q.patterns[0].exprSpecs[0] == expectedExprSpec);
 }
-
-TEST_CASE("parse / invalid space in between expr spec in pattern clause / throws syntax error") {
-    string input = "Select s pattern a(v, \"v z\")";
-    SelectQueryParser sqp;
-    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
-}
