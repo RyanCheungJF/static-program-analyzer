@@ -52,134 +52,82 @@ std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1
     return res;
 }
 
-// returns {param1Num, sNum}
-std::vector<std::vector<std::string>> NextHandler::handleIntWildcard(Parameter param1) {
-    std::string paramString1 = param1.getValue();
-    StmtNum n1 = stoi(paramString1);
-    ProcName proc1 = procStorage->getProcedure(n1);
-    std::vector<std::vector<std::string>> res;
-
-    if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
-        return res;
-    }
-
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-        cfgStorage->getGraph(proc1);
-    std::unordered_set<StmtNum> children = graph[n1][AppConstants::CHILDREN];
-    for (StmtNum child : children) {
-        res.push_back({paramString1, std::to_string(child)});
-    }
-    return res;
-}
-
-// returns {sNum, param2Num}
-std::vector<std::vector<std::string>> NextHandler::handleWildcardInt(Parameter param2) {
-    std::string paramString2 = param2.getValue();
-    StmtNum n2 = stoi(paramString2);
-    ProcName proc2 = procStorage->getProcedure(n2);
-    std::vector<std::vector<std::string>> res;
-
-    if (proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
-        return res;
-    }
-
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-        cfgStorage->getGraph(proc2);
-    std::unordered_set<StmtNum> parents = graph[n2][AppConstants::PARENTS];
-    for (StmtNum parent : parents) {
-        res.push_back({std::to_string(parent), paramString2});
-    }
-    return res;
-}
-
-// returns {param1Num, lineNum}
-std::vector<std::vector<std::string>> NextHandler::handleStmttypeInt(Parameter param1, Parameter param2) {
-    std::string paramString2 = param2.getValue();
-    StmtNum n2 = stoi(paramString2);
-    Stmt type = param1.getTypeString();
-    ProcName proc = procStorage->getProcedure(n2);
+std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardNonT(Parameter intParam, bool isFindChildren) {
+    std::string intString = intParam.getValue();
+    StmtNum intValue = stoi(intString);
+    ProcName proc = procStorage->getProcedure(intValue);
     std::vector<std::vector<std::string>> res;
 
     if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
 
-    std::unordered_set<StmtNum> stmttypeLines = stmtStorage->getStatementNumbers(type);
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-        cfgStorage->getGraph(proc);
-    std::unordered_set<StmtNum> parents = graph[n2][AppConstants::PARENTS];
-    for (StmtNum parent : parents) {
-        if (stmttypeLines.find(parent) != stmttypeLines.end()) {
-            res.push_back({std::to_string(parent), paramString2});
+    auto graph = cfgStorage->getGraph(proc);
+    std::unordered_set<StmtNum> relatives =
+        graph[intValue][isFindChildren ? AppConstants::CHILDREN : AppConstants::PARENTS];
+    for (StmtNum relative : relatives) {
+        if (isFindChildren) {
+            res.push_back({intString, std::to_string(relative)});
+        }
+        else {
+            res.push_back({std::to_string(relative), intString});
         }
     }
     return res;
 }
 
-// returns {lineNum, param2Num}
-std::vector<std::vector<std::string>> NextHandler::handleIntStmttype(Parameter param1, Parameter param2) {
-    std::string paramString1 = param1.getValue();
-    StmtNum n1 = stoi(paramString1);
-    Stmt type = param2.getTypeString();
-    ProcName proc = procStorage->getProcedure(n1);
+std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtNonT(Parameter intParam, Parameter stmtParam,
+                                                                     bool isFindChildren) {
+    std::string intString = intParam.getValue();
+    StmtNum intValue = stoi(intString);
+    Stmt stmtType = stmtParam.getTypeString();
+    ProcName proc = procStorage->getProcedure(intValue);
     std::vector<std::vector<std::string>> res;
 
     if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
 
-    std::unordered_set<StmtNum> stmttypeLines = stmtStorage->getStatementNumbers(type);
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-        cfgStorage->getGraph(proc);
-    std::unordered_set<StmtNum> children = graph[n1][AppConstants::CHILDREN];
-    for (StmtNum child : children) {
-        if (stmttypeLines.find(child) != stmttypeLines.end()) {
-            res.push_back({paramString1, std::to_string(child)});
+    std::unordered_set<StmtNum> stmtTypeLines = stmtStorage->getStatementNumbers(stmtType);
+    auto graph = cfgStorage->getGraph(proc);
+    std::unordered_set<StmtNum> relatives =
+        graph[intValue][isFindChildren ? AppConstants::CHILDREN : AppConstants::PARENTS];
+    for (StmtNum relative : relatives) {
+        if (stmtTypeLines.find(relative) == stmtTypeLines.end()) {
+            continue;
+        }
+
+        if (isFindChildren) {
+            res.push_back({intString, std::to_string(relative)});
+        }
+        else {
+            res.push_back({std::to_string(relative), intString});
         }
     }
     return res;
 }
 
-// returns {param1Num, sNum}
-std::vector<std::vector<std::string>> NextHandler::handleStmttypeWildcard(Parameter param1) {
-    Stmt type = param1.getTypeString();
+std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardNonT(Parameter stmtParam, bool isFindChildren) {
+    Stmt stmtType = stmtParam.getTypeString();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum> stmttypeLines = stmtStorage->getStatementNumbers(type);
-    std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines = getProcedureLines(stmttypeLines);
+    std::unordered_set<StmtNum> stmtTypeLines = stmtStorage->getStatementNumbers(stmtType);
+    std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines = getProcedureLines(stmtTypeLines);
 
-    for (auto kv : procedure_lines) {
-        ProcName proc = kv.first;
-        std::unordered_set<StmtNum> lines = kv.second;
-        std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-            cfgStorage->getGraph(proc);
+    for (auto row : procedure_lines) {
+        ProcName proc = row.first;
+        std::unordered_set<StmtNum> lines = row.second;
+        auto graph = cfgStorage->getGraph(proc);
         for (StmtNum line : lines) {
-            std::unordered_set<StmtNum> children = graph[line][AppConstants::CHILDREN];
-            for (StmtNum child : children) {
-                res.push_back({std::to_string(line), std::to_string(child)});
-            }
-        }
-    }
-    return res;
-}
-
-// returns {sNum, param2Num}
-std::vector<std::vector<std::string>> NextHandler::handleWildcardStmttype(Parameter param2) {
-    Stmt type = param2.getTypeString();
-    std::vector<std::vector<std::string>> res;
-
-    std::unordered_set<StmtNum> stmttypeLines = stmtStorage->getStatementNumbers(type);
-    std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines = getProcedureLines(stmttypeLines);
-
-    for (auto kv : procedure_lines) {
-        ProcName proc = kv.first;
-        std::unordered_set<StmtNum> lines = kv.second;
-        std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-            cfgStorage->getGraph(proc);
-        for (StmtNum line : lines) {
-            std::unordered_set<StmtNum> parents = graph[line][AppConstants::PARENTS];
-            for (StmtNum parent : parents) {
-                res.push_back({std::to_string(parent), std::to_string(line)});
+            std::unordered_set<StmtNum> relatives =
+                graph[line][isFindChildren ? AppConstants::CHILDREN : AppConstants::PARENTS];
+            for (StmtNum relative : relatives) {
+                if (isFindChildren) {
+                    res.push_back({std::to_string(line), std::to_string(relative)});
+                }
+                else {
+                    res.push_back({std::to_string(relative), std::to_string(line)});
+                }
             }
         }
     }
@@ -200,8 +148,7 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
         for (auto kv : procedure_lines) {
             ProcName proc = kv.first;
             std::unordered_set<StmtNum> lines = kv.second;
-            std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-                cfgStorage->getGraph(proc);
+            auto graph = cfgStorage->getGraph(proc);
             for (StmtNum line : lines) {
                 std::unordered_set<StmtNum> children = graph[line][AppConstants::CHILDREN];
                 for (StmtNum child : children) {
@@ -641,29 +588,29 @@ std::vector<std::vector<std::string>> NextHandler::handleNonTransitive(Parameter
             return handleIntInt(param1, param2);
         }
         else if (isTypedStmtParam2) {
-            return handleIntStmttype(param1, param2);
+            return oneIntOneStmtNonT(param1, param2, AppConstants::IS_FIND_CHILDREN);
         }
         else if (isWildCardParam2) {
-            return handleIntWildcard(param1);
+            return oneIntOneWildcardNonT(param1, AppConstants::IS_FIND_CHILDREN);
         }
     }
     else if (isTypedStmtParam1) {
         if (isFixedIntParam2) {
-            return handleStmttypeInt(param1, param2);
+            return oneIntOneStmtNonT(param2, param1, !AppConstants::IS_FIND_CHILDREN);
         }
         else if (isTypedStmtParam2) {
             return handleStmttypeStmttype(param1, param2);
         }
         else if (isWildCardParam2) {
-            return handleStmttypeWildcard(param1);
+            return oneStmtOneWildcardNonT(param1, AppConstants::IS_FIND_CHILDREN);
         }
     }
     else if (isWildCardParam1) {
         if (isFixedIntParam2) {
-            return handleWildcardInt(param2);
+            return oneIntOneWildcardNonT(param2, !AppConstants::IS_FIND_CHILDREN);
         }
         else if (isTypedStmtParam2) {
-            return handleWildcardStmttype(param2);
+            return oneStmtOneWildcardNonT(param2, !AppConstants::IS_FIND_CHILDREN);
         }
         else if (isWildCardParam2) {
             return handleWildcardWildcard();

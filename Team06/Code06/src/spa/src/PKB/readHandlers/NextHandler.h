@@ -88,4 +88,11 @@ private:
                                                            bool isFixedIntParam2, bool isWildCardParam1,
                                                            bool isWildCardParam2, bool isTypedStmtParam1,
                                                            bool isTypedStmtParam2);
+
+    std::vector<std::vector<std::string>> oneIntOneStmtNonT(Parameter intParam, Parameter stmtParam,
+                                                            bool isFindChildren);
+
+    std::vector<std::vector<std::string>> oneIntOneWildcardNonT(Parameter intParam, bool isFindChildren);
+
+    std::vector<std::vector<std::string>> oneStmtOneWildcardNonT(Parameter stmtParam, bool isFindChildren);
 };
