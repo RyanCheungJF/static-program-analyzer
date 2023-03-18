@@ -3,81 +3,81 @@
 std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
     std::deque<Token> tokens;
 
-    while (peekNextToken(file) != EOF) {
+    while (peekNextChar(file) != EOF) {
         std::string tokenValue = "";
 
-        while (std::isspace(peekNextToken(file))) {
-            getNextToken(file); // Eat whitespace
+        while (std::isspace(peekNextChar(file))) {
+            getNextChar(file); // Eat whitespace
         }
 
-        if (std::isdigit(peekNextToken(file))) { // DIGIT: 0-9
-            tokenValue += getNextToken(file);
+        if (std::isdigit(peekNextChar(file))) { // DIGIT: 0-9
+            tokenValue += getNextChar(file);
             /* Between two alphanumeric tokens, there must be at least one whitespace
                in between them, so something like 123ab should throw an error. So we
                simply fetch all the alphanumeric characters & rely on isInteger() to
                check if it's a valid integer.*/
-            while (std::isalnum(peekNextToken(file))) {
-                tokenValue += getNextToken(file);
+            while (std::isalnum(peekNextChar(file))) {
+                tokenValue += getNextChar(file);
             }
             if (!isInteger(tokenValue)) {
                 throw SyntaxErrorException("Integer does not follow format: 0 | NZDIGIT ( DIGIT )*  -> " + tokenValue);
             }
             tokens.push_back(Token(TokenType::INTEGER, tokenValue));
         }
-        else if (std::isalpha(peekNextToken(file))) { // LETTER: A-Z | a-z
-            tokenValue += getNextToken(file);
-            while (std::isalnum(peekNextToken(file))) {
-                tokenValue += getNextToken(file);
+        else if (std::isalpha(peekNextChar(file))) { // LETTER: A-Z | a-z
+            tokenValue += getNextChar(file);
+            while (std::isalnum(peekNextChar(file))) {
+                tokenValue += getNextChar(file);
             }
             // Don't need a check for name here, since format for NAME -> LETTER (LETTER | DIGIT)*
             tokens.push_back(Token(TokenType::NAME, tokenValue));
         }
         // Between two non-alphanumeric tokens, there need not be a whitespace in between the tokens
-        else if (peekNextToken(file) == AppConstants::NOT) { // Handle !, !=
-            getNextToken(file);
-            if (peekNextToken(file) == AppConstants::EQUAL_SIGN) {
-                getNextToken(file);
+        else if (peekNextChar(file) == AppConstants::NOT) { // Handle !, !=
+            getNextChar(file);
+            if (peekNextChar(file) == AppConstants::EQUAL_SIGN) {
+                getNextChar(file);
                 tokens.push_back(Token(TokenType::RELATIONAL_OPR, AppConstants::NOT_EQUALS));
             }
             else {
                 tokens.push_back(Token(TokenType::NOT));
             }
         }
-        else if (peekNextToken(file) == AppConstants::EQUAL_SIGN) { // Handle =, ==
-            getNextToken(file);
-            if (peekNextToken(file) == AppConstants::EQUAL_SIGN) {
-                getNextToken(file);
+        else if (peekNextChar(file) == AppConstants::EQUAL_SIGN) { // Handle =, ==
+            getNextChar(file);
+            if (peekNextChar(file) == AppConstants::EQUAL_SIGN) {
+                getNextChar(file);
                 tokens.push_back(Token(TokenType::RELATIONAL_OPR, AppConstants::EQUALS));
             }
             else {
                 tokens.push_back(Token(TokenType::ASSIGN));
             }
         }
-        else if (peekNextToken(file) == AppConstants::GREATER ||
-                 peekNextToken(file) == AppConstants::LESS) { // Handle <, >, <=, >=
-            tokenValue += getNextToken(file);
-            if (peekNextToken(file) == AppConstants::EQUAL_SIGN) {
-                tokenValue += getNextToken(file);
+        else if (peekNextChar(file) == AppConstants::GREATER ||
+                 peekNextChar(file) == AppConstants::LESS) { // Handle <, >, <=, >=
+            tokenValue += getNextChar(file);
+            if (peekNextChar(file) == AppConstants::EQUAL_SIGN) {
+                tokenValue += getNextChar(file);
                 tokens.push_back(Token(TokenType::RELATIONAL_OPR, tokenValue));
             }
             else {
                 tokens.push_back(Token(TokenType::RELATIONAL_OPR, tokenValue));
             }
         }
-        else if (peekNextToken(file) == AppConstants::PLUS ||
-                 peekNextToken(file) == AppConstants::MINUS) { // Handle +, -
-            tokenValue += getNextToken(file);
+        else if (peekNextChar(file) == AppConstants::PLUS ||
+                 peekNextChar(file) == AppConstants::MINUS) { // Handle +, -
+            tokenValue += getNextChar(file);
             tokens.push_back(Token(TokenType::EXPR_ARITH_OPR, tokenValue));
         }
-        else if (peekNextToken(file) == AppConstants::MULTIPLY || peekNextToken(file) == AppConstants::DIVIDE ||
-                 peekNextToken(file) == AppConstants::MODULO) { // Handle *, /, %
-            tokenValue += getNextToken(file);
+        else if (peekNextChar(file) == AppConstants::MULTIPLY || peekNextChar(file) == AppConstants::DIVIDE ||
+                 peekNextChar(file) == AppConstants::MODULO) { // Handle *, /, %
+            tokenValue += getNextChar(file);
             tokens.push_back(Token(TokenType::TERM_ARITH_OPR, tokenValue));
         }
-        else if (peekNextToken(file) == AppConstants::AMPERSAND ||
-                 peekNextToken(file) == AppConstants::VERTICAL_BAR) { // Handle &&, ||
-            tokenValue += getNextToken(file);
-            tokenValue += getNextToken(file);
+        else if (peekNextChar(file) == AppConstants::AMPERSAND ||
+                 peekNextChar(file) == AppConstants::VERTICAL_BAR) { // Handle &&, ||
+            tokenValue += getNextChar(file);
+            tokenValue += getNextChar(file);
             if (tokenValue == AppConstants::AND || tokenValue == AppConstants::OR) {
                 tokens.push_back(Token(TokenType::BINARY_LOGICAL_OPR, tokenValue));
             }
@@ -86,7 +86,7 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
             }
         }
         else { // Handle the rest of the tokens
-            char tokenChar = getNextToken(file);
+            char tokenChar = getNextChar(file);
 
             switch (tokenChar) {
             case AppConstants::LEFT_BRACE:
@@ -118,11 +118,11 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
     return tokens;
 }
 
-char Tokenizer::getNextToken(std::stringstream& file) {
+char Tokenizer::getNextChar(std::stringstream& file) {
     return (char)file.get();
 }
 
-char Tokenizer::peekNextToken(std::stringstream& file) {
+char Tokenizer::peekNextChar(std::stringstream& file) {
     return (char)file.peek();
 }
 

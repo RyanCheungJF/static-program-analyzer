@@ -3,7 +3,7 @@
 #include <queue>
 #include <set>
 
-#include "../../qps/entities/Parameter.h"
+#include "../../QPS/entities/Parameter.h"
 #include "../storage/CFGStorage.h"
 #include "../storage/ModifiesUsesStorage.h"
 #include "../storage/ProcedureStorage.h"

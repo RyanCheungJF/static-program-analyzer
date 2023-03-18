@@ -44,13 +44,14 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     ProcName proc2 = procStorage->getProcedure(a2);
     std::vector<std::vector<std::string>> res;
 
+    // either not in any procedure, or both are not in the same procedure
     if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST || proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
-    }
-    else if (proc1 != proc2) {
+    } else if (proc1 != proc2) {
         return res;
     }
 
+    // if both are not assign statements, should also just return nothing already
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
     std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
     if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
@@ -193,7 +194,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
         }
     }
 
-    //remove duplicates
+    // remove duplicates
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
     for (std::tuple<StmtNum, StmtNum, StmtNum> curr : seen) {
         temp.insert({get<0>(curr), get<2>(curr)});
@@ -203,9 +204,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
         res.push_back({std::to_string(p.first), std::to_string(p.second)});
     }
 
-//    for (std::tuple<StmtNum, StmtNum, StmtNum> curr : seen) {
-//        res.push_back({std::to_string(get<0>(curr)), std::to_string(get<2>(curr))});
-//    }
+    //    for (std::tuple<StmtNum, StmtNum, StmtNum> curr : seen) {
+    //        res.push_back({std::to_string(get<0>(curr)), std::to_string(get<2>(curr))});
+    //    }
     return res;
 }
 
@@ -270,11 +271,11 @@ std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<En
         }
     }
 
-//    for (Ent e : variablesUsedInA2) { // O(1) since there is really only 1 element
-//        if (variablesModifiedInA1.find(e) != variablesModifiedInA1.end()) {
-//            commonVariables.insert(e);
-//        }
-//    }
+    //    for (Ent e : variablesUsedInA2) { // O(1) since there is really only 1 element
+    //        if (variablesModifiedInA1.find(e) != variablesModifiedInA1.end()) {
+    //            commonVariables.insert(e);
+    //        }
+    //    }
     return commonVariables;
 }
 
@@ -380,7 +381,8 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
         for (StmtNum num : nextNodes) {
             if (isIntWildcard) {
                 queue.push_back({curr.second, num});
-            } else {
+            }
+            else {
                 queue.push_back({num, curr.first});
             }
         }
@@ -389,8 +391,7 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
     // remove potential duplicate entries
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
     for (std::pair<StmtNum, StmtNum> p : seen) {
-        isIntWildcard ? temp.insert({a1, p.second})
-                      : temp.insert({p.first, a2});
+        isIntWildcard ? temp.insert({a1, p.second}) : temp.insert({p.first, a2});
     }
 
     std::vector<std::vector<std::string>> res;
@@ -404,18 +405,23 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
 
 bool AffectsHandler::checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2) {
 
-    //if they are not consecutive
+    // if they are not consecutive
     if (!(a1 + 1 == a2 || a1 - 1 == a2)) {
         return false;
     }
 
     // means they are consecutive in terms of numbers, but might still be part of different if-else branches
+<<<<<<< HEAD
     //given they are not in a while loop, a2 MUST come after a1
+=======
+
+    // given they are not in a while loop, a2 MUST come after a1
+>>>>>>> pkb
     if (a2 < a1) {
         return false;
     }
 
-    //the 2 lines are in an if-else block
+    // the 2 lines are in an if-else block
     /*
      * case1
      * if (...) then {
@@ -468,26 +474,37 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
     }
 
     std::unordered_set<Ent> variablesInCurrA =
+<<<<<<< HEAD
         isIntWildcard ? modifiesStorage->getRightItems(currA) : usesStorage->getRightItems(currA);
+=======
+        isIntWildcard ? modifiesStorage->getEnt(currA) : usesStorage->getEnt(currA);
+>>>>>>> pkb
     for (StmtNum otherA : assignStatements) {
         if (procStorage->getProcedure(currA) != procStorage->getProcedure(otherA)) {
             continue;
         }
 
         std::unordered_set<Ent> variablesInOtherA =
+<<<<<<< HEAD
             isIntWildcard ? usesStorage->getRightItems(otherA) : modifiesStorage->getRightItems(otherA);
+=======
+            isIntWildcard ? usesStorage->getEnt(otherA) : modifiesStorage->getEnt(otherA);
+>>>>>>> pkb
         std::unordered_set<Ent> commonVariables = getCommonVariables(variablesInCurrA, variablesInOtherA);
         if (commonVariables.empty()) {
             continue;
         }
 
-        std::unordered_set<StmtNum> controlFlowPath = isIntWildcard ? getControlFlowPathIntInt(currA, otherA, proc) :
-                                                      getControlFlowPathIntInt(otherA, currA, proc);
+        std::unordered_set<StmtNum> controlFlowPath = isIntWildcard ? getControlFlowPathIntInt(currA, otherA, proc)
+                                                                    : getControlFlowPathIntInt(otherA, currA, proc);
 
         if (controlFlowPath.empty()) {
-            if (isIntWildcard && !checkDirectlyAfterEachOther(currA, otherA) && !checkHaveCommonWhileLoop(currA, otherA)) {
+            if (isIntWildcard && !checkDirectlyAfterEachOther(currA, otherA) &&
+                !checkHaveCommonWhileLoop(currA, otherA)) {
                 continue;
-            } else if (!isIntWildcard && !checkDirectlyAfterEachOther(otherA, currA) && !checkHaveCommonWhileLoop(otherA, currA)) {
+            }
+            else if (!isIntWildcard && !checkDirectlyAfterEachOther(otherA, currA) &&
+                     !checkHaveCommonWhileLoop(otherA, currA)) {
                 continue;
             }
         }
@@ -495,7 +512,8 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
         std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
         if ((currA == otherA) && variablesModifiedInPath.empty() &&
             (commonVariables.size() == 1)) { // O(1) since there is really only 1 element
-            isIntWildcard ? res.push_back({paramString, std::to_string(otherA)}) : res.push_back({std::to_string(otherA), paramString});
+            isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
+                          : res.push_back({std::to_string(otherA), paramString});
             continue;
         }
 
@@ -504,7 +522,8 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
             continue;
         }
         else {
-            isIntWildcard ? res.push_back({paramString, std::to_string(otherA)}) : res.push_back({std::to_string(otherA), paramString});
+            isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
+                          : res.push_back({std::to_string(otherA), paramString});
         }
     }
     return res;
