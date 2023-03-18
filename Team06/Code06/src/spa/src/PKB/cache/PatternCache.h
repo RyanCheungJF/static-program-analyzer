@@ -6,7 +6,7 @@
 struct patternHash {
     std::size_t operator()(shared_ptr<Pattern> const& pattern) const {
         std::size_t h1 = std::hash<ParameterType>{}(pattern->getPatternSyn()->getType());
-        std::size_t h2 = std::hash<std::string>{}(pattern->getEntRef()->getValue());
+        std::size_t h2 = std::hash<Parameter>{}(*pattern->getEntRef());
         std::size_t h3 = std::hash<std::string>{}(pattern->getExprSpecs()[0]);
 
         return ((h1 ^ (h2 << 1)) >> 1) ^ (h3 << 1);
