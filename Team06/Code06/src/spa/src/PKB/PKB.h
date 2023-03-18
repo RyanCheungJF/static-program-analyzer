@@ -130,7 +130,8 @@ public:
     std::unordered_set<Ent> getModifiesP(ProcName name);
 
     // returns the name of the procedure being called on line number s
-    // if line s is not a call statement, it returns a pair {AppConstants::NOT_USED_FIELD, AppConstants::PROCEDURE_DOES_NOT_EXIST}
+    // if line s is not a call statement, it returns a pair {AppConstants::NOT_USED_FIELD,
+    // AppConstants::PROCEDURE_DOES_NOT_EXIST}
     std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
 
     // returns all statement numbers for if statement
