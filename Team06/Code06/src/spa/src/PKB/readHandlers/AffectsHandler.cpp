@@ -453,7 +453,7 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
                                                                     : getControlFlowPathIntInt(otherA, currA, proc, commonVariables);
 
 
-
+        //TODO: Traversal Logic needs a re-work.
         bool consec = isIntWildcard ? checkDirectlyAfterEachOther(currA, otherA) : checkDirectlyAfterEachOther(otherA, currA);
         bool insideCommonWhile = isIntWildcard ? checkHaveCommonWhileLoop(currA, otherA) : checkHaveCommonWhileLoop(otherA, currA);
 
