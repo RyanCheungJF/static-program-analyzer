@@ -123,11 +123,11 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
         vector<string> paramStrings;
         string tupleString;
         for (start; start < end; start++) {
-            // recreates tuple string with whitespace removed
-            tupleString += wordList[start] + " ";
+            tupleString += " " + wordList[start];
         }
         tie(ignore, paramStrings) = extractParameters(tupleString, "<", ">", ",");
         for (string synonym : paramStrings) {
+            synonym = trim(synonym);
             if (!isElem(synonym)) {
                 throw SyntaxException();
             }
@@ -136,11 +136,8 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
         }
         return params;
     }
-    else if (isElem(wordList[start])) {
+    else if (isElem(wordList[start]) && end-start == 1) {
         // single select parameter
-        if ((end - start) != 1) {
-            throw SyntaxException();
-        }
         Parameter param = parseParameter(wordList[start]);
         params.push_back(param);
         return params;
