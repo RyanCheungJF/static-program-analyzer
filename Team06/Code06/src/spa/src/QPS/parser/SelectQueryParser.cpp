@@ -238,9 +238,11 @@ vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, in
     int curIndex = start;
     for (int i = 0; i < ands.size(); i++) {
         for (int j = curIndex; j < ands[i]; j++) {
+            //spaces are removed when converting into wordlist, need to add it back
             condString += wordList[j];
         }
         if (!formChecker(condString)) {
+            condString += " ";
             curIndex = ands[i];
             continue;
         }
@@ -250,9 +252,10 @@ vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, in
     }
 
     while (curIndex < end) {
-        condString += wordList[curIndex];
+        condString += wordList[curIndex] + " ";
         curIndex++;
     }
+    condString = trim(condString);
     if (!formChecker(condString)) {
         throw SyntaxException();
     }

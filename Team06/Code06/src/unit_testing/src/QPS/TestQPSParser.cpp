@@ -29,7 +29,6 @@ TEST_CASE("parse / select tuple with spaces should return syntax error / syntax 
     string test = "stmt s, abc, def, ghi;\n Select <a b c,d e f, g h i> such that Follows (s, 1) ";
     QPSParser qp;
     REQUIRE_THROWS_AS(qp.parse(test), SyntaxException);
-    REQUIRE(true);
 }
 
 TEST_CASE("parse / select multiple params without tuple / syntax error") {
