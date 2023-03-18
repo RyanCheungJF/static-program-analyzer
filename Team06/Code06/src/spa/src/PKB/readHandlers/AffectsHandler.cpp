@@ -459,10 +459,15 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
 
         if (controlFlowPath.empty()) {
             if (consec) {
-            isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
+                isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
                           : res.push_back({std::to_string(otherA), paramString});
-            continue;
+                continue;
             }
+//            if (insideCommonWhile) {
+//                isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
+//                              : res.push_back({std::to_string(otherA), paramString});
+//                continue;
+//            }
 
 //            if (isIntWildcard && !checkDirectlyAfterEachOther(currA, otherA) &&
 //                !checkHaveCommonWhileLoop(currA, otherA) && (currA != otherA)) {
