@@ -91,4 +91,6 @@ private:
     bool checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2);
 
     std::vector<std::vector<std::string>> nonTransitiveOneIntOneWildcard(StmtNum a1, StmtNum a2);
+
+    bool checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2);
 };
