@@ -1,0 +1,190 @@
+1 - stmt, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select s such that Uses(s, v)
+1, 2, 3, 11, 12, 7, 13, 19, 21, 16, 27, 30, 5, 6, 23, 24, 29, 33, 8, 25, 17, 9, 26, 18, 10, 22, 31, 32
+5000
+2 - read, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select r such that Uses(r, v)
+none
+5000
+3 - print, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select pn such that Uses(pn, v)
+6, 23, 24, 29, 33
+5000
+4 - call, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select c such that Uses(c, v)
+8, 25, 17, 9, 26, 18, 10, 22, 31, 32
+5000
+5 - while, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select w such that Uses(w, v)
+5
+5000
+6 - if, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select i such that Uses(i, v)
+16, 27, 30
+5000
+7 - assign, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select a such that Uses(a, v)
+1, 2, 11, 3, 12, 7, 13, 19, 21
+5000
+8 - procedure, var synonym
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select p such that Uses(p, v)
+One, Two, Three, Four, Five, Six
+5000
+9 - stmt number, var synonym (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select v such that Uses(2, v)
+x, y
+5000
+10 - stmt number, var synonym (2)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select v such that Uses(8, v)
+x, c, y, z, a, b, d, e, endpoint
+5000
+11 - print, var ident
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select pn such that Uses(pn, "e")
+24, 29
+5000
+12 - call, var ident
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select c such that Uses(c, "x")
+8, 10, 18, 26
+5000
+13 - while, var ident (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select w such that Uses(w, "z")
+5
+5000
+14 - while, var ident (2)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select w such that Uses(w, "y")
+5
+5000
+15 - while, var ident (3)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select w such that Uses(w, "x + y")
+SyntaxError
+5000
+16 - if, var ident (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select i such that Uses(i, "b")
+16
+5000
+17 - if, var ident (2)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select i such that Uses(i, "z")
+30, 16, 27
+5000
+18 - if, var ident (3)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select i such that Uses(i, "b != c")
+SyntaxError
+5000
+19 - assign, var ident
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select a such that Uses(a, "a")
+13
+5000
+20 - procedure, var ident
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select p such that Uses(p, "a")
+One, Two
+5000
+21 - procedure, var ident (2)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select p such that Uses(p, "endpoint")
+One, Two, Three, Four, Five, Six
+5000
+22 - procedure, var ident (3)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select p such that Uses(p, "end  point")
+SyntaxError
+5000
+23 - stmt, var ident (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select s such that Uses(s, "c")
+3, 6, 7, 12, 16, 8, 5
+5000
+24 - stmt, var ident (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select s such that Uses(s, "C")
+none
+5000
+25 - read, var ident
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select r such that Uses(r, "d")
+none
+5000
+26 - stmt number, var ident (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select w such that Uses(8, "a")
+5
+5000
+27 - stmt number, var ident (2)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select v such that Uses(1, "1")
+SyntaxError
+5000
+28 - stmt, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select s such that Uses(s, _)
+1, 2, 3, 11, 12, 7, 13, 19, 21, 16, 27, 30, 5, 6, 23, 24, 29, 33, 8, 25, 17, 9, 26, 18, 10, 22, 31, 32
+5000
+29 - read, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select r such that Uses(r, _)
+none
+5000
+30 - print, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select pn such that Uses(pn, _)
+6, 23, 24, 29, 33
+5000
+31 - call, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select c such that Uses(c, _)
+8, 25, 17, 9, 26, 18, 10, 22, 31, 32
+5000
+32 - while, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select w such that Uses(w, _)
+5
+5000
+33 - if, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select i such that Uses(i, _)
+16, 27, 30
+5000
+34 - assign, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select a such that Uses(a, _)
+1, 2, 11, 3, 12, 7, 13, 19, 21
+5000
+35 - procedure, wildcard
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select p such that Uses(p, _)
+One, Two, Three, Four, Five, Six
+5000
+36 - stmt number, wildcard (1)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select v such that Uses(2, _)
+x, c, y, z, a, b, d, e, endpoint
+5000
+37 - stmt number, wildcard (2)
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select v such that Uses(8, _)
+x, c, y, z, a, b, d, e, endpoint
+5000
+38 - Uses*
+stmt s; read r; print pn; call c; while w; if i; assign a; variable v; procedure p;
+Select v such that Uses*(8, v)
+SyntaxError
+5000

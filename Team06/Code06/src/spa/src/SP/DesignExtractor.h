@@ -17,7 +17,7 @@ private:
 
     void extractInfo();
     void extractCFG();
-    void validateSemantics();
+    std::vector<ProcName> validateSemantics();
     void buildCallerCalleeTable(std::vector<ProcName>& procedureNames,
                                 std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap);
 

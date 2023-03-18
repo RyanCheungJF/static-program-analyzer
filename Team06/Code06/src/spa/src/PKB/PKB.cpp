@@ -282,10 +282,6 @@ std::unordered_set<StmtNum> PKB::getProcedureStatementNumbers(ProcName p) {
     return procedureStorage->getProcedureStatementNumbers(p);
 }
 
-std::vector<std::pair<StmtNum, ProcName>> PKB::getCallStatements() {
-    return callStorage->getCallStatements();
-}
-
 std::unordered_set<ProcName> PKB::getAllProcedureNames() {
     return procedureStorage->getProcNames();
 }

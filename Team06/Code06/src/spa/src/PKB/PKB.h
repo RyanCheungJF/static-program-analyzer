@@ -107,9 +107,6 @@ public:
     // returns all the statement lines that are contained in the given procedure
     std::unordered_set<StmtNum> getProcedureStatementNumbers(ProcName p);
 
-    // returns all the call statement lines and the procedure that it is calling
-    std::vector<std::pair<StmtNum, ProcName>> getCallStatements();
-
     // returns all the procedure names present in the source code
     std::unordered_set<ProcName> getAllProcedureNames();
 
