@@ -411,12 +411,8 @@ bool AffectsHandler::checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2) {
     }
 
     // means they are consecutive in terms of numbers, but might still be part of different if-else branches
-<<<<<<< HEAD
-    //given they are not in a while loop, a2 MUST come after a1
-=======
-
+    
     // given they are not in a while loop, a2 MUST come after a1
->>>>>>> pkb
     if (a2 < a1) {
         return false;
     }
@@ -474,22 +470,14 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
     }
 
     std::unordered_set<Ent> variablesInCurrA =
-<<<<<<< HEAD
         isIntWildcard ? modifiesStorage->getRightItems(currA) : usesStorage->getRightItems(currA);
-=======
-        isIntWildcard ? modifiesStorage->getEnt(currA) : usesStorage->getEnt(currA);
->>>>>>> pkb
     for (StmtNum otherA : assignStatements) {
         if (procStorage->getProcedure(currA) != procStorage->getProcedure(otherA)) {
             continue;
         }
 
         std::unordered_set<Ent> variablesInOtherA =
-<<<<<<< HEAD
             isIntWildcard ? usesStorage->getRightItems(otherA) : modifiesStorage->getRightItems(otherA);
-=======
-            isIntWildcard ? usesStorage->getEnt(otherA) : modifiesStorage->getEnt(otherA);
->>>>>>> pkb
         std::unordered_set<Ent> commonVariables = getCommonVariables(variablesInCurrA, variablesInOtherA);
         if (commonVariables.empty()) {
             continue;
