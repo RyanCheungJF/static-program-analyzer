@@ -66,7 +66,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
 
     std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc1);
 
-    if (controlFlowPath.empty() && !checkDirectlyAfterEachOther(a1, a2)) {
+    if (controlFlowPath.empty() && !checkDirectlyAfterEachOther(a1, a2) && !checkHaveCommonWhileLoop(a1, a2)) {
         return res;
     }
 
@@ -193,9 +193,19 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
         }
     }
 
+    //remove duplicates
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
     for (std::tuple<StmtNum, StmtNum, StmtNum> curr : seen) {
-        res.push_back({std::to_string(get<0>(curr)), std::to_string(get<2>(curr))});
+        temp.insert({get<0>(curr), get<2>(curr)});
     }
+
+    for (std::pair<StmtNum, StmtNum> p : temp) {
+        res.push_back({std::to_string(p.first), std::to_string(p.second)});
+    }
+
+//    for (std::tuple<StmtNum, StmtNum, StmtNum> curr : seen) {
+//        res.push_back({std::to_string(get<0>(curr)), std::to_string(get<2>(curr))});
+//    }
     return res;
 }
 
@@ -366,14 +376,26 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
         }
         seen.insert(curr);
 
-        for (StmtNum num : (isIntWildcard ? hashmap[curr.second] : hashmap[curr.first])) {
-            isIntWildcard ? queue.push_back({curr.second, num}) : queue.push_back({num, curr.first});
+        unordered_set<StmtNum> nextNodes = (isIntWildcard ? hashmap[curr.second] : hashmap[curr.first]);
+        for (StmtNum num : nextNodes) {
+            if (isIntWildcard) {
+                queue.push_back({curr.second, num});
+            } else {
+                queue.push_back({num, curr.first});
+            }
         }
+    }
+
+    // remove potential duplicate entries
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> temp;
+    for (std::pair<StmtNum, StmtNum> p : seen) {
+        isIntWildcard ? temp.insert({a1, p.second})
+                      : temp.insert({p.first, a2});
     }
 
     std::vector<std::vector<std::string>> res;
     std::string paramString = (isIntWildcard ? std::to_string(a1) : std::to_string(a2));
-    for (std::pair<StmtNum, StmtNum> p : seen) {
+    for (std::pair<StmtNum, StmtNum> p : temp) {
         isIntWildcard ? res.push_back({paramString, std::to_string(p.second)})
                       : res.push_back({std::to_string(p.first), paramString});
     }
@@ -388,16 +410,6 @@ bool AffectsHandler::checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2) {
     }
 
     // means they are consecutive in terms of numbers, but might still be part of different if-else branches
-
-    //check if they are in a common while loop
-    std::unordered_set<StmtNum> a1Parents = parentTStorage->getLeftItems(a1);
-    std::unordered_set<StmtNum> a2Parents = parentTStorage->getLeftItems(a2);
-    for (StmtNum n : a1Parents) {
-        if (a2Parents.find(n) != a2Parents.end()) {
-            return false;
-        }
-    }
-
     //given they are not in a while loop, a2 MUST come after a1
     if (a2 < a1) {
         return false;
@@ -471,8 +483,13 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
 
         std::unordered_set<StmtNum> controlFlowPath = isIntWildcard ? getControlFlowPathIntInt(currA, otherA, proc) :
                                                       getControlFlowPathIntInt(otherA, currA, proc);
-        if (controlFlowPath.empty() && !checkDirectlyAfterEachOther(currA, otherA)) {
-            continue;
+
+        if (controlFlowPath.empty()) {
+            if (isIntWildcard && !checkDirectlyAfterEachOther(currA, otherA) && !checkHaveCommonWhileLoop(currA, otherA)) {
+                continue;
+            } else if (!isIntWildcard && !checkDirectlyAfterEachOther(otherA, currA) && !checkHaveCommonWhileLoop(otherA, currA)) {
+                continue;
+            }
         }
 
         std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
@@ -491,4 +508,20 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
         }
     }
     return res;
+}
+
+bool AffectsHandler::checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2) {
+
+    std::unordered_set<StmtNum> a1Parents = parentTStorage->getLeftItems(a1);
+    std::unordered_set<StmtNum> a2Parents = parentTStorage->getLeftItems(a2);
+    for (StmtNum n : a1Parents) {
+        if (a2Parents.find(n) != a2Parents.end()) {
+
+            unordered_set<Stmt> stmtType = stmtStorage->getStatementType(n);
+            if (stmtType.find(AppConstants::WHILE) != stmtType.end()) {
+                return true;
+            }
+        }
+    }
+    return false;
 }

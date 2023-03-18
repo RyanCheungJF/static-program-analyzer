@@ -25,7 +25,7 @@ struct hashFunctionTuple {
 
 struct hashFunctionAffectsT {
     size_t operator()(const std::pair<int, int>& x) const {
-        return (x.first << 31) ^ x.second;
+        return (x.first * 501) + x.second;
     }
 };
 
@@ -91,4 +91,6 @@ private:
     bool checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2);
 
     std::vector<std::vector<std::string>> nonTransitiveOneIntOneWildcard(StmtNum a1, StmtNum a2);
+
+    bool checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2);
 };
