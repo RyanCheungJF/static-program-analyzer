@@ -11,8 +11,8 @@
 ../../../Code06/cmake-build-debug/src/autotester/autotester source.txt Modifies.txt out-Modifies.xml
 ../../../Code06/cmake-build-debug/src/autotester/autotester source.txt Uses.txt out-Uses.xml
 
-#../../../Code06/cmake-build-debug/src/autotester/autotester source.txt Affects.txt out-Affects.xml
-#../../../Code06/cmake-build-debug/src/autotester/autotester source.txt AffectsT.txt out-AffectsT.xml
+../../../Code06/cmake-build-debug/src/autotester/autotester source.txt Affects.txt out-Affects.xml
+../../../Code06/cmake-build-debug/src/autotester/autotester source.txt AffectsT.txt out-AffectsT.xml
 
 #../../../Code06/cmake-build-debug/src/autotester/autotester source.txt Boolean.txt out-Boolean.xml
 

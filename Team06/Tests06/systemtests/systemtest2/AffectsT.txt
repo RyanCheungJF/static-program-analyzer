@@ -1,0 +1,35 @@
+1 - comment
+assign a;
+Select a such that Affects*(16, a)
+20
+5000
+2 - comment
+assign a;
+Select a such that Affects*(13, a)
+none
+5000
+3 - comment
+assign a;
+Select a such that Affects*(19, a)
+none
+5000
+4 - comment
+assign a;
+Select a such that Affects*(1, a)
+none
+5000
+5 - comment
+assign a;
+Select a such that Affects*(6, a)
+8
+5000
+6 - comment
+assign a;
+Select a such that Affects*(a, 25)
+23
+5000
+7 - comment
+assign a;
+Select a such that Affects*(a, 26)
+22
+5000

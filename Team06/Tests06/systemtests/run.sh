@@ -1,7 +1,13 @@
 #!/bin/bash
 
-bash systemtest1/run.sh
-bash systemtest2/run.sh
-bash systemtest3/run.sh
-bash systemtest4/run.sh
-bash systemtest5/run.sh
+cd systemtest1/ 
+bash  run.sh
+cd ../systemtest2/
+bash run.sh
+cd ../systemtest3/
+bash run.sh
+cd ../systemtest4/
+bash run.sh
+cd systemtest5/
+bash run.sh
+cd ..
