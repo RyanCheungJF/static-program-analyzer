@@ -1,0 +1,80 @@
+1 - space in expression
+assign a;
+Select a pattern a(_, "a    +   b")
+74
+5000
+2 - wildcard, exact match
+assign a;
+Select a pattern a(_, "a")
+none
+5000
+3 - wildcard, partial match
+assign a;
+Select a pattern a(_, _"a"_)
+69, 68, 8, 13, 9, 74, 31, 16, 21, 65, 22, 18, 34, 45, 54, 63, 162, 191
+5000
+4 - variable, partial match
+assign a; variable v;
+Select a pattern a(v, _"a"_)
+69, 68, 8, 13, 9, 74, 31, 16, 21, 65, 22, 18, 34, 45, 54, 63, 162, 191
+5000
+5 - variable, exact match
+assign a; variable v;
+Select a pattern a(v, "a")
+none
+5000
+6 - char string, wildcard
+assign a; 
+Select a pattern a("a", _)
+32, 8, 13, 84, 86, 58, 61, 71, 123, 122, 124
+5000
+7 - char string, exact match
+assign a; 
+Select a pattern a("z", "8")
+17
+5000
+8 - char string, partial match
+assign a; 
+Select a pattern a("z", _"8"_)
+17
+5000
+9 - exact match check (1)
+assign a; 
+Select a pattern a("a", "((f * q * e - s * 9)) * (g + ((10 + a)) * y)")
+8
+5000
+10 - exact match check (2)
+assign a; 
+Select a pattern a("a", "(f * (q * e) - s * 9) * (g + (10 + a) * y)")
+8
+5000
+11 - exact match check (3)
+assign a; 
+Select a pattern a("a", "(f * q * (e - s) * 9) * (g + (10 + a) * y)")
+none
+5000
+12 - partial match check (1)
+assign a; 
+Select a pattern a("a", _"(e - s)"_)
+none
+5000
+13 - partial match check (2)
+assign a; 
+Select a pattern a("a", _"q * e"_)
+8
+5000
+14 - partial match check (3)
+assign a; 
+Select a pattern a("a", _"(((q * e)))"_)
+8
+5000
+15 - partial match check (4)
+assign a; 
+Select a pattern a("a", _"9 * g"_)
+none
+5000
+16 - partial match check (5)
+assign a; 
+Select a pattern a("a", _"(10)"_)
+8, 13
+5000
