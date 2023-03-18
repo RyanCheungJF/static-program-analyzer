@@ -64,8 +64,7 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
                 tokens.push_back(Token(TokenType::RELATIONAL_OPR, tokenValue));
             }
         }
-        else if (peekNextChar(file) == AppConstants::PLUS ||
-                 peekNextChar(file) == AppConstants::MINUS) { // Handle +, -
+        else if (peekNextChar(file) == AppConstants::PLUS || peekNextChar(file) == AppConstants::MINUS) { // Handle +, -
             tokenValue += getNextChar(file);
             tokens.push_back(Token(TokenType::EXPR_ARITH_OPR, tokenValue));
         }
