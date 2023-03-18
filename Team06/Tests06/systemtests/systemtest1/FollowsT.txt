@@ -1,80 +1,610 @@
-1 - comment
-stmt s;
-Select s such that Follows*(1, s)
-2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+1 - read, wildcard
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Follows*(r, _)
+1, 2, 3
 5000
-2 - comment
-read r;
-Select r such that Follows*(1, r)
-2, 3
+2 - read, stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Follows*(r, s)
+1, 2, 3
 5000
-3 - comment
-call c;
-Select c such that Follows*(2, c)
+3 - print, wildcard
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Follows*(pn, _)
+none
+5000
+4 - print, stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Follows*(pn, s)
+none
+5000
+5 - call, wildcard
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Follows*(c, _)
 4
 5000
-4 - comment
-print p;
-Select p such that Follows*(1, p)
+6 - call, stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Follows*(c, s)
+4
+5000
+7 - while, wildcard
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Follows*(w, _)
+25, 27, 30
+5000
+8 - while, stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Follows*(w, s)
+25, 27, 30
+5000
+9 - if, wildcard
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Follows*(i, _)
+31
+5000
+10 - if, stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Follows*(i, s)
+31
+5000
+11 - assign, wildcard
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Follows*(a, _)
+5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 26, 28, 29, 37, 39
+5000
+12 - assign, stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Follows*(a, s)
+5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 26, 28, 29, 37, 39
+5000
+13 - wildcard, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Follows*(_, a1)
+5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 29, 37, 38, 39, 40, 41
+5000
+14 - stmt, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Follows*(s, a1)
+5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 29, 37, 38, 39, 40, 41
+5000
+15 - wildcard, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Follows*(_, r1)
+2, 3
+5000
+16 - stmt, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Follows*(s, r1)
+2, 3
+5000
+17 - wildcard, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Follows*(_, pn1)
+42
+5000
+18 - stmt, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Follows*(s, pn1)
+42
+5000
+19 - wildcard, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Follows*(_, i1)
 none
 5000
-5 - comment
-stmt s;
-Select s such that Follows*(22, s)
-23, 24, 25, 42
+20 - stmt, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Follows*(s, i1)
+none
 5000
-6 - comment
-while w;
-Select w such that Follows*(22, w)
+21 - wildcard, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Follows*(_, w1)
+25, 27, 30
+5000
+22 - stmt, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Follows*(s, w1)
+25, 27, 30
+5000
+23 - wildcard, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Follows*(_, c1)
+4
+5000
+24 - stmt, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Follows*(s, c1)
+4
+5000
+25 - call, stmt number
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Follows*(c, 5)
+4
+5000
+26 - read, stmt number
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Follows*(r, 3)
+1, 2
+5000
+27 - print, stmt number
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Follows*(pn, 4)
+none
+5000
+28 - if, stmt number
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Follows*(i, 32)
+none
+5000
+29 - assign, stmt number (1)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Follows*(a, 30)
+28, 29
+5000
+30 - assign, stmt number (2)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Follows*(a, 30)
+25, 27, 30, 34
+5000
+31 - while, stmt number
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Follows*(w, 25)
+none
+5000
+32 - stmt, stmt number (1)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select s such that Follows*(s, 27)
+26
+5000
+33 - stmt, stmt number (2)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select s such that Follows*(s, 17)
+none
+5000
+34 - stmt number, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Follows*(2, a1)
+5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+5000
+35 - stmt number, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Follows*(1, r1)
+2, 3
+5000
+36 - stmt number, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Follows*(25, pn1)
+42
+5000
+37 - stmt number, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Follows*(2, i1)
+none
+5000
+38 - stmt number, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Follows*(24, w1)
 25
 5000
-7 - comment
-stmt s;
-Select s such that Follows*(28, s)
-29, 30, 39, 40
+39 - stmt number, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Follows*(3, c1)
+4
 5000
-8 - comment
-stmt s;
-Select s such that Follows*(31, s)
+40 - stmt number, stmt (1)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select s1 such that Follows*(1, s1)
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+5000
+41 - stmt number, stmt (2)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select s1 such that Follows*(16, s1)
+none
+5000
+42 - stmt number, stmt (3)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select s1 such that Follows*(25, s1)
+42
+5000
+43 - stmt number, stmt number (1)
+print p;
+Select p such that Follows*(3, 4)
+32, 36, 42
+5000
+44 - stmt number, stmt number (2)
+print p;
+Select p such that Follows*(3, 5)
+32, 36, 42
+5000
+45 - read, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Follows*(r, r1)
+1, 2
+5000
+46 - read, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Follows*(r, r1)
+2, 3
+5000
+47 - read, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Follows*(r, pn1)
+none
+5000
+48 - read, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Follows*(r, pn1)
+none
+5000
+49 - read, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Follows*(r, c1)
+1, 2, 3
+5000
+50 - read, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Follows*(r, c1)
+4
+5000
+51 - read, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Follows*(r, w1)
+none
+5000
+52 - read, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Follows*(r, w1)
+none
+5000
+53 - read, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Follows*(r, i1)
+none
+5000
+54 - read, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Follows*(r, i1)
+none
+5000
+55 - read, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Follows*(r, a1)
+1, 2, 3
+5000
+56 - read, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Follows*(r, a1)
+5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+5000
+57 - print, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Follows*(pn, a1)
+none
+5000
+58 - print, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Follows*(pn, a1)
+none
+5000
+59 - print, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Follows*(pn, r1)
+none
+5000
+60 - print, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Follows*(pn, r1)
+none
+5000
+61 - print, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Follows*(pn, pn1)
+none
+5000
+62 - print, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Follows*(pn, pn1)
+none
+5000
+63 - print, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Follows*(pn, i1)
+none
+5000
+64 - print, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Follows*(pn, i1)
+none
+5000
+65 - print, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Follows*(pn, w1)
+none
+5000
+66 - print, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Follows*(pn, w1)
+none
+5000
+67 - print, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Follows*(pn, c1)
+none
+5000
+68 - print, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Follows*(pn, c1)
+none
+5000
+69 - call, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Follows*(c, r1)
+none
+5000
+70 - call, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Follows*(c, r1)
+none
+5000
+71 - call, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Follows*(c, pn1)
+none
+5000
+72 - call, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Follows*(c, pn1)
+none
+5000
+73 - call, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Follows*(c, c1)
+none
+5000
+74 - call, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Follows*(c, c1)
+none
+5000
+75 - call, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Follows*(c, i1)
+none
+5000
+76 - call, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Follows*(c, i1)
+none
+5000
+77 - call, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Follows*(c, w1)
+none
+5000
+78 - call, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Follows*(c, w1)
+none
+5000
+79 - call, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Follows*(c, a1)
+4
+5000
+80 - call, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Follows*(c, a1)
+5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+5000
+81 - if, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Follows*(i, r1)
+none
+5000
+82 - if, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Follows*(i, r1)
+none
+5000
+83 - if, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Follows*(i, pn1)
+none
+5000
+84 - if, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Follows*(i, pn1)
+none
+5000
+85 - if, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Follows*(i, c1)
+none
+5000
+86 - if, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Follows*(i, c1)
+none
+5000
+87 - if, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Follows*(i, i1)
+none
+5000
+88 - if, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Follows*(i, i1)
+none
+5000
+89 - if, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Follows*(i, w1)
+none
+5000
+90 - if, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Follows*(i, w1)
+none
+5000
+91 - if, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Follows*(i, a1)
+31
+5000
+92 - if, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Follows*(i, a1)
 37, 38
 5000
-9 - comment
-while w;
-Select w such that Follows*(31, w)
+93 - while, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Follows*(w, r1)
 none
 5000
-10 - comment
-stmt s;
-Select s such that Follows*(36, s)
+94 - while, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Follows*(w, r1)
 none
 5000
-11 - comment
-while w; if i;
-Select w such that Follows*(i, 32)
+95 - while, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Follows*(w, pn1)
+25
+5000
+96 - while, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Follows*(w, pn1)
+42
+5000
+97 - while, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Follows*(w, c1)
 none
 5000
-12 - comment
-while w; if i; assign a;
-Select i such that Follows*(a, 30)
-31, 33
-5000
-13 - comment
-while w; if i; assign a; stmt s;
-Select s such that Follows*(s, 24)
-17, 18, 19, 20, 21, 22, 23
-5000
-14 - comment
-stmt s1;
-Select s1 such that Follows*(s1, s1)
+98 - while, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Follows*(w, c1)
 none
 5000
-15 - comment
-assign a; print pn;
-Select a such that Follows*(a, pn)
+99 - while, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Follows*(w, i1)
+none
+5000
+100 - while, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Follows*(w, i1)
+none
+5000
+101 - while, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Follows*(w, w1)
+none
+5000
+102 - while, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Follows*(w, w1)
+none
+5000
+103 - while, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Follows*(w, a1)
+27, 30
+5000
+104 - while, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Follows*(w, a1)
+41, 39, 40
+5000
+105 - assign, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Follows*(a, a1)
+6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 29, 38, 40, 39, 41
+5000
+106 - assign, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Follows*(a, r1)
+none
+5000
+107 - assign, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Follows*(a, r1)
+none
+5000
+108 - assign, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Follows*(a, pn1)
 17, 18, 19, 20, 21, 22, 23, 24
 5000
-16 - comment 
-assign a; while w;
-Select a such that Follows*(a, w)
+109 - assign, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Follows*(a, pn1)
+42
+5000
+110- assign, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Follows*(a, i1)
+none
+5000
+111 - assign, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Follows*(a, i1)
+none
+5000
+112 - assign, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Follows*(a, w1)
 17, 18, 19, 20, 21, 22, 23, 24, 26, 28, 29
+5000
+113 - assign, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Follows*(a, w1)
+25, 27, 30
+5000
+114 - assign, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Follows*(a, c1)
+none
+5000
+115 - assign, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Follows*(a, c1)
+none
+5000
+116 - same stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select s such that Follows*(s, s)
+none
+5000
+117 - same read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Follows*(r, r)
+none
+5000
+118- same print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Follows*(pn, pn)
+none
+5000
+119 - same call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Follows*(c, c)
+none
+5000
+120 - same while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Follows*(w, w)
+none
+5000
+121 - same if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Follows*(i, i)
+none
+5000
+122 - same assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Follows*(a, a)
+none
 5000

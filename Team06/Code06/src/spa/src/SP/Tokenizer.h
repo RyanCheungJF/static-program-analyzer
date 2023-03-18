@@ -11,8 +11,8 @@
 
 class Tokenizer {
 private:
-    char getNextToken(std::stringstream& file);
-    char peekNextToken(std::stringstream& file);
+    char getNextChar(std::stringstream& file);
+    char peekNextChar(std::stringstream& file);
 
 public:
     bool isInteger(std::string value);

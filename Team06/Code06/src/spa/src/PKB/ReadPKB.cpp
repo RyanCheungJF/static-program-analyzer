@@ -27,10 +27,6 @@ std::unordered_set<StmtNum> ReadPKB::getProcedureStatementNumbers(ProcName p) {
     return pkbInstance->getProcedureStatementNumbers(p);
 }
 
-std::vector<std::pair<StmtNum, ProcName>> ReadPKB::getCallStatements() {
-    return pkbInstance->getCallStatements();
-}
-
 std::unordered_set<ProcName> ReadPKB::getAllProcedureNames() {
     return pkbInstance->getAllProcedureNames();
 }

@@ -7,16 +7,16 @@ DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writeP
 
 void DesignExtractor::populatePKB() {
     try {
-        validateSemantics();
+        auto order = validateSemantics();
         extractInfo();
         extractCFG();
-        populateUsesModifies(writePkb, readPkb);
+        populateUsesModifies(writePkb, readPkb, order);
     } catch (SemanticErrorException e) {
         throw e;
     }
 }
 
-void DesignExtractor::validateSemantics() {
+std::vector<ProcName> DesignExtractor::validateSemantics() {
     std::vector<ProcName> procedureNames;
     std::unordered_map<ProcName, std::unordered_set<ProcName>> procCallMap;
     buildCallerCalleeTable(procedureNames, procCallMap);
@@ -24,7 +24,8 @@ void DesignExtractor::validateSemantics() {
     try {
         validateNoDuplicateProcedureName(procedureNames);
         validateCalledProceduresExist(procedureNames, procCallMap);
-        validateNoCycles(procedureNames, procCallMap, writePkb, readPkb);
+        auto order = validateNoCycles(procedureNames, procCallMap, writePkb, readPkb);
+        return order;
     } catch (SemanticErrorException e) {
         throw e;
     }
