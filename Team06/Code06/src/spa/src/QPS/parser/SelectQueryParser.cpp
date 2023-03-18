@@ -141,7 +141,7 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
         if ((end - start) != 1) {
             throw SyntaxException();
         }
-        Parameter param = parseParameter(synonym);
+        Parameter param = parseParameter(wordList[start]);
         params.push_back(param);
         return params;
     }

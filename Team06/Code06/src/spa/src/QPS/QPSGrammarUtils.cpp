@@ -240,10 +240,10 @@ bool isAttrRef(string s) {
     if (nextStart >= s.size()) {
         return false;
     }
-    attribute = s.substr(nextStart, s.size() - nextStart - 1);
+    attribute = s.substr(nextStart, s.size() - nextStart);
     return isSynonym(name) && isAttribute(attribute);
 }
 
 bool isAttribute(string s) {
-    return regex_match(s, regex("^(procName | varName | value | stmt#)$"));
+    return regex_match(s, regex("^(procName|varName|value|stmt#)$"));
 }
