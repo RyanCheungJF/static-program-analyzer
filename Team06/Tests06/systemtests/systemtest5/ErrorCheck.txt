@@ -653,10 +653,10 @@ procedure p; constant c;
 Select p such that Calls*(c, p)
 SemanticError
 5000
-132 - Space between relRef and '('
+132 - Spaces in query
 procedure p;
-Select p such that Calls   (p, _)
-SyntaxError
+Select   p   such   that    Calls   (p, _)
+none
 5000
 133 - Partial wildcard for pattern
 assign a;
