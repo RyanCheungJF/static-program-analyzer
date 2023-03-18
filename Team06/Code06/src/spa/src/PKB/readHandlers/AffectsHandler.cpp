@@ -70,12 +70,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
         return res;
     }
 
-    std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
-    bool isModified = isModifiedInControlFlowPath(commonVariables, variablesModifiedInPath);
-    if (isModified) {
-        return res;
-    }
-
     res.push_back({paramString1, paramString2});
     return res;
 }
@@ -245,24 +239,6 @@ std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1,
     return res;
 }
 
-std::unordered_set<Ent>
-AffectsHandler::getVariablesModifiedInControlFlowPath(std::unordered_set<StmtNum> controlFlowPath) {
-    std::unordered_set<Ent> variablesModifiedInPath;
-    for (StmtNum num : controlFlowPath) {
-        std::unordered_set<Stmt> stmtTypes = stmtStorage->getStatementType(num);
-
-        // assignment, read, procedure call
-        if (stmtTypes.find(AppConstants::ASSIGN) != stmtTypes.end() ||
-            stmtTypes.find(AppConstants::READ) != stmtTypes.end() ||
-            stmtTypes.find(AppConstants::CALL) != stmtTypes.end()) {
-            std::unordered_set<Ent> variablesModifiedInCurrentLine = modifiesStorage->getEnt(num);
-            variablesModifiedInPath.insert(variablesModifiedInCurrentLine.begin(),
-                                           variablesModifiedInCurrentLine.end());
-        }
-    }
-    return variablesModifiedInPath;
-}
-
 std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<Ent> variablesModifiedInA1,
                                                            std::unordered_set<Ent> variablesUsedInA2) {
 
@@ -347,16 +323,6 @@ std::unordered_set<StmtNum> AffectsHandler::getAssignStatements(std::unordered_s
         }
     }
     return assignStatements;
-}
-
-bool AffectsHandler::isModifiedInControlFlowPath(std::unordered_set<Ent> commonVariables,
-                                                 std::unordered_set<Ent> variablesModifiedInPath) {
-    for (Ent e : commonVariables) {
-        if (variablesModifiedInPath.find(e) != variablesModifiedInPath.end()) {
-            return true;
-        }
-    }
-    return false;
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(StmtNum a1, StmtNum a2) {
@@ -481,7 +447,7 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
         std::unordered_set<Ent> variablesInOtherA =
             isIntWildcard ? usesStorage->getEnt(otherA) : modifiesStorage->getEnt(otherA);
         std::unordered_set<Ent> commonVariables = getCommonVariables(variablesInCurrA, variablesInOtherA);
-        if (commonVariables.empty()) {
+        if (commonVariables.empty()) {  // O(1) since there is really only 1 element
             continue;
         }
 
@@ -499,22 +465,14 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
             }
         }
 
-        std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
-        if ((currA == otherA) && variablesModifiedInPath.empty() &&
-            (commonVariables.size() == 1)) { // O(1) since there is really only 1 element
+        if (currA == otherA) {
             isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
                           : res.push_back({std::to_string(otherA), paramString});
             continue;
         }
 
-        bool isModified = isModifiedInControlFlowPath(commonVariables, variablesModifiedInPath);
-        if (isModified) {
-            continue;
-        }
-        else {
-            isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
-                          : res.push_back({std::to_string(otherA), paramString});
-        }
+        isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
+                      : res.push_back({std::to_string(otherA), paramString});
     }
     return res;
 }

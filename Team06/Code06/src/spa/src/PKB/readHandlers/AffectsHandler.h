@@ -67,8 +67,6 @@ private:
     // helper methods
     std::unordered_set<StmtNum> getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc, std::unordered_set<Ent> commonVariables);
 
-    std::unordered_set<Ent> getVariablesModifiedInControlFlowPath(std::unordered_set<StmtNum> controlFlowPath);
-
     std::unordered_set<Ent> getCommonVariables(std::unordered_set<Ent> variablesModifiedInA1,
                                                std::unordered_set<Ent> variablesUsedInA2);
 
@@ -82,9 +80,6 @@ private:
     std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted);
 
     std::unordered_set<StmtNum> getAssignStatements(std::unordered_set<StmtNum> allProcStatements);
-
-    bool isModifiedInControlFlowPath(std::unordered_set<Ent> commonVariables,
-                                     std::unordered_set<Ent> variablesModifiedInPath);
 
     std::vector<std::vector<std::string>> bfsTraversalOneWildcard(StmtNum a1, StmtNum a2);
 
