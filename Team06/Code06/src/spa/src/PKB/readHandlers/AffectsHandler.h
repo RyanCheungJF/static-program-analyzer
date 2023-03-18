@@ -7,8 +7,8 @@
 #include "../storage/CFGStorage.h"
 #include "../storage/ModifiesUsesStorage.h"
 #include "../storage/ProcedureStorage.h"
-#include "../storage/StmtStorage.h"
 #include "../storage/RelationshipStorage.h"
+#include "../storage/StmtStorage.h"
 
 struct hashFunctionTuple {
     int cantor(int a, int b) const {

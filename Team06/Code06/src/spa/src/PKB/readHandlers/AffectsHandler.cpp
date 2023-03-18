@@ -47,7 +47,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     // either not in any procedure, or both are not in the same procedure
     if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST || proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
-    } else if (proc1 != proc2) {
+    }
+    else if (proc1 != proc2) {
         return res;
     }
 
@@ -411,7 +412,7 @@ bool AffectsHandler::checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2) {
     }
 
     // means they are consecutive in terms of numbers, but might still be part of different if-else branches
-    
+
     // given they are not in a while loop, a2 MUST come after a1
     if (a2 < a1) {
         return false;
