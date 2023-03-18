@@ -37,7 +37,6 @@ private:
     vector<Parameter> extractSelectTuple(vector<string>& wordList, int start, int end);
     vector<ClauseType> getAllClauseTypes();
     vector<string> splitClauseByAnds(vector<string>& wordList, int start, int end, function<bool(string)> formChecker);
-
 };
 
 #endif // SPA_SELECTCLAUSEPARSER_H

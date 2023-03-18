@@ -234,15 +234,15 @@ vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
 }
 
 Parameter SelectQueryParser::parseParameter(string paramString) {
-  string paramName;
-  int index;
-  bool found;
-  tie(paramName, index, found) = extractSubStringUntilDelimiter(paramString, 0, ".");
-  if (!found) {
-      return Parameter::makeParameter(paramName);
-  }
-  string attributeType = paramString.substr(index, paramString.length() - index);
-  return Parameter::makeParameter(paramName, attributeType);
+    string paramName;
+    int index;
+    bool found;
+    tie(paramName, index, found) = extractSubStringUntilDelimiter(paramString, 0, ".");
+    if (!found) {
+        return Parameter::makeParameter(paramName);
+    }
+    string attributeType = paramString.substr(index, paramString.length() - index);
+    return Parameter::makeParameter(paramName, attributeType);
 }
 vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, int start, int end,
                                                     function<bool(string)> formChecker) {
@@ -252,7 +252,7 @@ vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, in
     int curIndex = start;
     for (int i = 0; i < ands.size(); i++) {
         for (int j = curIndex; j < ands[i]; j++) {
-            //spaces are removed when converting into wordlist, need to add it back
+            // spaces are removed when converting into wordlist, need to add it back
             condString += wordList[j];
         }
         if (!formChecker(condString)) {
