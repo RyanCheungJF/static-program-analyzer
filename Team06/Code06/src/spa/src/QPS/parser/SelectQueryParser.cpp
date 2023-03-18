@@ -127,6 +127,7 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
         }
         tie(ignore, paramStrings) = extractParameters(tupleString, "<", ">", ",");
         for (string synonym : paramStrings) {
+            synonym = trim(synonym);
             if (!isSynonym(synonym)) {
                 throw SyntaxException();
             }
