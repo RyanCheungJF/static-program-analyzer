@@ -25,6 +25,7 @@ enum ClauseType {
 class SelectQueryParser {
 public:
     Query parse(string selectQuery);
+    Parameter parseParameter(string paramString);
 
 private:
     map<ClauseType, vector<int>> getClauseStarts(vector<string>& wordList);

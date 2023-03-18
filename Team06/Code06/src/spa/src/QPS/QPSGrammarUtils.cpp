@@ -221,3 +221,27 @@ bool isFactor(string s) {
     }
     return isName(s) || isInteger(s);
 }
+
+bool isElem(string s) {
+    return isSynonym(s) || isAttrRef(s);
+}
+
+bool isAttrRef(string s) {
+    string delimiter = ".";
+    bool found;
+    int nextStart;
+    string name, attribute;
+    tie(name, nextStart, found) = extractSubStringUntilDelimiter(s, 0, delimiter);
+    if (!found) {
+        return false;
+    }
+    if (nextStart >= s.size()) {
+        return false;
+    }
+    attribute = s.substr(nextStart, s.size() - nextStart);
+    return isSynonym(name) && isAttribute(attribute);
+}
+
+bool isAttribute(string s) {
+    return regex_match(s, regex("^(procName|varName|value|stmt#)$"));
+}
