@@ -36,8 +36,8 @@ public:
     Relationship(const Relationship&);
     Relationship(RelationshipType, vector<Parameter>&);
     vector<Parameter*> getAllUncheckedSynonyms();
-    vector<Parameter> getParameters();
-    RelationshipType getType();
+    vector<Parameter> getParameters() const;
+    RelationshipType getType() const;
     bool operator==(const Relationship&) const;
 
 private:
@@ -45,6 +45,15 @@ private:
     static const unordered_map<RelationshipType, shared_ptr<SyntaxValidator<Relationship>>> typeToSyntaxValidatorMap;
     static const unordered_map<RelationshipType, vector<unordered_set<ParameterType>>> typeToParameterTypes;
     static RelationshipType stringToType(string);
+};
+
+template <> struct std::hash<Relationship> {
+    std::size_t operator()(Relationship const& rs) const {
+        std::size_t h1 = std::hash<RelationshipType>{}(rs.getType());
+        std::size_t h2 = std::hash<Parameter>{}(rs.getParameters()[0]);
+        std::size_t h3 = std::hash<Parameter>{}(rs.getParameters()[1]);
+        return ((h1 ^ (h2 << 1)) >> 1) ^ (h3 << 1);
+    }
 };
 
 #endif // !SPA_QPS_RELATIONSHIP_H

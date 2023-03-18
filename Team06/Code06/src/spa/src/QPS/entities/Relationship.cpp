@@ -30,7 +30,7 @@ vector<Parameter*> Relationship::getAllUncheckedSynonyms() {
     return synonyms;
 }
 
-vector<Parameter> Relationship::getParameters() {
+vector<Parameter> Relationship::getParameters() const {
     return params;
 }
 
@@ -38,7 +38,7 @@ bool Relationship::operator==(const Relationship& r) const {
     return type == r.type && params == r.params;
 }
 
-RelationshipType Relationship::getType() {
+RelationshipType Relationship::getType() const {
     return type;
 }
 

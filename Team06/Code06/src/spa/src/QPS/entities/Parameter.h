@@ -28,7 +28,7 @@ enum class ParameterType {
 
 class Parameter {
 public:
-    string getValue();
+    string getValue() const;
     ParameterType getType() const;
     Parameter(string, string);
     Parameter(string, ParameterType);
@@ -57,6 +57,14 @@ private:
     static ParameterType stringToType(string);
     string value;
     ParameterType type;
+};
+
+template <> struct std::hash<Parameter> {
+    std::size_t operator()(Parameter const& param) const {
+        std::size_t h1 = std::hash<ParameterType>{}(param.getType());
+        std::size_t h2 = std::hash<std::string>{}(param.getValue());
+        return h1 ^ (h2 << 1); 
+    }
 };
 
 #endif

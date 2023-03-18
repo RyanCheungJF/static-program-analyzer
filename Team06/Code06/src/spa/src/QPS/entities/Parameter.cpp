@@ -2,7 +2,7 @@
 
 #include "../syntaxValidator/ParamSyntaxValidator.h"
 
-string Parameter::getValue() {
+string Parameter::getValue() const {
     return value;
 }
 
