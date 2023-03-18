@@ -65,7 +65,7 @@ private:
     std::vector<std::vector<std::string>> handleWildcardWildcardTransitive();
 
     // helper methods
-    std::unordered_set<StmtNum> getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc);
+    std::unordered_set<StmtNum> getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc, std::unordered_set<Ent> commonVariables);
 
     std::unordered_set<Ent> getVariablesModifiedInControlFlowPath(std::unordered_set<StmtNum> controlFlowPath);
 
@@ -93,4 +93,6 @@ private:
     std::vector<std::vector<std::string>> nonTransitiveOneIntOneWildcard(StmtNum a1, StmtNum a2);
 
     bool checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2);
+
+    bool checkModifiedAssignReadCall(std::unordered_set<Ent> commonVariables, StmtNum currentLine);
 };

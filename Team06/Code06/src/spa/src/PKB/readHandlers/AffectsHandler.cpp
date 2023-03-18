@@ -64,7 +64,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
         return res;
     }
 
-    std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc1);
+    std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc1, commonVariables);
 
     if (controlFlowPath.empty() && !checkDirectlyAfterEachOther(a1, a2) && !checkHaveCommonWhileLoop(a1, a2)) {
         return res;
@@ -210,7 +210,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
 }
 
 // helper functions
-std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc) {
+std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc,
+                                                                     std::unordered_set<Ent> commonVariables) {
 
     std::unordered_set<StmtNum> res;
     std::deque<std::pair<std::unordered_set<StmtNum>, StmtNum>> queue;
@@ -229,6 +230,8 @@ std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1,
             continue;
         }
         else if (curr.first.find(curr.second) != curr.first.end()) {
+            continue;
+        } else if (!(curr.first.empty()) && checkModifiedAssignReadCall(commonVariables, curr.second)) {
             continue;
         }
 
@@ -482,8 +485,8 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
             continue;
         }
 
-        std::unordered_set<StmtNum> controlFlowPath = isIntWildcard ? getControlFlowPathIntInt(currA, otherA, proc)
-                                                                    : getControlFlowPathIntInt(otherA, currA, proc);
+        std::unordered_set<StmtNum> controlFlowPath = isIntWildcard ? getControlFlowPathIntInt(currA, otherA, proc, commonVariables)
+                                                                    : getControlFlowPathIntInt(otherA, currA, proc, commonVariables);
 
         if (controlFlowPath.empty()) {
             if (isIntWildcard && !checkDirectlyAfterEachOther(currA, otherA) &&
@@ -525,6 +528,25 @@ bool AffectsHandler::checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2) {
 
             unordered_set<Stmt> stmtType = stmtStorage->getStatementType(n);
             if (stmtType.find(AppConstants::WHILE) != stmtType.end()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool AffectsHandler::checkModifiedAssignReadCall(std::unordered_set<Ent> commonVariables, StmtNum currentLine) {
+    unordered_set<Ent> entitiesModifiedOnCurrentLine = modifiesStorage->getEnt(currentLine);
+
+
+    // if a assignment, read, or procedure call, we check if the entitiesModifiedOnCurrentLine is the same as commonVariables
+    std::unordered_set<Stmt> stmtTypes = stmtStorage->getStatementType(currentLine);
+    if (stmtTypes.find(AppConstants::ASSIGN) != stmtTypes.end() ||
+        stmtTypes.find(AppConstants::READ) != stmtTypes.end() ||
+        stmtTypes.find(AppConstants::CALL) != stmtTypes.end()) {
+
+        for (Ent e : commonVariables) { //O(1) since there is only 1 variable
+            if (entitiesModifiedOnCurrentLine.find(e) != entitiesModifiedOnCurrentLine.end()) {
                 return true;
             }
         }
