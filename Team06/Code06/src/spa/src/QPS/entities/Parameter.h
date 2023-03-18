@@ -28,7 +28,13 @@ enum class ParameterType {
     UNKNOWN
 };
 
-enum class AttributeType { PROCNAME, VARNAME, VALUE, STMTNO, NONE };
+enum class AttributeType {
+    PROCNAME,
+    VARNAME,
+    VALUE,
+    STMTNO,
+    NONE
+};
 
 class Parameter {
 public:

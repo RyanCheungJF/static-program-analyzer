@@ -170,39 +170,39 @@ TEST_CASE("splitQuery / given multiple clauses split by ; / vector of string "
 TEST_CASE("checkSynonyms / the variable store contains all the required "
           "variables in query / no exceptions thrown") {
 
-  QPSParser qp;
-  VariableStore vs;
-  SelectQueryParser sqp;
-  Parameter p1("v", ParameterType::VARIABLE);
-  Parameter p2("s", ParameterType::STMT);
-  vs.insertVariable(p1);
-  vs.insertVariable(p2);
-  Query q = sqp.parse("Select s such that Modifies(s, v)");
-  REQUIRE_NOTHROW(qp.checkSynonyms(&q, vs));
+    QPSParser qp;
+    VariableStore vs;
+    SelectQueryParser sqp;
+    Parameter p1("v", ParameterType::VARIABLE);
+    Parameter p2("s", ParameterType::STMT);
+    vs.insertVariable(p1);
+    vs.insertVariable(p2);
+    Query q = sqp.parse("Select s such that Modifies(s, v)");
+    REQUIRE_NOTHROW(qp.checkSynonyms(&q, vs));
 }
 
 TEST_CASE("checkSynonyms / the variable store does not contain stmt / "
           "exception is thrown") {
 
-  QPSParser qp;
-  VariableStore vs;
-  SelectQueryParser sqp;
-  Parameter p1("v", ParameterType::VARIABLE);
-  vs.insertVariable(p1);
-  Query q = sqp.parse("Select s such that Modifies(s, v)");
-  REQUIRE_THROWS_AS(qp.checkSynonyms(&q, vs), SemanticException);
+    QPSParser qp;
+    VariableStore vs;
+    SelectQueryParser sqp;
+    Parameter p1("v", ParameterType::VARIABLE);
+    vs.insertVariable(p1);
+    Query q = sqp.parse("Select s such that Modifies(s, v)");
+    REQUIRE_THROWS_AS(qp.checkSynonyms(&q, vs), SemanticException);
 }
 
 TEST_CASE("checkSynonyms / the variable store does not contain variable / "
           "exception is thrown") {
 
-  QPSParser qp;
-  VariableStore vs;
-  SelectQueryParser sqp;
-  Parameter p1("s", ParameterType::STMT);
-  vs.insertVariable(p1);
-  Query q = sqp.parse("Select s such that Modifies(s, v)");
-  REQUIRE_THROWS_AS(qp.checkSynonyms(&q, vs), SemanticException);
+    QPSParser qp;
+    VariableStore vs;
+    SelectQueryParser sqp;
+    Parameter p1("s", ParameterType::STMT);
+    vs.insertVariable(p1);
+    Query q = sqp.parse("Select s such that Modifies(s, v)");
+    REQUIRE_THROWS_AS(qp.checkSynonyms(&q, vs), SemanticException);
 }
 
 TEST_CASE("checkSynonyms / variable store is empty / exception is thrown") {
@@ -216,47 +216,47 @@ TEST_CASE("checkSynonyms / variable store is empty / exception is thrown") {
 TEST_CASE("checkSynonyms / the variable store contains more variable than "
           "needed / no exception is thrown") {
 
-  QPSParser qp;
-  VariableStore vs;
-  SelectQueryParser sqp;
-  Parameter p1("s", ParameterType::STMT);
-  Parameter p2("s2", ParameterType::STMT);
-  Parameter p3("s3", ParameterType::STMT);
-  Parameter p4("s4", ParameterType::STMT);
-  Parameter p5("v", ParameterType::VARIABLE);
-  Parameter p6("v2", ParameterType::VARIABLE);
-  Parameter p7("v3", ParameterType::VARIABLE);
-  Parameter p8("v4", ParameterType::VARIABLE);
-  vs.insertVariable(p1);
-  vs.insertVariable(p2);
-  vs.insertVariable(p3);
-  vs.insertVariable(p4);
-  vs.insertVariable(p5);
-  vs.insertVariable(p6);
-  vs.insertVariable(p7);
-  vs.insertVariable(p8);
-  Query q = sqp.parse("Select s such that Modifies(s, v)");
-  REQUIRE_NOTHROW(qp.checkSynonyms(&q, vs));
+    QPSParser qp;
+    VariableStore vs;
+    SelectQueryParser sqp;
+    Parameter p1("s", ParameterType::STMT);
+    Parameter p2("s2", ParameterType::STMT);
+    Parameter p3("s3", ParameterType::STMT);
+    Parameter p4("s4", ParameterType::STMT);
+    Parameter p5("v", ParameterType::VARIABLE);
+    Parameter p6("v2", ParameterType::VARIABLE);
+    Parameter p7("v3", ParameterType::VARIABLE);
+    Parameter p8("v4", ParameterType::VARIABLE);
+    vs.insertVariable(p1);
+    vs.insertVariable(p2);
+    vs.insertVariable(p3);
+    vs.insertVariable(p4);
+    vs.insertVariable(p5);
+    vs.insertVariable(p6);
+    vs.insertVariable(p7);
+    vs.insertVariable(p8);
+    Query q = sqp.parse("Select s such that Modifies(s, v)");
+    REQUIRE_NOTHROW(qp.checkSynonyms(&q, vs));
 }
 
 TEST_CASE("checkSynonyms / the variable store has correct type but wrong "
           "synonym / exception is thrown") {
 
-  QPSParser qp;
-  VariableStore vs;
-  SelectQueryParser sqp;
-  Parameter p2("s2", ParameterType::STMT);
-  Parameter p3("s3", ParameterType::STMT);
-  Parameter p4("s4", ParameterType::STMT);
-  Parameter p6("v2", ParameterType::VARIABLE);
-  Parameter p7("v3", ParameterType::VARIABLE);
-  Parameter p8("v4", ParameterType::VARIABLE);
-  vs.insertVariable(p2);
-  vs.insertVariable(p3);
-  vs.insertVariable(p4);
-  vs.insertVariable(p6);
-  vs.insertVariable(p7);
-  vs.insertVariable(p8);
-  Query q = sqp.parse("Select s such that Modifies(s, v)");
-  REQUIRE_THROWS_AS(qp.checkSynonyms(&q, vs), SemanticException);
+    QPSParser qp;
+    VariableStore vs;
+    SelectQueryParser sqp;
+    Parameter p2("s2", ParameterType::STMT);
+    Parameter p3("s3", ParameterType::STMT);
+    Parameter p4("s4", ParameterType::STMT);
+    Parameter p6("v2", ParameterType::VARIABLE);
+    Parameter p7("v3", ParameterType::VARIABLE);
+    Parameter p8("v4", ParameterType::VARIABLE);
+    vs.insertVariable(p2);
+    vs.insertVariable(p3);
+    vs.insertVariable(p4);
+    vs.insertVariable(p6);
+    vs.insertVariable(p7);
+    vs.insertVariable(p8);
+    Query q = sqp.parse("Select s such that Modifies(s, v)");
+    REQUIRE_THROWS_AS(qp.checkSynonyms(&q, vs), SemanticException);
 }
