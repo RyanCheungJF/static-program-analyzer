@@ -205,44 +205,6 @@ std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parame
     return res;
 }
 
-void initializeQueue(std::deque<std::vector<StmtNum>>& queue, CFG& graph, StmtNum num, bool isFindChildren) {
-
-    for (StmtNum relative : graph[num][isFindChildren ? AppConstants::CHILDREN : AppConstants::PARENTS]) {
-        if (isFindChildren) {
-            queue.push_back({num, relative});
-        }
-        else {
-            queue.push_back({relative, num});
-        }
-    }
-}
-
-void addCFGRelativesTransitive(std::vector<std::vector<std::string>>& res, CFG& graph,
-                               std::deque<std::vector<StmtNum>>& queue, bool isFindChildren) {
-    std::unordered_set<StmtNum> seen;
-    int pos = isFindChildren ? 1 : 0;
-
-    while (!queue.empty()) {
-        std::vector<StmtNum> curr = queue.front();
-        queue.pop_front();
-
-        if (seen.find(curr[pos]) != seen.end()) {
-            continue;
-        }
-        seen.insert(curr[pos]);
-        res.push_back({std::to_string(curr[0]), std::to_string(curr[1])});
-
-        for (StmtNum relative : graph[curr[pos]][isFindChildren ? AppConstants::CHILDREN : AppConstants::PARENTS]) {
-            if (isFindChildren) {
-                queue.push_back({curr[0], relative});
-            }
-            else {
-                queue.push_back({relative, curr[1]});
-            }
-        }
-    }
-}
-
 std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardT(Parameter intParam, bool isFindChildren) {
     std::string intString = intParam.getValue();
     StmtNum intValue = stoi(intString);
@@ -256,7 +218,8 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardT(Parameter 
     auto graph = cfgStorage->getGraph(proc);
     initializeQueue(queue, graph, intValue, isFindChildren);
 
-    addCFGRelativesTransitive(res, graph, queue, isFindChildren);
+    std::unordered_set<StmtNum> emptyFilter;
+    addCFGRelativesTransitive(res, graph, queue, isFindChildren, emptyFilter);
     return res;
 }
 
@@ -277,34 +240,8 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtT(Parameter intP
     auto graph = cfgStorage->getGraph(proc);
     initializeQueue(queue, graph, intValue, isFindChildren);
 
-    std::unordered_set<StmtNum> seen;
-    int pos = isFindChildren ? 1 : 0;
-    while (!queue.empty()) {
-        std::vector<StmtNum> curr = queue.front();
-        queue.pop_front();
+    addCFGRelativesTransitive(res, graph, queue, isFindChildren, stmttypeLines);
 
-        if (seen.find(curr[pos]) != seen.end()) {
-            continue;
-        }
-        seen.insert(curr[pos]);
-        if (stmttypeLines.find(curr[pos]) != stmttypeLines.end()) {
-            if (isFindChildren) {
-                res.push_back({intString, std::to_string(curr[pos])});
-            }
-            else {
-                res.push_back({std::to_string(curr[pos]), intString});
-            }
-        }
-
-        for (StmtNum relative : graph[curr[pos]][isFindChildren ? AppConstants::CHILDREN : AppConstants::PARENTS]) {
-            if (isFindChildren) {
-                queue.push_back({curr[0], relative});
-            }
-            else {
-                queue.push_back({relative, curr[1]});
-            }
-        }
-    }
     return res;
 }
 
@@ -326,7 +263,8 @@ std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardT(Parameter
             std::deque<std::vector<StmtNum>> queue;
             initializeQueue(queue, graph, line, isFindChildren);
 
-            addCFGRelativesTransitive(res, graph, queue, isFindChildren);
+            std::unordered_set<StmtNum> emptyFilter;
+            addCFGRelativesTransitive(res, graph, queue, isFindChildren, emptyFilter);
         }
     }
     return res;
@@ -351,28 +289,9 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransit
         for (StmtNum line : lines) {
 
             std::deque<std::vector<StmtNum>> queue;
-            std::unordered_set<StmtNum> seen;
-            std::unordered_set<StmtNum> children = graph[line][AppConstants::CHILDREN];
-            for (StmtNum child : children) {
-                queue.push_back({line, child});
-            }
+            initializeQueue(queue, graph, line, AppConstants::IS_FIND_CHILDREN);
 
-            while (!queue.empty()) {
-                std::vector<StmtNum> curr = queue.front();
-                queue.pop_front();
-                if (seen.find(curr[1]) != seen.end()) {
-                    continue;
-                }
-
-                seen.insert(curr[1]);
-                if (stmttypeLines2.find(curr[1]) != stmttypeLines2.end()) {
-                    res.push_back({std::to_string(curr[0]), std::to_string(curr[1])});
-                }
-
-                for (StmtNum child : graph[curr[1]][AppConstants::CHILDREN]) {
-                    queue.push_back({curr[0], child});
-                }
-            }
+            addCFGRelativesTransitive(res, graph, queue, AppConstants::IS_FIND_CHILDREN, stmttypeLines2);
         }
     }
     return res;
@@ -393,7 +312,8 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcardTransit
             std::unordered_set<StmtNum> seen;
             initializeQueue(queue, graph, parent, AppConstants::IS_FIND_CHILDREN);
 
-            addCFGRelativesTransitive(res, graph, queue, AppConstants::IS_FIND_CHILDREN);
+            std::unordered_set<StmtNum> emptyFilter;
+            addCFGRelativesTransitive(res, graph, queue, AppConstants::IS_FIND_CHILDREN, emptyFilter);
         }
     }
     return res;
@@ -427,6 +347,53 @@ void NextHandler::addCFGRelatives(std::vector<std::vector<std::string>>& res, Pr
         }
         else {
             res.push_back({std::to_string(relative), std::to_string(num)});
+        }
+    }
+}
+
+void NextHandler::initializeQueue(std::deque<std::vector<StmtNum>>& queue, CFG& graph, StmtNum num,
+                                  bool isFindChildren) {
+
+    for (StmtNum relative : graph[num][isFindChildren ? AppConstants::CHILDREN : AppConstants::PARENTS]) {
+        if (isFindChildren) {
+            queue.push_back({num, relative});
+        }
+        else {
+            queue.push_back({relative, num});
+        }
+    }
+}
+
+void NextHandler::addCFGRelativesTransitive(std::vector<std::vector<std::string>>& res, CFG& graph,
+                                            std::deque<std::vector<StmtNum>>& queue, bool isFindChildren,
+                                            std::unordered_set<StmtNum>& filterSet) {
+    std::unordered_set<StmtNum> seen;
+    int pos = isFindChildren ? 1 : 0;
+
+    while (!queue.empty()) {
+        std::vector<StmtNum> curr = queue.front();
+        queue.pop_front();
+
+        if (seen.find(curr[pos]) != seen.end()) {
+            continue;
+        }
+        seen.insert(curr[pos]);
+        if (!filterSet.empty()) {
+            if (filterSet.find(curr[pos]) != filterSet.end()) {
+                res.push_back({std::to_string(curr[0]), std::to_string(curr[1])});
+            }
+        }
+        else {
+            res.push_back({std::to_string(curr[0]), std::to_string(curr[1])});
+        }
+
+        for (StmtNum relative : graph[curr[pos]][isFindChildren ? AppConstants::CHILDREN : AppConstants::PARENTS]) {
+            if (isFindChildren) {
+                queue.push_back({curr[0], relative});
+            }
+            else {
+                queue.push_back({relative, curr[1]});
+            }
         }
     }
 }

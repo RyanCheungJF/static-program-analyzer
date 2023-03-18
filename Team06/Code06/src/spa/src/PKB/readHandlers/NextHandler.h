@@ -104,4 +104,10 @@ private:
     std::vector<std::vector<std::string>> oneIntOneStmtT(Parameter intParam, Parameter stmtParam, bool isFindChildren);
 
     std::vector<std::vector<std::string>> oneStmtOneWildcardT(Parameter stmtParam, bool isFindChildren);
+
+    void addCFGRelativesTransitive(std::vector<std::vector<std::string>>& res, CFG& graph,
+                                   std::deque<std::vector<StmtNum>>& queue, bool isFindChildren,
+                                   std::unordered_set<StmtNum>& filterSet);
+
+    void initializeQueue(std::deque<std::vector<StmtNum>>& queue, CFG& graph, StmtNum num, bool isFindChildren);
 };
