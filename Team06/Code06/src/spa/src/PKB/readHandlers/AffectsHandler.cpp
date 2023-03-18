@@ -521,7 +521,11 @@ bool AffectsHandler::checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2) {
     std::unordered_set<StmtNum> a2Parents = parentTStorage->getLeftWildcard(a2);
     for (StmtNum n : a1Parents) {
         if (a2Parents.find(n) != a2Parents.end()) {
-            return true;
+
+            unordered_set<Stmt> stmtType = stmtStorage->getStatementType(n);
+            if (stmtType.find(AppConstants::WHILE) != stmtType.end()) {
+                return true;
+            }
         }
     }
     return false;

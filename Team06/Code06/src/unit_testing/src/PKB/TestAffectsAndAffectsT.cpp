@@ -785,7 +785,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 3")
 
     writePkb.setUsesP(proc1, {"v", "d", "a", "c", "b", "d", "e"});
 
-    writePkb.setParentT(1, {2, 3, 4, 5, 6, 7, 8}); // TODO: add the correct set parentT calls
+    writePkb.setParentT(1, {2, 3, 4, 5, 6, 7, 8});
     writePkb.setParentT(3, {4, 5, 6, 7});
     writePkb.setParentT(4, {5});
 
@@ -872,7 +872,270 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 3")
             {"7", "5"}, {"7", "6"}, {"8", "7"}, {"8", "8"}, {"8", "6"}, {"8", "5"}
 
         };
-        //        REQUIRE(expected1 == res1);
         REQUIRE(unit_testing_utils::equals(expected1, res1));
+    }
+}
+
+TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* systest2 model") {
+    /*
+     *
+     * procedure wEiRdNAmeS123 {
+     * 	read p0licemAN;	// 1
+     * 	read p0liceWahMan;	// 2
+     * 	read pOl3icEwOM5N;	// 3
+     * 	if (p0licemAN == p0liceWahMan) then {	// 4
+     * 		read read;	// 5
+     * 		read = read + 1;	// 6
+     * 		read rEaD;	// 7
+     * 		rEEE = rEaD + read;	// 8
+     * 	} else {
+     * 		call noindent;	// 9
+     * 		print print;	// 10
+     * 	}
+     * 	call call;	// 11
+     * 	m0ArWeirdNaMe5AnDtH7sIsVer9Lon6AnDILov3Ch3rr1E2=8;	// 12
+     * }
+     *
+     * procedure noindent {
+     * 	call call;	// 13
+     * 	call call;	// 14
+     * 	call call;	// 15
+     * 	i = 5;	// 16
+     * 	N = 50;	// 17
+     * 	while (i <= N) {	// 18
+     * 		call call;	// 19
+     * 		i = i + 1;	// 20
+     * 		print i;	// 21
+     * 	}
+     * 	x = 1+2;	// 22
+     * 	y = 2+3;	// 23
+     * 	if (x != y) then {	// 24
+     * 		x = y;	// 25
+     * 	} else {
+     * 		y = x;	// 26
+     * 	}
+     * 	print x;	// 27
+     * 	print y;	// 28
+     * }
+     *
+     * procedure call {
+     * 	a = 2 + 3;	// 29
+     * }
+     *
+     * Valid Affects relationships:
+     *
+     * Valid Affects* relationships:
+     *
+     */
+
+    WritePKB writePkb;
+    ReadPKB readPkb;
+    PKB pkb;
+    pkb.initializePkb();
+    writePkb.setInstancePKB(pkb);
+    readPkb.setInstancePKB(pkb);
+
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graphOne = {
+        {1, {{AppConstants::PARENTS, {8}}, {AppConstants::CHILDREN, {2}}}},
+        {2, {{AppConstants::PARENTS, {1}}, {AppConstants::CHILDREN, {3}}}},
+        {3, {{AppConstants::PARENTS, {2, 7}}, {AppConstants::CHILDREN, {4}}}},
+        {4, {{AppConstants::PARENTS, {3, 5}}, {AppConstants::CHILDREN, {5, 9}}}},
+        {5, {{AppConstants::PARENTS, {4}}, {AppConstants::CHILDREN, {6}}}},
+        {6, {{AppConstants::PARENTS, {5}}, {AppConstants::CHILDREN, {7}}}},
+        {7, {{AppConstants::PARENTS, {6}}, {AppConstants::CHILDREN, {8}}}},
+        {8, {{AppConstants::PARENTS, {7}}, {AppConstants::CHILDREN, {11}}}},
+        {9, {{AppConstants::PARENTS, {4}}, {AppConstants::CHILDREN, {10}}}},
+        {10, {{AppConstants::PARENTS, {9}}, {AppConstants::CHILDREN, {11}}}},
+        {11, {{AppConstants::PARENTS, {8, 10}}, {AppConstants::CHILDREN, {12}}}},
+        {12, {{AppConstants::PARENTS, {11}}, {AppConstants::CHILDREN, {}}}}};
+
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graphTwo = {
+        {13, {{AppConstants::PARENTS, {}}, {AppConstants::CHILDREN, {14}}}},
+        {14, {{AppConstants::PARENTS, {13}}, {AppConstants::CHILDREN, {15}}}},
+        {15, {{AppConstants::PARENTS, {14}}, {AppConstants::CHILDREN, {16}}}},
+        {16, {{AppConstants::PARENTS, {15}}, {AppConstants::CHILDREN, {17}}}},
+        {17, {{AppConstants::PARENTS, {16}}, {AppConstants::CHILDREN, {18}}}},
+        {18, {{AppConstants::PARENTS, {17, 21}}, {AppConstants::CHILDREN, {19}}}},
+        {19, {{AppConstants::PARENTS, {18}}, {AppConstants::CHILDREN, {20}}}},
+        {20, {{AppConstants::PARENTS, {19}}, {AppConstants::CHILDREN, {21}}}},
+        {21, {{AppConstants::PARENTS, {20}}, {AppConstants::CHILDREN, {18}}}},
+        {22, {{AppConstants::PARENTS, {18}}, {AppConstants::CHILDREN, {23}}}},
+        {23, {{AppConstants::PARENTS, {22}}, {AppConstants::CHILDREN, {24}}}},
+        {24, {{AppConstants::PARENTS, {23}}, {AppConstants::CHILDREN, {25, 26}}}},
+        {25, {{AppConstants::PARENTS, {24}}, {AppConstants::CHILDREN, {27}}}},
+        {26, {{AppConstants::PARENTS, {24}}, {AppConstants::CHILDREN, {27}}}},
+        {27, {{AppConstants::PARENTS, {25, 26}}, {AppConstants::CHILDREN, {28}}}},
+        {28, {{AppConstants::PARENTS, {27}}, {AppConstants::CHILDREN, {}}}}};
+
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graphThree = {
+        {29, {{AppConstants::PARENTS, {}}, {AppConstants::CHILDREN, {}}}}};
+
+    ProcName proc1 = "wEiRdNAmeS123";
+    writePkb.writeCFG(proc1, graphOne);
+    ProcName proc2 = "noindent";
+    writePkb.writeCFG(proc2, graphTwo);
+    ProcName proc3 = "call";
+    writePkb.writeCFG(proc3, graphThree);
+
+    writePkb.setStatement("read", 1);
+    writePkb.setStatement("read", 2);
+    writePkb.setStatement("read", 3);
+    writePkb.setStatement("if", 4);
+    writePkb.setStatement("read", 5);
+    writePkb.setStatement("read", 6);
+    writePkb.setStatement("read", 7);
+    writePkb.setStatement("assign", 8);
+    writePkb.setStatement("call", 9);
+    writePkb.setStatement("print", 10);
+    writePkb.setStatement("call", 11);
+    writePkb.setStatement("assign", 12);
+
+    writePkb.setStatement("call", 13);
+    writePkb.setStatement("call", 14);
+    writePkb.setStatement("call", 15);
+    writePkb.setStatement("assign", 16);
+    writePkb.setStatement("assign", 17);
+    writePkb.setStatement("while", 18);
+    writePkb.setStatement("call", 19);
+    writePkb.setStatement("assign", 20);
+    writePkb.setStatement("print", 21);
+    writePkb.setStatement("assign", 22);
+    writePkb.setStatement("assign", 23);
+    writePkb.setStatement("if", 24);
+    writePkb.setStatement("assign", 25);
+    writePkb.setStatement("assign", 26);
+    writePkb.setStatement("print", 27);
+    writePkb.setStatement("print", 28);
+
+    writePkb.setStatement("assign", 29);
+
+    writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12});
+    writePkb.setProcedure(proc2, {113, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28});
+    writePkb.setProcedure(proc3, {29});
+
+    writePkb.setModifiesS(1, {"p0licemAN"});
+    writePkb.setModifiesS(2, {"p0liceWahMan"});
+    writePkb.setModifiesS(3, {"pOl3icEwOM5N"});
+    writePkb.setModifiesS(4, {"a", "i", "N", "x", "y", "read", "rEaD", "rEEE"});
+    writePkb.setModifiesS(5, {"read"});
+    writePkb.setModifiesS(6, {"read"});
+    writePkb.setModifiesS(7, {"rEaD"});
+    writePkb.setModifiesS(8, {"rEEE"});
+    writePkb.setModifiesS(9, {"a", "i", "N", "x", "y"});
+    //    writePkb.setModifiesS(10, {});
+    writePkb.setModifiesS(11, {"a"});
+    writePkb.setModifiesS(12, {"m0ArWeirdNaMe5AnDtH7sIsVer9Lon6AnDILov3Ch3rr1E2"});
+    writePkb.setModifiesP(
+        proc1, {"p0licemAN", "p0liceWahMan", "pOl3icEwOM5N", "a", "i", "N", "x", "y", "read", "rEaD", "rEEE"});
+
+    writePkb.setModifiesS(13, {"a"});
+    writePkb.setModifiesS(14, {"a"});
+    writePkb.setModifiesS(15, {"a"});
+    writePkb.setModifiesS(16, {"i"});
+    writePkb.setModifiesS(17, {"N"});
+    writePkb.setModifiesS(18, {"a", "i"});
+    writePkb.setModifiesS(19, {"a"});
+    writePkb.setModifiesS(20, {"i"});
+    writePkb.setModifiesS(21, {"i"});
+    writePkb.setModifiesS(22, {"x"});
+    writePkb.setModifiesS(23, {"y"});
+    writePkb.setModifiesS(24, {"x", "y"});
+    writePkb.setModifiesS(25, {"x"});
+    writePkb.setModifiesS(26, {"y"});
+    //    writePkb.setModifiesS(27, {});
+    //    writePkb.setModifiesS(28, {});
+    writePkb.setModifiesP(proc2, {"a", "i", "N", "x", "y"});
+
+    writePkb.setModifiesS(29, {"a"});
+    writePkb.setModifiesP(proc3, {"a"});
+
+    //    writePkb.setUsesS(1, {});
+    //    writePkb.setUsesS(2, {});
+    //    writePkb.setUsesS(3, {});
+    writePkb.setUsesS(4, {"p0licemAN", "p0liceWahMan", "rEaD", "read", "i", "N", "x", "y", "print"});
+    //    writePkb.setUsesS(5, {});
+    //    writePkb.setUsesS(6, {});
+    //    writePkb.setUsesS(7, {});
+    writePkb.setUsesS(8, {"rEaD", "read"});
+    writePkb.setUsesS(9, {"i", "N", "x", "y"});
+    writePkb.setUsesS(10, {"print"});
+    //    writePkb.setUsesS(11, {});
+    //    writePkb.setUsesS(12, {});
+    writePkb.setUsesP(proc1,
+                      {"i", "N", "x", "y", "p0licemAN", "p0liceWahMan", "rEaD", "read", "i", "N", "x", "y", "print"});
+
+    //    writePkb.setUsesS(13, {});
+    //    writePkb.setUsesS(14, {});
+    //    writePkb.setUsesS(15, {});
+    //    writePkb.setUsesS(16, {});
+    //    writePkb.setUsesS(17, {});
+    writePkb.setUsesS(18, {"i", "N"});
+    //    writePkb.setUsesS(19, {});
+    writePkb.setUsesS(20, {"i"});
+    writePkb.setUsesS(21, {"i"});
+    //    writePkb.setUsesS(22, {});
+    //    writePkb.setUsesS(23, {});
+    writePkb.setUsesS(24, {"x", "y"});
+    writePkb.setUsesS(25, {"y"});
+    writePkb.setUsesS(26, {"x"});
+    writePkb.setUsesS(27, {"x"});
+    writePkb.setUsesS(28, {"y"});
+    writePkb.setUsesP(proc2, {"i", "N", "x", "y"});
+
+    //    writePkb.setUsesS(29, {});
+    //    writePkb.setUsesP(proc3, {});
+
+    writePkb.setParentT(4, {5, 6, 7, 8, 9, 10});
+    writePkb.setParentT(18, {19, 20, 21});
+    writePkb.setParentT(24, {25, 26});
+
+    SECTION("Affects*(int, a)") {
+        //        std::vector<Parameter> params1 = {Parameter("6", AppConstants::FIXED_INT),
+        //                                          Parameter("a", AppConstants::ASSIGN)};
+        //        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTST, params1);
+        //        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        //        std::vector<std::vector<std::string>> expected1 = {{"6", "8"}};
+        //        REQUIRE(expected1 == res1);
+        //        REQUIRE(unit_testing_utils::equals(expected1, res1));
+
+        //        std::vector<Parameter> params2 = {Parameter("a", AppConstants::ASSIGN),
+        //                                          Parameter("2", AppConstants::FIXED_INT)};
+        //        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTST, params2);
+        //        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
+        //        std::vector<std::vector<std::string>> expected2 = {};
+        //        REQUIRE(expected2 == res2);
+    }
+
+    SECTION("Affects*(a, int)") {
+        //        std::vector<Parameter> params1 = {Parameter("a", AppConstants::ASSIGN),
+        //                                          Parameter("8", AppConstants::FIXED_INT)};
+        //        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTST, params1);
+        //        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        //        std::vector<std::vector<std::string>> expected1 = {{"2", "8"}, {"7", "8"}, {"6", "8"},
+        //                                                           {"5", "8"}, {"8", "8"}
+        //        };
+        //        REQUIRE(unit_testing_utils::equals(expected1, res1));
+        //
+        //        std::vector<Parameter> params2 = {Parameter("a", AppConstants::ASSIGN),
+        //                                          Parameter("2", AppConstants::FIXED_INT)};
+        //        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTST, params2);
+        //        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
+        //        std::vector<std::vector<std::string>> expected2 = {};
+        //        REQUIRE(expected2 == res2);
+    }
+
+    SECTION("Affects*(_, _)") {
+        //        std::vector<Parameter> params1 = {Parameter("_", AppConstants::WILDCARD),
+        //                                          Parameter("a", AppConstants::ASSIGN)};
+        //        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTST, params1);
+        //        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        //        std::vector<std::vector<std::string>> expected1 = {{"2", "5"}, {"2", "6"}, {"2", "7"}, {"2", "8"},
+        //                                                           {"5", "6"}, {"5", "7"}, {"5", "8"}, {"5", "5"},
+        //                                                           {"6", "7"}, {"6", "8"}, {"6", "5"}, {"6", "6"},
+        //                                                           {"7", "8"}, {"7", "7"}, {"7", "5"}, {"7", "6"},
+        //                                                           {"8", "7"}, {"8", "8"}, {"8", "6"}, {"8", "5"}
+        //
+        //        };
+        //        REQUIRE(unit_testing_utils::equals(expected1, res1));
     }
 }

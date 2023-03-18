@@ -9,11 +9,6 @@ std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcname(Param
     std::string callee = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
-    // based on the fact that there are no cycles in the source code
-    if (caller == callee) {
-        return res;
-    }
-
     std::unordered_set<ProcName> callees = callsStorage->getCallees(caller);
     if (callees.find(callee) != callees.end()) {
         res.push_back({caller, callee});
@@ -63,6 +58,11 @@ std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Par
     bool isProcnameParam2 = paramType2 == ParameterType::FIXED_STRING;
     bool isWildcardParam1 = paramType1 == ParameterType::PROCEDURE || paramType1 == ParameterType::WILDCARD;
     bool isWildcardParam2 = paramType2 == ParameterType::PROCEDURE || paramType2 == ParameterType::WILDCARD;
+
+    // based on the fact that there are no cycles in the source code
+    if (param1 == param1 && !(paramType1 == ParameterType::WILDCARD) && !(paramType2 == ParameterType::WILDCARD)) {
+        return {};
+    }
 
     if (isProcnameParam1) {
         if (isProcnameParam2) {
