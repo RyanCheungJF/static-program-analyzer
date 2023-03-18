@@ -52,6 +52,36 @@ std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1
     return res;
 }
 
+void filter(std::unordered_set<StmtNum>& toFilter, std::unordered_set<StmtNum>& filterSet) {
+    for (auto it = toFilter.begin(); it != toFilter.end();) {
+        if (filterSet.find(*it) == filterSet.end()) {
+            it = toFilter.erase(it);
+        }
+        else {
+            it++;
+        }
+    }
+}
+
+void NextHandler::addCFGRelatives(std::vector<std::vector<std::string>>& res, ProcName proc, StmtNum num, bool isFindChildren,
+                     std::unordered_set<StmtNum>& filterSet) {
+    auto graph = cfgStorage->getGraph(proc);
+    std::unordered_set<StmtNum> relatives = graph[num][isFindChildren ? AppConstants::CHILDREN : AppConstants::PARENTS];
+
+    if (!filterSet.empty()) {
+        filter(relatives, filterSet);
+    }
+
+    for (StmtNum relative : relatives) {
+        if (isFindChildren) {
+            res.push_back({std::to_string(num), std::to_string(relative)});
+        }
+        else {
+            res.push_back({std::to_string(relative), std::to_string(num)});
+        }
+    }
+}
+
 std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardNonT(Parameter intParam, bool isFindChildren) {
     std::string intString = intParam.getValue();
     StmtNum intValue = stoi(intString);
@@ -62,17 +92,8 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardNonT(Paramet
         return res;
     }
 
-    auto graph = cfgStorage->getGraph(proc);
-    std::unordered_set<StmtNum> relatives =
-        graph[intValue][isFindChildren ? AppConstants::CHILDREN : AppConstants::PARENTS];
-    for (StmtNum relative : relatives) {
-        if (isFindChildren) {
-            res.push_back({intString, std::to_string(relative)});
-        }
-        else {
-            res.push_back({std::to_string(relative), intString});
-        }
-    }
+    std::unordered_set<StmtNum> emptyFilter;
+    addCFGRelatives(res, proc, intValue, isFindChildren, emptyFilter);
     return res;
 }
 
@@ -90,20 +111,7 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtNonT(Parameter i
 
     std::unordered_set<StmtNum> stmtTypeLines = stmtStorage->getStatementNumbers(stmtType);
     auto graph = cfgStorage->getGraph(proc);
-    std::unordered_set<StmtNum> relatives =
-        graph[intValue][isFindChildren ? AppConstants::CHILDREN : AppConstants::PARENTS];
-    for (StmtNum relative : relatives) {
-        if (stmtTypeLines.find(relative) == stmtTypeLines.end()) {
-            continue;
-        }
-
-        if (isFindChildren) {
-            res.push_back({intString, std::to_string(relative)});
-        }
-        else {
-            res.push_back({std::to_string(relative), intString});
-        }
-    }
+    addCFGRelatives(res, proc, intValue, isFindChildren, stmtTypeLines);
     return res;
 }
 
@@ -114,21 +122,12 @@ std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardNonT(Parame
     std::unordered_set<StmtNum> stmtTypeLines = stmtStorage->getStatementNumbers(stmtType);
     std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines = getProcedureLines(stmtTypeLines);
 
-    for (auto row : procedure_lines) {
-        ProcName proc = row.first;
-        std::unordered_set<StmtNum> lines = row.second;
-        auto graph = cfgStorage->getGraph(proc);
+    for (auto kv : procedure_lines) {
+        ProcName proc = kv.first;
+        std::unordered_set<StmtNum> lines = kv.second;
+        std::unordered_set<StmtNum> emptyFilter;
         for (StmtNum line : lines) {
-            std::unordered_set<StmtNum> relatives =
-                graph[line][isFindChildren ? AppConstants::CHILDREN : AppConstants::PARENTS];
-            for (StmtNum relative : relatives) {
-                if (isFindChildren) {
-                    res.push_back({std::to_string(line), std::to_string(relative)});
-                }
-                else {
-                    res.push_back({std::to_string(relative), std::to_string(line)});
-                }
-            }
+            addCFGRelatives(res, proc, line, isFindChildren, emptyFilter);
         }
     }
     return res;
@@ -139,41 +138,28 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
     Stmt type2 = param2.getTypeString();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum> stmttypeLines1 = stmtStorage->getStatementNumbers(type1);
-    std::unordered_set<StmtNum> stmttypeLines2 = stmtStorage->getStatementNumbers(type2);
+    std::unordered_set<StmtNum> stmtTypeLines1 = stmtStorage->getStatementNumbers(type1);
+    std::unordered_set<StmtNum> stmtTypeLines2 = stmtStorage->getStatementNumbers(type2);
 
-    if (stmttypeLines1.size() < stmttypeLines2.size()) {
-        std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines = getProcedureLines(stmttypeLines1);
+    bool isLines1Smaller = stmtTypeLines1.size() < stmtTypeLines2.size();
+    std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines;
 
-        for (auto kv : procedure_lines) {
-            ProcName proc = kv.first;
-            std::unordered_set<StmtNum> lines = kv.second;
-            auto graph = cfgStorage->getGraph(proc);
-            for (StmtNum line : lines) {
-                std::unordered_set<StmtNum> children = graph[line][AppConstants::CHILDREN];
-                for (StmtNum child : children) {
-                    if (stmttypeLines2.find(child) != stmttypeLines2.end()) {
-                        res.push_back({std::to_string(line), std::to_string(child)});
-                    }
-                }
-            }
-        }
+    if (isLines1Smaller) {
+        procedure_lines = getProcedureLines(stmtTypeLines1);
     }
     else {
-        std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines = getProcedureLines(stmttypeLines2);
+        procedure_lines = getProcedureLines(stmtTypeLines2);
+    }
 
-        for (auto kv : procedure_lines) {
-            ProcName proc = kv.first;
-            std::unordered_set<StmtNum> lines = kv.second;
-            std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-                cfgStorage->getGraph(proc);
-            for (StmtNum line : lines) {
-                std::unordered_set<StmtNum> parents = graph[line][AppConstants::PARENTS];
-                for (StmtNum p : parents) {
-                    if (stmttypeLines1.find(p) != stmttypeLines1.end()) {
-                        res.push_back({std::to_string(p), std::to_string(line)});
-                    }
-                }
+    for (auto kv : procedure_lines) {
+        ProcName proc = kv.first;
+        std::unordered_set<StmtNum> lines = kv.second;
+        for (StmtNum line : lines) {
+            if (isLines1Smaller) {
+                addCFGRelatives(res, proc, line, AppConstants::IS_FIND_CHILDREN, stmtTypeLines2);
+            }
+            else {
+                addCFGRelatives(res, proc, line, !AppConstants::IS_FIND_CHILDREN, stmtTypeLines1);
             }
         }
     }

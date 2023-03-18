@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 typedef std::string ProcName;
 typedef std::string Stmt;

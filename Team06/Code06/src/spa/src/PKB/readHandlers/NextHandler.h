@@ -95,4 +95,7 @@ private:
     std::vector<std::vector<std::string>> oneIntOneWildcardNonT(Parameter intParam, bool isFindChildren);
 
     std::vector<std::vector<std::string>> oneStmtOneWildcardNonT(Parameter stmtParam, bool isFindChildren);
+
+    void addCFGRelatives(std::vector<std::vector<std::string>>& res, ProcName proc, StmtNum num, bool isFindChildren,
+                         std::unordered_set<StmtNum>& filter);
 };
