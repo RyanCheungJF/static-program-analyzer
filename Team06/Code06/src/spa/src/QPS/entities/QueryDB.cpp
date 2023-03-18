@@ -83,7 +83,6 @@ bool QueryDB::hasEmptyTable() {
 
 Table QueryDB::extractColumns(vector<Parameter> params) {
     // Assumes that each table has unique headers.
-    assert(!params.empty());
     vector<Table> temp;
     for (Table table : tableVector) {
         vector<Parameter> headers = table.getHeaders();

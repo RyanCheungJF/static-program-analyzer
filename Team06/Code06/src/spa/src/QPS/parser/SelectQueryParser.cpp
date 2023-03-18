@@ -124,7 +124,7 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
         string tupleString;
         for (start; start < end; start++) {
             // recreates tuple string with whitespace removed
-            tupleString += wordList[start];
+            tupleString += wordList[start] + " ";
         }
         tie(ignore, paramStrings) = extractParameters(tupleString, "<", ">", ",");
         for (string synonym : paramStrings) {
@@ -138,7 +138,10 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
     }
     else if (isSynonym(wordList[start])) {
         // single select parameter
-        Parameter param = Parameter::makeParameter(wordList[1], AppConstants::SYNONYM);
+        if ((end - start) != 1) {
+            throw SyntaxException();
+        }
+        Parameter param = Parameter::makeParameter(wordList[start], AppConstants::SYNONYM);
         params.push_back(param);
         return params;
     }
@@ -238,9 +241,11 @@ vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, in
     int curIndex = start;
     for (int i = 0; i < ands.size(); i++) {
         for (int j = curIndex; j < ands[i]; j++) {
+            //spaces are removed when converting into wordlist, need to add it back
             condString += wordList[j];
         }
         if (!formChecker(condString)) {
+            condString += " ";
             curIndex = ands[i];
             continue;
         }
@@ -250,9 +255,10 @@ vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, in
     }
 
     while (curIndex < end) {
-        condString += wordList[curIndex];
+        condString += wordList[curIndex] + " ";
         curIndex++;
     }
+    condString = trim(condString);
     if (!formChecker(condString)) {
         throw SyntaxException();
     }
