@@ -13,7 +13,9 @@ vector<Parameter> declarationToParameter(string s) {
             if (!isSynonym(synonym)) {
                 throw SyntaxException();
             }
-            Parameter p = Parameter::makeParameter(synonym, designEntity);
+            Parameter p = Parameter::makeParameter(synonym);
+            ParameterType pt = Parameter::stringToType(designEntity);
+            p.updateSynonymType(pt);
             paramList.push_back(p);
         }
     }

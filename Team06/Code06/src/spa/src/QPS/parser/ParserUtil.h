@@ -7,6 +7,7 @@
 
 #include "../../exceptions/Exception.h"
 #include "../QPSGrammarUtils.h"
+#include "../entities/Parameter.h"
 #include "exceptions/InternalException.h"
 #include "exceptions/SyntaxException.h"
 using namespace std;

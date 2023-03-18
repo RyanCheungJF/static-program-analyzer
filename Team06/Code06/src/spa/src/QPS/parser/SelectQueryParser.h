@@ -25,6 +25,7 @@ enum ClauseType {
 class SelectQueryParser {
 public:
     Query parse(string selectQuery);
+    Parameter parseParameter(string paramString);
 
 private:
     map<ClauseType, vector<int>> getClauseStarts(vector<string>& wordList);
@@ -36,6 +37,7 @@ private:
     vector<Parameter> extractSelectTuple(vector<string>& wordList, int start, int end);
     vector<ClauseType> getAllClauseTypes();
     vector<string> splitClauseByAnds(vector<string>& wordList, int start, int end, function<bool(string)> formChecker);
+
 };
 
 #endif // SPA_SELECTCLAUSEPARSER_H

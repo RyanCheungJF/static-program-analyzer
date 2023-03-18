@@ -128,20 +128,20 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
         }
         tie(ignore, paramStrings) = extractParameters(tupleString, "<", ">", ",");
         for (string synonym : paramStrings) {
-            if (!isSynonym(synonym)) {
+            if (!isElem(synonym)) {
                 throw SyntaxException();
             }
-            Parameter param = Parameter::makeParameter(synonym, AppConstants::SYNONYM);
+            Parameter param = parseParameter(synonym);
             params.push_back(param);
         }
         return params;
     }
-    else if (isSynonym(wordList[start])) {
+    else if (isElem(wordList[start])) {
         // single select parameter
         if ((end - start) != 1) {
             throw SyntaxException();
         }
-        Parameter param = Parameter::makeParameter(wordList[start], AppConstants::SYNONYM);
+        Parameter param = parseParameter(wordList[start]);
         params.push_back(param);
         return params;
     }
@@ -233,6 +233,17 @@ vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
     return vector<ClauseType>{SELECT, SUCH_THAT, PATTERN, WITH};
 }
 
+Parameter SelectQueryParser::parseParameter(string paramString) {
+  string paramName;
+  int index;
+  bool found;
+  tie(paramName, index, found) = extractSubStringUntilDelimiter(paramString, 0, ".");
+  if (!found) {
+      return Parameter::makeParameter(paramName);
+  }
+  string attributeType = paramString.substr(index, paramString.length() - index);
+  return Parameter::makeParameter(paramName, attributeType);
+}
 vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, int start, int end,
                                                     function<bool(string)> formChecker) {
     vector<int> ands = findAnds(wordList, start, end);

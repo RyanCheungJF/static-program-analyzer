@@ -92,6 +92,11 @@ vector<Parameter*> Query::getAllUncheckedSynonyms() {
 }
 
 bool Query::validateAllParameters() {
+    for (Parameter p : selectParameters) {
+        if (!p.hasValidAttributeType()) {
+            return false;
+        }
+    }
     for (Pattern p : patterns) {
         if (!p.validateParams()) {
             return false;
