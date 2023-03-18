@@ -11,15 +11,15 @@ Select a such that Affects(15, a)
 3 - comment
 assign a;
 Select a such that Affects(8, a)
-8, 13, 31
+8, 9, 31
 5000
 4 - comment
 assign a;
 Select a such that Affects(74, a)
-78
+none
 5000
 5 - comment
 assign a;
 Select a such that Affects(a, 154)
-139
+138
 5000
