@@ -496,7 +496,6 @@ bool AffectsHandler::checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2) {
 bool AffectsHandler::checkModifiedAssignReadCall(std::unordered_set<Ent> commonVariables, StmtNum currentLine) {
     unordered_set<Ent> entitiesModifiedOnCurrentLine = modifiesStorage->getEnt(currentLine);
 
-
     // if a assignment, read, or procedure call, we check if the entitiesModifiedOnCurrentLine is the same as commonVariables
     std::unordered_set<Stmt> stmtTypes = stmtStorage->getStatementType(currentLine);
     if (stmtTypes.find(AppConstants::ASSIGN) != stmtTypes.end() ||
