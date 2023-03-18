@@ -18,6 +18,7 @@ public:
     Parameter* getEntRef();
     vector<string> getExprSpecs();
     bool validateParams();
+    ParameterType getPatternType();
 
 private:
     static const unordered_map<int, shared_ptr<SyntaxValidator<Pattern>>> paramCountToValidatorMap;

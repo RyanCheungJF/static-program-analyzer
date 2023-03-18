@@ -32,7 +32,14 @@ public:
     inline static const std::string SYNONYM = "synonym";
     inline static const std::string WILDCARD = "wildcard";
     inline static const std::string FIXED_INT = "fixed_int";
+    inline static const std::string BOOLEAN = "BOOLEAN";
     inline static const std::string FIXED_STRING = "fixed_string";
+
+    // synonym attributes
+    inline static const std::string PROCNAME = "procName";
+    inline static const std::string VARNAME = "varName";
+    inline static const std::string VALUE = "value";
+    inline static const std::string STMTNO = "stmt#";
 
     // relationships
     inline static const std::string FOLLOWS = "Follows";

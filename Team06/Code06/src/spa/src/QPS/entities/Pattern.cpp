@@ -31,7 +31,7 @@ Pattern Pattern::makePattern(Parameter p, Parameter ent, vector<string>& es) {
     validator->validate(pat);
     vector<string> processedEs;
     for (string s : es) {
-        processedEs.push_back(removeCharFromString(s, '\"'));
+        processedEs.push_back(removeCharFromString(removeCharFromString(s, '\"'), ' '));
     }
     Pattern processedPat(p, ent, processedEs);
     return processedPat;
@@ -64,6 +64,10 @@ bool Pattern::validateParams() {
     default:
         return false;
     }
+}
+
+ParameterType Pattern::getPatternType() {
+    return patternSyn.getType();
 }
 
 shared_ptr<SyntaxValidator<Pattern>> patTwoParamVal =

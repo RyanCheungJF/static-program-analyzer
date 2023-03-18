@@ -5,7 +5,6 @@
 #include "QPSGrammarUtils.h"
 
 #include <algorithm>
-#include <iostream>
 #include <regex>
 #include <string>
 
@@ -21,6 +20,14 @@ bool isIdent(string s) {
 
 bool isSynonym(string s) {
     return isIdent(s);
+}
+
+bool isTupleStart(string s) {
+    return s[0] == '<';
+}
+
+bool isBoolean(string s) {
+    return s == AppConstants::BOOLEAN;
 }
 
 bool isInteger(string integer) {
@@ -108,8 +115,6 @@ bool isExprSpec(string s) {
     if (s == "_") {
         return true;
     }
-    // removes all whitespace from s.
-    s = removeCharFromString(s, ' ');
     bool startsWith_ = regex_search(s, regex("^_\""));
     bool endsWith_ = regex_search(s, regex("\"_$"));
     if (startsWith_ && endsWith_) {
@@ -215,4 +220,28 @@ bool isFactor(string s) {
         return isExpr(s);
     }
     return isName(s) || isInteger(s);
+}
+
+bool isElem(string s) {
+    return isSynonym(s) || isAttrRef(s);
+}
+
+bool isAttrRef(string s) {
+    string delimiter = ".";
+    bool found;
+    int nextStart;
+    string name, attribute;
+    tie(name, nextStart, found) = extractSubStringUntilDelimiter(s, 0, delimiter);
+    if (!found) {
+        return false;
+    }
+    if (nextStart >= s.size()) {
+        return false;
+    }
+    attribute = s.substr(nextStart, s.size() - nextStart);
+    return isSynonym(name) && isAttribute(attribute);
+}
+
+bool isAttribute(string s) {
+    return regex_match(s, regex("^(procName|varName|value|stmt#)$"));
 }

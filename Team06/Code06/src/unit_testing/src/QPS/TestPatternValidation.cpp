@@ -19,9 +19,9 @@ TEST_CASE("isExprSpec / \"_a_\" is NOT valid expr spec / return true") {
     REQUIRE(!isExprSpec("\"_a_\""));
 }
 
-TEST_CASE("isExprSpec / _  \"a  \"  _ is valid expr spec / return true") {
-    // adding stupid amount of whitespace
-    REQUIRE(isExprSpec("_  \"a  \"  _ "));
+TEST_CASE("isExprSpec / _  \"a  \"  _ is NOT valid expr spec / return true") {
+    // whitespaces between _ and " is not allowed.
+    REQUIRE(!isExprSpec("_  \"a  \"  _ "));
 }
 
 TEST_CASE("isExprSpec / _a_ is NOT a valid expr spec / return false") {
@@ -74,6 +74,16 @@ TEST_CASE("isExpr / +b is an invalid expression / return false") {
 
 TEST_CASE("isExpr / a+ is an invalid expression / return false") {
     REQUIRE(!isExpr("a+"));
+}
+
+TEST_CASE("isExpr / invalid space in pattern clause / throws syntax error") {
+    string input = "\"v z\"";
+    REQUIRE(!isExprSpec(input));
+}
+
+TEST_CASE("parse / invalid space in between _ and \" / throws syntax error") {
+    string input = "_ \"z\" _";
+    REQUIRE(!isExprSpec(input));
 }
 
 // IS FACTOR

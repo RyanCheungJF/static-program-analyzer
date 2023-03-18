@@ -88,8 +88,8 @@ TEST_CASE("Test If/While Pattern on WritePKB and ReadPKB") {
     writePkb.setWhilePattern(2, {"z"});
 
     SECTION("if(\"x\", _, _)") {
-        Parameter param1 = Parameter("if", AppConstants::IF);
-        Parameter param2 = Parameter("z", AppConstants::FIXED_STRING);
+        Parameter param1 = Parameter("if", ParameterType::IF);
+        Parameter param2 = Parameter("z", ParameterType::FIXED_STRING);
         vector<string> exprSpecs = {"_", "_"};
         Pattern pattern = Pattern(param1, param2, exprSpecs);
 
@@ -100,8 +100,8 @@ TEST_CASE("Test If/While Pattern on WritePKB and ReadPKB") {
     }
 
     SECTION("while(v, _)") {
-        Parameter param1 = Parameter("while", AppConstants::WHILE);
-        Parameter param2 = Parameter("v", AppConstants::VARIABLE);
+        Parameter param1 = Parameter("while", ParameterType::WHILE);
+        Parameter param2 = Parameter("v", ParameterType::VARIABLE);
         vector<string> exprSpecs = {"_", "_"};
         Pattern pattern = Pattern(param1, param2, exprSpecs);
 
@@ -112,8 +112,8 @@ TEST_CASE("Test If/While Pattern on WritePKB and ReadPKB") {
     }
 
     SECTION("if(_, _, _)") {
-        Parameter param1 = Parameter("if", AppConstants::IF);
-        Parameter param2 = Parameter("_", AppConstants::WILDCARD);
+        Parameter param1 = Parameter("if", ParameterType::IF);
+        Parameter param2 = Parameter("_", ParameterType::WILDCARD);
         vector<string> exprSpecs = {"_", "_"};
         Pattern pattern = Pattern(param1, param2, exprSpecs);
 
@@ -124,8 +124,8 @@ TEST_CASE("Test If/While Pattern on WritePKB and ReadPKB") {
     }
 
     SECTION("while(\"non-exist\", _, _)") {
-        Parameter param1 = Parameter("while", AppConstants::WHILE);
-        Parameter param2 = Parameter("non-exist", AppConstants::FIXED_STRING);
+        Parameter param1 = Parameter("while", ParameterType::WHILE);
+        Parameter param2 = Parameter("non-exist", ParameterType::FIXED_STRING);
         vector<string> exprSpecs = {"_", "_"};
         Pattern pattern = Pattern(param1, param2, exprSpecs);
 

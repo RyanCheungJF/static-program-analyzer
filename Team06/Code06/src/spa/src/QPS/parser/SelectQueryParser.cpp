@@ -80,12 +80,36 @@ vector<tuple<ClauseType, int, int>> SelectQueryParser::getClausePositions(map<Cl
     return res;
 }
 
+vector<Parameter> SelectQueryParser::extractSelectTuple(vector<string>& wordList, int start, int end) {
+    string tupleString;
+    vector<Parameter> params;
+    for (start; start < end; start++) {
+        // recreates tuple string with whitespace removed
+        tupleString += wordList[start];
+    }
+    if (tupleString.back() != '>') {
+        throw SyntaxException();
+    }
+    // gets rid of <>
+    tupleString.pop_back();
+    tupleString.erase(0, 1);
+    vector<string> synonyms = stringToWordListByDelimiter(tupleString, ",");
+    for (string synonym : synonyms) {
+        if (!isSynonym(synonym)) {
+            throw SyntaxException();
+        }
+        Parameter param = Parameter::makeParameter(synonym, AppConstants::SYNONYM);
+        params.push_back(param);
+    }
+    return params;
+}
+
 /*
 assumes start and end won't be -1 i.e. select clause must exist
 */
 vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList, int start, int end) {
     vector<Parameter> params;
-    if (end - start != 2) {
+    if (end - start < 2) {
         // select clause does not exist
         throw SyntaxException();
     }
@@ -93,13 +117,32 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
         throw InternalException("Error: SelectQueryParser.parseSelectClause bad "
                                 "start position for wordList");
     }
-    if (!isSynonym(wordList[end - (size_t)1])) {
-        // bad select parameter
-        throw SyntaxException();
+    start = start + 1;
+    if (isTupleStart(wordList[start])) {
+        // it is a tuple select clause
+        vector<string> paramStrings;
+        string tupleString;
+        for (start; start < end; start++) {
+            tupleString += " " + wordList[start];
+        }
+        tie(ignore, paramStrings) = extractParameters(tupleString, "<", ">", ",");
+        for (string synonym : paramStrings) {
+            synonym = trim(synonym);
+            if (!isElem(synonym)) {
+                throw SyntaxException();
+            }
+            Parameter param = parseParameter(synonym);
+            params.push_back(param);
+        }
+        return params;
     }
-    Parameter param = Parameter::makeParameter(wordList[1], AppConstants::SYNONYM);
-    params.push_back(param);
-    return params;
+    else if (isElem(wordList[start]) && end-start == 1) {
+        // single select parameter
+        Parameter param = parseParameter(wordList[start]);
+        params.push_back(param);
+        return params;
+    }
+    throw SyntaxException();
 }
 
 vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<string>& wordList, int start, int end) {
@@ -187,6 +230,17 @@ vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
     return vector<ClauseType>{SELECT, SUCH_THAT, PATTERN, WITH};
 }
 
+Parameter SelectQueryParser::parseParameter(string paramString) {
+    string paramName;
+    int index;
+    bool found;
+    tie(paramName, index, found) = extractSubStringUntilDelimiter(paramString, 0, ".");
+    if (!found) {
+        return Parameter::makeParameter(paramName);
+    }
+    string attributeType = paramString.substr(index, paramString.length() - index);
+    return Parameter::makeParameter(paramName, attributeType);
+}
 vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, int start, int end,
                                                     function<bool(string)> formChecker) {
     vector<int> ands = findAnds(wordList, start, end);
@@ -195,9 +249,11 @@ vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, in
     int curIndex = start;
     for (int i = 0; i < ands.size(); i++) {
         for (int j = curIndex; j < ands[i]; j++) {
+            // spaces are removed when converting into wordlist, need to add it back
             condString += wordList[j];
         }
         if (!formChecker(condString)) {
+            condString += " ";
             curIndex = ands[i];
             continue;
         }
@@ -207,9 +263,10 @@ vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, in
     }
 
     while (curIndex < end) {
-        condString += wordList[curIndex];
+        condString += wordList[curIndex] + " ";
         curIndex++;
     }
+    condString = trim(condString);
     if (!formChecker(condString)) {
         throw SyntaxException();
     }
