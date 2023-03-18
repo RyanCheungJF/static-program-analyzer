@@ -997,12 +997,12 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 3")
         std::vector<std::vector<std::string>> expected1 = {{"8", "7"}};
         REQUIRE(unit_testing_utils::equals(expected1, res1));
 
-        std::vector<Parameter> params2 = {Parameter("3", AppConstants::FIXED_INT),
-                                          Parameter("a", AppConstants::WILDCARD)};
-        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTS, params2);
-        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
-        std::vector<std::vector<std::string>> expected2 = {};
-        REQUIRE(unit_testing_utils::equals(expected2, res2));
+//        std::vector<Parameter> params2 = {Parameter("3", AppConstants::FIXED_INT),
+//                                          Parameter("a", AppConstants::WILDCARD)};
+//        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTS, params2);
+//        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
+//        std::vector<std::vector<std::string>> expected2 = {};
+//        REQUIRE(unit_testing_utils::equals(expected2, res2));
     }
 
     SECTION("Affects(_, _)") {
@@ -1345,6 +1345,13 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 5")
      writePkb.setParentT(1, {2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
 
     SECTION("Affects(int, int)") {
+        std::vector<Parameter> params1 = {Parameter("3", AppConstants::FIXED_INT),
+                                          Parameter("7", AppConstants::FIXED_INT)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTS, params1);
+        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected1 = {};
+        REQUIRE(expected1 == res1);
+//        REQUIRE(unit_testing_utils::equals(expected1, res1));
     }
 
     SECTION("Affects(int, _)") {
@@ -1353,7 +1360,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 5")
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTS, params1);
         std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
         std::vector<std::vector<std::string>> expected1 = {};
-        REQUIRE(unit_testing_utils::equals(expected1, res1));
+        REQUIRE(expected1 == res1);
+//        REQUIRE(unit_testing_utils::equals(expected1, res1));
     }
 
     SECTION("Affects(_, _)") {

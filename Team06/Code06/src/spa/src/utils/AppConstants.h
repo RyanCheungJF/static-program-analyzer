@@ -74,5 +74,6 @@ public:
     inline static const std::string CHILDREN = "children";
 
     inline static const int NOT_USED_FIELD = -1;
+    inline static const int DUMMY_NODE = 0;
     inline static const std::string PROCEDURE_DOES_NOT_EXIST = "procedure does not exist";
 };
