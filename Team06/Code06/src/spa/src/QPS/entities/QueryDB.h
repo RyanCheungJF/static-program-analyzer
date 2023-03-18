@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include "PKB/ReadPKB.h"
 #include "Parameter.h"
 #include "Table.h"
 
@@ -14,11 +15,17 @@ class QueryDB {
 public:
     QueryDB();
     void insertTable(Table);
-    bool hasParameter(Parameter&);
-    vector<string> fetch(Parameter);
+    vector<string> fetch(vector<Parameter>, ReadPKB&);
+    vector<string> emptyVec = {};
+    vector<string> falseVec = {"FALSE"};
+    vector<string> trueVec = {"TRUE"};
+    Table emptyTable = Table({}, {});
 
 private:
     vector<Table> tableVector;
+    Table extractColumns(vector<Parameter>);
+    bool hasEmptyTable();
+    bool hasParameter(Parameter&);
 };
 
 #endif // SPA_QUERYDB_H

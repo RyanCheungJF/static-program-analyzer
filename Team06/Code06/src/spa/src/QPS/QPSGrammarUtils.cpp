@@ -5,7 +5,6 @@
 #include "QPSGrammarUtils.h"
 
 #include <algorithm>
-#include <iostream>
 #include <regex>
 #include <string>
 
@@ -21,6 +20,14 @@ bool isIdent(string s) {
 
 bool isSynonym(string s) {
     return isIdent(s);
+}
+
+bool isTupleStart(string s) {
+    return s[0] == '<';
+}
+
+bool isBoolean(string s) {
+    return s == AppConstants::BOOLEAN;
 }
 
 bool isInteger(string integer) {

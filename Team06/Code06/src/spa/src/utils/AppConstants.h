@@ -29,6 +29,7 @@ public:
     inline static const std::string SYNONYM = "synonym";
     inline static const std::string WILDCARD = "wildcard";
     inline static const std::string FIXED_INT = "fixed_int";
+    inline static const std::string BOOLEAN = "BOOLEAN";
     inline static const std::string FIXED_STRING = "fixed_string";
 
     // synonym attributes
