@@ -558,6 +558,14 @@ bool AffectsHandler::checkModifiedAssignReadCall(std::unordered_set<Ent> commonV
 bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc,
                                                                      std::unordered_set<Ent> commonVariables) {
 
+
+    // if either is not an assign statements, should also just return nothing already
+    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
+    std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
+    if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
+        return false;
+    }
+
     if (commonVariables.size() == 0) {
         return false;
     }
