@@ -1082,7 +1082,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 4")
      *
      *
      * Valid Affects relationships:
-     * (1, 6), (1, 8) [issue], (1, 12) [issue?]
+     * (1, 6), (1, 8), (1, 12) [issue]
      * (5, 10)
      * (6, 8)
      * (8, 12)
@@ -1109,8 +1109,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 4")
             {6, {{AppConstants::PARENTS, {4}}, {AppConstants::CHILDREN, {7}}}},
             {7, {{AppConstants::PARENTS, {6}}, {AppConstants::CHILDREN, {8}}}},
             {8, {{AppConstants::PARENTS, {5, 7}}, {AppConstants::CHILDREN, {10}}}},
-            {9, {{AppConstants::PARENTS, {2}}, {AppConstants::CHILDREN, {}}}},
-            {10, {{AppConstants::PARENTS, {9, 10}}, {AppConstants::CHILDREN, {}}}},
+            {9, {{AppConstants::PARENTS, {2}}, {AppConstants::CHILDREN, {10}}}},
+            {10, {{AppConstants::PARENTS, {9, 10}}, {AppConstants::CHILDREN, {11}}}},
             {11, {{AppConstants::PARENTS, {10}}, {AppConstants::CHILDREN, {12}}}},
             {12, {{AppConstants::PARENTS, {11}}, {AppConstants::CHILDREN, {}}}}
     };
@@ -1165,11 +1165,12 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 4")
      writePkb.setParentT(4, {5, 6, 7});
 
     SECTION("Affects(int, int)") {
-//        std::vector<Parameter> params1 = {Parameter("2", AppConstants::FIXED_INT),
-//                                          Parameter("5", AppConstants::FIXED_INT)};
-//        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTS, params1);
-//        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
-//        std::vector<std::vector<std::string>> expected1 = {{"2", "5"}};
+        std::vector<Parameter> params1 = {Parameter("1", AppConstants::FIXED_INT),
+                                          Parameter("12", AppConstants::FIXED_INT)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTS, params1);
+        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected1 = {{"1", "12"}};
+        REQUIRE(expected1 == res1);
 //        REQUIRE(unit_testing_utils::equals(expected1, res1));
     }
 
