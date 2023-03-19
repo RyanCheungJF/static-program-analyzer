@@ -83,3 +83,9 @@ assign a;
 Select a such that Affects(a, 16)
 10, 12, 15
 5000
+18 - comment
+assign a;
+Select a such that Affects(a, a)
+26, 35, 38, 40, 41
+5000
+

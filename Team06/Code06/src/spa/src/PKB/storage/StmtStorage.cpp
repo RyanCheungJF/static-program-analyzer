@@ -7,8 +7,6 @@ void StmtStorage::writeStatement(Stmt s, StmtNum line) {
 }
 
 bool StmtStorage::checkStatement(Stmt stmt, StmtNum num) {
-
-    // source code does not even contain this type of statement
     if (stmt_stmtNum.find(stmt) == stmt_stmtNum.end()) {
         return false;
     }

@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 typedef std::string ProcName;
@@ -12,6 +14,7 @@ typedef std::string Ent;
 typedef std::string Operator;
 typedef int StmtNum;
 typedef int Const;
+typedef std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> CFG;
 
 class AppConstants {
 public:
@@ -81,5 +84,7 @@ public:
     inline static const std::string CHILDREN = "children";
 
     inline static const int NOT_USED_FIELD = -1;
+    inline static const int DUMMY_NODE = 0;
     inline static const std::string PROCEDURE_DOES_NOT_EXIST = "procedure does not exist";
+    inline static const int IS_FIND_CHILDREN = true;
 };

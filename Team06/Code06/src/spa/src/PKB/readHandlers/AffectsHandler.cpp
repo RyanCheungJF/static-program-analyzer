@@ -4,7 +4,8 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shar
                                std::shared_ptr<ProcedureStorage> procStorage,
                                std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
                                std::shared_ptr<ModifiesUsesStorage> usesStorage,
-                               std::shared_ptr<FollowsParentStorage> parentTStorage, bool isTransitive) {
+                               std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> parentTStorage,
+                               bool isTransitive) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
     this->procStorage = procStorage;
@@ -13,6 +14,31 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shar
     this->parentTStorage = parentTStorage;
     this->isTransitive = isTransitive;
 }
+
+    /*
+ *
+ * while (v != 1) { //1
+ *     d = 1; //2
+ *     while (d != 1) { //3
+ *         while (e != 1) { //4
+ *              a = d + e; //5
+ *         }
+ *         b = a + c; //6
+ *         d = b; //7
+ *     }
+ *     b = d; //8
+ * }
+ *
+ * Valid Affects relationships:
+ * (2, 5), (2, 8), (5, 6), (6, 7), (7, 5), (7, 8)
+ *
+ * Valid Affects* relationships:
+ * (2, 5), (2, 8), (2, 6), (2, 7)
+ * (5, 6), (5, 7), (5, 8), (5, 5)
+ * (6, 7), (6, 8), (6, 5), (6, 6)
+ * (7, 8), (7, 5), (7, 6), (7, 7)
+ *
+ */
 
 std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, Parameter param2) {
 
@@ -26,14 +52,31 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
     bool isWildCardParam1 = paramType1 == ParameterType::WILDCARD || paramType1 == ParameterType::ASSIGN;
     bool isWildCardParam2 = paramType2 == ParameterType::WILDCARD || paramType2 == ParameterType::ASSIGN;
 
+    std::vector<std::vector<std::string>> temp;
     if (isTransitive) {
-        return handleTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2,
+        temp = handleTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2,
                                 isWildCardParam1, isWildCardParam2);
     }
     else {
-        return handleNonTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2,
+        temp = handleNonTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2,
                                    isWildCardParam1, isWildCardParam2);
     }
+
+
+    if ((paramString1 == paramString2) && (paramType1 != ParameterType::WILDCARD)) {
+        std::vector<std::vector<std::string>> res;
+        for (std::vector<std::string> curr : temp) {
+            if (curr[0] == curr[1]) {
+                res.push_back(curr);
+            }
+        }
+        return res;
+    } else {
+        return temp;
+    }
+
+
+
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, StmtNum a2) {
@@ -43,6 +86,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     ProcName proc2 = procStorage->getProcedure(a2);
     std::vector<std::vector<std::string>> res;
 
+    // either not in any procedure, or both are not in the same procedure
     if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST || proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return res;
     }
@@ -50,28 +94,22 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
         return res;
     }
 
+    // if both are not assign statements, should also just return nothing already
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
     std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
     if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
         return res;
     }
 
-    std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getEnt(a1);
-    std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getEnt(a2);
+    std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getRightItems(a1);
+    std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getRightItems(a2);
     std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
     if (commonVariables.empty()) {
         return res;
     }
 
-    std::unordered_set<StmtNum> controlFlowPath = getControlFlowPathIntInt(a1, a2, proc1);
-
-    if (controlFlowPath.empty() && !checkDirectlyAfterEachOther(a1, a2) && !checkHaveCommonWhileLoop(a1, a2)) {
-        return res;
-    }
-
-    std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
-    bool isModified = isModifiedInControlFlowPath(commonVariables, variablesModifiedInPath);
-    if (isModified) {
+    bool canReach = checkCanReach(a1, a2, proc1, commonVariables);
+    if (!canReach) {
         return res;
     }
 
@@ -91,15 +129,16 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
     std::vector<std::vector<std::string>> res;
 
     std::unordered_set<ProcName> allProcedures = procStorage->getProcNames();
+
     for (ProcName proc : allProcedures) {
-        std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
-        std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
+        std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
+        std::unordered_set<StmtNum> assignStatements = getAssignStatements(procStatements);
 
         for (StmtNum a1 : assignStatements) {
             std::vector<std::vector<std::string>> temp = handleIntWildcard(a1);
-            res.reserve(res.size() + temp.size());
-            std::move(temp.begin(), temp.end(), std::inserter(res, res.end()));
-            temp.clear(); // todo: this code might have memory management issues
+            for (std::vector<std::string> val : temp) {
+                res.push_back(val);
+            }
         }
     }
     return res;
@@ -202,63 +241,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
         res.push_back({std::to_string(p.first), std::to_string(p.second)});
     }
 
-    //    for (std::tuple<StmtNum, StmtNum, StmtNum> curr : seen) {
-    //        res.push_back({std::to_string(get<0>(curr)), std::to_string(get<2>(curr))});
-    //    }
     return res;
 }
 
 // helper functions
-std::unordered_set<StmtNum> AffectsHandler::getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc) {
-
-    std::unordered_set<StmtNum> res;
-    std::deque<std::pair<std::unordered_set<StmtNum>, StmtNum>> queue;
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-        cfgStorage->getGraph(proc);
-
-    std::pair<std::unordered_set<StmtNum>, StmtNum> p = {{}, a1};
-    queue.push_back(p);
-    while (!queue.empty()) {
-        std::pair<std::unordered_set<StmtNum>, StmtNum> curr = queue.front();
-        queue.pop_front();
-        if (curr.second == a2 && !(curr.first.empty())) {
-            std::unordered_set<StmtNum> path = curr.first;
-            path.erase(a1);
-            res.insert(path.begin(), path.end());
-            continue;
-        }
-        else if (curr.first.find(curr.second) != curr.first.end()) {
-            continue;
-        }
-
-        curr.first.insert(curr.second);
-        std::unordered_set<StmtNum> children = graph[curr.second][AppConstants::CHILDREN];
-        for (StmtNum child : children) {
-            std::unordered_set<StmtNum> nxtPath(curr.first);
-            queue.push_back({nxtPath, child});
-        }
-    }
-    return res;
-}
-
-std::unordered_set<Ent>
-AffectsHandler::getVariablesModifiedInControlFlowPath(std::unordered_set<StmtNum> controlFlowPath) {
-    std::unordered_set<Ent> variablesModifiedInPath;
-    for (StmtNum num : controlFlowPath) {
-        std::unordered_set<Stmt> stmtTypes = stmtStorage->getStatementType(num);
-
-        // assignment, read, procedure call
-        if (stmtTypes.find(AppConstants::ASSIGN) != stmtTypes.end() ||
-            stmtTypes.find(AppConstants::READ) != stmtTypes.end() ||
-            stmtTypes.find(AppConstants::CALL) != stmtTypes.end()) {
-            std::unordered_set<Ent> variablesModifiedInCurrentLine = modifiesStorage->getEnt(num);
-            variablesModifiedInPath.insert(variablesModifiedInCurrentLine.begin(),
-                                           variablesModifiedInCurrentLine.end());
-        }
-    }
-    return variablesModifiedInPath;
-}
-
 std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<Ent> variablesModifiedInA1,
                                                            std::unordered_set<Ent> variablesUsedInA2) {
 
@@ -269,11 +255,6 @@ std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<En
         }
     }
 
-    //    for (Ent e : variablesUsedInA2) { // O(1) since there is really only 1 element
-    //        if (variablesModifiedInA1.find(e) != variablesModifiedInA1.end()) {
-    //            commonVariables.insert(e);
-    //        }
-    //    }
     return commonVariables;
 }
 
@@ -337,22 +318,12 @@ std::unordered_set<StmtNum> AffectsHandler::getAssignStatements(std::unordered_s
 
     std::unordered_set<StmtNum> assignStatements;
     for (StmtNum num : allProcStatements) {
-        std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
-        if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
+        std::unordered_set<Stmt> currStmtType = stmtStorage->getStatementType(num);
+        if (currStmtType.find(AppConstants::ASSIGN) != currStmtType.end()) {
             assignStatements.insert(num);
         }
     }
     return assignStatements;
-}
-
-bool AffectsHandler::isModifiedInControlFlowPath(std::unordered_set<Ent> commonVariables,
-                                                 std::unordered_set<Ent> variablesModifiedInPath) {
-    for (Ent e : commonVariables) {
-        if (variablesModifiedInPath.find(e) != variablesModifiedInPath.end()) {
-            return true;
-        }
-    }
-    return false;
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(StmtNum a1, StmtNum a2) {
@@ -401,131 +372,109 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
     return res;
 }
 
-bool AffectsHandler::checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2) {
-
-    // if they are not consecutive
-    if (!(a1 + 1 == a2 || a1 - 1 == a2)) {
-        return false;
-    }
-
-    // means they are consecutive in terms of numbers, but might still be part of different if-else branches
-
-    // given they are not in a while loop, a2 MUST come after a1
-    if (a2 < a1) {
-        return false;
-    }
-
-    // the 2 lines are in an if-else block
-    /*
-     * case1
-     * if (...) then {
-     *     a1;
-     * } else {
-     *     a2;
-     * }
-     *
-     * case2 [WHICH SHOULD NOT BE POSSIBLE IF THEY ARE NOT IN WHILE LOOPS TO BEGIN WITH]
-     * if (...) then {
-     *     a2;
-     * } else {
-     *     a1;
-     * }
-     */
-    std::unordered_set<Stmt> oneLineBeforeA1Stmt = stmtStorage->getStatementType(a1 - 1);
-    std::unordered_set<Stmt> twoLinesBeforeA2Stmt = stmtStorage->getStatementType(a2 - 2);
-
-    std::unordered_set<Stmt> twoLinesBeforeA1Stmt = stmtStorage->getStatementType(a1 - 2);
-    std::unordered_set<Stmt> oneLineBeforeA2Stmt = stmtStorage->getStatementType(a2 - 1);
-
-    if ((oneLineBeforeA1Stmt.find(AppConstants::IF) != oneLineBeforeA1Stmt.end()) &&
-        (twoLinesBeforeA2Stmt.find(AppConstants::IF) != twoLinesBeforeA2Stmt.end())) {
-        return false;
-    }
-
-    if ((twoLinesBeforeA1Stmt.find(AppConstants::IF) != twoLinesBeforeA1Stmt.end()) &&
-        (oneLineBeforeA2Stmt.find(AppConstants::IF) != oneLineBeforeA2Stmt.end())) {
-        return false;
-    }
-
-    return true;
-}
-
 std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWildcard(StmtNum a1input, StmtNum a2input) {
     bool isIntWildcard = (a2input == AppConstants::NOT_USED_FIELD);
     std::string paramString = isIntWildcard ? std::to_string(a1input) : std::to_string(a2input);
     StmtNum currA = isIntWildcard ? a1input : a2input;
     ProcName proc = procStorage->getProcedure(currA);
-    std::vector<std::vector<std::string>> res;
 
     if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
-        return res;
+        return {};
     }
 
-    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
-    std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
+    std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
+    std::unordered_set<StmtNum> assignStatements = getAssignStatements(procStatements);
+
     if (assignStatements.find(currA) == assignStatements.end()) {
-        return res;
+        return {};
     }
 
     std::unordered_set<Ent> variablesInCurrA =
-        isIntWildcard ? modifiesStorage->getEnt(currA) : usesStorage->getEnt(currA);
+        isIntWildcard ? modifiesStorage->getRightItems(currA) : usesStorage->getRightItems(currA);
+    std::vector<std::vector<std::string>> res;
+
     for (StmtNum otherA : assignStatements) {
-        if (procStorage->getProcedure(currA) != procStorage->getProcedure(otherA)) {
-            continue;
-        }
 
         std::unordered_set<Ent> variablesInOtherA =
-            isIntWildcard ? usesStorage->getEnt(otherA) : modifiesStorage->getEnt(otherA);
-        std::unordered_set<Ent> commonVariables = getCommonVariables(variablesInCurrA, variablesInOtherA);
-        if (commonVariables.empty()) {
+            isIntWildcard ? usesStorage->getRightItems(otherA) : modifiesStorage->getRightItems(otherA);
+        std::unordered_set<Ent> commonVariables = isIntWildcard
+                                                      ? getCommonVariables(variablesInCurrA, variablesInOtherA)
+                                                      : getCommonVariables(variablesInOtherA, variablesInCurrA);
+        if (proc != procStorage->getProcedure(otherA)) {
             continue;
         }
 
-        std::unordered_set<StmtNum> controlFlowPath = isIntWildcard ? getControlFlowPathIntInt(currA, otherA, proc)
-                                                                    : getControlFlowPathIntInt(otherA, currA, proc);
+        std::vector<std::vector<std::string>> temp =
+            isIntWildcard ? handleIntInt(currA, otherA) : handleIntInt(otherA, currA);
 
-        if (controlFlowPath.empty()) {
-            if (isIntWildcard && !checkDirectlyAfterEachOther(currA, otherA) &&
-                !checkHaveCommonWhileLoop(currA, otherA)) {
-                continue;
-            }
-            else if (!isIntWildcard && !checkDirectlyAfterEachOther(otherA, currA) &&
-                     !checkHaveCommonWhileLoop(otherA, currA)) {
-                continue;
-            }
-        }
-
-        std::unordered_set<Ent> variablesModifiedInPath = getVariablesModifiedInControlFlowPath(controlFlowPath);
-        if ((currA == otherA) && variablesModifiedInPath.empty() &&
-            (commonVariables.size() == 1)) { // O(1) since there is really only 1 element
-            isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
-                          : res.push_back({std::to_string(otherA), paramString});
-            continue;
-        }
-
-        bool isModified = isModifiedInControlFlowPath(commonVariables, variablesModifiedInPath);
-        if (isModified) {
-            continue;
-        }
-        else {
+        if (!temp.empty()) {
             isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
                           : res.push_back({std::to_string(otherA), paramString});
         }
     }
+
     return res;
 }
 
-bool AffectsHandler::checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2) {
+bool AffectsHandler::checkModifiedAssignReadCall(std::unordered_set<Ent> commonVariables, StmtNum currentLine) {
 
-    std::unordered_set<StmtNum> a1Parents = parentTStorage->getLeftWildcard(a1);
-    std::unordered_set<StmtNum> a2Parents = parentTStorage->getLeftWildcard(a2);
-    for (StmtNum n : a1Parents) {
-        if (a2Parents.find(n) != a2Parents.end()) {
+    unordered_set<Ent> entitiesModifiedOnCurrentLine = modifiesStorage->getRightItems(currentLine);
 
-            unordered_set<Stmt> stmtType = stmtStorage->getStatementType(n);
-            if (stmtType.find(AppConstants::WHILE) != stmtType.end()) {
+    // if a assignment, read, or procedure call, we check if the entitiesModifiedOnCurrentLine is the same as
+    // commonVariables
+    std::unordered_set<Stmt> currLineStmtType = stmtStorage->getStatementType(currentLine);
+    if (currLineStmtType.find(AppConstants::ASSIGN) != currLineStmtType.end() ||
+        currLineStmtType.find(AppConstants::READ) != currLineStmtType.end() ||
+        currLineStmtType.find(AppConstants::CALL) != currLineStmtType.end()) {
+
+        for (Ent e : commonVariables) { // O(1) since there is only 1 variable
+            if (entitiesModifiedOnCurrentLine.find(e) != entitiesModifiedOnCurrentLine.end()) {
                 return true;
             }
+        }
+    }
+    return false;
+}
+
+bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::unordered_set<Ent> commonVariables) {
+
+    // if either is not an assign statements, should also just return nothing already
+    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
+    std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
+    if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
+        return false;
+    }
+
+    if (commonVariables.size() == 0) {
+        return false;
+    }
+
+    std::deque<std::pair<StmtNum, StmtNum>> queue;
+    std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
+        cfgStorage->getGraph(proc);
+
+    // curr.first is the previous node.
+    // curr.second is the current node
+    std::pair<StmtNum, StmtNum> p = {AppConstants::DUMMY_NODE, a1};
+    queue.push_back(p);
+    while (!queue.empty()) {
+        std::pair<StmtNum, StmtNum> curr = queue.front();
+        queue.pop_front();
+        if (curr.second == a2 && curr.first != AppConstants::DUMMY_NODE) {
+            return true;
+        }
+        else if (curr.first != AppConstants::DUMMY_NODE && checkModifiedAssignReadCall(commonVariables, curr.second)) {
+            continue;
+        }
+        else if (seen.find(curr) != seen.end()) {
+            continue;
+        }
+
+        seen.insert(curr);
+        std::unordered_set<StmtNum> children = graph[curr.second][AppConstants::CHILDREN];
+        for (StmtNum child : children) {
+            queue.push_back({curr.second, child});
         }
     }
     return false;

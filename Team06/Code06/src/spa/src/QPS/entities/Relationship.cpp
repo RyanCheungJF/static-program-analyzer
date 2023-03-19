@@ -30,15 +30,33 @@ vector<Parameter*> Relationship::getAllUncheckedSynonyms() {
     return synonyms;
 }
 
-vector<Parameter> Relationship::getParameters() {
+vector<Parameter> Relationship::getParameters() const {
     return params;
+}
+
+vector<ParameterType> Relationship::getParameterTypes() {
+    vector<ParameterType> types;
+    for (auto param : params) {
+        types.push_back(param.getType());
+    }
+
+    return types;
+}
+
+vector<std::string> Relationship::getParameterValues() {
+    vector<std::string> values;
+    for (auto param : params) {
+        values.push_back(param.getValue());
+    }
+
+    return values;
 }
 
 bool Relationship::operator==(const Relationship& r) const {
     return type == r.type && params == r.params;
 }
 
-RelationshipType Relationship::getType() {
+RelationshipType Relationship::getType() const {
     return type;
 }
 

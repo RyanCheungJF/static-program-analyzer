@@ -6,7 +6,7 @@
 using namespace unit_testing_utils;
 
 TEST_CASE("Check writes and reads to/from ParentStorage") {
-    FollowsParentStorage par;
+    RelationshipStorage<StmtNum, StmtNum> par;
 
     par.write(1, 2);
     REQUIRE(par.exists(1, 2));
@@ -19,35 +19,35 @@ TEST_CASE("Check writes and reads to/from ParentStorage") {
 }
 
 TEST_CASE("Tests for getting children") {
-    FollowsParentStorage par;
+    RelationshipStorage<StmtNum, StmtNum> par;
 
     par.write(1, 2);
     par.write(1, 3);
 
-    std::unordered_set<StmtNum> res = par.getRightWildcard(1);
+    std::unordered_set<StmtNum> res = par.getRightItems(1);
     std::unordered_set<StmtNum> check{2, 3};
     REQUIRE(unit_testing_utils::equals(check, res));
 
-    res = par.getRightWildcard(2);
+    res = par.getRightItems(2);
     REQUIRE(res.empty());
 
-    res = par.getRightWildcard(3);
+    res = par.getRightItems(3);
     REQUIRE(res.empty());
 }
 
 TEST_CASE("Tests for getting parent") {
-    FollowsParentStorage par;
+    RelationshipStorage<StmtNum, StmtNum> par;
 
     par.write(1, 2);
 
-    std::unordered_set<StmtNum> res = par.getLeftWildcard(2);
+    std::unordered_set<StmtNum> res = par.getLeftItems(2);
     std::unordered_set<StmtNum> check{1};
     REQUIRE(unit_testing_utils::equals(check, res));
 
-    res = par.getLeftWildcard(1);
+    res = par.getLeftItems(1);
     REQUIRE(res.empty());
 
-    res = par.getLeftWildcard(3);
+    res = par.getLeftItems(3);
     REQUIRE(res.empty());
 }
 
