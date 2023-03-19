@@ -1,12 +1,7 @@
 1 - comment
 assign a;
-<<<<<<< HEAD
-Select a such that Affects*(183, a)
-184, 185, 186, 187, 188, 189, 190, 191, 192, 193
-=======
 Select a such that Affects*(193, a)
 194, 195, 196, 197, 198, 199, 200, 201, 202, 203
->>>>>>> staging
 5000
 2 - comment
 assign a;
