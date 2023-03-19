@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "../../QPS/entities/Pattern.h"
 #include "Cache.h"
 

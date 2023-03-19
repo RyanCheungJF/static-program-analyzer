@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <memory>
 
 #include "../../QPS/entities/Parameter.h"

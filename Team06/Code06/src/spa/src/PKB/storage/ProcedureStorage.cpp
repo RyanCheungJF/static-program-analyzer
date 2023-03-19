@@ -9,8 +9,6 @@ void ProcedureStorage::writeProcedure(ProcName p, std::unordered_set<StmtNum> li
 }
 
 bool ProcedureStorage::checkProcedure(ProcName p, StmtNum num) {
-
-    // source code does not even contain this type of statement
     if (proc_stmtNum.find(p) == proc_stmtNum.end()) {
         return false;
     }

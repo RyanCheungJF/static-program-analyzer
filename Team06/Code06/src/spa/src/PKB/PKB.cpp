@@ -209,6 +209,7 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
         IfWhilePatternHandler handler(ifWhilePatternMap.at(type));
         res = handler.handle(p);
     }
+
     if (!res.empty()) {
         patternCache.addResult(pattern, res);
     }
@@ -216,6 +217,9 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
     return res;
 }
 
+
+// this function is incomplete and is currently done with a Stub. Please DO NOT CODE REVIEW this.
+// Waiting for QPS to complete parsing and sending of the With object
 std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
     Parameter param = w.syn;
     ParameterType paramType = param.getType();
@@ -248,21 +252,21 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
             }
         }
     }
-    // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
+    // currently just returns a pair of duplicated values
     else if (paramType == ParameterType::CONSTANT) {
         std::unordered_set<Const> consts = constantStorage->getEntNames();
         for (auto constant : consts) {
             res.push_back({std::to_string(constant), std::to_string(constant)});
         }
     }
-    // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
+    // currently just returns a pair of duplicated values
     else if (paramType == ParameterType::VARIABLE) {
         std::unordered_set<Ent> vars = entityStorage->getEntNames();
         for (auto var : vars) {
             res.push_back({var, var});
         }
     }
-    // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
+    // currently just returns a pair of duplicated values
     else {
         std::unordered_set<ProcName> procs = procedureStorage->getProcNames();
         for (auto proc : procs) {

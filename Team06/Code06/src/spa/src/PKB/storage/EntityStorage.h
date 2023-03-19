@@ -1,7 +1,4 @@
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
+#pragma once
 
 #include "../../../src/utils/AppConstants.h"
 

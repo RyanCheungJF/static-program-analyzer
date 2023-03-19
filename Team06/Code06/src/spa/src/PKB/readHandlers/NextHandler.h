@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <memory>
 #include <queue>
 
@@ -47,7 +46,8 @@ private:
     std::vector<std::vector<std::string>> handleIntIntTransitive(Parameter param1, Parameter param2);
 
     // Next*(a1, 2) or Next*(1, a2)
-    std::vector<std::vector<std::string>> oneIntOneStmtTransitive(Parameter intParam, Parameter stmtParam, bool isFindChildren);
+    std::vector<std::vector<std::string>> oneIntOneStmtTransitive(Parameter intParam, Parameter stmtParam,
+                                                                  bool isFindChildren);
 
     // e.g. Next*(1, s2) or Next*(1, _)
     std::vector<std::vector<std::string>> oneIntOneWildcardTransitive(Parameter intParam, bool isFindChildren);

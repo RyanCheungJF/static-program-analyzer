@@ -209,7 +209,8 @@ std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parame
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardTransitive(Parameter intParam, bool isFindChildren) {
+std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardTransitive(Parameter intParam,
+                                                                               bool isFindChildren) {
     std::string intString = intParam.getValue();
     StmtNum intValue = stoi(intString);
     ProcName proc = procStorage->getProcedure(intValue);
@@ -228,7 +229,7 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardTransitive(P
 }
 
 std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtTransitive(Parameter intParam, Parameter stmtParam,
-                                                                  bool isFindChildren) {
+                                                                           bool isFindChildren) {
     std::string intString = intParam.getValue();
     StmtNum intValue = stoi(intString);
     Stmt stmtType = stmtParam.getTypeString();
