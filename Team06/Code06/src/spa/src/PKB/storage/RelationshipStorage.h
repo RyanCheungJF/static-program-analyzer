@@ -4,7 +4,7 @@
 
 #include "../../../src/utils/AppConstants.h"
 
-template<typename T, typename U> class RelationshipStorage {
+template <typename T, typename U> class RelationshipStorage {
 public:
     void write(T leftItem, U rightItem);
     void write(T leftItem, std::unordered_set<U> rightItems);
