@@ -223,7 +223,7 @@ bool isFactor(string s) {
 }
 
 bool isElem(string s) {
-    return isSynonym(s) || isAttrRef(s);
+    return isSynonym(trim(s)) || isAttrRef(trim(s));
 }
 
 bool isAttrRef(string s) {
@@ -239,9 +239,14 @@ bool isAttrRef(string s) {
         return false;
     }
     attribute = s.substr(nextStart, s.size() - nextStart);
-    return isSynonym(name) && isAttribute(attribute);
+    return isSynonym(trim(name)) && isAttribute(trim(attribute));
 }
 
 bool isAttribute(string s) {
     return regex_match(s, regex("^(procName|varName|value|stmt#)$"));
+}
+
+bool isRef(string s)
+{
+    return isFixedString(s) || isInteger(s) || isAttrRef(s);
 }

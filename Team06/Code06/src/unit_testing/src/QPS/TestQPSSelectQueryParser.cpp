@@ -225,6 +225,13 @@ TEST_CASE("parse / select clause parameter with valid attributes / return query"
     CHECK(true);
 }
 
+TEST_CASE("parse / select clause parameter with valid attributes and valid spaces / return query") {
+    string input = "Select s . stmt#";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
 TEST_CASE("parse / select clause parameter with invalid attributes / throw syntax error") {
     string input = "Select s.invalidAttribute";
     SelectQueryParser sqp;
