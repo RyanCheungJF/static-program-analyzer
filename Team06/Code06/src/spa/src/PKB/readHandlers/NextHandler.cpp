@@ -209,7 +209,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parame
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardT(Parameter intParam, bool isFindChildren) {
+std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardTransitive(Parameter intParam, bool isFindChildren) {
     std::string intString = intParam.getValue();
     StmtNum intValue = stoi(intString);
     ProcName proc = procStorage->getProcedure(intValue);
@@ -227,7 +227,7 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardT(Parameter 
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtT(Parameter intParam, Parameter stmtParam,
+std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtTransitive(Parameter intParam, Parameter stmtParam,
                                                                   bool isFindChildren) {
     std::string intString = intParam.getValue();
     StmtNum intValue = stoi(intString);
@@ -249,7 +249,8 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtT(Parameter intP
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardT(Parameter stmtParam, bool isFindChildren) {
+std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardTransitive(Parameter stmtParam,
+                                                                                bool isFindChildren) {
     Stmt stmtType = stmtParam.getTypeString();
     std::vector<std::vector<std::string>> res;
 
@@ -463,29 +464,29 @@ std::vector<std::vector<std::string>> NextHandler::handleTransitive(Parameter pa
             return handleIntIntTransitive(param1, param2);
         }
         else if (isTypedStmtParam2) {
-            return oneIntOneStmtT(param1, param2, AppConstants::IS_FIND_CHILDREN);
+            return oneIntOneStmtTransitive(param1, param2, AppConstants::IS_FIND_CHILDREN);
         }
         else if (isWildCardParam2) {
-            return oneIntOneWildcardT(param1, AppConstants::IS_FIND_CHILDREN);
+            return oneIntOneWildcardTransitive(param1, AppConstants::IS_FIND_CHILDREN);
         }
     }
     else if (isTypedStmtParam1) {
         if (isFixedIntParam2) {
-            return oneIntOneStmtT(param2, param1, !AppConstants::IS_FIND_CHILDREN);
+            return oneIntOneStmtTransitive(param2, param1, !AppConstants::IS_FIND_CHILDREN);
         }
         else if (isTypedStmtParam2) {
             return handleStmttypeStmttypeTransitive(param1, param2);
         }
         else if (isWildCardParam2) {
-            return oneStmtOneWildcardT(param1, AppConstants::IS_FIND_CHILDREN);
+            return oneStmtOneWildcardTransitive(param1, AppConstants::IS_FIND_CHILDREN);
         }
     }
     else if (isWildCardParam1) {
         if (isFixedIntParam2) {
-            return oneIntOneWildcardT(param2, !AppConstants::IS_FIND_CHILDREN);
+            return oneIntOneWildcardTransitive(param2, !AppConstants::IS_FIND_CHILDREN);
         }
         else if (isTypedStmtParam2) {
-            return oneStmtOneWildcardT(param2, !AppConstants::IS_FIND_CHILDREN);
+            return oneStmtOneWildcardTransitive(param2, !AppConstants::IS_FIND_CHILDREN);
         }
         else if (isWildCardParam2) {
             return handleWildcardWildcardTransitive();
