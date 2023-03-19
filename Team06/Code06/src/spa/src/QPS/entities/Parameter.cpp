@@ -37,7 +37,7 @@ Parameter::Parameter(const Parameter& p) {
 Parameter Parameter::makeParameter(string val) {
     ParamSyntaxValidator paramSynVal;
     ParameterType type = guessParameterType(val);
-    Parameter p(removeCharFromString(val, '\"'), type);
+    Parameter p(trim(removeCharFromString(val, '\"')), type);
     paramSynVal.validate(p);
     return p;
 }
@@ -46,7 +46,7 @@ Parameter Parameter::makeParameter(string val, string attr) {
     ParamSyntaxValidator paramSynVal;
     ParameterType type = guessParameterType(val);
     AttributeType attribute = stringToAttribute(attr);
-    Parameter p(removeCharFromString(val, '\"'), type, attribute);
+    Parameter p(trim(removeCharFromString(val, '\"')), type, attribute);
     paramSynVal.validate(p);
     return p;
 }
