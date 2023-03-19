@@ -217,7 +217,6 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
     return res;
 }
 
-
 // this function is incomplete and is currently done with a Stub. Please DO NOT CODE REVIEW this.
 // Waiting for QPS to complete parsing and sending of the With object
 std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
