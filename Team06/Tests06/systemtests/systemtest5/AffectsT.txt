@@ -11,7 +11,7 @@ Select a such that Affects*(148, a)
 3 - comment
 assign a;
 Select a such that Affects*(a, 65)
-65, 64, 63, 61, 55, 54, 34
+64, 63, 61, 55, 34
 5000
 4 - comment
 assign a;

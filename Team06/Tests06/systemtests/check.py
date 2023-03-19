@@ -21,11 +21,11 @@ for entry in src:
                 if xml_string.find(b'failed') != -1:
                     error = True
                     print(
-                        '❌ {}/{} has a failing test case!'.format(entry, subentry))
+                        '{}/{} has a failing test case!'.format(entry, subentry))
                 elif xml_string.find(b'timeout') != -1:
                     error = True
                     print(
-                        '⚠️ {}/{} has a test case which timeouts!'.format(entry, subentry))
+                        '{}/{} has a test case which timeouts!'.format(entry, subentry))
 
 if not error:
-    print('✔️ Success, all systemtests passes!')
+    print('Success, all systemtests passes!')
