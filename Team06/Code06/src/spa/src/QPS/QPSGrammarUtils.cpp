@@ -74,6 +74,18 @@ bool hasCorrectRelRefOrPatternForm(string s) {
     return regexMatched && bracketBalanced;
 }
 
+bool hasCorrectAttrCompForm(string s) {
+    string leftParamString, rightParamString;
+    bool found;
+    int next;
+    tie(leftParamString, next, found) = extractSubStringUntilDelimiter(s, 0, AppConstants::OP_EQUALS);
+    if (!found || next > s.size()) {
+        return false;
+    }
+    rightParamString = s.substr(next, s.size() - next);
+    return isRef(leftParamString) && isRef(rightParamString);
+}
+
 bool isDeclaration(string declaration) {
     int index = declaration.find(" ");
     string declarationToken = declaration.substr(0, index);

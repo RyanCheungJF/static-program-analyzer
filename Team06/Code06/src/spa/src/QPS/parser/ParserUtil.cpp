@@ -64,7 +64,7 @@ vector<int> findWith(const vector<string>& wordList)
         }
         withStarts.push_back(i);
     }
-    return vector<int>();
+    return withStarts;
 }
 
 vector<int> findAnds(const vector<string>& wordList, int start, int end) {

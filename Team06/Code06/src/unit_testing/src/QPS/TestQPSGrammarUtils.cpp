@@ -206,3 +206,28 @@ TEST_CASE("isEntRef /  / return true") {
     string s = "Whatthe0fuck";
     REQUIRE(isEntRef(s));
 }
+
+TEST_CASE("hasCorrectAttrCompForm / correct form / return true") {
+    string s = "asd . stmt# = 123";
+    REQUIRE(hasCorrectAttrCompForm(s));
+}
+
+TEST_CASE("hasCorrectAttrCompForm / missing right hand param / return false") {
+    string s = "asd . stmt# = ";
+    REQUIRE(!hasCorrectAttrCompForm(s));
+}
+
+TEST_CASE("hasCorrectAttrCompForm / missing left hand param / return false") {
+    string s = " = \"ks\"";
+    REQUIRE(!hasCorrectAttrCompForm(s));
+}
+
+TEST_CASE("hasCorrectAttrCompForm / missing comparator / return false") {
+    string s = "asd . stmt#";
+    REQUIRE(!hasCorrectAttrCompForm(s));
+}
+
+TEST_CASE("hasCorrectAttrCompForm / invalid whitespace in right param / return false") {
+    string s = "asd . stmt# = k s";
+    REQUIRE(!hasCorrectAttrCompForm(s));
+}

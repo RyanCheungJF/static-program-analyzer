@@ -342,3 +342,10 @@ TEST_CASE("parse / select pattern with valid spaces in exprSpec / return query")
         CHECK(true);
     }
 }
+
+TEST_CASE("parse / select with clause with valid form / returns query") {
+    string input = "Select s with \"a\" = b.procName";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}

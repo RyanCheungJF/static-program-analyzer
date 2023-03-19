@@ -34,6 +34,7 @@ bool isFactor(string);
 bool isBoolean(string);
 bool isFixedStringWithWildCard(string);
 bool hasCorrectRelRefOrPatternForm(string);
+bool hasCorrectAttrCompForm(string);
 bool isElem(string);
 bool isAttrRef(string);
 bool isAttribute(string);

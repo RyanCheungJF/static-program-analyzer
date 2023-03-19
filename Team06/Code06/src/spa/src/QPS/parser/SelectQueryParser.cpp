@@ -11,6 +11,8 @@ Query SelectQueryParser::parse(string selectQuery) {
     vector<shared_ptr<Relationship>> tempRelations;
     vector<Pattern> patterns;
     vector<Pattern> tempPatterns;
+    vector<Comparison> comparisons;
+    vector<Comparison> tempComparisons;
     for (tuple<ClauseType, int, int> clause : clausePositions) {
         ClauseType ct;
         int clauseStart, clauseEnd;
@@ -25,6 +27,8 @@ Query SelectQueryParser::parse(string selectQuery) {
             patterns.insert(patterns.end(), tempPatterns.begin(), tempPatterns.end());
             break;
         case WITH:
+            tempComparisons = parseWithClause(wordList, clauseStart, clauseEnd);
+            comparisons.insert(comparisons.end(), tempComparisons.begin(), tempComparisons.end());
             break;
         case SELECT:
             selectParams = parseSelectClause(wordList, clauseStart, clauseEnd);
@@ -126,8 +130,11 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
             tupleString += " " + wordList[start];
         }
         tie(ignore, paramStrings) = extractParameters(tupleString, "<", ">", ",");
-        for (string synonym : paramStrings) {
-            Parameter param = parseParameter(synonym);
+        for (string elemString : paramStrings) {
+            if (!isElem(elemString)) {
+                throw SyntaxException();
+            }
+            Parameter param = parseParameter(elemString);
             params.push_back(param);
         }
         return params;
@@ -137,6 +144,9 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
     for (int i = start; i < end; i++) {
         elemString += wordList[i] + " ";
     }
+    if (!isElem(elemString)) {
+        throw SyntaxException();
+    }
     Parameter param = parseParameter(elemString);
     params.push_back(param);
     return params;
@@ -144,9 +154,6 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
 
 vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<string>& wordList, int start, int end) {
     vector<shared_ptr<Relationship>> res;
-    if (start == -1 && end == -1) {
-        return res;
-    }
     if (end <= start) {
         throw InternalException("Error: SelectQueryParser.parseSuchThatClause bad "
                                 "start position and end position");
@@ -182,9 +189,6 @@ vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<s
 
 vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, int start, int end) {
     vector<Pattern> res;
-    if (start == -1 && end == -1) {
-        return res;
-    }
     if (end <= start) {
         throw InternalException("Error: SelectQueryParser.parsePatternClause bad "
                                 "start position and end position");
@@ -223,14 +227,38 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
     return res;
 }
 
+vector<Comparison> SelectQueryParser::parseWithClause(vector<string>& wordList, int start, int end)
+{
+    vector<Comparison> res;
+
+    if (end <= start) {
+        throw InternalException("Error: SelectQueryParser.parseWithClause bad "
+            "start position and end position");
+    }
+    if (end - start < 2) {
+        throw SyntaxException();
+    }
+    int curIndex = start + 1;
+    vector<string> unparsedComparisons = splitClauseByAnds(wordList, curIndex, end, hasCorrectAttrCompForm);
+    for (string compString : unparsedComparisons) {
+        vector<string> splitParams = stringToWordListByDelimiter(compString, AppConstants::OP_EQUALS);
+        if (!isRef(splitParams[0]) || !isRef(splitParams[1])) {
+            throw SyntaxException();
+        }
+        Parameter leftP = parseParameter(splitParams[0]);
+        Parameter rightP = parseParameter(splitParams[1]);
+        Comparison comp = Comparison::makeComparison(AppConstants::OP_EQUALS, leftP, rightP);
+        res.push_back(comp);
+    }
+    return res;
+}
+
+
 vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
     return vector<ClauseType>{SELECT, SUCH_THAT, PATTERN, WITH};
 }
 
 Parameter SelectQueryParser::parseParameter(string paramString) {
-    if (!isElem(paramString)) {
-        throw SyntaxException();
-    }
     string paramName;
     int index;
     bool found;
