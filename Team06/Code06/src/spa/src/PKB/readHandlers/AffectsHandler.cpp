@@ -335,6 +335,25 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
 
+
+
+    //TODO: DELETE THIS DEBUGGING CODE ONCE DONE
+    if (a1 == 183) {
+        std::cout << "\n\n---------- All valid Affects relationship below --------\n\n";
+        for (auto kv : hashmap) {
+            std::cout << "\n***************\n";
+            std::cout << "key: " << kv.first << "\n";
+            std::cout << "values: ";
+            for (StmtNum num : kv.second) {
+                std::cout << num << ", ";
+            }
+            std::cout << "\n***************\n";
+
+        }
+    }
+
+
+
     // add from initial starting node
     for (StmtNum num : (isIntWildcard ? hashmap[a1] : hashmap[a2])) {
         isIntWildcard ? queue.push_back({a1, num}) : queue.push_back({num, a2});
@@ -436,17 +455,6 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
 
     std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
     std::unordered_set<StmtNum> assignStatements = getAssignStatements(procStatements);
-
-    //TODO: DELETE THIS DEBUGGING CODE ONCE DONE
-    if (currA == 154) {
-        std::cout << "\n\n---------- All Statements In this Procedure below --------\n\n";
-        std::cout << "\n***************\n";
-        for (StmtNum num : procStatements) {
-            std::cout << num << "\n";
-        }
-        std::cout << "\n***************\n";
-    }
-
 
 
     if (assignStatements.find(currA) == assignStatements.end()) {
