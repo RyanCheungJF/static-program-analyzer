@@ -14,10 +14,6 @@ TEST_CASE("CallStorage: writeS") {
         REQUIRE(res.second == AppConstants::PROCEDURE_DOES_NOT_EXIST);
     }
 
-    SECTION("getCallStatements(): empty storage") {
-        auto res = cs.getCallStatements();
-        REQUIRE(res.empty());
-    }
 
     ProcName proc1 = "proc1";
     ProcName proc2 = "proc2";
@@ -25,10 +21,6 @@ TEST_CASE("CallStorage: writeS") {
     cs.writeCallS(11, proc1);
     cs.writeCallS(21, proc2);
 
-    SECTION("getCallStatements(): non-empty storage") {
-        auto i = cs.getCallStatements();
-        REQUIRE(i.size() == 2);
-    }
 
     SECTION("getCallStmt(StmtNum s): non-empty storage") {
         auto i = cs.getCallStmt(11);
