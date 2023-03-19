@@ -325,3 +325,9 @@ std::unordered_set<ProcName> PKB::getCallsT(ProcName p) {
 std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> PKB::getCFG(ProcName name) {
     return cfgStorage->getGraph(name);
 }
+
+void PKB::clearCache() {
+    parameterCache.clearCache();
+    relationshipCache.clearCache();
+    patternCache.clearCache();
+}

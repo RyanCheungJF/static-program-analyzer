@@ -146,6 +146,9 @@ public:
     // returns the cfg if it exists, else it returns an empty graph
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> getCFG(ProcName name);
 
+    // clears all of PKB's Caches
+    void clearCache();
+
 private:
     // STATEMENTS
     std::shared_ptr<FollowsParentStorage> followsStorage;
