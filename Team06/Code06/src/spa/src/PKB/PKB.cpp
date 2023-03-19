@@ -199,7 +199,6 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
         return res;
     }
 
-    // TODO: This violates LoD. Needs QPS to have a getPatternType() function
     ParameterType type = p.getPatternSyn()->getType();
 
     if (type == ParameterType::ASSIGN) {

@@ -298,6 +298,8 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransit
             addCFGRelativesTransitive(res, graph, queue, AppConstants::IS_FIND_CHILDREN, stmttypeLines2);
         }
     }
+
+    // if both synonyms are the same filter non-matching answers
     if (param1 == param2) {
         res.erase(std::remove_if(res.begin(), res.end(),
                                  [&](const std::vector<std::string>& pair) {
