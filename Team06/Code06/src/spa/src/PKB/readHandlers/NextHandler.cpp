@@ -14,8 +14,8 @@ std::vector<std::vector<std::string>> NextHandler::handle(Parameter param1, Para
 
     bool isFixedIntParam1 = paramType1 == ParameterType::FIXED_INT;
     bool isFixedIntParam2 = paramType2 == ParameterType::FIXED_INT;
-    bool isWildCardParam1 = paramType1 == ParameterType::WILDCARD || paramType1 == ParameterType::STMT;
-    bool isWildCardParam2 = paramType2 == ParameterType::WILDCARD || paramType2 == ParameterType::STMT;
+    bool isWildCardParam1 = paramType1 == ParameterType::WILDCARD;
+    bool isWildCardParam2 = paramType2 == ParameterType::WILDCARD;
     bool isTypedStmtParam1 = stmtTypesSet.find(paramType1) != stmtTypesSet.end();
     bool isTypedStmtParam2 = stmtTypesSet.find(paramType2) != stmtTypesSet.end();
 
@@ -107,6 +107,10 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
     Stmt type1 = param1.getTypeString();
     Stmt type2 = param2.getTypeString();
     std::vector<std::vector<std::string>> res;
+
+    if (param1 == param2) {
+        return res;
+    }
 
     std::unordered_set<StmtNum> stmtTypeLines1 = stmtStorage->getStatementNumbers(type1);
     std::unordered_set<StmtNum> stmtTypeLines2 = stmtStorage->getStatementNumbers(type2);
@@ -294,6 +298,16 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransit
             addCFGRelativesTransitive(res, graph, queue, AppConstants::IS_FIND_CHILDREN, stmttypeLines2);
         }
     }
+
+    // if both synonyms are the same filter non-matching answers
+    if (param1 == param2) {
+        res.erase(std::remove_if(res.begin(), res.end(),
+                                 [&](const std::vector<std::string>& pair) {
+                                     return pair[0] != pair[1];
+                                 }),
+                  res.end());
+    }
+
     return res;
 }
 

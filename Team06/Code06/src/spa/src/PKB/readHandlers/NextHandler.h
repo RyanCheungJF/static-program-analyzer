@@ -20,7 +20,8 @@ private:
     std::unordered_map<ParameterType, std::string> stmtTypesSet = {
         {ParameterType::IF, AppConstants::IF},         {ParameterType::WHILE, AppConstants::WHILE},
         {ParameterType::ASSIGN, AppConstants::ASSIGN}, {ParameterType::PRINT, AppConstants::PRINT},
-        {ParameterType::READ, AppConstants::READ},     {ParameterType::CALL, AppConstants::CALL}};
+        {ParameterType::READ, AppConstants::READ},     {ParameterType::CALL, AppConstants::CALL},
+        {ParameterType::STMT, AppConstants::STMT}};
     bool isTransitive;
 
     // e.g. Next(1, 2)
