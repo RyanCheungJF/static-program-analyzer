@@ -6,7 +6,7 @@ Select w such that Follows(28, s) and Follows(28, s) and Follows(28, s) and Foll
 2 - select all while
 while w; stmt s;
 Select w such that Follows(28, s) and Follows(27, s) and Follows(26, s) and Follows(25, s) and Follows(24, s) and Follows(23, s) and Follows(22, s) and Follows(21, s) and Follows(20, s) and Follows(12, s) and Follows(11, s) and Follows(13, s) and Follows(14, s) and Follows(15, s) and Follows(16, s) and Follows(17, s) and Follows(18, s) 
-58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 76, 78, 80, 81, 195, 207, 213, 237, 286
+none
 5000
 3 - multi clause
 stmt s; assign a;

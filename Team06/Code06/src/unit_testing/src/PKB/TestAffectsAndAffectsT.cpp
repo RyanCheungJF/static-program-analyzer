@@ -474,6 +474,14 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 1")
         shared_ptr<Relationship> rs4 = Relationship::makeRelationship(AppConstants::AFFECTST, params4);
         std::vector<std::vector<std::string>> res4 = readPkb.findRelationship(rs4);
         REQUIRE(unit_testing_utils::equals(expected1, res4));
+
+        std::vector<Parameter> params5 = {Parameter("as", ParameterType::ASSIGN),
+                                          Parameter("as", ParameterType::ASSIGN)};
+        shared_ptr<Relationship> rs5 = Relationship::makeRelationship(AppConstants::AFFECTST, params5);
+        std::vector<std::vector<std::string>> res5 = readPkb.findRelationship(rs5);
+        std::vector<std::vector<std::string>> expected5 = {
+            {"3", "3"}, {"6", "6"}, {"9", "9"}, {"14", "14"}, {"19", "19"}};
+        REQUIRE(unit_testing_utils::equals(expected5, res5));
     }
 }
 
