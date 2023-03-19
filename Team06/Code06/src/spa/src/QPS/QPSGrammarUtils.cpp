@@ -126,16 +126,16 @@ bool isExprSpec(string s) {
     if (s == "_") {
         return true;
     }
-    bool startsWith_ = regex_search(s, regex("^_\""));
-    bool endsWith_ = regex_search(s, regex("\"_$"));
+    bool startsWith_ = regex_search(s, regex("^_"));
+    bool endsWith_ = regex_search(s, regex("_$"));
     if (startsWith_ && endsWith_) {
         if (s.size() < 5) {
             return false;
         }
         // This will get rid of _" and "_
         // If s = _"X+Y"_ then expr = X+Y
-        string expr = s.substr(2, s.size() - 4);
-        return isExpr(expr);
+        string expr = s.substr(1, s.size() - 2);
+        return isExprSpec(expr);
     }
     bool startsWithQuotation = regex_search(s, regex("^\""));
     bool endsWithQuotation = regex_search(s, regex("\"$"));

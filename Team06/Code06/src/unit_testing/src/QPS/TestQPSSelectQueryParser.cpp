@@ -316,14 +316,29 @@ TEST_CASE("parse / select tuple multiple parameter with valid attributes and inv
 }
 
 TEST_CASE("parse / select such that with valid spaces in fixed string / return query") {
-    string input = "Select s such that Uses( \" valid \", \"hello\")";
+    string input = "Select s such that Uses( \" valid \", \"hello \" ) ";
     SelectQueryParser sqp;
     Query q = sqp.parse(input);
     CHECK(true);
 }
 
 TEST_CASE("parse / select such that with invalid spaces in fixed string / throws syntax error") {
-    string input = "Select s such that Uses( \"in valid\", \"hello\")";
+    string input = "Select s such that Uses( \"in valid\", \"hello\" )";
     SelectQueryParser sqp;
     CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
+TEST_CASE("parse / select pattern with valid spaces in exprSpec / return query") {
+    SelectQueryParser sqp;
+    SECTION("exprSpec without wild cards") {
+        string input1 = "Select s pattern a (d, \" valid\")";
+        Query q1 = sqp.parse(input1);
+        CHECK(true);
+    }
+
+    SECTION("exprSpec with wild cards") {
+        string input2 = "Select s pattern a (d, _\" valid \" _)";
+        Query q2 = sqp.parse(input2);
+        CHECK(true);
+    }
 }
