@@ -37,7 +37,7 @@ Parameter::Parameter(const Parameter& p) {
 Parameter Parameter::makeParameter(string val) {
     ParamSyntaxValidator paramSynVal;
     ParameterType type = guessParameterType(val);
-    Parameter p(removeCharFromString(val, '\"'), type);
+    Parameter p(trim(removeCharFromString(val, '\"')), type);
     paramSynVal.validate(p);
     return p;
 }
@@ -46,7 +46,7 @@ Parameter Parameter::makeParameter(string val, string attr) {
     ParamSyntaxValidator paramSynVal;
     ParameterType type = guessParameterType(val);
     AttributeType attribute = stringToAttribute(attr);
-    Parameter p(removeCharFromString(val, '\"'), type, attribute);
+    Parameter p(trim(removeCharFromString(val, '\"')), type, attribute);
     paramSynVal.validate(p);
     return p;
 }
@@ -167,8 +167,7 @@ const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
     {AppConstants::CONSTANT, ParameterType::CONSTANT},   {AppConstants::PROCEDURE, ParameterType::PROCEDURE},
     {AppConstants::SYNONYM, ParameterType::SYNONYM},     {AppConstants::WILDCARD, ParameterType::WILDCARD},
     {AppConstants::FIXED_INT, ParameterType::FIXED_INT}, {AppConstants::FIXED_STRING, ParameterType::FIXED_STRING},
-    {AppConstants::BOOLEAN, ParameterType::BOOLEAN}
-};
+    {AppConstants::BOOLEAN, ParameterType::BOOLEAN}};
 
 const unordered_map<string, AttributeType> Parameter::stringToAttributeMap = {
     {AppConstants::PROCNAME, AttributeType::PROCNAME},

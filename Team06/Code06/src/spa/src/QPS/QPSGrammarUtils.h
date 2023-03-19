@@ -36,5 +36,6 @@ bool hasCorrectRelRefOrPatternForm(string);
 bool isElem(string);
 bool isAttrRef(string);
 bool isAttribute(string);
+bool isRef(string);
 
 #endif // SPA_QPSGRAMMARUTILS_H

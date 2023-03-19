@@ -10,6 +10,7 @@ const string SUCH = "such";
 const string THAT = "that";
 const string PATTERN = "pattern";
 const string AND = "and";
+const string WITH = "with";
 
 vector<int> findSuchThat(const vector<string>& wordList) {
     vector<int> suchThatStarts;
@@ -44,6 +45,22 @@ vector<int> findPattern(const vector<string>& wordList) {
         patternStarts.push_back(i);
     }
     return patternStarts;
+}
+
+vector<int> findWith(const vector<string>& wordList) {
+    vector<int> withStarts;
+    for (int i = 0; i < wordList.size(); i++) {
+        if (WITH != wordList[i]) {
+            continue;
+        }
+        if (i == wordList.size() - 1) {
+            continue;
+        }
+        string substr;
+        bool found;
+        tie(substr, ignore, found) = extractSubStringUntilDelimiter(wordList[i + 1], 0, "=");
+    }
+    return vector<int>();
 }
 
 vector<int> findAnds(const vector<string>& wordList, int start, int end) {
