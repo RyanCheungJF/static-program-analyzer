@@ -140,7 +140,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
         AffectsHandler handler(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
-                               parentTStorage, type == RelationshipType::AFFECTST);
+                               type == RelationshipType::AFFECTST);
         res = handler.handle(param1, param2);
     }
     if (!res.empty()) {
@@ -230,7 +230,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
 
     if (Parameter::isStatementRef(param)) {
         std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(param.getTypeString());
-        if (attrType == "procName") {
+        if (attrType == AppConstants::PROCEDURE) {
             for (auto stmtNum : stmtNums) {
                 ProcName procName = procedureStorage->getProcedure(stmtNum);
                 res.push_back({std::to_string(stmtNum), procName});
@@ -238,14 +238,14 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
         }
         // assumes that QPS is correct in only allowing varName for reads and prints,
         // since reads and prints will only have 1 variable tied to them
-        else if (attrType == "varName") {
+        else if (attrType == AppConstants::VARIABLE) {
             for (auto stmtNum : stmtNums) {
                 Ent var = *entityStorage->getEntities(stmtNum).begin();
                 res.push_back({std::to_string(stmtNum), var});
             }
         }
         // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
-        else if (attrType == "stmtNum") {
+        else if (attrType == AppConstants::STMTNO) {
             for (auto stmtNum : stmtNums) {
                 res.push_back({std::to_string(stmtNum), std::to_string(stmtNum)});
             }

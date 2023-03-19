@@ -301,7 +301,7 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransit
         }
     }
 
-    // if both synonyms are the same filter non-matching answers
+    // if both synonyms are the same, filter non-matching answers
     if (param1 == param2) {
         res.erase(std::remove_if(res.begin(), res.end(),
                                  [&](const std::vector<std::string>& pair) {

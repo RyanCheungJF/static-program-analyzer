@@ -4,14 +4,12 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shar
                                std::shared_ptr<ProcedureStorage> procStorage,
                                std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
                                std::shared_ptr<ModifiesUsesStorage> usesStorage,
-                               std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> parentTStorage,
                                bool isTransitive) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
     this->procStorage = procStorage;
     this->modifiesStorage = modifiesStorage;
     this->usesStorage = usesStorage;
-    this->parentTStorage = parentTStorage;
     this->isTransitive = isTransitive;
 }
 
