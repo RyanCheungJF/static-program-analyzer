@@ -79,57 +79,33 @@ bool isContainerStatement(Statement* statement) {
     return CAST_TO(IfStatement, statement) || CAST_TO(WhileStatement, statement);
 }
 
-void populateUsesModifies(WritePKB* writePKB, ReadPKB* readPKB) {
-    processCallStatements(writePKB, readPKB);
+void populateUsesModifies(WritePKB* writePKB, ReadPKB* readPKB, std::vector<ProcName> order) {
+    processProcedures(writePKB, readPKB, order);
     processContainerStatements(writePKB, readPKB);
-    processProcedures(writePKB, readPKB);
 }
 
-void processCallStatements(WritePKB* writePKB, ReadPKB* readPKB) {
-    auto callStatements = readPKB->getCallStatements();
-    for (std::pair<StmtNum, ProcName> callStmt : callStatements) {
-        /* Could be possible I handled the call statement in the recursion, so I
-           check if there's anything. If one of them is empty, it means I handled it
-           in the recursion. Only if both are empty, means I might not have handled it. */
-        if (readPKB->getUsesS(callStmt.first).empty() && readPKB->getModifiesS(callStmt.first).empty()) {
-            handleCallStmt(writePKB, readPKB, callStmt);
-        }
-    }
-}
+void processProcedures(WritePKB* writePKB, ReadPKB* readPKB, std::vector<ProcName> order) {
+    for (ProcName proc : order) {
+        auto procedureStmtNum = readPKB->getProcedureStatementNumbers(proc);
+        std::unordered_set<Ent> currUsesVariables;
+        std::unordered_set<Ent> currModifiesVariables;
 
-std::vector<std::unordered_set<Ent>> handleCallStmt(WritePKB* writePKB, ReadPKB* readPKB,
-                                                    std::pair<StmtNum, ProcName> callStmt) {
-    auto procedureStmtNum = readPKB->getProcedureStatementNumbers(callStmt.second);
-    std::unordered_set<Ent> currUsesVariables;
-    std::unordered_set<Ent> currModifiesVariables;
-    for (StmtNum sn : procedureStmtNum) {
-        if (readPKB->checkStatement(AppConstants::CALL, sn)) {
-            std::unordered_set<Ent> moreUsesVariables;
-            if (readPKB->getUsesS(readPKB->getCallStmt(sn).first).empty()) {
-                moreUsesVariables = handleCallStmt(writePKB, readPKB, readPKB->getCallStmt(sn))[0];
+        for (StmtNum sn : procedureStmtNum) {
+            if (readPKB->checkStatement(AppConstants::CALL, sn)) {
+                auto callStmt = readPKB->getCallStmt(sn);
+                writePKB->setUsesS(callStmt.first, readPKB->getUsesP(callStmt.second));
+                writePKB->setModifiesS(callStmt.first, readPKB->getModifiesP(callStmt.second));
+                currUsesVariables.merge(readPKB->getUsesP(callStmt.second));
+                currModifiesVariables.merge(readPKB->getModifiesP(callStmt.second));
             }
-            else { // If I handled the call statement before, just read from it.
-                moreUsesVariables = readPKB->getUsesS(readPKB->getCallStmt(sn).first);
+            else {
+                currUsesVariables.merge(readPKB->getUsesS(sn));
+                currModifiesVariables.merge(readPKB->getModifiesS(sn));
             }
-            currUsesVariables.merge(moreUsesVariables);
-
-            std::unordered_set<Ent> moreModifiesVariables;
-            if (readPKB->getModifiesS(readPKB->getCallStmt(sn).first).empty()) {
-                moreModifiesVariables = handleCallStmt(writePKB, readPKB, readPKB->getCallStmt(sn))[1];
-            }
-            else { // If I handled the call statement before, just read from it.
-                moreModifiesVariables = readPKB->getModifiesS(readPKB->getCallStmt(sn).first);
-            }
-            currModifiesVariables.merge(moreModifiesVariables);
         }
-        else {
-            currUsesVariables.merge(readPKB->getUsesS(sn));
-            currModifiesVariables.merge(readPKB->getModifiesS(sn));
-        }
+        writePKB->setUsesP(proc, currUsesVariables);
+        writePKB->setModifiesP(proc, currModifiesVariables);
     }
-    writePKB->setUsesS(callStmt.first, currUsesVariables);
-    writePKB->setModifiesS(callStmt.first, currModifiesVariables);
-    return std::vector{currUsesVariables, currModifiesVariables};
 }
 
 void processContainerStatements(WritePKB* writePKB, ReadPKB* readPKB) {
@@ -145,21 +121,6 @@ void processContainerStatements(WritePKB* writePKB, ReadPKB* readPKB) {
         }
         writePKB->setUsesS(containerStmt, usesVariables);
         writePKB->setModifiesS(containerStmt, modifiesVariables);
-    }
-}
-
-void processProcedures(WritePKB* writePKB, ReadPKB* readPKB) {
-    auto procedureNames = readPKB->getAllProcedureNames();
-    for (ProcName p : procedureNames) {
-        auto procedureStmtNum = readPKB->getProcedureStatementNumbers(p);
-        std::unordered_set<Ent> usesVariables;
-        std::unordered_set<Ent> modifiesVariables;
-        for (StmtNum s : procedureStmtNum) {
-            usesVariables.merge(readPKB->getUsesS(s));
-            modifiesVariables.merge(readPKB->getModifiesS(s));
-        }
-        writePKB->setUsesP(p, usesVariables);
-        writePKB->setModifiesP(p, modifiesVariables);
     }
 }
 
@@ -205,11 +166,7 @@ void connectNodesForCFG(std::unordered_map<StmtNum, std::unordered_map<std::stri
 }
 
 void validateNoDuplicateProcedureName(std::vector<ProcName>& procedureNames) {
-    std::unordered_set<ProcName> procSet;
-    for (ProcName p : procedureNames) {
-        procSet.insert(p);
-    }
-    if (procSet.size() != procedureNames.size()) {
+    if (procedureNames.size() > std::unordered_set<ProcName>(procedureNames.begin(), procedureNames.end()).size()) {
         throw SemanticErrorException("A program cannot have two procedures with the same name.");
     }
 }
@@ -255,9 +212,9 @@ void checkCallStatementHelper(std::vector<std::unique_ptr<Statement>>& statement
     }
 }
 
-void validateNoCycles(std::vector<ProcName>& procedureNames,
-                      std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap, WritePKB* writePkb,
-                      ReadPKB* readPkb) {
+std::vector<ProcName> validateNoCycles(std::vector<ProcName>& procedureNames,
+                                       std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
+                                       WritePKB* writePkb, ReadPKB* readPkb) {
     std::deque<ProcName> queue;
     std::unordered_map<ProcName, std::pair<int, std::unordered_set<ProcName>>> nodes;
     std::vector<ProcName> order;
@@ -297,6 +254,7 @@ void validateNoCycles(std::vector<ProcName>& procedureNames,
     }
     else {
         populateCallsTable(procCallMap, order, writePkb, readPkb);
+        return order;
     }
 }
 

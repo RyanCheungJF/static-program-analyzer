@@ -57,4 +57,3 @@ procedure conditionalSpam {
 	}
 	print while;	// 42
 }
-

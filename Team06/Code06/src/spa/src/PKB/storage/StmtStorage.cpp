@@ -1,9 +1,9 @@
 #include "StmtStorage.h"
 
 void StmtStorage::writeStatement(Stmt s, StmtNum line) {
-  stmt_stmtNum[s].insert(line);
+    stmt_stmtNum[s].insert(line);
     stmtNum_stmt[line].insert(s);
-  return;
+    return;
 }
 
 bool StmtStorage::checkStatement(Stmt stmt, StmtNum num) {

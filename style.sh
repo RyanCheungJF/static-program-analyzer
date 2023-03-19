@@ -1,7 +1,9 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+#!/usr/bin/env bash
 
 echo "Running auto checkstyle! 🔫"
+
+# please ensure you have clang-format installed first
+# sudo apt-get install clang-format
 
 show_spinner()
 {
@@ -19,6 +21,7 @@ show_spinner()
   printf "    \b\b\b\b"
 }
 
-#cd .. && (find . -regex '.*\.\(cpp\|h\)' -exec clang-format -style=file -i {} \;) & show_spinner "$!"
+# run automatic checkstyle
+(find . -regex '.*\.\(cpp\|h\)' -exec clang-format -style=file -i {} \;) & show_spinner "$!"
 
 echo "Done! Thank you for not contributing to our code debt!"

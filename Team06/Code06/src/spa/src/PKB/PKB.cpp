@@ -140,7 +140,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
         AffectsHandler handler(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
-                               type == RelationshipType::AFFECTST);
+                               parentTStorage, type == RelationshipType::AFFECTST);
         res = handler.handle(param1, param2);
     }
     if (!res.empty()) {
@@ -156,7 +156,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
     if (!res.empty()) {
         return res;
     }
-    
+
     ParameterType type = p.getType();
 
     if (type == ParameterType::PROCEDURE) {
@@ -282,10 +282,6 @@ std::unordered_set<StmtNum> PKB::getProcedureStatementNumbers(ProcName p) {
     return procedureStorage->getProcedureStatementNumbers(p);
 }
 
-std::vector<std::pair<StmtNum, ProcName>> PKB::getCallStatements() {
-    return callStorage->getCallStatements();
-}
-
 std::unordered_set<ProcName> PKB::getAllProcedureNames() {
     return procedureStorage->getProcNames();
 }
@@ -328,4 +324,10 @@ std::unordered_set<ProcName> PKB::getCallsT(ProcName p) {
 
 std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> PKB::getCFG(ProcName name) {
     return cfgStorage->getGraph(name);
+}
+
+void PKB::clearCache() {
+    parameterCache.clearCache();
+    relationshipCache.clearCache();
+    patternCache.clearCache();
 }

@@ -345,14 +345,6 @@ TEST_CASE("CallStorage WritePKB ReadPKB Facade") {
         REQUIRE(res.first == 11);
         REQUIRE(res.second == "proc2");
     }
-
-    SECTION("CallStorage WritePKB ReadPKB Facade: getCallStatements()") {
-        auto actual = readPkb.getCallStatements();
-        std::vector<std::pair<StmtNum, ProcName>> expected = {{11, "proc2"}, {22, "proc3"}};
-        std::sort(actual.begin(), actual.end());
-        std::sort(expected.begin(), expected.end());
-        REQUIRE(actual == expected);
-    }
 }
 
 TEST_CASE("StmtStorage WritePKB ReadPKB Facade") {

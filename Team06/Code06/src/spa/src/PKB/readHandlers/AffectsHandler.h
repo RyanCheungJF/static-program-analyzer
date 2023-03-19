@@ -3,8 +3,9 @@
 #include <queue>
 #include <set>
 
-#include "../../qps/entities/Parameter.h"
+#include "../../QPS/entities/Parameter.h"
 #include "../storage/CFGStorage.h"
+#include "../storage/FollowsParentStorage.h"
 #include "../storage/ModifiesUsesStorage.h"
 #include "../storage/ProcedureStorage.h"
 #include "../storage/StmtStorage.h"
@@ -24,7 +25,7 @@ struct hashFunctionTuple {
 
 struct hashFunctionAffectsT {
     size_t operator()(const std::pair<int, int>& x) const {
-        return (x.first << 31) ^ x.second;
+        return (x.first * 501) + x.second;
     }
 };
 
@@ -32,7 +33,8 @@ class AffectsHandler {
 public:
     AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
                    std::shared_ptr<ProcedureStorage> procStorage, std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
-                   std::shared_ptr<ModifiesUsesStorage> usesStorage, bool isTransitive);
+                   std::shared_ptr<ModifiesUsesStorage> usesStorage,
+                   std::shared_ptr<FollowsParentStorage> parentTStorage, bool isTransitive);
     std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
 
 private:
@@ -41,28 +43,26 @@ private:
     std::shared_ptr<ProcedureStorage> procStorage;
     std::shared_ptr<ModifiesUsesStorage> modifiesStorage;
     std::shared_ptr<ModifiesUsesStorage> usesStorage;
+    std::shared_ptr<FollowsParentStorage> parentTStorage;
     bool isTransitive;
 
     // Affects(1, 2)
     std::vector<std::vector<std::string>> handleIntInt(StmtNum a1, StmtNum a2);
-
     // Affects(a1, 2) or Affects(_, 2)
     std::vector<std::vector<std::string>> handleWildcardInt(StmtNum a2);
-
     // Affects(1, a2) or Affects(1, _)
     std::vector<std::vector<std::string>> handleIntWildcard(StmtNum a1);
-
     // Affects(a1, a2) or Affects(_, _)
     std::vector<std::vector<std::string>> handleWildcardWildcard();
 
     // Affects*(1, 2)
-    std::vector<std::vector<std::string>> handleIntIntTransitive(StmtNum a1, StmtNum a2); // TODO
+    std::vector<std::vector<std::string>> handleIntIntTransitive(StmtNum a1, StmtNum a2);
     // Affects*(a1, 2) or Affects*(_, 2)
-    std::vector<std::vector<std::string>> handleWildcardIntTransitive(StmtNum a2); // TODO
+    std::vector<std::vector<std::string>> handleWildcardIntTransitive(StmtNum a2);
     // Affects*(1, a2) or Affects*(1, _)
-    std::vector<std::vector<std::string>> handleIntWildcardTransitive(StmtNum a1); // TODO
+    std::vector<std::vector<std::string>> handleIntWildcardTransitive(StmtNum a1);
     // Affects*(a1, a2) or Affects*(_, _)
-    std::vector<std::vector<std::string>> handleWildcardWildcardTransitive(); // TODO
+    std::vector<std::vector<std::string>> handleWildcardWildcardTransitive();
 
     // helper methods
     std::unordered_set<StmtNum> getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc);
@@ -78,4 +78,19 @@ private:
     std::vector<std::vector<std::string>> handleTransitive(std::string param1value, std::string param2value,
                                                            bool isFixedIntParam1, bool isFixedIntParam2,
                                                            bool isWildCardParam1, bool isWildCardParam2);
+
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted);
+
+    std::unordered_set<StmtNum> getAssignStatements(std::unordered_set<StmtNum> allProcStatements);
+
+    bool isModifiedInControlFlowPath(std::unordered_set<Ent> commonVariables,
+                                     std::unordered_set<Ent> variablesModifiedInPath);
+
+    std::vector<std::vector<std::string>> bfsTraversalOneWildcard(StmtNum a1, StmtNum a2);
+
+    bool checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2);
+
+    std::vector<std::vector<std::string>> nonTransitiveOneIntOneWildcard(StmtNum a1, StmtNum a2);
+
+    bool checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2);
 };

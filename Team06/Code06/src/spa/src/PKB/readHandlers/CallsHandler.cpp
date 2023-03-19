@@ -59,6 +59,11 @@ std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Par
     bool isWildcardParam1 = paramType1 == ParameterType::PROCEDURE || paramType1 == ParameterType::WILDCARD;
     bool isWildcardParam2 = paramType2 == ParameterType::PROCEDURE || paramType2 == ParameterType::WILDCARD;
 
+    // based on the fact that there are no cycles in the source code
+    if (param1 == param2 && !(paramType1 == ParameterType::WILDCARD) && !(paramType2 == ParameterType::WILDCARD)) {
+        return {};
+    }
+
     if (isProcnameParam1) {
         if (isProcnameParam2) {
             return handleProcnameProcname(param1, param2);

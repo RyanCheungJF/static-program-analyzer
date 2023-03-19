@@ -251,7 +251,7 @@ SyntaxError
 49 - invalid While Pattern, extra param
 while w;
 Select w pattern w("x", _, _)
-SyntaxError
+SemanticError
 5000
 50 - invalid While Pattern, invalid first param
 while w; procedure p;
@@ -261,7 +261,7 @@ SemanticError
 51 - invalid While Pattern, invalid second param
 while w; assign a;
 Select w pattern w("x", "invalid")
-SyntaxError
+SemanticError
 5000
 52 - invalid Calls Relationship, invalid first param
 variable v; procedure p;
@@ -327,4 +327,19 @@ SyntaxError
 if i;
 Select i pattern i("9o0", _, _)
 SyntaxError
+5000
+65 - affects on non assign statement
+print p; read r; call c; assign a;
+Select a such that Affects(c, 15)
+SemanticError
+5000
+66 - affects on non assign statement
+print p; read r; call c; assign a;
+Select a such that Affects(p, 15)
+SemanticError
+5000
+65 - affects on non assign statement
+print p; read r; call c; assign a;
+Select a such that Affects(r, 15)
+SemanticError
 5000

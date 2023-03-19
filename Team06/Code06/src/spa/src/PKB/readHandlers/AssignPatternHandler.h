@@ -5,6 +5,7 @@
 
 class AssignPatternHandler {
 public:
+    // TODO: Milestone 3 optimisation. use postifx string, no need to do tree traversal. possible speed gains
     AssignPatternHandler(std::shared_ptr<PatternWithExprStorage> patternStorage);
 
     std::vector<std::vector<std::string>> handle(Pattern p);

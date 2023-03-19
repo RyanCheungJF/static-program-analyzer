@@ -5,7 +5,7 @@ A, B, C, D, F
 5000
 2 - Incorrect spelling of Calls
 procedure p;
-Select p such that Call(p, "A")
+Select p such that Cals(p, "A")
 SyntaxError
 5000
 3 - Lowercase Calls
@@ -18,48 +18,113 @@ procedure BOOLEAN, p;
 Select BOOLEAN such that Calls(p, BOOLEAN)
 B, D, E, F, G
 5000
-5 - stmt as parameter
-procedure p; stmt s;
-Select p such that Calls(p, s)
-SemanticError
-5000
-6 - read as parameter
-procedure p; read r;
-Select p such that Calls(r, p)
-SemanticError
-5000
-7 - constant as parameter
-procedure p; constant c;
-Select p such that Calls(p, c)
-SemanticError
-5000
-8 - while as parameter
-procedure p; while w;
-Select p such that Calls(p, w)
-SemanticError
-5000
-9 - if as parameter
-procedure p; if i;
-Select p such that Calls(p, i)
-SemanticError
-5000
-10 - Wildcard for both parameters
+5 - Check for procedure that Calls itself
 procedure p;
+Select p such that Calls(p, p)
+none
+5000
+6 - wildcard, wildcard
+procedure p, p1;
 Select p such that Calls(_, _)
 A, B, C, D, E, F, G
 5000
-11 - Wildcard for left parameter
-procedure p;
-Select p such that Calls(_, p)
+7 - procedure, procedure
+procedure p, p1;
+Select p such that Calls(p, p1)
+A, B, C, D, F
+5000
+7 - procedure, procedure
+procedure p, p1;
+Select p1 such that Calls(p, p1)
 B, D, E, F, G
 5000
-12 - Wildcard for right parameter
-procedure p;
+8 - wildcard, procedure
+procedure p, p1;
+Select p1 such that Calls(_, p1)
+B, D, E, F, G
+5000
+9 - procedure, wildcard
+procedure p, p1;
 Select p such that Calls(p, _)
 A, B, C, D, F
 5000
-13 - Check for procedure that calls itself
-procedure p;
-Select p such that Calls(p, p)
+10 - Procedure Calls non-existing procedure
+procedure p, p1;
+Select p such that Calls(p, "Nonexistent")
+none
+5000
+11 - Non-existent procedure Calls procedure
+procedure p, p1;
+Select p such that Calls("Nonexistent", p)
+none
+5000
+12 - procedure that Calls A
+procedure p, p1;
+Select p such that Calls(p, "A")
+none
+5000
+13 - procedure that Calls B
+procedure p, p1;
+Select p such that Calls(p, "B")
+A
+5000
+14 - procedure that Calls C
+procedure p, p1;
+Select p such that Calls(p, "C")
+none
+5000
+15 - procedure that Calls D
+procedure p, p1;
+Select p such that Calls(p, "D")
+B, C
+5000
+16 - procedure that Calls E
+procedure p, p1;
+Select p such that Calls(p, "E")
+A, D
+5000
+17 - procedure that Calls F
+procedure p, p1;
+Select p such that Calls(p, "F")
+A, B
+5000
+18 - procedure that Calls G
+procedure p, p1;
+Select p such that Calls(p, "G")
+C, F
+5000
+19 - procedure that Calls by A
+procedure p, p1;
+Select p1 such that Calls("A", p1)
+B, E, F
+5000
+20 - procedure that Calls by B
+procedure p, p1;
+Select p1 such that Calls("B", p1)
+D, F
+5000
+21 - procedure that Calls by C
+procedure p, p1;
+Select p1 such that Calls("C", p1)
+D, G
+5000
+22 - procedure that Calls by D
+procedure p, p1;
+Select p1 such that Calls("D", p1)
+E
+5000
+23 - procedure that Calls by E
+procedure p, p1;
+Select p1 such that Calls("E", p1)
+none
+5000
+24 - procedure that Calls by F
+procedure p, p1;
+Select p1 such that Calls("F", p1)
+G
+5000
+25 - procedure that Calls by G
+procedure p, p1;
+Select p1 such that Calls("G", p1)
 none
 5000

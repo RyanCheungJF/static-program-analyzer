@@ -79,4 +79,7 @@ public:
     // CFG-related
     inline static const std::string PARENTS = "parents";
     inline static const std::string CHILDREN = "children";
+
+    inline static const int NOT_USED_FIELD = -1;
+    inline static const std::string PROCEDURE_DOES_NOT_EXIST = "procedure does not exist";
 };

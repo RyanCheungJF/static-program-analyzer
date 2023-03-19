@@ -11,6 +11,9 @@
 #include "../QPS/entities/Pattern.h"
 #include "../QPS/entities/Relationship.h"
 #include "../utils/AppConstants.h"
+#include "cache/ParameterCache.h"
+#include "cache/PatternCache.h"
+#include "cache/RelationshipCache.h"
 #include "readHandlers/AffectsHandler.h"
 #include "readHandlers/AssignPatternHandler.h"
 #include "readHandlers/CallsHandler.h"
@@ -30,9 +33,6 @@
 #include "storage/ProcedureStorage.h"
 #include "storage/StmtStorage.h"
 #include "utils/AppConstants.h"
-#include "cache/RelationshipCache.h"
-#include "cache/ParameterCache.h"
-#include "cache/PatternCache.h"
 
 class PKB : AppConstants {
 
@@ -107,9 +107,6 @@ public:
     // returns all the statement lines that are contained in the given procedure
     std::unordered_set<StmtNum> getProcedureStatementNumbers(ProcName p);
 
-    // returns all the call statement lines and the procedure that it is calling
-    std::vector<std::pair<StmtNum, ProcName>> getCallStatements();
-
     // returns all the procedure names present in the source code
     std::unordered_set<ProcName> getAllProcedureNames();
 
@@ -130,7 +127,8 @@ public:
     std::unordered_set<Ent> getModifiesP(ProcName name);
 
     // returns the name of the procedure being called on line number s
-    // if line s is not a call statement, it returns a pair {-1, "INVALID"}
+    // if line s is not a call statement, it returns a pair {AppConstants::NOT_USED_FIELD,
+    // AppConstants::PROCEDURE_DOES_NOT_EXIST}
     std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
 
     // returns all statement numbers for if statement
@@ -147,6 +145,9 @@ public:
 
     // returns the cfg if it exists, else it returns an empty graph
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> getCFG(ProcName name);
+
+    // clears all of PKB's Caches
+    void clearCache();
 
 private:
     // STATEMENTS
@@ -173,7 +174,6 @@ private:
     RelationshipCache relationshipCache;
     ParameterCache parameterCache;
     PatternCache patternCache;
-
 
     std::unordered_map<RelationshipType, std::shared_ptr<FollowsParentStorage>> followsParentMap = {
         {RelationshipType::FOLLOWS, NULL},

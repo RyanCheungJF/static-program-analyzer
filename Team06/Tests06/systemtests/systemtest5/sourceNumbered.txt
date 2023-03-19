@@ -28,7 +28,7 @@ procedure A {
 		}
 20		while ((23 % j * v + j - 123 + j + x - m + n + h * w + g + l - c / k - z - 43 - s / 54 + g + 1 % l + 58 % n / b + n / b / w / g + e % 45 + i + n >= 8 / 4 % 70 * e / l - 24 * c) || (f * e % w * k * v / e * 44 - v % b + c + 5 <= x)) {
 21			b = z + (x + i) + z + c * (a - b / e) * (a % a);
-22			z = (3*z + 1000000) + (a +b);
+22			z = (3 * z + 1000000) + (a + b);
 23			read c;
 24			read d;
 25			read e;
@@ -203,102 +203,102 @@ procedure E {
 133				e = 0;
 134				read b;
 			} else {
-125				f = 0;
+135				f = 0;
 			}
 		} else {
-126			if (k * l / x % c % k - n * s % 4 * c * g + v % i - 431 / 2 + v - k + 85 / w + 122 != i) then {
-127				g = 0;
+136			if (k * l / x % c % k - n * s % 4 * c * g + v % i - 431 / 2 + v - k + 85 / w + 122 != i) then {
+137				g = 0;
 			} else {
-128				h = 0;
+138				h = 0;
 			}
-129			print d;
+139			print d;
 		}
 	}
-130	f = s + (p * (s + 1) / (2 + (3 * ( (4 % 3) + 5) / (h * 2 + (4 * 3))))) * s;
+140	f = s + (p * (s + 1) / (2 + (3 * ( (4 % 3) + 5) / (h * 2 + (4 * 3))))) * s;
 }
 
 procedure F {
-131	b = 165;
-132	read o;
-133	while (!(n * 23 - i == 5 + e % l / b * h % m - 62 % s * x / i - u / 97 - i * z + x / 9 - c / m + t / d * g)) {
-134		b = 2;
-135		print b;
+141	b = 165;
+142	read o;
+143	while (!(n * 23 - i == 5 + e % l / b * h % m - 62 % s * x / i - u / 97 - i * z + x / 9 - c / m + t / d * g)) {
+144		b = 2;
+145		print b;
 	}
-136	c = b;
-137	call G;
+146	c = b;
+147	call G;
 }
 
 procedure G {
-138	b = 141;
-139	c = b;
-140	d = c;
-141	e = d;
-142	f = e;
-143	g = f;
-144	if ((34 / t % h * 27 % t * m / r / x > z) || ((z * t / a > c) && ((c <= 55) || (y / y % b == b)))) then {
-145		f = g - 1;
-146		x = b + c;
-147		if (e > 10) then {
-148			f = g - 11;
+148	b = 141;
+149	c = b;
+150	d = c;
+151	e = d;
+152	f = e;
+153	g = f;
+154	if ((34 / t % h * 27 % t * m / r / x > z) || ((z * t / a > c) && ((c <= 55) || (y / y % b == b)))) then {
+155		f = g - 1;
+156		x = b + c;
+157		if (e > 10) then {
+158			f = g - 11;
 		} else {
-149			if (a % 374 % a / z > 731) then {
-150				print x;
+159			if (a % 374 % a / z > 731) then {
+160				print x;
 			} else {
-151				f = g - 111;
-152				x = a + b + c + d + e + f + g + h;
+161				f = g - 111;
+162				x = a + b + c + d + e + f + g + h;
 			}
 		}
-153		print a;
-154		b = b + (x - 1) * 2;
-155		b = b + b * c - 3;
-156		read x;
-157		print c;
-158		c = b + c;
-159		while (!(r / q / 54 * 145 * o * c >= m + z / b)) {
-160			read e;
-161			f = ((5 * g) % ((h + 6) / i)) - x;
-162			print j;
+163		print a;
+164		b = b + (x - 1) * 2;
+165		b = b + b * c - 3;
+166		read x;
+167		print c;
+168		c = b + c;
+169		while (!(r / q / 54 * 145 * o * c >= m + z / b)) {
+170			read e;
+171			f = ((5 * g) % ((h + 6) / i)) - x;
+172			print j;
 		}
 	} else {
-163		h = i * 2;
-164		read j;
-165		if ((((a - o / f > 68) || (a % 297 <= v - b * q - t / 921 + f)) || (t > c)) && (t % 666 + t + n % b * x % z * t % t * h * c - 211 * q - b - v != k)) then {
-166			m = n + 8 * 9 / p - q % 10 + r;
-167			s = t / u / v / 11 - w * 12 % x + y;
+173		h = i * 2;
+174		read j;
+175		if ((((a - o / f > 68) || (a % 297 <= v - b * q - t / 921 + f)) || (t > c)) && (t % 666 + t + n % b * x % z * t % t * h * c - 211 * q - b - v != k)) then {
+176			m = n + 8 * 9 / p - q % 10 + r;
+177			s = t / u / v / 11 - w * 12 % x + y;
 		} else {
-168			e = b + c;
-169			while (z < 13) {
-170				x = 3 * (5 + y / (z - w));
+178			e = b + c;
+179			while (z < 13) {
+180				x = 3 * (5 + y / (z - w));
 			}
 		}
-171		while (((54 % z + h * 27 % q - k % t + 79 - r / o <= z) && (!(z > 51 - o * v - n + v + x / k % 99 + q * 95))) && ((z / 404 - 18 > 89) || ((((!(!(x > v))) || ((b != x % 756) && (!((45 > t) || (f % 3 / h % t % h > k))))) && (!(c - h % 2 * f - z / r / x + m / h > t))) || (!((b <= h - k) && (7 > v / v / 51 - t)))))) {
-172			if (b != m * r % r) then {
-173				j = b + c;
-174				while (k == 13) {
-175					f = ((5 * g) % ((h + 6) / i)) - x;
-176					read j;
+181		while (((54 % z + h * 27 % q - k % t + 79 - r / o <= z) && (!(z > 51 - o * v - n + v + x / k % 99 + q * 95))) && ((z / 404 - 18 > 89) || ((((!(!(x > v))) || ((b != x % 756) && (!((45 > t) || (f % 3 / h % t % h > k))))) && (!(c - h % 2 * f - z / r / x + m / h > t))) || (!((b <= h - k) && (7 > v / v / 51 - t)))))) {
+182			if (b != m * r % r) then {
+183				j = b + c;
+184				while (k == 13) {
+185					f = ((5 * g) % ((h + 6) / i)) - x;
+186					read j;
 				}
-177				k = u % 8;
+187				k = u % 8;
 			} else {
-178				while ((96 >= 24) || (h * c + y + 92 % x < 48)) {
-179					h = j * 2;
+188				while ((96 >= 24) || (h * c + y + 92 % x < 48)) {
+189					h = j * 2;
 				}
-180				print h;
-181				x = a + b + c + d + e + f + g + h;
-182				read y;
+190				print h;
+191				x = a + b + c + d + e + f + g + h;
+192				read y;
 			}
 		}
 	}
-183	h = g;
-184	i = h;
-185	j = i;
-186	k = j;
-187	m = k;
-188	n = m;
-189	p = n;
-190	q = p;
-191	r = q;
-192	s = r;
-193	t = s;
-194	z = 164;
+193	h = g;
+194	i = h;
+195	j = i;
+196	k = j;
+197	m = k;
+198	n = m;
+199	p = n;
+200	q = p;
+201	r = q;
+202	s = r;
+203	t = s;
+204	z = 164;
 }
