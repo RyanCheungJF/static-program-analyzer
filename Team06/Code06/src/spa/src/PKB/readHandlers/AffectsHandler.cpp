@@ -90,15 +90,31 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
     std::vector<std::vector<std::string>> res;
 
     std::unordered_set<ProcName> allProcedures = procStorage->getProcNames();
+
     for (ProcName proc : allProcedures) {
-        std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
-        std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
+        std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
+        std::unordered_set<StmtNum> assignStatements = getAssignStatements(procStatements);
+
+
+        //TODO: DELETE THIS DEBUGGING CODE ONCE DONE
+        if (proc == "G") {
+            std::cout << "\n\n---------- All ASSIGN statements in G --------\n\n";
+            for (StmtNum num : assignStatements) {
+                std::cout << num << "\n";
+            }
+            std::cout << "\n\n---------- End of All ASSIGN statements in G  --------\n\n";
+
+        }
+
 
         for (StmtNum a1 : assignStatements) {
             std::vector<std::vector<std::string>> temp = handleIntWildcard(a1);
-            res.reserve(res.size() + temp.size());
-            std::move(temp.begin(), temp.end(), std::inserter(res, res.end()));
-            temp.clear(); // todo: this code might have memory management issues
+            for (std::vector<std::string> val : temp) {
+                res.push_back(val);
+            }
+//            res.reserve(res.size() + temp.size());
+//            std::move(temp.begin(), temp.end(), std::inserter(res, res.end()));
+//            temp.clear(); // todo: this code might have memory management issues
         }
     }
     return res;
@@ -340,6 +356,9 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
     //TODO: DELETE THIS DEBUGGING CODE ONCE DONE
     if (a1 == 183) {
         std::cout << "\n\n---------- All valid Affects relationship below --------\n\n";
+        std::cout << "isIntWildcard: " << isIntWildcard << "\n";
+        std::cout << "a1, a2: " << a1 <<", " << a2 << "\n";
+        std::cout << "\n";
         for (auto kv : hashmap) {
             std::cout << "\n***************\n";
             std::cout << "key: " << kv.first << "\n";
@@ -348,8 +367,8 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
                 std::cout << num << ", ";
             }
             std::cout << "\n***************\n";
-
         }
+        std::cout << "\n\n---------- End of all Affects relationships --------\n\n";
     }
 
 
