@@ -67,7 +67,7 @@ public:
 private:
     const static unordered_map<string, ParameterType> stringToTypeMap;
     const static unordered_map<string, AttributeType> stringToAttributeMap;
-    const static unordered_map<ParameterType, unordered_set<AttributeType>> Parameter::typeToAttributeTypes;
+    const static unordered_map<ParameterType, unordered_set<AttributeType>> typeToAttributeTypes;
     static AttributeType stringToAttribute(string);
     string value;
     ParameterType type;
