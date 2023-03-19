@@ -4,7 +4,6 @@ void CallStorage::writeCallS(StmtNum callLine, ProcName callee) {
     callLine_callee[callLine] = callee;
 }
 
-
 std::pair<StmtNum, ProcName> CallStorage::getCallStmt(StmtNum s) {
 
     if (callLine_callee.find(s) == callLine_callee.end()) {
