@@ -11,7 +11,7 @@
 #include "utils/AppConstants.h"
 
 bool isName(string s) {
-    return regex_match(s, regex("^[a-zA-Z][a-zA-Z0-9]*$"));
+    return regex_match(trim(s), regex("^[a-zA-Z][a-zA-Z0-9]*$"));
 }
 
 bool isIdent(string s) {
@@ -31,19 +31,19 @@ bool isBoolean(string s) {
 }
 
 bool isInteger(string integer) {
-    return regex_match(integer, regex("^0$|^[1-9][0-9]*$"));
+    return regex_match(trim(integer), regex("^0$|^[1-9][0-9]*$"));
 }
 
 bool isSelect(string s) {
-    return regex_search(s, regex("^Select"));
+    return regex_search(trim(s), regex("^Select"));
 }
 
 bool isPattern(string s) {
-    return regex_match(s, regex("^pattern$"));
+    return regex_match(trim(s), regex("^pattern$"));
 }
 
 bool startsWithLetter(string s) {
-    return regex_match(s, regex("^[a-zA-Z].*"));
+    return regex_match(trim(s), regex("^[a-zA-Z].*"));
 }
 
 bool hasBalancedBrackets(string s) {
@@ -76,7 +76,7 @@ bool isDeclaration(string declaration) {
 }
 
 bool isDesignEntity(string designEntity) {
-    return regex_search(designEntity, regex("^(stmt|read|print|call|while|if|assign|variable|"
+    return regex_search(trim(designEntity), regex("^(stmt|read|print|call|while|if|assign|variable|"
                                             "constant|procedure)"));
 }
 
@@ -85,18 +85,29 @@ pair<string, string> extractDesignEntity(string designEntity) {
               "procedure)\\s+");
     smatch match;
     string remainder;
-    if (regex_search(designEntity, match, rgx)) {
+    string trimmedString = trim(designEntity);
+    if (regex_search(trimmedString, match, rgx)) {
         remainder = match.suffix().str();
     }
     return pair(match[1], remainder);
 }
 
 bool isFixedString(string s) {
-    return regex_match(s, regex("^\"[a-zA-Z][a-zA-Z0-9]*\"$"));
+    s = trim(s);
+    if (s.size() < 2) {
+        return false;
+    }
+    if (s.at(0) != '\"') {
+        return false;
+    }
+    if (s.at(s.size() - 1) != '\"') {
+        return false;
+    }
+    return isSynonym(s.substr(1, s.size() - 2));
 }
 
 bool isWildCard(string s) {
-    return s == "_";
+    return trim(s) == "_";
 }
 
 bool isStmtRef(string stmtRef) {
@@ -115,16 +126,16 @@ bool isExprSpec(string s) {
     if (s == "_") {
         return true;
     }
-    bool startsWith_ = regex_search(s, regex("^_\""));
-    bool endsWith_ = regex_search(s, regex("\"_$"));
+    bool startsWith_ = regex_search(s, regex("^_"));
+    bool endsWith_ = regex_search(s, regex("_$"));
     if (startsWith_ && endsWith_) {
         if (s.size() < 5) {
             return false;
         }
         // This will get rid of _" and "_
         // If s = _"X+Y"_ then expr = X+Y
-        string expr = s.substr(2, s.size() - 4);
-        return isExpr(expr);
+        string expr = s.substr(1, s.size() - 2);
+        return isExprSpec(expr);
     }
     bool startsWithQuotation = regex_search(s, regex("^\""));
     bool endsWithQuotation = regex_search(s, regex("\"$"));
@@ -223,7 +234,7 @@ bool isFactor(string s) {
 }
 
 bool isElem(string s) {
-    return isSynonym(s) || isAttrRef(s);
+    return isSynonym(trim(s)) || isAttrRef(trim(s));
 }
 
 bool isAttrRef(string s) {
@@ -243,5 +254,10 @@ bool isAttrRef(string s) {
 }
 
 bool isAttribute(string s) {
-    return regex_match(s, regex("^(procName|varName|value|stmt#)$"));
+    return regex_match(trim(s), regex("^(procName|varName|value|stmt#)$"));
+}
+
+bool isRef(string s)
+{
+    return isFixedString(s) || isInteger(s) || isAttrRef(s);
 }

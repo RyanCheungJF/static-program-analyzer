@@ -115,7 +115,7 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
     }
     if (!isSelect(wordList[start])) {
         throw InternalException("Error: SelectQueryParser.parseSelectClause bad "
-                                "start position for wordList");
+            "start position for wordList");
     }
     start = start + 1;
     if (isTupleStart(wordList[start])) {
@@ -127,22 +127,19 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
         }
         tie(ignore, paramStrings) = extractParameters(tupleString, "<", ">", ",");
         for (string synonym : paramStrings) {
-            synonym = trim(synonym);
-            if (!isElem(synonym)) {
-                throw SyntaxException();
-            }
             Parameter param = parseParameter(synonym);
             params.push_back(param);
         }
         return params;
     }
-    else if (isElem(wordList[start]) && end-start == 1) {
-        // single select parameter
-        Parameter param = parseParameter(wordList[start]);
-        params.push_back(param);
-        return params;
+    // single select parameter
+    string elemString = "";
+    for (int i = start; i < end; i++) {
+        elemString += wordList[i] + " ";
     }
-    throw SyntaxException();
+    Parameter param = parseParameter(elemString);
+    params.push_back(param);
+    return params;
 }
 
 vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<string>& wordList, int start, int end) {
@@ -231,15 +228,18 @@ vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
 }
 
 Parameter SelectQueryParser::parseParameter(string paramString) {
+    if (!isElem(paramString)) {
+        throw SyntaxException();
+    }
     string paramName;
     int index;
     bool found;
-    tie(paramName, index, found) = extractSubStringUntilDelimiter(paramString, 0, ".");
+    tie(paramName, index, found) = extractSubStringUntilDelimiter(trim(paramString), 0, ".");
     if (!found) {
         return Parameter::makeParameter(paramName);
     }
     string attributeType = paramString.substr(index, paramString.length() - index);
-    return Parameter::makeParameter(paramName, attributeType);
+    return Parameter::makeParameter(trim(paramName), trim(attributeType));
 }
 vector<string> SelectQueryParser::splitClauseByAnds(vector<string>& wordList, int start, int end,
                                                     function<bool(string)> formChecker) {
