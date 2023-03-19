@@ -653,173 +653,23 @@ procedure p; constant c;
 Select p such that Calls*(c, p)
 SemanticError
 5000
-132 - Spaces in query
+132 - Space between relRef and '('
 procedure p;
-Select   p   such   that    Calls   (p, _)
-none
+Select p such that Calls   (p, _)
+SyntaxError
 5000
-133 - stmt for assign pattern
-stmt s;
-Select s pattern s(_, _)
-SemanticError
-5000
-134 - read for assign pattern
-read r;
-Select r pattern r(_, _)
-SemanticError
-5000
-135 - print for assign pattern
-print pn;
-Select pn pattern pn(_, _)
-SemanticError
-5000
-136 - call for assign pattern
-call cl;
-Select cl pattern cl(_, _)
-SemanticError
-5000
-137 - while with three parameters
-while w;
-Select w pattern w(_, _, _)
-SemanticError
-5000
-138 - if with two parameters
-if i;
-Select i pattern i(_, _)
-SemanticError
-5000
-139 - variable for assign pattern
-variable v;
-Select v pattern v(_, _)
-SemanticError
-5000
-140 - constant for assign pattern
-constant c;
-Select c pattern c(_, _)
-SemanticError
-5000
-141 - procedure for assign pattern
-procedure p;
-Select p pattern p(_, _)
-SemanticError
-5000
-142 - space in pattern
+133 - Partial wildcard for pattern
 assign a;
-Select a patt ern a(_, _)
+Select a pattern a("x", _"x")
 SyntaxError
 5000
-143 - double quotes in entRef
+134 - Extra _ for pattern
 assign a;
-Select a pattern a(""x"", ""a+b"")
+Select a pattern a("x", _"x"__)
 SyntaxError
 5000
-144 - integer in entRef
+135 - Integer on LHS pattern
 assign a;
-Select a pattern a(12, _)
-SyntaxError
-5000
-145 - invalid expression-spec
-assign a;
-Select a pattern a(_, "((((a+b)+3)*4)")
-SyntaxError
-5000
-146 - space in syn-assign
-assign a;
-Select a pattern a  a(_, _)
-SyntaxError
-5000
-147 - stmt in lhs assign pattern
-assign a; stmt s;
-Select a pattern a(s, _)
-SemanticError
-5000
-148 - read in lhs assign pattern
-assign a; read r;
-Select a pattern a(r, _)
-SemanticError
-5000
-149 - print in lhs assign pattern
-assign a; print pn;
-Select a pattern a(pn, _)
-SemanticError
-5000
-150 - call in lhs assign pattern
-assign a; call cl;
-Select a pattern a(cl, _)
-SemanticError
-5000
-151 - while in lhs assign pattern
-assign a; while w;
-Select a pattern a(w, _)
-SemanticError
-5000
-152 - if in lhs assign pattern
-assign a; if i;
-Select a pattern a(i, _)
-SemanticError
-5000
-153 - assign in lhs assign pattern
-assign a, a1;
-Select a pattern a(a1, _)
-SemanticError
-5000
-154 - procedure in lhs assign pattern
-assign a; procedure p;
-Select a pattern a(p, _)
-SemanticError
-5000
-155 - constant in lhs assign pattern
-assign a; constant c;
-Select a pattern a(c, _)
-SemanticError
-5000
-156 - stmt in rhs assign pattern
-assign a; stmt s;
-Select a pattern a(_, s)
-SyntaxError
-5000
-157 - read in rhs assign pattern
-assign a; read r;
-Select a pattern a(_, r)
-SyntaxError
-5000
-158 - print in rhs assign pattern
-assign a; print pn;
-Select a pattern a(_, pn)
-SyntaxError
-5000
-159 - call in rhs assign pattern
-assign a; call cl;
-Select a pattern a(_, cl)
-SyntaxError
-5000
-160 - while in rhs assign pattern
-assign a; while w;
-Select a pattern a(_, w)
-SyntaxError
-5000
-161 - if in rhs assign pattern
-assign a; if i;
-Select a pattern a(_, i)
-SyntaxError
-5000
-162 - assign in rhs assign pattern
-assign a, a1;
-Select a pattern a(_, a1)
-SyntaxError
-5000
-163 - procedure in rhs assign pattern
-assign a; procedure p;
-Select a pattern a(_, p)
-SyntaxError
-5000
-164 - variable in rhs assign pattern
-assign a; variable v;
-Select a pattern a(_, v)
-SyntaxError
-5000
-165 - constant in rhs assign pattern
-assign a; constant c;
-Select a pattern a(_, c)
+Select a pattern a(1, _"x"_)
 SyntaxError
 5000

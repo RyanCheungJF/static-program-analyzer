@@ -7,8 +7,8 @@
 #include "../storage/CFGStorage.h"
 #include "../storage/ModifiesUsesStorage.h"
 #include "../storage/ProcedureStorage.h"
-#include "../storage/StmtStorage.h"
 #include "../storage/RelationshipStorage.h"
+#include "../storage/StmtStorage.h"
 
 struct hashFunctionTuple {
     int cantor(int a, int b) const {
@@ -65,9 +65,8 @@ private:
     std::vector<std::vector<std::string>> handleWildcardWildcardTransitive();
 
     // helper methods
-    std::unordered_set<StmtNum> getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc);
-
-    std::unordered_set<Ent> getVariablesModifiedInControlFlowPath(std::unordered_set<StmtNum> controlFlowPath);
+    std::unordered_set<StmtNum> getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc,
+                                                         std::unordered_set<Ent> commonVariables);
 
     std::unordered_set<Ent> getCommonVariables(std::unordered_set<Ent> variablesModifiedInA1,
                                                std::unordered_set<Ent> variablesUsedInA2);
@@ -83,14 +82,11 @@ private:
 
     std::unordered_set<StmtNum> getAssignStatements(std::unordered_set<StmtNum> allProcStatements);
 
-    bool isModifiedInControlFlowPath(std::unordered_set<Ent> commonVariables,
-                                     std::unordered_set<Ent> variablesModifiedInPath);
-
     std::vector<std::vector<std::string>> bfsTraversalOneWildcard(StmtNum a1, StmtNum a2);
-
-    bool checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2);
 
     std::vector<std::vector<std::string>> nonTransitiveOneIntOneWildcard(StmtNum a1, StmtNum a2);
 
-    bool checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2);
+    bool checkModifiedAssignReadCall(std::unordered_set<Ent> commonVariables, StmtNum currentLine);
+
+    bool checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::unordered_set<Ent> commonVariables);
 };
