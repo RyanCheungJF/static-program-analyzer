@@ -37,6 +37,8 @@ public:
     Relationship(RelationshipType, vector<Parameter>&);
     vector<Parameter*> getAllUncheckedSynonyms();
     vector<Parameter> getParameters() const;
+    vector<ParameterType> getParameterTypes();
+    vector<std::string> getParameterValues();
     RelationshipType getType() const;
     bool operator==(const Relationship&) const;
 

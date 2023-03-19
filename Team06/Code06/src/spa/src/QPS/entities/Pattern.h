@@ -19,6 +19,8 @@ public:
     vector<string> getExprSpecs();
     bool validateParams();
     ParameterType getPatternType();
+    ParameterType getEntRefType();
+    std::string getEntRefValue();
     bool operator==(const Pattern&) const;
 
 private:

@@ -70,6 +70,14 @@ ParameterType Pattern::getPatternType() {
     return patternSyn.getType();
 }
 
+ParameterType Pattern::getEntRefType() {
+    return entRef.getType();
+}
+
+std::string Pattern::getEntRefValue() {
+    return entRef.getValue();
+}
+
 bool Pattern::operator==(const Pattern& p) const {
     return patternSyn == p.patternSyn && entRef == p.entRef && exprSpecs == p.exprSpecs;
 }
