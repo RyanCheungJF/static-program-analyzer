@@ -3,8 +3,20 @@
 #include <utility>
 
 Table::Table(vector<Parameter> headers, vector<vector<string>> contents) {
-    this->headers = std::move(headers);
-    this->contents = std::move(contents);
+    vector<int> duplicateIndexes;
+    for (int i = 0; i < headers.size(); i++) {
+        if(!hasParameter(headers[i])) {
+            this->headers.push_back(headers[i]);
+        } else {
+            duplicateIndexes.push_back(i);
+        }
+    }
+    for (vector<string> content : contents) {
+        for (int index : duplicateIndexes) {
+            content.erase(content.begin() + index);
+        }
+        this->contents.push_back(content);
+    }
 }
 
 bool Table::hasParameter(const Parameter& p) {
