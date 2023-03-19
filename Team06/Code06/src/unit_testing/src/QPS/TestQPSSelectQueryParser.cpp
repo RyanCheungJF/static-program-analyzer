@@ -232,6 +232,12 @@ TEST_CASE("parse / select clause parameter with valid attributes and valid space
     CHECK(true);
 }
 
+TEST_CASE("parse / select clause parameter with valid attributes and invalid spaces / throw syntax error") {
+    string input = "Select s s. stmt#";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
 TEST_CASE("parse / select clause parameter with invalid attributes / throw syntax error") {
     string input = "Select s.invalidAttribute";
     SelectQueryParser sqp;
@@ -287,4 +293,37 @@ TEST_CASE(
     SelectQueryParser sqp;
     Query q = sqp.parse(input);
     CHECK(q.patterns[0].exprSpecs[0] == expectedExprSpec);
+}
+
+TEST_CASE("parse / select tuple parameter with valid attributes and valid spaces / return query") {
+    string input = "Select <s . stmt# >";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / select tuple multiple parameter with valid attributes and valid spaces / return query") {
+    string input = "Select < s . stmt# , s1 . stmt# >";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / select tuple multiple parameter with valid attributes and invalid spaces / return query") {
+    string input = "Select < s 2. stmt# , s1 . stmt# >";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
+TEST_CASE("parse / select such that with valid spaces in fixed string / return query") {
+    string input = "Select s such that Uses( \" valid \", \"hello\")";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / select such that with invalid spaces in fixed string / throws syntax error") {
+    string input = "Select s such that Uses( \"in valid\", \"hello\")";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
 }
