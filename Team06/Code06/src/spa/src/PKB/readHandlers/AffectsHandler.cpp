@@ -321,8 +321,8 @@ std::unordered_set<StmtNum> AffectsHandler::getAssignStatements(std::unordered_s
 
     std::unordered_set<StmtNum> assignStatements;
     for (StmtNum num : allProcStatements) {
-        std::unordered_set<Stmt> statementTypes = stmtStorage->getStatementType(num);
-        if (statementTypes.find(AppConstants::ASSIGN) != statementTypes.end()) {
+        std::unordered_set<Stmt> currStmtType = stmtStorage->getStatementType(num);
+        if (currStmtType.find(AppConstants::ASSIGN) != currStmtType.end()) {
             assignStatements.insert(num);
         }
     }
@@ -375,54 +375,54 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
     return res;
 }
 
-bool AffectsHandler::checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2) {
-
-    // if they are not consecutive
-    if (!(a1 + 1 == a2 || a1 - 1 == a2)) {
-        return false;
-    }
-
-    // means they are consecutive in terms of numbers, but might still be part of different if-else branches
-
-    // given they are not in a while loop, a2 MUST come after a1
-    if (a2 < a1) {
-        return false;
-    }
-
-    // the 2 lines are in an if-else block
-    /*
-     * case1
-     * if (...) then {
-     *     a1;
-     * } else {
-     *     a2;
-     * }
-     *
-     * case2 [WHICH SHOULD NOT BE POSSIBLE IF THEY ARE NOT IN WHILE LOOPS TO BEGIN WITH]
-     * if (...) then {
-     *     a2;
-     * } else {
-     *     a1;
-     * }
-     */
-    std::unordered_set<Stmt> oneLineBeforeA1Stmt = stmtStorage->getStatementType(a1 - 1);
-    std::unordered_set<Stmt> twoLinesBeforeA2Stmt = stmtStorage->getStatementType(a2 - 2);
-
-    std::unordered_set<Stmt> twoLinesBeforeA1Stmt = stmtStorage->getStatementType(a1 - 2);
-    std::unordered_set<Stmt> oneLineBeforeA2Stmt = stmtStorage->getStatementType(a2 - 1);
-
-    if ((oneLineBeforeA1Stmt.find(AppConstants::IF) != oneLineBeforeA1Stmt.end()) &&
-        (twoLinesBeforeA2Stmt.find(AppConstants::IF) != twoLinesBeforeA2Stmt.end())) {
-        return false;
-    }
-
-    if ((twoLinesBeforeA1Stmt.find(AppConstants::IF) != twoLinesBeforeA1Stmt.end()) &&
-        (oneLineBeforeA2Stmt.find(AppConstants::IF) != oneLineBeforeA2Stmt.end())) {
-        return false;
-    }
-
-    return true;
-}
+//bool AffectsHandler::checkDirectlyAfterEachOther(StmtNum a1, StmtNum a2) {
+//
+//    // if they are not consecutive
+//    if (!(a1 + 1 == a2 || a1 - 1 == a2)) {
+//        return false;
+//    }
+//
+//    // means they are consecutive in terms of numbers, but might still be part of different if-else branches
+//
+//    // given they are not in a while loop, a2 MUST come after a1
+//    if (a2 < a1) {
+//        return false;
+//    }
+//
+//    // the 2 lines are in an if-else block
+//    /*
+//     * case1
+//     * if (...) then {
+//     *     a1;
+//     * } else {
+//     *     a2;
+//     * }
+//     *
+//     * case2 [WHICH SHOULD NOT BE POSSIBLE IF THEY ARE NOT IN WHILE LOOPS TO BEGIN WITH]
+//     * if (...) then {
+//     *     a2;
+//     * } else {
+//     *     a1;
+//     * }
+//     */
+//    std::unordered_set<Stmt> oneLineBeforeA1Stmt = stmtStorage->getStatementType(a1 - 1);
+//    std::unordered_set<Stmt> twoLinesBeforeA2Stmt = stmtStorage->getStatementType(a2 - 2);
+//
+//    std::unordered_set<Stmt> twoLinesBeforeA1Stmt = stmtStorage->getStatementType(a1 - 2);
+//    std::unordered_set<Stmt> oneLineBeforeA2Stmt = stmtStorage->getStatementType(a2 - 1);
+//
+//    if ((oneLineBeforeA1Stmt.find(AppConstants::IF) != oneLineBeforeA1Stmt.end()) &&
+//        (twoLinesBeforeA2Stmt.find(AppConstants::IF) != twoLinesBeforeA2Stmt.end())) {
+//        return false;
+//    }
+//
+//    if ((twoLinesBeforeA1Stmt.find(AppConstants::IF) != twoLinesBeforeA1Stmt.end()) &&
+//        (oneLineBeforeA2Stmt.find(AppConstants::IF) != oneLineBeforeA2Stmt.end())) {
+//        return false;
+//    }
+//
+//    return true;
+//}
 
 std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWildcard(StmtNum a1input, StmtNum a2input) {
     bool isIntWildcard = (a2input == AppConstants::NOT_USED_FIELD);
@@ -434,8 +434,21 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
         return {};
     }
 
-    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
-    std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
+    std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
+    std::unordered_set<StmtNum> assignStatements = getAssignStatements(procStatements);
+
+    //TODO: DELETE THIS DEBUGGING CODE ONCE DONE
+    if (currA == 154) {
+        std::cout << "\n\n---------- All Statements In this Procedure below --------\n\n";
+        std::cout << "\n***************\n";
+        for (StmtNum num : procStatements) {
+            std::cout << num << "\n";
+        }
+        std::cout << "\n***************\n";
+    }
+
+
+
     if (assignStatements.find(currA) == assignStatements.end()) {
         return {};
     }
@@ -452,11 +465,20 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
             continue;
         }
 
-        bool canReach = isIntWildcard ? checkCanReach(currA, otherA, proc, commonVariables) : checkCanReach(otherA, currA, proc, commonVariables);
-        if (canReach) {
+        std::vector<std::vector<std::string>> temp =
+                isIntWildcard ? handleIntInt(currA, otherA) : handleIntInt (otherA, currA);
+
+        if (!temp.empty()) {
             isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
                           : res.push_back({std::to_string(otherA), paramString});
+
         }
+
+//        bool canReach = isIntWildcard ? checkCanReach(currA, otherA, proc, commonVariables) : checkCanReach(otherA, currA, proc, commonVariables);
+//        if (canReach) {
+//            isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
+//                          : res.push_back({std::to_string(otherA), paramString});
+//        }
 
 
 //        if (procStorage->getProcedure(currA) != procStorage->getProcedure(otherA)) {
@@ -517,21 +539,21 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
     return res;
 }
 
-bool AffectsHandler::checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2) {
-
-    std::unordered_set<StmtNum> a1Parents = parentTStorage->getLeftWildcard(a1);
-    std::unordered_set<StmtNum> a2Parents = parentTStorage->getLeftWildcard(a2);
-    for (StmtNum n : a1Parents) {
-        if (a2Parents.find(n) != a2Parents.end()) {
-
-            unordered_set<Stmt> stmtType = stmtStorage->getStatementType(n);
-            if (stmtType.find(AppConstants::WHILE) != stmtType.end()) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
+//bool AffectsHandler::checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2) {
+//
+//    std::unordered_set<StmtNum> a1Parents = parentTStorage->getLeftWildcard(a1);
+//    std::unordered_set<StmtNum> a2Parents = parentTStorage->getLeftWildcard(a2);
+//    for (StmtNum n : a1Parents) {
+//        if (a2Parents.find(n) != a2Parents.end()) {
+//
+//            unordered_set<Stmt> stmtType = stmtStorage->getStatementType(n);
+//            if (stmtType.find(AppConstants::WHILE) != stmtType.end()) {
+//                return true;
+//            }
+//        }
+//    }
+//    return false;
+//}
 
 bool AffectsHandler::checkModifiedAssignReadCall(std::unordered_set<Ent> commonVariables, StmtNum currentLine) {
 //    if (commonVariables.size() == 0) {
