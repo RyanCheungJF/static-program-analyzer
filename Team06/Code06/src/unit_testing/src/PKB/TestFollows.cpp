@@ -6,19 +6,19 @@
 using namespace unit_testing_utils;
 
 TEST_CASE("FollowsStorage: write(StmtNum followee, StmtNum follower)") {
-    FollowsParentStorage fs;
+    RelationshipStorage<StmtNum, StmtNum> fs;
 
     SECTION("exists(StmtNum followee, StmtNum follower): empty storage") {
         REQUIRE(!fs.exists(1, 2));
     }
 
     SECTION("getRightWildcard(StmtNum leftStmtNum): empty storage") {
-        std::unordered_set<StmtNum> res = fs.getRightWildcard(1);
+        std::unordered_set<StmtNum> res = fs.getRightItems(1);
         REQUIRE(res.empty());
     }
 
     SECTION("getLeftWildcard(StmtNum leftStmtNum): empty storage") {
-        std::unordered_set<StmtNum> res = fs.getLeftWildcard(2);
+        std::unordered_set<StmtNum> res = fs.getLeftItems(2);
         REQUIRE(res.size() == 0);
     }
 
@@ -33,32 +33,32 @@ TEST_CASE("FollowsStorage: write(StmtNum followee, StmtNum follower)") {
 
     SECTION("getRightWildcard(StmtNum leftStmtNum): non-empty storage") {
         std::vector<StmtNum> expected = {2};
-        std::unordered_set<StmtNum> res = fs.getRightWildcard(1);
+        std::unordered_set<StmtNum> res = fs.getRightItems(1);
         REQUIRE(unit_testing_utils::equals(expected, res));
     }
 
     SECTION("getLeftWildcard(StmtNum leftStmtNum): non-empty storage") {
         std::vector<StmtNum> expected = {1};
-        std::unordered_set<StmtNum> res = fs.getLeftWildcard(2);
+        std::unordered_set<StmtNum> res = fs.getLeftItems(2);
         REQUIRE(unit_testing_utils::equals(expected, res));
     }
 }
 
 TEST_CASE("Checks FollowsStorage such that given a followee, if it does not have a certain follower, an empty vector "
           "is returned") {
-    FollowsParentStorage fs;
+    RelationshipStorage<StmtNum, StmtNum> fs;
 
     fs.write(1, 2);
-    std::unordered_set<StmtNum> res = fs.getRightWildcard(3);
+    std::unordered_set<StmtNum> res = fs.getRightItems(3);
     REQUIRE(res.empty());
 }
 
 TEST_CASE("Checks FollowsStorage such that given a follower, if it does not have a certain followee, an empty vector "
           "is returned") {
-    FollowsParentStorage fs;
+    RelationshipStorage<StmtNum, StmtNum> fs;
 
     fs.write(1, 2);
-    std::unordered_set<StmtNum> res = fs.getLeftWildcard(3);
+    std::unordered_set<StmtNum> res = fs.getLeftItems(3);
     REQUIRE(res.empty());
 }
 
@@ -349,7 +349,6 @@ TEST_CASE("Checks that PKB pointer in WritePKB and ReadPKB is set to first pkb i
     writePkb.setFollows(1, 2);
 
     PKB pkb2;
-    FollowsParentStorage fs2;
     pkb2.initializePkb();
     writePkb.setInstancePKB(pkb2);
 

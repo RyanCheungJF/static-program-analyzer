@@ -37,6 +37,8 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results) {
     for (std::string val : res) {
         results.push_back(val);
     }
+
+    pkb.clearCache();
     // store the answers to the query in the results list (it is initially empty)
     // each result must be a string.
 }

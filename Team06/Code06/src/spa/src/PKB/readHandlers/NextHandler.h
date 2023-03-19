@@ -88,4 +88,26 @@ private:
                                                            bool isFixedIntParam2, bool isWildCardParam1,
                                                            bool isWildCardParam2, bool isTypedStmtParam1,
                                                            bool isTypedStmtParam2);
+
+    std::vector<std::vector<std::string>> oneIntOneStmtNonT(Parameter intParam, Parameter stmtParam,
+                                                            bool isFindChildren);
+
+    std::vector<std::vector<std::string>> oneIntOneWildcardNonT(Parameter intParam, bool isFindChildren);
+
+    std::vector<std::vector<std::string>> oneStmtOneWildcardNonT(Parameter stmtParam, bool isFindChildren);
+
+    void addCFGRelatives(std::vector<std::vector<std::string>>& res, ProcName proc, StmtNum num, bool isFindChildren,
+                         std::unordered_set<StmtNum>& filter);
+
+    std::vector<std::vector<std::string>> oneIntOneWildcardT(Parameter intParam, bool isFindChildren);
+
+    std::vector<std::vector<std::string>> oneIntOneStmtT(Parameter intParam, Parameter stmtParam, bool isFindChildren);
+
+    std::vector<std::vector<std::string>> oneStmtOneWildcardT(Parameter stmtParam, bool isFindChildren);
+
+    void addCFGRelativesTransitive(std::vector<std::vector<std::string>>& res, CFG& graph,
+                                   std::deque<std::vector<StmtNum>>& queue, bool isFindChildren,
+                                   std::unordered_set<StmtNum>& filterSet);
+
+    void initializeQueue(std::deque<std::vector<StmtNum>>& queue, CFG& graph, StmtNum num, bool isFindChildren);
 };

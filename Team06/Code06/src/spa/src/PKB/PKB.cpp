@@ -1,14 +1,14 @@
 #include "PKB.h"
 
 void PKB::initializePkb() {
-    this->followsStorage = std::make_shared<FollowsParentStorage>();
-    this->followsTStorage = std::make_shared<FollowsParentStorage>();
-    this->parentStorage = std::make_shared<FollowsParentStorage>();
-    this->parentTStorage = std::make_shared<FollowsParentStorage>();
+    this->followsStorage = std::make_shared<RelationshipStorage<StmtNum, StmtNum>>();
+    this->followsTStorage = std::make_shared<RelationshipStorage<StmtNum, StmtNum>>();
+    this->parentStorage = std::make_shared<RelationshipStorage<StmtNum, StmtNum>>();
+    this->parentTStorage = std::make_shared<RelationshipStorage<StmtNum, StmtNum>>();
     this->statementStorage = std::make_shared<StmtStorage>();
-    this->entityStorage = std::make_shared<EntityStorage>();
     this->procedureStorage = std::make_shared<ProcedureStorage>();
-    this->constantStorage = std::make_shared<ConstantStorage>();
+    this->entityStorage = std::make_shared<EntityStorage<Ent>>();
+    this->constantStorage = std::make_shared<EntityStorage<Const>>();
     this->assignPatternStorage = std::make_shared<PatternWithExprStorage>();
     this->ifPatternStorage = std::make_shared<PatternStorage>();
     this->whilePatternStorage = std::make_shared<PatternStorage>();
@@ -16,8 +16,8 @@ void PKB::initializePkb() {
     this->usesStorage = std::make_shared<ModifiesUsesStorage>();
     this->modifiesStorage = std::make_shared<ModifiesUsesStorage>();
     this->cfgStorage = std::make_shared<CFGStorage>();
-    this->callsStorage = std::make_shared<CallsStorage>();
-    this->callsTStorage = std::make_shared<CallsStorage>();
+    this->callsStorage = std::make_shared<RelationshipStorage<Ent, Ent>>();
+    this->callsTStorage = std::make_shared<RelationshipStorage<Ent, Ent>>();
 
     this->followsParentMap[RelationshipType::FOLLOWS] = followsStorage;
     this->followsParentMap[RelationshipType::FOLLOWST] = followsTStorage;
@@ -63,7 +63,7 @@ void PKB::setEntity(StmtNum num, std::unordered_set<Ent> entities) {
 }
 
 void PKB::setConstant(StmtNum num, std::unordered_set<Const> constants) {
-    constantStorage->writeConstant(num, constants);
+    constantStorage->writeEntity(num, constants);
 }
 
 void PKB::setCall(StmtNum callLine, ProcName procedure_being_called) {
@@ -71,27 +71,27 @@ void PKB::setCall(StmtNum callLine, ProcName procedure_being_called) {
 }
 
 void PKB::setCalls(ProcName caller, std::unordered_set<ProcName> callees) {
-    callsStorage->writeCallP(caller, callees);
+    callsStorage->write(caller, callees);
 }
 
 void PKB::setCallsT(ProcName caller, std::unordered_set<ProcName> callees) {
-    callsTStorage->writeCallP(caller, callees);
+    callsTStorage->write(caller, callees);
 }
 
 void PKB::setUsesS(StmtNum num, std::unordered_set<Ent> entities) {
-    usesStorage->writeS(num, entities);
+    usesStorage->write(num, entities);
 }
 
 void PKB::setUsesP(ProcName name, std::unordered_set<Ent> entities) {
-    usesStorage->writeP(name, entities);
+    usesStorage->write(name, entities);
 }
 
 void PKB::setModifiesS(StmtNum num, std::unordered_set<Ent> entities) {
-    modifiesStorage->writeS(num, entities);
+    modifiesStorage->write(num, entities);
 }
 
 void PKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {
-    modifiesStorage->writeP(name, entities);
+    modifiesStorage->write(name, entities);
 }
 
 void PKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer) {
@@ -166,7 +166,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
         }
     }
     else if (type == ParameterType::CONSTANT) {
-        std::unordered_set<Const> constants = constantStorage->getConstNames();
+        std::unordered_set<Const> constants = constantStorage->getEntNames();
         for (auto constant : constants) {
             res.push_back(to_string(constant));
         }
@@ -251,7 +251,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
     }
     // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
     else if (paramType == ParameterType::CONSTANT) {
-        std::unordered_set<Const> consts = constantStorage->getConstNames();
+        std::unordered_set<Const> consts = constantStorage->getEntNames();
         for (auto constant : consts) {
             res.push_back({std::to_string(constant), std::to_string(constant)});
         }
@@ -287,19 +287,19 @@ std::unordered_set<ProcName> PKB::getAllProcedureNames() {
 }
 
 std::unordered_set<Ent> PKB::getUsesS(StmtNum num) {
-    return usesStorage->getEnt(num);
+    return usesStorage->getRightItems(num);
 }
 
 std::unordered_set<Ent> PKB::getUsesP(ProcName name) {
-    return usesStorage->getEnt(name);
+    return usesStorage->getRightItems(name);
 }
 
 std::unordered_set<Ent> PKB::getModifiesS(StmtNum num) {
-    return modifiesStorage->getEnt(num);
+    return modifiesStorage->getRightItems(num);
 }
 
 std::unordered_set<Ent> PKB::getModifiesP(ProcName name) {
-    return modifiesStorage->getEnt(name);
+    return modifiesStorage->getRightItems(name);
 }
 
 std::unordered_set<StmtNum> PKB::getIfStatementNumbers() {
@@ -311,7 +311,7 @@ std::unordered_set<StmtNum> PKB::getWhileStatementNumbers() {
 }
 
 std::unordered_set<StmtNum> PKB::getContainedStatements(StmtNum containerNum) {
-    return parentTStorage->getRightWildcard(containerNum);
+    return parentTStorage->getRightItems(containerNum);
 }
 
 std::pair<StmtNum, ProcName> PKB::getCallStmt(StmtNum s) {
@@ -319,9 +319,15 @@ std::pair<StmtNum, ProcName> PKB::getCallStmt(StmtNum s) {
 }
 
 std::unordered_set<ProcName> PKB::getCallsT(ProcName p) {
-    return callsTStorage->getCallees(p);
+    return callsTStorage->getRightItems(p);
 }
 
 std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> PKB::getCFG(ProcName name) {
     return cfgStorage->getGraph(name);
+}
+
+void PKB::clearCache() {
+    relationshipCache.clearCache();
+    parameterCache.clearCache();
+    patternCache.clearCache();
 }

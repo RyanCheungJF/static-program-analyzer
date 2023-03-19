@@ -4,7 +4,7 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shar
                                std::shared_ptr<ProcedureStorage> procStorage,
                                std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
                                std::shared_ptr<ModifiesUsesStorage> usesStorage,
-                               std::shared_ptr<FollowsParentStorage> parentTStorage, bool isTransitive) {
+                               std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> parentTStorage, bool isTransitive) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
     this->procStorage = procStorage;
@@ -57,8 +57,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
         return res;
     }
 
-    std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getEnt(a1);
-    std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getEnt(a2);
+    std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getRightItems(a1);
+    std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getRightItems(a2);
     std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
     if (commonVariables.empty()) {
         return res;
@@ -480,12 +480,12 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
         return {};
     }
 
-    std::unordered_set<Ent> variablesInCurrA = isIntWildcard ? modifiesStorage->getEnt(currA) : usesStorage->getEnt(currA);
+    std::unordered_set<Ent> variablesInCurrA = isIntWildcard ? modifiesStorage->getRightItems(currA) : usesStorage->getRightItems(currA);
     std::vector<std::vector<std::string>> res;
 
     for (StmtNum otherA : assignStatements) {
 
-        std::unordered_set<Ent> variablesInOtherA = isIntWildcard ? usesStorage->getEnt(otherA) : modifiesStorage->getEnt(otherA);
+        std::unordered_set<Ent> variablesInOtherA = isIntWildcard ? usesStorage->getRightItems(otherA) : modifiesStorage->getRightItems(otherA);
         std::unordered_set<Ent> commonVariables = isIntWildcard ? getCommonVariables(variablesInCurrA, variablesInOtherA)
                 : getCommonVariables(variablesInOtherA, variablesInCurrA);
         if (proc != procStorage->getProcedure(otherA)) {
@@ -512,7 +512,7 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
 //            continue;
 //        }
 //
-//        std::unordered_set<Ent> variablesInOtherA = isIntWildcard ? usesStorage->getEnt(otherA) : modifiesStorage->getEnt(otherA);
+//        std::unordered_set<Ent> variablesInOtherA = isIntWildcard ? usesStorage->getRightItems(otherA) : modifiesStorage->getRightItems(otherA);
 //        std::unordered_set<Ent> commonVariables = getCommonVariables(variablesInCurrA, variablesInOtherA);
 //        if (commonVariables.empty()) {  // O(1) since there is really only 1 element
 //            continue;
@@ -587,7 +587,7 @@ bool AffectsHandler::checkModifiedAssignReadCall(std::unordered_set<Ent> commonV
 //        return false;
 //    }
 
-    unordered_set<Ent> entitiesModifiedOnCurrentLine = modifiesStorage->getEnt(currentLine);
+    unordered_set<Ent> entitiesModifiedOnCurrentLine = modifiesStorage->getRightItems(currentLine);
 
     // if a assignment, read, or procedure call, we check if the entitiesModifiedOnCurrentLine is the same as commonVariables
     std::unordered_set<Stmt> currLineStmtType = stmtStorage->getStatementType(currentLine);
