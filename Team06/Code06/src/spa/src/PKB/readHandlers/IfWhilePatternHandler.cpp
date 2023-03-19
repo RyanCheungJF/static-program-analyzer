@@ -30,11 +30,10 @@ std::vector<std::vector<std::string>> IfWhilePatternHandler::handleWildcard() {
 }
 
 std::vector<std::vector<std::string>> IfWhilePatternHandler::handle(Pattern p) {
-    Parameter* lhs = p.getEntRef();
-    ParameterType type = lhs->getType();
-    std::string lhsString = lhs->getValue();
+    ParameterType lhsType = p.getEntRefType();
+    std::string lhsString = p.getEntRefValue();
 
-    if (type == ParameterType::FIXED_STRING) {
+    if (lhsType == ParameterType::FIXED_STRING) {
         return handleVar(lhsString);
     }
     else {

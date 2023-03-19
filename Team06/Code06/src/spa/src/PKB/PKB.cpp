@@ -200,7 +200,7 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
     }
 
     // TODO: This violates LoD. Needs QPS to have a getPatternType() function
-    ParameterType type = p.getPatternSyn()->getType();
+    ParameterType type = p.getPatternType();
 
     if (type == ParameterType::ASSIGN) {
         AssignPatternHandler handler(assignPatternStorage);
