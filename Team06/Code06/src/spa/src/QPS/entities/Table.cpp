@@ -5,9 +5,10 @@
 Table::Table(vector<Parameter> headers, vector<vector<string>> contents) {
     vector<int> duplicateIndexes;
     for (int i = 0; i < headers.size(); i++) {
-        if(!hasParameter(headers[i])) {
+        if (!hasParameter(headers[i])) {
             this->headers.push_back(headers[i]);
-        } else {
+        }
+        else {
             duplicateIndexes.push_back(i);
         }
     }

@@ -52,3 +52,32 @@ jobs:
       - name: Run Integration Tests
         run: |
           Team06/Code06/build/src/integration_testing/Release/integration_testing
+
+      - name: Generate sys test 1 xml files
+        run: |
+          cd Team06/Tests06/systemtests/systemtest1
+          .\ci.bat
+      - name: Generate sys test 2 xml files
+        run: |
+          cd Team06/Tests06/systemtests/systemtest2
+          .\ci.bat
+      - name: Generate sys test 3 xml files
+        run: |
+          cd Team06/Tests06/systemtests/systemtest3
+          .\ci.bat
+      - name: Generate sys test 4 xml files
+        run: |
+          cd Team06/Tests06/systemtests/systemtest4
+          .\ci.bat
+      - name: Generate sys test 5 xml files
+        run: |
+          cd Team06/Tests06/systemtests/systemtest5
+          .\ci.bat
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10" # install the python version needed
+
+      - name: Execute Python SystemTest Script
+        run: python ./Team06/Tests06/systemtests/check.py
