@@ -90,18 +90,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
         std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
         std::unordered_set<StmtNum> assignStatements = getAssignStatements(procStatements);
 
-
-        //TODO: DELETE THIS DEBUGGING CODE ONCE DONE
-        if (proc == "G") {
-            std::cout << "\n\n---------- All ASSIGN statements in G --------\n\n";
-            for (StmtNum num : assignStatements) {
-                std::cout << num << "\n";
-            }
-            std::cout << "\n\n---------- End of All ASSIGN statements in G  --------\n\n";
-
-        }
-
-
         for (StmtNum a1 : assignStatements) {
             std::vector<std::vector<std::string>> temp = handleIntWildcard(a1);
             for (std::vector<std::string> val : temp) {
@@ -302,28 +290,6 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(!isIntWildcard);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
-
-
-
-    //TODO: DELETE THIS DEBUGGING CODE ONCE DONE
-    if (a1 == 183) {
-        std::cout << "\n\n---------- All valid Affects relationship below --------\n\n";
-        std::cout << "isIntWildcard: " << isIntWildcard << "\n";
-        std::cout << "a1, a2: " << a1 <<", " << a2 << "\n";
-        std::cout << "\n";
-        for (auto kv : hashmap) {
-            std::cout << "\n***************\n";
-            std::cout << "key: " << kv.first << "\n";
-            std::cout << "values: ";
-            for (StmtNum num : kv.second) {
-                std::cout << num << ", ";
-            }
-            std::cout << "\n***************\n";
-        }
-        std::cout << "\n\n---------- End of all Affects relationships --------\n\n";
-    }
-
-
 
     // add from initial starting node
     for (StmtNum num : (isIntWildcard ? hashmap[a1] : hashmap[a2])) {
