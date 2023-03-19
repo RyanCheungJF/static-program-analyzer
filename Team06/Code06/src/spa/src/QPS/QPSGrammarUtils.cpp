@@ -152,6 +152,7 @@ bool isExprSpec(string s) {
 }
 
 bool isExpr(string s) {
+    s = trim(s);
     if (s.empty()) {
         return false;
     }
@@ -179,12 +180,13 @@ bool isExpr(string s) {
         // cannot have + or - at start or end of string
         return false;
     }
-    string first = trim(s.substr(0, index));
-    string second = trim(s.substr(index + 1, s.size() - 1 - index));
+    string first = s.substr(0, index);
+    string second = s.substr(index + 1, s.size() - 1 - index);
     return isExpr(first) && isTerm(second);
 }
 
 bool isTerm(string s) {
+    s = trim(s);
     if (s.empty()) {
         return false;
     }
@@ -212,12 +214,13 @@ bool isTerm(string s) {
         // operator cannot be at start and end of string
         return false;
     }
-    string first = trim(s.substr(0, index));
-    string second = trim(s.substr(index + 1, s.size() - 1 - index));
+    string first = s.substr(0, index);
+    string second = s.substr(index + 1, s.size() - 1 - index);
     return isTerm(first) && isFactor(second);
 }
 
 bool isFactor(string s) {
+    s = trim(s);
     if (s.empty()) {
         return false;
     }
@@ -234,10 +237,11 @@ bool isFactor(string s) {
 }
 
 bool isElem(string s) {
-    return isSynonym(trim(s)) || isAttrRef(trim(s));
+    return isSynonym(s) || isAttrRef(s);
 }
 
 bool isAttrRef(string s) {
+    s = trim(s);
     string delimiter = ".";
     bool found;
     int nextStart;
