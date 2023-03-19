@@ -52,6 +52,9 @@ public:
     inline static const std::string AFFECTS = "Affects";
     inline static const std::string AFFECTST = "Affects*";
 
+    // comparisons
+    inline static const std::string OP_EQUALS = "=";
+
     // terminals
     inline static const std::string THEN = "then";
     inline static const std::string ELSE = "else";

@@ -60,6 +60,7 @@ Relationship::Relationship(RelationshipType t, vector<Parameter>& ps) {
     params = ps;
 }
 
+//TODO: update this to throw error if not found
 RelationshipType Relationship::stringToType(string s) {
     auto iter = Relationship::stringToTypeMap.find(s);
     if (iter == stringToTypeMap.end()) {

@@ -47,7 +47,7 @@ that clause, and list of pattern clause in that order
 map<ClauseType, vector<int>> SelectQueryParser::getClauseStarts(vector<string>& wordList) {
     vector<int> suchThatStart = findSuchThat(wordList);
     vector<int> patternStart = findPattern(wordList);
-    vector<int> withStart{};
+    vector<int> withStart = findWith(wordList);
     vector<int> selectStart{0};
 
     map<ClauseType, vector<int>> res{

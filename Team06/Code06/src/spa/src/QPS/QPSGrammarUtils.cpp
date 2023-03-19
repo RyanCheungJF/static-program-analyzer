@@ -46,6 +46,11 @@ bool startsWithLetter(string s) {
     return regex_match(trim(s), regex("^[a-zA-Z].*"));
 }
 
+bool startsLikeRef(string s)
+{
+    return regex_match(trim(s), regex("^[a-zA-Z\"0-9].*"));
+}
+
 bool hasBalancedBrackets(string s) {
     int balance = 0;
     for (int i = 0; i < s.size(); i++) {

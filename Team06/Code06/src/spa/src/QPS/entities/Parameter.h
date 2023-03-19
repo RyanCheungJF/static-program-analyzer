@@ -55,19 +55,20 @@ public:
     static bool isPatternSyn(Parameter&);
     static bool isFixedStringOrWildcard(Parameter&);
     static bool isFixedIntOrWildCard(Parameter&);
+    static bool isComparable(Parameter&, Parameter&);
     static ParameterType stringToType(string);
     bool isUncheckedSynonym();
     bool hasValidAttributeType();
     void updateSynonymType(ParameterType);
     string getTypeString() const;
     bool operator==(const Parameter&) const;
-
     static ParameterType guessParameterType(string);
-
+    ParameterType getComparisonType();
 private:
     const static unordered_map<string, ParameterType> stringToTypeMap;
     const static unordered_map<string, AttributeType> stringToAttributeMap;
-    const static unordered_map<ParameterType, unordered_set<AttributeType>> Parameter::typeToAttributeTypes;
+    const static unordered_map<ParameterType, unordered_set<AttributeType>> typeToAttributeTypes;
+    const static unordered_map<AttributeType, ParameterType> attributeToReturnType;
     static AttributeType stringToAttribute(string);
     string value;
     ParameterType type;
