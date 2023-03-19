@@ -115,7 +115,7 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
     }
     if (!isSelect(wordList[start])) {
         throw InternalException("Error: SelectQueryParser.parseSelectClause bad "
-            "start position for wordList");
+                                "start position for wordList");
     }
     start = start + 1;
     if (isTupleStart(wordList[start])) {

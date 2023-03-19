@@ -47,8 +47,7 @@ vector<int> findPattern(const vector<string>& wordList) {
     return patternStarts;
 }
 
-vector<int> findWith(const vector<string>& wordList)
-{
+vector<int> findWith(const vector<string>& wordList) {
     vector<int> withStarts;
     for (int i = 0; i < wordList.size(); i++) {
         if (WITH != wordList[i]) {

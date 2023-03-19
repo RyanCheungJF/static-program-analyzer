@@ -167,8 +167,7 @@ const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
     {AppConstants::CONSTANT, ParameterType::CONSTANT},   {AppConstants::PROCEDURE, ParameterType::PROCEDURE},
     {AppConstants::SYNONYM, ParameterType::SYNONYM},     {AppConstants::WILDCARD, ParameterType::WILDCARD},
     {AppConstants::FIXED_INT, ParameterType::FIXED_INT}, {AppConstants::FIXED_STRING, ParameterType::FIXED_STRING},
-    {AppConstants::BOOLEAN, ParameterType::BOOLEAN}
-};
+    {AppConstants::BOOLEAN, ParameterType::BOOLEAN}};
 
 const unordered_map<string, AttributeType> Parameter::stringToAttributeMap = {
     {AppConstants::PROCNAME, AttributeType::PROCNAME},

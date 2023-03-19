@@ -77,7 +77,7 @@ bool isDeclaration(string declaration) {
 
 bool isDesignEntity(string designEntity) {
     return regex_search(trim(designEntity), regex("^(stmt|read|print|call|while|if|assign|variable|"
-                                            "constant|procedure)"));
+                                                  "constant|procedure)"));
 }
 
 pair<string, string> extractDesignEntity(string designEntity) {
@@ -257,7 +257,6 @@ bool isAttribute(string s) {
     return regex_match(trim(s), regex("^(procName|varName|value|stmt#)$"));
 }
 
-bool isRef(string s)
-{
+bool isRef(string s) {
     return isFixedString(s) || isInteger(s) || isAttrRef(s);
 }
