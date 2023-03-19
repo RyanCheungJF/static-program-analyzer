@@ -67,8 +67,8 @@ TEST_CASE("Checks for cases e.g. ParentT(assign, 3)") {
     writePkb.setStatement(AppConstants::ASSIGN, 2);
     writePkb.setStatement(AppConstants::IF, 3);
 
-    Parameter param1 = Parameter("a", AppConstants::ASSIGN);
-    Parameter param2 = Parameter("3", AppConstants::FIXED_INT);
+    Parameter param1 = Parameter("a", ParameterType::ASSIGN);
+    Parameter param2 = Parameter("3", ParameterType::FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -95,8 +95,8 @@ TEST_CASE("Checks for cases e.g. ParentT(while, assign)") {
     writePkb.setStatement(AppConstants::ASSIGN, 3);
     writePkb.setStatement(AppConstants::CALL, 4);
 
-    Parameter param1 = Parameter("w", AppConstants::WHILE);
-    Parameter param2 = Parameter("a", AppConstants::ASSIGN);
+    Parameter param1 = Parameter("w", ParameterType::WHILE);
+    Parameter param2 = Parameter("a", ParameterType::ASSIGN);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -123,8 +123,8 @@ TEST_CASE("Checks for cases e.g. Parent(stmt, _)") {
     writePkb.setStatement(AppConstants::ASSIGN, 3);
     writePkb.setStatement(AppConstants::PRINT, 4);
 
-    Parameter param1 = Parameter("s", AppConstants::STMT);
-    Parameter param2 = Parameter("_", AppConstants::WILDCARD);
+    Parameter param1 = Parameter("s", ParameterType::STMT);
+    Parameter param2 = Parameter("_", ParameterType::WILDCARD);
 
     std::vector<Parameter> params;
     params.push_back(param1);
@@ -152,8 +152,8 @@ TEST_CASE("Checks that if both synonyms are the same, returns empty vector e.g. 
     writePkb.setStatement(AppConstants::ASSIGN, 3);
     writePkb.setStatement(AppConstants::PRINT, 4);
 
-    Parameter param1 = Parameter("s", AppConstants::STMT);
-    Parameter param2 = Parameter("s", AppConstants::STMT);
+    Parameter param1 = Parameter("s", ParameterType::STMT);
+    Parameter param2 = Parameter("s", ParameterType::STMT);
 
     std::vector<Parameter> params;
     params.push_back(param1);

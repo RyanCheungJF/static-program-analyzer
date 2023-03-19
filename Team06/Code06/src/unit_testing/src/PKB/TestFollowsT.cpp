@@ -78,8 +78,8 @@ TEST_CASE("Checks for cases e.g. Follows*(1, 2)") {
     followers.insert(2);
     writePkb.setFollowsT(1, followers);
 
-    Parameter param1 = Parameter("1", AppConstants::FIXED_INT);
-    Parameter param2 = Parameter("2", AppConstants::FIXED_INT);
+    Parameter param1 = Parameter("1", ParameterType::FIXED_INT);
+    Parameter param2 = Parameter("2", ParameterType::FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -103,8 +103,8 @@ TEST_CASE("Checks that a non-existent FollowsT relationship returns an empty vec
     followers.insert(2);
     writePkb.setFollowsT(1, followers);
 
-    Parameter param1 = Parameter("1", AppConstants::FIXED_INT);
-    Parameter param2 = Parameter("3", AppConstants::FIXED_INT);
+    Parameter param1 = Parameter("1", ParameterType::FIXED_INT);
+    Parameter param2 = Parameter("3", ParameterType::FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -132,8 +132,8 @@ TEST_CASE("Checks for cases e.g. Follows*(1, assign)") {
     writePkb.setStatement(AppConstants::ASSIGN, 3);
     writePkb.setStatement(AppConstants::IF, 4);
 
-    Parameter param1 = Parameter("1", AppConstants::FIXED_INT);
-    Parameter param2 = Parameter("a", AppConstants::ASSIGN);
+    Parameter param1 = Parameter("1", ParameterType::FIXED_INT);
+    Parameter param2 = Parameter("a", ParameterType::ASSIGN);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -163,8 +163,8 @@ TEST_CASE("Checks for cases e.g. Follows*(1, _)") {
     writePkb.setStatement(AppConstants::ASSIGN, 3);
     writePkb.setStatement(AppConstants::IF, 4);
 
-    Parameter param1 = Parameter("1", AppConstants::FIXED_INT);
-    Parameter param2 = Parameter("_", AppConstants::WILDCARD);
+    Parameter param1 = Parameter("1", ParameterType::FIXED_INT);
+    Parameter param2 = Parameter("_", ParameterType::WILDCARD);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -194,8 +194,8 @@ TEST_CASE("Checks for cases e.g. Follows*(if, 3)") {
     writePkb.setStatement(AppConstants::WHILE, 1);
     writePkb.setStatement(AppConstants::WHILE, 2);
 
-    Parameter param1 = Parameter("s", AppConstants::STMT);
-    Parameter param2 = Parameter("3", AppConstants::FIXED_INT);
+    Parameter param1 = Parameter("s", ParameterType::STMT);
+    Parameter param2 = Parameter("3", ParameterType::FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -224,8 +224,8 @@ TEST_CASE("Checks for cases e.g. Follows*(if, assign)") {
     writePkb.setStatement(AppConstants::IF, 2);
     writePkb.setStatement(AppConstants::IF, 3);
 
-    Parameter param1 = Parameter("w", AppConstants::WHILE);
-    Parameter param2 = Parameter(AppConstants::IF, AppConstants::IF);
+    Parameter param1 = Parameter("w", ParameterType::WHILE);
+    Parameter param2 = Parameter("if", ParameterType::IF);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -257,8 +257,8 @@ TEST_CASE("Checks for cases e.g. Follows*(if, _)") {
     writePkb.setStatement(AppConstants::WHILE, 1);
     writePkb.setStatement(AppConstants::WHILE, 2);
 
-    Parameter param1 = Parameter("w", AppConstants::WHILE);
-    Parameter param2 = Parameter("_", AppConstants::WILDCARD);
+    Parameter param1 = Parameter("w", ParameterType::WHILE);
+    Parameter param2 = Parameter("_", ParameterType::WILDCARD);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -289,8 +289,8 @@ TEST_CASE("Checks for cases e.g. Follows*(_, 3)") {
     writePkb.setFollowsT(1, followers1);
     writePkb.setFollowsT(2, followers2);
 
-    Parameter param1 = Parameter("_", AppConstants::WILDCARD);
-    Parameter param2 = Parameter("3", AppConstants::FIXED_INT);
+    Parameter param1 = Parameter("_", ParameterType::WILDCARD);
+    Parameter param2 = Parameter("3", ParameterType::FIXED_INT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -321,8 +321,8 @@ TEST_CASE("Checks for cases e.g. Follows*(_, call)") {
     writePkb.setStatement(AppConstants::PRINT, 2);
     writePkb.setStatement(AppConstants::CALL, 3);
 
-    Parameter param1 = Parameter("_", AppConstants::WILDCARD);
-    Parameter param2 = Parameter("p", AppConstants::PRINT);
+    Parameter param1 = Parameter("_", ParameterType::WILDCARD);
+    Parameter param2 = Parameter("p", ParameterType::PRINT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -350,8 +350,8 @@ TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
     writePkb.setFollowsT(1, followers1);
     writePkb.setFollowsT(2, followers2);
 
-    Parameter param1 = Parameter("_", AppConstants::WILDCARD);
-    Parameter param2 = Parameter("_", AppConstants::WILDCARD);
+    Parameter param1 = Parameter("_", ParameterType::WILDCARD);
+    Parameter param2 = Parameter("_", ParameterType::WILDCARD);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);

@@ -51,8 +51,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
     writePkb.setCallsT("proc2", {"proc3"});
 
     SECTION("Calls(fixed_string, wildcard)") {
-        std::vector<Parameter> params1 = {Parameter("proc1", AppConstants::FIXED_STRING),
-                                          Parameter("_", AppConstants::WILDCARD)};
+        std::vector<Parameter> params1 = {Parameter("proc1", ParameterType::FIXED_STRING),
+                                          Parameter("_", ParameterType::WILDCARD)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
 
         auto res = readPkb.findRelationship(rs1);
@@ -61,8 +61,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
     }
 
     SECTION("Calls(fixed_string, fixed_string)") {
-        std::vector<Parameter> params1 = {Parameter("proc2", AppConstants::FIXED_STRING),
-                                          Parameter("proc3", AppConstants::FIXED_STRING)};
+        std::vector<Parameter> params1 = {Parameter("proc2", ParameterType::FIXED_STRING),
+                                          Parameter("proc3", ParameterType::FIXED_STRING)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
 
         auto res = readPkb.findRelationship(rs1);
@@ -71,8 +71,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
     }
 
     SECTION("Calls(proc synonym, fixed_string)") {
-        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
-                                          Parameter("proc3", AppConstants::FIXED_STRING)};
+        std::vector<Parameter> params1 = {Parameter("p", ParameterType::PROCEDURE),
+                                          Parameter("proc3", ParameterType::FIXED_STRING)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
 
         auto res = readPkb.findRelationship(rs1);
@@ -81,8 +81,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
     }
 
     SECTION("Calls(proc synonym, wildcard)") {
-        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
-                                          Parameter("_", AppConstants::WILDCARD)};
+        std::vector<Parameter> params1 = {Parameter("p", ParameterType::PROCEDURE),
+                                          Parameter("_", ParameterType::WILDCARD)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
 
         auto res = readPkb.findRelationship(rs1);
@@ -91,8 +91,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
     }
 
     SECTION("Calls*(fixed_string, wildcard)") {
-        std::vector<Parameter> params1 = {Parameter("proc1", AppConstants::FIXED_STRING),
-                                          Parameter("_", AppConstants::WILDCARD)};
+        std::vector<Parameter> params1 = {Parameter("proc1", ParameterType::FIXED_STRING),
+                                          Parameter("_", ParameterType::WILDCARD)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
 
         auto res = readPkb.findRelationship(rs1);
@@ -101,8 +101,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
     }
 
     SECTION("Calls*(fixed_string, proc synonym)") {
-        std::vector<Parameter> params1 = {Parameter("proc1", AppConstants::FIXED_STRING),
-                                          Parameter("p", AppConstants::PROCEDURE)};
+        std::vector<Parameter> params1 = {Parameter("proc1", ParameterType::FIXED_STRING),
+                                          Parameter("p", ParameterType::PROCEDURE)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
 
         auto res = readPkb.findRelationship(rs1);
@@ -111,8 +111,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
     }
 
     SECTION("Calls*(proc synonym, proc synonym)") {
-        std::vector<Parameter> params1 = {Parameter("p1", AppConstants::PROCEDURE),
-                                          Parameter("p2", AppConstants::PROCEDURE)};
+        std::vector<Parameter> params1 = {Parameter("p1", ParameterType::PROCEDURE),
+                                          Parameter("p2", ParameterType::PROCEDURE)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
 
         auto res = readPkb.findRelationship(rs1);
@@ -121,8 +121,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
     }
 
     SECTION("Calls*(wildcard, proc synonym)") {
-        std::vector<Parameter> params1 = {Parameter("_", AppConstants::WILDCARD),
-                                          Parameter("p2", AppConstants::PROCEDURE)};
+        std::vector<Parameter> params1 = {Parameter("_", ParameterType::WILDCARD),
+                                          Parameter("p2", ParameterType::PROCEDURE)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
 
         auto res = readPkb.findRelationship(rs1);
@@ -131,8 +131,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
     }
 
     SECTION("Calls*(wildcard, wildcard)") {
-        std::vector<Parameter> params1 = {Parameter("_", AppConstants::WILDCARD),
-                                          Parameter("_", AppConstants::WILDCARD)};
+        std::vector<Parameter> params1 = {Parameter("_", ParameterType::WILDCARD),
+                                          Parameter("_", ParameterType::WILDCARD)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
 
         auto res = readPkb.findRelationship(rs1);

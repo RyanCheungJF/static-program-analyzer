@@ -8,7 +8,7 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
     // I am going to assume here that since the object has been created it means
     // that the variables are correctly instantiated.
     QueryDB queryDb = QueryDB();
-    bool isFalseQuery = false;
+    Table emptyTable({}, {});
     for (shared_ptr<Relationship> relation : relations) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
@@ -16,11 +16,15 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
         vector<Parameter> params = relation->getParameters();
         Table table(params, response);
         if (response.empty()) {
-            isFalseQuery = true;
+            queryDb.insertTable(emptyTable);
+            break;
         }
-        // This will remove wild cards and FIXED INT from the table.
+        // clauses that are just fixed ints or wild cards will just be
+        // taken as true and not be inserted into the tableVec
         table = table.extractDesignEntities();
-        queryDb.insertTable(table);
+        if (!table.isEmptyTable()) {
+            queryDb.insertTable(table);
+        }
     }
 
     for (Pattern pattern : patterns) {
@@ -32,22 +36,17 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
         vector<Parameter> headers{*patternSyn, *entRef};
         Table table(headers, response);
         if (response.empty()) {
-            isFalseQuery = true;
+            queryDb.insertTable(emptyTable);
+            break;
         }
         // This will remove wild cards and FIXED INT from the table.
         table = table.extractDesignEntities();
-        queryDb.insertTable(table);
+        if (!table.isEmptyTable()) {
+            queryDb.insertTable(table);
+        }
     }
-    if (isFalseQuery) {
-        return {};
-    }
-    if (queryDb.hasParameter(selectParameters[0])) {
-        return queryDb.fetch(selectParameters[0]);
-    }
-    else {
-        vector<string> res = readPKB.findDesignEntities(selectParameters[0]);
-        return res;
-    }
+    vector<string> res = queryDb.fetch(selectParameters, readPKB);
+    return res;
 }
 
 Query::Query() {}
@@ -93,6 +92,11 @@ vector<Parameter*> Query::getAllUncheckedSynonyms() {
 }
 
 bool Query::validateAllParameters() {
+    for (Parameter p : selectParameters) {
+        if (!p.hasValidAttributeType()) {
+            return false;
+        }
+    }
     for (Pattern p : patterns) {
         if (!p.validateParams()) {
             return false;
@@ -102,6 +106,12 @@ bool Query::validateAllParameters() {
     for (shared_ptr<Relationship> r : relations) {
         if (!(*r).validateParams()) {
             return false;
+        }
+    }
+
+    for (Parameter p : selectParameters) {
+        if (selectParameters.size() > 1 && p.getType() == ParameterType::BOOLEAN) {
+            throw SyntaxException();
         }
     }
     return true;

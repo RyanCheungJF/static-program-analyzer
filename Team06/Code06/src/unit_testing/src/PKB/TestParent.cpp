@@ -65,8 +65,8 @@ TEST_CASE("Checks for cases e.g. Parent(1, assign)") {
     writePkb.setStatement(AppConstants::ASSIGN, 2);
     writePkb.setStatement(AppConstants::IF, 3);
 
-    Parameter param1 = Parameter("1", AppConstants::FIXED_INT);
-    Parameter param2 = Parameter("a", AppConstants::ASSIGN);
+    Parameter param1 = Parameter("1", ParameterType::FIXED_INT);
+    Parameter param2 = Parameter("a", ParameterType::ASSIGN);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -92,8 +92,8 @@ TEST_CASE("Checks for cases e.g. Parent(while, assign)") {
     writePkb.setStatement(AppConstants::ASSIGN, 2);
     writePkb.setStatement(AppConstants::IF, 3);
 
-    Parameter param1 = Parameter("w", AppConstants::WHILE);
-    Parameter param2 = Parameter(AppConstants::IF, AppConstants::IF);
+    Parameter param1 = Parameter("w", ParameterType::WHILE);
+    Parameter param2 = Parameter("if", ParameterType::IF);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
@@ -118,8 +118,8 @@ TEST_CASE("Checks for cases e.g. Parent(_, stmt)") {
     writePkb.setStatement(AppConstants::CALL, 2);
     writePkb.setStatement(AppConstants::ASSIGN, 3);
 
-    Parameter param1 = Parameter("_", AppConstants::WILDCARD);
-    Parameter param2 = Parameter("s", AppConstants::STMT);
+    Parameter param1 = Parameter("_", ParameterType::WILDCARD);
+    Parameter param2 = Parameter("s", ParameterType::STMT);
     std::vector<Parameter> params;
     params.push_back(param1);
     params.push_back(param2);
