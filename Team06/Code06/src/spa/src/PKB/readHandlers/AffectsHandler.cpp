@@ -15,6 +15,31 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shar
     this->isTransitive = isTransitive;
 }
 
+    /*
+ *
+ * while (v != 1) { //1
+ *     d = 1; //2
+ *     while (d != 1) { //3
+ *         while (e != 1) { //4
+ *              a = d + e; //5
+ *         }
+ *         b = a + c; //6
+ *         d = b; //7
+ *     }
+ *     b = d; //8
+ * }
+ *
+ * Valid Affects relationships:
+ * (2, 5), (2, 8), (5, 6), (6, 7), (7, 5), (7, 8)
+ *
+ * Valid Affects* relationships:
+ * (2, 5), (2, 8), (2, 6), (2, 7)
+ * (5, 6), (5, 7), (5, 8), (5, 5)
+ * (6, 7), (6, 8), (6, 5), (6, 6)
+ * (7, 8), (7, 5), (7, 6), (7, 7)
+ *
+ */
+
 std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, Parameter param2) {
 
     std::string paramString1 = param1.getValue();
