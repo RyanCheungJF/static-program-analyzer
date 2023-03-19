@@ -1257,8 +1257,10 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* sys
      * }
      *
      * Valid Affects relationships:
+     * (16, 20), (20, 20), (22, 26), (23, 25)
      *
      * Valid Affects* relationships:
+     * (16, 20), (20, 20), (22, 26), (23, 25)
      *
      */
 
@@ -1423,52 +1425,161 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* sys
     writePkb.setParentT(18, {19, 20, 21});
     writePkb.setParentT(24, {25, 26});
 
-    SECTION("Affects*(int, a)") {
-        //        std::vector<Parameter> params1 = {Parameter("6", ParameterType::FIXED_INT),
-        //                                          Parameter("a", ParameterType::ASSIGN)};
-        //        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTST, params1);
-        //        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
-        //        std::vector<std::vector<std::string>> expected1 = {{"6", "8"}};
-        //        REQUIRE(unit_testing_utils::equals(expected1, res1));
 
-        //        std::vector<Parameter> params2 = {Parameter("a", ParameterType::ASSIGN),
-        //                                          Parameter("2", ParameterType::FIXED_INT)};
-        //        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTST, params2);
-        //        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
-        //        std::vector<std::vector<std::string>> expected2 = {};
-        //        REQUIRE(expected2 == res2);
+    SECTION("Affects(int, int)") {
+        std::vector<Parameter> params1 = {Parameter("3", ParameterType::FIXED_INT),
+                                          Parameter("7", ParameterType::FIXED_INT)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTS, params1);
+        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected1 = {};
+        REQUIRE(expected1 == res1);
+
+        std::vector<Parameter> params2 = {Parameter("23", ParameterType::FIXED_INT),
+                                          Parameter("25", ParameterType::FIXED_INT)};
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTS, params2);
+        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
+        std::vector<std::vector<std::string>> expected2 = {{"23", "25"}};
+        REQUIRE(expected2 == res2);
+
+        std::vector<Parameter> params3 = {Parameter("20", ParameterType::FIXED_INT),
+                                          Parameter("20", ParameterType::FIXED_INT)};
+        shared_ptr<Relationship> rs3 = Relationship::makeRelationship(AppConstants::AFFECTS, params3);
+        std::vector<std::vector<std::string>> res3 = readPkb.findRelationship(rs3);
+        std::vector<std::vector<std::string>> expected3 = {{"20", "20"}};
+        REQUIRE(expected3 == res3);
+    }
+
+    SECTION("Affects(int, _)") {
+        std::vector<Parameter> params1 = {Parameter("22", ParameterType::FIXED_INT),
+                                          Parameter("a", ParameterType::ASSIGN)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTS, params1);
+        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected1 = {{"22", "26"}};
+        REQUIRE(unit_testing_utils::equals(expected1, res1));
+
+        std::vector<Parameter> params2 = {Parameter("29", ParameterType::FIXED_INT),
+                                          Parameter("a", ParameterType::ASSIGN)};
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTS, params2);
+        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
+        std::vector<std::vector<std::string>> expected2 = {};
+        REQUIRE(unit_testing_utils::equals(expected2, res2));
+    }
+
+    SECTION("Affects(_, int)") {
+        std::vector<Parameter> params1 = {Parameter("_", ParameterType::WILDCARD),
+                                          Parameter("20", ParameterType::FIXED_INT)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTS, params1);
+        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected1 = {{"16", "20"}, {"20", "20"}};
+        REQUIRE(unit_testing_utils::equals(expected1, res1));
+    }
+
+    SECTION("Affects(_, _)") {
+        std::vector<Parameter> params1 = {Parameter("_", ParameterType::WILDCARD),
+                                          Parameter("a", ParameterType::ASSIGN)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTS, params1);
+        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected1 = {{"16", "20"}, {"20", "20"}, {"22", "26"}, {"23", "25"}};
+        REQUIRE(unit_testing_utils::equals(expected1, res1));
+
+        std::vector<Parameter> params2 = {Parameter("a", ParameterType::ASSIGN),
+                                          Parameter("_", ParameterType::WILDCARD)};
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTS, params2);
+        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
+        REQUIRE(unit_testing_utils::equals(expected1, res2));
+
+        std::vector<Parameter> params3 = {Parameter("_", ParameterType::WILDCARD),
+                                          Parameter("_", ParameterType::WILDCARD)};
+        shared_ptr<Relationship> rs3 = Relationship::makeRelationship(AppConstants::AFFECTS, params3);
+        std::vector<std::vector<std::string>> res3 = readPkb.findRelationship(rs3);
+        REQUIRE(unit_testing_utils::equals(expected1, res3));
+
+        std::vector<Parameter> params4 = {Parameter("a", ParameterType::ASSIGN),
+                                          Parameter("a", ParameterType::ASSIGN)};
+        shared_ptr<Relationship> rs4 = Relationship::makeRelationship(AppConstants::AFFECTS, params4);
+        std::vector<std::vector<std::string>> res4 = readPkb.findRelationship(rs4);
+        std::vector<std::vector<std::string>> expected4 = {{"20", "20"}};
+        REQUIRE(unit_testing_utils::equals(expected4, res4));
+    }
+
+    SECTION("Affects*(int, a)") {
+        std::vector<Parameter> params1 = {Parameter("16", ParameterType::FIXED_INT),
+                                          Parameter("a", ParameterType::ASSIGN)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTST, params1);
+        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected1 = {{"16", "20"}};
+        REQUIRE(unit_testing_utils::equals(expected1, res1));
+
+        std::vector<Parameter> params2 = {Parameter("16", ParameterType::FIXED_INT),
+                                          Parameter("_", ParameterType::WILDCARD)};
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTST, params2);
+        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
+        REQUIRE(unit_testing_utils::equals(expected1, res2));
+
+        std::vector<Parameter> params4 = {
+            Parameter("24", ParameterType::FIXED_INT), // not an assign statement
+            Parameter("a", ParameterType::ASSIGN)};
+        shared_ptr<Relationship> rs4 = Relationship::makeRelationship(AppConstants::AFFECTST, params4);
+        std::vector<std::vector<std::string>> res4 = readPkb.findRelationship(rs4);
+        std::vector<std::vector<std::string>> expected4 = {};
+        REQUIRE(unit_testing_utils::equals(expected4, res4));
     }
 
     SECTION("Affects*(a, int)") {
-        //        std::vector<Parameter> params1 = {Parameter("a", ParameterType::ASSIGN),
-        //                                          Parameter("8", ParameterType::FIXED_INT)};
-        //        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTST, params1);
-        //        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
-        //        std::vector<std::vector<std::string>> expected1 = {{"2", "8"}, {"7", "8"}, {"6", "8"},
-        //                                                           {"5", "8"}, {"8", "8"}
-        //        };
-        //        REQUIRE(unit_testing_utils::equals(expected1, res1));
-        //
-        //        std::vector<Parameter> params2 = {Parameter("a", ParameterType::ASSIGN),
-        //                                          Parameter("2", ParameterType::FIXED_INT)};
-        //        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTST, params2);
-        //        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
-        //        std::vector<std::vector<std::string>> expected2 = {};
-        //        REQUIRE(expected2 == res2);
+        std::vector<Parameter> params1 = {Parameter("a", ParameterType::ASSIGN),
+                                          Parameter("20", ParameterType::FIXED_INT)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTST, params1);
+        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected1 = {{"16", "20"}, {"20", "20"}};
+        REQUIRE(unit_testing_utils::equals(expected1, res1));
+
+        std::vector<Parameter> params2 = {Parameter("_", ParameterType::WILDCARD),
+                                          Parameter("20", ParameterType::FIXED_INT)};
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTST, params2);
+        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
+        REQUIRE(unit_testing_utils::equals(expected1, res2));
+
+        std::vector<Parameter> params3 = {
+            Parameter("_", ParameterType::WILDCARD),
+            Parameter("18", ParameterType::FIXED_INT)}; // not an assign statement
+        shared_ptr<Relationship> rs3 = Relationship::makeRelationship(AppConstants::AFFECTST, params3);
+        std::vector<std::vector<std::string>> res3 = readPkb.findRelationship(rs3);
+        std::vector<std::vector<std::string>> expected3 = {};
+        REQUIRE(unit_testing_utils::equals(expected3, res3));
+
+        std::vector<Parameter> params4 = {Parameter("_", ParameterType::WILDCARD),
+                                          Parameter("100", ParameterType::FIXED_INT)}; // not in source code
+        shared_ptr<Relationship> rs4 = Relationship::makeRelationship(AppConstants::AFFECTST, params4);
+        std::vector<std::vector<std::string>> res4 = readPkb.findRelationship(rs4);
+        std::vector<std::vector<std::string>> expected4 = {};
+        REQUIRE(unit_testing_utils::equals(expected4, res4));
     }
 
     SECTION("Affects*(_, _)") {
-        //        std::vector<Parameter> params1 = {Parameter("_", ParameterType::WILDCARD),
-        //                                          Parameter("a", ParameterType::ASSIGN)};
-        //        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTST, params1);
-        //        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
-        //        std::vector<std::vector<std::string>> expected1 = {{"2", "5"}, {"2", "6"}, {"2", "7"}, {"2", "8"},
-        //                                                           {"5", "6"}, {"5", "7"}, {"5", "8"}, {"5", "5"},
-        //                                                           {"6", "7"}, {"6", "8"}, {"6", "5"}, {"6", "6"},
-        //                                                           {"7", "8"}, {"7", "7"}, {"7", "5"}, {"7", "6"},
-        //                                                           {"8", "7"}, {"8", "8"}, {"8", "6"}, {"8", "5"}
-        //
-        //        };
-        //        REQUIRE(unit_testing_utils::equals(expected1, res1));
+        std::vector<Parameter> params1 = {Parameter("_", ParameterType::WILDCARD),
+                                          Parameter("a", ParameterType::ASSIGN)};
+        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::AFFECTST, params1);
+        std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
+        std::vector<std::vector<std::string>> expected1 = {{"16", "20"}, {"20", "20"}, {"22", "26"}, {"23", "25"}};
+        REQUIRE(unit_testing_utils::equals(expected1, res1));
+
+        std::vector<Parameter> params2 = {Parameter("a", ParameterType::ASSIGN),
+                                          Parameter("_", ParameterType::WILDCARD)};
+        shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::AFFECTST, params2);
+        std::vector<std::vector<std::string>> res2 = readPkb.findRelationship(rs2);
+        REQUIRE(unit_testing_utils::equals(expected1, res2));
+
+        std::vector<Parameter> params3 = {Parameter("_", ParameterType::WILDCARD),
+                                          Parameter("_", ParameterType::WILDCARD)};
+        shared_ptr<Relationship> rs3 = Relationship::makeRelationship(AppConstants::AFFECTST, params3);
+        std::vector<std::vector<std::string>> res3 = readPkb.findRelationship(rs3);
+        REQUIRE(unit_testing_utils::equals(expected1, res3));
+
+        std::vector<Parameter> params4 = {Parameter("a", ParameterType::ASSIGN),
+                                          Parameter("a", ParameterType::ASSIGN)};
+        shared_ptr<Relationship> rs4 = Relationship::makeRelationship(AppConstants::AFFECTST, params4);
+        std::vector<std::vector<std::string>> res4 = readPkb.findRelationship(rs4);
+        std::vector<std::vector<std::string>> expected4 = {{"20", "20"}};
+        REQUIRE(unit_testing_utils::equals(expected4, res4));
     }
 }

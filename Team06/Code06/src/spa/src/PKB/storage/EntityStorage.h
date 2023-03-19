@@ -5,8 +5,7 @@
 
 #include "../../../src/utils/AppConstants.h"
 
-template<typename T>
-class EntityStorage {
+template <typename T> class EntityStorage {
 public:
     void writeEntity(StmtNum num, std::unordered_set<T> entities);
     bool checkEntity(T entity, StmtNum num);

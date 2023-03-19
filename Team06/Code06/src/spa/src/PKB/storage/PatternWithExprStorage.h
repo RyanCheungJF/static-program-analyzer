@@ -26,6 +26,7 @@ public:
 
     std::unordered_map<Ent, std::unordered_set<std::pair<StmtNum, std::unique_ptr<Expression>>, hashFunction>>*
     getAll();
+
 private:
     std::unordered_map<Ent, std::unordered_set<std::pair<StmtNum, std::unique_ptr<Expression>>, hashFunction>>
         lhs_stmtNum_rhsPostfix;
