@@ -7,15 +7,17 @@
 
 #include "../../exceptions/Exception.h"
 #include "../QPSGrammarUtils.h"
+#include "../entities/Parameter.h"
 #include "exceptions/InternalException.h"
 #include "exceptions/SyntaxException.h"
 using namespace std;
 
 vector<int> findSuchThat(const vector<string>& wordList);
 vector<int> findPattern(const vector<string>& wordList);
+vector<int> findWith(const vector<string>& wordList);
 vector<int> findAnds(const vector<string>& wordList, int start, int end);
-tuple<string, string, string, string> extractParameters(string s);
-tuple<string, size_t> extractSubStringUntilDelimiter(const string& original, int start, string delimiter);
+tuple<string, vector<string>> extractParameters(string s, string containerStart, string containerEnd, string delimiter);
+tuple<string, size_t, bool> extractSubStringUntilDelimiter(const string& original, int start, string delimiter);
 vector<string> stringToWordList(string s);
 vector<string> stringToWordListByDelimiter(string original, string delimiter);
 string trim(const string&);

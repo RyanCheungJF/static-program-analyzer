@@ -2,6 +2,7 @@
 #define SPA_QPS_PARAMETER_H
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "../../../src/utils/AppConstants.h"
 #include "QPS/QPSGrammarUtils.h"
@@ -23,18 +24,28 @@ enum class ParameterType {
     WILDCARD,
     FIXED_INT,
     FIXED_STRING,
-    FIXED_STRING_WITH_WILDCARD,
+    BOOLEAN,
     UNKNOWN
+};
+
+enum class AttributeType {
+    PROCNAME,
+    VARNAME,
+    VALUE,
+    STMTNO,
+    NONE
 };
 
 class Parameter {
 public:
-    string getValue();
+    string getValue() const;
     ParameterType getType() const;
-    Parameter(string, string);
     Parameter(string, ParameterType);
+    Parameter(string, ParameterType, AttributeType);
     Parameter(const Parameter&);
     Parameter();
+    static Parameter makeParameter(string);
+    static Parameter makeParameter(string, string);
     static bool isSyntacticEntityRef(Parameter&);
     static bool isEntityRef(Parameter&);
     static bool isSyntacticStatementRef(Parameter&);
@@ -44,7 +55,9 @@ public:
     static bool isPatternSyn(Parameter&);
     static bool isFixedStringOrWildcard(Parameter&);
     static bool isFixedIntOrWildCard(Parameter&);
+    static ParameterType stringToType(string);
     bool isUncheckedSynonym();
+    bool hasValidAttributeType();
     void updateSynonymType(ParameterType);
     string getTypeString() const;
     bool operator==(const Parameter&) const;
@@ -53,9 +66,20 @@ public:
 
 private:
     const static unordered_map<string, ParameterType> stringToTypeMap;
-    static ParameterType stringToType(string);
+    const static unordered_map<string, AttributeType> stringToAttributeMap;
+    const static unordered_map<ParameterType, unordered_set<AttributeType>> typeToAttributeTypes;
+    static AttributeType stringToAttribute(string);
     string value;
     ParameterType type;
+    AttributeType attribute;
+};
+
+template <> struct std::hash<Parameter> {
+    std::size_t operator()(Parameter const& param) const {
+        std::size_t h1 = std::hash<ParameterType>{}(param.getType());
+        std::size_t h2 = std::hash<std::string>{}(param.getValue());
+        return h1 ^ (h2 << 1);
+    }
 };
 
 #endif

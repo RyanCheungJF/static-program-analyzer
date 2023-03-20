@@ -1,0 +1,91 @@
+1 - comment
+assign a;
+Select a such that Affects(24, 25)
+none
+5000
+2 - comment
+assign a;
+Select a such that Affects(41, 17)
+none
+5000
+3 - comment
+assign a; call c;
+Select c such that Affects(17, 41)
+4
+5000
+4 - comment
+assign a; call c;
+Select c such that Affects(28, 38)
+4
+5000
+5 - comment
+assign a; call c;
+Select c such that Affects(41, 41)
+4
+5000
+6 - comment
+assign a; call c;
+Select c such that Affects(30, 30)
+none
+5000
+7 - comment
+assign a;
+Select a such that Affects(a, 35)
+20, 28, 35, 38
+5000
+8 - comment
+assign a;
+Select a such that Affects(26, a)
+26
+5000
+9 - comment
+call c;
+Select c such that Affects(39, 39)
+none
+5000
+10 - comment
+assign a; call c;
+Select c such that Affects(12, 18)
+none
+5000
+11 - comment
+assign a; call c;
+Select c such that Affects(18, 12)
+none
+5000
+12 - comment
+assign a; call c; print p;
+Select p such that Affects(38, 39)
+32, 36, 42
+5000
+13 - comment
+assign a;
+Select a such that Affects(23, a)
+none
+5000
+14 - comment
+assign a;
+Select a such that Affects(28, a)
+35, 38, 39
+5000
+15 - comment
+assign a;
+Select a such that Affects(5, a)
+7, 8
+5000
+16 - comment
+assign a;
+Select a such that Affects(9, a)
+10
+5000
+17 - comment
+assign a;
+Select a such that Affects(a, 16)
+10, 12, 15
+5000
+18 - comment
+assign a;
+Select a such that Affects(a, a)
+26, 35, 38, 40, 41
+5000
+

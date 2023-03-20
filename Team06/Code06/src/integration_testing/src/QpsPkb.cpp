@@ -5,7 +5,6 @@
 #include "../../spa/src/PKB/WritePKB.cpp"
 #include "../../spa/src/PKB/utils/utils.h"
 #include "../../spa/src/QPS/QPS.h"
-#include "../../spa/src/utils/AppConstants.h"
 #include "catch.hpp"
 
 using namespace std;
@@ -21,10 +20,10 @@ PKB buildPkb() {
     //  procedure main {
     // 1     x = 1;
     // 2     call sub;
-    // 3	    while (y == x) {
+    // 3	 while (y == x) {
     // 4         y = x + 2;
     // 5		    read y;
-    //      }
+    //       }
     // 6     x = x + 2;
     //  }
     //
@@ -42,6 +41,31 @@ PKB buildPkb() {
     //   procedure end {
     // 13    print end;
     //   }
+
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> mainCFG = {
+        {1, {{AppConstants::PARENTS, {}}, {AppConstants::CHILDREN, {2}}}},
+        {2, {{AppConstants::PARENTS, {1}}, {AppConstants::CHILDREN, {3}}}},
+        {3, {{AppConstants::PARENTS, {2, 5}}, {AppConstants::CHILDREN, {4, 6}}}},
+        {4, {{AppConstants::PARENTS, {3}}, {AppConstants::CHILDREN, {5}}}},
+        {5, {{AppConstants::PARENTS, {4}}, {AppConstants::CHILDREN, {3}}}},
+        {6, {{AppConstants::PARENTS, {3}}, {AppConstants::CHILDREN, {}}}}};
+
+    writePkb.writeCFG("main", mainCFG);
+
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> subCFG = {
+        {7, {{AppConstants::PARENTS, {}}, {AppConstants::CHILDREN, {8, 9}}}},
+        {8, {{AppConstants::PARENTS, {7}}, {AppConstants::CHILDREN, {9}}}},
+        {9, {{AppConstants::PARENTS, {7, 8}}, {AppConstants::CHILDREN, {10, 11}}}},
+        {10, {{AppConstants::PARENTS, {9}}, {AppConstants::CHILDREN, {12}}}},
+        {11, {{AppConstants::PARENTS, {9}}, {AppConstants::CHILDREN, {12}}}},
+        {12, {{AppConstants::PARENTS, {10, 11}}, {AppConstants::CHILDREN, {}}}}};
+
+    writePkb.writeCFG("sub", subCFG);
+
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> endCFG = {
+        {13, {{AppConstants::PARENTS, {}}, {AppConstants::CHILDREN, {}}}}};
+
+    writePkb.writeCFG("end", endCFG);
 
     unordered_set<int> mainProcNums = {1, 2, 3, 4, 5, 6};
     writePkb.setProcedure("main", mainProcNums);
@@ -287,6 +311,30 @@ TEST_CASE("Single Select Query") {
         REQUIRE(exists(result, "0"));
         REQUIRE(exists(result, "1"));
         REQUIRE(exists(result, "2"));
+    }
+
+    SECTION("Select BOOLEAN") {
+        string query = R"(Select BOOLEAN)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE((result[0] == "TRUE" && result.size() == 1));
+    }
+
+    SECTION("Select <statement, variable>") {
+        string query = R"(
+        stmt s; variable v;
+        Select <s, v>)";
+        result = qps.processQueries(query, readPkb);
+        // gives cartesian product of stmt and variables
+        // final size = 13 * 5 = 65
+        REQUIRE(result.size() == 65);
+    }
+
+    SECTION("Select <statement, variable, BOOLEAN>") {
+        string query = R"(
+        stmt s; variable v;
+        Select <s, v, BOOLEAN>)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result[0] == "SyntaxError");
     }
 }
 
@@ -569,6 +617,128 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
             REQUIRE(exists(result, "sub"));
         }
     }
+
+    SECTION("Next") {
+        SECTION("syn, wildcard") {
+            string query = R"(
+			assign a;
+			Select a such that Next(a, _))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 4);
+            REQUIRE(exists(result, "1"));
+            REQUIRE(exists(result, "4"));
+            REQUIRE(exists(result, "8"));
+            REQUIRE(exists(result, "11"));
+        }
+
+        SECTION("int, syn") {
+            string query = R"(
+			stmt s;
+			Select s such that Next(1, s))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 1);
+            REQUIRE(exists(result, "2"));
+        }
+
+        SECTION("syn, syn") {
+            string query = R"(
+			stmt s; assign a;
+			Select s such that Next(s, a))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(exists(result, "3"));
+            REQUIRE(exists(result, "7"));
+            REQUIRE(exists(result, "9"));
+        }
+    }
+
+    SECTION("NextT") {
+        SECTION("syn, wildcard") {
+            string query = R"(
+			assign a;
+			Select a such that Next*(a, _))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 4);
+            REQUIRE(exists(result, "1"));
+            REQUIRE(exists(result, "4"));
+            REQUIRE(exists(result, "8"));
+            REQUIRE(exists(result, "11"));
+        }
+
+        SECTION("int, syn") {
+            string query = R"(
+			stmt s;
+			Select s such that Next*(1, s))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 5);
+            REQUIRE(exists(result, "2"));
+            REQUIRE(exists(result, "3"));
+            REQUIRE(exists(result, "4"));
+            REQUIRE(exists(result, "5"));
+            REQUIRE(exists(result, "6"));
+        }
+
+        SECTION("syn, int") {
+            string query = R"(
+			stmt s;
+			Select s such that Next*(s, 3))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 5);
+            REQUIRE(exists(result, "1"));
+            REQUIRE(exists(result, "2"));
+            REQUIRE(exists(result, "3"));
+            REQUIRE(exists(result, "4"));
+            REQUIRE(exists(result, "5"));
+        }
+    }
+
+    SECTION("Affects") {
+        SECTION("int, syn") {
+            string query = R"(
+			assign a;
+			Select a such that Affects(1, a))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 0);
+        }
+
+        SECTION("syn, wildcard") {
+            string query = R"(
+			assign a;
+			Select a such that Affects(a, _))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 1);
+            REQUIRE(exists(result, "8"));
+        }
+    }
+
+    SECTION("AffectsT") {
+        SECTION("syn, int") {
+            string query = R"(
+			assign a;
+			Select a such that Affects*(a, 11))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 1);
+            REQUIRE(exists(result, "8"));
+        }
+
+        SECTION("syn, syn") {
+            string query = R"(
+			assign a1, a2;
+			Select a2 such that Affects*(a1, a2))";
+
+            result = qps.processQueries(query, readPkb);
+            REQUIRE(result.size() == 1);
+            REQUIRE(exists(result, "11"));
+        }
+    }
 }
 
 TEST_CASE("Select synonym from single such that clause, synonym is not in clause") {
@@ -693,7 +863,7 @@ TEST_CASE("Select synonym from single if/while pattern clause, synonym is in cla
 
     SECTION("if", "exact") {
         string query = R"(
-		if if; 
+		if if;
 		Select if pattern if("count", _, _))";
 
         result = qps.processQueries(query, readPkb);
@@ -714,7 +884,7 @@ TEST_CASE("Select synonym from single if/while pattern clause, synonym is in cla
 
     SECTION("while", "exact") {
         string query = R"(
-		while w; 
+		while w;
 		Select w pattern w("abcdef", _))";
 
         result = qps.processQueries(query, readPkb);
@@ -742,7 +912,7 @@ TEST_CASE("Select synonym from single such that  clause, synonym is in clause") 
 
     SECTION("if", "exact") {
         string query = R"(
-		if if; 
+		if if;
 		Select if pattern if("count", _, _))";
 
         result = qps.processQueries(query, readPkb);
@@ -763,7 +933,7 @@ TEST_CASE("Select synonym from single such that  clause, synonym is in clause") 
 
     SECTION("while", "exact") {
         string query = R"(
-		while w; 
+		while w;
 		Select w pattern w("abcdef", _))";
 
         result = qps.processQueries(query, readPkb);
@@ -888,5 +1058,85 @@ TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
             REQUIRE(exists(result, "1"));
             REQUIRE(exists(result, "2"));
         }
+    }
+
+    SECTION("2 clauses with 2 distinct variables select tuple no cartesian product") {
+        string query = R"(
+        stmt s1, s2;
+        Select <s1, s2> such that Follows(s1, s2))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 5);
+        REQUIRE(exists(result, "1 2"));
+        REQUIRE(exists(result, "2 3"));
+        REQUIRE(exists(result, "4 5"));
+        REQUIRE(exists(result, "7 8"));
+        REQUIRE(exists(result, "8 9"));
+    }
+
+    SECTION("2 clauses with 2 distinct variables select tuple no cartesian product") {
+        string query = R"(
+        stmt s1, s2;
+        variable v;
+        Select <s1, s2, v> such that Follows(s1, s2))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 25);
+        REQUIRE(exists(result, "1 2 x"));
+        REQUIRE(exists(result, "2 3 x"));
+        REQUIRE(exists(result, "4 5 x"));
+        REQUIRE(exists(result, "7 8 x"));
+        REQUIRE(exists(result, "8 9 x"));
+        REQUIRE(exists(result, "1 2 y"));
+        REQUIRE(exists(result, "2 3 y"));
+        REQUIRE(exists(result, "4 5 y"));
+        REQUIRE(exists(result, "7 8 y"));
+        REQUIRE(exists(result, "8 9 y"));
+        REQUIRE(exists(result, "1 2 z"));
+        REQUIRE(exists(result, "2 3 z"));
+        REQUIRE(exists(result, "4 5 z"));
+        REQUIRE(exists(result, "7 8 z"));
+        REQUIRE(exists(result, "8 9 z"));
+        REQUIRE(exists(result, "1 2 count"));
+        REQUIRE(exists(result, "2 3 count"));
+        REQUIRE(exists(result, "4 5 count"));
+        REQUIRE(exists(result, "7 8 count"));
+        REQUIRE(exists(result, "8 9 count"));
+        REQUIRE(exists(result, "1 2 end"));
+        REQUIRE(exists(result, "2 3 end"));
+        REQUIRE(exists(result, "4 5 end"));
+        REQUIRE(exists(result, "7 8 end"));
+        REQUIRE(exists(result, "8 9 end"));
+    }
+
+    SECTION("non empty clauses with select BOOLEAN") {
+        string query = R"(
+        stmt s1, s2;
+        Select BOOLEAN such that Follows(s1, s2))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(exists(result, "TRUE"));
+    }
+
+    SECTION("one empty clause with select BOOLEAN") {
+        string query = R"(
+        stmt s1, s2;
+        Select BOOLEAN such that Follows(s1, s2) and Follows(100, 0) )";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(exists(result, "FALSE"));
+    }
+
+    SECTION("intersection results in empty table with select BOOLEAN") {
+        // Should return FALSE
+        string query = R"(
+        stmt s1;
+        Select BOOLEAN such that Follows(s1, 3) and Follows(s1, 8) )";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(exists(result, "FALSE"));
     }
 }

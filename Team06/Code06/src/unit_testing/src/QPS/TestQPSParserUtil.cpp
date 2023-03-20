@@ -63,48 +63,42 @@ TEST_CASE("stringToWordList / string with consecutive spaces / return wordlist "
     REQUIRE(expected == output);
 }
 
-TEST_CASE("extractParameters / one clause / return vector with one tuple") {
+TEST_CASE("extractParameters / one clause / return expected") {
     string input = "a(sd,\"x*y\")";
-    tuple<string, string, string, string> expectedTuple("a", "sd", "\"x*y\"", "");
+    tuple<string, vector<string>> expectedTuple("a", {"sd", "\"x*y\""});
 
-    tuple<string, string, string, string> output = extractParameters(input);
+    tuple<string, vector<string>> output = extractParameters(input, AppConstants::STRING_LEFT_PARENTHESIS, ")", ",");
     REQUIRE(expectedTuple == output);
 }
 
 TEST_CASE("extractParameters / one clause with brackets in third parameter / "
-          "return vector with one tuple") {
+          "return expected") {
     string input = "a(sd,\"(x*y)+(z*y)\")";
-    tuple<string, string, string, string> expectedTuple("a", "sd", "\"(x*y)+(z*y)\"", "");
-    tuple<string, string, string, string> output = extractParameters(input);
+    tuple<string, vector<string>> expectedTuple("a", {"sd", "\"(x*y)+(z*y)\""});
+    tuple<string, vector<string>> output = extractParameters(input, AppConstants::STRING_LEFT_PARENTHESIS, ")", ",");
     REQUIRE(expectedTuple == output);
 }
 
-TEST_CASE("extractParameters / pattern string with wild cards / return vector "
-          "with one tuple") {
+TEST_CASE("extractParameters / pattern string with wild cards / return expected") {
     string input = "a(sd,_\"(x*y)+(z*y)\"_)";
-    tuple<string, string, string, string> expectedTuple("a", "sd", "_\"(x*y)+(z*y)\"_", "");
-    tuple<string, string, string, string> output = extractParameters(input);
+    tuple<string, vector<string>> expectedTuple("a", {"sd", "_\"(x*y)+(z*y)\"_"});
+    tuple<string, vector<string>> output = extractParameters(input, AppConstants::STRING_LEFT_PARENTHESIS, ")", ",");
     REQUIRE(expectedTuple == output);
 }
 
-TEST_CASE("extractParameters / one clause with no closing bracket / throws error") {
-    string input = "a(sd,\"x*y\"";
-    REQUIRE_THROWS(extractParameters(input));
-}
-
-TEST_CASE("extractParameters / one clause with no comma / throws error") {
+TEST_CASE("extractParameters / one clause / return expected ") {
     string input = "a(sd\"x*y\")";
-    REQUIRE_THROWS(extractParameters(input));
+    tuple<string, vector<string>> expectedTuple("a", {"sd\"x*y\""});
+    tuple<string, vector<string>> output = extractParameters(input, AppConstants::STRING_LEFT_PARENTHESIS, ")", ",");
+    REQUIRE(expectedTuple == output);
 }
 
-TEST_CASE("extractParameters / one clause with no opening bracket / throws error") {
-    string input = "asd,\"x*y\")";
-    REQUIRE_THROWS(extractParameters(input));
-}
-
-TEST_CASE("extractParameters / one clause with not proper format / throws error") {
-    string input = "asd,\"x*y\"";
-    REQUIRE_THROWS(extractParameters(input));
+TEST_CASE("extractParameters / no outerParam, different braces/ return expected") {
+    string input = "<asd,\"x*y\">";
+    tuple<string, vector<string>> expectedTuple("", {"asd", "\"x*y\""});
+    tuple<string, vector<string>> output =
+        extractParameters(input, AppConstants::STRING_LESS, AppConstants::STRING_GREATER, ",");
+    REQUIRE(expectedTuple == output);
 }
 
 TEST_CASE("extractSubStringUntilDelimiter / empty string, non-empty delimiter, "
@@ -146,7 +140,53 @@ TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty "
     string inputDelimiter = ",";
     int start = 0;
 
-    tuple<string, size_t> expected{inputString, inputString.size()};
-    tuple<string, size_t> output = extractSubStringUntilDelimiter(inputString, start, inputDelimiter);
+    tuple<string, size_t, bool> expected{inputString, inputString.size(), false};
+    tuple<string, size_t, bool> output = extractSubStringUntilDelimiter(inputString, start, inputDelimiter);
+    CHECK(expected == output);
+}
+
+TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty "
+          "delimiter present, start = 0 / return tuple with expected substring and next starting position") {
+    string inputStringFront = "helloMyName,";
+    string inputStringBack = " is johnny ";
+    string inputString = inputStringFront + inputStringBack;
+    string expectedString = "helloMyName";
+    string inputDelimiter = ",";
+    int start = 0;
+
+    tuple<string, size_t, bool> expected{expectedString, inputStringFront.size(), true};
+    tuple<string, size_t, bool> output = extractSubStringUntilDelimiter(inputString, start, inputDelimiter);
+    CHECK(expected == output);
+}
+
+TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty "
+          "delimiter present multiple times, start = 0 / return tuple with expected substring "
+          "and next starting position") {
+    string inputStringFront = "helloMyName,";
+    string inputStringBack = " is, johnny ";
+    string inputString = inputStringFront + inputStringBack;
+    string expectedString = "helloMyName";
+    string inputDelimiter = ",";
+    int start = 0;
+
+    tuple<string, size_t, bool> expected{expectedString, inputStringFront.size(), true};
+    tuple<string, size_t, bool> output = extractSubStringUntilDelimiter(inputString, start, inputDelimiter);
+    CHECK(expected == output);
+}
+
+TEST_CASE("extractSubStringUntilDelimiter / non-empty string, non-empty "
+          "delimiter present multiple times, start after first delimiter / return tuple with "
+          "expected substring "
+          "and next starting position") {
+    string inputStringFront = "helloMyName,";
+    string inputStringMiddle = " is,";
+    string inputStringBack = " johnny ";
+    string inputString = inputStringFront + inputStringMiddle + inputStringBack;
+    string expectedString = " is";
+    string inputDelimiter = ",";
+    int start = inputStringFront.size();
+
+    tuple<string, size_t, bool> expected{expectedString, inputStringFront.size() + inputStringMiddle.size(), true};
+    tuple<string, size_t, bool> output = extractSubStringUntilDelimiter(inputString, start, inputDelimiter);
     CHECK(expected == output);
 }

@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 typedef std::string ProcName;
@@ -12,6 +14,7 @@ typedef std::string Ent;
 typedef std::string Operator;
 typedef int StmtNum;
 typedef int Const;
+typedef std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> CFG;
 
 class AppConstants {
 public:
@@ -29,8 +32,14 @@ public:
     inline static const std::string SYNONYM = "synonym";
     inline static const std::string WILDCARD = "wildcard";
     inline static const std::string FIXED_INT = "fixed_int";
+    inline static const std::string BOOLEAN = "BOOLEAN";
     inline static const std::string FIXED_STRING = "fixed_string";
-    inline static const std::string FIXED_STRING_WTIH_WILDCARD = "fixed_string_with_wildcard";
+
+    // synonym attributes
+    inline static const std::string PROCNAME = "procName";
+    inline static const std::string VARNAME = "varName";
+    inline static const std::string VALUE = "value";
+    inline static const std::string STMTNO = "stmt#";
 
     // relationships
     inline static const std::string FOLLOWS = "Follows";
@@ -51,6 +60,8 @@ public:
     inline static const std::string ELSE = "else";
     inline static const std::string AND = "&&";
     inline static const std::string OR = "||";
+    inline static const std::string EQUALS = "==";
+    inline static const std::string NOT_EQUALS = "!=";
     inline static const char NOT = '!';
     inline static const char GREATER = '>';
     inline static const char LESS = '<';
@@ -64,8 +75,31 @@ public:
     inline static const char LEFT_PARENTHESIS = '(';
     inline static const char RIGHT_PARENTHESIS = ')';
     inline static const char SEMICOLON = ';';
+    inline static const char EQUAL_SIGN = '=';
+    inline static const char AMPERSAND = '&';
+    inline static const char VERTICAL_BAR = '|';
+
+    inline static const std::string STRING_NOT = "!";
+    inline static const std::string STRING_GREATER = ">";
+    inline static const std::string STRING_LESS = "<";
+    inline static const std::string STRING_PLUS = "+";
+    inline static const std::string STRING_MINUS = "-";
+    inline static const std::string STRING_MULTIPLY = "*";
+    inline static const std::string STRING_DIVIDE = "/";
+    inline static const std::string STRING_MODULO = "%";
+    inline static const std::string STRING_LEFT_PARENTHESIS = "(";
+    inline static const std::string STRING_RIGHT_PARENTHESIS = ")";
+    inline static const std::string STRING_SEMICOLON = ";";
+    inline static const std::string STRING_EQUAL_SIGN = "=";
+    inline static const std::string STRING_AMPERSAND = "&";
+    inline static const std::string STRING_VERTICAL_BAR = "|";
 
     // CFG-related
     inline static const std::string PARENTS = "parents";
     inline static const std::string CHILDREN = "children";
+
+    inline static const int NOT_USED_FIELD = -1;
+    inline static const int DUMMY_NODE = 0;
+    inline static const std::string PROCEDURE_DOES_NOT_EXIST = "procedure does not exist";
+    inline static const int IS_FIND_CHILDREN = true;
 };

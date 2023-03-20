@@ -1,6 +1,6 @@
 #include "Variable.h"
 
-Variable::Variable() {}
+Variable::Variable() : name() {}
 
 Variable::Variable(Ent name) {
     this->name = name;

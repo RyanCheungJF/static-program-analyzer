@@ -20,19 +20,19 @@ TEST_CASE("ModifiesUsesStorage: writeS") {
         REQUIRE(!us.exists(num2, "b"));
     }
 
-    us.writeS(num1, input1);
-    us.writeS(num1, input1_1);
-    us.writeS(num2, input2);
-    us.writeS(num2, input2_1);
+    us.write(num1, input1);
+    us.write(num1, input1_1);
+    us.write(num2, input2);
+    us.write(num2, input2_1);
 
-    SECTION("ModifiesUsesStorage: getEnt(StmtNum num)") {
-        std::unordered_set<Ent> res1 = us.getEnt(num1);
+    SECTION("ModifiesUsesStorage: getRightItems(StmtNum num)") {
+        std::unordered_set<Ent> res1 = us.getRightItems(num1);
         REQUIRE(res1.size() == input1_1.size());
 
-        std::unordered_set<Ent> res2 = us.getEnt(num2);
+        std::unordered_set<Ent> res2 = us.getRightItems(num2);
         REQUIRE(res2.size() == input2_1.size());
 
-        std::unordered_set<Ent> res3 = us.getEnt(100000);
+        std::unordered_set<Ent> res3 = us.getRightItems(100000);
         REQUIRE(res3.empty());
     }
 
@@ -44,32 +44,23 @@ TEST_CASE("ModifiesUsesStorage: writeS") {
         REQUIRE(!us.exists(num2, "b"));
     }
 
-    SECTION("ModifiesUsesStorage: getStmtsFromEnt(Ent var)") {
-        std::unordered_set<StmtNum> res1 = us.getStmtsFromEnt("a");
+    SECTION("ModifiesUsesStorage: getStmtNums(Ent var)") {
+        std::unordered_set<StmtNum> res1 = us.getStmtNums("a");
         REQUIRE(res1.size() == 2);
 
-        std::unordered_set<StmtNum> res2 = us.getStmtsFromEnt("d");
+        std::unordered_set<StmtNum> res2 = us.getStmtNums("d");
         REQUIRE(res2.size() == 1);
 
-        std::unordered_set<StmtNum> res3 = us.getStmtsFromEnt("b");
+        std::unordered_set<StmtNum> res3 = us.getStmtNums("b");
         REQUIRE(res3.size() == 1);
 
-        std::unordered_set<StmtNum> res4 = us.getStmtsFromEnt("z");
+        std::unordered_set<StmtNum> res4 = us.getStmtNums("z");
         REQUIRE(res4.empty());
     }
 
-    SECTION("ModifiesUsesStorage: getAllStmtEntPairs()") {
-        std::pair<std::vector<StmtNum>, std::vector<std::string>> res = us.getAllStmtEntPairs();
-
-        REQUIRE(res.first.size() == res.second.size());
-        REQUIRE(res.first.size() == (input1_1.size() + input2_1.size()));
-        REQUIRE(find(res.first.begin(), res.first.end(), num1) != res.first.end());
-        REQUIRE(find(res.first.begin(), res.first.end(), num2) != res.first.end());
-        REQUIRE(find(res.first.begin(), res.first.end(), 100000) == res.first.end());
-
-        REQUIRE(find(res.second.begin(), res.second.end(), "a") != res.second.end());
-        REQUIRE(find(res.second.begin(), res.second.end(), "x") != res.second.end());
-        REQUIRE(find(res.second.begin(), res.second.end(), "z") == res.second.end());
+    SECTION("ModifiesUsesStorage: getAllStmtNums()") {
+        std::unordered_set<StmtNum> res = us.getAllStmtNums();
+        std::unordered_set<StmtNum> expected = {11, 20};
     }
 }
 
@@ -92,19 +83,19 @@ TEST_CASE("ModifiesUsesStorage: writeP") {
         REQUIRE(!us.exists(proc2, "b"));
     }
 
-    us.writeP(proc1, input1);
-    us.writeP(proc1, input1_1);
-    us.writeP(proc2, input2);
-    us.writeP(proc2, input2_1);
+    us.write(proc1, input1);
+    us.write(proc1, input1_1);
+    us.write(proc2, input2);
+    us.write(proc2, input2_1);
 
-    SECTION("ModifiesUsesStorage: getEnt(ProcName proc)") {
-        std::unordered_set<Ent> res1 = us.getEnt(proc1);
+    SECTION("ModifiesUsesStorage: getRightItems(ProcName proc)") {
+        std::unordered_set<Ent> res1 = us.getRightItems(proc1);
         REQUIRE(res1.size() == input1_1.size());
 
-        std::unordered_set<Ent> res2 = us.getEnt(proc2);
+        std::unordered_set<Ent> res2 = us.getRightItems(proc2);
         REQUIRE(res2.size() == input2_1.size());
 
-        std::unordered_set<Ent> res3 = us.getEnt("proc3");
+        std::unordered_set<Ent> res3 = us.getRightItems("proc3");
         REQUIRE(res3.size() == 0);
     }
 
@@ -117,30 +108,22 @@ TEST_CASE("ModifiesUsesStorage: writeP") {
     }
 
     SECTION("ModifiesUsesStorage: getProcsFromEnt(Ent var)") {
-        std::unordered_set<ProcName> res1 = us.getProcsFromEnt("a");
+        std::unordered_set<ProcName> res1 = us.getProcs("a");
         REQUIRE(res1.size() == 2);
 
-        std::unordered_set<ProcName> res2 = us.getProcsFromEnt("d");
+        std::unordered_set<ProcName> res2 = us.getProcs("d");
         REQUIRE(res2.size() == 1);
 
-        std::unordered_set<ProcName> res3 = us.getProcsFromEnt("b");
+        std::unordered_set<ProcName> res3 = us.getProcs("b");
         REQUIRE(res3.size() == 1);
 
-        std::unordered_set<ProcName> res4 = us.getProcsFromEnt("z");
+        std::unordered_set<ProcName> res4 = us.getProcs("z");
         REQUIRE(res4.size() == 0);
     }
 
-    SECTION("ModifiesUsesStorage: getAllProcEntPairs()") {
-        std::pair<std::vector<ProcName>, std::vector<std::string>> res = us.getAllProcEntPairs();
-
-        REQUIRE(res.first.size() == res.second.size());
-        REQUIRE(res.first.size() == (input1_1.size() + input2_1.size()));
-        REQUIRE(find(res.first.begin(), res.first.end(), proc1) != res.first.end());
-        REQUIRE(find(res.first.begin(), res.first.end(), proc2) != res.first.end());
-        REQUIRE(find(res.first.begin(), res.first.end(), "proc3") == res.first.end());
-
-        REQUIRE(find(res.second.begin(), res.second.end(), "a") != res.second.end());
-        REQUIRE(find(res.second.begin(), res.second.end(), "x") != res.second.end());
-        REQUIRE(find(res.second.begin(), res.second.end(), "z") == res.second.end());
+    SECTION("ModifiesUsesStorage: getAllProcs()") {
+        std::unordered_set<Ent> res = us.getAllProcs();
+        std::unordered_set<Ent> expected = {"proc1", "proc2"};
+        REQUIRE(res == expected);
     }
 }

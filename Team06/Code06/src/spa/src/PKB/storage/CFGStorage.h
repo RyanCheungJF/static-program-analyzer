@@ -1,11 +1,4 @@
 #pragma once
-// #include "../../../src/unit_testing/src/stubs/CFGNodeStub.h"
-#include <stdio.h>
-
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
 
 #include "../../../src/utils/AppConstants.h"
 #include "../../SP/AST/Node/AssignStatement.h"
@@ -34,8 +27,8 @@ public:
      *
      */
 
-    // TODO: this could be a pointer in the future so that we do not need to do pass-by-copy
-    //  and use resources on time & space
+    //  : this could be a pointer in the future so that we do not need to do pass-by-copy
+    // and use resources on time & space
     void writeCFG(ProcName name,
                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph);
 

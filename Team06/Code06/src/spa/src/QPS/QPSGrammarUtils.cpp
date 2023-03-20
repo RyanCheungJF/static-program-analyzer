@@ -5,14 +5,13 @@
 #include "QPSGrammarUtils.h"
 
 #include <algorithm>
-#include <iostream>
 #include <regex>
 #include <string>
 
 #include "utils/AppConstants.h"
 
 bool isName(string s) {
-    return regex_match(s, regex("^[a-zA-Z][a-zA-Z0-9]*$"));
+    return regex_match(trim(s), regex("^[a-zA-Z][a-zA-Z0-9]*$"));
 }
 
 bool isIdent(string s) {
@@ -23,37 +22,49 @@ bool isSynonym(string s) {
     return isIdent(s);
 }
 
+bool isTupleStart(string s) {
+    return s[0] == AppConstants::LESS;
+}
+
+bool isBoolean(string s) {
+    return s == AppConstants::BOOLEAN;
+}
+
 bool isInteger(string integer) {
-    return regex_match(integer, regex("^0$|^[1-9][0-9]*$"));
+    return regex_match(trim(integer), regex("^0$|^[1-9][0-9]*$"));
 }
 
 bool isSelect(string s) {
-    return regex_search(s, regex("^Select"));
+    return regex_search(trim(s), regex("^Select"));
 }
 
 bool isPattern(string s) {
-    return regex_match(s, regex("^pattern$"));
+    return regex_match(trim(s), regex("^pattern$"));
 }
 
 bool startsWithLetter(string s) {
-    return regex_match(s, regex("^[a-zA-Z].*"));
+    return regex_match(trim(s), regex("^[a-zA-Z].*"));
 }
 
 bool hasBalancedBrackets(string s) {
     int balance = 0;
-    for (char c : s) {
-        if (c == '(') {
+    for (int i = 0; i < s.size(); i++) {
+        char c = s[i];
+        if (c == AppConstants::LEFT_PARENTHESIS) {
             balance += 1;
         }
-        else if (c == ')') {
+        else if (c == AppConstants::RIGHT_PARENTHESIS) {
             balance -= 1;
+        }
+        if (balance < 0) {
+            return false;
         }
     }
     return balance == 0;
 }
 
 bool hasCorrectRelRefOrPatternForm(string s) {
-    bool regexMatched = regex_match(s, regex("^[a-zA-Z].*\(.*,.*\)$"));
+    bool regexMatched = regex_match(s, regex("^[a-zA-Z].*\(.*\)$"));
     bool bracketBalanced = hasBalancedBrackets(s);
     return regexMatched && bracketBalanced;
 }
@@ -65,8 +76,8 @@ bool isDeclaration(string declaration) {
 }
 
 bool isDesignEntity(string designEntity) {
-    return regex_search(designEntity, regex("^(stmt|read|print|call|while|if|assign|variable|"
-                                            "constant|procedure)"));
+    return regex_search(trim(designEntity), regex("^(stmt|read|print|call|while|if|assign|variable|"
+                                                  "constant|procedure)"));
 }
 
 pair<string, string> extractDesignEntity(string designEntity) {
@@ -74,18 +85,29 @@ pair<string, string> extractDesignEntity(string designEntity) {
               "procedure)\\s+");
     smatch match;
     string remainder;
-    if (regex_search(designEntity, match, rgx)) {
+    string trimmedString = trim(designEntity);
+    if (regex_search(trimmedString, match, rgx)) {
         remainder = match.suffix().str();
     }
     return pair(match[1], remainder);
 }
 
 bool isFixedString(string s) {
-    return regex_match(s, regex("^\"[a-zA-Z][a-zA-Z0-9]*\"$"));
+    s = trim(s);
+    if (s.size() < 2) {
+        return false;
+    }
+    if (s.at(0) != '\"') {
+        return false;
+    }
+    if (s.at(s.size() - 1) != '\"') {
+        return false;
+    }
+    return isSynonym(s.substr(1, s.size() - 2));
 }
 
 bool isWildCard(string s) {
-    return s == "_";
+    return trim(s) == "_";
 }
 
 bool isStmtRef(string stmtRef) {
@@ -104,18 +126,16 @@ bool isExprSpec(string s) {
     if (s == "_") {
         return true;
     }
-    // removes all whitespace from s.
-    s = removeCharFromString(s, ' ');
-    bool startsWith_ = regex_search(s, regex("^_\""));
-    bool endsWith_ = regex_search(s, regex("\"_$"));
+    bool startsWith_ = regex_search(s, regex("^_"));
+    bool endsWith_ = regex_search(s, regex("_$"));
     if (startsWith_ && endsWith_) {
         if (s.size() < 5) {
             return false;
         }
         // This will get rid of _" and "_
         // If s = _"X+Y"_ then expr = X+Y
-        string expr = s.substr(2, s.size() - 4);
-        return isExpr(expr);
+        string expr = s.substr(1, s.size() - 2);
+        return isExprSpec(expr);
     }
     bool startsWithQuotation = regex_search(s, regex("^\""));
     bool endsWithQuotation = regex_search(s, regex("\"$"));
@@ -132,6 +152,7 @@ bool isExprSpec(string s) {
 }
 
 bool isExpr(string s) {
+    s = trim(s);
     if (s.empty()) {
         return false;
     }
@@ -140,14 +161,14 @@ bool isExpr(string s) {
     // finds the first + or - from the back where there are no brackets
     // encapsulating them.
     for (int i = s.size() - 1; i >= 0; i--) {
-        if ((s[i] == '+' || s[i] == '-') && bracketsCounter == 0) {
+        if ((s[i] == AppConstants::PLUS || s[i] == AppConstants::MINUS) && bracketsCounter == 0) {
             index = i;
             break;
         }
-        if (s[i] == '(') {
+        if (s[i] == AppConstants::LEFT_PARENTHESIS) {
             bracketsCounter--;
         }
-        else if (s[i] == ')') {
+        else if (s[i] == AppConstants::RIGHT_PARENTHESIS) {
             bracketsCounter++;
         }
     }
@@ -159,12 +180,13 @@ bool isExpr(string s) {
         // cannot have + or - at start or end of string
         return false;
     }
-    string first = trim(s.substr(0, index));
-    string second = trim(s.substr(index + 1, s.size() - 1 - index));
+    string first = s.substr(0, index);
+    string second = s.substr(index + 1, s.size() - 1 - index);
     return isExpr(first) && isTerm(second);
 }
 
 bool isTerm(string s) {
+    s = trim(s);
     if (s.empty()) {
         return false;
     }
@@ -173,14 +195,15 @@ bool isTerm(string s) {
     int index = -1;
     int bracketsCounter = 0;
     for (int i = s.size() - 1; i >= 0; i--) {
-        if ((s[i] == '*' || s[i] == '/' || s[i] == '%') && bracketsCounter == 0) {
+        if ((s[i] == AppConstants::MULTIPLY || s[i] == AppConstants::DIVIDE || s[i] == AppConstants::MODULO) &&
+            bracketsCounter == 0) {
             index = i;
             break;
         }
-        if (s[i] == '(') {
+        if (s[i] == AppConstants::LEFT_PARENTHESIS) {
             bracketsCounter--;
         }
-        else if (s[i] == ')') {
+        else if (s[i] == AppConstants::RIGHT_PARENTHESIS) {
             bracketsCounter++;
         }
     }
@@ -192,18 +215,19 @@ bool isTerm(string s) {
         // operator cannot be at start and end of string
         return false;
     }
-    string first = trim(s.substr(0, index));
-    string second = trim(s.substr(index + 1, s.size() - 1 - index));
+    string first = s.substr(0, index);
+    string second = s.substr(index + 1, s.size() - 1 - index);
     return isTerm(first) && isFactor(second);
 }
 
 bool isFactor(string s) {
+    s = trim(s);
     if (s.empty()) {
         return false;
     }
     // recursively remove brackets
     bool hasBrackets = false;
-    if (s[0] == '(' && s[s.size() - 1] == ')') {
+    if (s[0] == AppConstants::LEFT_PARENTHESIS && s[s.size() - 1] == AppConstants::RIGHT_PARENTHESIS) {
         hasBrackets = true;
         s = s.substr(1, s.size() - 2);
     }
@@ -211,4 +235,33 @@ bool isFactor(string s) {
         return isExpr(s);
     }
     return isName(s) || isInteger(s);
+}
+
+bool isElem(string s) {
+    return isSynonym(s) || isAttrRef(s);
+}
+
+bool isAttrRef(string s) {
+    s = trim(s);
+    string delimiter = ".";
+    bool found;
+    int nextStart;
+    string name, attribute;
+    tie(name, nextStart, found) = extractSubStringUntilDelimiter(s, 0, delimiter);
+    if (!found) {
+        return false;
+    }
+    if (nextStart >= s.size()) {
+        return false;
+    }
+    attribute = s.substr(nextStart, s.size() - nextStart);
+    return isSynonym(name) && isAttribute(attribute);
+}
+
+bool isAttribute(string s) {
+    return regex_match(trim(s), regex("^(procName|varName|value|stmt#)$"));
+}
+
+bool isRef(string s) {
+    return isFixedString(s) || isInteger(s) || isAttrRef(s);
 }

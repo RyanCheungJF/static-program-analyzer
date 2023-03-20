@@ -1,10 +1,5 @@
 #pragma once
 
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
-
 #include "../../../src/utils/AppConstants.h"
 
 class StmtStorage {
@@ -12,6 +7,7 @@ public:
     virtual void writeStatement(Stmt s, StmtNum line);
     virtual bool checkStatement(Stmt stmt, StmtNum num);
     virtual std::unordered_set<StmtNum> getStatementNumbers(Stmt s);
+    virtual std::unordered_set<Stmt> getStatementType(StmtNum num);
 
 private:
     /*

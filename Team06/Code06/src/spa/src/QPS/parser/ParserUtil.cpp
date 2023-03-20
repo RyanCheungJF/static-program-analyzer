@@ -10,6 +10,7 @@ const string SUCH = "such";
 const string THAT = "that";
 const string PATTERN = "pattern";
 const string AND = "and";
+const string WITH = "with";
 
 vector<int> findSuchThat(const vector<string>& wordList) {
     vector<int> suchThatStarts;
@@ -46,6 +47,23 @@ vector<int> findPattern(const vector<string>& wordList) {
     return patternStarts;
 }
 
+vector<int> findWith(const vector<string>& wordList) {
+    vector<int> withStarts;
+    for (int i = 0; i < wordList.size(); i++) {
+        if (WITH != wordList[i]) {
+            continue;
+        }
+        if (i == wordList.size() - 1) {
+            continue;
+        }
+        string substr;
+        bool found;
+        tie(substr, ignore, found) =
+            extractSubStringUntilDelimiter(wordList[i + 1], 0, AppConstants::STRING_EQUAL_SIGN);
+    }
+    return vector<int>();
+}
+
 vector<int> findAnds(const vector<string>& wordList, int start, int end) {
     vector<int> ands;
     for (int i = start; i < end; i++) {
@@ -60,80 +78,35 @@ vector<int> findAnds(const vector<string>& wordList, int start, int end) {
     return ands;
 }
 
-tuple<string, string, string, string> extractParameters(string s) {
-    tuple<string, string, string, string> res;
+tuple<string, vector<string>> extractParameters(string s, string containerStart, string containerEnd,
+                                                string delimiter) {
+    s = trim(s);
+    tuple<string, vector<string>> res;
     int endOfString = s.size();
     int curIndex = 0;
-    string param1 = "";
-    string param2 = "";
-    string param3 = "";
-    string param4 = "";
-    int bracCount = 0;
-    char curChar = '\0';
-    while (curIndex < endOfString) {
-        curChar = s[curIndex];
-        if (curChar == '(') {
-            bracCount++;
-            break;
-        }
-        param1 += curChar;
-        curIndex++;
-    }
-    curIndex++;
-    while (curIndex < endOfString) {
-        curChar = s[curIndex];
-        if (curChar == ',') {
-            break;
-        }
-        param2 += curChar;
-        curIndex++;
-    }
-    curIndex++;
-    while (curIndex < endOfString) {
-        curChar = s[curIndex];
-        if (curChar == ',') {
-            curIndex++;
-            if (curIndex == endOfString - 1) {
-                // for the case of "(v,_,)"
-                throw SyntaxException();
-            }
-            break;
-        }
-        if (curChar == '(') {
-            bracCount++;
-        }
-        if (curChar == ')') {
-            bracCount--;
-            if (bracCount == 0) {
-                curIndex++;
-                break;
-            }
-        }
-        param3 += curChar;
-        curIndex++;
-    }
-
-    while (curIndex < endOfString) {
-        curChar = s[curIndex];
-        if (curChar == '(') {
-            bracCount++;
-        }
-        if (curChar == ')') {
-            bracCount--;
-            if (bracCount == 0) {
-                curIndex++;
-                break;
-            }
-        }
-        param4 += curChar;
-        curIndex++;
-    }
-
-    if (param1 == "" || param2 == "" || param3 == "" || !(param4 == "" || param4 == "_") || curIndex != endOfString ||
-        curChar != ')') {
+    string outerParam = "";
+    vector<string> innerParams;
+    bool found = false;
+    tie(outerParam, curIndex, found) = extractSubStringUntilDelimiter(s, curIndex, containerStart);
+    if (!found) {
         throw SyntaxException();
     }
-    res = make_tuple(param1, param2, param3, param4);
+    if (!(s.substr(endOfString - containerEnd.size(), containerEnd.size()) == containerEnd)) {
+        throw SyntaxException();
+    }
+    string innerParamsString = s.substr(curIndex, endOfString - curIndex - containerEnd.size());
+    endOfString = innerParamsString.size();
+    curIndex = 0;
+    while (curIndex < endOfString) {
+        string curParam;
+        tie(curParam, curIndex, found) = extractSubStringUntilDelimiter(innerParamsString, curIndex, delimiter);
+        if (found && curIndex == innerParamsString.size()) {
+            // end of string with delimiter at the end
+            throw SyntaxException();
+        }
+        innerParams.push_back(trim(curParam));
+    }
+    res = {trim(outerParam), innerParams};
     return res;
 }
 
@@ -142,7 +115,7 @@ string removeCharFromString(string s, char c) {
     return s;
 }
 
-tuple<string, size_t> extractSubStringUntilDelimiter(const string& original, int start, string delimiter) {
+tuple<string, size_t, bool> extractSubStringUntilDelimiter(const string& original, int start, string delimiter) {
     if (delimiter == "") {
         throw InternalException("Error: ParserUtils.extractSubStringUntilDelimiter bad delimiter");
     }
@@ -151,11 +124,11 @@ tuple<string, size_t> extractSubStringUntilDelimiter(const string& original, int
     }
     size_t end = original.find(delimiter, start);
     if (end == string::npos) {
-        return tuple<string, int>(original.substr(start, original.size()), original.size());
+        return tuple<string, int, bool>(original.substr(start, original.size()), original.size(), false);
     }
     size_t length = end - start;
     string substr = original.substr(start, length);
-    return tuple<string, int>(substr, end + 1);
+    return tuple<string, int, bool>(substr, end + delimiter.size(), true);
 }
 
 vector<string> stringToWordList(string s) {

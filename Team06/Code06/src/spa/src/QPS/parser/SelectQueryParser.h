@@ -1,6 +1,7 @@
 #ifndef SPA_SELECTCLAUSEPARSER_H
 #define SPA_SELECTCLAUSEPARSER_H
 #include <algorithm>
+#include <functional>
 #include <map>
 #include <sstream>
 #include <string>
@@ -24,6 +25,7 @@ enum ClauseType {
 class SelectQueryParser {
 public:
     Query parse(string selectQuery);
+    Parameter parseParameter(string paramString);
 
 private:
     map<ClauseType, vector<int>> getClauseStarts(vector<string>& wordList);
@@ -32,7 +34,9 @@ private:
     vector<Parameter> parseSelectClause(vector<string>& wordList, int start, int end);
     vector<shared_ptr<Relationship>> parseSuchThatClause(vector<string>& wordList, int start, int end);
     vector<Pattern> parsePatternClause(vector<string>& wordList, int start, int end);
+    vector<Parameter> extractSelectTuple(vector<string>& wordList, int start, int end);
     vector<ClauseType> getAllClauseTypes();
+    vector<string> splitClauseByAnds(vector<string>& wordList, int start, int end, function<bool(string)> formChecker);
 };
 
 #endif // SPA_SELECTCLAUSEPARSER_H
