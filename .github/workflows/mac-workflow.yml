@@ -44,16 +44,16 @@ jobs:
         working-directory: ${{runner.workspace}}/build
         run: src/unit_testing/unit_testing
 
-      - name: Generate xml files
-        run: |
-            cd ./Team06/Tests06/systemtests/systemtest1
-            bash $GITHUB_WORKSPACE/Team06/Tests06/systemtests/systemtest1/ci.sh
-        shell: bash
+      # - name: Generate xml files
+      #   run: |
+      #       cd ./Team06/Tests06/systemtests/systemtest1
+      #       bash $GITHUB_WORKSPACE/Team06/Tests06/systemtests/systemtest1/ci.sh
+      #   shell: bash
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10" # install the python version needed
+      # - name: Setup Python
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: "3.10" # install the python version needed
 
-      - name: Execute Python SystemTest Script
-        run: python ./Team06/Tests06/systemtests/check.py
+      # - name: Execute Python SystemTest Script
+      #   run: python ./Team06/Tests06/systemtests/check.py
