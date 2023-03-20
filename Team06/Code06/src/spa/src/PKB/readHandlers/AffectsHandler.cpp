@@ -282,7 +282,7 @@ std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffects
     return hashmap;
 }
 
-// TODO: area for optimisation. get this at compile time
+//  : area for optimisation. get this at compile time
 std::unordered_set<StmtNum> AffectsHandler::getAssignStatements(std::unordered_set<StmtNum> allProcStatements) {
 
     std::unordered_set<StmtNum> assignStatements;

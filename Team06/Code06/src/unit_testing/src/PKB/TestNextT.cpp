@@ -253,7 +253,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next* - complex") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    // TODO: are self pointing nodes allowed?
+    //  : are self pointing nodes allowed?
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph3 = {
         {13, {{AppConstants::PARENTS, {15, 16}}, {AppConstants::CHILDREN, {14}}}},
         {14, {{AppConstants::PARENTS, {13}}, {AppConstants::CHILDREN, {15, 17}}}},
