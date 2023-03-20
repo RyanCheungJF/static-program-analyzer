@@ -1,12 +1,13 @@
 import os
 import xml.etree.ElementTree as ET
 
-r_path = 'Team06\Tests06\systemtests'
-src = os.listdir(r_path)
+# r_path = 'Team06\Tests06\systemtests'
+# src = os.listdir(r_path)
+src = os.path.join("Team06", "Tests06", "systemtests")
 error = False
 
 for entry in src:
-    subdir_path = os.path.join(r_path, entry)
+    subdir_path = os.path.join(src, entry)
     if os.path.isdir(subdir_path):
         subdir_entries = os.listdir(subdir_path)
         for subentry in subdir_entries:
