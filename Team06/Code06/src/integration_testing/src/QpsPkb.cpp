@@ -5,7 +5,6 @@
 #include "../../spa/src/PKB/WritePKB.cpp"
 #include "../../spa/src/PKB/utils/utils.h"
 #include "../../spa/src/QPS/QPS.h"
-#include "../../spa/src/utils/AppConstants.h"
 #include "catch.hpp"
 
 using namespace std;

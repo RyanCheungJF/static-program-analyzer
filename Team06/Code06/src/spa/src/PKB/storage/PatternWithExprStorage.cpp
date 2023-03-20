@@ -1,6 +1,5 @@
 #include "PatternWithExprStorage.h"
 
-#include <string>
 #include <unordered_map>
 
 void PatternWithExprStorage::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> ptr) {
