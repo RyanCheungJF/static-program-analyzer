@@ -96,7 +96,8 @@ TEST_CASE("extractParameters / one clause / return expected ") {
 TEST_CASE("extractParameters / no outerParam, different braces/ return expected") {
     string input = "<asd,\"x*y\">";
     tuple<string, vector<string>> expectedTuple("", {"asd", "\"x*y\""});
-    tuple<string, vector<string>> output = extractParameters(input, AppConstants::STRING_LESS, AppConstants::STRING_GREATER, ",");
+    tuple<string, vector<string>> output =
+        extractParameters(input, AppConstants::STRING_LESS, AppConstants::STRING_GREATER, ",");
     REQUIRE(expectedTuple == output);
 }
 

@@ -1363,13 +1363,13 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* sys
     //    writePkb.setUsesS(5, {});
     //    writePkb.setUsesS(6, {});
     //    writePkb.setUsesS(7, {});
-    writePkb.setUsesS(8, {"rEaD", "read"}); //rEeeeaD
+    writePkb.setUsesS(8, {"rEaD", "read"}); // rEeeeaD
     writePkb.setUsesS(9, {"i", "N", "x", "y"});
     writePkb.setUsesS(10, {AppConstants::PRINT});
     //    writePkb.setUsesS(11, {});
     //    writePkb.setUsesS(12, {});
-    writePkb.setUsesP(proc1,
-                      {"i", "N", "x", "y", "p0licemAN", "p0liceWahMan", "rEaD", "read", "i", "N", "x", "y", AppConstants::PRINT});
+    writePkb.setUsesP(proc1, {"i", "N", "x", "y", "p0licemAN", "p0liceWahMan", "rEaD", "read", "i", "N", "x", "y",
+                              AppConstants::PRINT});
 
     //    writePkb.setUsesS(13, {});
     //    writePkb.setUsesS(14, {});

@@ -195,7 +195,8 @@ bool isTerm(string s) {
     int index = -1;
     int bracketsCounter = 0;
     for (int i = s.size() - 1; i >= 0; i--) {
-        if ((s[i] == AppConstants::MULTIPLY || s[i] == AppConstants::DIVIDE || s[i] == AppConstants::MODULO) && bracketsCounter == 0) {
+        if ((s[i] == AppConstants::MULTIPLY || s[i] == AppConstants::DIVIDE || s[i] == AppConstants::MODULO) &&
+            bracketsCounter == 0) {
             index = i;
             break;
         }

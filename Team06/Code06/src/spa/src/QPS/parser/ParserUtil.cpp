@@ -58,8 +58,8 @@ vector<int> findWith(const vector<string>& wordList) {
         }
         string substr;
         bool found;
-        tie(substr, ignore, found) = extractSubStringUntilDelimiter(wordList[i + 1], 0,
-                                                                    AppConstants::STRING_EQUAL_SIGN);
+        tie(substr, ignore, found) =
+            extractSubStringUntilDelimiter(wordList[i + 1], 0, AppConstants::STRING_EQUAL_SIGN);
     }
     return vector<int>();
 }

@@ -125,7 +125,8 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
         for (start; start < end; start++) {
             tupleString += " " + wordList[start];
         }
-        tie(ignore, paramStrings) = extractParameters(tupleString, AppConstants::STRING_LESS, AppConstants::STRING_GREATER, ",");
+        tie(ignore, paramStrings) =
+            extractParameters(tupleString, AppConstants::STRING_LESS, AppConstants::STRING_GREATER, ",");
         for (string synonym : paramStrings) {
             Parameter param = parseParameter(synonym);
             params.push_back(param);
