@@ -5,7 +5,7 @@
 
 class NotConditionalExpression : public ConditionalExpression {
 public:
-    Operator op = "!";
+    Operator op = AppConstants::STRING_NOT;
     std::unique_ptr<ConditionalExpression> condExpr;
 
     NotConditionalExpression();

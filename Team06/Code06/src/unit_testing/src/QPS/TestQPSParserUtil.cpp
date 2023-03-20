@@ -67,7 +67,7 @@ TEST_CASE("extractParameters / one clause / return expected") {
     string input = "a(sd,\"x*y\")";
     tuple<string, vector<string>> expectedTuple("a", {"sd", "\"x*y\""});
 
-    tuple<string, vector<string>> output = extractParameters(input, "(", ")", ",");
+    tuple<string, vector<string>> output = extractParameters(input, AppConstants::STRING_LEFT_PARENTHESIS, ")", ",");
     REQUIRE(expectedTuple == output);
 }
 
@@ -75,28 +75,28 @@ TEST_CASE("extractParameters / one clause with brackets in third parameter / "
           "return expected") {
     string input = "a(sd,\"(x*y)+(z*y)\")";
     tuple<string, vector<string>> expectedTuple("a", {"sd", "\"(x*y)+(z*y)\""});
-    tuple<string, vector<string>> output = extractParameters(input, "(", ")", ",");
+    tuple<string, vector<string>> output = extractParameters(input, AppConstants::STRING_LEFT_PARENTHESIS, ")", ",");
     REQUIRE(expectedTuple == output);
 }
 
 TEST_CASE("extractParameters / pattern string with wild cards / return expected") {
     string input = "a(sd,_\"(x*y)+(z*y)\"_)";
     tuple<string, vector<string>> expectedTuple("a", {"sd", "_\"(x*y)+(z*y)\"_"});
-    tuple<string, vector<string>> output = extractParameters(input, "(", ")", ",");
+    tuple<string, vector<string>> output = extractParameters(input, AppConstants::STRING_LEFT_PARENTHESIS, ")", ",");
     REQUIRE(expectedTuple == output);
 }
 
 TEST_CASE("extractParameters / one clause / return expected ") {
     string input = "a(sd\"x*y\")";
     tuple<string, vector<string>> expectedTuple("a", {"sd\"x*y\""});
-    tuple<string, vector<string>> output = extractParameters(input, "(", ")", ",");
+    tuple<string, vector<string>> output = extractParameters(input, AppConstants::STRING_LEFT_PARENTHESIS, ")", ",");
     REQUIRE(expectedTuple == output);
 }
 
 TEST_CASE("extractParameters / no outerParam, different braces/ return expected") {
     string input = "<asd,\"x*y\">";
     tuple<string, vector<string>> expectedTuple("", {"asd", "\"x*y\""});
-    tuple<string, vector<string>> output = extractParameters(input, "<", ">", ",");
+    tuple<string, vector<string>> output = extractParameters(input, AppConstants::STRING_LESS, AppConstants::STRING_GREATER, ",");
     REQUIRE(expectedTuple == output);
 }
 

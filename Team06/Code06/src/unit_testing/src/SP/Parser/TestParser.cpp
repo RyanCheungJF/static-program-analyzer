@@ -62,7 +62,7 @@ TEST_CASE("Valid Source Program") {
 
         // creating actual tree
         auto mathNodeA =
-            std::make_unique<MathExpression>("+", std::make_unique<Variable>("x"), std::make_unique<Constant>(1));
+            std::make_unique<MathExpression>(AppConstants::STRING_PLUS, std::make_unique<Variable>("x"), std::make_unique<Constant>(1));
         auto assignNodeA = std::make_unique<AssignStatement>(1, "x", std::move(mathNodeA));
         std::vector<std::unique_ptr<Statement>> statementsA;
         statementsA.push_back(std::move(assignNodeA));
@@ -70,7 +70,7 @@ TEST_CASE("Valid Source Program") {
         auto procedureNodeA = std::make_unique<Procedure>("A", std::move(statementListNodeA));
 
         auto mathNodeB =
-            std::make_unique<MathExpression>("*", std::make_unique<Variable>("y"), std::make_unique<Constant>(2));
+            std::make_unique<MathExpression>(AppConstants::STRING_MULTIPLY, std::make_unique<Variable>("y"), std::make_unique<Constant>(2));
         auto assignNodeB = std::make_unique<AssignStatement>(2, "y", std::move(mathNodeB));
         auto readNodeB = std::make_unique<ReadStatement>(3, "y");
         std::vector<std::unique_ptr<Statement>> statementsB;
@@ -80,7 +80,7 @@ TEST_CASE("Valid Source Program") {
         auto procedureNodeB = std::make_unique<Procedure>("B", std::move(statementListNodeB));
 
         auto mathNodeC =
-            std::make_unique<MathExpression>("-", std::make_unique<Variable>("z"), std::make_unique<Constant>(3));
+            std::make_unique<MathExpression>(AppConstants::STRING_MINUS, std::make_unique<Variable>("z"), std::make_unique<Constant>(3));
         auto assignNodeC = std::make_unique<AssignStatement>(6, "z", std::move(mathNodeC));
         auto printNodeC = std::make_unique<PrintStatement>(4, "z");
         auto callNodeC = std::make_unique<CallStatement>(5, "B");
@@ -123,19 +123,19 @@ TEST_CASE("Valid Source Program") {
         auto elseStmtList = std::make_unique<StatementList>(std::move(elseStatements));
 
         auto lhsIfExpr =
-            std::make_unique<MathExpression>("%", std::make_unique<Variable>("z"), std::make_unique<Constant>(2));
+            std::make_unique<MathExpression>(AppConstants::STRING_MODULO, std::make_unique<Variable>("z"), std::make_unique<Constant>(2));
         auto rhsIfExpr = std::make_unique<Constant>(0);
-        auto ifRelExprNode = std::make_unique<RelationalExpression>("==", std::move(lhsIfExpr), std::move(rhsIfExpr));
+        auto ifRelExprNode = std::make_unique<RelationalExpression>(AppConstants::EQUALS, std::move(lhsIfExpr), std::move(rhsIfExpr));
         auto ifStatementNode = std::make_unique<IfStatement>(4, std::move(ifRelExprNode), std::move(thenStmtList),
                                                              std::move(elseStmtList));
 
         auto leftRelExpr =
-            std::make_unique<RelationalExpression>("<", std::make_unique<Variable>("x"), std::make_unique<Constant>(7));
+            std::make_unique<RelationalExpression>(AppConstants::STRING_LESS, std::make_unique<Variable>("x"), std::make_unique<Constant>(7));
         auto leftCondExpr = std::make_unique<NotConditionalExpression>(std::move(leftRelExpr));
         auto rightCondExpr = std::make_unique<RelationalExpression>("<=", std::make_unique<Variable>("z"),
                                                                     std::make_unique<Constant>(12));
         auto binaryCondNode =
-            std::make_unique<BinaryConditionalExpression>("&&", std::move(leftCondExpr), std::move(rightCondExpr));
+            std::make_unique<BinaryConditionalExpression>(AppConstants::AND, std::move(leftCondExpr), std::move(rightCondExpr));
 
         std::vector<std::unique_ptr<Statement>> whileStatements;
         whileStatements.push_back(std::move(ifStatementNode));
@@ -194,8 +194,8 @@ TEST_CASE("Valid Source Program") {
 
         auto whileStmtList = std::make_unique<StatementList>(std::move(whileStatements));
         auto lhsExpr =
-            std::make_unique<MathExpression>("+", std::make_unique<Constant>(1), std::make_unique<Constant>(3));
-        auto relExpr = std::make_unique<RelationalExpression>("<", std::move(lhsExpr), std::make_unique<Constant>(2));
+            std::make_unique<MathExpression>(AppConstants::STRING_PLUS, std::make_unique<Constant>(1), std::make_unique<Constant>(3));
+        auto relExpr = std::make_unique<RelationalExpression>(AppConstants::STRING_LESS, std::move(lhsExpr), std::make_unique<Constant>(2));
         auto whileNode = std::make_unique<WhileStatement>(1, std::move(relExpr), std::move(whileStmtList));
 
         std::vector<std::unique_ptr<Statement>> statementsA;

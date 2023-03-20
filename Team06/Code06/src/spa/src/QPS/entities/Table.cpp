@@ -85,7 +85,7 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
                 key += c1[i][intersectingIndex.first];
             }
             else {
-                key += "+" + c1[i][intersectingIndex.first];
+                key += AppConstants::STRING_PLUS + c1[i][intersectingIndex.first];
             }
         }
         hashmap.insert({key, i});
@@ -102,7 +102,7 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
                 key += c2[i][intersectingIndex.second];
             }
             else {
-                key += "+" + c2[i][intersectingIndex.second];
+                key += AppConstants::STRING_PLUS + c2[i][intersectingIndex.second];
             }
         }
         auto range = hashmap.equal_range(key);

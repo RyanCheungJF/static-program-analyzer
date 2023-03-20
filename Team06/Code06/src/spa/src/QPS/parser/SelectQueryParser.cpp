@@ -87,7 +87,7 @@ vector<Parameter> SelectQueryParser::extractSelectTuple(vector<string>& wordList
         // recreates tuple string with whitespace removed
         tupleString += wordList[start];
     }
-    if (tupleString.back() != '>') {
+    if (tupleString.back() != AppConstants::GREATER) {
         throw SyntaxException();
     }
     // gets rid of <>
@@ -125,7 +125,7 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
         for (start; start < end; start++) {
             tupleString += " " + wordList[start];
         }
-        tie(ignore, paramStrings) = extractParameters(tupleString, "<", ">", ",");
+        tie(ignore, paramStrings) = extractParameters(tupleString, AppConstants::STRING_LESS, AppConstants::STRING_GREATER, ",");
         for (string synonym : paramStrings) {
             Parameter param = parseParameter(synonym);
             params.push_back(param);
@@ -160,7 +160,8 @@ vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<s
 
     vector<tuple<string, vector<string>>> relRefParams;
     for (int i = 0; i < unparsedRelRef.size(); i++) {
-        relRefParams.push_back(extractParameters(unparsedRelRef[i], "(", ")", ","));
+        relRefParams.push_back(extractParameters(unparsedRelRef[i], AppConstants::STRING_LEFT_PARENTHESIS,
+                                                 AppConstants::STRING_RIGHT_PARENTHESIS, ","));
     }
 
     for (int i = 0; i < relRefParams.size(); i++) {
@@ -198,7 +199,8 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
 
     vector<tuple<string, vector<string>>> patternParams;
     for (const auto& unparsedPattern : unparsedPatterns) {
-        patternParams.push_back(extractParameters(unparsedPattern, "(", ")", ","));
+        patternParams.push_back(extractParameters(unparsedPattern, AppConstants::STRING_LEFT_PARENTHESIS,
+                                                  AppConstants::STRING_RIGHT_PARENTHESIS, ","));
     }
 
     for (tuple<string, vector<string>> t : patternParams) {

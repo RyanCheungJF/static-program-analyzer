@@ -42,10 +42,10 @@ vector<Query> QPSParser::parse(string qpsQuery) {
 vector<string> QPSParser::splitQuery(string qpsQuery) {
     qpsQuery = trim(qpsQuery);
     // Check if the last term is a semicolon.
-    if (qpsQuery.back() == ';') {
+    if (qpsQuery.back() == AppConstants::SEMICOLON) {
         throw SyntaxException();
     }
-    string delimiter = ";";
+    string delimiter = AppConstants::STRING_SEMICOLON;
     vector<string> clauses;
     int start = 0;
     bool found;

@@ -68,8 +68,8 @@ TEST_CASE("Valid source program") {
         strStream << testFile.rdbuf();
 
         Token t1(TokenType::NOT);
-        Token t2(TokenType::BINARY_LOGICAL_OPR, "&&");
-        Token t3(TokenType::BINARY_LOGICAL_OPR, "||");
+        Token t2(TokenType::BINARY_LOGICAL_OPR, AppConstants::AND);
+        Token t3(TokenType::BINARY_LOGICAL_OPR, AppConstants::OR);
         Token t4(TokenType::ENDOFFILE);
 
         expectedTokens = {t1, t2, t3, t4};
@@ -83,12 +83,12 @@ TEST_CASE("Valid source program") {
         std::ifstream testFile(testDirectory.string() + "valid5.txt");
         strStream << testFile.rdbuf();
 
-        Token t1(TokenType::RELATIONAL_OPR, ">");
-        Token t2(TokenType::RELATIONAL_OPR, "<");
-        Token t3(TokenType::RELATIONAL_OPR, "==");
+        Token t1(TokenType::RELATIONAL_OPR, AppConstants::STRING_GREATER);
+        Token t2(TokenType::RELATIONAL_OPR, AppConstants::STRING_LESS);
+        Token t3(TokenType::RELATIONAL_OPR, AppConstants::EQUALS);
         Token t4(TokenType::RELATIONAL_OPR, "<=");
         Token t5(TokenType::RELATIONAL_OPR, ">=");
-        Token t6(TokenType::RELATIONAL_OPR, "!=");
+        Token t6(TokenType::RELATIONAL_OPR, AppConstants::NOT_EQUALS);
         Token t7(TokenType::ENDOFFILE);
 
         expectedTokens = {t1, t2, t3, t4, t5, t6, t7};
@@ -102,11 +102,11 @@ TEST_CASE("Valid source program") {
         std::ifstream testFile(testDirectory.string() + "valid6.txt");
         strStream << testFile.rdbuf();
 
-        Token t1(TokenType::TERM_ARITH_OPR, "%");
-        Token t2(TokenType::TERM_ARITH_OPR, "/");
-        Token t3(TokenType::TERM_ARITH_OPR, "*");
-        Token t4(TokenType::EXPR_ARITH_OPR, "-");
-        Token t5(TokenType::EXPR_ARITH_OPR, "+");
+        Token t1(TokenType::TERM_ARITH_OPR, AppConstants::STRING_MODULO);
+        Token t2(TokenType::TERM_ARITH_OPR, AppConstants::STRING_DIVIDE);
+        Token t3(TokenType::TERM_ARITH_OPR, AppConstants::STRING_MULTIPLY);
+        Token t4(TokenType::EXPR_ARITH_OPR, AppConstants::STRING_MINUS);
+        Token t5(TokenType::EXPR_ARITH_OPR, AppConstants::STRING_PLUS);
         Token t6(TokenType::ENDOFFILE);
 
         expectedTokens = {t1, t2, t3, t4, t5, t6};
@@ -146,7 +146,7 @@ TEST_CASE("Valid source program") {
         Token t6(TokenType::INTEGER, "1");
         Token t7(TokenType::SEMICOLON);
         Token t8(TokenType::NAME, "y");
-        Token t9(TokenType::RELATIONAL_OPR, "<");
+        Token t9(TokenType::RELATIONAL_OPR, AppConstants::STRING_LESS);
         Token t10(TokenType::NAME, "z");
         Token t11(TokenType::SEMICOLON);
         Token t12(TokenType::RIGHT_BRACE);
@@ -168,7 +168,7 @@ TEST_CASE("Valid source program") {
         Token t4(TokenType::NAME, "x");
         Token t5(TokenType::ASSIGN);
         Token t6(TokenType::INTEGER, "1");
-        Token t7(TokenType::EXPR_ARITH_OPR, "+");
+        Token t7(TokenType::EXPR_ARITH_OPR, AppConstants::STRING_PLUS);
         Token t8(TokenType::NAME, "y");
         Token t9(TokenType::SEMICOLON);
         Token t10(TokenType::RIGHT_BRACE);
@@ -190,19 +190,19 @@ TEST_CASE("Valid source program") {
         Token t4(TokenType::NAME, "a");
         Token t5(TokenType::ASSIGN);
         Token t6(TokenType::NAME, "x");
-        Token t7(TokenType::EXPR_ARITH_OPR, "+");
+        Token t7(TokenType::EXPR_ARITH_OPR, AppConstants::STRING_PLUS);
         Token t8(TokenType::NAME, "y");
         Token t9(TokenType::SEMICOLON);
         Token t10(TokenType::NAME, "a");
         Token t11(TokenType::ASSIGN);
         Token t12(TokenType::NAME, "x");
-        Token t13(TokenType::EXPR_ARITH_OPR, "+");
+        Token t13(TokenType::EXPR_ARITH_OPR, AppConstants::STRING_PLUS);
         Token t14(TokenType::NAME, "y");
         Token t15(TokenType::SEMICOLON);
         Token t16(TokenType::NAME, "a");
         Token t17(TokenType::ASSIGN);
         Token t18(TokenType::NAME, "x");
-        Token t19(TokenType::EXPR_ARITH_OPR, "+");
+        Token t19(TokenType::EXPR_ARITH_OPR, AppConstants::STRING_PLUS);
         Token t20(TokenType::NAME, "y");
         Token t21(TokenType::SEMICOLON);
         Token t22(TokenType::RIGHT_BRACE);
