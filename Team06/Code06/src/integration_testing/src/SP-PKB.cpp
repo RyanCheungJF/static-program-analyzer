@@ -257,6 +257,8 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
         REQUIRE(cfgC[5]["children"] == std::unordered_set({6}));
         REQUIRE(cfgC[6]["parents"] == std::unordered_set({5}));
         REQUIRE(cfgC[6]["children"].empty());
+
+        REQUIRE(cfgC[2]["children"].empty()); // boundary check
     }
 
     SECTION("SP-PKB Integration: Next") {

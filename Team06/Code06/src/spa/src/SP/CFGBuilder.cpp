@@ -1,11 +1,11 @@
 #include "CFGBuilder.h"
 
-CFGBuilder::CFGBuilder(WritePKB* writePKB, ReadPKB* readPKB) : writePkb(writePKB), readPkb(readPKB) {}
+CFGBuilder::CFGBuilder(WritePKB* writePKB) : writeApi(writePKB) {}
 
 void CFGBuilder::buildCFG(Procedure* proc) {
     buildCFGHelper(proc->statementList.get(), 0);
-    writePkb->writeCFG(proc->procedureName, cfg);
-    cfg = {};
+    writeApi->writeCFG(proc->procedureName, cfg);
+    cfg = {}; // Reset the CFG
 }
 
 void CFGBuilder::buildCFGHelper(StatementList* stmtList, StmtNum loopedStmtNum) {
