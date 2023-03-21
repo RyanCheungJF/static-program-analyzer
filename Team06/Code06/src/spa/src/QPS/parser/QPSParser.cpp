@@ -20,7 +20,6 @@ vector<Query> QPSParser::parse(string qpsQuery) {
         }
         else if (isSelect(queryStatement)) {
             Query query = selectQueryParser.parse(queryStatement);
-            // TODO: actually why does this even exist? its always only one i think
             queryVec.push_back(query);
         }
         else {
@@ -43,10 +42,10 @@ vector<Query> QPSParser::parse(string qpsQuery) {
 vector<string> QPSParser::splitQuery(string qpsQuery) {
     qpsQuery = trim(qpsQuery);
     // Check if the last term is a semicolon.
-    if (qpsQuery.back() == ';') {
+    if (qpsQuery.back() == AppConstants::SEMICOLON) {
         throw SyntaxException();
     }
-    string delimiter = ";";
+    string delimiter = AppConstants::STRING_SEMICOLON;
     vector<string> clauses;
     int start = 0;
     bool found;

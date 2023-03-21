@@ -79,6 +79,21 @@ public:
     inline static const char AMPERSAND = '&';
     inline static const char VERTICAL_BAR = '|';
 
+    inline static const std::string STRING_NOT = "!";
+    inline static const std::string STRING_GREATER = ">";
+    inline static const std::string STRING_LESS = "<";
+    inline static const std::string STRING_PLUS = "+";
+    inline static const std::string STRING_MINUS = "-";
+    inline static const std::string STRING_MULTIPLY = "*";
+    inline static const std::string STRING_DIVIDE = "/";
+    inline static const std::string STRING_MODULO = "%";
+    inline static const std::string STRING_LEFT_PARENTHESIS = "(";
+    inline static const std::string STRING_RIGHT_PARENTHESIS = ")";
+    inline static const std::string STRING_SEMICOLON = ";";
+    inline static const std::string STRING_EQUAL_SIGN = "=";
+    inline static const std::string STRING_AMPERSAND = "&";
+    inline static const std::string STRING_VERTICAL_BAR = "|";
+
     // CFG-related
     inline static const std::string PARENTS = "parents";
     inline static const std::string CHILDREN = "children";

@@ -110,40 +110,40 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 1")
     writePkb.writeCFG(proc1, graph1);
     writePkb.writeCFG(proc2, graph2);
 
-    writePkb.setStatement("while", 1);
-    writePkb.setStatement("assign", 2);
-    writePkb.setStatement("assign", 3);
-    writePkb.setStatement("if", 4);
-    writePkb.setStatement("assign", 5);
-    writePkb.setStatement("assign", 6);
-    writePkb.setStatement("assign", 7);
-    writePkb.setStatement("assign", 8);
-    writePkb.setStatement("assign", 9);
-    writePkb.setStatement("assign", 10);
-    writePkb.setStatement("assign", 11);
-    writePkb.setStatement("assign", 12);
-    writePkb.setStatement("assign", 13);
-    writePkb.setStatement("assign", 14);
-    writePkb.setStatement("read", 15);
-    writePkb.setStatement("call", 16);
+    writePkb.setStatement(AppConstants::WHILE, 1);
+    writePkb.setStatement(AppConstants::ASSIGN, 2);
+    writePkb.setStatement(AppConstants::ASSIGN, 3);
+    writePkb.setStatement(AppConstants::IF, 4);
+    writePkb.setStatement(AppConstants::ASSIGN, 5);
+    writePkb.setStatement(AppConstants::ASSIGN, 6);
+    writePkb.setStatement(AppConstants::ASSIGN, 7);
+    writePkb.setStatement(AppConstants::ASSIGN, 8);
+    writePkb.setStatement(AppConstants::ASSIGN, 9);
+    writePkb.setStatement(AppConstants::ASSIGN, 10);
+    writePkb.setStatement(AppConstants::ASSIGN, 11);
+    writePkb.setStatement(AppConstants::ASSIGN, 12);
+    writePkb.setStatement(AppConstants::ASSIGN, 13);
+    writePkb.setStatement(AppConstants::ASSIGN, 14);
+    writePkb.setStatement(AppConstants::READ, 15);
+    writePkb.setStatement(AppConstants::CALL, 16);
     writePkb.setCall(16, proc2);
-    writePkb.setStatement("print", 17);
-    writePkb.setStatement("assign", 18);
-    writePkb.setStatement("assign", 19);
-    writePkb.setStatement("assign", 20);
-    writePkb.setStatement("call", 21);
+    writePkb.setStatement(AppConstants::PRINT, 17);
+    writePkb.setStatement(AppConstants::ASSIGN, 18);
+    writePkb.setStatement(AppConstants::ASSIGN, 19);
+    writePkb.setStatement(AppConstants::ASSIGN, 20);
+    writePkb.setStatement(AppConstants::CALL, 21);
     writePkb.setCall(21, proc2);
-    writePkb.setStatement("assign", 22);
-    writePkb.setStatement("if", 23);
-    writePkb.setStatement("assign", 24);
-    writePkb.setStatement("assign", 25);
-    writePkb.setStatement("assign", 26);
-    writePkb.setStatement("print", 27);
-    writePkb.setStatement("print", 28);
+    writePkb.setStatement(AppConstants::ASSIGN, 22);
+    writePkb.setStatement(AppConstants::IF, 23);
+    writePkb.setStatement(AppConstants::ASSIGN, 24);
+    writePkb.setStatement(AppConstants::ASSIGN, 25);
+    writePkb.setStatement(AppConstants::ASSIGN, 26);
+    writePkb.setStatement(AppConstants::PRINT, 27);
+    writePkb.setStatement(AppConstants::PRINT, 28);
 
     writePkb.setProcedure(
         proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27});
-    writePkb.setStatement("assign", 28);
+    writePkb.setStatement(AppConstants::ASSIGN, 28);
     writePkb.setProcedure(proc2, {28});
 
     writePkb.setModifiesS(1, {"y", "x", "v"});
@@ -578,33 +578,33 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 2")
     writePkb.writeCFG(proc2, graphTwo);
     writePkb.writeCFG(proc3, graphThree);
 
-    writePkb.setStatement("assign", 1);
-    writePkb.setStatement("assign", 2);
-    writePkb.setStatement("assign", 3);
-    writePkb.setStatement("assign", 4);
-    writePkb.setStatement("while", 5);
-    writePkb.setStatement("print", 6);
-    writePkb.setStatement("assign", 7);
-    writePkb.setStatement("call", 8);
+    writePkb.setStatement(AppConstants::ASSIGN, 1);
+    writePkb.setStatement(AppConstants::ASSIGN, 2);
+    writePkb.setStatement(AppConstants::ASSIGN, 3);
+    writePkb.setStatement(AppConstants::ASSIGN, 4);
+    writePkb.setStatement(AppConstants::WHILE, 5);
+    writePkb.setStatement(AppConstants::PRINT, 6);
+    writePkb.setStatement(AppConstants::ASSIGN, 7);
+    writePkb.setStatement(AppConstants::CALL, 8);
     writePkb.setCall(8, proc2);
-    writePkb.setStatement("call", 9);
+    writePkb.setStatement(AppConstants::CALL, 9);
     writePkb.setCall(9, proc3);
-    writePkb.setStatement("call", 10);
+    writePkb.setStatement(AppConstants::CALL, 10);
 
-    writePkb.setStatement("assign", 11);
-    writePkb.setStatement("assign", 12);
-    writePkb.setStatement("assign", 13);
-    writePkb.setStatement("assign", 14);
-    writePkb.setStatement("read", 15);
-    writePkb.setStatement("if", 16);
-    writePkb.setStatement("call", 17);
+    writePkb.setStatement(AppConstants::ASSIGN, 11);
+    writePkb.setStatement(AppConstants::ASSIGN, 12);
+    writePkb.setStatement(AppConstants::ASSIGN, 13);
+    writePkb.setStatement(AppConstants::ASSIGN, 14);
+    writePkb.setStatement(AppConstants::READ, 15);
+    writePkb.setStatement(AppConstants::IF, 16);
+    writePkb.setStatement(AppConstants::CALL, 17);
     writePkb.setCall(17, proc3);
-    writePkb.setStatement("call", 18);
-    writePkb.setStatement("assign", 19);
+    writePkb.setStatement(AppConstants::CALL, 18);
+    writePkb.setStatement(AppConstants::ASSIGN, 19);
 
-    writePkb.setStatement("assign", 20);
-    writePkb.setStatement("assign", 21);
-    writePkb.setStatement("call", 22);
+    writePkb.setStatement(AppConstants::ASSIGN, 20);
+    writePkb.setStatement(AppConstants::ASSIGN, 21);
+    writePkb.setStatement(AppConstants::CALL, 22);
 
     writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
     writePkb.setProcedure(proc2, {11, 12, 13, 14, 15, 16, 17, 18, 19});
@@ -752,14 +752,14 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 3")
     ProcName proc1 = "One";
     writePkb.writeCFG(proc1, graphOne);
 
-    writePkb.setStatement("while", 1);
-    writePkb.setStatement("assign", 2);
-    writePkb.setStatement("while", 3);
-    writePkb.setStatement("while", 4);
-    writePkb.setStatement("assign", 5);
-    writePkb.setStatement("assign", 6);
-    writePkb.setStatement("assign", 7);
-    writePkb.setStatement("assign", 8);
+    writePkb.setStatement(AppConstants::WHILE, 1);
+    writePkb.setStatement(AppConstants::ASSIGN, 2);
+    writePkb.setStatement(AppConstants::WHILE, 3);
+    writePkb.setStatement(AppConstants::WHILE, 4);
+    writePkb.setStatement(AppConstants::ASSIGN, 5);
+    writePkb.setStatement(AppConstants::ASSIGN, 6);
+    writePkb.setStatement(AppConstants::ASSIGN, 7);
+    writePkb.setStatement(AppConstants::ASSIGN, 8);
 
     writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8});
 
@@ -931,18 +931,18 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* Tem
     ProcName proc1 = "One";
     writePkb.writeCFG(proc1, graphOne);
 
-    writePkb.setStatement("assign", 1);
-    writePkb.setStatement("if", 2);
-    writePkb.setStatement("assign", 3);
-    writePkb.setStatement("if", 4);
-    writePkb.setStatement("assign", 5);
-    writePkb.setStatement("assign", 6);
-    writePkb.setStatement("assign", 7);
-    writePkb.setStatement("assign", 8);
-    writePkb.setStatement("assign", 9);
-    writePkb.setStatement("assign", 10);
-    writePkb.setStatement("assign", 11);
-    writePkb.setStatement("assign", 12);
+    writePkb.setStatement(AppConstants::ASSIGN, 1);
+    writePkb.setStatement(AppConstants::IF, 2);
+    writePkb.setStatement(AppConstants::ASSIGN, 3);
+    writePkb.setStatement(AppConstants::IF, 4);
+    writePkb.setStatement(AppConstants::ASSIGN, 5);
+    writePkb.setStatement(AppConstants::ASSIGN, 6);
+    writePkb.setStatement(AppConstants::ASSIGN, 7);
+    writePkb.setStatement(AppConstants::ASSIGN, 8);
+    writePkb.setStatement(AppConstants::ASSIGN, 9);
+    writePkb.setStatement(AppConstants::ASSIGN, 10);
+    writePkb.setStatement(AppConstants::ASSIGN, 11);
+    writePkb.setStatement(AppConstants::ASSIGN, 12);
 
     writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
 
@@ -1102,17 +1102,17 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 5")
     ProcName proc1 = "One";
     writePkb.writeCFG(proc1, graphOne);
 
-    writePkb.setStatement("while", 1);
-    writePkb.setStatement("if", 2);
-    writePkb.setStatement("assign", 3);
-    writePkb.setStatement("call", 4);
-    writePkb.setStatement("if", 5);
-    writePkb.setStatement("call", 6);
-    writePkb.setStatement("assign", 7);
-    writePkb.setStatement("assign", 8);
-    writePkb.setStatement("print", 9);
-    writePkb.setStatement("call", 10);
-    writePkb.setStatement("read", 11);
+    writePkb.setStatement(AppConstants::WHILE, 1);
+    writePkb.setStatement(AppConstants::IF, 2);
+    writePkb.setStatement(AppConstants::ASSIGN, 3);
+    writePkb.setStatement(AppConstants::CALL, 4);
+    writePkb.setStatement(AppConstants::IF, 5);
+    writePkb.setStatement(AppConstants::CALL, 6);
+    writePkb.setStatement(AppConstants::ASSIGN, 7);
+    writePkb.setStatement(AppConstants::ASSIGN, 8);
+    writePkb.setStatement(AppConstants::PRINT, 9);
+    writePkb.setStatement(AppConstants::CALL, 10);
+    writePkb.setStatement(AppConstants::READ, 11);
 
     writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
 
@@ -1281,40 +1281,40 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* sys
     writePkb.writeCFG(proc1, graphOne);
     ProcName proc2 = "noindent";
     writePkb.writeCFG(proc2, graphTwo);
-    ProcName proc3 = "call";
+    ProcName proc3 = AppConstants::CALL;
     writePkb.writeCFG(proc3, graphThree);
 
-    writePkb.setStatement("read", 1);
-    writePkb.setStatement("read", 2);
-    writePkb.setStatement("read", 3);
-    writePkb.setStatement("if", 4);
-    writePkb.setStatement("read", 5);
-    writePkb.setStatement("read", 6);
-    writePkb.setStatement("read", 7);
-    writePkb.setStatement("assign", 8);
-    writePkb.setStatement("call", 9);
-    writePkb.setStatement("print", 10);
-    writePkb.setStatement("call", 11);
-    writePkb.setStatement("assign", 12);
+    writePkb.setStatement(AppConstants::READ, 1);
+    writePkb.setStatement(AppConstants::READ, 2);
+    writePkb.setStatement(AppConstants::READ, 3);
+    writePkb.setStatement(AppConstants::IF, 4);
+    writePkb.setStatement(AppConstants::READ, 5);
+    writePkb.setStatement(AppConstants::READ, 6);
+    writePkb.setStatement(AppConstants::READ, 7);
+    writePkb.setStatement(AppConstants::ASSIGN, 8);
+    writePkb.setStatement(AppConstants::CALL, 9);
+    writePkb.setStatement(AppConstants::PRINT, 10);
+    writePkb.setStatement(AppConstants::CALL, 11);
+    writePkb.setStatement(AppConstants::ASSIGN, 12);
 
-    writePkb.setStatement("call", 13);
-    writePkb.setStatement("call", 14);
-    writePkb.setStatement("call", 15);
-    writePkb.setStatement("assign", 16);
-    writePkb.setStatement("assign", 17);
-    writePkb.setStatement("while", 18);
-    writePkb.setStatement("call", 19);
-    writePkb.setStatement("assign", 20);
-    writePkb.setStatement("print", 21);
-    writePkb.setStatement("assign", 22);
-    writePkb.setStatement("assign", 23);
-    writePkb.setStatement("if", 24);
-    writePkb.setStatement("assign", 25);
-    writePkb.setStatement("assign", 26);
-    writePkb.setStatement("print", 27);
-    writePkb.setStatement("print", 28);
+    writePkb.setStatement(AppConstants::CALL, 13);
+    writePkb.setStatement(AppConstants::CALL, 14);
+    writePkb.setStatement(AppConstants::CALL, 15);
+    writePkb.setStatement(AppConstants::ASSIGN, 16);
+    writePkb.setStatement(AppConstants::ASSIGN, 17);
+    writePkb.setStatement(AppConstants::WHILE, 18);
+    writePkb.setStatement(AppConstants::CALL, 19);
+    writePkb.setStatement(AppConstants::ASSIGN, 20);
+    writePkb.setStatement(AppConstants::PRINT, 21);
+    writePkb.setStatement(AppConstants::ASSIGN, 22);
+    writePkb.setStatement(AppConstants::ASSIGN, 23);
+    writePkb.setStatement(AppConstants::IF, 24);
+    writePkb.setStatement(AppConstants::ASSIGN, 25);
+    writePkb.setStatement(AppConstants::ASSIGN, 26);
+    writePkb.setStatement(AppConstants::PRINT, 27);
+    writePkb.setStatement(AppConstants::PRINT, 28);
 
-    writePkb.setStatement("assign", 29);
+    writePkb.setStatement(AppConstants::ASSIGN, 29);
 
     writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12});
     writePkb.setProcedure(proc2, {113, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28});
@@ -1359,17 +1359,17 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* sys
     //    writePkb.setUsesS(1, {});
     //    writePkb.setUsesS(2, {});
     //    writePkb.setUsesS(3, {});
-    writePkb.setUsesS(4, {"p0licemAN", "p0liceWahMan", "rEaD", "read", "i", "N", "x", "y", "print"});
+    writePkb.setUsesS(4, {"p0licemAN", "p0liceWahMan", "rEaD", "read", "i", "N", "x", "y", AppConstants::PRINT});
     //    writePkb.setUsesS(5, {});
     //    writePkb.setUsesS(6, {});
     //    writePkb.setUsesS(7, {});
-    writePkb.setUsesS(8, {"rEaD", "read"});
+    writePkb.setUsesS(8, {"rEaD", "read"}); // rEeeeaD
     writePkb.setUsesS(9, {"i", "N", "x", "y"});
-    writePkb.setUsesS(10, {"print"});
+    writePkb.setUsesS(10, {AppConstants::PRINT});
     //    writePkb.setUsesS(11, {});
     //    writePkb.setUsesS(12, {});
-    writePkb.setUsesP(proc1,
-                      {"i", "N", "x", "y", "p0licemAN", "p0liceWahMan", "rEaD", "read", "i", "N", "x", "y", "print"});
+    writePkb.setUsesP(proc1, {"i", "N", "x", "y", "p0licemAN", "p0liceWahMan", "rEaD", "read", "i", "N", "x", "y",
+                              AppConstants::PRINT});
 
     //    writePkb.setUsesS(13, {});
     //    writePkb.setUsesS(14, {});

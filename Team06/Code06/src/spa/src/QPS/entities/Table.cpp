@@ -5,9 +5,10 @@
 Table::Table(vector<Parameter> headers, vector<vector<string>> contents) {
     vector<int> duplicateIndexes;
     for (int i = 0; i < headers.size(); i++) {
-        if(!hasParameter(headers[i])) {
+        if (!hasParameter(headers[i])) {
             this->headers.push_back(headers[i]);
-        } else {
+        }
+        else {
             duplicateIndexes.push_back(i);
         }
     }
@@ -84,7 +85,7 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
                 key += c1[i][intersectingIndex.first];
             }
             else {
-                key += "+" + c1[i][intersectingIndex.first];
+                key += AppConstants::STRING_PLUS + c1[i][intersectingIndex.first];
             }
         }
         hashmap.insert({key, i});
@@ -101,7 +102,7 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
                 key += c2[i][intersectingIndex.second];
             }
             else {
-                key += "+" + c2[i][intersectingIndex.second];
+                key += AppConstants::STRING_PLUS + c2[i][intersectingIndex.second];
             }
         }
         auto range = hashmap.equal_range(key);

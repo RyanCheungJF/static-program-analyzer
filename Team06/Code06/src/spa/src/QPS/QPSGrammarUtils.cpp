@@ -23,7 +23,7 @@ bool isSynonym(string s) {
 }
 
 bool isTupleStart(string s) {
-    return s[0] == '<';
+    return s[0] == AppConstants::LESS;
 }
 
 bool isBoolean(string s) {
@@ -50,10 +50,10 @@ bool hasBalancedBrackets(string s) {
     int balance = 0;
     for (int i = 0; i < s.size(); i++) {
         char c = s[i];
-        if (c == '(') {
+        if (c == AppConstants::LEFT_PARENTHESIS) {
             balance += 1;
         }
-        else if (c == ')') {
+        else if (c == AppConstants::RIGHT_PARENTHESIS) {
             balance -= 1;
         }
         if (balance < 0) {
@@ -174,14 +174,14 @@ bool isExpr(string s) {
     // finds the first + or - from the back where there are no brackets
     // encapsulating them.
     for (int i = s.size() - 1; i >= 0; i--) {
-        if ((s[i] == '+' || s[i] == '-') && bracketsCounter == 0) {
+        if ((s[i] == AppConstants::PLUS || s[i] == AppConstants::MINUS) && bracketsCounter == 0) {
             index = i;
             break;
         }
-        if (s[i] == '(') {
+        if (s[i] == AppConstants::LEFT_PARENTHESIS) {
             bracketsCounter--;
         }
-        else if (s[i] == ')') {
+        else if (s[i] == AppConstants::RIGHT_PARENTHESIS) {
             bracketsCounter++;
         }
     }
@@ -208,14 +208,15 @@ bool isTerm(string s) {
     int index = -1;
     int bracketsCounter = 0;
     for (int i = s.size() - 1; i >= 0; i--) {
-        if ((s[i] == '*' || s[i] == '/' || s[i] == '%') && bracketsCounter == 0) {
+        if ((s[i] == AppConstants::MULTIPLY || s[i] == AppConstants::DIVIDE || s[i] == AppConstants::MODULO) &&
+            bracketsCounter == 0) {
             index = i;
             break;
         }
-        if (s[i] == '(') {
+        if (s[i] == AppConstants::LEFT_PARENTHESIS) {
             bracketsCounter--;
         }
-        else if (s[i] == ')') {
+        else if (s[i] == AppConstants::RIGHT_PARENTHESIS) {
             bracketsCounter++;
         }
     }
@@ -239,7 +240,7 @@ bool isFactor(string s) {
     }
     // recursively remove brackets
     bool hasBrackets = false;
-    if (s[0] == '(' && s[s.size() - 1] == ')') {
+    if (s[0] == AppConstants::LEFT_PARENTHESIS && s[s.size() - 1] == AppConstants::RIGHT_PARENTHESIS) {
         hasBrackets = true;
         s = s.substr(1, s.size() - 2);
     }

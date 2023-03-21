@@ -23,14 +23,14 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next") {
 
     ProcName proc1 = "proc1";
     writePkb.writeCFG(proc1, graph1);
-    writePkb.setStatement("if", 1);
-    writePkb.setStatement("assign", 2);
-    writePkb.setStatement("read", 3);
-    writePkb.setStatement("print", 4);
-    writePkb.setStatement("call", 5);
-    writePkb.setStatement("while", 6);
-    writePkb.setStatement("assign", 7);
-    writePkb.setStatement("print", 8);
+    writePkb.setStatement(AppConstants::IF, 1);
+    writePkb.setStatement(AppConstants::ASSIGN, 2);
+    writePkb.setStatement(AppConstants::READ, 3);
+    writePkb.setStatement(AppConstants::PRINT, 4);
+    writePkb.setStatement(AppConstants::CALL, 5);
+    writePkb.setStatement(AppConstants::WHILE, 6);
+    writePkb.setStatement(AppConstants::ASSIGN, 7);
+    writePkb.setStatement(AppConstants::PRINT, 8);
     writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8});
 
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph2 = {
@@ -41,10 +41,10 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next") {
 
     ProcName proc2 = "proc2";
     writePkb.writeCFG(proc2, graph2);
-    writePkb.setStatement("while", 9);
-    writePkb.setStatement("assign", 10);
-    writePkb.setStatement("assign", 11);
-    writePkb.setStatement("print", 12);
+    writePkb.setStatement(AppConstants::WHILE, 9);
+    writePkb.setStatement(AppConstants::ASSIGN, 10);
+    writePkb.setStatement(AppConstants::ASSIGN, 11);
+    writePkb.setStatement(AppConstants::PRINT, 12);
     writePkb.setProcedure(proc2, {9, 10, 11, 12});
 
     SECTION("Next(int, int)") {
