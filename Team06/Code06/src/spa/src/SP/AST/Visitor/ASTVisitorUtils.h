@@ -32,11 +32,6 @@ void populateUsesModifies(WritePKB* writePKB, ReadPKB* readPKB, std::vector<Proc
 void processProcedures(WritePKB* writePKB, ReadPKB* readPKB, std::vector<ProcName> order);
 void processContainerStatements(WritePKB* writePKB, ReadPKB* readPKB);
 bool isContainerStatement(Statement* statement);
-void buildCFG(Procedure* proc, WritePKB* writePKB, ReadPKB* readPKB);
-void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
-                    StatementList* stmtList, StmtNum loopedStmtNum);
-void connectNodesForCFG(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
-                        StmtNum curr, StmtNum next);
 void validateNoDuplicateProcedureName(std::vector<ProcName>& procedureNames);
 void validateCalledProceduresExist(std::vector<ProcName>& procedureNames,
                                    std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap);

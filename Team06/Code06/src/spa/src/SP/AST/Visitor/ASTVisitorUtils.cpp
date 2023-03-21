@@ -124,47 +124,6 @@ void processContainerStatements(WritePKB* writePKB, ReadPKB* readPKB) {
     }
 }
 
-void buildCFG(Procedure* proc, WritePKB* writePKB, ReadPKB* readPKB) {
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> cfg;
-    buildCFGHelper(cfg, proc->statementList.get(), 0);
-    writePKB->writeCFG(proc->procedureName, cfg);
-}
-
-void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
-                    StatementList* stmtList, StmtNum loopedStmtNum) {
-    StmtNum lastStmtNum = stmtList->getLastStatementNumber();
-    for (int i = 0; i < stmtList->statements.size(); i++) {
-        StmtNum currStmtNum = stmtList->getStmtNumForStmtIdx(i);
-        StmtNum nextStmtNum = currStmtNum != lastStmtNum ? stmtList->getStmtNumForStmtIdx(i + 1) : 0;
-
-        if (const auto ifStmt = CAST_TO(IfStatement, stmtList->getStmtForStmtIdx(i))) {
-            connectNodesForCFG(cfg, currStmtNum, ifStmt->getFirstStmtNumForThen());
-            connectNodesForCFG(cfg, currStmtNum, ifStmt->getFirstStmtNumForElse());
-            buildCFGHelper(cfg, ifStmt->thenStmtList.get(), nextStmtNum == 0 ? loopedStmtNum : nextStmtNum);
-            buildCFGHelper(cfg, ifStmt->elseStmtList.get(), nextStmtNum == 0 ? loopedStmtNum : nextStmtNum);
-        }
-        else {
-            if (nextStmtNum != 0) {
-                connectNodesForCFG(cfg, currStmtNum, nextStmtNum);
-            }
-            else if (loopedStmtNum != 0) {
-                connectNodesForCFG(cfg, currStmtNum, loopedStmtNum);
-            }
-        }
-
-        if (const auto whileStmt = CAST_TO(WhileStatement, stmtList->getStmtForStmtIdx(i))) {
-            connectNodesForCFG(cfg, currStmtNum, whileStmt->getFirstStmtNumForList());
-            buildCFGHelper(cfg, whileStmt->stmtList.get(), currStmtNum);
-        }
-    }
-}
-
-void connectNodesForCFG(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
-                        StmtNum curr, StmtNum next) {
-    cfg[curr][AppConstants::CHILDREN].insert(next);
-    cfg[next][AppConstants::PARENTS].insert(curr);
-}
-
 void validateNoDuplicateProcedureName(std::vector<ProcName>& procedureNames) {
     if (procedureNames.size() > std::unordered_set<ProcName>(procedureNames.begin(), procedureNames.end()).size()) {
         throw SemanticErrorException("A program cannot have two procedures with the same name.");

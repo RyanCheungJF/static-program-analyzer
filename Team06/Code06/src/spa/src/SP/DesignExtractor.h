@@ -8,6 +8,7 @@
 #include "AST/Visitor/ParentExtractorVisitor.h"
 #include "AST/Visitor/ProcedureExtractorVisitor.h"
 #include "AST/Visitor/StatementExtractorVisitor.h"
+#include "CFGBuilder.h"
 
 class DesignExtractor {
 private:

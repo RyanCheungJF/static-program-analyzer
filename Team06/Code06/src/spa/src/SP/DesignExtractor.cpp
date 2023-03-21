@@ -70,7 +70,8 @@ void DesignExtractor::extractInfo() {
 }
 
 void DesignExtractor::extractCFG() {
+    auto cfgBuilder = CFGBuilder(writePkb, readPkb);
     for (const auto& procedure : ASTroot->procedureList) {
-        buildCFG(procedure.get(), writePkb, readPkb);
+        cfgBuilder.buildCFG(procedure.get());
     }
 }
