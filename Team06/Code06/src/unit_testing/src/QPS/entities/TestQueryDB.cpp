@@ -180,8 +180,7 @@ TEST_CASE("insertTable / insert tables with empty content / tables can still "
     vector<vector<string>> content3 = {};
     vector<Parameter> params1 = {Parameter("s1", ParameterType::STMT), Parameter("x", ParameterType::VARIABLE)};
     vector<Parameter> params2 = {Parameter("s2", ParameterType::STMT), Parameter("y", ParameterType::VARIABLE)};
-    vector<Parameter> params3 = {Parameter("s2", ParameterType::STMT), Parameter("s1", ParameterType::STMT)};
-    Table t1(params1, content1);
+    vector<Parameter> params3 = {Parameter("s2", ParameterType::STMT), Parameter("s1", ParameterType::STMT)};Table t1(params1, content1);
     Table t2(params2, content2);
     Table t3(params3, content3);
     qdb.insertTable(t1);
@@ -192,4 +191,73 @@ TEST_CASE("insertTable / insert tables with empty content / tables can still "
     bool c = qdb.fetch({Parameter("x", ParameterType::VARIABLE)}, readPKB).empty();
     bool d = qdb.fetch({Parameter("y", ParameterType::VARIABLE)}, readPKB).empty();
     REQUIRE((a && b && c && d));
+}
+
+TEST_CASE("insertTable / insert tables with with content / tables correctly insert and fetch "
+          "be inserted without content") {
+    // this is based of systemTest 1'
+    // while w1, w2, w3;
+    // Select <w1, w2, w3> such that Parent*(w1, w2) and Parent*(w2, w3)
+    QueryDB qdb;
+    ReadPKB readPKB;
+    vector<vector<string>> content1 = {{"25", "27"}, {"25", "30"}, {"25", "34"},
+                                       {"27", "30"}, {"27", "34"},
+                                       {"30", "34"}};
+    vector<Parameter> params1 = {Parameter("w1", ParameterType::WHILE), Parameter("w2", ParameterType::WHILE)};
+    vector<Parameter> params2 = {Parameter("w2", ParameterType::WHILE), Parameter("w3", ParameterType::WHILE)};
+    Table t1(params1, content1);
+    Table t2(params2, content1);
+    qdb.insertTable(t1);
+    qdb.insertTable(t2);
+    vector<string> res = qdb.fetch({
+                                           Parameter("w1", ParameterType::WHILE),
+                                           Parameter("w2", ParameterType::WHILE),
+                                           Parameter("w3", ParameterType::WHILE)
+                                   }, readPKB);
+    REQUIRE(find(res.begin(), res.end(), "25 27 30") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "25 27 34") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "25 30 34") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "27 30 34") != res.end());
+}
+
+TEST_CASE("insertTable / insert tables with with content, non intersecting / tables correctly insert and fetch "
+          "be inserted without content") {
+    // this is based of systemTest 1'
+    // while w1, w2, w3;
+    // Select <w1, w2, w3> such that Parent*(w1, w2) and Parent*(w3, 34)
+    QueryDB qdb;
+    ReadPKB readPKB;
+    vector<vector<string>> content1 = {{"25", "27"}, {"25", "30"}, {"25", "34"},
+                                       {"27", "30"}, {"27", "34"},
+                                       {"30", "34"}};
+    vector<vector<string>> content2 = {{"25"}, {"27"}, {"30"}};
+    vector<Parameter> params1 = {Parameter("w1", ParameterType::WHILE), Parameter("w2", ParameterType::WHILE)};
+    vector<Parameter> params2 = {Parameter("w3", ParameterType::WHILE)};
+    Table t1(params1, content1);
+    Table t2(params2, content2);
+    qdb.insertTable(t2);
+    qdb.insertTable(t1);
+    vector<string> res = qdb.fetch({
+                                           Parameter("w1", ParameterType::WHILE),
+                                           Parameter("w2", ParameterType::WHILE),
+                                           Parameter("w3", ParameterType::WHILE)
+                                   }, readPKB);
+    REQUIRE(find(res.begin(), res.end(), "25 27 25") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "25 30 25") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "25 34 25") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "27 30 25") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "27 34 25") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "30 34 25") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "25 27 27") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "25 30 27") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "25 34 27") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "27 30 27") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "27 34 27") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "30 34 27") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "25 27 30") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "25 30 30") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "25 34 30") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "27 30 30") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "27 34 30") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "30 34 30") != res.end());
 }
