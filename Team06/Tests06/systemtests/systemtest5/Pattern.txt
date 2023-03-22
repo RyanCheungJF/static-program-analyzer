@@ -113,3 +113,8 @@ assign a;
 Select a pattern a("l", _"x + y + z + u"_)
 18
 5000
+24 - syn-assign is pattern
+assign pattern; 
+Select pattern pattern pattern("l", _"x + y + z + u"_)
+18
+5000

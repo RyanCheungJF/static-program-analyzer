@@ -207,11 +207,21 @@ std::unique_ptr<ConditionalExpression> Parser::parseBinaryConditionalExpression(
      * handle this case here, by iterating through the nested expression, to
      * check for a relational operator. If there isn't any, then we should parse
      * it as a relational expression */
-    int idx = 0;
+    int stack = 1;
+    int idx = 1;
     bool parseAsRelExprFlag = true;
-    while (!tokens.at(idx).isType(TokenType::RIGHT_PARENTHESIS)) {
+    while (stack != 0) {
+        if (tokens.at(idx).isType(TokenType::LEFT_PARENTHESIS)) {
+            stack++;
+        }
+        if (tokens.at(idx).isType(TokenType::RIGHT_PARENTHESIS)) {
+            stack--;
+        }
         if (tokens.at(idx).isType(TokenType::RELATIONAL_OPR)) {
             parseAsRelExprFlag = false;
+        }
+        if (tokens.at(idx).isType(TokenType::ENDOFFILE)) {
+            throw SyntaxErrorException("Error in parsing binary conditional expression");
         }
         idx++;
     }
@@ -333,9 +343,14 @@ std::unique_ptr<Expression> Parser::parseFactor(std::deque<Token>& tokens) {
 
 std::unique_ptr<Expression> Parser::parseConstant(std::deque<Token>& tokens) {
     // Rule: INTEGER
-    Const value = stoi(tokens.front().value);
-    tokens.pop_front();
-    return std::make_unique<Constant>(value);
+    try {
+        Const value = stoi(tokens.front().value);
+        tokens.pop_front();
+        return std::make_unique<Constant>(value);
+    } catch (std::out_of_range e) {
+        throw SyntaxErrorException(
+            "Parsing failed, this SPA does not support integers greater than INT_MAX (2147483647)");
+    }
 }
 
 std::unique_ptr<Expression> Parser::parseVariable(std::deque<Token>& tokens) {

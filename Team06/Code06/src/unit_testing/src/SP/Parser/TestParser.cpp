@@ -807,6 +807,21 @@ TEST_CASE("Invalid Source Program") {
 
         REQUIRE(errorMessage.find("Expected ')' in factor") != std::string::npos);
     }
+
+    SECTION("Integer overflow") {
+        std::ifstream testFile(testDirectory.string() + "invalid39.txt");
+        strStream << testFile.rdbuf();
+        tokenQueue = testTokenizer.tokenize(strStream);
+
+        try {
+            testParser.parseProgram(tokenQueue);
+        } catch (SyntaxErrorException e) {
+            errorMessage = e.what();
+        }
+
+        REQUIRE(errorMessage.find("SPA does not support integers greater than INT_MAX (2147483647)") !=
+                std::string::npos);
+    }
 }
 
 bool checkIfSameExpression(std::unique_ptr<Expression> expectedExpression,
