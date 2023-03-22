@@ -202,12 +202,13 @@ std::unique_ptr<ConditionalExpression> Parser::parseConditionalExpression(std::d
 }
 
 std::unique_ptr<ConditionalExpression> Parser::parseBinaryConditionalExpression(std::deque<Token>& tokens) {
-    /* SIMPLE grammar is slightly complicated, as something like (3 + 2) > 0
-     * would get wrongly parsed as a cond_expr, instead of rel_expr, thus we
-     * handle this case here, by iterating through the nested expression, to
-     * check for a relational operator. If there isn't any, then we should parse
-     * it as a relational expression */
-    int stack = 1;
+    /* SIMPLE grammar is slightly complicated, as something like (3 + 2) > 0 would get
+     * wrongly parsed as a cond_expr, instead of rel_expr, thus we handle this case here,
+     * by iterating through the nested expression, to check for a relational operator.
+     * If there isn't any before the corresponding ), then we should parse it as a relational
+     * expression. Note it has to be the corresponding ), as something like
+     * ((a + b) > 3) && ((a + b) < 5) should be parsed as a binary conditional expression */
+    int stack = 1; // Start with '(' in stack
     int idx = 1;
     bool parseAsRelExprFlag = true;
     while (stack != 0) {
