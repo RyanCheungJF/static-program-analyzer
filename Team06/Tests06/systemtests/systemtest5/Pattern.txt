@@ -88,3 +88,28 @@ assign a;
 Select a pattern a("h", _"a * c"_)
 45
 5000
+19 - check left-associative (3)
+assign a; 
+Select a pattern a("l", _"x + y + z"_)
+18
+5000
+20 - check left-associative (4)
+assign a; 
+Select a pattern a("l", _"y + z"_)
+none
+5000
+21 - check left-associative (5)
+assign a; 
+Select a pattern a("l", _"z + u"_)
+none
+5000
+22 - check left-associative (6)
+assign a; 
+Select a pattern a("l", _"y + z + u + a + b"_)
+none
+5000
+23 - check left-associative (7)
+assign a; 
+Select a pattern a("l", _"x + y + z + u"_)
+18
+5000
