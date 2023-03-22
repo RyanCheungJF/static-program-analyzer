@@ -343,3 +343,28 @@ print p; read r; call c; assign a;
 Select a such that Affects(r, 15)
 SemanticError
 5000
+66 - Invalid design entity
+ifs if; read r; 
+Select r such that Follows* (r, if)
+SyntaxError
+5000
+67 - Invalid design entity
+read r; ifs if; while w; 
+Select r such that Follows* (r, if)
+SyntaxError
+5000
+68 - Invalid design entity
+whiles w; ifs if; read r; 
+Select r such that Follows* (r, if)
+SyntaxError
+5000
+69 - Invalid design entity
+if ifs; ifs if; read r; 
+Select r such that Follows* (r, if)
+SyntaxError
+5000
+70 - comment
+call c; procedure p; while w;
+Select BOOLEAN such that Affects(5, 7) and Affects*("conditionalSpam", 16) and Modifies("unknown", "b") and Uses(30, "while")
+SyntaxError
+5000
