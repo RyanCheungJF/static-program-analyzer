@@ -3,8 +3,21 @@
 #include <utility>
 
 Table::Table(vector<Parameter> headers, vector<vector<string>> contents) {
-    this->headers = std::move(headers);
-    this->contents = std::move(contents);
+    vector<int> duplicateIndexes;
+    for (int i = 0; i < headers.size(); i++) {
+        if (!hasParameter(headers[i])) {
+            this->headers.push_back(headers[i]);
+        }
+        else {
+            duplicateIndexes.push_back(i);
+        }
+    }
+    for (vector<string> content : contents) {
+        for (int index : duplicateIndexes) {
+            content.erase(content.begin() + index);
+        }
+        this->contents.push_back(content);
+    }
 }
 
 bool Table::hasParameter(const Parameter& p) {
@@ -43,21 +56,21 @@ vector<pair<int, int>> Table::getIntersectingIndex(Table t1, Table t2) {
     return result;
 }
 
-vector<string> Table::extractColumn(Parameter p) {
-    int index;
-    for (int i = 0; i < headers.size(); i++) {
-        if (headers[i] == p) {
-            index = i;
-            break;
+Table Table::cartesianProduct(Table table) {
+    vector<Parameter> h1 = this->getHeaders();
+    vector<Parameter> h2 = table.getHeaders();
+    vector<vector<string>> c1 = this->getContent();
+    vector<vector<string>> c2 = table.getContent();
+    vector<vector<string>> c3;
+    h1.insert(h1.end(), h2.begin(), h2.end());
+    for (const vector<string>& row1 : c1) {
+        for (vector<string> row2 : c2) {
+            vector<string> dupRow(row1);
+            dupRow.insert(dupRow.end(), row2.begin(), row2.end());
+            c3.push_back(dupRow);
         }
     }
-    vector<string> colVal;
-    for (vector<string> entry : contents) {
-        if (find(colVal.begin(), colVal.end(), entry[index]) == colVal.end()) {
-            colVal.push_back(entry[index]);
-        }
-    }
-    return colVal;
+    return Table{h1, c3};
 }
 
 vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector<vector<string>> c2,
@@ -72,7 +85,7 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
                 key += c1[i][intersectingIndex.first];
             }
             else {
-                key += "+" + c1[i][intersectingIndex.first];
+                key += AppConstants::STRING_PLUS + c1[i][intersectingIndex.first];
             }
         }
         hashmap.insert({key, i});
@@ -89,7 +102,7 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
                 key += c2[i][intersectingIndex.second];
             }
             else {
-                key += "+" + c2[i][intersectingIndex.second];
+                key += AppConstants::STRING_PLUS + c2[i][intersectingIndex.second];
             }
         }
         auto range = hashmap.equal_range(key);
@@ -144,10 +157,10 @@ Table Table::extractDesignEntities() {
             indexes.push_back(i);
         }
     }
-    return selectColumns(indexes);
+    return extractColumns(indexes);
 }
 
-Table Table::selectColumns(vector<int>& indexes) {
+Table Table::extractColumns(vector<int>& indexes) {
     vector<vector<string>> newContent;
     vector<Parameter> newHeader;
     // I do not believe that there will be a case where the tables are empty.
@@ -164,4 +177,34 @@ Table Table::selectColumns(vector<int>& indexes) {
         }
     }
     return Table{newHeader, newContent};
+}
+
+bool Table::isEmptyTable() {
+    return contents.empty();
+}
+
+Table Table::extractColumns(vector<Parameter> params) {
+    // Assume that all the params called is confirmed to be present in the table
+    vector<int> indexes;
+    for (int i = 0; i < headers.size(); i++) {
+        if (find(params.begin(), params.end(), headers[i]) != params.end()) {
+            indexes.push_back(i);
+        }
+    }
+    return extractColumns(indexes);
+}
+
+vector<string> Table::getResult() {
+    vector<string> res;
+    for (const vector<string>& stringVec : contents) {
+        string row;
+        for (const string& s : stringVec) {
+            row += s;
+            row += " ";
+        }
+        // remove the extra space.
+        row.pop_back();
+        res.push_back(row);
+    }
+    return res;
 }

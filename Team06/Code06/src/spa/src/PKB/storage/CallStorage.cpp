@@ -4,10 +4,8 @@ void CallStorage::writeCallS(StmtNum callLine, ProcName callee) {
     callLine_callee[callLine] = callee;
 }
 
-
 std::pair<StmtNum, ProcName> CallStorage::getCallStmt(StmtNum s) {
 
-    // SHOULD NOT HIT.
     if (callLine_callee.find(s) == callLine_callee.end()) {
         return {AppConstants::NOT_USED_FIELD, AppConstants::PROCEDURE_DOES_NOT_EXIST};
     }

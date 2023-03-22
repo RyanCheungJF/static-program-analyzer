@@ -13,6 +13,30 @@ TEST_CASE("parse / given valid string with such that clause / parse into "
     REQUIRE(true);
 }
 
+TEST_CASE("parse / select tuple, variables not declared / Semantic Error") {
+    string test = "stmt s; variable v;\n Select <s ,  g ,  q , asd   ,v> such that Follows (s, 1) ";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(test), SemanticException);
+}
+
+TEST_CASE("parse / no closing > / SyntaxError") {
+    string test = "stmt s; variable v;\n Select <s, a such that Follows (s, 1) ";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / select tuple with spaces should return syntax error / syntax error") {
+    string test = "stmt s, abc, def, ghi;\n Select <a b c,d e f, g h i> such that Follows (s, 1) ";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / select multiple params without tuple / syntax error") {
+    string test = "stmt s1, s2;\n Select s1 s2 such that Follows (s1, 1)";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
 TEST_CASE("parse / given valid string with such that and pattern clause / "
           "parse into correct vector of queries") {
     string test = "stmt s; variable v; assign a   ;\n     Select v such that "
@@ -155,8 +179,8 @@ TEST_CASE("checkSynonyms / the variable store contains all the required "
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
-    Parameter p1("v", AppConstants::VARIABLE);
-    Parameter p2("s", AppConstants::STMT);
+    Parameter p1("v", ParameterType::VARIABLE);
+    Parameter p2("s", ParameterType::STMT);
     vs.insertVariable(p1);
     vs.insertVariable(p2);
     Query q = sqp.parse("Select s such that Modifies(s, v)");
@@ -169,7 +193,7 @@ TEST_CASE("checkSynonyms / the variable store does not contain stmt / "
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
-    Parameter p1("v", AppConstants::VARIABLE);
+    Parameter p1("v", ParameterType::VARIABLE);
     vs.insertVariable(p1);
     Query q = sqp.parse("Select s such that Modifies(s, v)");
     REQUIRE_THROWS_AS(qp.checkSynonyms(&q, vs), SemanticException);
@@ -181,7 +205,7 @@ TEST_CASE("checkSynonyms / the variable store does not contain variable / "
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
-    Parameter p1("s", AppConstants::STMT);
+    Parameter p1("s", ParameterType::STMT);
     vs.insertVariable(p1);
     Query q = sqp.parse("Select s such that Modifies(s, v)");
     REQUIRE_THROWS_AS(qp.checkSynonyms(&q, vs), SemanticException);
@@ -201,14 +225,14 @@ TEST_CASE("checkSynonyms / the variable store contains more variable than "
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
-    Parameter p1("s", AppConstants::STMT);
-    Parameter p2("s2", AppConstants::STMT);
-    Parameter p3("s3", AppConstants::STMT);
-    Parameter p4("s4", AppConstants::STMT);
-    Parameter p5("v", AppConstants::VARIABLE);
-    Parameter p6("v2", AppConstants::VARIABLE);
-    Parameter p7("v3", AppConstants::VARIABLE);
-    Parameter p8("v4", AppConstants::VARIABLE);
+    Parameter p1("s", ParameterType::STMT);
+    Parameter p2("s2", ParameterType::STMT);
+    Parameter p3("s3", ParameterType::STMT);
+    Parameter p4("s4", ParameterType::STMT);
+    Parameter p5("v", ParameterType::VARIABLE);
+    Parameter p6("v2", ParameterType::VARIABLE);
+    Parameter p7("v3", ParameterType::VARIABLE);
+    Parameter p8("v4", ParameterType::VARIABLE);
     vs.insertVariable(p1);
     vs.insertVariable(p2);
     vs.insertVariable(p3);
@@ -227,12 +251,12 @@ TEST_CASE("checkSynonyms / the variable store has correct type but wrong "
     QPSParser qp;
     VariableStore vs;
     SelectQueryParser sqp;
-    Parameter p2("s2", AppConstants::STMT);
-    Parameter p3("s3", AppConstants::STMT);
-    Parameter p4("s4", AppConstants::STMT);
-    Parameter p6("v2", AppConstants::VARIABLE);
-    Parameter p7("v3", AppConstants::VARIABLE);
-    Parameter p8("v4", AppConstants::VARIABLE);
+    Parameter p2("s2", ParameterType::STMT);
+    Parameter p3("s3", ParameterType::STMT);
+    Parameter p4("s4", ParameterType::STMT);
+    Parameter p6("v2", ParameterType::VARIABLE);
+    Parameter p7("v3", ParameterType::VARIABLE);
+    Parameter p8("v4", ParameterType::VARIABLE);
     vs.insertVariable(p2);
     vs.insertVariable(p3);
     vs.insertVariable(p4);

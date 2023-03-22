@@ -18,11 +18,13 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Follows and FollowsT")
     // Follows*(1, _) should return {1, 2}, {1, 3}
 
     // Follows
-    std::vector<Parameter> params1 = {Parameter("1", AppConstants::FIXED_INT), Parameter("_", AppConstants::WILDCARD)};
+    std::vector<Parameter> params1 = {Parameter("1", ParameterType::FIXED_INT),
+                                      Parameter("_", ParameterType::WILDCARD)};
     shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::FOLLOWS, params1);
 
     // FollowsT
-    std::vector<Parameter> params2 = {Parameter("1", AppConstants::FIXED_INT), Parameter("_", AppConstants::WILDCARD)};
+    std::vector<Parameter> params2 = {Parameter("1", ParameterType::FIXED_INT),
+                                      Parameter("_", ParameterType::WILDCARD)};
     shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::FOLLOWST, params2);
 
     writePkb.setFollows(1, 2);

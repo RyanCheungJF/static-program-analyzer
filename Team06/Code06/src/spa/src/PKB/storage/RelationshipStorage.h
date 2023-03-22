@@ -1,6 +1,4 @@
 #pragma once
-#include <unordered_map>
-#include <unordered_set>
 
 #include "../../../src/utils/AppConstants.h"
 
@@ -12,7 +10,6 @@ public:
     std::unordered_set<U> getRightItems(T leftItem);
     std::unordered_set<T> getLeftItems(U rightItem);
     std::unordered_set<T> getAllLeftItems();
-    std::unordered_set<U> getAllRightItems();
 
 protected:
     std::unordered_map<T, std::unordered_set<U>> leftToRightMap;

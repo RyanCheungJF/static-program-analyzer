@@ -140,7 +140,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
         AffectsHandler handler(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
-                               parentTStorage, type == RelationshipType::AFFECTST);
+                               type == RelationshipType::AFFECTST);
         res = handler.handle(param1, param2);
     }
     if (!res.empty()) {
@@ -199,8 +199,7 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
         return res;
     }
 
-    // TODO: This violates LoD. Needs QPS to have a getPatternType() function
-    ParameterType type = p.getPatternSyn()->getType();
+    ParameterType type = p.getPatternType();
 
     if (type == ParameterType::ASSIGN) {
         AssignPatternHandler handler(assignPatternStorage);
@@ -210,6 +209,7 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
         IfWhilePatternHandler handler(ifWhilePatternMap.at(type));
         res = handler.handle(p);
     }
+
     if (!res.empty()) {
         patternCache.addResult(pattern, res);
     }
@@ -217,6 +217,8 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
     return res;
 }
 
+// this function is incomplete and is currently done with a Stub. Please DO NOT CODE REVIEW this.
+// Waiting for QPS to complete parsing and sending of the With object
 std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
     Parameter param = w.syn;
     ParameterType paramType = param.getType();
@@ -228,7 +230,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
 
     if (Parameter::isStatementRef(param)) {
         std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(param.getTypeString());
-        if (attrType == "procName") {
+        if (attrType == AppConstants::PROCEDURE) {
             for (auto stmtNum : stmtNums) {
                 ProcName procName = procedureStorage->getProcedure(stmtNum);
                 res.push_back({std::to_string(stmtNum), procName});
@@ -236,34 +238,34 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
         }
         // assumes that QPS is correct in only allowing varName for reads and prints,
         // since reads and prints will only have 1 variable tied to them
-        else if (attrType == "varName") {
+        else if (attrType == AppConstants::VARIABLE) {
             for (auto stmtNum : stmtNums) {
                 Ent var = *entityStorage->getEntities(stmtNum).begin();
                 res.push_back({std::to_string(stmtNum), var});
             }
         }
         // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
-        else if (attrType == "stmtNum") {
+        else if (attrType == AppConstants::STMTNO) {
             for (auto stmtNum : stmtNums) {
                 res.push_back({std::to_string(stmtNum), std::to_string(stmtNum)});
             }
         }
     }
-    // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
+    // currently just returns a pair of duplicated values
     else if (paramType == ParameterType::CONSTANT) {
         std::unordered_set<Const> consts = constantStorage->getEntNames();
         for (auto constant : consts) {
             res.push_back({std::to_string(constant), std::to_string(constant)});
         }
     }
-    // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
+    // currently just returns a pair of duplicated values
     else if (paramType == ParameterType::VARIABLE) {
         std::unordered_set<Ent> vars = entityStorage->getEntNames();
         for (auto var : vars) {
             res.push_back({var, var});
         }
     }
-    // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
+    // currently just returns a pair of duplicated values
     else {
         std::unordered_set<ProcName> procs = procedureStorage->getProcNames();
         for (auto proc : procs) {

@@ -62,8 +62,8 @@ DeriveLineEnding: true
 DerivePointerAlignment: false
 DisableFormat: false
 ExperimentalAutoDetectBinPacking: false
-# EmptyLineAfterAccessModifier: Never
-# EmptyLineBeforeAccessModifier: Always
+EmptyLineAfterAccessModifier: Never
+EmptyLineBeforeAccessModifier: Always
 FixNamespaceComments: false
 ForEachMacros:
   - foreach

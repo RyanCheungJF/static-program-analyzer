@@ -43,14 +43,6 @@ template <typename T, typename U> std::unordered_set<T> RelationshipStorage<T, U
     return res;
 }
 
-template <typename T, typename U> std::unordered_set<U> RelationshipStorage<T, U>::getAllRightItems() {
-    std::unordered_set<U> res;
-    for (auto row : rightToLeftMap) {
-        res.insert(row.first);
-    }
-    return res;
-}
-
 template class RelationshipStorage<StmtNum, StmtNum>;
 template class RelationshipStorage<StmtNum, Ent>;
 template class RelationshipStorage<Ent, Ent>;

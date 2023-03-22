@@ -5,7 +5,6 @@
 #include "../../spa/src/PKB/WritePKB.cpp"
 #include "../../spa/src/PKB/utils/utils.h"
 #include "../../spa/src/QPS/QPS.h"
-#include "../../spa/src/utils/AppConstants.h"
 #include "catch.hpp"
 
 using namespace std;
@@ -312,6 +311,30 @@ TEST_CASE("Single Select Query") {
         REQUIRE(exists(result, "0"));
         REQUIRE(exists(result, "1"));
         REQUIRE(exists(result, "2"));
+    }
+
+    SECTION("Select BOOLEAN") {
+        string query = R"(Select BOOLEAN)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE((result[0] == "TRUE" && result.size() == 1));
+    }
+
+    SECTION("Select <statement, variable>") {
+        string query = R"(
+        stmt s; variable v;
+        Select <s, v>)";
+        result = qps.processQueries(query, readPkb);
+        // gives cartesian product of stmt and variables
+        // final size = 13 * 5 = 65
+        REQUIRE(result.size() == 65);
+    }
+
+    SECTION("Select <statement, variable, BOOLEAN>") {
+        string query = R"(
+        stmt s; variable v;
+        Select <s, v, BOOLEAN>)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result[0] == "SyntaxError");
     }
 }
 
@@ -840,7 +863,7 @@ TEST_CASE("Select synonym from single if/while pattern clause, synonym is in cla
 
     SECTION("if", "exact") {
         string query = R"(
-		if if; 
+		if if;
 		Select if pattern if("count", _, _))";
 
         result = qps.processQueries(query, readPkb);
@@ -861,7 +884,7 @@ TEST_CASE("Select synonym from single if/while pattern clause, synonym is in cla
 
     SECTION("while", "exact") {
         string query = R"(
-		while w; 
+		while w;
 		Select w pattern w("abcdef", _))";
 
         result = qps.processQueries(query, readPkb);
@@ -889,7 +912,7 @@ TEST_CASE("Select synonym from single such that  clause, synonym is in clause") 
 
     SECTION("if", "exact") {
         string query = R"(
-		if if; 
+		if if;
 		Select if pattern if("count", _, _))";
 
         result = qps.processQueries(query, readPkb);
@@ -910,7 +933,7 @@ TEST_CASE("Select synonym from single such that  clause, synonym is in clause") 
 
     SECTION("while", "exact") {
         string query = R"(
-		while w; 
+		while w;
 		Select w pattern w("abcdef", _))";
 
         result = qps.processQueries(query, readPkb);
@@ -1035,5 +1058,85 @@ TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
             REQUIRE(exists(result, "1"));
             REQUIRE(exists(result, "2"));
         }
+    }
+
+    SECTION("2 clauses with 2 distinct variables select tuple no cartesian product") {
+        string query = R"(
+        stmt s1, s2;
+        Select <s1, s2> such that Follows(s1, s2))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 5);
+        REQUIRE(exists(result, "1 2"));
+        REQUIRE(exists(result, "2 3"));
+        REQUIRE(exists(result, "4 5"));
+        REQUIRE(exists(result, "7 8"));
+        REQUIRE(exists(result, "8 9"));
+    }
+
+    SECTION("2 clauses with 2 distinct variables select tuple no cartesian product") {
+        string query = R"(
+        stmt s1, s2;
+        variable v;
+        Select <s1, s2, v> such that Follows(s1, s2))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 25);
+        REQUIRE(exists(result, "1 2 x"));
+        REQUIRE(exists(result, "2 3 x"));
+        REQUIRE(exists(result, "4 5 x"));
+        REQUIRE(exists(result, "7 8 x"));
+        REQUIRE(exists(result, "8 9 x"));
+        REQUIRE(exists(result, "1 2 y"));
+        REQUIRE(exists(result, "2 3 y"));
+        REQUIRE(exists(result, "4 5 y"));
+        REQUIRE(exists(result, "7 8 y"));
+        REQUIRE(exists(result, "8 9 y"));
+        REQUIRE(exists(result, "1 2 z"));
+        REQUIRE(exists(result, "2 3 z"));
+        REQUIRE(exists(result, "4 5 z"));
+        REQUIRE(exists(result, "7 8 z"));
+        REQUIRE(exists(result, "8 9 z"));
+        REQUIRE(exists(result, "1 2 count"));
+        REQUIRE(exists(result, "2 3 count"));
+        REQUIRE(exists(result, "4 5 count"));
+        REQUIRE(exists(result, "7 8 count"));
+        REQUIRE(exists(result, "8 9 count"));
+        REQUIRE(exists(result, "1 2 end"));
+        REQUIRE(exists(result, "2 3 end"));
+        REQUIRE(exists(result, "4 5 end"));
+        REQUIRE(exists(result, "7 8 end"));
+        REQUIRE(exists(result, "8 9 end"));
+    }
+
+    SECTION("non empty clauses with select BOOLEAN") {
+        string query = R"(
+        stmt s1, s2;
+        Select BOOLEAN such that Follows(s1, s2))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(exists(result, "TRUE"));
+    }
+
+    SECTION("one empty clause with select BOOLEAN") {
+        string query = R"(
+        stmt s1, s2;
+        Select BOOLEAN such that Follows(s1, s2) and Follows(100, 0) )";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(exists(result, "FALSE"));
+    }
+
+    SECTION("intersection results in empty table with select BOOLEAN") {
+        // Should return FALSE
+        string query = R"(
+        stmt s1;
+        Select BOOLEAN such that Follows(s1, 3) and Follows(s1, 8) )";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(exists(result, "FALSE"));
     }
 }

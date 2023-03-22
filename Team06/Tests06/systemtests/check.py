@@ -1,6 +1,8 @@
 import os
 import xml.etree.ElementTree as ET
 
+# src = os.listdir(r_path)
+# src = os.listdir(os.path.join("Team06", "Tests06", "systemtests"))
 r_path = 'Team06\Tests06\systemtests'
 src = os.listdir(r_path)
 error = False
@@ -27,5 +29,7 @@ for entry in src:
                     print(
                         '{}/{} has a test case which timeouts!'.format(entry, subentry))
 
-if not error:
-    print('Success, all systemtests passes!')
+if error:
+    raise Exception('One or more system tests failed!')
+
+print('Success, all systemtests passes!')

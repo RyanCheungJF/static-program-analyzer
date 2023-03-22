@@ -656,7 +656,7 @@ SemanticError
 132 - Spaces in query
 procedure p;
 Select   p   such   that    Calls   (p, _)
-none
+A, B, C, D, F
 5000
 133 - stmt for assign pattern
 stmt s;
@@ -822,4 +822,14 @@ SyntaxError
 assign a; constant c;
 Select a pattern a(_, c)
 SyntaxError
+5000
+166 - valid spacing in expression-spec
+assign a;
+Select a pattern a(_, _   "test "   _)
+none
+5000
+167 - valid spacing in entRef
+procedure p;
+Select p such that Calls(p, "none  ")
+none
 5000

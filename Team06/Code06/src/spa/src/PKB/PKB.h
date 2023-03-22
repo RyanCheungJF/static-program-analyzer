@@ -1,11 +1,6 @@
 #pragma once
 
-#include <stdio.h>
-
-#include <iostream>
 #include <queue>
-#include <string>
-#include <vector>
 
 #include "../../unit_testing/src/stubs/With.h"
 #include "../QPS/entities/Pattern.h"

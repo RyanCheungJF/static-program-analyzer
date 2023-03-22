@@ -31,7 +31,7 @@ Pattern Pattern::makePattern(Parameter p, Parameter ent, vector<string>& es) {
     validator->validate(pat);
     vector<string> processedEs;
     for (string s : es) {
-        processedEs.push_back(removeCharFromString(s, '\"'));
+        processedEs.push_back(removeCharFromString(removeCharFromString(s, '\"'), ' '));
     }
     Pattern processedPat(p, ent, processedEs);
     return processedPat;
@@ -64,6 +64,22 @@ bool Pattern::validateParams() {
     default:
         return false;
     }
+}
+
+ParameterType Pattern::getPatternType() {
+    return patternSyn.getType();
+}
+
+ParameterType Pattern::getEntRefType() {
+    return entRef.getType();
+}
+
+std::string Pattern::getEntRefValue() {
+    return entRef.getValue();
+}
+
+bool Pattern::operator==(const Pattern& p) const {
+    return patternSyn == p.patternSyn && entRef == p.entRef && exprSpecs == p.exprSpecs;
 }
 
 shared_ptr<SyntaxValidator<Pattern>> patTwoParamVal =

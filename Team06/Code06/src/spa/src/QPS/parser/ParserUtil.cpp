@@ -10,6 +10,7 @@ const string SUCH = "such";
 const string THAT = "that";
 const string PATTERN = "pattern";
 const string AND = "and";
+const string WITH = "with";
 
 vector<int> findSuchThat(const vector<string>& wordList) {
     vector<int> suchThatStarts;
@@ -46,6 +47,23 @@ vector<int> findPattern(const vector<string>& wordList) {
     return patternStarts;
 }
 
+vector<int> findWith(const vector<string>& wordList) {
+    vector<int> withStarts;
+    for (int i = 0; i < wordList.size(); i++) {
+        if (WITH != wordList[i]) {
+            continue;
+        }
+        if (i == wordList.size() - 1) {
+            continue;
+        }
+        string substr;
+        bool found;
+        tie(substr, ignore, found) =
+            extractSubStringUntilDelimiter(wordList[i + 1], 0, AppConstants::STRING_EQUAL_SIGN);
+    }
+    return vector<int>();
+}
+
 vector<int> findAnds(const vector<string>& wordList, int start, int end) {
     vector<int> ands;
     for (int i = start; i < end; i++) {
@@ -60,10 +78,9 @@ vector<int> findAnds(const vector<string>& wordList, int start, int end) {
     return ands;
 }
 
-// assumes the string is of the correct form:
-// ^.*{containerStart}.*{containerEnd}$
 tuple<string, vector<string>> extractParameters(string s, string containerStart, string containerEnd,
                                                 string delimiter) {
+    s = trim(s);
     tuple<string, vector<string>> res;
     int endOfString = s.size();
     int curIndex = 0;
@@ -72,7 +89,10 @@ tuple<string, vector<string>> extractParameters(string s, string containerStart,
     bool found = false;
     tie(outerParam, curIndex, found) = extractSubStringUntilDelimiter(s, curIndex, containerStart);
     if (!found) {
-        throw InternalException("ParserUtil.extractParameters: containerStart not found");
+        throw SyntaxException();
+    }
+    if (!(s.substr(endOfString - containerEnd.size(), containerEnd.size()) == containerEnd)) {
+        throw SyntaxException();
     }
     string innerParamsString = s.substr(curIndex, endOfString - curIndex - containerEnd.size());
     endOfString = innerParamsString.size();
@@ -84,9 +104,9 @@ tuple<string, vector<string>> extractParameters(string s, string containerStart,
             // end of string with delimiter at the end
             throw SyntaxException();
         }
-        innerParams.push_back(curParam);
+        innerParams.push_back(trim(curParam));
     }
-    res = {outerParam, innerParams};
+    res = {trim(outerParam), innerParams};
     return res;
 }
 

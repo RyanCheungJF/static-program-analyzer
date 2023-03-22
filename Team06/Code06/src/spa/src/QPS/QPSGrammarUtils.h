@@ -27,9 +27,15 @@ bool isFixedString(string);
 bool isEntRef(string);
 bool isExprSpec(string);
 bool isTerm(string);
+bool isTupleStart(string);
 bool isExpr(string);
 bool isFactor(string);
+bool isBoolean(string);
 bool isFixedStringWithWildCard(string);
 bool hasCorrectRelRefOrPatternForm(string);
+bool isElem(string);
+bool isAttrRef(string);
+bool isAttribute(string);
+bool isRef(string);
 
 #endif // SPA_QPSGRAMMARUTILS_H
