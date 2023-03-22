@@ -24,8 +24,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
 
     bool isFixedIntParam1 = paramType1 == ParameterType::FIXED_INT;
     bool isFixedIntParam2 = paramType2 == ParameterType::FIXED_INT;
-    bool isWildCardParam1 = paramType1 == ParameterType::WILDCARD || paramType1 == ParameterType::ASSIGN;
-    bool isWildCardParam2 = paramType2 == ParameterType::WILDCARD || paramType2 == ParameterType::ASSIGN;
+    bool isWildCardParam1 = paramType1 == ParameterType::STMT || paramType1 == ParameterType::WILDCARD ||
+                            paramType1 == ParameterType::ASSIGN;
+    bool isWildCardParam2 = paramType2 == ParameterType::STMT || paramType2 == ParameterType::WILDCARD ||
+                            paramType2 == ParameterType::ASSIGN;
 
     std::vector<std::vector<std::string>> temp;
     if (isTransitive) {
@@ -37,7 +39,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
                                    isWildCardParam1, isWildCardParam2);
     }
 
-
     if ((paramString1 == paramString2) && (paramType1 != ParameterType::WILDCARD)) {
         std::vector<std::vector<std::string>> res;
         for (std::vector<std::string> curr : temp) {
@@ -46,12 +47,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
             }
         }
         return res;
-    } else {
+    }
+    else {
         return temp;
     }
-
-
-
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, StmtNum a2) {
