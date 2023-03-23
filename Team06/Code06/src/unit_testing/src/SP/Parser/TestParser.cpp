@@ -226,9 +226,11 @@ TEST_CASE("Valid Source Program") {
         auto printStmt = std::make_unique<PrintStatement>(3, AppConstants::READ);
         auto readAssignStmt = std::make_unique<AssignStatement>(4, AppConstants::READ, std::make_unique<Constant>("2"));
         auto callAssignStmt = std::make_unique<AssignStatement>(5, AppConstants::CALL, std::make_unique<Constant>("3"));
-        auto whileAssignStmt = std::make_unique<AssignStatement>(6, AppConstants::WHILE, std::make_unique<Constant>("5"));
+        auto whileAssignStmt =
+            std::make_unique<AssignStatement>(6, AppConstants::WHILE, std::make_unique<Constant>("5"));
         auto ifAssignStmt = std::make_unique<AssignStatement>(7, AppConstants::IF, std::make_unique<Constant>("4"));
-        auto printAssignStmt = std::make_unique<AssignStatement>(8, AppConstants::PRINT, std::make_unique<Constant>("8"));
+        auto printAssignStmt =
+            std::make_unique<AssignStatement>(8, AppConstants::PRINT, std::make_unique<Constant>("8"));
 
         std::vector<std::unique_ptr<Statement>> statementsA;
         statementsA.push_back(std::move(readStmt));

@@ -3,8 +3,7 @@
 AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
                                std::shared_ptr<ProcedureStorage> procStorage,
                                std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
-                               std::shared_ptr<ModifiesUsesStorage> usesStorage,
-                               bool isTransitive) {
+                               std::shared_ptr<ModifiesUsesStorage> usesStorage, bool isTransitive) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
     this->procStorage = procStorage;
@@ -85,9 +84,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     }
 
     return {{paramString1, paramString2}};
-//    std::vector<std::vector<std::string>> res;
-//    res.push_back({paramString1, paramString2});
-//    return res;
+    //    std::vector<std::vector<std::string>> res;
+    //    res.push_back({paramString1, paramString2});
+    //    return res;
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum a2) {
@@ -452,4 +451,3 @@ bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::u
     }
     return false;
 }
-
