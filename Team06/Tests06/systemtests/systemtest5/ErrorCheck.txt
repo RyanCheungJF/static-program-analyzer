@@ -1098,3 +1098,133 @@ if i;
 Select i pattern i(_, _, _"x"_)
 SyntaxError
 5000
+221 - Procedure as LHS argument for Next
+procedure p;
+Select p such that Next(p, _)
+SemanticError
+5000
+222 - Procedure as RHS argument for Next
+procedure p;
+Select p such that Next(_, p)
+SemanticError
+5000
+223 - Variable as LHS argument for Next
+variable v;
+Select v such that Next(v, _)
+SemanticError
+5000
+224 - Variable as RHS argument for Next
+variable v;
+Select v such that Next(_, v)
+SemanticError
+5000
+225 - Constant as LHS argument for Next
+constant c;
+Select c such that Next(c, _)
+SemanticError
+5000
+226 - Constant as RHS argument for Next
+constant c;
+Select c such that Next(_, c)
+SemanticError
+5000
+227 - Procedure as LHS argument for Next*
+procedure p;
+Select p such that Next*(p, _)
+SemanticError
+5000
+228 - Procedure as RHS argument for Next*
+procedure p;
+Select p such that Next*(_, p)
+SemanticError
+5000
+229 - Variable as LHS argument for Next*
+variable v;
+Select v such that Next*(v, _)
+SemanticError
+5000
+230 - Variable as RHS argument for Next*
+variable v;
+Select v such that Next*(_, v)
+SemanticError
+5000
+231 - Constant as LHS argument for Next*
+constant c;
+Select c such that Next*(c, _)
+SemanticError
+5000
+232 - Constant as RHS argument for Next*
+constant c;
+Select c such that Next*(_, c)
+SemanticError
+5000
+233 - Space in relRef for Next*
+stmt s;
+Select s such that Next  *(_, _)
+SyntaxError
+5000
+234 - Procedure as LHS argument for Affects
+procedure p;
+Select p such that Affects(p, _)
+SemanticError
+5000
+235 - Procedure as RHS argument for Affects
+procedure p;
+Select p such that Affects(_, p)
+SemanticError
+5000
+236 - Variable as LHS argument for Affects
+variable v;
+Select v such that Affects(v, _)
+SemanticError
+5000
+237 - Variable as RHS argument for Affects
+variable v;
+Select v such that Affects(_, v)
+SemanticError
+5000
+238 - Constant as LHS argument for Affects
+constant c;
+Select c such that Affects(c, _)
+SemanticError
+5000
+239 - Constant as RHS argument for Affects
+constant c;
+Select c such that Affects(_, c)
+SemanticError
+5000
+240 - Procedure as LHS argument for Affects*
+procedure p;
+Select p such that Affects*(p, _)
+SemanticError
+5000
+241 - Procedure as RHS argument for Affects*
+procedure p;
+Select p such that Affects*(_, p)
+SemanticError
+5000
+242 - Variable as LHS argument for Affects*
+variable v;
+Select v such that Affects*(v, _)
+SemanticError
+5000
+243 - Variable as RHS argument for Affects*
+variable v;
+Select v such that Affects*(_, v)
+SemanticError
+5000
+244 - Constant as LHS argument for Affects*
+constant c;
+Select c such that Affects*(c, _)
+SemanticError
+5000
+245 - Constant as RHS argument for Affects*
+constant c;
+Select c such that Affects*(_, c)
+SemanticError
+5000
+246 - Space in relRef for Affects*
+stmt s;
+Select s such that Affects  *(_, _)
+SyntaxError
+5000
