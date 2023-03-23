@@ -16,7 +16,7 @@
 
 using namespace std;
 
-enum ClauseType {
+enum class ClauseType {
     SELECT,
     SUCH_THAT,
     PATTERN,
