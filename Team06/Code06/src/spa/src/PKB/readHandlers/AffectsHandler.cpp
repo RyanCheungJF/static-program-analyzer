@@ -76,9 +76,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
 
     // TODO: short-circuit strategies here
     //if a1 >= a2 and they are both not in a while loop, then also confirm cannot reach
-    if (a1 >= a2 && !checkHaveCommonWhileLoop(a1, a2)) {
-        return {};
-    }
+//    if (a1 >= a2 && !checkHaveCommonWhileLoop(a1, a2)) {
+//        return {};
+//    }
 
 
     std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getRightItems(a1);
