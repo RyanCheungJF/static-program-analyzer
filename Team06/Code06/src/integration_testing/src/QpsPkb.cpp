@@ -105,11 +105,11 @@ PKB buildPkb() {
     writePkb.setEntity(11, {"x", "y", "z"});
     writePkb.setEntity(13, {"end"});
 
-    writePkb.setConstant(1, unordered_set<int>{1});
-    writePkb.setConstant(4, unordered_set<int>{2});
-    writePkb.setConstant(6, unordered_set<int>{2});
-    writePkb.setConstant(8, unordered_set<int>{2});
-    writePkb.setConstant(9, unordered_set<int>{0});
+    writePkb.setConstant(1, unordered_set<Const>{"1"});
+    writePkb.setConstant(4, unordered_set<Const>{"2"});
+    writePkb.setConstant(6, unordered_set<Const>{"2"});
+    writePkb.setConstant(8, unordered_set<Const>{"2"});
+    writePkb.setConstant(9, unordered_set<Const>{"0"});
 
     writePkb.setFollows(1, 2);
     writePkb.setFollows(2, 3);
