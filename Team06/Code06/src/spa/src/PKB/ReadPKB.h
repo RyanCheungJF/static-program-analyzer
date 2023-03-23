@@ -1,4 +1,5 @@
 #pragma once
+
 #include "PKB.h"
 
 class ReadPKB {
@@ -16,9 +17,6 @@ public:
 
     // returns all the statement lines that are contained in the given procedure
     std::unordered_set<StmtNum> getProcedureStatementNumbers(ProcName p);
-
-    // returns all the call statement lines and the procedure that it is calling
-    std::vector<std::pair<StmtNum, ProcName>> getCallStatements();
 
     // returns all the procedure names present in the source code
     std::unordered_set<ProcName> getAllProcedureNames();
@@ -40,7 +38,8 @@ public:
     std::unordered_set<Ent> getModifiesP(ProcName name);
 
     // returns the name of the procedure being called on line number s
-    // if line s is not a call statement, it returns a pair {-1, "INVALID"}
+    // if line s is not a call statement, it returns a pair {AppConstants::NOT_USED_FIELD,
+    // AppConstants::PROCEDURE_DOES_NOT_EXIST}
     std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
 
     // returns all the procedures that are called from a given procedure
@@ -63,12 +62,4 @@ public:
 
 private:
     PKB* pkbInstance = NULL;
-    std::unordered_map<RelationshipType, std::shared_ptr<FollowsParentStorage>> followsParentMap = {
-        {RelationshipType::FOLLOWS, NULL},
-        {RelationshipType::FOLLOWST, NULL},
-        {RelationshipType::PARENT, NULL},
-        {RelationshipType::PARENTT, NULL}};
-
-    std::unordered_map<RelationshipType, std::shared_ptr<ModifiesUsesStorage>> modifiesUsesMap = {
-        {RelationshipType::MODIFIES, NULL}, {RelationshipType::USES, NULL}};
 };

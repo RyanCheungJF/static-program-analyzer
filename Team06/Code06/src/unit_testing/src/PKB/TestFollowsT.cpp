@@ -7,7 +7,7 @@ using namespace std;
 using namespace unit_testing_utils;
 
 TEST_CASE("Check that all followers are recorded in the followee") {
-    FollowsParentStorage fts;
+    RelationshipStorage<StmtNum, StmtNum> fts;
 
     std::unordered_set<StmtNum> followers = {2, 3, 4};
     fts.write(1, followers);
@@ -19,7 +19,7 @@ TEST_CASE("Check that all followers are recorded in the followee") {
 }
 
 TEST_CASE("Check that a follower is not recorded as a followee") {
-    FollowsParentStorage fts;
+    RelationshipStorage<StmtNum, StmtNum> fts;
 
     std::unordered_set<StmtNum> followers = {2};
     fts.write(1, followers);
@@ -28,23 +28,23 @@ TEST_CASE("Check that a follower is not recorded as a followee") {
 }
 
 TEST_CASE("Check that all of the followers of each followee is accurate, even with duplicate entries") {
-    FollowsParentStorage fts;
+    RelationshipStorage<StmtNum, StmtNum> fts;
     std::unordered_set<StmtNum> followers_1 = {2, 3, 4, 4, 3, 4};
     std::unordered_set<StmtNum> followers_2 = {3, 4, 4, 3, 4};
     fts.write(1, followers_1);
     fts.write(2, followers_2);
 
-    std::unordered_set<StmtNum> actual = fts.getRightWildcard(1);
+    std::unordered_set<StmtNum> actual = fts.getRightItems(1);
     std::unordered_set<StmtNum> expected = {2, 4, 3};
     REQUIRE(unit_testing_utils::equals(expected, actual));
 
-    std::unordered_set<StmtNum> actual2 = fts.getRightWildcard(2);
+    std::unordered_set<StmtNum> actual2 = fts.getRightItems(2);
     std::unordered_set<StmtNum> expected2 = {4, 3};
     REQUIRE(unit_testing_utils::equals(expected2, actual2));
 }
 
 TEST_CASE("Check that all of the followees of each follower is accurate, even with duplicate entries") {
-    FollowsParentStorage fts;
+    RelationshipStorage<StmtNum, StmtNum> fts;
     std::unordered_set<StmtNum> followers1 = {2, 3, 3, 4};
     std::unordered_set<StmtNum> followers2 = {3, 4};
     std::unordered_set<StmtNum> followers3 = {4};
@@ -52,15 +52,15 @@ TEST_CASE("Check that all of the followees of each follower is accurate, even wi
     fts.write(2, followers2);
     fts.write(3, followers3);
 
-    std::unordered_set<StmtNum> actual1 = fts.getLeftWildcard(2);
+    std::unordered_set<StmtNum> actual1 = fts.getLeftItems(2);
     std::unordered_set<StmtNum> expected1 = {1};
     REQUIRE(unit_testing_utils::equals(expected1, actual1));
 
-    std::unordered_set<StmtNum> actual2 = fts.getLeftWildcard(3);
+    std::unordered_set<StmtNum> actual2 = fts.getLeftItems(3);
     std::unordered_set<StmtNum> expected2 = {1, 2};
     REQUIRE(unit_testing_utils::equals(expected2, actual2));
 
-    std::unordered_set<StmtNum> actual3 = fts.getLeftWildcard(4);
+    std::unordered_set<StmtNum> actual3 = fts.getLeftItems(4);
     std::unordered_set<StmtNum> expected3 = {1, 2, 3};
     REQUIRE(unit_testing_utils::equals(expected3, actual3));
 }

@@ -153,7 +153,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
     }
 }
 
-// TODO: by default, all are failing since it is not part of Milestone 1's requirements. it is part of our TDD.
+//  : by default, all are failing since it is not part of Milestone 1's requirements. it is part of our TDD.
 TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -344,14 +344,6 @@ TEST_CASE("CallStorage WritePKB ReadPKB Facade") {
         auto res = readPkb.getCallStmt(11);
         REQUIRE(res.first == 11);
         REQUIRE(res.second == "proc2");
-    }
-
-    SECTION("CallStorage WritePKB ReadPKB Facade: getCallStatements()") {
-        auto actual = readPkb.getCallStatements();
-        std::vector<std::pair<StmtNum, ProcName>> expected = {{11, "proc2"}, {22, "proc3"}};
-        std::sort(actual.begin(), actual.end());
-        std::sort(expected.begin(), expected.end());
-        REQUIRE(actual == expected);
     }
 }
 

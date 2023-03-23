@@ -23,7 +23,7 @@ bool isSynonym(string s) {
 }
 
 bool isTupleStart(string s) {
-    return s[0] == '<';
+    return s[0] == AppConstants::LESS;
 }
 
 bool isBoolean(string s) {
@@ -55,10 +55,10 @@ bool hasBalancedBrackets(string s) {
     int balance = 0;
     for (int i = 0; i < s.size(); i++) {
         char c = s[i];
-        if (c == '(') {
+        if (c == AppConstants::LEFT_PARENTHESIS) {
             balance += 1;
         }
-        else if (c == ')') {
+        else if (c == AppConstants::RIGHT_PARENTHESIS) {
             balance -= 1;
         }
         if (balance < 0) {
@@ -87,14 +87,28 @@ bool hasCorrectAttrCompForm(string s) {
 }
 
 bool isDeclaration(string declaration) {
+    // This allows for there to be duplicate synonyms.
+    // While it should technically not be allowed, we will check for duplicate synonyms
+    // when inserting to variableStore.
+    declaration = trim(declaration);
     int index = declaration.find(" ");
     string declarationToken = declaration.substr(0, index);
-    return isDesignEntity(declarationToken);
+    string synonymsString = declaration.substr(index + 1, declaration.size());
+    vector<string> synonymsVec = stringToWordListByDelimiter(synonymsString, ",");
+    if (!isDesignEntity(declarationToken)) {
+        return false;
+    }
+    for (string synonym : synonymsVec) {
+        if (!isSynonym(synonym)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 bool isDesignEntity(string designEntity) {
-    return regex_search(trim(designEntity), regex("^(stmt|read|print|call|while|if|assign|variable|"
-                                            "constant|procedure)"));
+    return regex_match(trim(designEntity), regex("^(stmt|read|print|call|while|if|assign|variable|"
+                                                  "constant|procedure)"));
 }
 
 pair<string, string> extractDesignEntity(string designEntity) {
@@ -169,6 +183,7 @@ bool isExprSpec(string s) {
 }
 
 bool isExpr(string s) {
+    s = trim(s);
     if (s.empty()) {
         return false;
     }
@@ -177,14 +192,14 @@ bool isExpr(string s) {
     // finds the first + or - from the back where there are no brackets
     // encapsulating them.
     for (int i = s.size() - 1; i >= 0; i--) {
-        if ((s[i] == '+' || s[i] == '-') && bracketsCounter == 0) {
+        if ((s[i] == AppConstants::PLUS || s[i] == AppConstants::MINUS) && bracketsCounter == 0) {
             index = i;
             break;
         }
-        if (s[i] == '(') {
+        if (s[i] == AppConstants::LEFT_PARENTHESIS) {
             bracketsCounter--;
         }
-        else if (s[i] == ')') {
+        else if (s[i] == AppConstants::RIGHT_PARENTHESIS) {
             bracketsCounter++;
         }
     }
@@ -196,12 +211,13 @@ bool isExpr(string s) {
         // cannot have + or - at start or end of string
         return false;
     }
-    string first = trim(s.substr(0, index));
-    string second = trim(s.substr(index + 1, s.size() - 1 - index));
+    string first = s.substr(0, index);
+    string second = s.substr(index + 1, s.size() - 1 - index);
     return isExpr(first) && isTerm(second);
 }
 
 bool isTerm(string s) {
+    s = trim(s);
     if (s.empty()) {
         return false;
     }
@@ -210,14 +226,15 @@ bool isTerm(string s) {
     int index = -1;
     int bracketsCounter = 0;
     for (int i = s.size() - 1; i >= 0; i--) {
-        if ((s[i] == '*' || s[i] == '/' || s[i] == '%') && bracketsCounter == 0) {
+        if ((s[i] == AppConstants::MULTIPLY || s[i] == AppConstants::DIVIDE || s[i] == AppConstants::MODULO) &&
+            bracketsCounter == 0) {
             index = i;
             break;
         }
-        if (s[i] == '(') {
+        if (s[i] == AppConstants::LEFT_PARENTHESIS) {
             bracketsCounter--;
         }
-        else if (s[i] == ')') {
+        else if (s[i] == AppConstants::RIGHT_PARENTHESIS) {
             bracketsCounter++;
         }
     }
@@ -229,18 +246,19 @@ bool isTerm(string s) {
         // operator cannot be at start and end of string
         return false;
     }
-    string first = trim(s.substr(0, index));
-    string second = trim(s.substr(index + 1, s.size() - 1 - index));
+    string first = s.substr(0, index);
+    string second = s.substr(index + 1, s.size() - 1 - index);
     return isTerm(first) && isFactor(second);
 }
 
 bool isFactor(string s) {
+    s = trim(s);
     if (s.empty()) {
         return false;
     }
     // recursively remove brackets
     bool hasBrackets = false;
-    if (s[0] == '(' && s[s.size() - 1] == ')') {
+    if (s[0] == AppConstants::LEFT_PARENTHESIS && s[s.size() - 1] == AppConstants::RIGHT_PARENTHESIS) {
         hasBrackets = true;
         s = s.substr(1, s.size() - 2);
     }
@@ -251,10 +269,11 @@ bool isFactor(string s) {
 }
 
 bool isElem(string s) {
-    return isSynonym(trim(s)) || isAttrRef(trim(s));
+    return isSynonym(s) || isAttrRef(s);
 }
 
 bool isAttrRef(string s) {
+    s = trim(s);
     string delimiter = ".";
     bool found;
     int nextStart;
@@ -274,7 +293,6 @@ bool isAttribute(string s) {
     return regex_match(trim(s), regex("^(procName|varName|value|stmt#)$"));
 }
 
-bool isRef(string s)
-{
+bool isRef(string s) {
     return isFixedString(s) || isInteger(s) || isAttrRef(s);
 }

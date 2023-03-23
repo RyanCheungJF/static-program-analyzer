@@ -82,6 +82,12 @@ TEST_CASE("parse / while pattern can only have 2 params (wild card) / throws "
     CHECK_THROWS_AS(qp.parse(test), SemanticException);
 }
 
+TEST_CASE("parse / wrong design entity / throws syntax error ") {
+    string test = "variables v; Select v";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
 TEST_CASE("parse / while pattern can only have 2 params (synonym) / throws "
           "syntax error") {
     string test = "variable v; while while; Select v pattern while (v, _, v) ";

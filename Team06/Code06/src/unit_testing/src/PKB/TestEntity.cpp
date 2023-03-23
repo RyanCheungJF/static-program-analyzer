@@ -2,7 +2,7 @@
 #include "catch.hpp"
 
 TEST_CASE("Checks that write and read works for entityStorage") {
-    EntityStorage es;
+    EntityStorage<Ent> es;
     Ent e = "v";
     es.writeEntity(3, {e});
     es.writeEntity(6, {e});
@@ -17,7 +17,7 @@ TEST_CASE("Checks that write and read works for entityStorage") {
 }
 
 TEST_CASE("Check that if an entity does not appear in the source code, it should return an empty set") {
-    EntityStorage es;
+    EntityStorage<Ent> es;
     Ent e = "v";
     std::unordered_set<StmtNum> statementNums = es.getEntityStmtNums(e);
 
@@ -26,7 +26,7 @@ TEST_CASE("Check that if an entity does not appear in the source code, it should
 }
 
 TEST_CASE("Check that given query for an entity and a statementNumber that it appears in, it returns true") {
-    EntityStorage es;
+    EntityStorage<Ent> es;
     Ent e = "v";
     es.writeEntity(3, {e});
 
@@ -35,6 +35,6 @@ TEST_CASE("Check that given query for an entity and a statementNumber that it ap
 }
 
 TEST_CASE("Check that if an entity does not exist, it returns false") {
-    EntityStorage es;
+    EntityStorage<Ent> es;
     REQUIRE(!es.checkEntity("v", 4));
 }

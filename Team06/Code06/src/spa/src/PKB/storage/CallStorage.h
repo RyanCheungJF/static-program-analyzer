@@ -1,17 +1,10 @@
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
-
 #include "../../../src/utils/AppConstants.h"
 
 class CallStorage {
 public:
     virtual void writeCallS(StmtNum callLine, ProcName callee);
-    virtual std::vector<std::pair<StmtNum, ProcName>> getCallStatements();
     virtual std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
 
 private:

@@ -7,11 +7,11 @@ using namespace unit_testing_utils;
 using namespace std;
 
 TEST_CASE("CallsStorage: writeP") {
-    CallsStorage cs;
+    RelationshipStorage<Ent, Ent> cs;
     ProcName caller = "proc0";
 
     SECTION("getCallees(procName): empty storage") {
-        std::unordered_set<ProcName> res = cs.getCallees(caller);
+        std::unordered_set<ProcName> res = cs.getRightItems(caller);
         REQUIRE(res.empty());
     }
 
@@ -19,19 +19,19 @@ TEST_CASE("CallsStorage: writeP") {
     ProcName proc2 = "proc2";
 
     std::unordered_set<ProcName> callees = {proc1, proc2};
-    cs.writeCallP(caller, callees);
+    cs.write(caller, callees);
 
     SECTION("getCallees(procName): non-empty storage") {
-        std::unordered_set<ProcName> res1 = cs.getCallees("nonExistent");
+        std::unordered_set<ProcName> res1 = cs.getRightItems("nonExistent");
         REQUIRE(res1.empty());
 
-        std::unordered_set<ProcName> res2 = cs.getCallees(caller);
+        std::unordered_set<ProcName> res2 = cs.getRightItems(caller);
         REQUIRE(unit_testing_utils::equals({"proc1", "proc2"}, res2));
 
-        std::unordered_set<ProcName> res3 = cs.getCallers(caller);
+        std::unordered_set<ProcName> res3 = cs.getLeftItems(caller);
         REQUIRE(unit_testing_utils::equals({}, res3));
 
-        std::unordered_set<ProcName> res4 = cs.getCallers(proc1);
+        std::unordered_set<ProcName> res4 = cs.getLeftItems(proc1);
         REQUIRE(unit_testing_utils::equals({caller}, res4));
     }
 }
@@ -140,23 +140,23 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
         REQUIRE(equals(res, expected));
     }
 
-//    SECTION("Calls(p, p)") {
-//        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
-//                                          Parameter("p", AppConstants::PROCEDURE)};
-//        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
-//
-//        auto res = readPkb.findRelationship(rs1);
-//        vector<vector<string>> expected = {};
-//        REQUIRE(equals(res, expected));
-//    }
-//
-//    SECTION("Calls*(p, p)") {
-//        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
-//                                          Parameter("p", AppConstants::PROCEDURE)};
-//        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
-//
-//        auto res = readPkb.findRelationship(rs1);
-//        vector<vector<string>> expected = {};
-//        REQUIRE(equals(res, expected));
-//    }
+    //    SECTION("Calls(p, p)") {
+    //        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
+    //                                          Parameter("p", AppConstants::PROCEDURE)};
+    //        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
+    //
+    //        auto res = readPkb.findRelationship(rs1);
+    //        vector<vector<string>> expected = {};
+    //        REQUIRE(equals(res, expected));
+    //    }
+    //
+    //    SECTION("Calls*(p, p)") {
+    //        std::vector<Parameter> params1 = {Parameter("p", AppConstants::PROCEDURE),
+    //                                          Parameter("p", AppConstants::PROCEDURE)};
+    //        shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
+    //
+    //        auto res = readPkb.findRelationship(rs1);
+    //        vector<vector<string>> expected = {};
+    //        REQUIRE(equals(res, expected));
+    //    }
 }

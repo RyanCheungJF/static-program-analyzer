@@ -10,13 +10,8 @@ TEST_CASE("CallStorage: writeS") {
 
     SECTION("getCallStmt(StmtNum s): empty storage") {
         std::pair<StmtNum, ProcName> res = cs.getCallStmt(s);
-        REQUIRE(res.first == -1);
-        REQUIRE(res.second == "INVALID");
-    }
-
-    SECTION("getCallStatements(): empty storage") {
-        auto res = cs.getCallStatements();
-        REQUIRE(res.empty());
+        REQUIRE(res.first == AppConstants::NOT_USED_FIELD);
+        REQUIRE(res.second == AppConstants::PROCEDURE_DOES_NOT_EXIST);
     }
 
     ProcName proc1 = "proc1";
@@ -24,11 +19,6 @@ TEST_CASE("CallStorage: writeS") {
 
     cs.writeCallS(11, proc1);
     cs.writeCallS(21, proc2);
-
-    SECTION("getCallStatements(): non-empty storage") {
-        auto i = cs.getCallStatements();
-        REQUIRE(i.size() == 2);
-    }
 
     SECTION("getCallStmt(StmtNum s): non-empty storage") {
         auto i = cs.getCallStmt(11);

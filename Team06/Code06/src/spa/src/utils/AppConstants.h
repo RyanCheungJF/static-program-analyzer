@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 typedef std::string ProcName;
@@ -12,6 +14,7 @@ typedef std::string Ent;
 typedef std::string Operator;
 typedef int StmtNum;
 typedef int Const;
+typedef std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> CFG;
 
 class AppConstants {
 public:
@@ -79,7 +82,27 @@ public:
     inline static const char AMPERSAND = '&';
     inline static const char VERTICAL_BAR = '|';
 
+    inline static const std::string STRING_NOT = "!";
+    inline static const std::string STRING_GREATER = ">";
+    inline static const std::string STRING_LESS = "<";
+    inline static const std::string STRING_PLUS = "+";
+    inline static const std::string STRING_MINUS = "-";
+    inline static const std::string STRING_MULTIPLY = "*";
+    inline static const std::string STRING_DIVIDE = "/";
+    inline static const std::string STRING_MODULO = "%";
+    inline static const std::string STRING_LEFT_PARENTHESIS = "(";
+    inline static const std::string STRING_RIGHT_PARENTHESIS = ")";
+    inline static const std::string STRING_SEMICOLON = ";";
+    inline static const std::string STRING_EQUAL_SIGN = "=";
+    inline static const std::string STRING_AMPERSAND = "&";
+    inline static const std::string STRING_VERTICAL_BAR = "|";
+
     // CFG-related
     inline static const std::string PARENTS = "parents";
     inline static const std::string CHILDREN = "children";
+
+    inline static const int NOT_USED_FIELD = -1;
+    inline static const int DUMMY_NODE = 0;
+    inline static const std::string PROCEDURE_DOES_NOT_EXIST = "procedure does not exist";
+    inline static const int IS_FIND_CHILDREN = true;
 };

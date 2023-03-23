@@ -1,6 +1,6 @@
 #include "CallsHandler.h"
 
-CallsHandler::CallsHandler(std::shared_ptr<CallsStorage> callsStorage) {
+CallsHandler::CallsHandler(std::shared_ptr<RelationshipStorage<Ent, Ent>> callsStorage) {
     this->callsStorage = callsStorage;
 }
 
@@ -9,7 +9,8 @@ std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcname(Param
     std::string callee = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<ProcName> callees = callsStorage->getCallees(caller);
+    std::unordered_set<ProcName> callees = callsStorage->getRightItems(caller);
+
     if (callees.find(callee) != callees.end()) {
         res.push_back({caller, callee});
     }
@@ -20,7 +21,7 @@ std::vector<std::vector<std::string>> CallsHandler::handleProcnameWildcard(Param
     std::string caller = param1.getValue();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<ProcName> callees = callsStorage->getCallees(caller);
+    std::unordered_set<ProcName> callees = callsStorage->getRightItems(caller);
     for (auto i : callees) {
         res.push_back({caller, i});
     }
@@ -31,7 +32,7 @@ std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcname(Param
     std::string callee = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<ProcName> callers = callsStorage->getCallers(callee);
+    std::unordered_set<ProcName> callers = callsStorage->getLeftItems(callee);
     for (auto i : callers) {
         res.push_back({i, callee});
     }
@@ -40,8 +41,8 @@ std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcname(Param
 
 std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard() {
     std::vector<std::vector<std::string>> res;
-    for (auto caller : callsStorage->getAllCallers()) {
-        for (auto callee : callsStorage->getCallees(caller)) {
+    for (auto caller : callsStorage->getAllLeftItems()) {
+        for (auto callee : callsStorage->getRightItems(caller)) {
             res.push_back({caller, callee});
         }
     }
@@ -49,15 +50,17 @@ std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard() {
 }
 
 std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Parameter param2) {
-
-    std::string paramString1 = param1.getValue();
-    std::string paramString2 = param2.getValue();
     ParameterType paramType1 = param1.getType();
     ParameterType paramType2 = param2.getType();
     bool isProcnameParam1 = paramType1 == ParameterType::FIXED_STRING;
     bool isProcnameParam2 = paramType2 == ParameterType::FIXED_STRING;
     bool isWildcardParam1 = paramType1 == ParameterType::PROCEDURE || paramType1 == ParameterType::WILDCARD;
     bool isWildcardParam2 = paramType2 == ParameterType::PROCEDURE || paramType2 == ParameterType::WILDCARD;
+
+    // based on the fact that there are no cycles in the source code
+    if (param1 == param2 && !(paramType1 == ParameterType::WILDCARD) && !(paramType2 == ParameterType::WILDCARD)) {
+        return {};
+    }
 
     if (isProcnameParam1) {
         if (isProcnameParam2) {

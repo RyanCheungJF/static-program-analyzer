@@ -6,7 +6,7 @@
 using namespace unit_testing_utils;
 
 TEST_CASE("Check writes and reads to/from ParentTStorage") {
-    FollowsParentStorage pts;
+    RelationshipStorage<StmtNum, StmtNum> pts;
     std::unordered_set<StmtNum> children = {2, 3, 4};
     pts.write(1, children);
 
@@ -17,36 +17,36 @@ TEST_CASE("Check writes and reads to/from ParentTStorage") {
 }
 
 TEST_CASE("Tests for getting children for ParentTStorage") {
-    FollowsParentStorage pts;
+    RelationshipStorage<StmtNum, StmtNum> pts;
     std::unordered_set<StmtNum> children = {2, 3, 4};
     pts.write(1, children);
 
-    std::unordered_set<StmtNum> res = pts.getRightWildcard(1);
+    std::unordered_set<StmtNum> res = pts.getRightItems(1);
     std::unordered_set<StmtNum> check{2, 3, 4};
     REQUIRE(unit_testing_utils::equals(check, res));
 
-    res = pts.getRightWildcard(2);
+    res = pts.getRightItems(2);
     REQUIRE(res.empty());
 
-    res = pts.getRightWildcard(3);
+    res = pts.getRightItems(3);
     REQUIRE(res.empty());
 }
 
 TEST_CASE("Tests for getting parent for ParentTStorage") {
-    FollowsParentStorage pts;
+    RelationshipStorage<StmtNum, StmtNum> pts;
     std::unordered_set<StmtNum> children1 = {2, 3, 4};
     std::unordered_set<StmtNum> children2 = {3};
     pts.write(1, children1);
     pts.write(2, children2);
 
-    std::unordered_set<StmtNum> res = pts.getLeftWildcard(3);
+    std::unordered_set<StmtNum> res = pts.getLeftItems(3);
     std::unordered_set<StmtNum> check{1, 2};
     REQUIRE(unit_testing_utils::equals(check, res));
 
-    res = pts.getLeftWildcard(1);
+    res = pts.getLeftItems(1);
     REQUIRE(res.empty());
 
-    res = pts.getLeftWildcard(5);
+    res = pts.getLeftItems(5);
     REQUIRE(res.empty());
 }
 

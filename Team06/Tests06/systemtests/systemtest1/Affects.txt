@@ -29,18 +29,18 @@ Select c such that Affects(30, 30)
 none
 5000
 7 - comment
-variable v;
-Select v such that Affects(20, 35)
-b
+assign a;
+Select a such that Affects(a, 35)
+20, 28, 35, 38
 5000
 8 - comment
-variable v;
-Select v such that Affects(26, 26)
-a
+assign a;
+Select a such that Affects(26, a)
+26
 5000
 9 - comment
-variable v;
-Select v such that Affects(39, 39)
+call c;
+Select c such that Affects(39, 39)
 none
 5000
 10 - comment
@@ -54,7 +54,38 @@ Select c such that Affects(18, 12)
 none
 5000
 12 - comment
-assign a; call c; variable v;
-Select v such that Affects(38, 39)
-while
+assign a; call c; print p;
+Select p such that Affects(38, 39)
+32, 36, 42
 5000
+13 - comment
+assign a;
+Select a such that Affects(23, a)
+none
+5000
+14 - comment
+assign a;
+Select a such that Affects(28, a)
+35, 38, 39
+5000
+15 - comment
+assign a;
+Select a such that Affects(5, a)
+7, 8
+5000
+16 - comment
+assign a;
+Select a such that Affects(9, a)
+10
+5000
+17 - comment
+assign a;
+Select a such that Affects(a, 16)
+10, 12, 15
+5000
+18 - comment
+assign a;
+Select a such that Affects(a, a)
+26, 35, 38, 40, 41
+5000
+

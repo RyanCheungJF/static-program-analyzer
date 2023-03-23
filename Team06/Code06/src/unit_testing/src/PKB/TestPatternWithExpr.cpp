@@ -55,7 +55,7 @@ TEST_CASE("Support for pattern query of type pattern(\"a\", \"v\")") {
 
     std::vector<std::vector<std::string>> check1 = {{"1", "z"}};
     std::vector<std::vector<std::string>> check2 = {{"2", "z"}};
-    
+
     REQUIRE(unit_testing_utils::equals(check1, res1));
     REQUIRE(unit_testing_utils::equals(check2, res2));
 }

@@ -9,7 +9,22 @@ Select c such that Affects*(12, 16)
 4
 5000
 3 - comment
-assign a; call c; variable v;
-Select v such that Affects*(28, 38)
-while
+assign a; call c; print p;
+Select p such that Affects*(28, 38)
+32, 36, 42
+5000
+4 - comment
+assign a;
+Select a such that Affects*(5, a)
+7, 8, 9, 10, 16
+5000
+5 - comment
+assign a;
+Select a such that Affects*(a, 16)
+15, 13, 12, 10, 9, 8, 6, 5
+5000
+6 - comment
+assign a;
+Select a such that Affects*(a, 39)
+38, 37, 28
 5000

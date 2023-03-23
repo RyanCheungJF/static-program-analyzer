@@ -1,14 +1,12 @@
 #include "StmtStorage.h"
 
 void StmtStorage::writeStatement(Stmt s, StmtNum line) {
-  stmt_stmtNum[s].insert(line);
+    stmt_stmtNum[s].insert(line);
     stmtNum_stmt[line].insert(s);
-  return;
+    return;
 }
 
 bool StmtStorage::checkStatement(Stmt stmt, StmtNum num) {
-
-    // source code does not even contain this type of statement
     if (stmt_stmtNum.find(stmt) == stmt_stmtNum.end()) {
         return false;
     }

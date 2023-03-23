@@ -1,0 +1,30 @@
+1 - comment
+assign a;
+Select a such that Affects(14, a)
+none
+5000
+2 - comment
+assign a;
+Select a such that Affects(15, a)
+18
+5000
+3 - comment
+assign a;
+Select a such that Affects(8, a)
+8, 9, 31
+5000
+4 - comment
+assign a;
+Select a such that Affects(74, a)
+none
+5000
+5 - comment
+assign a;
+Select a such that Affects(a, 164)
+148, 156, 162
+5000
+6 - comment
+assign a;
+Select a such that Affects(a, 154)
+none
+5000
