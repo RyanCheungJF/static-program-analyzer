@@ -18,6 +18,7 @@ TEST_CASE("Test Relationship Cache") {
 
     cache.addResult(rs1, {{"1", "2"}});
 
+    // Modifies("x", y)
     param1 = Parameter("x", ParameterType::FIXED_STRING);
     param2 = Parameter("y", ParameterType::VARIABLE);
     params1 = vector<Parameter>();
@@ -40,6 +41,19 @@ TEST_CASE("Test Relationship Cache") {
             vector<vector<string>> expected = {{"1", "2"}};
             REQUIRE(equals(res, expected));
         }
+
+        SECTION("Modifies(\"x\", y1)") {
+            Parameter param3 = Parameter("x", ParameterType::FIXED_STRING);
+            Parameter param4 = Parameter("y1", ParameterType::VARIABLE);
+            vector<Parameter> params2;
+            params2.push_back(param3);
+            params2.push_back(param4);
+            shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
+
+            vector<vector<string>> res = cache.findResult(rs2);
+            vector<vector<string>> expected = {{"x", "a"}, {"x", "b"}};
+            REQUIRE(equals(res, expected));
+        }
     }
 
     // Follows(1, 3)
@@ -60,6 +74,32 @@ TEST_CASE("Test Relationship Cache") {
         SECTION("Modifies(\"x\", \"y\")") {
             Parameter param3 = Parameter("x", ParameterType::FIXED_STRING);
             Parameter param4 = Parameter("y", ParameterType::FIXED_STRING);
+            vector<Parameter> params2;
+            params2.push_back(param3);
+            params2.push_back(param4);
+            shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
+
+            vector<vector<string>> res = cache.findResult(rs2);
+            vector<vector<string>> expected = {};
+            REQUIRE(equals(res, expected));
+        }
+
+        SECTION("Modifies(\"x1\", y)") {
+            Parameter param3 = Parameter("x1", ParameterType::FIXED_STRING);
+            Parameter param4 = Parameter("y", ParameterType::VARIABLE);
+            vector<Parameter> params2;
+            params2.push_back(param3);
+            params2.push_back(param4);
+            shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
+
+            vector<vector<string>> res = cache.findResult(rs2);
+            vector<vector<string>> expected = {};
+            REQUIRE(equals(res, expected));
+        }
+
+        SECTION("Modifies(x, y1)") {
+            Parameter param3 = Parameter("x", ParameterType::PROCEDURE);
+            Parameter param4 = Parameter("y", ParameterType::VARIABLE);
             vector<Parameter> params2;
             params2.push_back(param3);
             params2.push_back(param4);

@@ -11,8 +11,7 @@ struct patternHash {
 
         // only pattern a("x", _) and pattern a("x1", _) should have different hashes.
         if (pattern->getPatternType() == ParameterType::FIXED_STRING) {
-            std::size_t h4 = std::hash<Ent>{}(pattern->getEntRefValue());
-            return ((((h1 ^ (h2 << 1)) >> 1) ^ (h3 << 1)) >> 1) ^ (h4 << 1);
+            std::size_t h3 = std::hash<Parameter>{}(*pattern->getEntRef());
         }
         return ((h1 ^ (h2 << 1)) >> 1) ^ (h3 << 1);
     }
@@ -24,14 +23,14 @@ struct patternEquals {
         // pattern a(v1, _) and pattern a(v2, _) should be equal in PKB's context.
         bool check1 = pattern1->getPatternType() == pattern2->getPatternType();
         bool check2 = pattern1->getExprSpecs()[0] == pattern2->getExprSpecs()[0];
+        bool check3 = pattern1->getEntRefType() == pattern2->getEntRefType();
 
         // only pattern a("x", _) and pattern a("x1", _) should not be equals
         if (pattern1->getPatternType() == ParameterType::FIXED_STRING) {
-            bool check3 = *pattern1->getEntRef() == *pattern2->getEntRef();
-            return check1 && check2 && check3;
+            check3 = *pattern1->getEntRef() == *pattern2->getEntRef();
         }
 
-        return check1 && check2;
+        return check1 && check2 && check3;
     }
 };
 
