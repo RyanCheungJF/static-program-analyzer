@@ -4,7 +4,6 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shar
                                std::shared_ptr<ProcedureStorage> procStorage,
                                std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
                                std::shared_ptr<ModifiesUsesStorage> usesStorage,
-                               std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> parentTStorage,
                                bool isTransitive) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
@@ -12,7 +11,6 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shar
     this->modifiesStorage = modifiesStorage;
     this->usesStorage = usesStorage;
     this->isTransitive = isTransitive;
-    this->parentTStorage = parentTStorage;
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, Parameter param2) {
@@ -73,13 +71,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
         return {};
     }
-
-    // TODO: short-circuit strategies here
-    //if a1 >= a2 and they are both not in a while loop, then also confirm cannot reach
-//    if (a1 >= a2 && !checkHaveCommonWhileLoop(a1, a2)) {
-//        return {};
-//    }
-
 
     std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getRightItems(a1);
     std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getRightItems(a2);
@@ -462,18 +453,3 @@ bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::u
     return false;
 }
 
-bool AffectsHandler::checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2) {
-
-    std::unordered_set<StmtNum> a1Parents = parentTStorage->getLeftItems(a1);
-    std::unordered_set<StmtNum> a2Parents = parentTStorage->getLeftItems(a2);
-    for (StmtNum n : a1Parents) {
-        if (a2Parents.find(n) != a2Parents.end()) {
-
-            unordered_set<Stmt> stmtType = stmtStorage->getStatementType(n);
-            if (stmtType.find(AppConstants::WHILE) != stmtType.end()) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
