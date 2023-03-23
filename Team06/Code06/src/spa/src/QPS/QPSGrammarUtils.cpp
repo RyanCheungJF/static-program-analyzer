@@ -73,6 +73,7 @@ bool isDeclaration(string declaration) {
     // This allows for there to be duplicate synonyms.
     // While it should technically not be allowed, we will check for duplicate synonyms
     // when inserting to variableStore.
+    declaration = trim(declaration);
     int index = declaration.find(" ");
     string declarationToken = declaration.substr(0, index);
     string synonymsString = declaration.substr(index + 1, declaration.size());

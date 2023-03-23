@@ -261,3 +261,37 @@ TEST_CASE("insertTable / insert tables with with content, non intersecting / tab
     REQUIRE(find(res.begin(), res.end(), "27 34 30") != res.end());
     REQUIRE(find(res.begin(), res.end(), "30 34 30") != res.end());
 }
+
+TEST_CASE("fetch / fetching duplicate parameters / returns duplicate parameters "
+          "be inserted without content") {
+    QueryDB qdb;
+    ReadPKB readPKB;
+    vector<vector<string>> content1 = {{"a", "b"}, {"c", "d"}, {"e", "f"}};
+    vector<Parameter> params1 = {Parameter("v", ParameterType::VARIABLE), Parameter("v2", ParameterType::VARIABLE)};
+    Table t1(params1, content1);
+    qdb.insertTable(t1);
+    vector<string> res = qdb.fetch({
+                                           Parameter("v", ParameterType::VARIABLE),
+                                           Parameter("v", ParameterType::VARIABLE),
+                                           Parameter("v2", ParameterType::VARIABLE)
+                                   }, readPKB);
+    REQUIRE(find(res.begin(), res.end(), "a a b") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "c c d") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "e e f") != res.end());
+}
+
+TEST_CASE("fetch / insertion of table with duplicate params but only fetching first instance "
+          "of that param / returns one instance of the param ") {
+    QueryDB qdb;
+    ReadPKB readPKB;
+    vector<vector<string>> content1 = {{"a", "aa"}, {"c", "cc"}, {"e", "ee"}};
+    vector<Parameter> params1 = {Parameter("v", ParameterType::VARIABLE), Parameter("v", ParameterType::VARIABLE)};
+    Table t1(params1, content1);
+    qdb.insertTable(t1);
+    vector<string> res = qdb.fetch({
+                                           Parameter("v", ParameterType::VARIABLE),
+                                   }, readPKB);
+    REQUIRE(find(res.begin(), res.end(), "a") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "c") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "e") != res.end());
+}
