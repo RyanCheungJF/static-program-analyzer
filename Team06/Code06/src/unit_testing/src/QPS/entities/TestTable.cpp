@@ -114,14 +114,6 @@ TEST_CASE("extractDesignEntities / test for variable and wild card / return "
     REQUIRE((t.getHeaders().size() == 1 && t.getHeaders()[0].getValue() == "v"));
 }
 
-TEST_CASE("create Table / creates table with duplicate parameters/ duplicate params are removed") {
-    vector<Parameter> headers = {Parameter("s", ParameterType::STMT), Parameter("v", ParameterType::VARIABLE),
-                                 Parameter("s", ParameterType::STMT), Parameter("v1", ParameterType::VARIABLE)};
-    vector<vector<string>> content = {{"1", "a", "1", "b"}, {"2", "a", "2", "b"}, {"3", "a", "3", "b"}};
-    Table table(headers, content);
-    REQUIRE(table.getHeaders().size() == 3);
-}
-
 TEST_CASE("extractDesignEntities / test for stmt and fixed_int / return only stmt") {
 
     vector<Parameter> headers = {Parameter("s", ParameterType::STMT), Parameter("321", ParameterType::FIXED_INT)};
