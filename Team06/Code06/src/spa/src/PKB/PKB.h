@@ -2,7 +2,7 @@
 
 #include <queue>
 
-#include "../../unit_testing/src/stubs/With.h"
+#include "../../unit_testing/src/stubs/Comparison.h"
 #include "../QPS/entities/Pattern.h"
 #include "../QPS/entities/Relationship.h"
 #include "../utils/AppConstants.h"
@@ -91,7 +91,7 @@ public:
     // Returns relevant strings based on Pattern object passed
     std::vector<std::vector<std::string>> findPattern(Pattern p);
 
-    std::vector<std::vector<std::string>> findAttribute(With w);
+    std::vector<std::vector<std::string>> findAttribute(Comparison w);
 
     // check if given a statement type and statement line number, whether that
     // statement line number is indeed of that statement type

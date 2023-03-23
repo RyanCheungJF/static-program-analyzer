@@ -219,18 +219,19 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
 
 // this function is incomplete and is currently done with a Stub. Please DO NOT CODE REVIEW this.
 // Waiting for QPS to complete parsing and sending of the With object
-std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
-    Parameter param = w.syn;
-    ParameterType paramType = param.getType();
-    std::string attrType = w.attrType;
+std::vector<std::vector<std::string>> PKB::findAttribute(Comparison c) {
+    Parameter leftParam = c.getLeftParam();
+    Parameter rightParam = c.getRightParam();
+    AttributeType attrType = leftParam.getAttr();
+    ParameterType leftParamType = leftParam.getType();
     bool hasEquals = w.hasEquals;
     std::string equalsValue = w.equalsValue;
 
     std::vector<std::vector<std::string>> res;
 
-    if (Parameter::isStatementRef(param)) {
-        std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(param.getTypeString());
-        if (attrType == AppConstants::PROCEDURE) {
+    if (Parameter::isStatementRef(leftParam)) {
+        std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(leftParam.getTypeString());
+        if (attrType == AttributeType::PROCNAME) {
             for (auto stmtNum : stmtNums) {
                 ProcName procName = procedureStorage->getProcedure(stmtNum);
                 res.push_back({std::to_string(stmtNum), procName});
@@ -238,28 +239,28 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
         }
         // assumes that QPS is correct in only allowing varName for reads and prints,
         // since reads and prints will only have 1 variable tied to them
-        else if (attrType == AppConstants::VARIABLE) {
+        else if (attrType == AttributeType::VARNAME) {
             for (auto stmtNum : stmtNums) {
                 Ent var = *entityStorage->getEntities(stmtNum).begin();
                 res.push_back({std::to_string(stmtNum), var});
             }
         }
         // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
-        else if (attrType == AppConstants::STMTNO) {
+        else if (attrType == AttributeType::STMTNO) {
             for (auto stmtNum : stmtNums) {
                 res.push_back({std::to_string(stmtNum), std::to_string(stmtNum)});
             }
         }
     }
     // currently just returns a pair of duplicated values
-    else if (paramType == ParameterType::CONSTANT) {
+    else if (leftParamType == ParameterType::CONSTANT) {
         std::unordered_set<Const> consts = constantStorage->getEntNames();
         for (auto constant : consts) {
             res.push_back({std::to_string(constant), std::to_string(constant)});
         }
     }
     // currently just returns a pair of duplicated values
-    else if (paramType == ParameterType::VARIABLE) {
+    else if (leftParamType == ParameterType::VARIABLE) {
         std::unordered_set<Ent> vars = entityStorage->getEntNames();
         for (auto var : vars) {
             res.push_back({var, var});
@@ -271,6 +272,14 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
         for (auto proc : procs) {
             res.push_back({proc, proc});
         }
+    }
+
+    if (hasEquals) {
+        res.erase(std::remove_if(res.begin(), res.end(),
+                                 [&](const std::vector<std::string>& item) {
+                                     return item[1] != equalsValue;
+                                 }),
+                  res.end());
     }
 
     return res;
