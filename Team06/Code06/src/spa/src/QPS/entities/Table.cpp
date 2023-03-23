@@ -4,20 +4,8 @@
 
 Table::Table(vector<Parameter> headers, vector<vector<string>> contents) {
     vector<int> duplicateIndexes;
-    for (int i = 0; i < headers.size(); i++) {
-        if (!hasParameter(headers[i])) {
-            this->headers.push_back(headers[i]);
-        }
-        else {
-            duplicateIndexes.push_back(i);
-        }
-    }
-    for (vector<string> content : contents) {
-        for (int index : duplicateIndexes) {
-            content.erase(content.begin() + index);
-        }
-        this->contents.push_back(content);
-    }
+    this->headers = headers;
+    this->contents = contents;
 }
 
 bool Table::hasParameter(const Parameter& p) {
@@ -186,9 +174,12 @@ bool Table::isEmptyTable() {
 Table Table::extractColumns(vector<Parameter> params) {
     // Assume that all the params called is confirmed to be present in the table
     vector<int> indexes;
-    for (int i = 0; i < headers.size(); i++) {
-        if (find(params.begin(), params.end(), headers[i]) != params.end()) {
-            indexes.push_back(i);
+    for (int i = 0; i < params.size(); i++) {
+        for (int j = 0; j < headers.size(); j++) {
+            if(params[i] == headers[j]) {
+                indexes.push_back(j);
+                break;
+            }
         }
     }
     return extractColumns(indexes);

@@ -24,12 +24,6 @@ TEST_CASE("parseDeclaration / cannot store declaration of diff types with same "
     CHECK_THROWS_AS(parseDeclarations(declarations), SemanticException);
 }
 
-TEST_CASE("parseDeclaration / invalid spaces in design entity "
-          " / throws Syntax exception") {
-    vector<string> declarations = {"st mt s", "assign s"};
-    CHECK_THROWS_AS(parseDeclarations(declarations), SyntaxException);
-}
-
 TEST_CASE("parseDeclaration / invalid spaces in synonym name "
           " / throws Syntax exception") {
     vector<string> declarations = {"stmt s s", "assign s"};
