@@ -344,14 +344,9 @@ std::unique_ptr<Expression> Parser::parseFactor(std::deque<Token>& tokens) {
 
 std::unique_ptr<Expression> Parser::parseConstant(std::deque<Token>& tokens) {
     // Rule: INTEGER
-    try {
-        Const value = stoi(tokens.front().value);
-        tokens.pop_front();
-        return std::make_unique<Constant>(value);
-    } catch (std::out_of_range e) {
-        throw SyntaxErrorException(
-            "Parsing failed, this SPA does not support integers greater than INT_MAX (2147483647)");
-    }
+    Const value = tokens.front().value;
+    tokens.pop_front();
+    return std::make_unique<Constant>(value);
 }
 
 std::unique_ptr<Expression> Parser::parseVariable(std::deque<Token>& tokens) {

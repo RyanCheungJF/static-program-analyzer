@@ -3,7 +3,8 @@
 AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
                                std::shared_ptr<ProcedureStorage> procStorage,
                                std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
-                               std::shared_ptr<ModifiesUsesStorage> usesStorage, bool isTransitive) {
+                               std::shared_ptr<ModifiesUsesStorage> usesStorage,
+                               bool isTransitive) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
     this->procStorage = procStorage;
@@ -21,8 +22,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
 
     bool isFixedIntParam1 = paramType1 == ParameterType::FIXED_INT;
     bool isFixedIntParam2 = paramType2 == ParameterType::FIXED_INT;
-    bool isWildCardParam1 = paramType1 == ParameterType::WILDCARD || paramType1 == ParameterType::ASSIGN;
-    bool isWildCardParam2 = paramType2 == ParameterType::WILDCARD || paramType2 == ParameterType::ASSIGN;
+    bool isWildCardParam1 = paramType1 == ParameterType::STMT || paramType1 == ParameterType::WILDCARD ||
+                            paramType1 == ParameterType::ASSIGN;
+    bool isWildCardParam2 = paramType2 == ParameterType::STMT || paramType2 == ParameterType::WILDCARD ||
+                            paramType2 == ParameterType::ASSIGN;
 
     std::vector<std::vector<std::string>> temp;
     if (isTransitive) {
@@ -53,37 +56,38 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     std::string paramString2 = std::to_string(a2);
     ProcName proc1 = procStorage->getProcedure(a1);
     ProcName proc2 = procStorage->getProcedure(a2);
-    std::vector<std::vector<std::string>> res;
 
     // either not in any procedure, or both are not in the same procedure
     if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST || proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
-        return res;
+        return {};
     }
     else if (proc1 != proc2) {
-        return res;
+        return {};
     }
 
     // if both are not assign statements, should also just return nothing already
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
     std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
     if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
-        return res;
+        return {};
     }
 
     std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getRightItems(a1);
     std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getRightItems(a2);
     std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
     if (commonVariables.empty()) {
-        return res;
+        return {};
     }
 
     bool canReach = checkCanReach(a1, a2, proc1, commonVariables);
     if (!canReach) {
-        return res;
+        return {};
     }
 
-    res.push_back({paramString1, paramString2});
-    return res;
+    return {{paramString1, paramString2}};
+//    std::vector<std::vector<std::string>> res;
+//    res.push_back({paramString1, paramString2});
+//    return res;
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum a2) {
@@ -448,3 +452,4 @@ bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::u
     }
     return false;
 }
+

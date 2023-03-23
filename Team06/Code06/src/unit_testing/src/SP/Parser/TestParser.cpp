@@ -36,7 +36,7 @@ TEST_CASE("Valid Source Program") {
 
         // creating expected tree
         auto printNode = std::make_unique<PrintStatement>(2, "z");
-        auto expressionNode = std::make_unique<Constant>(1);
+        auto expressionNode = std::make_unique<Constant>("1");
         auto assignNode = std::make_unique<AssignStatement>(1, "x", std::move(expressionNode));
 
         std::vector<std::unique_ptr<Statement>> statements;
@@ -62,7 +62,7 @@ TEST_CASE("Valid Source Program") {
 
         // creating actual tree
         auto mathNodeA = std::make_unique<MathExpression>(AppConstants::STRING_PLUS, std::make_unique<Variable>("x"),
-                                                          std::make_unique<Constant>(1));
+                                                          std::make_unique<Constant>("1"));
         auto assignNodeA = std::make_unique<AssignStatement>(1, "x", std::move(mathNodeA));
         std::vector<std::unique_ptr<Statement>> statementsA;
         statementsA.push_back(std::move(assignNodeA));
@@ -70,7 +70,7 @@ TEST_CASE("Valid Source Program") {
         auto procedureNodeA = std::make_unique<Procedure>("A", std::move(statementListNodeA));
 
         auto mathNodeB = std::make_unique<MathExpression>(
-            AppConstants::STRING_MULTIPLY, std::make_unique<Variable>("y"), std::make_unique<Constant>(2));
+            AppConstants::STRING_MULTIPLY, std::make_unique<Variable>("y"), std::make_unique<Constant>("2"));
         auto assignNodeB = std::make_unique<AssignStatement>(2, "y", std::move(mathNodeB));
         auto readNodeB = std::make_unique<ReadStatement>(3, "y");
         std::vector<std::unique_ptr<Statement>> statementsB;
@@ -80,7 +80,7 @@ TEST_CASE("Valid Source Program") {
         auto procedureNodeB = std::make_unique<Procedure>("B", std::move(statementListNodeB));
 
         auto mathNodeC = std::make_unique<MathExpression>(AppConstants::STRING_MINUS, std::make_unique<Variable>("z"),
-                                                          std::make_unique<Constant>(3));
+                                                          std::make_unique<Constant>("3"));
         auto assignNodeC = std::make_unique<AssignStatement>(6, "z", std::move(mathNodeC));
         auto printNodeC = std::make_unique<PrintStatement>(4, "z");
         auto callNodeC = std::make_unique<CallStatement>(5, "B");
@@ -108,33 +108,33 @@ TEST_CASE("Valid Source Program") {
         auto rootNode = testParser.parseProgram(tokenQueue);
 
         // creating actual tree
-        auto assignNodeX = std::make_unique<AssignStatement>(1, "x", std::make_unique<Constant>(6));
+        auto assignNodeX = std::make_unique<AssignStatement>(1, "x", std::make_unique<Constant>("6"));
         auto assignNodeZ = std::make_unique<AssignStatement>(2, "z", std::make_unique<Variable>("x"));
         auto printNodeZ = std::make_unique<PrintStatement>(7, "z");
 
         std::vector<std::unique_ptr<Statement>> thenStatements;
-        auto thenStmtNode = std::make_unique<AssignStatement>(5, "z", std::make_unique<Constant>(2));
+        auto thenStmtNode = std::make_unique<AssignStatement>(5, "z", std::make_unique<Constant>("2"));
         thenStatements.push_back(std::move(thenStmtNode));
         auto thenStmtList = std::make_unique<StatementList>(std::move(thenStatements));
 
         std::vector<std::unique_ptr<Statement>> elseStatements;
-        auto elseStmtNode = std::make_unique<AssignStatement>(6, "z", std::make_unique<Constant>(3));
+        auto elseStmtNode = std::make_unique<AssignStatement>(6, "z", std::make_unique<Constant>("3"));
         elseStatements.push_back(std::move(elseStmtNode));
         auto elseStmtList = std::make_unique<StatementList>(std::move(elseStatements));
 
         auto lhsIfExpr = std::make_unique<MathExpression>(AppConstants::STRING_MODULO, std::make_unique<Variable>("z"),
-                                                          std::make_unique<Constant>(2));
-        auto rhsIfExpr = std::make_unique<Constant>(0);
+                                                          std::make_unique<Constant>("2"));
+        auto rhsIfExpr = std::make_unique<Constant>("0");
         auto ifRelExprNode =
             std::make_unique<RelationalExpression>(AppConstants::EQUALS, std::move(lhsIfExpr), std::move(rhsIfExpr));
         auto ifStatementNode = std::make_unique<IfStatement>(4, std::move(ifRelExprNode), std::move(thenStmtList),
                                                              std::move(elseStmtList));
 
         auto leftRelExpr = std::make_unique<RelationalExpression>(
-            AppConstants::STRING_LESS, std::make_unique<Variable>("x"), std::make_unique<Constant>(7));
+            AppConstants::STRING_LESS, std::make_unique<Variable>("x"), std::make_unique<Constant>("7"));
         auto leftCondExpr = std::make_unique<NotConditionalExpression>(std::move(leftRelExpr));
         auto rightCondExpr = std::make_unique<RelationalExpression>("<=", std::make_unique<Variable>("z"),
-                                                                    std::make_unique<Constant>(12));
+                                                                    std::make_unique<Constant>("12"));
         auto binaryCondNode = std::make_unique<BinaryConditionalExpression>(AppConstants::AND, std::move(leftCondExpr),
                                                                             std::move(rightCondExpr));
 
@@ -189,15 +189,15 @@ TEST_CASE("Valid Source Program") {
         auto rootNode = testParser.parseProgram(tokenQueue);
 
         // creating expected tree
-        auto assignNodeX = std::make_unique<AssignStatement>(2, "x", std::make_unique<Constant>(1));
+        auto assignNodeX = std::make_unique<AssignStatement>(2, "x", std::make_unique<Constant>("1"));
         std::vector<std::unique_ptr<Statement>> whileStatements;
         whileStatements.push_back(std::move(assignNodeX));
 
         auto whileStmtList = std::make_unique<StatementList>(std::move(whileStatements));
-        auto lhsExpr = std::make_unique<MathExpression>(AppConstants::STRING_PLUS, std::make_unique<Constant>(1),
-                                                        std::make_unique<Constant>(3));
+        auto lhsExpr = std::make_unique<MathExpression>(AppConstants::STRING_PLUS, std::make_unique<Constant>("1"),
+                                                        std::make_unique<Constant>("3"));
         auto relExpr = std::make_unique<RelationalExpression>(AppConstants::STRING_LESS, std::move(lhsExpr),
-                                                              std::make_unique<Constant>(2));
+                                                              std::make_unique<Constant>("2"));
         auto whileNode = std::make_unique<WhileStatement>(1, std::move(relExpr), std::move(whileStmtList));
 
         std::vector<std::unique_ptr<Statement>> statementsA;
@@ -224,11 +224,11 @@ TEST_CASE("Valid Source Program") {
         auto readStmt = std::make_unique<ReadStatement>(1, AppConstants::CALL);
         auto callStmt = std::make_unique<CallStatement>(2, AppConstants::PRINT);
         auto printStmt = std::make_unique<PrintStatement>(3, AppConstants::READ);
-        auto readAssignStmt = std::make_unique<AssignStatement>(4, AppConstants::READ, std::make_unique<Constant>(2));
-        auto callAssignStmt = std::make_unique<AssignStatement>(5, AppConstants::CALL, std::make_unique<Constant>(3));
-        auto whileAssignStmt = std::make_unique<AssignStatement>(6, AppConstants::WHILE, std::make_unique<Constant>(5));
-        auto ifAssignStmt = std::make_unique<AssignStatement>(7, AppConstants::IF, std::make_unique<Constant>(4));
-        auto printAssignStmt = std::make_unique<AssignStatement>(8, AppConstants::PRINT, std::make_unique<Constant>(8));
+        auto readAssignStmt = std::make_unique<AssignStatement>(4, AppConstants::READ, std::make_unique<Constant>("2"));
+        auto callAssignStmt = std::make_unique<AssignStatement>(5, AppConstants::CALL, std::make_unique<Constant>("3"));
+        auto whileAssignStmt = std::make_unique<AssignStatement>(6, AppConstants::WHILE, std::make_unique<Constant>("5"));
+        auto ifAssignStmt = std::make_unique<AssignStatement>(7, AppConstants::IF, std::make_unique<Constant>("4"));
+        auto printAssignStmt = std::make_unique<AssignStatement>(8, AppConstants::PRINT, std::make_unique<Constant>("8"));
 
         std::vector<std::unique_ptr<Statement>> statementsA;
         statementsA.push_back(std::move(readStmt));
@@ -806,21 +806,6 @@ TEST_CASE("Invalid Source Program") {
         }
 
         REQUIRE(errorMessage.find("Expected ')' in factor") != std::string::npos);
-    }
-
-    SECTION("Integer overflow") {
-        std::ifstream testFile(testDirectory.string() + "invalid39.txt");
-        strStream << testFile.rdbuf();
-        tokenQueue = testTokenizer.tokenize(strStream);
-
-        try {
-            testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
-            errorMessage = e.what();
-        }
-
-        REQUIRE(errorMessage.find("SPA does not support integers greater than INT_MAX (2147483647)") !=
-                std::string::npos);
     }
 }
 
