@@ -349,3 +349,10 @@ TEST_CASE("parse / select with clause with valid form / returns query") {
     Query q = sqp.parse(input);
     CHECK(true);
 }
+
+
+TEST_CASE("parse / select with clause with invalid form / throws syntax error") {
+    string input = "Select s with \"a\" = b";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
