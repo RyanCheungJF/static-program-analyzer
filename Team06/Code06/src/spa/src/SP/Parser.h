@@ -47,7 +47,9 @@ private:
     std::unique_ptr<ConditionalExpression> parseBinaryConditionalExpression(std::deque<Token>& tokens);
     std::unique_ptr<ConditionalExpression> parseRelationalExpression(std::deque<Token>& tokens);
     std::unique_ptr<Expression> parseRelationalFactor(std::deque<Token>& tokens);
+    std::unique_ptr<Expression> parseExpressionHelper(std::deque<Token>& tokens, std::unique_ptr<Expression> lhs);
     std::unique_ptr<Expression> parseTerm(std::deque<Token>& tokens);
+    std::unique_ptr<Expression> parseTermHelper(std::deque<Token>& tokens, std::unique_ptr<Expression> lhs);
     std::unique_ptr<Expression> parseFactor(std::deque<Token>& tokens);
     std::unique_ptr<Expression> parseConstant(std::deque<Token>& tokens);
     std::unique_ptr<Expression> parseVariable(std::deque<Token>& tokens);

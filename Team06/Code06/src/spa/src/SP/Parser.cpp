@@ -272,12 +272,16 @@ std::unique_ptr<Expression> Parser::parseExpression(std::deque<Token>& tokens) {
      *    expr: term(expr')
      *    expr': '+' term(expr') | '-' term(expr') | epsilon */
     auto lhs = parseTerm(tokens);
+    return parseExpressionHelper(tokens, std::move(lhs));
+}
 
+std::unique_ptr<Expression> Parser::parseExpressionHelper(std::deque<Token>& tokens, std::unique_ptr<Expression> lhs) {
     if (tokens.front().isType(TokenType::EXPR_ARITH_OPR)) {
         Operator mathOperator = tokens.front().value;
         tokens.pop_front(); // Pop the '+' or '-'
-        auto rhs = parseExpression(tokens);
-        return std::make_unique<MathExpression>(mathOperator, std::move(lhs), std::move(rhs));
+        auto rhs = parseTerm(tokens);
+        return parseExpressionHelper(tokens,
+                                     std::make_unique<MathExpression>(mathOperator, std::move(lhs), std::move(rhs)));
     }
     else { // Reached the epsilon
         return lhs;
@@ -290,12 +294,15 @@ std::unique_ptr<Expression> Parser::parseTerm(std::deque<Token>& tokens) {
      *    term: factor(term')
      *    term': '*' factor(term') | '/' factor(term') | '%' factor(term') | epsilon */
     auto lhs = parseFactor(tokens);
+    return parseTermHelper(tokens, std::move(lhs));
+}
 
+std::unique_ptr<Expression> Parser::parseTermHelper(std::deque<Token>& tokens, std::unique_ptr<Expression> lhs) {
     if (tokens.front().isType(TokenType::TERM_ARITH_OPR)) {
         Operator mathOperator = tokens.front().value;
         tokens.pop_front(); // Pop the '*' or '/' or '%'
-        auto rhs = parseTerm(tokens);
-        return std::make_unique<MathExpression>(mathOperator, std::move(lhs), std::move(rhs));
+        auto rhs = parseFactor(tokens);
+        return parseTermHelper(tokens, std::make_unique<MathExpression>(mathOperator, std::move(lhs), std::move(rhs)));
     }
     else { // Reached the epsilon
         return lhs;

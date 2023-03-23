@@ -1,9 +1,8 @@
+from pathlib import Path
 import os
 import xml.etree.ElementTree as ET
 
-# src = os.listdir(r_path)
-# src = os.listdir(os.path.join("Team06", "Tests06", "systemtests"))
-r_path = 'Team06\Tests06\systemtests'
+r_path = Path('Team06/Tests06/systemtests/')
 src = os.listdir(r_path)
 error = False
 

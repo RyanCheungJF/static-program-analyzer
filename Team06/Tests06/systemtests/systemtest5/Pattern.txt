@@ -46,7 +46,7 @@ Select a pattern a("a", "((f * q * e - s * 9)) * (g + ((10 + a)) * y)")
 10 - exact match check (2)
 assign a; 
 Select a pattern a("a", "(f * (q * e) - s * 9) * (g + (10 + a) * y)")
-8
+none
 5000
 11 - exact match check (3)
 assign a; 
@@ -61,12 +61,12 @@ none
 13 - partial match check (2)
 assign a; 
 Select a pattern a("a", _"q * e"_)
-8
+none
 5000
 14 - partial match check (3)
 assign a; 
 Select a pattern a("a", _"(((q * e)))"_)
-8
+none
 5000
 15 - partial match check (4)
 assign a; 
@@ -77,4 +77,14 @@ none
 assign a; 
 Select a pattern a("a", _"(10)"_)
 8, 13
+5000
+17 - check left-associative (1)
+assign a; 
+Select a pattern a("h", _"c * z"_)
+none
+5000
+18 - check left-associative (2)
+assign a; 
+Select a pattern a("h", _"a * c"_)
+45
 5000

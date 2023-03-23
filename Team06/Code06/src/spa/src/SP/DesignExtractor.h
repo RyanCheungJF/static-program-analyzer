@@ -2,12 +2,15 @@
 
 #include "../PKB/ReadPKB.h"
 #include "../PKB/WritePKB.h"
+#include "AST/Extractor/UsesModifiesExtractor.h"
 #include "AST/Visitor/ASTVisitorUtils.h"
 #include "AST/Visitor/EntRefExtractorVisitor.h"
 #include "AST/Visitor/FollowsExtractorVisitor.h"
 #include "AST/Visitor/ParentExtractorVisitor.h"
 #include "AST/Visitor/ProcedureExtractorVisitor.h"
 #include "AST/Visitor/StatementExtractorVisitor.h"
+#include "CFGBuilder.h"
+#include "SemanticValidator.h"
 
 class DesignExtractor {
 private:
@@ -15,11 +18,8 @@ private:
     WritePKB* writePkb;
     ReadPKB* readPkb;
 
-    void extractInfo();
+    void extractInfo(std::vector<ProcName> topoOrder);
     void extractCFG();
-    std::vector<ProcName> validateSemantics();
-    void buildCallerCalleeTable(std::vector<ProcName>& procedureNames,
-                                std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap);
 
 public:
     DesignExtractor();
