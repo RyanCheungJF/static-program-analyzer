@@ -3,13 +3,16 @@
 AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
                                std::shared_ptr<ProcedureStorage> procStorage,
                                std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
-                               std::shared_ptr<ModifiesUsesStorage> usesStorage, bool isTransitive) {
+                               std::shared_ptr<ModifiesUsesStorage> usesStorage,
+                               std::shared_ptr<ModifiesUsesStorage> parentTStorage,
+                               bool isTransitive) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
     this->procStorage = procStorage;
     this->modifiesStorage = modifiesStorage;
     this->usesStorage = usesStorage;
     this->isTransitive = isTransitive;
+    this
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, Parameter param2) {
@@ -446,6 +449,22 @@ bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::u
         std::unordered_set<StmtNum> children = graph[curr.second][AppConstants::CHILDREN];
         for (StmtNum child : children) {
             queue.push_back({curr.second, child});
+        }
+    }
+    return false;
+}
+
+bool AffectsHandler::checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2) {
+
+    std::unordered_set<StmtNum> a1Parents = parentTStorage->getLeftItems(a1);
+    std::unordered_set<StmtNum> a2Parents = parentTStorage->getLeftItems(a2);
+    for (StmtNum n : a1Parents) {
+        if (a2Parents.find(n) != a2Parents.end()) {
+
+            unordered_set<Stmt> stmtType = stmtStorage->getStatementType(n);
+            if (stmtType.find(AppConstants::WHILE) != stmtType.end()) {
+                return true;
+            }
         }
     }
     return false;

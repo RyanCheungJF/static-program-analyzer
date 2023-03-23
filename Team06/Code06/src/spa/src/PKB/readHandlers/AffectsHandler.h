@@ -86,4 +86,6 @@ private:
     bool checkModifiedAssignReadCall(std::unordered_set<Ent> commonVariables, StmtNum currentLine);
 
     bool checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::unordered_set<Ent> commonVariables);
+
+    bool checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2);
 };
