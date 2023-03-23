@@ -326,7 +326,7 @@ std::unique_ptr<Expression> Parser::parseFactor(std::deque<Token>& tokens) {
 
 std::unique_ptr<Expression> Parser::parseConstant(std::deque<Token>& tokens) {
     // Rule: INTEGER
-    Const value = stoi(tokens.front().value);
+    Const value = tokens.front().value;
     tokens.pop_front();
     return std::make_unique<Constant>(value);
 }
