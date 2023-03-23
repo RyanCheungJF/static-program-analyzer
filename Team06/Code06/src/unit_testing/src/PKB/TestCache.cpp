@@ -114,9 +114,9 @@ TEST_CASE("Test Pattern Cache") {
     vector<string> exprSpecs = {"_b / c_"};
     Pattern p1 = Pattern(param1, param2, exprSpecs);
 
-    // Pattern if("z", _, _)
+    // Pattern if(v, _, _)
     Parameter param3 = Parameter("if", ParameterType::IF);
-    Parameter param4 = Parameter("z", ParameterType::FIXED_STRING);
+    Parameter param4 = Parameter("v", ParameterType::VARIABLE);
     exprSpecs = {"_", "_"};
     Pattern p2 = Pattern(param3, param4, exprSpecs);
 
@@ -128,7 +128,7 @@ TEST_CASE("Test Pattern Cache") {
 
     // Pattern a("z", "_b / c_")
     SECTION("Cache hit, Assign pattern") {
-        Parameter param6 = Parameter("a", ParameterType::ASSIGN);
+        Parameter param6 = Parameter("a2", ParameterType::ASSIGN);
         Parameter param7 = Parameter("z", ParameterType::FIXED_STRING);
         vector<string> exprSpecs = {"_b / c_"};
         Pattern p3 = Pattern(param6, param7, exprSpecs);
@@ -139,10 +139,10 @@ TEST_CASE("Test Pattern Cache") {
         REQUIRE(equals(res, expected));
     }
 
-    // Pattern if("z", _, _)
+    // Pattern if(v2, _, _)
     SECTION("Cache hit, If pattern") {
         Parameter param6 = Parameter("if", ParameterType::IF);
-        Parameter param7 = Parameter("z", ParameterType::FIXED_STRING);
+        Parameter param7 = Parameter("v2", ParameterType::VARIABLE);
         vector<string> exprSpecs = {"_", "_"};
         Pattern p3 = Pattern(param6, param7, exprSpecs);
         shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
@@ -177,10 +177,23 @@ TEST_CASE("Test Pattern Cache") {
     }
 
     // Pattern while("z", _)
-    SECTION("Cache miss, Assign pattern") {
+    SECTION("Cache miss, While pattern") {
         Parameter param6 = Parameter("while", ParameterType::WHILE);
         Parameter param7 = Parameter("z", ParameterType::FIXED_STRING);
         vector<string> exprSpecs = {"_"};
+        Pattern p3 = Pattern(param6, param7, exprSpecs);
+        shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
+
+        vector<vector<string>> res = cache.findResult(pattern3);
+        vector<vector<string>> expected = {};
+        REQUIRE(equals(res, expected));
+    }
+
+    // Pattern if("v", _, _)
+    SECTION("Cache miss, If pattern") {
+        Parameter param6 = Parameter("if", ParameterType::IF);
+        Parameter param7 = Parameter("v", ParameterType::FIXED_STRING);
+        vector<string> exprSpecs = {"_", "_"};
         Pattern p3 = Pattern(param6, param7, exprSpecs);
         shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
 
