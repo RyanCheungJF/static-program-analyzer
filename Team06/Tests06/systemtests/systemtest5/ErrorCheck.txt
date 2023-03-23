@@ -658,22 +658,22 @@ procedure p;
 Select   p   such   that    Calls   (p, _)
 A, B, C, D, F
 5000
-133 - stmt for assign pattern
+133 - stmt for assign/while pattern
 stmt s;
 Select s pattern s(_, _)
 SemanticError
 5000
-134 - read for assign pattern
+134 - read for assign/while pattern
 read r;
 Select r pattern r(_, _)
 SemanticError
 5000
-135 - print for assign pattern
+135 - print for assign/while pattern
 print pn;
 Select pn pattern pn(_, _)
 SemanticError
 5000
-136 - call for assign pattern
+136 - call for assign/while pattern
 call cl;
 Select cl pattern cl(_, _)
 SemanticError
@@ -688,17 +688,17 @@ if i;
 Select i pattern i(_, _)
 SemanticError
 5000
-139 - variable for assign pattern
+139 - variable for assign/while pattern
 variable v;
 Select v pattern v(_, _)
 SemanticError
 5000
-140 - constant for assign pattern
+140 - constant for assign/while pattern
 constant c;
 Select c pattern c(_, _)
 SemanticError
 5000
-141 - procedure for assign pattern
+141 - procedure for assign/while pattern
 procedure p;
 Select p pattern p(_, _)
 SemanticError
@@ -832,4 +832,269 @@ none
 procedure p;
 Select p such that Calls(p, "none  ")
 none
+5000
+168 - leading integer for entRef in Uses
+procedure p;
+Select p such that Uses(p, "1abc")
+SyntaxError
+5000
+169 - leading integer for entRef in Modifies
+procedure p;
+Select p such that Modifies(p, "1abc")
+SyntaxError
+5000
+170 - leading integer for entRef in assign pattern
+assign a;
+Select a pattern a("1abc", _)
+SyntaxError
+5000
+171 - syn-while not while
+read w;
+Select w pattern w("a", _)
+SemanticError
+5000
+172 - leading integer for entRef in while pattern
+while w;
+Select w pattern w("1abc", _)
+SyntaxError
+5000
+173 - syn-if not if
+stmt i;
+Select i pattern i("a", _, _)
+SemanticError
+5000
+174 - leading integer for entRef in if pattern
+if i;
+Select i pattern i("1abc", _, _)
+SyntaxError
+5000
+175 - space in while pattern
+while w;
+Select w patt ern w(_, _)
+SyntaxError
+5000
+176 - double quotes in entRef
+while w;
+Select w pattern w(""x"", _)
+SyntaxError
+5000
+177 - integer in entRef
+while w;
+Select w pattern w(12, _)
+SyntaxError
+5000
+178 - invalid expression-spec
+while w;
+Select w pattern w(_, "((((w+b)+3)*4)")
+SyntaxError
+5000
+179 - space in syn-while
+while w;
+Select w pattern w  w(_, _)
+SyntaxError
+5000
+180 - stmt in lhs while pattern
+while w; stmt s;
+Select w pattern w(s, _)
+SemanticError
+5000
+181 - read in lhs while pattern
+while w; read r;
+Select w pattern w(r, _)
+SemanticError
+5000
+182 - print in lhs while pattern
+while w; print pn;
+Select w pattern w(pn, _)
+SemanticError
+5000
+183 - call in lhs while pattern
+while w; call cl;
+Select w pattern w(cl, _)
+SemanticError
+5000
+184 - while in lhs while pattern
+while w;
+Select w pattern w(w, _)
+SemanticError
+5000
+185 - if in lhs while pattern
+while w; if i;
+Select w pattern w(i, _)
+SemanticError
+5000
+186 - while in lhs while pattern
+while w, w1;
+Select w pattern w(w1, _)
+SemanticError
+5000
+187 - procedure in lhs while pattern
+while w; procedure p;
+Select w pattern w(p, _)
+SemanticError
+5000
+188 - constant in lhs while pattern
+while w; constant c;
+Select w pattern w(c, _)
+SemanticError
+5000
+189 - stmt in rhs while pattern
+while w; stmt s;
+Select w pattern w(_, s)
+SyntaxError
+5000
+190 - read in rhs while pattern
+while w; read r;
+Select w pattern w(_, r)
+SyntaxError
+5000
+191 - print in rhs while pattern
+while w; print pn;
+Select w pattern w(_, pn)
+SyntaxError
+5000
+192 - call in rhs while pattern
+while w; call cl;
+Select w pattern w(_, cl)
+SyntaxError
+5000
+193 - while in rhs while pattern
+while w;
+Select w pattern w(_, w)
+SyntaxError
+5000
+194 - if in rhs while pattern
+while w; if i;
+Select w pattern w(_, i)
+SyntaxError
+5000
+195 - while in rhs while pattern
+while w, w1;
+Select w pattern w(_, w1)
+SyntaxError
+5000
+196 - procedure in rhs while pattern
+while w; procedure p;
+Select w pattern w(_, p)
+SyntaxError
+5000
+197 - variable in rhs while pattern
+while w; variable v;
+Select w pattern w(_, v)
+SyntaxError
+5000
+198 - constant in rhs while pattern
+while w; constant c;
+Select w pattern w(_, c)
+SyntaxError
+5000
+199 - expr in rhs while pattern
+while w;
+Select w pattern w(_, "x")
+SemanticError
+5000
+200 - partial expr in rhs while pattern
+while w;
+Select w pattern w(_, _"x"_)
+SemanticError
+5000
+201 - space in if pattern
+if i;
+Select i patt ern w(_, _, _)
+SyntaxError
+5000
+202 - double quotes in entRef
+if i;
+Select i pattern i(""x"", _, _)
+SyntaxError
+5000
+203 - integer in entRef
+if i;
+Select i pattern i(12, _, _)
+SyntaxError
+5000
+204 - invalid expression-spec
+if i;
+Select i pattern i("((((w+b)+3)*4)", _, _)
+SyntaxError
+5000
+205 - space in syn-if
+if ii;
+Select i pattern i  i(_, _)
+SyntaxError
+5000
+206 - stmt in lhs if pattern
+if i; stmt s;
+Select i pattern i(s, _, _)
+SemanticError
+5000
+207 - read in lhs if pattern
+if i; read r;
+Select i pattern i(r, _, _)
+SemanticError
+5000
+208 - print in lhs if pattern
+if i; print pn;
+Select i pattern i(pn, _, _)
+SemanticError
+5000
+209 - call in lhs if pattern
+if i; call cl;
+Select i pattern i(cl, _, _)
+SemanticError
+5000
+210 - if in lhs if pattern
+if i;
+Select i pattern i(i, _, _)
+SemanticError
+5000
+211 - while in lhs if pattern
+if i; while w;
+Select i pattern i(w, _, _)
+SemanticError
+5000
+212 - if in lhs if pattern
+if i, i1;
+Select i pattern i(i1, _, _)
+SemanticError
+5000
+213 - procedure in lhs if pattern
+if i; procedure p;
+Select i pattern i(p, _, _)
+SemanticError
+5000
+214 - constant in lhs if pattern
+if i; constant c;
+Select i pattern i(c, _, _)
+SemanticError
+5000
+215 - entRef in middle of if pattern
+if i; variable v;
+Select i pattern i(_, v, _)
+SyntaxError
+5000
+216 - entRef in rhs of if pattern
+if i; variable v;
+Select i pattern i(_, _, v)
+SyntaxError
+5000
+217 - expr in middle of if pattern
+if i;
+Select i pattern i(_, "x", _)
+SyntaxError
+5000
+218 - partial expr in middle of if pattern
+if i;
+Select i pattern i(_, _"x"_, _)
+SyntaxError
+5000
+219 - expr in rhs of if pattern
+if i;
+Select i pattern i(_, _, "x")
+SyntaxError
+5000
+220 - partial expr in rhs of if pattern
+if i;
+Select i pattern i(_, _, _"x"_)
+SyntaxError
 5000

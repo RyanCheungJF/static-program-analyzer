@@ -15,7 +15,7 @@ procedure A {
 			print a;
 			a = a % 9 + (10 + 3);
 		} else {
-			y = 1;
+			y = 2147483648;
 			y = 2;
 			u = 100 * 9 + a * d / r + (a * (f + (w / t)) - x - 100);
 			z = 8;
@@ -234,7 +234,7 @@ procedure G {
     if ((34 / t % h * 27 % t * m / r / x > z) || ((z * t / a > c) && ((c <= 55) || (y / y % b == b)))) then {
         f = g - 1;
         x = b + c;
-        if (e > 10) then {
+        if (2 > 10) then {
             f = g - 11;
         } else {
 			if (a % 374 % a / z > 731) then {
@@ -270,7 +270,7 @@ procedure G {
         while (((54 % z + h * 27 % q - k % t + 79 - r / o <= z) && (!(z > 51 - o * v - n + v + x / k % 99 + q * 95))) && ((z / 404 - 18 > 89) || ((((!(!(x > v))) || ((b != x % 756) && (!((45 > t) || (f % 3 / h % t % h > k))))) && (!(c - h % 2 * f - z / r / x + m / h > t))) || (!((b <= h - k) && (7 > v / v / 51 - t)))))) {
 			if (b != m * r % r) then {
                 j = b + c;
-                while (k == 13) {
+                while (10 == 13) {
                     f = ((5 * g) % ((h + 6) / i)) - x;
 					read j;
                 }
