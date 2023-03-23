@@ -31,7 +31,8 @@ class AffectsHandler {
 public:
     AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
                    std::shared_ptr<ProcedureStorage> procStorage, std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
-                   std::shared_ptr<ModifiesUsesStorage> usesStorage, bool isTransitive);
+                   std::shared_ptr<ModifiesUsesStorage> usesStorage,
+                   std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> parentTStorage, bool isTransitive);
     std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
 
 private:
