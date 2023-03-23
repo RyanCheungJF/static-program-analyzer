@@ -84,20 +84,20 @@ bool QueryDB::hasEmptyTable() {
 Table QueryDB::extractColumns(vector<Parameter> params) {
     // Assumes that each table has unique headers.
     vector<Table> temp;
-        for (Table table : tableVector) {
-            vector<Parameter> headers = table.getHeaders();
-            vector<Parameter> paramsVec;
-            for (Parameter param: params) {
-                if (find(headers.begin(), headers.end(), param) != headers.end()) {
-                    paramsVec.push_back(param);
-                }
+    for (Table table : tableVector) {
+        vector<Parameter> headers = table.getHeaders();
+        vector<Parameter> paramsVec;
+        for (Parameter param : params) {
+            if (find(headers.begin(), headers.end(), param) != headers.end()) {
+                paramsVec.push_back(param);
             }
-            if (paramsVec.empty()) {
-                continue;
-            }
-            Table extracted = table.extractColumns(paramsVec);
-            temp.push_back(extracted);
         }
+        if (paramsVec.empty()) {
+            continue;
+        }
+        Table extracted = table.extractColumns(paramsVec);
+        temp.push_back(extracted);
+    }
     if (temp.size() == 1) {
         return temp[0];
     }

@@ -44,16 +44,36 @@ jobs:
         working-directory: ${{runner.workspace}}/build
         run: src/unit_testing/unit_testing
 
-      # - name: Generate xml files
-      #   run: |
-      #       cd ./Team06/Tests06/systemtests/systemtest1
-      #       bash $GITHUB_WORKSPACE/Team06/Tests06/systemtests/systemtest1/ci.sh
-      #   shell: bash
+      - name: Generate sys test 1 xml files
+        run: |
+            cd ./Team06/Tests06/systemtests/systemtest1
+            bash $GITHUB_WORKSPACE/Team06/Tests06/systemtests/systemtest1/ci.sh
+        shell: bash
+      - name: Generate sys test 2 xml files
+        run: |
+            cd ./Team06/Tests06/systemtests/systemtest2
+            bash $GITHUB_WORKSPACE/Team06/Tests06/systemtests/systemtest2/ci.sh
+        shell: bash
+      - name: Generate sys test 3 xml files
+        run: |
+            cd ./Team06/Tests06/systemtests/systemtest3
+            bash $GITHUB_WORKSPACE/Team06/Tests06/systemtests/systemtest3/ci.sh
+        shell: bash
+      - name: Generate sys test 4 xml files
+        run: |
+            cd ./Team06/Tests06/systemtests/systemtest4
+            bash $GITHUB_WORKSPACE/Team06/Tests06/systemtests/systemtest4/ci.sh
+        shell: bash
+      - name: Generate sys test 5 xml files
+        run: |
+            cd ./Team06/Tests06/systemtests/systemtest5
+            bash $GITHUB_WORKSPACE/Team06/Tests06/systemtests/systemtest5/ci.sh
+        shell: bash
 
-      # - name: Setup Python
-      #   uses: actions/setup-python@v4
-      #   with:
-      #     python-version: "3.10" # install the python version needed
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10" # install the python version needed
 
-      # - name: Execute Python SystemTest Script
-      #   run: python ./Team06/Tests06/systemtests/check.py
+      - name: Execute Python SystemTest Script
+        run: python ./Team06/Tests06/systemtests/check.py
