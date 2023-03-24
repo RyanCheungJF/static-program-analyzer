@@ -28,3 +28,18 @@ assign a;
 Select a such that Affects*(a, 39)
 38, 37, 28
 5000
+7 - comment
+assign a; print p; read r; call c;
+Select a such that Affects*(p, 39)
+none
+5000
+8 - comment
+assign a; print p; read r; call c;
+Select a such that Affects*(r, 39)
+none
+5000
+9 - comment
+assign a; print p; read r; call c;
+Select a such that Affects*(c, 39)
+none
+5000

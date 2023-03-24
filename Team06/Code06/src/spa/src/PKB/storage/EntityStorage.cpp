@@ -35,5 +35,4 @@ template <typename T> std::unordered_set<T> EntityStorage<T>::getEntNames() {
     return entNames;
 }
 
-template class EntityStorage<Ent>;
-template class EntityStorage<Const>;
+template class EntityStorage<std::string>;

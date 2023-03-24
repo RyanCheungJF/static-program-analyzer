@@ -254,7 +254,7 @@ TEST_CASE("findDesignEntities() Tests") {
     std::unordered_set<StmtNum> lines = {3, 6, 9};
 
     StmtNum stmtNum = 123;
-    writePkb.setConstant(stmtNum, {123});
+    writePkb.setConstant(stmtNum, {"123"});
 
     ProcName p = "Main";
     writePkb.setProcedure(p, lines);

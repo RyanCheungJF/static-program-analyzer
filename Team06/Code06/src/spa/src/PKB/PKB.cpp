@@ -168,7 +168,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
     else if (type == ParameterType::CONSTANT) {
         std::unordered_set<Const> constants = constantStorage->getEntNames();
         for (auto constant : constants) {
-            res.push_back(to_string(constant));
+            res.push_back(constant);
         }
     }
     else if (type == ParameterType::VARIABLE) {
@@ -255,7 +255,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
     else if (paramType == ParameterType::CONSTANT) {
         std::unordered_set<Const> consts = constantStorage->getEntNames();
         for (auto constant : consts) {
-            res.push_back({std::to_string(constant), std::to_string(constant)});
+            res.push_back({constant, constant});
         }
     }
     // currently just returns a pair of duplicated values
