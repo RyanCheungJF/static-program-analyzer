@@ -45,6 +45,20 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
             queryDb.insertTable(table);
         }
     }
+
+    for (Comparison comparison : comparisons) {
+        vector<vector<string>> response = readPKB.findAttribute(comparison);
+        if (response.empty()) {
+            queryDb.insertTable(emptyTable);
+            break;
+        }
+        vector<Parameter> headers{comparison.getLeftParam(), comparison.getRightParam()};
+        Table table{headers, response};
+        table = table.extractDesignEntities();
+        if(!table.isEmptyTable()) {
+            queryDb.insertTable(table);
+        }
+    }
     vector<string> res = queryDb.fetch(selectParameters, readPKB);
     return res;
 }
