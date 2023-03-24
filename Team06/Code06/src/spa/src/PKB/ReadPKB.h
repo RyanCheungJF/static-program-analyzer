@@ -7,9 +7,16 @@ public:
     // Sets the pointer to the PKB instance if it is not set yet
     void setInstancePKB(PKB& pkb);
 
-    std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship> rs);
+    std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship>& rs);
 
-    std::vector<std::string> findDesignEntities(Parameter p);
+    std::vector<std::string> findDesignEntities(Parameter& p);
+
+    // Returns relevant strings based on Pattern object passed
+    std::vector<std::vector<std::string>> findPattern(Pattern& p);
+
+    std::vector<std::vector<std::string>> findAttribute(Parameter& p);
+
+    std::vector<std::vector<std::string>> findWith(Comparison& c);
 
     // check if given a statement type and statement line number, whether that
     // statement line number is indeed of that statement type
@@ -53,9 +60,6 @@ public:
 
     // returns nested statement numbers of all if and while statements
     std::unordered_set<StmtNum> getContainedStatements(StmtNum containerNum);
-
-    // Returns relevant strings based on Pattern object passed
-    std::vector<std::vector<std::string>> findPattern(Pattern p);
 
     // returns a pointer to the CFG graph
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> getCFG(ProcName name);
