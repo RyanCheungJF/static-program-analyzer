@@ -10,9 +10,9 @@ on:
       - qps
       - sp
       - staging
-  pull_request:
-    branches:
-      - master
+  # pull_request:
+  #   branches:
+  #     - master
 
 # If you are doing triggering your workflow from pushes or merging more than twice a day on average,
 # please execute your workflow on a schedule instead.

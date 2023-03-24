@@ -21,8 +21,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
 
     bool isFixedIntParam1 = paramType1 == ParameterType::FIXED_INT;
     bool isFixedIntParam2 = paramType2 == ParameterType::FIXED_INT;
-    bool isWildCardParam1 = paramType1 == ParameterType::WILDCARD || paramType1 == ParameterType::ASSIGN;
-    bool isWildCardParam2 = paramType2 == ParameterType::WILDCARD || paramType2 == ParameterType::ASSIGN;
+    bool isWildCardParam1 = paramType1 == ParameterType::STMT || paramType1 == ParameterType::WILDCARD ||
+                            paramType1 == ParameterType::ASSIGN;
+    bool isWildCardParam2 = paramType2 == ParameterType::STMT || paramType2 == ParameterType::WILDCARD ||
+                            paramType2 == ParameterType::ASSIGN;
 
     std::vector<std::vector<std::string>> temp;
     if (isTransitive) {
@@ -53,37 +55,38 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     std::string paramString2 = std::to_string(a2);
     ProcName proc1 = procStorage->getProcedure(a1);
     ProcName proc2 = procStorage->getProcedure(a2);
-    std::vector<std::vector<std::string>> res;
 
     // either not in any procedure, or both are not in the same procedure
     if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST || proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
-        return res;
+        return {};
     }
     else if (proc1 != proc2) {
-        return res;
+        return {};
     }
 
     // if both are not assign statements, should also just return nothing already
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
     std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
     if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
-        return res;
+        return {};
     }
 
     std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getRightItems(a1);
     std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getRightItems(a2);
     std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
     if (commonVariables.empty()) {
-        return res;
+        return {};
     }
 
     bool canReach = checkCanReach(a1, a2, proc1, commonVariables);
     if (!canReach) {
-        return res;
+        return {};
     }
 
-    res.push_back({paramString1, paramString2});
-    return res;
+    return {{paramString1, paramString2}};
+    //    std::vector<std::vector<std::string>> res;
+    //    res.push_back({paramString1, paramString2});
+    //    return res;
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum a2) {
@@ -94,10 +97,16 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
     return nonTransitiveOneIntOneWildcard(a1, AppConstants::NOT_USED_FIELD);
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
-    std::vector<std::vector<std::string>> res;
+std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(ProcName proc) {
 
-    std::unordered_set<ProcName> allProcedures = procStorage->getProcNames();
+    std::vector<std::vector<std::string>> res;
+    std::unordered_set<ProcName> allProcedures;
+
+    if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
+        allProcedures = procStorage->getProcNames();
+    } else {
+        allProcedures = {proc};
+    }
 
     for (ProcName proc : allProcedures) {
         std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
@@ -126,7 +135,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
         return res;
     }
 
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false, proc1);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
     for (StmtNum num : hashmap[a1]) {
@@ -174,7 +183,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTransitive() {
     std::vector<std::vector<std::string>> res;
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false, AppConstants::PROCEDURE_DOES_NOT_EXIST);
 
     std::unordered_set<std::tuple<StmtNum, StmtNum, StmtNum>, hashFunctionTuple> seen;
     std::deque<std::tuple<StmtNum, StmtNum, StmtNum>> queue;
@@ -243,7 +252,7 @@ AffectsHandler::handleNonTransitive(std::string param1value, std::string param2v
             return handleWildcardInt(stoi(param2value));
         }
         else if (isWildCardParam2) {
-            return handleWildcardWildcard();
+            return handleWildcardWildcard(AppConstants::PROCEDURE_DOES_NOT_EXIST);
         }
     }
     return std::vector<std::vector<std::string>>();
@@ -271,10 +280,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(std::stri
     return std::vector<std::vector<std::string>>();
 }
 
-std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffectsGraph(bool isInverted) {
+std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffectsGraph(bool isInverted, ProcName proc) {
 
     // build the hop graph
-    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
+    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard(proc);
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
     for (std::vector<std::string> p : allValidAffects) {
         isInverted ? hashmap[stoi(p[1])].insert(stoi(p[0])) : hashmap[stoi(p[0])].insert(stoi(p[1]));
@@ -297,7 +306,8 @@ std::unordered_set<StmtNum> AffectsHandler::getAssignStatements(std::unordered_s
 
 std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(StmtNum a1, StmtNum a2) {
     bool isIntWildcard = a2 == AppConstants::NOT_USED_FIELD;
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(!isIntWildcard);
+    ProcName proc = isIntWildcard ? procStorage->getProcedure(a1) : procStorage->getProcedure(a2);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(!isIntWildcard, proc);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
 

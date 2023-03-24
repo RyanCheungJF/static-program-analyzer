@@ -1,5 +1,5 @@
 1 - comment
 procedure p1, p2;
-Select <p1.procName, p2.procName> such that Calls(p1, p2) and (p2, "Six")
+Select <p1.procName, p2> such that Calls(p1, p2) and Calls(p2, "Six")
 One Three, Four Five, Two Three
 5000

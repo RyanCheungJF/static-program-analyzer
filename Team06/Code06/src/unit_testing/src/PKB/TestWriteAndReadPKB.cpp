@@ -26,9 +26,12 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
         REQUIRE(res.size() == 0);
     }
 
-    writePkb.setModifiesS(1, {"a", "b", "c"});
-    writePkb.setModifiesS(2, {"a"});
-    writePkb.setModifiesS(3, {"a", "b"});
+    std::unordered_set<Ent> val1 = {"a", "b", "c"};
+    std::unordered_set<Ent> val2 = {"a"};
+    std::unordered_set<Ent> val3 = {"a", "b"};
+    writePkb.setModifiesS(1, val1);
+    writePkb.setModifiesS(2, val2);
+    writePkb.setModifiesS(3, val3);
     writePkb.setStatement(AppConstants::IF, 1);
     writePkb.setStatement(AppConstants::WHILE, 2);
     writePkb.setStatement(AppConstants::ASSIGN, 3);
@@ -172,9 +175,12 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
         REQUIRE(res.size() == 0);
     }
 
-    writePkb.setModifiesP("proc1", {"a", "b", "c"});
-    writePkb.setModifiesP("proc2", {"a"});
-    writePkb.setModifiesP("proc3", {"a", "b"});
+    std::unordered_set<Ent> val1 = {"a", "b", "c"};
+    std::unordered_set<Ent> val2 = {"a"};
+    std::unordered_set<Ent> val3 = {"a", "b"};
+    writePkb.setModifiesP("proc1", val1);
+    writePkb.setModifiesP("proc2", val2);
+    writePkb.setModifiesP("proc3", val3);
 
     SECTION("findRelationship(shared_ptr<Relationship> rs): non-empty storage, positive case, LHS: ProcName, RHS: "
             "non-wildcard") {
@@ -254,7 +260,8 @@ TEST_CASE("findDesignEntities() Tests") {
     std::unordered_set<StmtNum> lines = {3, 6, 9};
 
     StmtNum stmtNum = 123;
-    writePkb.setConstant(stmtNum, {123});
+    std::unordered_set<Const> val1 = {"123"};
+    writePkb.setConstant(stmtNum, val1);
 
     ProcName p = "Main";
     writePkb.setProcedure(p, lines);
@@ -265,7 +272,8 @@ TEST_CASE("findDesignEntities() Tests") {
     writePkb.setStatement(s, 9);
 
     Ent e = "varName";
-    writePkb.setEntity(1, {e});
+    std::unordered_set<Ent> val2 = {e};
+    writePkb.setEntity(1, val2);
 
     Parameter constParam = Parameter("irrelevant", ParameterType::CONSTANT);
     std::vector<std::string> res = readPkb.findDesignEntities(constParam);
@@ -408,8 +416,10 @@ TEST_CASE("ProcedureStorage WritePKB ReadPKB Facade") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    writePkb.setProcedure("proc1", {1, 2, 3, 4, 5});
-    writePkb.setProcedure("proc2", {6, 7, 8});
+    std::unordered_set<StmtNum> val1 = {1, 2, 3, 4, 5};
+    std::unordered_set<StmtNum> val2 = {6, 7, 8};
+    writePkb.setProcedure("proc1", val1);
+    writePkb.setProcedure("proc2", val2);
 
     SECTION("ProcedureStorage WritePKB ReadPKB Facade: getProcedureStatementNumbers(ProcName p) positive case") {
         std::vector<StmtNum> expected = {1, 2, 3, 4, 5};
@@ -450,12 +460,16 @@ TEST_CASE("UsesStorage WritePKB ReadPKB Facade") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    writePkb.setUsesS(1, {"a", "b", "c"});
-    writePkb.setUsesS(2, {"a"});
-    writePkb.setUsesS(3, {"a"});
-    writePkb.setUsesS(4, {"b", "x", "z"});
-    writePkb.setUsesP("proc1", {"a", "b", "c"});
-    writePkb.setUsesP("proc2", {"a", "b", "x", "z"});
+    std::unordered_set<Ent> val1 = {"a", "b", "c"};
+    std::unordered_set<Ent> val2 = {"a"};
+    std::unordered_set<Ent> val3 = {"b", "x", "z"};
+    std::unordered_set<Ent> val4 = {"a", "b", "x", "z"};
+    writePkb.setUsesS(1, val1);
+    writePkb.setUsesS(2, val2);
+    writePkb.setUsesS(3, val2);
+    writePkb.setUsesS(4, val3);
+    writePkb.setUsesP("proc1", val1);
+    writePkb.setUsesP("proc2", val4);
 
     SECTION("UsesStorage WritePKB ReadPKB Facade: getUsesS(StmtNum num) positive case") {
         std::vector<Ent> expected = {"a", "b", "c"};
@@ -500,12 +514,17 @@ TEST_CASE("ModifiesStorage WritePKB ReadPKB Facade") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    writePkb.setModifiesS(1, {"a", "b", "c"});
-    writePkb.setModifiesS(2, {"a"});
-    writePkb.setModifiesS(3, {"a"});
-    writePkb.setModifiesS(4, {"b", "x", "z"});
-    writePkb.setModifiesP("proc1", {"a", "b", "c"});
-    writePkb.setModifiesP("proc2", {"a", "b", "x", "z"});
+
+    std::unordered_set<Ent> val1 = {"a", "b", "c"};
+    std::unordered_set<Ent> val2 = {"a"};
+    std::unordered_set<Ent> val3 = {"b", "x", "z"};
+    std::unordered_set<Ent> val4 = {"a", "b", "x", "z"};
+    writePkb.setModifiesS(1, val1);
+    writePkb.setModifiesS(2, val2);
+    writePkb.setModifiesS(3, val2);
+    writePkb.setModifiesS(4, val3);
+    writePkb.setModifiesP("proc1", val1);
+    writePkb.setModifiesP("proc2", val4);
 
     SECTION("ModifiesStorage WritePKB ReadPKB Facade: getUsesS(StmtNum num) positive case") {
         std::vector<Ent> expected = {"a", "b", "c"};
@@ -533,7 +552,7 @@ TEST_CASE("ModifiesStorage WritePKB ReadPKB Facade") {
         }
         std::sort(actual.begin(), actual.end());
         std::sort(expected.begin(), expected.end());
-        REQUIRE(actual == expected);
+        REQUIRE(expected == actual);
     }
 
     SECTION("ModifiesStorage WritePKB ReadPKB Facade: getUsesP(ProcName name) negative case") {
@@ -550,9 +569,12 @@ TEST_CASE("ParentTStorage WritePKB ReadPKB Facade") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    writePkb.setParentT(11, {12, 13, 14, 15});
-    writePkb.setParentT(12, {13});
-    writePkb.setParentT(14, {15});
+    std::unordered_set<StmtNum> val1 = {12, 13, 14, 15};
+    std::unordered_set<StmtNum> val2 = {13};
+    std::unordered_set<StmtNum> val3 = {15};
+    writePkb.setParentT(11, val1);
+    writePkb.setParentT(12, val2);
+    writePkb.setParentT(14, val3);
 
     SECTION("ParentTStorage WritePKB ReadPKB Facade: getContainedStatements(StmtNum containerNum) positive case") {
         std::vector<StmtNum> expected = {12, 13, 14, 15};
@@ -588,6 +610,7 @@ TEST_CASE("CallStorage WritePKB ReadPKB Facade procedure names") {
 
     writePkb.setCall(11, proc1);
     writePkb.setCall(21, proc2);
-    writePkb.setCalls(caller, {proc1, proc2});
+    std::unordered_set<ProcName> val1 = {proc1, proc2};
+    writePkb.setCalls(caller, val1);
     writePkb.setCallsT(caller, callees);
 }

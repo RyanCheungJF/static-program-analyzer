@@ -1,6 +1,6 @@
 1 - comment
 while w; if i; read r1, r2;
-Select <r1, i> such that Parent(i, r1) and Next(r1, r2)
+Select <r1, i> such that Parent(i, r1) and Next*(r1, r2)
 5 4
 5000
 2 - comment

@@ -5,7 +5,7 @@ template <typename T, typename U> void RelationshipStorage<T, U>::write(T leftIt
     rightToLeftMap[rightItem].insert(leftItem);
 }
 
-template <typename T, typename U> void RelationshipStorage<T, U>::write(T leftItem, std::unordered_set<U> rightItems) {
+template <typename T, typename U> void RelationshipStorage<T, U>::write(T leftItem, std::unordered_set<U>& rightItems) {
     leftToRightMap[leftItem].insert(rightItems.begin(), rightItems.end());
     for (U rightItem : rightItems) {
         rightToLeftMap[rightItem].insert(leftItem);

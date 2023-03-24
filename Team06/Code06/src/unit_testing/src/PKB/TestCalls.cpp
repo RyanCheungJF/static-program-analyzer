@@ -44,11 +44,14 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    writePkb.setCalls("proc1", {"proc2"});
-    writePkb.setCalls("proc2", {"proc3"});
+    std::unordered_set<ProcName> val1 = {"proc2"};
+    std::unordered_set<ProcName> val2 = {"proc3"};
+    std::unordered_set<ProcName> val3 = {"proc2", "proc3"};
+    writePkb.setCalls("proc1", val1);
+    writePkb.setCalls("proc2", val2);
 
-    writePkb.setCallsT("proc1", {"proc2", "proc3"});
-    writePkb.setCallsT("proc2", {"proc3"});
+    writePkb.setCallsT("proc1", val3);
+    writePkb.setCallsT("proc2", val2);
 
     SECTION("Calls(fixed_string, wildcard)") {
         std::vector<Parameter> params1 = {Parameter("proc1", ParameterType::FIXED_STRING),

@@ -1,6 +1,6 @@
 #include "ProcedureStorage.h"
 
-void ProcedureStorage::writeProcedure(ProcName p, std::unordered_set<StmtNum> lines) {
+void ProcedureStorage::writeProcedure(ProcName p, std::unordered_set<StmtNum>& lines) {
     for (StmtNum line : lines) {
         proc_stmtNum[p].insert(line);
         stmtNum_proc[line] = p;
