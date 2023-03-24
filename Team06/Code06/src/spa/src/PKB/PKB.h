@@ -52,53 +52,53 @@ public:
     void setFollows(StmtNum left, StmtNum right);
 
     // Sets FollowsT relation in PKB
-    void setFollowsT(StmtNum followee, std::unordered_set<StmtNum> followers);
+    void setFollowsT(StmtNum followee, std::unordered_set<StmtNum>& followers);
 
     // Sets Parent relation in PKB
     void setParent(StmtNum parent, StmtNum child);
 
     // Sets ParentT relation in PKB
-    void setParentT(StmtNum parent, std::unordered_set<StmtNum> children);
+    void setParentT(StmtNum parent, std::unordered_set<StmtNum>& children);
 
     // Sets the statement along with the statement line that it appears in
     void setStatement(Stmt s, StmtNum line);
 
     // Sets the entity along with the statement line that the entities appears in
-    void setEntity(StmtNum line, std::unordered_set<Ent> entities);
+    void setEntity(StmtNum line, std::unordered_set<Ent>& entities);
 
     // Sets the entity along with the statement line that it appears in
     void setEntity(Ent e, StmtNum line);
 
     // Sets the procedure along with the statement lines that are in that
     // procedure appears in
-    void setProcedure(ProcName p, std::unordered_set<StmtNum> lines);
+    void setProcedure(ProcName p, std::unordered_set<StmtNum>& lines);
 
     // Sets the constants along with the statement line that the constants appears
     // in
-    void setConstant(StmtNum num, std::unordered_set<Const> constants);
+    void setConstant(StmtNum num, std::unordered_set<Const>& constants);
 
     void setCall(StmtNum callLine, ProcName procedure_being_called);
 
-    void setCalls(ProcName caller, std::unordered_set<ProcName> callees);
+    void setCalls(ProcName caller, std::unordered_set<ProcName>& callees);
 
-    void setCallsT(ProcName caller, std::unordered_set<ProcName> callees);
+    void setCallsT(ProcName caller, std::unordered_set<ProcName>& callees);
 
-    void setUsesS(StmtNum num, std::unordered_set<Ent> entities);
+    void setUsesS(StmtNum num, std::unordered_set<Ent>& entities);
 
-    void setUsesP(ProcName, std::unordered_set<Ent> entities);
+    void setUsesP(ProcName, std::unordered_set<Ent>& entities);
 
-    void setModifiesS(StmtNum num, std::unordered_set<Ent> entities);
+    void setModifiesS(StmtNum num, std::unordered_set<Ent>& entities);
 
-    void setModifiesP(ProcName, std::unordered_set<Ent> entities);
+    void setModifiesP(ProcName, std::unordered_set<Ent>& entities);
 
-    void writeIfPattern(StmtNum num, std::unordered_set<Ent> variables);
+    void writeIfPattern(StmtNum num, std::unordered_set<Ent>& variables);
 
-    void writeWhilePattern(StmtNum num, std::unordered_set<Ent> variables);
+    void writeWhilePattern(StmtNum num, std::unordered_set<Ent>& variables);
 
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
     void writeCFG(ProcName name,
-                  std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph);
+                  std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph);
 
     std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship> rs);
 
