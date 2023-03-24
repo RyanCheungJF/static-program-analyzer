@@ -54,8 +54,10 @@ map<ClauseType, vector<int>> SelectQueryParser::getClauseStarts(vector<string>& 
     vector<int> withStart = findWith(wordList);
     vector<int> selectStart{0};
 
-    map<ClauseType, vector<int>> res{
-        {ClauseType::SELECT, selectStart}, {ClauseType::SUCH_THAT, suchThatStart}, {ClauseType::PATTERN, patternStart}, {ClauseType::WITH, withStart}};
+    map<ClauseType, vector<int>> res{{ClauseType::SELECT, selectStart},
+                                     {ClauseType::SUCH_THAT, suchThatStart},
+                                     {ClauseType::PATTERN, patternStart},
+                                     {ClauseType::WITH, withStart}};
     return res;
 }
 
@@ -129,7 +131,8 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
         for (start; start < end; start++) {
             tupleString += " " + wordList[start];
         }
-        tie(ignore, paramStrings) = extractParameters(tupleString, AppConstants::STRING_LESS, AppConstants::STRING_GREATER, ",");
+        tie(ignore, paramStrings) =
+            extractParameters(tupleString, AppConstants::STRING_LESS, AppConstants::STRING_GREATER, ",");
         for (string elemString : paramStrings) {
             if (!isElem(elemString)) {
                 throw SyntaxException();
@@ -229,13 +232,12 @@ vector<Pattern> SelectQueryParser::parsePatternClause(vector<string>& wordList, 
     return res;
 }
 
-vector<Comparison> SelectQueryParser::parseWithClause(vector<string>& wordList, int start, int end)
-{
+vector<Comparison> SelectQueryParser::parseWithClause(vector<string>& wordList, int start, int end) {
     vector<Comparison> res;
 
     if (end <= start) {
         throw InternalException("Error: SelectQueryParser.parseWithClause bad "
-            "start position and end position");
+                                "start position and end position");
     }
     if (end - start < 2) {
         throw SyntaxException();
@@ -254,7 +256,6 @@ vector<Comparison> SelectQueryParser::parseWithClause(vector<string>& wordList, 
     }
     return res;
 }
-
 
 vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
     return vector<ClauseType>{ClauseType::SELECT, ClauseType::SUCH_THAT, ClauseType::PATTERN, ClauseType::WITH};

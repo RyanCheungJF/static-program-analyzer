@@ -30,7 +30,7 @@ vector<int> findSuchThat(const vector<string>& wordList) {
     return suchThatStarts;
 }
 
-//TODO: refactor these find* functions
+// TODO: refactor these find* functions
 vector<int> findPattern(const vector<string>& wordList) {
     vector<int> patternStarts;
     for (int i = 0; i < wordList.size(); i++) {
@@ -48,9 +48,8 @@ vector<int> findPattern(const vector<string>& wordList) {
     return patternStarts;
 }
 
-//TODO: refactor these find* functions
-vector<int> findWith(const vector<string>& wordList)
-{
+// TODO: refactor these find* functions
+vector<int> findWith(const vector<string>& wordList) {
     vector<int> withStarts;
     for (int i = 0; i < wordList.size(); i++) {
         if (WITH != wordList[i]) {

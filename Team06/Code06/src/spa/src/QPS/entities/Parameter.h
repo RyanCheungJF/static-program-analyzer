@@ -66,6 +66,7 @@ public:
     bool operator==(const Parameter&) const;
     static ParameterType guessParameterType(string);
     ParameterType getComparisonType();
+
 private:
     const static unordered_map<string, ParameterType> stringToTypeMap;
     const static unordered_map<string, AttributeType> stringToAttributeMap;

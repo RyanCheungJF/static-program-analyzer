@@ -46,8 +46,7 @@ bool startsWithLetter(string s) {
     return regex_match(trim(s), regex("^[a-zA-Z].*"));
 }
 
-bool startsLikeRef(string s)
-{
+bool startsLikeRef(string s) {
     return regex_match(trim(s), regex("^[a-zA-Z\"0-9].*"));
 }
 
@@ -112,7 +111,7 @@ bool isDeclaration(string declaration) {
 
 bool isDesignEntity(string designEntity) {
     return regex_match(trim(designEntity), regex("^(stmt|read|print|call|while|if|assign|variable|"
-                                                  "constant|procedure)"));
+                                                 "constant|procedure)"));
 }
 
 pair<string, string> extractDesignEntity(string designEntity) {

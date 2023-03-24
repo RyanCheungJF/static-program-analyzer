@@ -9,9 +9,9 @@
 #include <vector>
 
 #include "ParserUtil.h"
+#include "QPS/entities/Comparison.h"
 #include "QPS/entities/Query.h"
 #include "QPS/entities/Relationship.h"
-#include "QPS/entities/Comparison.h"
 #include "exceptions/Exception.h"
 
 using namespace std;

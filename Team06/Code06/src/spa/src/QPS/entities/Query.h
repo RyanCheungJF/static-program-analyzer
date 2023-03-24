@@ -7,12 +7,12 @@
 #include <string>
 #include <vector>
 
+#include "Comparison.h"
 #include "PKB/ReadPKB.h"
 #include "Parameter.h"
 #include "Pattern.h"
 #include "QueryDB.h"
 #include "Relationship.h"
-#include "Comparison.h"
 #include "Table.h"
 #include "exceptions/SyntaxException.h"
 

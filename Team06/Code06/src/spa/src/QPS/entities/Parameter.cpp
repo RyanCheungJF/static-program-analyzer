@@ -10,8 +10,7 @@ ParameterType Parameter::getType() const {
     return type;
 }
 
-AttributeType Parameter::getAttribute() const
-{
+AttributeType Parameter::getAttribute() const {
     return attribute;
 }
 
@@ -104,8 +103,7 @@ bool Parameter::isFixedIntOrWildCard(Parameter& p) {
     return p.type == ParameterType::FIXED_INT || p.type == ParameterType::WILDCARD;
 }
 
-bool Parameter::isComparable(Parameter& p1, Parameter& p2)
-{
+bool Parameter::isComparable(Parameter& p1, Parameter& p2) {
     ParameterType p1CompType = p1.getComparisonType();
     ParameterType p2CompType = p2.getComparisonType();
     if (p1CompType == ParameterType::UNKNOWN) {
@@ -122,8 +120,7 @@ bool Parameter::hasValidAttributeType() {
     return Parameter::typeToAttributeTypes.at(type).count(attribute) == 1 || attribute == AttributeType::NONE;
 }
 
-bool Parameter::hasAttribute()
-{
+bool Parameter::hasAttribute() {
     return attribute != AttributeType::NONE;
 }
 
@@ -175,8 +172,7 @@ ParameterType Parameter::guessParameterType(string s) {
     return ParameterType::UNKNOWN;
 }
 
-ParameterType Parameter::getComparisonType()
-{
+ParameterType Parameter::getComparisonType() {
     if (type == ParameterType::FIXED_INT || type == ParameterType::FIXED_STRING) {
         return type;
     }
