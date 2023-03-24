@@ -75,11 +75,15 @@ bool hasCorrectRelRefOrPatternForm(string s) {
 }
 
 bool hasCorrectAttrCompForm(string s) {
+    s = trim(s);
+    if (s == "") {
+        return false;
+    }
     string leftParamString, rightParamString;
     bool found;
     int next;
     tie(leftParamString, next, found) = extractSubStringUntilDelimiter(s, 0, AppConstants::OP_EQUALS);
-    if (!found || next > s.size()) {
+    if (!found || next >= s.size()) {
         return false;
     }
     rightParamString = s.substr(next, s.size() - next);
@@ -274,6 +278,9 @@ bool isElem(string s) {
 
 bool isAttrRef(string s) {
     s = trim(s);
+    if (s == "") {
+        return false;
+    }
     string delimiter = ".";
     bool found;
     int nextStart;

@@ -18,26 +18,26 @@ Query SelectQueryParser::parse(string selectQuery) {
         int clauseStart, clauseEnd;
         tie(ct, clauseStart, clauseEnd) = clause;
         switch (ct) {
-        case SUCH_THAT:
+        case ClauseType::SUCH_THAT:
             tempRelations = parseSuchThatClause(wordList, clauseStart, clauseEnd);
             relations.insert(relations.end(), tempRelations.begin(), tempRelations.end());
             break;
-        case PATTERN:
+        case ClauseType::PATTERN:
             tempPatterns = parsePatternClause(wordList, clauseStart, clauseEnd);
             patterns.insert(patterns.end(), tempPatterns.begin(), tempPatterns.end());
             break;
-        case WITH:
+        case ClauseType::WITH:
             tempComparisons = parseWithClause(wordList, clauseStart, clauseEnd);
             comparisons.insert(comparisons.end(), tempComparisons.begin(), tempComparisons.end());
             break;
-        case SELECT:
+        case ClauseType::SELECT:
             selectParams = parseSelectClause(wordList, clauseStart, clauseEnd);
             break;
         default:
             break;
         }
     }
-    Query query(selectParams, relations, patterns);
+    Query query(selectParams, relations, patterns, comparisons);
     return query;
 }
 
@@ -55,7 +55,7 @@ map<ClauseType, vector<int>> SelectQueryParser::getClauseStarts(vector<string>& 
     vector<int> selectStart{0};
 
     map<ClauseType, vector<int>> res{
-        {SELECT, selectStart}, {SUCH_THAT, suchThatStart}, {PATTERN, patternStart}, {WITH, withStart}};
+        {ClauseType::SELECT, selectStart}, {ClauseType::SUCH_THAT, suchThatStart}, {ClauseType::PATTERN, patternStart}, {ClauseType::WITH, withStart}};
     return res;
 }
 
@@ -257,7 +257,7 @@ vector<Comparison> SelectQueryParser::parseWithClause(vector<string>& wordList, 
 
 
 vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
-    return vector<ClauseType>{SELECT, SUCH_THAT, PATTERN, WITH};
+    return vector<ClauseType>{ClauseType::SELECT, ClauseType::SUCH_THAT, ClauseType::PATTERN, ClauseType::WITH};
 }
 
 Parameter SelectQueryParser::parseParameter(string paramString) {

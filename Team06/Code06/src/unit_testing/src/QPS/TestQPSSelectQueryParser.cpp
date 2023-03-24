@@ -357,9 +357,22 @@ TEST_CASE("parse / select with clause with valid form / returns query") {
     CHECK(true);
 }
 
-
 TEST_CASE("parse / select with clause with invalid form / throws syntax error") {
     string input = "Select s with \"a\" = b";
     SelectQueryParser sqp;
     CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
+TEST_CASE("parse / select with clause with with / returns query") {
+    string input = "Select s with \" issue \" = with.procName";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / select with clause with and / returns query") {
+    string input = "Select s with \"a\" = b.procName and 1 = c.stmt# and d.varName = e.procName";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
 }

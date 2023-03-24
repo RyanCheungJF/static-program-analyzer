@@ -10,6 +10,11 @@ ParameterType Parameter::getType() const {
     return type;
 }
 
+AttributeType Parameter::getAttribute() const
+{
+    return attribute;
+}
+
 Parameter::Parameter() {
     type = ParameterType::UNKNOWN;
     value = "";
@@ -115,6 +120,11 @@ bool Parameter::isUncheckedSynonym() {
 
 bool Parameter::hasValidAttributeType() {
     return Parameter::typeToAttributeTypes.at(type).count(attribute) == 1 || attribute == AttributeType::NONE;
+}
+
+bool Parameter::hasAttribute()
+{
+    return attribute != AttributeType::NONE;
 }
 
 void Parameter::updateSynonymType(ParameterType pt) {

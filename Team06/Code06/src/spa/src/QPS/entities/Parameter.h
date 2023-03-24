@@ -40,6 +40,7 @@ class Parameter {
 public:
     string getValue() const;
     ParameterType getType() const;
+    AttributeType getAttribute() const;
     Parameter(string, ParameterType);
     Parameter(string, ParameterType, AttributeType);
     Parameter(const Parameter&);
@@ -59,6 +60,7 @@ public:
     static ParameterType stringToType(string);
     bool isUncheckedSynonym();
     bool hasValidAttributeType();
+    bool hasAttribute();
     void updateSynonymType(ParameterType);
     string getTypeString() const;
     bool operator==(const Parameter&) const;

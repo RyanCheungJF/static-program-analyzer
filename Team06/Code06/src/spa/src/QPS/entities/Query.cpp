@@ -52,17 +52,17 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
 Query::Query() {}
 
 Query::Query(const Query& q) {
-    for (int i = 0; i < q.relations.size(); i++) {
-    }
     relations = q.relations;
     selectParameters = q.selectParameters;
     patterns = q.patterns;
+    comparisons = q.comparisons;
 }
 
-Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector<Pattern>& ps) {
+Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector<Pattern>& ps, vector<Comparison>& cs) {
     selectParameters = ss;
     relations = rs;
     patterns = ps;
+    comparisons = cs;
 }
 
 vector<Parameter*> Query::getAllUncheckedSynonyms() {
@@ -88,15 +88,26 @@ vector<Parameter*> Query::getAllUncheckedSynonyms() {
             synonyms.push_back(patternSyn);
         }
     }
+    for (int i = 0; i < comparisons.size(); i++) {
+        vector<Parameter*> params = comparisons.at(i).getAllUncheckedSynonyms();
+        for (int j = 0; j < params.size(); j++) {
+            synonyms.push_back(params.at(i));
+        }
+    }
     return synonyms;
 }
 
 bool Query::validateAllParameters() {
+
     for (Parameter p : selectParameters) {
         if (!p.hasValidAttributeType()) {
             return false;
         }
+        if (selectParameters.size() > 1 && p.getType() == ParameterType::BOOLEAN) {
+            return false;
+        }
     }
+
     for (Pattern p : patterns) {
         if (!p.validateParams()) {
             return false;
@@ -109,10 +120,11 @@ bool Query::validateAllParameters() {
         }
     }
 
-    for (Parameter p : selectParameters) {
-        if (selectParameters.size() > 1 && p.getType() == ParameterType::BOOLEAN) {
-            throw SyntaxException();
+    for (Comparison c : comparisons) {
+        if (!c.validateParams()) {
+            return false;
         }
     }
+
     return true;
 }

@@ -3,6 +3,7 @@
 
 Comparison::Comparison()
 {
+	op = ComparisonOperator::EQUALS;
 }
 
 Comparison::Comparison(ComparisonOperator o, Parameter leftP, Parameter rightP)
@@ -54,6 +55,19 @@ ComparisonOperator Comparison::stringToOp(string s)
 		throw SyntaxException();
 	}
 	return iter->second;
+}
+
+bool Comparison::validateParams() {
+	if (!leftParam.hasValidAttributeType()) {
+		return false;
+	}
+	if (!rightParam.hasValidAttributeType()) {
+		return false;
+	}
+	if (leftParam.getComparisonType() != rightParam.getComparisonType()) {
+		return false;
+	}
+	return true;
 }
 
 const unordered_map<string, ComparisonOperator> Comparison::stringToOpMap = {

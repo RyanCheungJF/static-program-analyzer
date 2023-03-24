@@ -13,6 +13,7 @@ public:
 	Parameter getRightParam();
 	ComparisonOperator getOperator();
 	vector<Parameter*> getAllUncheckedSynonyms();
+	bool validateParams();
 	static Comparison makeComparison(string o, Parameter leftP, Parameter rightP);
 private:
 	Parameter leftParam;
