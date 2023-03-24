@@ -30,6 +30,7 @@ vector<int> findSuchThat(const vector<string>& wordList) {
     return suchThatStarts;
 }
 
+// TODO: refactor these find* functions
 vector<int> findPattern(const vector<string>& wordList) {
     vector<int> patternStarts;
     for (int i = 0; i < wordList.size(); i++) {
@@ -47,6 +48,7 @@ vector<int> findPattern(const vector<string>& wordList) {
     return patternStarts;
 }
 
+// TODO: refactor these find* functions
 vector<int> findWith(const vector<string>& wordList) {
     vector<int> withStarts;
     for (int i = 0; i < wordList.size(); i++) {
@@ -56,12 +58,12 @@ vector<int> findWith(const vector<string>& wordList) {
         if (i == wordList.size() - 1) {
             continue;
         }
-        string substr;
-        bool found;
-        tie(substr, ignore, found) =
-            extractSubStringUntilDelimiter(wordList[i + 1], 0, AppConstants::STRING_EQUAL_SIGN);
+        if (!startsLikeRef(wordList[i + 1])) {
+            continue;
+        }
+        withStarts.push_back(i);
     }
-    return vector<int>();
+    return withStarts;
 }
 
 vector<int> findAnds(const vector<string>& wordList, int start, int end) {
