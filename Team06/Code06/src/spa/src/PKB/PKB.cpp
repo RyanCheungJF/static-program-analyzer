@@ -229,8 +229,11 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
         std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(p.getTypeString());
         if (attrType == AttributeType::PROCNAME) {
             for (auto stmtNum : stmtNums) {
-                ProcName procName = procedureStorage->getProcedure(stmtNum);
-                res.push_back({std::to_string(stmtNum), procName});
+                std::pair<StmtNum, ProcName> numProcPair = callStorage->getCallStmt(stmtNum);
+                if (numProcPair.second == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
+                    continue;
+                }
+                res.push_back({std::to_string(stmtNum), numProcPair.second});
             }
         }
         // assumes that QPS is correct in only allowing varName for reads and prints,
