@@ -2,7 +2,7 @@
 
 #include <queue>
 
-#include "../../unit_testing/src/stubs/Comparison.h"
+#include "../QPS/entities/Comparison.h"
 #include "../QPS/entities/Pattern.h"
 #include "../QPS/entities/Relationship.h"
 #include "../utils/AppConstants.h"

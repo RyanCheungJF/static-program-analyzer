@@ -47,7 +47,7 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
     }
 
     for (Comparison comparison : comparisons) {
-        vector<vector<string>> response = readPKB.findAttribute(comparison);
+        vector<vector<string>> response = readPKB.findWith(comparison);
         if (response.empty()) {
             queryDb.insertTable(emptyTable);
             break;

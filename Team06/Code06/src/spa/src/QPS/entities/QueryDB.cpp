@@ -45,7 +45,13 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
             presentParams.push_back(param);
         }
         else if (param.getType() != ParameterType::BOOLEAN) {
-            vector<string> content = readPKB.findDesignEntities(param);
+            vector<string> content;
+            if (param.hasAttribute()) {
+                content = readPKB.findAttributes(param);
+            }
+            else {
+                content = readPKB.findDesignEntities(param);
+            }
             vector<Parameter> paramVec = {param};
             vector<vector<string>> contentVec = {};
             for (string c : content) {
