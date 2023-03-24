@@ -86,12 +86,12 @@ public:
 
     std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship> rs);
 
-    std::vector<std::string> findDesignEntities(Parameter p);
+    std::vector<std::string> findDesignEntities(Parameter& p);
 
     // Returns relevant strings based on Pattern object passed
-    std::vector<std::vector<std::string>> findPattern(Pattern p);
+    std::vector<std::vector<std::string>> findPattern(Pattern& p);
 
-    std::vector<std::vector<std::string>> findAttribute(Comparison w);
+    std::vector<std::vector<std::string>> findAttribute(Comparison& w);
 
     // check if given a statement type and statement line number, whether that
     // statement line number is indeed of that statement type

@@ -149,7 +149,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     return res;
 }
 
-std::vector<std::string> PKB::findDesignEntities(Parameter p) {
+std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
     std::shared_ptr<Parameter> param = std::make_shared<Parameter>(p);
 
     std::vector<std::string> res = parameterCache.findResult(param);
@@ -192,7 +192,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
     return res;
 }
 
-std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
+std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
     std::shared_ptr<Pattern> pattern = std::make_shared<Pattern>(p);
     std::vector<std::vector<std::string>> res = patternCache.findResult(pattern);
     if (!res.empty()) {
@@ -219,7 +219,7 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
 
 // this function is incomplete and is currently done with a Stub. Please DO NOT CODE REVIEW this.
 // Waiting for QPS to complete parsing and sending of the With object
-std::vector<std::vector<std::string>> PKB::findAttribute(Comparison c) {
+std::vector<std::vector<std::string>> PKB::findAttribute(Comparison& c) {
     Parameter leftParam = c.getLeftParam();
     Parameter rightParam = c.getRightParam();
     AttributeType attrType = leftParam.getAttr();
