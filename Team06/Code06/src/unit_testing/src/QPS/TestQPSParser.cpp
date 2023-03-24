@@ -162,6 +162,12 @@ TEST_CASE("parse / with clause variable invalid attribute / catch error") {
     CHECK_THROWS_AS(qp.parse(test), SemanticException);
 }
 
+TEST_CASE("parse / with clause variable empty string / catch syntax error") {
+    string test = "variable v; procedure p; Select v with p.procName = \" \"";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
 TEST_CASE("splitQuery / splitting variable v; Select v; should give error / "
           "catch error") {
     string test = "variable v; Select v ; ";

@@ -50,6 +50,16 @@ ComparisonOperator Comparison::stringToOp(string s) {
     return iter->second;
 }
 
+bool Comparison::hasValidComparisonTypes() {
+    if (leftParam.getComparisonType() == ParameterType::UNKNOWN) {
+        return false;
+    }
+    if (rightParam.getComparisonType() == ParameterType::UNKNOWN) {
+        return false;
+    }
+    return true;
+}
+
 bool Comparison::validateParams() {
     if (!leftParam.hasValidAttributeType()) {
         return false;

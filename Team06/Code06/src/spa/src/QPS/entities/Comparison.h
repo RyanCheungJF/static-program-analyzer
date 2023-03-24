@@ -14,6 +14,7 @@ public:
     ComparisonOperator getOperator();
     vector<Parameter*> getAllUncheckedSynonyms();
     bool validateParams();
+    bool hasValidComparisonTypes();
     static Comparison makeComparison(string o, Parameter leftP, Parameter rightP);
 
 private:
