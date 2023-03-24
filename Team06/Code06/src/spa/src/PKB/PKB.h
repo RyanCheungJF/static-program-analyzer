@@ -28,6 +28,22 @@
 #include "utils/AppConstants.h"
 
 class PKB : AppConstants {
+    struct withClauseHash {
+        std::size_t operator()(std::vector<std::string> const& vec) const {
+            return std::hash<std::string>{}(vec[1]);
+        }
+    };
+
+    struct withClauseEquals {
+        bool operator()(shared_ptr<Pattern> const& pattern1, shared_ptr<Pattern> const& pattern2) const {
+            bool check1 = pattern1->getPatternType() == pattern2->getPatternType();
+            bool check2 = *pattern1->getEntRef() == *pattern2->getEntRef();
+            bool check3 = pattern1->getExprSpecs()[0] == pattern2->getExprSpecs()[0];
+
+            return check1 && check2 && check3;
+        }
+    };
+
 
 public:
     void initializePkb();
@@ -91,7 +107,9 @@ public:
     // Returns relevant strings based on Pattern object passed
     std::vector<std::vector<std::string>> findPattern(Pattern& p);
 
-    std::vector<std::vector<std::string>> findAttribute(Comparison& w);
+    std::vector<std::vector<std::string>> findAttribute(Parameter& p);
+
+    std::vector<std::vector<std::string>> findWith(Comparison& c);
 
     // check if given a statement type and statement line number, whether that
     // statement line number is indeed of that statement type

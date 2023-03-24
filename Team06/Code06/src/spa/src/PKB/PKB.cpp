@@ -219,16 +219,14 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
 
 // this function is incomplete and is currently done with a Stub. Please DO NOT CODE REVIEW this.
 // Waiting for QPS to complete parsing and sending of the With object
-std::vector<std::vector<std::string>> PKB::findAttribute(Comparison& c) {
-    Parameter leftParam = c.getLeftParam();
-    Parameter rightParam = c.getRightParam();
-    AttributeType attrType = leftParam.getAttribute();
-    ParameterType leftParamType = leftParam.getType();
+std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
+    AttributeType attrType = p.getAttribute();
+    ParameterType paramType = p.getType();
 
     std::vector<std::vector<std::string>> res;
 
-    if (Parameter::isStatementRef(leftParam)) {
-        std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(leftParam.getTypeString());
+    if (Parameter::isStatementRef(p)) {
+        std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(p.getTypeString());
         if (attrType == AttributeType::PROCNAME) {
             for (auto stmtNum : stmtNums) {
                 ProcName procName = procedureStorage->getProcedure(stmtNum);
@@ -251,14 +249,14 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Comparison& c) {
         }
     }
     // currently just returns a pair of duplicated values
-    else if (leftParamType == ParameterType::CONSTANT) {
+    else if (paramType == ParameterType::CONSTANT) {
         std::unordered_set<Const> consts = constantStorage->getEntNames();
         for (auto constant : consts) {
             res.push_back({std::to_string(constant), std::to_string(constant)});
         }
     }
     // currently just returns a pair of duplicated values
-    else if (leftParamType == ParameterType::VARIABLE) {
+    else if (paramType == ParameterType::VARIABLE) {
         std::unordered_set<Ent> vars = entityStorage->getEntNames();
         for (auto var : vars) {
             res.push_back({var, var});
@@ -272,13 +270,33 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Comparison& c) {
         }
     }
 
-    std::string rightParamValue = rightParam.getValue();
-    if (rightParamValue != "") {
-        res.erase(std::remove_if(res.begin(), res.end(),
-                                 [&](const std::vector<std::string>& item) {
-                                     return item[1] != rightParamValue;
-                                 }),
-                  res.end());
+    return res;
+}
+
+std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
+    Parameter leftParam = c.getLeftParam();
+    Parameter rightParam = c.getRightParam();
+    std::vector<std::vector<std::string>> leftParamRes = findAttribute(leftParam);
+
+    if (rightParam.getType() == ParameterType::FIXED_STRING || rightParam.getType() == ParameterType::FIXED_INT) {
+        std::string rightParamValue = rightParam.getValue();
+        leftParamRes.erase(std::remove_if(leftParamRes.begin(), leftParamRes.end(),
+                                          [&](const std::vector<std::string>& item) {
+                                              return item[1] != rightParamValue;
+                                          }),
+                           leftParamRes.end());
+        return leftParamRes;
+    }
+    std::vector<std::vector<std::string>> res;
+    std::vector<std::vector<std::string>> rightParamRes = findAttribute(rightParam);
+    std::unordered_map<std::string, std::unordered_set<std::string>> tempMap;
+    for (auto pair : leftParamRes) {
+        tempMap[pair[1]].insert(pair[0]);
+    }
+    for (auto pair : rightParamRes) {
+        for (auto item : tempMap[pair[1]]) {
+            res.push_back({pair[0], item});
+        }
     }
 
     return res;
