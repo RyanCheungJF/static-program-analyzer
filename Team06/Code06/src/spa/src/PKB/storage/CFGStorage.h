@@ -30,7 +30,7 @@ public:
     //  : this could be a pointer in the future so that we do not need to do pass-by-copy
     // and use resources on time & space
     void writeCFG(ProcName name,
-                  std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph);
+                  std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph);
 
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> getGraph(ProcName name);
 

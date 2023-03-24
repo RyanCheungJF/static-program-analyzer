@@ -10,6 +10,10 @@ ParameterType Parameter::getType() const {
     return type;
 }
 
+AttributeType Parameter::getAttribute() const {
+    return attribute;
+}
+
 Parameter::Parameter() {
     type = ParameterType::UNKNOWN;
     value = "";

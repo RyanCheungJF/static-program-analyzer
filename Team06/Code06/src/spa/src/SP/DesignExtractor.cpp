@@ -7,51 +7,21 @@ DesignExtractor::DesignExtractor(std::unique_ptr<Program> root, WritePKB* writeP
 
 void DesignExtractor::populatePKB() {
     try {
-        auto order = validateSemantics();
-        extractInfo();
+        auto semanticValidator = SemanticValidator(ASTroot.get(), writePkb, readPkb);
+        auto topoOrder = semanticValidator.validate();
+        extractInfo(topoOrder);
         extractCFG();
-        populateUsesModifies(writePkb, readPkb, order);
     } catch (SemanticErrorException e) {
         throw e;
     }
 }
 
-std::vector<ProcName> DesignExtractor::validateSemantics() {
-    std::vector<ProcName> procedureNames;
-    std::unordered_map<ProcName, std::unordered_set<ProcName>> procCallMap;
-    buildCallerCalleeTable(procedureNames, procCallMap);
-
-    try {
-        validateNoDuplicateProcedureName(procedureNames);
-        validateCalledProceduresExist(procedureNames, procCallMap);
-        auto order = validateNoCycles(procedureNames, procCallMap, writePkb, readPkb);
-        return order;
-    } catch (SemanticErrorException e) {
-        throw e;
-    }
-}
-
-void DesignExtractor::buildCallerCalleeTable(std::vector<ProcName>& procedureNames,
-                                             std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap) {
-    for (const auto& procedure : ASTroot->procedureList) {
-        procedureNames.push_back(procedure->procedureName);
-        for (const auto& statement : procedure->getStatements()) {
-            if (const auto i = CAST_TO(CallStatement, statement.get())) {
-                procCallMap[procedure->procedureName].insert(i->procName);
-            }
-            if (isContainerStatement(statement.get())) {
-                recurseCallStatementHelper(statement.get(), procCallMap, procedure->procedureName);
-            }
-        }
-    }
-}
-
-void DesignExtractor::extractInfo() {
-    FollowsExtractorVisitor followsExtractor = FollowsExtractorVisitor(writePkb);
-    ParentExtractorVisitor parentExtractor = ParentExtractorVisitor(writePkb);
-    StatementExtractorVisitor statementExtractor = StatementExtractorVisitor(writePkb);
-    ProcedureExtractorVisitor procedureExtractor = ProcedureExtractorVisitor(writePkb);
-    EntRefExtractorVisitor entRefExtractor = EntRefExtractorVisitor(writePkb);
+void DesignExtractor::extractInfo(std::vector<ProcName> topoOrder) {
+    auto followsExtractor = FollowsExtractorVisitor(writePkb);
+    auto parentExtractor = ParentExtractorVisitor(writePkb);
+    auto statementExtractor = StatementExtractorVisitor(writePkb);
+    auto procedureExtractor = ProcedureExtractorVisitor(writePkb);
+    auto entRefExtractor = EntRefExtractorVisitor(writePkb);
     std::vector<ASTVisitor*> visitors{&followsExtractor, &parentExtractor, &statementExtractor, &procedureExtractor,
                                       &entRefExtractor};
 
@@ -67,10 +37,14 @@ void DesignExtractor::extractInfo() {
             }
         }
     }
+
+    auto usesModifiesExtractor = UsesModifiesExtractor(writePkb, readPkb);
+    usesModifiesExtractor.extract(topoOrder);
 }
 
 void DesignExtractor::extractCFG() {
+    auto cfgBuilder = CFGBuilder(writePkb);
     for (const auto& procedure : ASTroot->procedureList) {
-        buildCFG(procedure.get(), writePkb, readPkb);
+        cfgBuilder.buildCFG(procedure.get());
     }
 }

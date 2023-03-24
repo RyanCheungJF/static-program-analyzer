@@ -38,7 +38,7 @@ void PKB::setFollows(StmtNum followee, StmtNum follower) {
     followsStorage->write(followee, follower);
 }
 
-void PKB::setFollowsT(StmtNum followee, std::unordered_set<StmtNum> followers) {
+void PKB::setFollowsT(StmtNum followee, std::unordered_set<StmtNum>& followers) {
     followsTStorage->write(followee, followers);
 }
 
@@ -46,11 +46,11 @@ void PKB::setParent(StmtNum parent, StmtNum children) {
     parentStorage->write(parent, children);
 }
 
-void PKB::setParentT(StmtNum parent, std::unordered_set<StmtNum> children) {
+void PKB::setParentT(StmtNum parent, std::unordered_set<StmtNum>& children) {
     parentTStorage->write(parent, children);
 }
 
-void PKB::setProcedure(ProcName p, std::unordered_set<StmtNum> lines) {
+void PKB::setProcedure(ProcName p, std::unordered_set<StmtNum>& lines) {
     procedureStorage->writeProcedure(p, lines);
 }
 
@@ -58,11 +58,11 @@ void PKB::setStatement(Stmt s, StmtNum line) {
     statementStorage->writeStatement(s, line);
 }
 
-void PKB::setEntity(StmtNum num, std::unordered_set<Ent> entities) {
+void PKB::setEntity(StmtNum num, std::unordered_set<Ent>& entities) {
     entityStorage->writeEntity(num, entities);
 }
 
-void PKB::setConstant(StmtNum num, std::unordered_set<Const> constants) {
+void PKB::setConstant(StmtNum num, std::unordered_set<Const>& constants) {
     constantStorage->writeEntity(num, constants);
 }
 
@@ -70,27 +70,27 @@ void PKB::setCall(StmtNum callLine, ProcName procedure_being_called) {
     callStorage->writeCallS(callLine, procedure_being_called);
 }
 
-void PKB::setCalls(ProcName caller, std::unordered_set<ProcName> callees) {
+void PKB::setCalls(ProcName caller, std::unordered_set<ProcName>& callees) {
     callsStorage->write(caller, callees);
 }
 
-void PKB::setCallsT(ProcName caller, std::unordered_set<ProcName> callees) {
+void PKB::setCallsT(ProcName caller, std::unordered_set<ProcName>& callees) {
     callsTStorage->write(caller, callees);
 }
 
-void PKB::setUsesS(StmtNum num, std::unordered_set<Ent> entities) {
+void PKB::setUsesS(StmtNum num, std::unordered_set<Ent>& entities) {
     usesStorage->write(num, entities);
 }
 
-void PKB::setUsesP(ProcName name, std::unordered_set<Ent> entities) {
+void PKB::setUsesP(ProcName name, std::unordered_set<Ent>& entities) {
     usesStorage->write(name, entities);
 }
 
-void PKB::setModifiesS(StmtNum num, std::unordered_set<Ent> entities) {
+void PKB::setModifiesS(StmtNum num, std::unordered_set<Ent>& entities) {
     modifiesStorage->write(num, entities);
 }
 
-void PKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {
+void PKB::setModifiesP(ProcName name, std::unordered_set<Ent>& entities) {
     modifiesStorage->write(name, entities);
 }
 
@@ -98,16 +98,16 @@ void PKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression>
     assignPatternStorage->writePattern(lhs, num, std::move(pointer));
 }
 
-void PKB::writeIfPattern(StmtNum num, std::unordered_set<Ent> variables) {
+void PKB::writeIfPattern(StmtNum num, std::unordered_set<Ent>& variables) {
     ifPatternStorage->writePattern(num, variables);
 }
 
-void PKB::writeWhilePattern(StmtNum num, std::unordered_set<Ent> variables) {
+void PKB::writeWhilePattern(StmtNum num, std::unordered_set<Ent>& variables) {
     whilePatternStorage->writePattern(num, variables);
 }
 
 void PKB::writeCFG(ProcName name,
-                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph) {
+                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph) {
     cfgStorage->writeCFG(name, graph);
 }
 
@@ -149,7 +149,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     return res;
 }
 
-std::vector<std::string> PKB::findDesignEntities(Parameter p) {
+std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
     std::shared_ptr<Parameter> param = std::make_shared<Parameter>(p);
 
     std::vector<std::string> res = parameterCache.findResult(param);
@@ -168,7 +168,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
     else if (type == ParameterType::CONSTANT) {
         std::unordered_set<Const> constants = constantStorage->getEntNames();
         for (auto constant : constants) {
-            res.push_back(to_string(constant));
+            res.push_back(constant);
         }
     }
     else if (type == ParameterType::VARIABLE) {
@@ -192,7 +192,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
     return res;
 }
 
-std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
+std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
     std::shared_ptr<Pattern> pattern = std::make_shared<Pattern>(p);
     std::vector<std::vector<std::string>> res = patternCache.findResult(pattern);
     if (!res.empty()) {
@@ -219,33 +219,33 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
 
 // this function is incomplete and is currently done with a Stub. Please DO NOT CODE REVIEW this.
 // Waiting for QPS to complete parsing and sending of the With object
-std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
-    Parameter param = w.syn;
-    ParameterType paramType = param.getType();
-    std::string attrType = w.attrType;
-    bool hasEquals = w.hasEquals;
-    std::string equalsValue = w.equalsValue;
+std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
+    AttributeType attrType = p.getAttribute();
+    ParameterType paramType = p.getType();
 
     std::vector<std::vector<std::string>> res;
 
-    if (Parameter::isStatementRef(param)) {
-        std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(param.getTypeString());
-        if (attrType == AppConstants::PROCEDURE) {
+    if (Parameter::isStatementRef(p)) {
+        std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(p.getTypeString());
+        if (attrType == AttributeType::PROCNAME) {
             for (auto stmtNum : stmtNums) {
-                ProcName procName = procedureStorage->getProcedure(stmtNum);
-                res.push_back({std::to_string(stmtNum), procName});
+                std::pair<StmtNum, ProcName> numProcPair = callStorage->getCallStmt(stmtNum);
+                if (numProcPair.second == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
+                    continue;
+                }
+                res.push_back({std::to_string(stmtNum), numProcPair.second});
             }
         }
         // assumes that QPS is correct in only allowing varName for reads and prints,
         // since reads and prints will only have 1 variable tied to them
-        else if (attrType == AppConstants::VARIABLE) {
+        else if (attrType == AttributeType::VARNAME) {
             for (auto stmtNum : stmtNums) {
                 Ent var = *entityStorage->getEntities(stmtNum).begin();
                 res.push_back({std::to_string(stmtNum), var});
             }
         }
         // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
-        else if (attrType == AppConstants::STMTNO) {
+        else if (attrType == AttributeType::STMTNO) {
             for (auto stmtNum : stmtNums) {
                 res.push_back({std::to_string(stmtNum), std::to_string(stmtNum)});
             }
@@ -255,7 +255,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
     else if (paramType == ParameterType::CONSTANT) {
         std::unordered_set<Const> consts = constantStorage->getEntNames();
         for (auto constant : consts) {
-            res.push_back({std::to_string(constant), std::to_string(constant)});
+            res.push_back({constant, constant});
         }
     }
     // currently just returns a pair of duplicated values
@@ -270,6 +270,35 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
         std::unordered_set<ProcName> procs = procedureStorage->getProcNames();
         for (auto proc : procs) {
             res.push_back({proc, proc});
+        }
+    }
+
+    return res;
+}
+
+std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
+    Parameter leftParam = c.getLeftParam();
+    Parameter rightParam = c.getRightParam();
+    std::vector<std::vector<std::string>> leftParamRes = findAttribute(leftParam);
+
+    if (rightParam.getType() == ParameterType::FIXED_STRING || rightParam.getType() == ParameterType::FIXED_INT) {
+        std::string rightParamValue = rightParam.getValue();
+        leftParamRes.erase(std::remove_if(leftParamRes.begin(), leftParamRes.end(),
+                                          [&](const std::vector<std::string>& item) {
+                                              return item[1] != rightParamValue;
+                                          }),
+                           leftParamRes.end());
+        return leftParamRes;
+    }
+    std::vector<std::vector<std::string>> res;
+    std::vector<std::vector<std::string>> rightParamRes = findAttribute(rightParam);
+    std::unordered_map<std::string, std::unordered_set<std::string>> tempMap;
+    for (auto pair : leftParamRes) {
+        tempMap[pair[1]].insert(pair[0]);
+    }
+    for (auto pair : rightParamRes) {
+        for (auto item : tempMap[pair[1]]) {
+            res.push_back({item, pair[0]});
         }
     }
 

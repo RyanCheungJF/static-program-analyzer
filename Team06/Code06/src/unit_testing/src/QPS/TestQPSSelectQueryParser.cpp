@@ -328,6 +328,13 @@ TEST_CASE("parse / select such that with invalid spaces in fixed string / throws
     CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
 }
 
+TEST_CASE("parse / select tuple but only one item in the tuple / throws syntax error") {
+    string input = "Select <s>";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    REQUIRE(q.selectParameters.size() == 1);
+}
+
 TEST_CASE("parse / select pattern with valid spaces in exprSpec / return query") {
     SelectQueryParser sqp;
     SECTION("exprSpec without wild cards") {

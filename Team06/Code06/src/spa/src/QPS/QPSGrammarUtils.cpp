@@ -70,14 +70,28 @@ bool hasCorrectRelRefOrPatternForm(string s) {
 }
 
 bool isDeclaration(string declaration) {
+    // This allows for there to be duplicate synonyms.
+    // While it should technically not be allowed, we will check for duplicate synonyms
+    // when inserting to variableStore.
+    declaration = trim(declaration);
     int index = declaration.find(" ");
     string declarationToken = declaration.substr(0, index);
-    return isDesignEntity(declarationToken);
+    string synonymsString = declaration.substr(index + 1, declaration.size());
+    vector<string> synonymsVec = stringToWordListByDelimiter(synonymsString, ",");
+    if (!isDesignEntity(declarationToken)) {
+        return false;
+    }
+    for (string synonym : synonymsVec) {
+        if (!isSynonym(synonym)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 bool isDesignEntity(string designEntity) {
-    return regex_search(trim(designEntity), regex("^(stmt|read|print|call|while|if|assign|variable|"
-                                                  "constant|procedure)"));
+    return regex_match(trim(designEntity), regex("^(stmt|read|print|call|while|if|assign|variable|"
+                                                 "constant|procedure)"));
 }
 
 pair<string, string> extractDesignEntity(string designEntity) {

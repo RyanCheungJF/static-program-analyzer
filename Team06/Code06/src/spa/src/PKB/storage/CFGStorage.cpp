@@ -1,7 +1,7 @@
 #include "CFGStorage.h"
 
 void CFGStorage::writeCFG(
-    ProcName name, std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph) {
+    ProcName name, std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph) {
     proc_graph[name] = graph;
 }
 

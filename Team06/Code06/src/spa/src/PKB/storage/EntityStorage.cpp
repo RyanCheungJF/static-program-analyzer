@@ -1,6 +1,6 @@
 #include "EntityStorage.h"
 
-template <typename T> void EntityStorage<T>::writeEntity(StmtNum num, std::unordered_set<T> entities) {
+template <typename T> void EntityStorage<T>::writeEntity(StmtNum num, std::unordered_set<T>& entities) {
     stmtNum_ent[num].insert(entities.begin(), entities.end());
     for (auto e : entities) {
         ent_stmtNum[e].insert(num);
@@ -35,5 +35,4 @@ template <typename T> std::unordered_set<T> EntityStorage<T>::getEntNames() {
     return entNames;
 }
 
-template class EntityStorage<Ent>;
-template class EntityStorage<Const>;
+template class EntityStorage<std::string>;
