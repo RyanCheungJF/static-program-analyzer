@@ -50,7 +50,7 @@ private:
     // Affects(1, a2) or Affects(1, _)
     std::vector<std::vector<std::string>> handleIntWildcard(StmtNum a1);
     // Affects(a1, a2) or Affects(_, _)
-    std::vector<std::vector<std::string>> handleWildcardWildcard();
+    std::vector<std::vector<std::string>> handleWildcardWildcard(ProcName proc);
 
     // Affects*(1, 2)
     std::vector<std::vector<std::string>> handleIntIntTransitive(StmtNum a1, StmtNum a2);
@@ -75,7 +75,7 @@ private:
                                                            bool isFixedIntParam1, bool isFixedIntParam2,
                                                            bool isWildCardParam1, bool isWildCardParam2);
 
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted, ProcName proc);
 
     std::unordered_set<StmtNum> getAssignStatements(std::unordered_set<StmtNum> allProcStatements);
 

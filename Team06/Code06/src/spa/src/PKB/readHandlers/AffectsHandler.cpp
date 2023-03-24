@@ -96,10 +96,16 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
     return nonTransitiveOneIntOneWildcard(a1, AppConstants::NOT_USED_FIELD);
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard() {
-    std::vector<std::vector<std::string>> res;
+std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(ProcName proc) {
 
-    std::unordered_set<ProcName> allProcedures = procStorage->getProcNames();
+    std::vector<std::vector<std::string>> res;
+    std::unordered_set<ProcName> allProcedures;
+
+    if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
+        allProcedures = procStorage->getProcNames();
+    } else {
+        allProcedures = {proc};
+    }
 
     for (ProcName proc : allProcedures) {
         std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
@@ -128,7 +134,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
         return res;
     }
 
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false, proc1);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
     for (StmtNum num : hashmap[a1]) {
@@ -176,7 +182,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTransitive() {
     std::vector<std::vector<std::string>> res;
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false, AppConstants::PROCEDURE_DOES_NOT_EXIST);
 
     std::unordered_set<std::tuple<StmtNum, StmtNum, StmtNum>, hashFunctionTuple> seen;
     std::deque<std::tuple<StmtNum, StmtNum, StmtNum>> queue;
@@ -245,7 +251,7 @@ AffectsHandler::handleNonTransitive(std::string param1value, std::string param2v
             return handleWildcardInt(stoi(param2value));
         }
         else if (isWildCardParam2) {
-            return handleWildcardWildcard();
+            return handleWildcardWildcard(AppConstants::PROCEDURE_DOES_NOT_EXIST);
         }
     }
     return std::vector<std::vector<std::string>>();
@@ -273,10 +279,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(std::stri
     return std::vector<std::vector<std::string>>();
 }
 
-std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffectsGraph(bool isInverted) {
+std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffectsGraph(bool isInverted, ProcName proc) {
 
     // build the hop graph
-    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard();
+    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard(proc);
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
     for (std::vector<std::string> p : allValidAffects) {
         isInverted ? hashmap[stoi(p[1])].insert(stoi(p[0])) : hashmap[stoi(p[0])].insert(stoi(p[1]));
@@ -299,7 +305,8 @@ std::unordered_set<StmtNum> AffectsHandler::getAssignStatements(std::unordered_s
 
 std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(StmtNum a1, StmtNum a2) {
     bool isIntWildcard = a2 == AppConstants::NOT_USED_FIELD;
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(!isIntWildcard);
+    ProcName proc = isIntWildcard ? procStorage->getProcedure(a1) : procStorage->getProcedure(a2);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(!isIntWildcard, proc);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
 
