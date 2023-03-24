@@ -10,7 +10,7 @@ void WritePKB::setFollows(StmtNum followee, StmtNum follower) {
     pkbInstance->setFollows(followee, follower);
 }
 
-void WritePKB::setFollowsT(StmtNum followee, std::unordered_set<StmtNum> followers) {
+void WritePKB::setFollowsT(StmtNum followee, std::unordered_set<StmtNum>& followers) {
     pkbInstance->setFollowsT(followee, followers);
 }
 

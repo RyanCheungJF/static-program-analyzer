@@ -36,7 +36,7 @@ public:
     void setFollows(StmtNum left, StmtNum right);
 
     // Sets FollowsT relation in PKB
-    void setFollowsT(StmtNum followee, std::unordered_set<StmtNum> followers);
+    void setFollowsT(StmtNum followee, std::unordered_set<StmtNum>& followers);
 
     // Sets Parent relation in PKB
     void setParent(StmtNum parent, StmtNum child);

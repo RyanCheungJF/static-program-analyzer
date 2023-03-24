@@ -38,7 +38,7 @@ void PKB::setFollows(StmtNum followee, StmtNum follower) {
     followsStorage->write(followee, follower);
 }
 
-void PKB::setFollowsT(StmtNum followee, std::unordered_set<StmtNum> followers) {
+void PKB::setFollowsT(StmtNum followee, std::unordered_set<StmtNum>& followers) {
     followsTStorage->write(followee, followers);
 }
 
