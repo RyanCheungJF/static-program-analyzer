@@ -46,11 +46,11 @@ void PKB::setParent(StmtNum parent, StmtNum children) {
     parentStorage->write(parent, children);
 }
 
-void PKB::setParentT(StmtNum parent, std::unordered_set<StmtNum> children) {
+void PKB::setParentT(StmtNum parent, std::unordered_set<StmtNum>& children) {
     parentTStorage->write(parent, children);
 }
 
-void PKB::setProcedure(ProcName p, std::unordered_set<StmtNum> lines) {
+void PKB::setProcedure(ProcName p, std::unordered_set<StmtNum>& lines) {
     procedureStorage->writeProcedure(p, lines);
 }
 
@@ -58,11 +58,11 @@ void PKB::setStatement(Stmt s, StmtNum line) {
     statementStorage->writeStatement(s, line);
 }
 
-void PKB::setEntity(StmtNum num, std::unordered_set<Ent> entities) {
+void PKB::setEntity(StmtNum num, std::unordered_set<Ent>& entities) {
     entityStorage->writeEntity(num, entities);
 }
 
-void PKB::setConstant(StmtNum num, std::unordered_set<Const> constants) {
+void PKB::setConstant(StmtNum num, std::unordered_set<Const>& constants) {
     constantStorage->writeEntity(num, constants);
 }
 
@@ -70,27 +70,27 @@ void PKB::setCall(StmtNum callLine, ProcName procedure_being_called) {
     callStorage->writeCallS(callLine, procedure_being_called);
 }
 
-void PKB::setCalls(ProcName caller, std::unordered_set<ProcName> callees) {
+void PKB::setCalls(ProcName caller, std::unordered_set<ProcName>& callees) {
     callsStorage->write(caller, callees);
 }
 
-void PKB::setCallsT(ProcName caller, std::unordered_set<ProcName> callees) {
+void PKB::setCallsT(ProcName caller, std::unordered_set<ProcName>& callees) {
     callsTStorage->write(caller, callees);
 }
 
-void PKB::setUsesS(StmtNum num, std::unordered_set<Ent> entities) {
+void PKB::setUsesS(StmtNum num, std::unordered_set<Ent>& entities) {
     usesStorage->write(num, entities);
 }
 
-void PKB::setUsesP(ProcName name, std::unordered_set<Ent> entities) {
+void PKB::setUsesP(ProcName name, std::unordered_set<Ent>& entities) {
     usesStorage->write(name, entities);
 }
 
-void PKB::setModifiesS(StmtNum num, std::unordered_set<Ent> entities) {
+void PKB::setModifiesS(StmtNum num, std::unordered_set<Ent>& entities) {
     modifiesStorage->write(num, entities);
 }
 
-void PKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {
+void PKB::setModifiesP(ProcName name, std::unordered_set<Ent>& entities) {
     modifiesStorage->write(name, entities);
 }
 
@@ -98,16 +98,16 @@ void PKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression>
     assignPatternStorage->writePattern(lhs, num, std::move(pointer));
 }
 
-void PKB::writeIfPattern(StmtNum num, std::unordered_set<Ent> variables) {
+void PKB::writeIfPattern(StmtNum num, std::unordered_set<Ent>& variables) {
     ifPatternStorage->writePattern(num, variables);
 }
 
-void PKB::writeWhilePattern(StmtNum num, std::unordered_set<Ent> variables) {
+void PKB::writeWhilePattern(StmtNum num, std::unordered_set<Ent>& variables) {
     whilePatternStorage->writePattern(num, variables);
 }
 
 void PKB::writeCFG(ProcName name,
-                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph) {
+                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph) {
     cfgStorage->writeCFG(name, graph);
 }
 
