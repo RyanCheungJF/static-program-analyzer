@@ -295,7 +295,7 @@ std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
     }
     for (auto pair : rightParamRes) {
         for (auto item : tempMap[pair[1]]) {
-            res.push_back({pair[0], item});
+            res.push_back({item, pair[0]});
         }
     }
 
