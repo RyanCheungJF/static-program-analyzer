@@ -222,10 +222,8 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
 std::vector<std::vector<std::string>> PKB::findAttribute(Comparison& c) {
     Parameter leftParam = c.getLeftParam();
     Parameter rightParam = c.getRightParam();
-    AttributeType attrType = leftParam.getAttr();
+    AttributeType attrType = leftParam.getAttribute();
     ParameterType leftParamType = leftParam.getType();
-    bool hasEquals = w.hasEquals;
-    std::string equalsValue = w.equalsValue;
 
     std::vector<std::vector<std::string>> res;
 
@@ -274,10 +272,11 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Comparison& c) {
         }
     }
 
-    if (hasEquals) {
+    std::string rightParamValue = rightParam.getValue();
+    if (rightParamValue != "") {
         res.erase(std::remove_if(res.begin(), res.end(),
                                  [&](const std::vector<std::string>& item) {
-                                     return item[1] != equalsValue;
+                                     return item[1] != rightParamValue;
                                  }),
                   res.end());
     }
