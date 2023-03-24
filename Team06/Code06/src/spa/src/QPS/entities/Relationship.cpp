@@ -108,13 +108,17 @@ const unordered_map<RelationshipType, shared_ptr<SyntaxValidator<Relationship>>>
         {RelationshipType::AFFECTS, relSSSynVal}, {RelationshipType::AFFECTST, relSSSynVal},
 };
 
-const unordered_set<ParameterType> Relationship::stmtRefs = { ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL };
-const unordered_set<ParameterType> Relationship::entityRefs = { ParameterType::VARIABLE, ParameterType::FIXED_STRING, ParameterType::WILDCARD };
-const unordered_set<ParameterType> Relationship::procedureRefs = { ParameterType::WILDCARD, ParameterType::PROCEDURE, ParameterType::FIXED_STRING };
-const unordered_set<ParameterType> Relationship::procOrStmtRefs = { ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::CALL, ParameterType::PROCEDURE,
-          ParameterType::FIXED_STRING };
+const unordered_set<ParameterType> Relationship::stmtRefs = {
+    ParameterType::STMT,   ParameterType::READ,      ParameterType::PRINT,    ParameterType::WHILE, ParameterType::IF,
+    ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL};
+const unordered_set<ParameterType> Relationship::entityRefs = {ParameterType::VARIABLE, ParameterType::FIXED_STRING,
+                                                               ParameterType::WILDCARD};
+const unordered_set<ParameterType> Relationship::procedureRefs = {ParameterType::WILDCARD, ParameterType::PROCEDURE,
+                                                                  ParameterType::FIXED_STRING};
+const unordered_set<ParameterType> Relationship::procOrStmtRefs = {
+    ParameterType::STMT,      ParameterType::READ,        ParameterType::PRINT,     ParameterType::WHILE,
+    ParameterType::IF,        ParameterType::ASSIGN,      ParameterType::FIXED_INT, ParameterType::CALL,
+    ParameterType::PROCEDURE, ParameterType::FIXED_STRING};
 
 const unordered_map<RelationshipType, vector<unordered_set<ParameterType>>> Relationship::typeToParameterTypes = {
     {RelationshipType::FOLLOWS,
@@ -137,16 +141,8 @@ const unordered_map<RelationshipType, vector<unordered_set<ParameterType>>> Rela
          stmtRefs,
          stmtRefs,
      }},
-    {RelationshipType::USES,
-     {
-procOrStmtRefs,
-         entityRefs
-     }},
-    {RelationshipType::MODIFIES,
-     {
-procOrStmtRefs,
-         entityRefs
-     }},
+    {RelationshipType::USES, {procOrStmtRefs, entityRefs}},
+    {RelationshipType::MODIFIES, {procOrStmtRefs, entityRefs}},
     {RelationshipType::NEXT,
      {
          stmtRefs,
@@ -159,13 +155,13 @@ procOrStmtRefs,
      }},
     {RelationshipType::CALLS,
      {
-        procedureRefs,
-        procedureRefs,
+         procedureRefs,
+         procedureRefs,
      }},
     {RelationshipType::CALLST,
      {
-        procedureRefs,
-        procedureRefs,
+         procedureRefs,
+         procedureRefs,
      }},
     {RelationshipType::AFFECTS,
      {
