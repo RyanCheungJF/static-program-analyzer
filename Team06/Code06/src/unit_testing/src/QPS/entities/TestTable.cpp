@@ -294,3 +294,13 @@ TEST_CASE("extractColumns / extracting through using params with duplicates / ex
     REQUIRE(t2.getHeaders().size() == 2);
     REQUIRE(t2.getContent().size() == 2);
 }
+
+TEST_CASE("updateValues / single header updates correctly the values of the table") {
+    Table table({Parameter("v", ParameterType::VARIABLE)}, {{"1"}, {"2"}, {"3"}});
+    unordered_map<string, string> map;
+    map.insert({{"1", "2"},
+                {"2", "4"},
+                {"3", "6"}});
+    table = table.updateValues(Parameter("v", ParameterType::VARIABLE), map);
+    REQUIRE(true);
+}

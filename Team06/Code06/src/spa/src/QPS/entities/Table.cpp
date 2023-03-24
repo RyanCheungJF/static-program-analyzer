@@ -148,6 +148,19 @@ Table Table::extractDesignEntities() {
     return extractColumns(indexes);
 }
 
+Table Table::updateValues(Parameter p, unordered_map<string, string> map) {
+    int index;
+    for (int i = 0; i < headers.size(); i++) {
+        if(headers[i] == p) {
+            index = i;
+        }
+    }
+    for (vector<string> row : contents) {
+        row[index] = map[row[index]];
+    }
+    return *this;
+}
+
 Table Table::extractColumns(vector<int>& indexes) {
     vector<vector<string>> newContent;
     vector<Parameter> newHeader;
