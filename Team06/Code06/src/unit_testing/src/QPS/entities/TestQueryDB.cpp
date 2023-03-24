@@ -180,7 +180,8 @@ TEST_CASE("insertTable / insert tables with empty content / tables can still "
     vector<vector<string>> content3 = {};
     vector<Parameter> params1 = {Parameter("s1", ParameterType::STMT), Parameter("x", ParameterType::VARIABLE)};
     vector<Parameter> params2 = {Parameter("s2", ParameterType::STMT), Parameter("y", ParameterType::VARIABLE)};
-    vector<Parameter> params3 = {Parameter("s2", ParameterType::STMT), Parameter("s1", ParameterType::STMT)};Table t1(params1, content1);
+    vector<Parameter> params3 = {Parameter("s2", ParameterType::STMT), Parameter("s1", ParameterType::STMT)};
+    Table t1(params1, content1);
     Table t2(params2, content2);
     Table t3(params3, content3);
     qdb.insertTable(t1);
@@ -201,19 +202,16 @@ TEST_CASE("insertTable / insert tables with with content / tables correctly inse
     QueryDB qdb;
     ReadPKB readPKB;
     vector<vector<string>> content1 = {{"25", "27"}, {"25", "30"}, {"25", "34"},
-                                       {"27", "30"}, {"27", "34"},
-                                       {"30", "34"}};
+                                       {"27", "30"}, {"27", "34"}, {"30", "34"}};
     vector<Parameter> params1 = {Parameter("w1", ParameterType::WHILE), Parameter("w2", ParameterType::WHILE)};
     vector<Parameter> params2 = {Parameter("w2", ParameterType::WHILE), Parameter("w3", ParameterType::WHILE)};
     Table t1(params1, content1);
     Table t2(params2, content1);
     qdb.insertTable(t1);
     qdb.insertTable(t2);
-    vector<string> res = qdb.fetch({
-                                           Parameter("w1", ParameterType::WHILE),
-                                           Parameter("w2", ParameterType::WHILE),
-                                           Parameter("w3", ParameterType::WHILE)
-                                   }, readPKB);
+    vector<string> res = qdb.fetch({Parameter("w1", ParameterType::WHILE), Parameter("w2", ParameterType::WHILE),
+                                    Parameter("w3", ParameterType::WHILE)},
+                                   readPKB);
     REQUIRE(find(res.begin(), res.end(), "25 27 30") != res.end());
     REQUIRE(find(res.begin(), res.end(), "25 27 34") != res.end());
     REQUIRE(find(res.begin(), res.end(), "25 30 34") != res.end());
@@ -228,8 +226,7 @@ TEST_CASE("insertTable / insert tables with with content, non intersecting / tab
     QueryDB qdb;
     ReadPKB readPKB;
     vector<vector<string>> content1 = {{"25", "27"}, {"25", "30"}, {"25", "34"},
-                                       {"27", "30"}, {"27", "34"},
-                                       {"30", "34"}};
+                                       {"27", "30"}, {"27", "34"}, {"30", "34"}};
     vector<vector<string>> content2 = {{"25"}, {"27"}, {"30"}};
     vector<Parameter> params1 = {Parameter("w1", ParameterType::WHILE), Parameter("w2", ParameterType::WHILE)};
     vector<Parameter> params2 = {Parameter("w3", ParameterType::WHILE)};
@@ -237,11 +234,9 @@ TEST_CASE("insertTable / insert tables with with content, non intersecting / tab
     Table t2(params2, content2);
     qdb.insertTable(t2);
     qdb.insertTable(t1);
-    vector<string> res = qdb.fetch({
-                                           Parameter("w1", ParameterType::WHILE),
-                                           Parameter("w2", ParameterType::WHILE),
-                                           Parameter("w3", ParameterType::WHILE)
-                                   }, readPKB);
+    vector<string> res = qdb.fetch({Parameter("w1", ParameterType::WHILE), Parameter("w2", ParameterType::WHILE),
+                                    Parameter("w3", ParameterType::WHILE)},
+                                   readPKB);
     REQUIRE(find(res.begin(), res.end(), "25 27 25") != res.end());
     REQUIRE(find(res.begin(), res.end(), "25 30 25") != res.end());
     REQUIRE(find(res.begin(), res.end(), "25 34 25") != res.end());
@@ -270,11 +265,9 @@ TEST_CASE("fetch / fetching duplicate parameters / returns duplicate parameters 
     vector<Parameter> params1 = {Parameter("v", ParameterType::VARIABLE), Parameter("v2", ParameterType::VARIABLE)};
     Table t1(params1, content1);
     qdb.insertTable(t1);
-    vector<string> res = qdb.fetch({
-                                           Parameter("v", ParameterType::VARIABLE),
-                                           Parameter("v", ParameterType::VARIABLE),
-                                           Parameter("v2", ParameterType::VARIABLE)
-                                   }, readPKB);
+    vector<string> res = qdb.fetch({Parameter("v", ParameterType::VARIABLE), Parameter("v", ParameterType::VARIABLE),
+                                    Parameter("v2", ParameterType::VARIABLE)},
+                                   readPKB);
     REQUIRE(find(res.begin(), res.end(), "a a b") != res.end());
     REQUIRE(find(res.begin(), res.end(), "c c d") != res.end());
     REQUIRE(find(res.begin(), res.end(), "e e f") != res.end());
@@ -288,9 +281,11 @@ TEST_CASE("fetch / insertion of table with duplicate params but only fetching fi
     vector<Parameter> params1 = {Parameter("v", ParameterType::VARIABLE), Parameter("v", ParameterType::VARIABLE)};
     Table t1(params1, content1);
     qdb.insertTable(t1);
-    vector<string> res = qdb.fetch({
-                                           Parameter("v", ParameterType::VARIABLE),
-                                   }, readPKB);
+    vector<string> res = qdb.fetch(
+        {
+            Parameter("v", ParameterType::VARIABLE),
+        },
+        readPKB);
     REQUIRE(find(res.begin(), res.end(), "a") != res.end());
     REQUIRE(find(res.begin(), res.end(), "c") != res.end());
     REQUIRE(find(res.begin(), res.end(), "e") != res.end());

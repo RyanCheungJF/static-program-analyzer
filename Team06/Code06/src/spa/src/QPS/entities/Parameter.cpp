@@ -10,6 +10,10 @@ ParameterType Parameter::getType() const {
     return type;
 }
 
+AttributeType Parameter::getAttribute() const {
+    return attribute;
+}
+
 Parameter::Parameter() {
     type = ParameterType::UNKNOWN;
     value = "";
@@ -99,12 +103,25 @@ bool Parameter::isFixedIntOrWildCard(Parameter& p) {
     return p.type == ParameterType::FIXED_INT || p.type == ParameterType::WILDCARD;
 }
 
+bool Parameter::isComparable(Parameter& p1, Parameter& p2) {
+    ParameterType p1CompType = p1.getComparisonType();
+    ParameterType p2CompType = p2.getComparisonType();
+    if (p1CompType == ParameterType::UNKNOWN) {
+        return false;
+    }
+    return p1CompType == p2CompType;
+}
+
 bool Parameter::isUncheckedSynonym() {
     return type == ParameterType::SYNONYM;
 }
 
 bool Parameter::hasValidAttributeType() {
     return Parameter::typeToAttributeTypes.at(type).count(attribute) == 1 || attribute == AttributeType::NONE;
+}
+
+bool Parameter::hasAttribute() {
+    return attribute != AttributeType::NONE;
 }
 
 void Parameter::updateSynonymType(ParameterType pt) {
@@ -155,6 +172,19 @@ ParameterType Parameter::guessParameterType(string s) {
     return ParameterType::UNKNOWN;
 }
 
+ParameterType Parameter::getComparisonType() {
+    if (type == ParameterType::FIXED_INT || type == ParameterType::FIXED_STRING) {
+        return type;
+    }
+    else {
+        auto iter = Parameter::attributeToReturnType.find(attribute);
+        if (iter == attributeToReturnType.end()) {
+            return ParameterType::UNKNOWN;
+        }
+        return iter->second;
+    }
+}
+
 bool Parameter::operator==(const Parameter& p) const {
     return type == p.type && value == p.value && attribute == p.attribute;
 }
@@ -192,4 +222,11 @@ const unordered_map<ParameterType, unordered_set<AttributeType>> Parameter::type
     {ParameterType::WILDCARD, {}},
     {ParameterType::FIXED_INT, {}},
     {ParameterType::FIXED_STRING, {}},
+};
+
+const unordered_map<AttributeType, ParameterType> Parameter::attributeToReturnType = {
+    {AttributeType::PROCNAME, ParameterType::FIXED_STRING},
+    {AttributeType::VARNAME, ParameterType::FIXED_STRING},
+    {AttributeType::VALUE, ParameterType::FIXED_INT},
+    {AttributeType::STMTNO, ParameterType::FIXED_INT},
 };

@@ -126,6 +126,12 @@ TEST_CASE("parse / parsing empty strings / throw syntax error") {
     REQUIRE_THROWS_AS(qp.parse(test), SyntaxException);
 }
 
+TEST_CASE("parse / parsing undeclared BOOLEAN in select tuple / throw semantic error") {
+    string test = "variable v; Select <v, BOOLEAN>";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(test), SemanticException);
+}
+
 TEST_CASE("parse / rubbish clauses is a syntax error / catch error") {
     string test = "coding at 2am sucks; but here is a syntax error;";
     QPSParser qp;
@@ -136,6 +142,30 @@ TEST_CASE("parse / variable v; Select v such that Uses(_,_) / catch error") {
     string test = "variable v; Select v such that Uses(_,_)";
     QPSParser qp;
     CHECK_THROWS_AS(qp.parse(test), SemanticException);
+}
+
+TEST_CASE("parse / with clause variable not declared / catch error") {
+    string test = "variable v; Select v with a.value = 2";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SemanticException);
+}
+
+TEST_CASE("parse / with clause variable different comparison types / catch error") {
+    string test = "variable v; constant c; Select v with c.value = \"fixedString\"";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SemanticException);
+}
+
+TEST_CASE("parse / with clause variable invalid attribute / catch error") {
+    string test = "variable v; constant c; Select v with c.varName = \"fixedString\"";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SemanticException);
+}
+
+TEST_CASE("parse / with clause variable empty string / catch syntax error") {
+    string test = "variable v; procedure p; Select v with p.procName = \" \"";
+    QPSParser qp;
+    CHECK_THROWS_AS(qp.parse(test), SyntaxException);
 }
 
 TEST_CASE("splitQuery / splitting variable v; Select v; should give error / "
