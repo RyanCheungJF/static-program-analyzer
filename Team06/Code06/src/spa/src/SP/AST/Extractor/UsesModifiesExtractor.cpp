@@ -17,8 +17,12 @@ void UsesModifiesExtractor::processProcedures(std::vector<ProcName> topoOrder) {
         for (StmtNum sn : procedureStmtNum) {
             if (readApi->checkStatement(AppConstants::CALL, sn)) {
                 auto callStmt = readApi->getCallStmt(sn);
-                writeApi->setUsesS(callStmt.first, readApi->getUsesP(callStmt.second));
-                writeApi->setModifiesS(callStmt.first, readApi->getModifiesP(callStmt.second));
+
+                std::unordered_set<Ent> temp1 = readApi->getUsesP(callStmt.second);
+                writeApi->setUsesS(callStmt.first, temp1);
+
+                std::unordered_set<Ent> temp2 = readApi->getModifiesP(callStmt.second);
+                writeApi->setModifiesS(callStmt.first, temp2);
                 currUsesVariables.merge(readApi->getUsesP(callStmt.second));
                 currModifiesVariables.merge(readApi->getModifiesP(callStmt.second));
             }
