@@ -46,6 +46,10 @@ bool startsWithLetter(string s) {
     return regex_match(trim(s), regex("^[a-zA-Z].*"));
 }
 
+bool startsLikeRef(string s) {
+    return regex_match(trim(s), regex("^[a-zA-Z\"0-9].*"));
+}
+
 bool hasBalancedBrackets(string s) {
     int balance = 0;
     for (int i = 0; i < s.size(); i++) {
@@ -67,6 +71,22 @@ bool hasCorrectRelRefOrPatternForm(string s) {
     bool regexMatched = regex_match(s, regex("^[a-zA-Z].*\(.*\)$"));
     bool bracketBalanced = hasBalancedBrackets(s);
     return regexMatched && bracketBalanced;
+}
+
+bool hasCorrectAttrCompForm(string s) {
+    s = trim(s);
+    if (s == "") {
+        return false;
+    }
+    string leftParamString, rightParamString;
+    bool found;
+    int next;
+    tie(leftParamString, next, found) = extractSubStringUntilDelimiter(s, 0, AppConstants::OP_EQUALS);
+    if (!found || next >= s.size()) {
+        return false;
+    }
+    rightParamString = s.substr(next, s.size() - next);
+    return isRef(leftParamString) && isRef(rightParamString);
 }
 
 bool isDeclaration(string declaration) {
@@ -91,7 +111,7 @@ bool isDeclaration(string declaration) {
 
 bool isDesignEntity(string designEntity) {
     return regex_match(trim(designEntity), regex("^(stmt|read|print|call|while|if|assign|variable|"
-                                                  "constant|procedure)"));
+                                                 "constant|procedure)"));
 }
 
 pair<string, string> extractDesignEntity(string designEntity) {
@@ -257,6 +277,9 @@ bool isElem(string s) {
 
 bool isAttrRef(string s) {
     s = trim(s);
+    if (s == "") {
+        return false;
+    }
     string delimiter = ".";
     bool found;
     int nextStart;

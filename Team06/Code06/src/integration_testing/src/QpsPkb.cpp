@@ -334,7 +334,7 @@ TEST_CASE("Single Select Query") {
         stmt s; variable v;
         Select <s, v, BOOLEAN>)";
         result = qps.processQueries(query, readPkb);
-        REQUIRE(result[0] == "SyntaxError");
+        REQUIRE(result[0] == "SemanticError");
     }
 }
 
