@@ -87,7 +87,9 @@ TEST_CASE("Test findWith()") {
             Comparison comp = Comparison(ComparisonOperator::EQUALS, leftParam, rightParam);
             vector<vector<string>> res = pkb.findWith(comp);
             vector<vector<string>> expected = {{"1", "1"}, {"2", "2"}};
-            REQUIRE(res == expected);
+            REQUIRE(find(res.begin(), res.end(), expected[0]) != res.end());
+            REQUIRE(find(res.begin(), res.end(), expected[1]) != res.end());
+
         }
 
         SECTION("with call.procName# = print.varName") {

@@ -4,10 +4,10 @@
 enum class ComparisonOperator {
     EQUALS,
 };
-class Comparison {
+class ComparisonStub {
 public:
-    Comparison();
-    Comparison(ComparisonOperator o, Parameter leftP, Parameter rightP);
+    ComparisonStub();
+    ComparisonStub(ComparisonOperator o, Parameter leftP, Parameter rightP);
     Parameter getLeftParam();
     Parameter getRightParam();
     ComparisonOperator getOperator();
