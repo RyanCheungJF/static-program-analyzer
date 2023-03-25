@@ -46,6 +46,10 @@ private:
     static const unordered_map<string, RelationshipType> stringToTypeMap;
     static const unordered_map<RelationshipType, shared_ptr<SyntaxValidator<Relationship>>> typeToSyntaxValidatorMap;
     static const unordered_map<RelationshipType, vector<unordered_set<ParameterType>>> typeToParameterTypes;
+    static const unordered_set<ParameterType> stmtRefs;
+    static const unordered_set<ParameterType> entityRefs;
+    static const unordered_set<ParameterType> procedureRefs;
+    static const unordered_set<ParameterType> procOrStmtRefs;
     static RelationshipType stringToType(string);
 };
 

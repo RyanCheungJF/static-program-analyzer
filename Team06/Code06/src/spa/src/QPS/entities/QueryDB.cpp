@@ -87,8 +87,8 @@ Table QueryDB::extractColumns(vector<Parameter> params) {
     for (Table table : tableVector) {
         vector<Parameter> headers = table.getHeaders();
         vector<Parameter> paramsVec;
-        for (Parameter param : headers) {
-            if (find(params.begin(), params.end(), param) != params.end()) {
+        for (Parameter param : params) {
+            if (find(headers.begin(), headers.end(), param) != headers.end()) {
                 paramsVec.push_back(param);
             }
         }
@@ -104,8 +104,8 @@ Table QueryDB::extractColumns(vector<Parameter> params) {
     else {
         Table t = temp[0];
         for (int i = 1; i < temp.size(); i++) {
-            t.cartesianProduct(temp[i]);
+            t = t.cartesianProduct(temp[i]);
         }
-        return t;
+        return t.extractColumns(params);
     }
 }

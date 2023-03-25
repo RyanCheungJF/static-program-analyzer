@@ -13,7 +13,7 @@ typedef std::string Stmt;
 typedef std::string Ent;
 typedef std::string Operator;
 typedef int StmtNum;
-typedef int Const;
+typedef std::string Const;
 typedef std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> CFG;
 
 class AppConstants {
@@ -54,6 +54,9 @@ public:
     inline static const std::string CALLST = "Calls*";
     inline static const std::string AFFECTS = "Affects";
     inline static const std::string AFFECTST = "Affects*";
+
+    // comparisons
+    inline static const std::string OP_EQUALS = "=";
 
     // terminals
     inline static const std::string THEN = "then";

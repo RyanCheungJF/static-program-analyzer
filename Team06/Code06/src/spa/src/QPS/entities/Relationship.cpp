@@ -78,6 +78,7 @@ Relationship::Relationship(RelationshipType t, vector<Parameter>& ps) {
     params = ps;
 }
 
+// TODO: update this to throw error if not found
 RelationshipType Relationship::stringToType(string s) {
     auto iter = Relationship::stringToTypeMap.find(s);
     if (iter == stringToTypeMap.end()) {
@@ -108,81 +109,69 @@ const unordered_map<RelationshipType, shared_ptr<SyntaxValidator<Relationship>>>
         {RelationshipType::AFFECTS, relSSSynVal}, {RelationshipType::AFFECTST, relSSSynVal},
 };
 
+const unordered_set<ParameterType> Relationship::stmtRefs = {
+    ParameterType::STMT,   ParameterType::READ,      ParameterType::PRINT,    ParameterType::WHILE, ParameterType::IF,
+    ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL};
+const unordered_set<ParameterType> Relationship::entityRefs = {ParameterType::VARIABLE, ParameterType::FIXED_STRING,
+                                                               ParameterType::WILDCARD};
+const unordered_set<ParameterType> Relationship::procedureRefs = {ParameterType::WILDCARD, ParameterType::PROCEDURE,
+                                                                  ParameterType::FIXED_STRING};
+const unordered_set<ParameterType> Relationship::procOrStmtRefs = {
+    ParameterType::STMT,      ParameterType::READ,        ParameterType::PRINT,     ParameterType::WHILE,
+    ParameterType::IF,        ParameterType::ASSIGN,      ParameterType::FIXED_INT, ParameterType::CALL,
+    ParameterType::PROCEDURE, ParameterType::FIXED_STRING};
+
 const unordered_map<RelationshipType, vector<unordered_set<ParameterType>>> Relationship::typeToParameterTypes = {
     {RelationshipType::FOLLOWS,
      {
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL},
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL},
+         stmtRefs,
+         stmtRefs,
      }},
     {RelationshipType::FOLLOWST,
      {
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL},
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL},
+         stmtRefs,
+         stmtRefs,
      }},
     {RelationshipType::PARENT,
      {
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL},
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL},
+         stmtRefs,
+         stmtRefs,
      }},
     {RelationshipType::PARENTT,
      {
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL},
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL},
+         stmtRefs,
+         stmtRefs,
      }},
-    {RelationshipType::USES,
-     {
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::CALL, ParameterType::PROCEDURE,
-          ParameterType::FIXED_STRING},
-         {ParameterType::VARIABLE, ParameterType::FIXED_STRING, ParameterType::WILDCARD},
-     }},
-    {RelationshipType::MODIFIES,
-     {
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::CALL, ParameterType::PROCEDURE,
-          ParameterType::FIXED_STRING},
-         {ParameterType::VARIABLE, ParameterType::FIXED_STRING, ParameterType::WILDCARD},
-     }},
+    {RelationshipType::USES, {procOrStmtRefs, entityRefs}},
+    {RelationshipType::MODIFIES, {procOrStmtRefs, entityRefs}},
     {RelationshipType::NEXT,
      {
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL},
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL},
+         stmtRefs,
+         stmtRefs,
      }},
     {RelationshipType::NEXTT,
      {
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL},
-         {ParameterType::STMT, ParameterType::READ, ParameterType::PRINT, ParameterType::WHILE, ParameterType::IF,
-          ParameterType::ASSIGN, ParameterType::FIXED_INT, ParameterType::WILDCARD, ParameterType::CALL},
+         stmtRefs,
+         stmtRefs,
      }},
     {RelationshipType::CALLS,
      {
-         {ParameterType::WILDCARD, ParameterType::PROCEDURE, ParameterType::FIXED_STRING},
-         {ParameterType::WILDCARD, ParameterType::PROCEDURE, ParameterType::FIXED_STRING},
+         procedureRefs,
+         procedureRefs,
      }},
     {RelationshipType::CALLST,
      {
-         {ParameterType::WILDCARD, ParameterType::PROCEDURE, ParameterType::FIXED_STRING},
-         {ParameterType::WILDCARD, ParameterType::PROCEDURE, ParameterType::FIXED_STRING},
+         procedureRefs,
+         procedureRefs,
      }},
     {RelationshipType::AFFECTS,
      {
-         {ParameterType::WILDCARD, ParameterType::ASSIGN, ParameterType::FIXED_INT},
-         {ParameterType::WILDCARD, ParameterType::ASSIGN, ParameterType::FIXED_INT},
+         stmtRefs,
+         stmtRefs,
      }},
     {RelationshipType::AFFECTST,
      {
-         {ParameterType::WILDCARD, ParameterType::ASSIGN, ParameterType::FIXED_INT},
-         {ParameterType::WILDCARD, ParameterType::ASSIGN, ParameterType::FIXED_INT},
+         stmtRefs,
+         stmtRefs,
      }},
 };

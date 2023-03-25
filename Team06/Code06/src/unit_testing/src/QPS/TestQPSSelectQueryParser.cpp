@@ -328,6 +328,13 @@ TEST_CASE("parse / select such that with invalid spaces in fixed string / throws
     CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
 }
 
+TEST_CASE("parse / select tuple but only one item in the tuple / throws syntax error") {
+    string input = "Select <s>";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    REQUIRE(q.selectParameters.size() == 1);
+}
+
 TEST_CASE("parse / select pattern with valid spaces in exprSpec / return query") {
     SelectQueryParser sqp;
     SECTION("exprSpec without wild cards") {
@@ -341,4 +348,31 @@ TEST_CASE("parse / select pattern with valid spaces in exprSpec / return query")
         Query q2 = sqp.parse(input2);
         CHECK(true);
     }
+}
+
+TEST_CASE("parse / select with clause with valid form / returns query") {
+    string input = "Select s with \"a\" = b.procName";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / select with clause with invalid form / throws syntax error") {
+    string input = "Select s with \"a\" = b";
+    SelectQueryParser sqp;
+    CHECK_THROWS_AS(sqp.parse(input), SyntaxException);
+}
+
+TEST_CASE("parse / select with clause with with / returns query") {
+    string input = "Select s with \" issue \" = with.procName";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / select with clause with and / returns query") {
+    string input = "Select s with \"a\" = b.procName and 1 = c.stmt# and d.varName = e.procName";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
 }
