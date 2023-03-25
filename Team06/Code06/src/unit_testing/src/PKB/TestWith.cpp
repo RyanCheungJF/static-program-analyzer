@@ -89,7 +89,6 @@ TEST_CASE("Test findWith()") {
             vector<vector<string>> expected = {{"1", "1"}, {"2", "2"}};
             REQUIRE(find(res.begin(), res.end(), expected[0]) != res.end());
             REQUIRE(find(res.begin(), res.end(), expected[1]) != res.end());
-
         }
 
         SECTION("with call.procName# = print.varName") {
