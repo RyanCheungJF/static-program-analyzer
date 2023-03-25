@@ -2,7 +2,8 @@ from pathlib import Path
 import os
 import xml.etree.ElementTree as ET
 
-r_path = Path('Team06/Tests06/systemtests/')
+# r_path = Path('Team06/Tests06/systemtests/')
+r_path = os.getcwd()
 src = os.listdir(r_path)
 error = False
 
