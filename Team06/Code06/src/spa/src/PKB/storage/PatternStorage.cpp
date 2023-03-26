@@ -1,6 +1,6 @@
 #include "PatternStorage.h"
 
-void PatternStorage::writePattern(StmtNum stmtNum, std::unordered_set<Ent> variables) {
+void PatternStorage::writePattern(StmtNum stmtNum, std::unordered_set<Ent>& variables) {
     for (auto var : variables) {
         varsToStmtNumMap[var].insert(stmtNum);
     }

@@ -88,4 +88,23 @@ assign a;
 Select a such that Affects(a, a)
 26, 35, 38, 40, 41
 5000
-
+19 - affects on non assign statement
+print p; read r; call c; assign a;
+Select p such that Affects(p, p)
+none
+5000
+20 - affects on non assign statement
+print p; read r; call c; assign a;
+Select r such that Affects(9, r)
+none
+5000
+21 - affects on non assign statement
+print p; read r; call c; assign a;
+Select a such that Affects(9, c)
+none
+5000
+22 - affects on non assign statement
+print p; read r; call c; assign a; stmt s;
+Select s such that Affects(s, s)
+26, 35, 38, 40, 41
+5000

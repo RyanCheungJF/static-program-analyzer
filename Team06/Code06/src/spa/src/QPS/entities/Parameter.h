@@ -82,7 +82,8 @@ template <> struct std::hash<Parameter> {
     std::size_t operator()(Parameter const& param) const {
         std::size_t h1 = std::hash<ParameterType>{}(param.getType());
         std::size_t h2 = std::hash<std::string>{}(param.getValue());
-        return h1 ^ (h2 << 1);
+        std::size_t h3 = std::hash<AttributeType>{}(param.getAttribute());
+        return ((h1 ^ (h2 << 1)) >> 1) ^ (h3 << 1);
     }
 };
 

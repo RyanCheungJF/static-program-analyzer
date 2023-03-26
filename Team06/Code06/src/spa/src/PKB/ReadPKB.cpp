@@ -7,16 +7,24 @@ void ReadPKB::setInstancePKB(PKB& pkb) {
     this->pkbInstance = &pkb;
 }
 
-std::vector<std::vector<std::string>> ReadPKB::findRelationship(shared_ptr<Relationship> rs) {
+std::vector<std::vector<std::string>> ReadPKB::findRelationship(shared_ptr<Relationship>& rs) {
     return pkbInstance->findRelationship(rs);
 }
 
-std::vector<std::string> ReadPKB::findDesignEntities(Parameter p) {
+std::vector<std::string> ReadPKB::findDesignEntities(Parameter& p) {
     return pkbInstance->findDesignEntities(p);
 }
 
-std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern p) {
+std::vector<std::vector<std::string>> ReadPKB::findPattern(Pattern& p) {
     return pkbInstance->findPattern(p);
+}
+
+std::vector<std::vector<std::string>> ReadPKB::findAttribute(Parameter& p) {
+    return pkbInstance->findAttribute(p);
+}
+
+std::vector<std::vector<std::string>> ReadPKB::findWith(Comparison& c) {
+    return pkbInstance->findWith(c);
 }
 
 bool ReadPKB::checkStatement(Stmt stmt, StmtNum num) {

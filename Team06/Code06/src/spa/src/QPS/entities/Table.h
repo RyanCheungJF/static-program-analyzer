@@ -22,6 +22,7 @@ public:
     Table cartesianProduct(Table);
     vector<string> getResult();
     bool isEmptyTable();
+    Table updateValues(Parameter, unordered_map<string, string>);
 
 private:
     vector<Parameter> headers;

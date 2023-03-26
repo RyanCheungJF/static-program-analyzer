@@ -23,7 +23,7 @@ public:
 
 private:
     vector<Table> tableVector;
-    Table extractColumns(vector<Parameter>);
+    Table extractColumns(vector<Parameter>, ReadPKB&);
     bool hasEmptyTable();
     bool hasParameter(Parameter&);
 };

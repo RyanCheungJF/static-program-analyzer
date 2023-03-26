@@ -10,9 +10,9 @@ on:
       - qps
       - sp
       - staging
-  pull_request:
-    branches:
-      - master
+  # pull_request:
+  #   branches:
+  #     - master
 
 env:
   BUILD_TYPE: Release

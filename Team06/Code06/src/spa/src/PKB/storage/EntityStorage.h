@@ -4,7 +4,7 @@
 
 template <typename T> class EntityStorage {
 public:
-    void writeEntity(StmtNum num, std::unordered_set<T> entities);
+    void writeEntity(StmtNum num, std::unordered_set<T>& entities);
     bool checkEntity(T entity, StmtNum num);
     std::unordered_set<StmtNum> getEntityStmtNums(T e);
     std::unordered_set<T> getEntities(StmtNum num);
