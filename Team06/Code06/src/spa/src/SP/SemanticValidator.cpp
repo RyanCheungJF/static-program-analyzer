@@ -123,7 +123,7 @@ void SemanticValidator::populateCallsTable(std::vector<ProcName>& topoOrder) {
         writeApi->setCalls(p, procCallMap[p]);
         for (ProcName j : procCallMap[p]) {
             calleeTSet.insert(j);
-            calleeTSet.merge(readApi->getCallsT(j));
+            calleeTSet.insert(readApi->getCallsT(j)->begin(), readApi->getCallsT(j)->end());
         }
         writeApi->setCallsT(p, calleeTSet);
         calleeTSet.clear();

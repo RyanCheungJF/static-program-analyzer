@@ -13,8 +13,8 @@ public:
     using RelationshipStorage<StmtNum, Ent>::getLeftItems;
     using RelationshipStorage<StmtNum, Ent>::getRightItems;
     using RelationshipStorage<Ent, Ent>::getRightItems;
-    std::unordered_set<StmtNum> getStmtNums(Ent ent);
-    std::unordered_set<Ent> getProcs(Ent ent);
-    std::unordered_set<Ent> getAllProcs();
-    std::unordered_set<StmtNum> getAllStmtNums();
+    std::unordered_set<StmtNum>* getStmtNums(Ent ent);
+    std::unordered_set<Ent>* getProcs(Ent ent);
+    std::unordered_set<Ent>* getAllProcs();
+    std::unordered_set<StmtNum>* getAllStmtNums();
 };

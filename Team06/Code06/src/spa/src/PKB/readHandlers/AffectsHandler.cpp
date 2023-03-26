@@ -71,8 +71,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
         return {};
     }
 
-    std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getRightItems(a1);
-    std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getRightItems(a2);
+    std::unordered_set<Ent> variablesModifiedInA1 = *modifiesStorage->getRightItems(a1);
+    std::unordered_set<Ent> variablesUsedInA2 = *usesStorage->getRightItems(a2);
     std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
     if (commonVariables.empty()) {
         return {};
@@ -223,6 +223,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
 }
 
 // helper functions
+//TODO: optimise this to just return Ent instead of the entire data structure
 std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<Ent> variablesModifiedInA1,
                                                            std::unordered_set<Ent> variablesUsedInA2) {
 
@@ -368,13 +369,13 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
     }
 
     std::unordered_set<Ent> variablesInCurrA =
-        isIntWildcard ? modifiesStorage->getRightItems(currA) : usesStorage->getRightItems(currA);
+        isIntWildcard ? *modifiesStorage->getRightItems(currA) : *usesStorage->getRightItems(currA);
     std::vector<std::vector<std::string>> res;
 
     for (StmtNum otherA : assignStatements) {
 
         std::unordered_set<Ent> variablesInOtherA =
-            isIntWildcard ? usesStorage->getRightItems(otherA) : modifiesStorage->getRightItems(otherA);
+            isIntWildcard ? *usesStorage->getRightItems(otherA) : *modifiesStorage->getRightItems(otherA);
         std::unordered_set<Ent> commonVariables = isIntWildcard
                                                       ? getCommonVariables(variablesInCurrA, variablesInOtherA)
                                                       : getCommonVariables(variablesInOtherA, variablesInCurrA);
@@ -396,7 +397,7 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
 
 bool AffectsHandler::checkModifiedAssignReadCall(std::unordered_set<Ent> commonVariables, StmtNum currentLine) {
 
-    unordered_set<Ent> entitiesModifiedOnCurrentLine = modifiesStorage->getRightItems(currentLine);
+    unordered_set<Ent> entitiesModifiedOnCurrentLine = *modifiesStorage->getRightItems(currentLine);
 
     // if a assignment, read, or procedure call, we check if the entitiesModifiedOnCurrentLine is the same as
     // commonVariables
