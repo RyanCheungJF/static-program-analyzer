@@ -1,27 +1,23 @@
 #!/usr/bin/env bash
 
-echo "Running auto checkstyle! 🔫"
+echo "Running auto checkstyle!"
 
-# please ensure you have clang-format installed first
-# sudo apt-get install clang-format
+while read st file; do
+    # skip deleted files
+    if [ "$st" == 'D' ]; then continue; fi
 
-show_spinner()
-{
-  local -r pid="${1}"
-  local -r delay='0.75'
-  local spinstr='\|/-'
-  local temp
-  while ps a | awk '{print $1}' | grep -q "${pid}"; do
-    temp="${spinstr#?}"
-    printf " [%c]  " "${spinstr}"
-    spinstr=${temp}${spinstr%"${temp}"}
-    sleep "${delay}"
-    printf "\b\b\b\b\b\b"
-  done
-  printf "    \b\b\b\b"
-}
+    # do a check only on the cpp h files
+    if [[ ( $file == *.cpp ) || ( $file == *.h ) ]]; then
+        echo "✏️ styling: $file"
+        clang-format -i $file
+    fi
 
-# run automatic checkstyle
-(find . -regex '.*\.\(cpp\|h\)' -exec clang-format -style=file -i {} \;) & show_spinner "$!"
+# enumerates modified files and pipe as input
+done < <(git diff --cached --name-status)
 
-echo "Done! Thank you for not contributing to our code debt!"
+# unfortunately, we can't commit again as it will either cause recursion due to hooks
+# even if we set flags such as --no-verify, I can't seem to make git recognize the commits to be the same author...
+echo "Done, please commit again to include the styled files! 🤠"
+
+# exit 0 to ensure no issues
+exit 0
