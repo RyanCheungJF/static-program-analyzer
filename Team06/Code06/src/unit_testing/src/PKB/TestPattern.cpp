@@ -16,7 +16,7 @@ TEST_CASE("Check Pattern Storage Write correctness") {
         std::unordered_set<Ent> temp = {"y"};
         ps.writePattern(2, temp);
 
-        unordered_set<StmtNum> res = *ps.getStmtNums("y");
+        unordered_set<StmtNum> res = ps.getStmtNums("y");
 
         unordered_set<StmtNum> expected = {1, 2};
         REQUIRE(res.size() == 2);
@@ -27,7 +27,7 @@ TEST_CASE("Check Pattern Storage Write correctness") {
         std::unordered_set<Ent> temp = {"x", "y"};
         ps.writePattern(1, temp);
 
-        unordered_set<StmtNum> res = *ps.getStmtNums("y");
+        unordered_set<StmtNum> res = ps.getStmtNums("y");
 
         unordered_set<StmtNum> expected = {1};
         REQUIRE(res.size() == 1);
@@ -45,7 +45,7 @@ TEST_CASE("Check Pattern Storage Write and non-empty Gets") {
     ps.writePattern(3, temp3);
 
     SECTION("Get statement numbers of existing pattern") {
-        unordered_set<StmtNum> res = *ps.getStmtNums("y");
+        unordered_set<StmtNum> res = ps.getStmtNums("y");
         unordered_set<StmtNum> expected = {1, 2};
         REQUIRE(res.size() == 2);
         REQUIRE(equals(res, expected));
@@ -77,7 +77,7 @@ TEST_CASE("Check Pattern Storage Write and empty Gets") {
     ps.writePattern(3, temp3);
 
     SECTION("Get statement numbers of non-existing pattern") {
-        unordered_set<StmtNum> res = *ps.getStmtNums("non-existing");
+        unordered_set<StmtNum> res = ps.getStmtNums("non-existing");
         REQUIRE(res.size() == 0);
     }
 }
