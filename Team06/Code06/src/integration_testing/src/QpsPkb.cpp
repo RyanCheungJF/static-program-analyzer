@@ -1173,37 +1173,57 @@ TEST_CASE("Select synonym with attributes") {
     readPkb.setInstancePKB(pkb);
     QPS qps;
     vector<string> result;
-//    SECTION("Select with") {
-//        string query = R"(
-//        stmt s;
-//        Select s with s.stmt# = 2)";
-//        result = qps.processQueries(query, readPkb);
-//        REQUIRE(result[0] == "2");
-//    }
-//
-//    SECTION("Select useless with") {
-//        string query = R"(
-//        stmt s;
-//        Select s with 2 = 2)";
-//        result = qps.processQueries(query, readPkb);
-//        REQUIRE(result.size() == 13);
-//    }
+    SECTION("Select with, attribute = fixed") {
+        string query = R"(
+        stmt s;
+        Select s with s.stmt# = 2)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(exists(result, "2"));
+    }
 
-//    SECTION("Select procedure with attribute") {
-//        string query = R"(
-//        procedure p;
-//        Select p.procName)";
-//        result = qps.processQueries(query, readPkb);
-//        REQUIRE(find(result.begin(), result.end(), "main") != result.end());
-//        REQUIRE(find(result.begin(), result.end(), "end") != result.end());
-//        REQUIRE(find(result.begin(), result.end(), "sub") != result.end());
-//    }
+    SECTION("Select with, attribute = attribute") {
+        string query = R"(
+        call c; print pn;
+        Select c with c.procName = pn.varName)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(result[0] == "12");
+    }
+
+    SECTION("Select with, fixed = attribute") {
+        string query = R"(
+        read r;
+        Select r with "x" = r.varName)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 1);
+        REQUIRE(result[0] == "10");
+    }
+
+    SECTION("Select with, fixed = fixed") {
+        string query = R"(
+        stmt s;
+        Select s with 2 = 2)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.size() == 13);
+    }
+
+    SECTION("Select procedure with attribute") {
+        string query = R"(
+        procedure p;
+        Select p.procName)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(find(result.begin(), result.end(), "main") != result.end());
+        REQUIRE(find(result.begin(), result.end(), "end") != result.end());
+        REQUIRE(find(result.begin(), result.end(), "sub") != result.end());
+    }
 
     SECTION("Select procedure with attribute and such that clause") {
         string query = R"(
         procedure p;
         Select p.procName such that Calls("main", p))";
         result = qps.processQueries(query, readPkb);
-        REQUIRE(result[0] == "sub");
+        REQUIRE(result.size() == 1);
+        REQUIRE(exists(result, "sub"));
     }
 }
