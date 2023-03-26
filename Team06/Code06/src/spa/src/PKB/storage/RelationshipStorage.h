@@ -5,7 +5,7 @@
 template <typename T, typename U> class RelationshipStorage {
 public:
     void write(T leftItem, U rightItem);
-    void write(T leftItem, std::unordered_set<U> rightItems);
+    void write(T leftItem, std::unordered_set<U>& rightItems);
     bool exists(T leftItem, U rightItems);
     std::unordered_set<U> getRightItems(T leftItem);
     std::unordered_set<T> getLeftItems(U rightItem);

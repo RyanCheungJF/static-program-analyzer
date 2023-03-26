@@ -38,7 +38,7 @@ void PKB::setFollows(StmtNum followee, StmtNum follower) {
     followsStorage->write(followee, follower);
 }
 
-void PKB::setFollowsT(StmtNum followee, std::unordered_set<StmtNum> followers) {
+void PKB::setFollowsT(StmtNum followee, std::unordered_set<StmtNum>& followers) {
     followsTStorage->write(followee, followers);
 }
 
@@ -46,7 +46,7 @@ void PKB::setParent(StmtNum parent, StmtNum children) {
     parentStorage->write(parent, children);
 }
 
-void PKB::setParentT(StmtNum parent, std::unordered_set<StmtNum> children) {
+void PKB::setParentT(StmtNum parent, std::unordered_set<StmtNum>& children) {
     parentTStorage->write(parent, children);
 }
 
@@ -70,27 +70,27 @@ void PKB::setCall(StmtNum callLine, ProcName procedure_being_called) {
     callStorage->writeCallS(callLine, procedure_being_called);
 }
 
-void PKB::setCalls(ProcName caller, std::unordered_set<ProcName> callees) {
+void PKB::setCalls(ProcName caller, std::unordered_set<ProcName>& callees) {
     callsStorage->write(caller, callees);
 }
 
-void PKB::setCallsT(ProcName caller, std::unordered_set<ProcName> callees) {
+void PKB::setCallsT(ProcName caller, std::unordered_set<ProcName>& callees) {
     callsTStorage->write(caller, callees);
 }
 
-void PKB::setUsesS(StmtNum num, std::unordered_set<Ent> entities) {
+void PKB::setUsesS(StmtNum num, std::unordered_set<Ent>& entities) {
     usesStorage->write(num, entities);
 }
 
-void PKB::setUsesP(ProcName name, std::unordered_set<Ent> entities) {
+void PKB::setUsesP(ProcName name, std::unordered_set<Ent>& entities) {
     usesStorage->write(name, entities);
 }
 
-void PKB::setModifiesS(StmtNum num, std::unordered_set<Ent> entities) {
+void PKB::setModifiesS(StmtNum num, std::unordered_set<Ent>& entities) {
     modifiesStorage->write(num, entities);
 }
 
-void PKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {
+void PKB::setModifiesP(ProcName name, std::unordered_set<Ent>& entities) {
     modifiesStorage->write(name, entities);
 }
 

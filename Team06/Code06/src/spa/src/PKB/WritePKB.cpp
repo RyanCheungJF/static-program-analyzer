@@ -10,7 +10,7 @@ void WritePKB::setFollows(StmtNum followee, StmtNum follower) {
     pkbInstance->setFollows(followee, follower);
 }
 
-void WritePKB::setFollowsT(StmtNum followee, std::unordered_set<StmtNum> followers) {
+void WritePKB::setFollowsT(StmtNum followee, std::unordered_set<StmtNum>& followers) {
     pkbInstance->setFollowsT(followee, followers);
 }
 
@@ -18,7 +18,7 @@ void WritePKB::setParent(StmtNum parent, StmtNum children) {
     pkbInstance->setParent(parent, children);
 }
 
-void WritePKB::setParentT(StmtNum parent, std::unordered_set<StmtNum> children) {
+void WritePKB::setParentT(StmtNum parent, std::unordered_set<StmtNum>& children) {
     pkbInstance->setParentT(parent, children);
 }
 
@@ -42,27 +42,27 @@ void WritePKB::setCall(StmtNum callLine, ProcName procedure_being_called) {
     pkbInstance->setCall(callLine, procedure_being_called);
 }
 
-void WritePKB::setCalls(ProcName caller, std::unordered_set<ProcName> callees) {
+void WritePKB::setCalls(ProcName caller, std::unordered_set<ProcName>& callees) {
     pkbInstance->setCalls(caller, callees);
 }
 
-void WritePKB::setCallsT(ProcName caller, std::unordered_set<ProcName> callees) {
+void WritePKB::setCallsT(ProcName caller, std::unordered_set<ProcName>& callees) {
     pkbInstance->setCallsT(caller, callees);
 }
 
-void WritePKB::setUsesS(StmtNum num, std::unordered_set<Ent> entities) {
+void WritePKB::setUsesS(StmtNum num, std::unordered_set<Ent>& entities) {
     pkbInstance->setUsesS(num, entities);
 }
 
-void WritePKB::setUsesP(ProcName name, std::unordered_set<Ent> entities) {
+void WritePKB::setUsesP(ProcName name, std::unordered_set<Ent>& entities) {
     pkbInstance->setUsesP(name, entities);
 }
 
-void WritePKB::setModifiesS(StmtNum num, std::unordered_set<Ent> entities) {
+void WritePKB::setModifiesS(StmtNum num, std::unordered_set<Ent>& entities) {
     pkbInstance->setModifiesS(num, entities);
 }
 
-void WritePKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {
+void WritePKB::setModifiesP(ProcName name, std::unordered_set<Ent>& entities) {
     pkbInstance->setModifiesP(name, entities);
 }
 
