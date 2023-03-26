@@ -166,13 +166,13 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
         }
     }
     else if (type == ParameterType::CONSTANT) {
-        std::unordered_set<Const> constants = constantStorage->getEntNames();
+        std::unordered_set<Const> constants = *constantStorage->getEntNames();
         for (auto constant : constants) {
             res.push_back(constant);
         }
     }
     else if (type == ParameterType::VARIABLE) {
-        std::unordered_set<Ent> vars = entityStorage->getEntNames();
+        std::unordered_set<Ent> vars = *entityStorage->getEntNames();
         for (auto var : vars) {
             res.push_back(var);
         }
@@ -240,7 +240,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
         // since reads and prints will only have 1 variable tied to them
         else if (attrType == AppConstants::VARIABLE) {
             for (auto stmtNum : stmtNums) {
-                Ent var = *entityStorage->getEntities(stmtNum).begin();
+                Ent var = *entityStorage->getEntities(stmtNum)->begin();
                 res.push_back({std::to_string(stmtNum), var});
             }
         }
@@ -253,14 +253,14 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
     }
     // currently just returns a pair of duplicated values
     else if (paramType == ParameterType::CONSTANT) {
-        std::unordered_set<Const> consts = constantStorage->getEntNames();
+        std::unordered_set<Const> consts = *constantStorage->getEntNames();
         for (auto constant : consts) {
             res.push_back({constant, constant});
         }
     }
     // currently just returns a pair of duplicated values
     else if (paramType == ParameterType::VARIABLE) {
-        std::unordered_set<Ent> vars = entityStorage->getEntNames();
+        std::unordered_set<Ent> vars = *entityStorage->getEntNames();
         for (auto var : vars) {
             res.push_back({var, var});
         }
