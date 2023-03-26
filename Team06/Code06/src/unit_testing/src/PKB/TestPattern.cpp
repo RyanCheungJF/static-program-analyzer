@@ -91,7 +91,6 @@ TEST_CASE("Test If/While Pattern on WritePKB and ReadPKB") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-
     std::unordered_set<Ent> temp1 = {"x", "y", "z"};
     std::unordered_set<Ent> temp2 = {"z"};
 

@@ -514,7 +514,6 @@ TEST_CASE("ModifiesStorage WritePKB ReadPKB Facade") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-
     std::unordered_set<Ent> val1 = {"a", "b", "c"};
     std::unordered_set<Ent> val2 = {"a"};
     std::unordered_set<Ent> val3 = {"b", "x", "z"};
