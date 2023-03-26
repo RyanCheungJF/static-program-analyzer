@@ -57,6 +57,14 @@ public:
     static bool isFixedStringOrWildcard(Parameter&);
     static bool isFixedIntOrWildCard(Parameter&);
     static bool isComparable(Parameter&, Parameter&);
+    bool isFixedInt();
+    bool isFixedString();
+    bool isVariable();
+    bool isStmt();
+    bool isWildcard();
+    bool isAssign();
+    bool isProcedureOnly();
+    bool isConstant();
     static ParameterType stringToType(string);
     bool isUncheckedSynonym();
     bool hasValidAttributeType();
