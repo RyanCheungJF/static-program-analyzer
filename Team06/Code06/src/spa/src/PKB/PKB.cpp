@@ -324,7 +324,7 @@ std::unordered_set<ProcName>* PKB::getCallsT(ProcName p) {
     return callsTStorage->getRightItems(p);
 }
 
-std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> PKB::getCFG(ProcName name) {
+std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>* PKB::getCFG(ProcName name) {
     return cfgStorage->getGraph(name);
 }
 

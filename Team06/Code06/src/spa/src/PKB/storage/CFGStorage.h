@@ -30,10 +30,12 @@ public:
     void writeCFG(ProcName name,
                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph);
 
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> getGraph(ProcName name);
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>* getGraph(ProcName name);
 
 private:
     std::unordered_map<ProcName,
                        std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>>
         proc_graph;
+
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> emptyGraph;
 };

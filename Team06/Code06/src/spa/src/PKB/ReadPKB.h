@@ -58,7 +58,7 @@ public:
     std::vector<std::vector<std::string>> findPattern(Pattern p);
 
     // returns a pointer to the CFG graph
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> getCFG(ProcName name);
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>* getCFG(ProcName name); //todo: delete if unused
 
 private:
     PKB* pkbInstance = NULL;

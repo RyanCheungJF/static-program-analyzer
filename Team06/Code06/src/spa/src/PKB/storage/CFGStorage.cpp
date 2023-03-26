@@ -20,11 +20,10 @@ void CFGStorage::writeCFG(
     proc_graph[name] = temp;
 }
 
-std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>
+std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>*
 CFGStorage::getGraph(ProcName name) {
     if (proc_graph.find(name) == proc_graph.end()) {
-        std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> empty;
-        return empty;
+        return &emptyGraph;
     }
-    return proc_graph[name];
+    return &proc_graph[name];
 }
