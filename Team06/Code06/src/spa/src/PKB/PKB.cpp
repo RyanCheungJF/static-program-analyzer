@@ -98,11 +98,11 @@ void PKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression>
     assignPatternStorage->writePattern(lhs, num, std::move(pointer));
 }
 
-void PKB::writeIfPattern(StmtNum num, std::unordered_set<Ent> variables) {
+void PKB::writeIfPattern(StmtNum num, std::unordered_set<Ent>& variables) {
     ifPatternStorage->writePattern(num, variables);
 }
 
-void PKB::writeWhilePattern(StmtNum num, std::unordered_set<Ent> variables) {
+void PKB::writeWhilePattern(StmtNum num, std::unordered_set<Ent>& variables) {
     whilePatternStorage->writePattern(num, variables);
 }
 

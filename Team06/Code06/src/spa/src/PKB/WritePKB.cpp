@@ -66,11 +66,11 @@ void WritePKB::setModifiesP(ProcName name, std::unordered_set<Ent> entities) {
     pkbInstance->setModifiesP(name, entities);
 }
 
-void WritePKB::setIfPattern(StmtNum num, std::unordered_set<Ent> variables) {
+void WritePKB::setIfPattern(StmtNum num, std::unordered_set<Ent>& variables) {
     pkbInstance->writeIfPattern(num, variables);
 }
 
-void WritePKB::setWhilePattern(StmtNum num, std::unordered_set<Ent> variables) {
+void WritePKB::setWhilePattern(StmtNum num, std::unordered_set<Ent>& variables) {
     pkbInstance->writeWhilePattern(num, variables);
 }
 

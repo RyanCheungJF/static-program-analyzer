@@ -75,9 +75,9 @@ public:
 
     void setModifiesP(ProcName, std::unordered_set<Ent> entities);
 
-    void writeIfPattern(StmtNum num, std::unordered_set<Ent> variables);
+    void writeIfPattern(StmtNum num, std::unordered_set<Ent>& variables);
 
-    void writeWhilePattern(StmtNum num, std::unordered_set<Ent> variables);
+    void writeWhilePattern(StmtNum num, std::unordered_set<Ent>& variables);
 
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
