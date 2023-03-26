@@ -34,11 +34,11 @@ TEST_CASE("Check that all of the followers of each followee is accurate, even wi
     fts.write(1, followers_1);
     fts.write(2, followers_2);
 
-    std::unordered_set<StmtNum> actual = *fts.getRightItems(1);
+    std::unordered_set<StmtNum> actual = fts.getRightItems(1);
     std::unordered_set<StmtNum> expected = {2, 4, 3};
     REQUIRE(unit_testing_utils::equals(expected, actual));
 
-    std::unordered_set<StmtNum> actual2 = *fts.getRightItems(2);
+    std::unordered_set<StmtNum> actual2 = fts.getRightItems(2);
     std::unordered_set<StmtNum> expected2 = {4, 3};
     REQUIRE(unit_testing_utils::equals(expected2, actual2));
 }
@@ -52,15 +52,15 @@ TEST_CASE("Check that all of the followees of each follower is accurate, even wi
     fts.write(2, followers2);
     fts.write(3, followers3);
 
-    std::unordered_set<StmtNum> actual1 = *fts.getLeftItems(2);
+    std::unordered_set<StmtNum> actual1 = fts.getLeftItems(2);
     std::unordered_set<StmtNum> expected1 = {1};
     REQUIRE(unit_testing_utils::equals(expected1, actual1));
 
-    std::unordered_set<StmtNum> actual2 = *fts.getLeftItems(3);
+    std::unordered_set<StmtNum> actual2 = fts.getLeftItems(3);
     std::unordered_set<StmtNum> expected2 = {1, 2};
     REQUIRE(unit_testing_utils::equals(expected2, actual2));
 
-    std::unordered_set<StmtNum> actual3 = *fts.getLeftItems(4);
+    std::unordered_set<StmtNum> actual3 = fts.getLeftItems(4);
     std::unordered_set<StmtNum> expected3 = {1, 2, 3};
     REQUIRE(unit_testing_utils::equals(expected3, actual3));
 }

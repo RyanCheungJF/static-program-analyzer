@@ -11,7 +11,7 @@ TEST_CASE("CallsStorage: writeP") {
     ProcName caller = "proc0";
 
     SECTION("getCallees(procName): empty storage") {
-        std::unordered_set<ProcName> res = *cs.getRightItems(caller);
+        std::unordered_set<ProcName> res = cs.getRightItems(caller);
         REQUIRE(res.empty());
     }
 
@@ -22,16 +22,16 @@ TEST_CASE("CallsStorage: writeP") {
     cs.write(caller, callees);
 
     SECTION("getCallees(procName): non-empty storage") {
-        std::unordered_set<ProcName> res1 = *cs.getRightItems("nonExistent");
+        std::unordered_set<ProcName> res1 = cs.getRightItems("nonExistent");
         REQUIRE(res1.empty());
 
-        std::unordered_set<ProcName> res2 = *cs.getRightItems(caller);
+        std::unordered_set<ProcName> res2 = cs.getRightItems(caller);
         REQUIRE(unit_testing_utils::equals({"proc1", "proc2"}, res2));
 
-        std::unordered_set<ProcName> res3 = *cs.getLeftItems(caller);
+        std::unordered_set<ProcName> res3 = cs.getLeftItems(caller);
         REQUIRE(unit_testing_utils::equals({}, res3));
 
-        std::unordered_set<ProcName> res4 = *cs.getLeftItems(proc1);
+        std::unordered_set<ProcName> res4 = cs.getLeftItems(proc1);
         REQUIRE(unit_testing_utils::equals({caller}, res4));
     }
 }

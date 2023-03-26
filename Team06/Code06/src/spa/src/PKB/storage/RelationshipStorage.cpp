@@ -21,22 +21,22 @@ template <typename T, typename U> bool RelationshipStorage<T, U>::exists(T leftI
     return leftToRightMap[leftItem].find(rightItem) != leftToRightMap[leftItem].end();
 }
 
-template <typename T, typename U> std::unordered_set<U>* RelationshipStorage<T, U>::getRightItems(T leftItem) {
+template <typename T, typename U> std::unordered_set<U>& RelationshipStorage<T, U>::getRightItems(T leftItem) {
     if (leftToRightMap.find(leftItem) == leftToRightMap.end()) {
-        return &emptySetU;
+        return emptySetU;
     }
-    return &leftToRightMap[leftItem];
+    return leftToRightMap[leftItem];
 }
 
-template <typename T, typename U> std::unordered_set<T>* RelationshipStorage<T, U>::getLeftItems(U rightItem) {
+template <typename T, typename U> std::unordered_set<T>& RelationshipStorage<T, U>::getLeftItems(U rightItem) {
     if (rightToLeftMap.find(rightItem) == rightToLeftMap.end()) {
-        return &emptySetT;
+        return emptySetT;
     }
-    return &rightToLeftMap[rightItem];
+    return rightToLeftMap[rightItem];
 }
 
-template <typename T, typename U> std::unordered_set<T>* RelationshipStorage<T, U>::getAllLeftItems() {
-    return &allLeft;
+template <typename T, typename U> std::unordered_set<T>& RelationshipStorage<T, U>::getAllLeftItems() {
+    return allLeft;
 }
 
 template class RelationshipStorage<StmtNum, StmtNum>;

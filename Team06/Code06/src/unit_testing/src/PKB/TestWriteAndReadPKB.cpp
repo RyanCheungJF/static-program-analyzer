@@ -473,7 +473,7 @@ TEST_CASE("UsesStorage WritePKB ReadPKB Facade") {
 
     SECTION("UsesStorage WritePKB ReadPKB Facade: getUsesS(StmtNum num) positive case") {
         std::vector<Ent> expected = {"a", "b", "c"};
-        auto res = *readPkb.getUsesS(1);
+        auto res = readPkb.getUsesS(1);
         std::vector<Ent> actual;
         for (ProcName name : res) {
             actual.push_back(name);
@@ -484,13 +484,13 @@ TEST_CASE("UsesStorage WritePKB ReadPKB Facade") {
     }
 
     SECTION("UsesStorage WritePKB ReadPKB Facade: getUsesS(StmtNum num) negative case") {
-        auto res = *readPkb.getUsesS(11);
+        auto res = readPkb.getUsesS(11);
         REQUIRE(res.empty());
     }
 
     SECTION("UsesStorage WritePKB ReadPKB Facade: getUsesP(ProcName name) positive case") {
         std::vector<Ent> expected = {"a", "b", "x", "z"};
-        auto res = *readPkb.getUsesP("proc2");
+        auto res = readPkb.getUsesP("proc2");
         std::vector<Ent> actual;
         for (ProcName name : res) {
             actual.push_back(name);
@@ -501,7 +501,7 @@ TEST_CASE("UsesStorage WritePKB ReadPKB Facade") {
     }
 
     SECTION("UsesStorage WritePKB ReadPKB Facade: getUsesP(ProcName name) negative case") {
-        auto res = *readPkb.getUsesP("proc3");
+        auto res = readPkb.getUsesP("proc3");
         REQUIRE(res.empty());
     }
 }
@@ -528,7 +528,7 @@ TEST_CASE("ModifiesStorage WritePKB ReadPKB Facade") {
 
     SECTION("ModifiesStorage WritePKB ReadPKB Facade: getModifiesS(StmtNum num) positive case") {
         std::vector<Ent> expected = {"a", "b", "c"};
-        auto res = *readPkb.getModifiesS(1);
+        auto res = readPkb.getModifiesS(1);
         std::vector<Ent> actual;
         for (ProcName name : res) {
             actual.push_back(name);
@@ -539,13 +539,13 @@ TEST_CASE("ModifiesStorage WritePKB ReadPKB Facade") {
     }
 
     SECTION("ModifiesStorage WritePKB ReadPKB Facade: getModifiesS(StmtNum num) negative case") {
-        auto res = *readPkb.getModifiesS(11);
+        auto res = readPkb.getModifiesS(11);
         REQUIRE(res.empty());
     }
 
     SECTION("ModifiesStorage WritePKB ReadPKB Facade: getUsesP(ProcName name) positive case") {
         std::vector<Ent> expected = {"a", "b", "x", "z"};
-        auto res = *readPkb.getModifiesP("proc2");
+        auto res = readPkb.getModifiesP("proc2");
         std::vector<Ent> actual;
         for (ProcName name : res) {
             actual.push_back(name);
@@ -556,7 +556,7 @@ TEST_CASE("ModifiesStorage WritePKB ReadPKB Facade") {
     }
 
     SECTION("ModifiesStorage WritePKB ReadPKB Facade: getUsesP(ProcName name) negative case") {
-        auto res = *readPkb.getModifiesP("proc3");
+        auto res = readPkb.getModifiesP("proc3");
         REQUIRE(res.empty());
     }
 }
@@ -578,7 +578,7 @@ TEST_CASE("ParentTStorage WritePKB ReadPKB Facade") {
 
     SECTION("ParentTStorage WritePKB ReadPKB Facade: getContainedStatements(StmtNum containerNum) positive case") {
         std::vector<StmtNum> expected = {12, 13, 14, 15};
-        auto res = *readPkb.getContainedStatements(11);
+        auto res = readPkb.getContainedStatements(11);
         std::vector<StmtNum> actual;
         for (StmtNum num : res) {
             actual.push_back(num);
@@ -589,7 +589,7 @@ TEST_CASE("ParentTStorage WritePKB ReadPKB Facade") {
     }
 
     SECTION("ParentTStorage WritePKB ReadPKB Facade: getContainedStatements(StmtNum containerNum) negative case") {
-        auto res = *readPkb.getContainedStatements(15);
+        auto res = readPkb.getContainedStatements(15);
         REQUIRE(res.empty());
     }
 }

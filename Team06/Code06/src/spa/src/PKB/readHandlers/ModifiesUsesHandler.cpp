@@ -20,9 +20,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntVar(Paramete
 std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntWildcard(Parameter fixedIntParam) {
     std::string fixedIntString = fixedIntParam.getValue();
     std::vector<std::vector<std::string>> res;
-
-    std::unordered_set<Ent> entities = *rlStorage->getRightItems(stoi(fixedIntString));
-    for (auto entity : entities) {
+    for (Ent entity : rlStorage->getRightItems(stoi(fixedIntString))) {
         res.push_back({fixedIntString, entity});
     }
     return res;
@@ -42,9 +40,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcVar(Paramet
 std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcWildcard(Parameter fixedProcParam) {
     std::string fixedProc = fixedProcParam.getValue();
     std::vector<std::vector<std::string>> res;
-
-    std::unordered_set<Ent> entities = *rlStorage->getRightItems(fixedProc);
-    for (auto entity : entities) {
+    for (Ent entity : rlStorage->getRightItems(fixedProc)) {
         res.push_back({fixedProc, entity});
     }
     return res;
@@ -54,8 +50,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynVar(Para
     std::string paramString2 = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum> stmtNums = *rlStorage->getLeftItems(paramString2);
-    for (StmtNum stmtNum : stmtNums) {
+    for (StmtNum stmtNum : rlStorage->getLeftItems(paramString2)) {
         if (stmtStorage->getStatementNumbers(param1.getTypeString()).find(stmtNum) !=
                 stmtStorage->getStatementNumbers(param1.getTypeString()).end()) {
             std::string stmtNumString = to_string(stmtNum);
@@ -69,8 +64,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynWildcard
     std::vector<std::vector<std::string>> res;
 
     for (auto typedStmtNum : stmtStorage->getStatementNumbers(param1.getTypeString())) {
-        std::unordered_set<Ent> entities = *rlStorage->getRightItems(typedStmtNum);
-        for (auto entity : entities) {
+        for (Ent entity : rlStorage->getRightItems(typedStmtNum)) {
             std::string stmtNumString = to_string(typedStmtNum);
             res.push_back({stmtNumString, entity});
         }
@@ -82,8 +76,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcSynVar(Para
     std::string fixedVar = fixedVarParam.getValue();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<ProcName> procs = *rlStorage->getProcs(fixedVar);
-    for (auto proc : procs) {
+    for (ProcName proc : rlStorage->getProcs(fixedVar)) {
         res.push_back({proc, fixedVar});
     }
     return res;
@@ -91,8 +84,8 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcSynVar(Para
 
 std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcSynWildcard() {
     std::vector<std::vector<std::string>> res;
-    for (ProcName proc : *rlStorage->getAllProcs()) {
-        for (Ent entity : *rlStorage->getRightItems(proc)) {
+    for (ProcName proc : rlStorage->getAllProcs()) {
+        for (Ent entity : rlStorage->getRightItems(proc)) {
             res.push_back({proc, entity});
         }
     }

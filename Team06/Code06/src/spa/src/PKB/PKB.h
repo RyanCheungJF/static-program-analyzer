@@ -105,19 +105,19 @@ public:
 
     // returns the entire row of all Entities involved in the Uses(StmtNum, v)
     // relationship
-    std::unordered_set<Ent>* getUsesS(StmtNum num);
+    std::unordered_set<Ent>& getUsesS(StmtNum num);
 
     // returns the entire row of all Entities involved in the Modifies(StmtNum, v)
     // relationship
-    std::unordered_set<Ent>* getModifiesS(StmtNum num);
+    std::unordered_set<Ent>& getModifiesS(StmtNum num);
 
     // returns the entire row of all Entities involved in the Uses(ProcName, v)
     // relationship
-    std::unordered_set<Ent>* getUsesP(ProcName name);
+    std::unordered_set<Ent>& getUsesP(ProcName name);
 
     // returns the entire row of all Entities involved in the Modifies(ProcName,
     // v) relationship
-    std::unordered_set<Ent>* getModifiesP(ProcName name);
+    std::unordered_set<Ent>& getModifiesP(ProcName name);
 
     // returns the name of the procedure being called on line number s
     // if line s is not a call statement, it returns a pair {AppConstants::NOT_USED_FIELD,
@@ -131,10 +131,10 @@ public:
     std::unordered_set<StmtNum>& getWhileStatementNumbers();
 
     // returns nested statement numbers of all if and while statements
-    std::unordered_set<StmtNum>* getContainedStatements(StmtNum containerNum);
+    std::unordered_set<StmtNum>& getContainedStatements(StmtNum containerNum);
 
     // returns all the procedures that are called from a given procedure
-    std::unordered_set<ProcName>* getCallsT(ProcName p);
+    std::unordered_set<ProcName>& getCallsT(ProcName p);
 
     // returns the cfg if it exists, else it returns an empty graph
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>* getCFG(ProcName name);

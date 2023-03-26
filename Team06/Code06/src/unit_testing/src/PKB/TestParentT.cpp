@@ -21,14 +21,14 @@ TEST_CASE("Tests for getting children for ParentTStorage") {
     std::unordered_set<StmtNum> children = {2, 3, 4};
     pts.write(1, children);
 
-    std::unordered_set<StmtNum> res = *pts.getRightItems(1);
+    std::unordered_set<StmtNum> res = pts.getRightItems(1);
     std::unordered_set<StmtNum> check{2, 3, 4};
     REQUIRE(unit_testing_utils::equals(check, res));
 
-    res = *pts.getRightItems(2);
+    res = pts.getRightItems(2);
     REQUIRE(res.empty());
 
-    res = *pts.getRightItems(3);
+    res = pts.getRightItems(3);
     REQUIRE(res.empty());
 }
 
@@ -39,14 +39,14 @@ TEST_CASE("Tests for getting parent for ParentTStorage") {
     pts.write(1, children1);
     pts.write(2, children2);
 
-    std::unordered_set<StmtNum> res = *pts.getLeftItems(3);
+    std::unordered_set<StmtNum> res = pts.getLeftItems(3);
     std::unordered_set<StmtNum> check{1, 2};
     REQUIRE(unit_testing_utils::equals(check, res));
 
-    res = *pts.getLeftItems(1);
+    res = pts.getLeftItems(1);
     REQUIRE(res.empty());
 
-    res = *pts.getLeftItems(5);
+    res = pts.getLeftItems(5);
     REQUIRE(res.empty());
 }
 

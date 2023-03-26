@@ -26,13 +26,13 @@ TEST_CASE("ModifiesUsesStorage: writeS") {
     us.write(num2, input2_1);
 
     SECTION("ModifiesUsesStorage: getRightItems(StmtNum num)") {
-        std::unordered_set<Ent> res1 = *us.getRightItems(num1);
+        std::unordered_set<Ent> res1 = us.getRightItems(num1);
         REQUIRE(res1.size() == input1_1.size());
 
-        std::unordered_set<Ent> res2 = *us.getRightItems(num2);
+        std::unordered_set<Ent> res2 = us.getRightItems(num2);
         REQUIRE(res2.size() == input2_1.size());
 
-        std::unordered_set<Ent> res3 = *us.getRightItems(100000);
+        std::unordered_set<Ent> res3 = us.getRightItems(100000);
         REQUIRE(res3.empty());
     }
 
@@ -45,21 +45,21 @@ TEST_CASE("ModifiesUsesStorage: writeS") {
     }
 
     SECTION("ModifiesUsesStorage: getStmtNums(Ent var)") {
-        std::unordered_set<StmtNum> res1 = *us.getStmtNums("a");
+        std::unordered_set<StmtNum> res1 = us.getStmtNums("a");
         REQUIRE(res1.size() == 2);
 
-        std::unordered_set<StmtNum> res2 = *us.getStmtNums("d");
+        std::unordered_set<StmtNum> res2 = us.getStmtNums("d");
         REQUIRE(res2.size() == 1);
 
-        std::unordered_set<StmtNum> res3 = *us.getStmtNums("b");
+        std::unordered_set<StmtNum> res3 = us.getStmtNums("b");
         REQUIRE(res3.size() == 1);
 
-        std::unordered_set<StmtNum> res4 = *us.getStmtNums("z");
+        std::unordered_set<StmtNum> res4 = us.getStmtNums("z");
         REQUIRE(res4.empty());
     }
 
     SECTION("ModifiesUsesStorage: getAllStmtNums()") {
-        std::unordered_set<StmtNum> res = *us.getAllStmtNums();
+        std::unordered_set<StmtNum> res = us.getAllStmtNums();
         std::unordered_set<StmtNum> expected = {11, 20};
     }
 }
@@ -89,13 +89,13 @@ TEST_CASE("ModifiesUsesStorage: writeP") {
     us.write(proc2, input2_1);
 
     SECTION("ModifiesUsesStorage: getRightItems(ProcName proc)") {
-        std::unordered_set<Ent> res1 = *us.getRightItems(proc1);
+        std::unordered_set<Ent> res1 = us.getRightItems(proc1);
         REQUIRE(res1.size() == input1_1.size());
 
-        std::unordered_set<Ent> res2 = *us.getRightItems(proc2);
+        std::unordered_set<Ent> res2 = us.getRightItems(proc2);
         REQUIRE(res2.size() == input2_1.size());
 
-        std::unordered_set<Ent> res3 = *us.getRightItems("proc3");
+        std::unordered_set<Ent> res3 = us.getRightItems("proc3");
         REQUIRE(res3.size() == 0);
     }
 
@@ -108,21 +108,21 @@ TEST_CASE("ModifiesUsesStorage: writeP") {
     }
 
     SECTION("ModifiesUsesStorage: getProcsFromEnt(Ent var)") {
-        std::unordered_set<ProcName> res1 = *us.getProcs("a");
+        std::unordered_set<ProcName> res1 = us.getProcs("a");
         REQUIRE(res1.size() == 2);
 
-        std::unordered_set<ProcName> res2 = *us.getProcs("d");
+        std::unordered_set<ProcName> res2 = us.getProcs("d");
         REQUIRE(res2.size() == 1);
 
-        std::unordered_set<ProcName> res3 = *us.getProcs("b");
+        std::unordered_set<ProcName> res3 = us.getProcs("b");
         REQUIRE(res3.size() == 1);
 
-        std::unordered_set<ProcName> res4 = *us.getProcs("z");
+        std::unordered_set<ProcName> res4 = us.getProcs("z");
         REQUIRE(res4.size() == 0);
     }
 
     SECTION("ModifiesUsesStorage: getAllProcs()") {
-        std::unordered_set<Ent> res = *us.getAllProcs();
+        std::unordered_set<Ent> res = us.getAllProcs();
         std::unordered_set<Ent> expected = {"proc1", "proc2"};
         REQUIRE(res == expected);
     }

@@ -31,19 +31,19 @@ std::unordered_set<ProcName>& ReadPKB::getAllProcedureNames() {
     return pkbInstance->getAllProcedureNames();
 }
 
-std::unordered_set<Ent>* ReadPKB::getUsesS(StmtNum num) {
+std::unordered_set<Ent>& ReadPKB::getUsesS(StmtNum num) {
     return pkbInstance->getUsesS(num);
 }
 
-std::unordered_set<Ent>* ReadPKB::getUsesP(ProcName name) {
+std::unordered_set<Ent>& ReadPKB::getUsesP(ProcName name) {
     return pkbInstance->getUsesP(name);
 }
 
-std::unordered_set<Ent>* ReadPKB::getModifiesS(StmtNum num) {
+std::unordered_set<Ent>& ReadPKB::getModifiesS(StmtNum num) {
     return pkbInstance->getModifiesS(num);
 }
 
-std::unordered_set<Ent>* ReadPKB::getModifiesP(ProcName name) {
+std::unordered_set<Ent>& ReadPKB::getModifiesP(ProcName name) {
     return pkbInstance->getModifiesP(name);
 }
 
@@ -55,7 +55,7 @@ std::unordered_set<StmtNum>& ReadPKB::getWhileStatementNumbers() {
     return pkbInstance->getWhileStatementNumbers();
 }
 
-std::unordered_set<StmtNum>* ReadPKB::getContainedStatements(StmtNum containerNum) {
+std::unordered_set<StmtNum>& ReadPKB::getContainedStatements(StmtNum containerNum) {
     return pkbInstance->getContainedStatements(containerNum);
 }
 
@@ -68,6 +68,6 @@ ReadPKB::getCFG(ProcName name) {
     return pkbInstance->getCFG(name);
 }
 
-std::unordered_set<ProcName>* ReadPKB::getCallsT(ProcName p) {
+std::unordered_set<ProcName>& ReadPKB::getCallsT(ProcName p) {
     return pkbInstance->getCallsT(p);
 }

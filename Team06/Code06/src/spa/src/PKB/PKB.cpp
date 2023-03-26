@@ -280,19 +280,19 @@ std::unordered_set<ProcName>& PKB::getAllProcedureNames() {
     return procedureStorage->getProcNames();
 }
 
-std::unordered_set<Ent>* PKB::getUsesS(StmtNum num) {
+std::unordered_set<Ent>& PKB::getUsesS(StmtNum num) {
     return usesStorage->getRightItems(num);
 }
 
-std::unordered_set<Ent>* PKB::getUsesP(ProcName name) {
+std::unordered_set<Ent>& PKB::getUsesP(ProcName name) {
     return usesStorage->getRightItems(name);
 }
 
-std::unordered_set<Ent>* PKB::getModifiesS(StmtNum num) {
+std::unordered_set<Ent>& PKB::getModifiesS(StmtNum num) {
     return modifiesStorage->getRightItems(num);
 }
 
-std::unordered_set<Ent>* PKB::getModifiesP(ProcName name) {
+std::unordered_set<Ent>& PKB::getModifiesP(ProcName name) {
     return modifiesStorage->getRightItems(name);
 }
 
@@ -304,7 +304,7 @@ std::unordered_set<StmtNum>& PKB::getWhileStatementNumbers() {
     return statementStorage->getStatementNumbers(WHILE);
 }
 
-std::unordered_set<StmtNum>* PKB::getContainedStatements(StmtNum containerNum) {
+std::unordered_set<StmtNum>& PKB::getContainedStatements(StmtNum containerNum) {
     return parentTStorage->getRightItems(containerNum);
 }
 
@@ -312,7 +312,7 @@ std::pair<StmtNum, ProcName> PKB::getCallStmt(StmtNum s) {
     return callStorage->getCallStmt(s);
 }
 
-std::unordered_set<ProcName>* PKB::getCallsT(ProcName p) {
+std::unordered_set<ProcName>& PKB::getCallsT(ProcName p) {
     return callsTStorage->getRightItems(p);
 }
 
