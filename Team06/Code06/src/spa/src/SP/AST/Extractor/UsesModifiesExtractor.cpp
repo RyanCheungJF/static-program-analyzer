@@ -10,7 +10,7 @@ void UsesModifiesExtractor::extract(std::vector<ProcName> topoOrder) {
 
 void UsesModifiesExtractor::processProcedures(std::vector<ProcName> topoOrder) {
     for (ProcName proc : topoOrder) {
-        auto procedureStmtNum = readApi->getProcedureStatementNumbers(proc);
+        std::unordered_set<StmtNum> procedureStmtNum = *readApi->getProcedureStatementNumbers(proc);
         std::unordered_set<Ent> currUsesVariables;
         std::unordered_set<Ent> currModifiesVariables;
 

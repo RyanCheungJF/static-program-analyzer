@@ -16,10 +16,10 @@ public:
     bool checkStatement(Stmt stmt, StmtNum num);
 
     // returns all the statement lines that are contained in the given procedure
-    std::unordered_set<StmtNum> getProcedureStatementNumbers(ProcName p);
+    std::unordered_set<StmtNum>* getProcedureStatementNumbers(ProcName p);
 
     // returns all the procedure names present in the source code
-    std::unordered_set<ProcName> getAllProcedureNames();
+    std::unordered_set<ProcName>* getAllProcedureNames();
 
     // returns the entire row of all Entities involved in the Uses(StmtNum, v)
     // relationship

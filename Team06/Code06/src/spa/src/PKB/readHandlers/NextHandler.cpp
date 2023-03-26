@@ -141,7 +141,7 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
 }
 
 std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcard() {
-    std::unordered_set<ProcName> procedures = procStorage->getProcNames();
+    std::unordered_set<ProcName> procedures = *procStorage->getProcNames();
     std::vector<std::vector<std::string>> res;
 
     for (ProcName proc : procedures) {
@@ -314,7 +314,7 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransit
 }
 
 std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcardTransitive() {
-    std::unordered_set<ProcName> procedures = procStorage->getProcNames();
+    std::unordered_set<ProcName> procedures = *procStorage->getProcNames();
     std::vector<std::vector<std::string>> res;
 
     for (ProcName proc : procedures) {

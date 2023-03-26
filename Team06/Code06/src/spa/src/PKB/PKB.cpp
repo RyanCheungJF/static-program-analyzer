@@ -160,7 +160,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
     ParameterType type = p.getType();
 
     if (type == ParameterType::PROCEDURE) {
-        std::unordered_set<ProcName> procs = procedureStorage->getProcNames();
+        std::unordered_set<ProcName> procs = *procedureStorage->getProcNames();
         for (auto proc : procs) {
             res.push_back(proc);
         }
@@ -267,7 +267,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
     }
     // currently just returns a pair of duplicated values
     else {
-        std::unordered_set<ProcName> procs = procedureStorage->getProcNames();
+        std::unordered_set<ProcName> procs = *procedureStorage->getProcNames();
         for (auto proc : procs) {
             res.push_back({proc, proc});
         }
@@ -280,11 +280,11 @@ bool PKB::checkStatement(Stmt stmt, StmtNum num) {
     return statementStorage->checkStatement(stmt, num);
 }
 
-std::unordered_set<StmtNum> PKB::getProcedureStatementNumbers(ProcName p) {
+std::unordered_set<StmtNum>* PKB::getProcedureStatementNumbers(ProcName p) {
     return procedureStorage->getProcedureStatementNumbers(p);
 }
 
-std::unordered_set<ProcName> PKB::getAllProcedureNames() {
+std::unordered_set<ProcName>* PKB::getAllProcedureNames() {
     return procedureStorage->getProcNames();
 }
 

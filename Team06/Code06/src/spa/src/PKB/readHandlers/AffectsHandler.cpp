@@ -65,7 +65,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     }
 
     // if both are not assign statements, should also just return nothing already
-    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
+    std::unordered_set<StmtNum> statements = *procStorage->getProcedureStatementNumbers(proc1);
     std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
     if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
         return {};
@@ -103,13 +103,13 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(Pro
     std::unordered_set<ProcName> allProcedures;
 
     if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
-        allProcedures = procStorage->getProcNames();
+        allProcedures = *procStorage->getProcNames();
     } else {
         allProcedures = {proc};
     }
 
     for (ProcName proc : allProcedures) {
-        std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
+        std::unordered_set<StmtNum> procStatements = *procStorage->getProcedureStatementNumbers(proc);
         std::unordered_set<StmtNum> assignStatements = getAssignStatements(procStatements);
 
         for (StmtNum a1 : assignStatements) {
@@ -291,7 +291,6 @@ std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffects
     return hashmap;
 }
 
-//  : area for optimisation. get this at compile time
 std::unordered_set<StmtNum> AffectsHandler::getAssignStatements(std::unordered_set<StmtNum> allProcStatements) {
 
     std::unordered_set<StmtNum> assignStatements;
@@ -361,7 +360,7 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
         return {};
     }
 
-    std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
+    std::unordered_set<StmtNum> procStatements = *procStorage->getProcedureStatementNumbers(proc);
     std::unordered_set<StmtNum> assignStatements = getAssignStatements(procStatements);
 
     if (assignStatements.find(currA) == assignStatements.end()) {
@@ -418,7 +417,7 @@ bool AffectsHandler::checkModifiedAssignReadCall(std::unordered_set<Ent> commonV
 bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::unordered_set<Ent> commonVariables) {
 
     // if either is not an assign statements, should also just return nothing already
-    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
+    std::unordered_set<StmtNum> statements = *procStorage->getProcedureStatementNumbers(proc);
     std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
     if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
         return false;
