@@ -9,7 +9,7 @@ TEST_CASE("All statement numbers are recorded in their respective procedures") {
     ProcName p = "calculateEuclidean";
     std::unordered_set<StmtNum> lines = {2, 3, 4};
     store.writeProcedure(p, lines);
-    std::unordered_set<StmtNum> statementNums = *store.getProcedureStatementNumbers(p);
+    std::unordered_set<StmtNum> statementNums = store.getProcedureStatementNumbers(p);
     REQUIRE(unit_testing_utils::equals(lines, statementNums));
 }
 
@@ -17,7 +17,7 @@ TEST_CASE(
     "If a procedure does not appear in the source code, getProcedureStatementNumbers() should return an empty set") {
     ProcedureStorage store;
     ProcName p = "calculateEuclidean";
-    std::unordered_set<StmtNum> statementNums = *store.getProcedureStatementNumbers(p);
+    std::unordered_set<StmtNum> statementNums = store.getProcedureStatementNumbers(p);
     REQUIRE(statementNums.empty());
 }
 

@@ -6,9 +6,9 @@ class ProcedureStorage {
 public:
     void writeProcedure(ProcName p, std::unordered_set<StmtNum>& lines);
     bool checkProcedure(ProcName p, StmtNum num);
-    std::unordered_set<StmtNum>* getProcedureStatementNumbers(ProcName p);
+    std::unordered_set<StmtNum>& getProcedureStatementNumbers(ProcName p);
     ProcName getProcedure(StmtNum num);
-    std::unordered_set<ProcName>* getProcNames();
+    std::unordered_set<ProcName>& getProcNames();
 
 private:
     /*

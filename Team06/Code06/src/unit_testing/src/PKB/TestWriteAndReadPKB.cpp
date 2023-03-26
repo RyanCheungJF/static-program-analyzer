@@ -423,7 +423,7 @@ TEST_CASE("ProcedureStorage WritePKB ReadPKB Facade") {
 
     SECTION("ProcedureStorage WritePKB ReadPKB Facade: getProcedureStatementNumbers(ProcName p) positive case") {
         std::vector<StmtNum> expected = {1, 2, 3, 4, 5};
-        auto res = *readPkb.getProcedureStatementNumbers("proc1");
+        auto res = readPkb.getProcedureStatementNumbers("proc1");
         std::vector<StmtNum> actual;
         for (StmtNum num : res) {
             actual.push_back(num);
@@ -435,13 +435,13 @@ TEST_CASE("ProcedureStorage WritePKB ReadPKB Facade") {
 
     SECTION("ProcedureStorage WritePKB ReadPKB Facade: getProcedureStatementNumbers(ProcName p) negative case") {
         std::vector<StmtNum> expected = {};
-        auto res = *readPkb.getProcedureStatementNumbers("doesNotExist");
+        auto res = readPkb.getProcedureStatementNumbers("doesNotExist");
         REQUIRE(res.empty());
     }
 
     SECTION("ProcedureStorage WritePKB ReadPKB Facade: getAllProcedureNames() positive case") {
         std::vector<ProcName> expected = {"proc1", "proc2"};
-        auto res = *readPkb.getAllProcedureNames();
+        auto res = readPkb.getAllProcedureNames();
         std::vector<ProcName> actual;
         for (ProcName name : res) {
             actual.push_back(name);

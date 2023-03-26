@@ -27,7 +27,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
     SECTION("SP-PKB Integration: ModifiesP") {
         auto procedureNames = readPKB.getAllProcedureNames();
         auto expectedProcedureNames = std::unordered_set<Ent>({"A", "B", "C"});
-        REQUIRE(*procedureNames == expectedProcedureNames);
+        REQUIRE(procedureNames == expectedProcedureNames);
 
         auto variablesAModifies = *readPKB.getModifiesP("A");
         auto expectedAModifies = std::unordered_set<Ent>({"x"});
@@ -301,7 +301,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
     SECTION("SP-PKB Integration: ModifiesP") {
         auto procedureNames = readPKB.getAllProcedureNames();
         auto expectedProcedureNames = std::unordered_set<Ent>({"A", "B"});
-        REQUIRE(*procedureNames == expectedProcedureNames);
+        REQUIRE(procedureNames == expectedProcedureNames);
 
         auto variablesAModifies = *readPKB.getModifiesP("A");
         auto expectedAModifies = std::unordered_set<Ent>({"x", "y", "z"});
@@ -684,7 +684,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 3") {
     SECTION("SP-PKB Integration: ModifiesP") {
         auto procedureNames = readPKB.getAllProcedureNames();
         auto expectedProcedureNames = std::unordered_set<Ent>({"A", "B", "C", "D", "E"});
-        REQUIRE(*procedureNames == expectedProcedureNames);
+        REQUIRE(procedureNames == expectedProcedureNames);
 
         auto variablesAModifies = *readPKB.getModifiesP("A");
         auto expectedAModifies = std::unordered_set<Ent>({"x", "a", "r", "o", "e"});

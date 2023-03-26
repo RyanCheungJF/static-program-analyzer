@@ -23,11 +23,11 @@ bool ReadPKB::checkStatement(Stmt stmt, StmtNum num) {
     return pkbInstance->checkStatement(stmt, num);
 }
 
-std::unordered_set<StmtNum>* ReadPKB::getProcedureStatementNumbers(ProcName p) {
+std::unordered_set<StmtNum>& ReadPKB::getProcedureStatementNumbers(ProcName p) {
     return pkbInstance->getProcedureStatementNumbers(p);
 }
 
-std::unordered_set<ProcName>* ReadPKB::getAllProcedureNames() {
+std::unordered_set<ProcName>& ReadPKB::getAllProcedureNames() {
     return pkbInstance->getAllProcedureNames();
 }
 
