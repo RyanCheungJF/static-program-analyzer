@@ -42,6 +42,34 @@ TEST_CASE("Test findWith()") {
     procLines = {6};
     pkb.setProcedure("sub", procLines);
 
+    SECTION("fixed value equals fixed value") {
+        SECTION("with \"4\" = \"4\"") {
+            Parameter leftParam = Parameter("4", ParameterType::FIXED_INT);
+            Parameter rightParam = Parameter("4", ParameterType::FIXED_INT);
+            Comparison comp = Comparison(ComparisonOperator::EQUALS, leftParam, rightParam);
+            vector<vector<string>> res = pkb.findWith(comp);
+            vector<vector<string>> expected = {{"4", "4"}};
+            REQUIRE(res == expected);
+        }
+
+        SECTION("with \"random\" = \"random\"") {
+            Parameter leftParam = Parameter("random", ParameterType::FIXED_STRING);
+            Parameter rightParam = Parameter("random", ParameterType::FIXED_STRING);
+            Comparison comp = Comparison(ComparisonOperator::EQUALS, leftParam, rightParam);
+            vector<vector<string>> res = pkb.findWith(comp);
+            vector<vector<string>> expected = {{"random", "random"}};
+            REQUIRE(res == expected);
+        }
+
+        SECTION("with \"blah1\" = \"blah2\"") {
+            Parameter leftParam = Parameter("blah1", ParameterType::FIXED_STRING);
+            Parameter rightParam = Parameter("blah2", ParameterType::FIXED_STRING);
+            Comparison comp = Comparison(ComparisonOperator::EQUALS, leftParam, rightParam);
+            vector<vector<string>> res = pkb.findWith(comp);
+            REQUIRE(res.empty());
+        }
+    }
+
     SECTION("Attribute equals fixed value") {
         SECTION("with stmt.stmt# = \"2\"") {
             Parameter leftParam = Parameter("s", ParameterType::STMT, AttributeType::STMTNO);
@@ -76,6 +104,26 @@ TEST_CASE("Test findWith()") {
             Comparison comp = Comparison(ComparisonOperator::EQUALS, leftParam, rightParam);
             vector<vector<string>> res = pkb.findWith(comp);
             vector<vector<string>> expected = {};
+            REQUIRE(res == expected);
+        }
+    }
+
+    SECTION("fixed value equals Attribute") {
+        SECTION("with \"3\" = stmt.stmt#") {
+            Parameter leftParam = Parameter("3", ParameterType::FIXED_INT);
+            Parameter rightParam = Parameter("s", ParameterType::STMT, AttributeType::STMTNO);
+            Comparison comp = Comparison(ComparisonOperator::EQUALS, leftParam, rightParam);
+            vector<vector<string>> res = pkb.findWith(comp);
+            vector<vector<string>> expected = {{"3", "3"}};
+            REQUIRE(res == expected);
+        }
+
+        SECTION("with \"main\" = call.procName#") {
+            Parameter leftParam = Parameter("sub", ParameterType::FIXED_STRING);
+            Parameter rightParam = Parameter("c", ParameterType::CALL, AttributeType::PROCNAME);
+            Comparison comp = Comparison(ComparisonOperator::EQUALS, leftParam, rightParam);
+            vector<vector<string>> res = pkb.findWith(comp);
+            vector<vector<string>> expected = {{"sub", "1"}};
             REQUIRE(res == expected);
         }
     }
