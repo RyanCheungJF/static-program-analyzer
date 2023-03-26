@@ -23,15 +23,15 @@ template <typename T> std::unordered_set<StmtNum> EntityStorage<T>::getEntityStm
     return ent_stmtNum.at(e);
 }
 
-template <typename T> std::unordered_set<T>* EntityStorage<T>::getEntities(StmtNum num) {
+template <typename T> std::unordered_set<T>& EntityStorage<T>::getEntities(StmtNum num) {
     if (stmtNum_ent.find(num) == stmtNum_ent.end()) {
-        return &emptySetStmtNums;
+        return emptySetStmtNums;
     }
-    return &stmtNum_ent.at(num);
+    return stmtNum_ent.at(num);
 }
 
-template <typename T> std::unordered_set<T>* EntityStorage<T>::getEntNames() {
-    return &entNames;
+template <typename T> std::unordered_set<T>& EntityStorage<T>::getEntNames() {
+    return entNames;
 }
 
 template class EntityStorage<std::string>;
