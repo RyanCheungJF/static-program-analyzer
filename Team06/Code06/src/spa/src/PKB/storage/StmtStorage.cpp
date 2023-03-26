@@ -15,7 +15,7 @@ bool StmtStorage::checkStatement(Stmt stmt, StmtNum num) {
 
 std::unordered_set<StmtNum> StmtStorage::getStatementNumbers(Stmt s) {
     std::unordered_set<StmtNum> res;
-    if (s == AppConstants::STMT) {
+    if (s == AppConstants::STMT) { //todo: explore if this can be done at compile time
         for (auto i : stmt_stmtNum) {
             auto p = stmt_stmtNum.at(i.first);
             for (auto v : p) {
@@ -31,10 +31,9 @@ std::unordered_set<StmtNum> StmtStorage::getStatementNumbers(Stmt s) {
     return stmt_stmtNum.at(s);
 }
 
-std::unordered_set<Stmt> StmtStorage::getStatementType(StmtNum num) {
+std::unordered_set<Stmt>* StmtStorage::getStatementType(StmtNum num) {
     if (stmtNum_stmt.find(num) == stmtNum_stmt.end()) {
-        std::unordered_set<Stmt> emptySet;
-        return emptySet;
+        return &emptyStmt;
     }
-    return stmtNum_stmt.at(num);
+    return &stmtNum_stmt[num];
 }

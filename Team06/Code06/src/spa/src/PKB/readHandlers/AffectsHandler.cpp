@@ -295,7 +295,7 @@ std::unordered_set<StmtNum> AffectsHandler::getAssignStatements(std::unordered_s
 
     std::unordered_set<StmtNum> assignStatements;
     for (StmtNum num : allProcStatements) {
-        std::unordered_set<Stmt> currStmtType = stmtStorage->getStatementType(num);
+        std::unordered_set<Stmt> currStmtType = *stmtStorage->getStatementType(num);
         if (currStmtType.find(AppConstants::ASSIGN) != currStmtType.end()) {
             assignStatements.insert(num);
         }
@@ -400,7 +400,7 @@ bool AffectsHandler::checkModifiedAssignReadCall(std::unordered_set<Ent> commonV
 
     // if a assignment, read, or procedure call, we check if the entitiesModifiedOnCurrentLine is the same as
     // commonVariables
-    std::unordered_set<Stmt> currLineStmtType = stmtStorage->getStatementType(currentLine);
+    std::unordered_set<Stmt> currLineStmtType = *stmtStorage->getStatementType(currentLine);
     if (currLineStmtType.find(AppConstants::ASSIGN) != currLineStmtType.end() ||
         currLineStmtType.find(AppConstants::READ) != currLineStmtType.end() ||
         currLineStmtType.find(AppConstants::CALL) != currLineStmtType.end()) {
