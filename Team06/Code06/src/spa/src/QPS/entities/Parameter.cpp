@@ -186,7 +186,7 @@ ParameterType Parameter::getComparisonType() {
 }
 
 bool Parameter::operator==(const Parameter& p) const {
-    return type == p.type && value == p.value && attribute == p.attribute;
+    return type == p.type && value == p.value;
 }
 
 const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {
