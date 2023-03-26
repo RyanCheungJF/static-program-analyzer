@@ -218,8 +218,6 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
     return res;
 }
 
-// this function is incomplete and is currently done with a Stub. Please DO NOT CODE REVIEW this.
-// Waiting for QPS to complete parsing and sending of the With object
 std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
     AttributeType attrType = p.getAttribute();
     ParameterType paramType = p.getType();
@@ -277,29 +275,57 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
     return res;
 }
 
+// TODO: Consider refactoring?
 std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
     Parameter leftParam = c.getLeftParam();
     Parameter rightParam = c.getRightParam();
-    std::vector<std::vector<std::string>> leftParamRes = findAttribute(leftParam);
+    bool isLeftParamFixed = leftParam.isFixedInt() || leftParam.isFixedStringType();
+    bool isRightParamFixed = rightParam.isFixedInt() || rightParam.isFixedStringType();
+    Ent leftParamValue = leftParam.getValue();
+    Ent rightParamValue = rightParam.getValue();
 
-    if (rightParam.isFixedInt() || rightParam.isFixedStringType()) {
-        std::string rightParamValue = rightParam.getValue();
-        leftParamRes.erase(std::remove_if(leftParamRes.begin(), leftParamRes.end(),
-                                          [&](const std::vector<std::string>& item) {
-                                              return item[1] != rightParamValue;
-                                          }),
-                           leftParamRes.end());
-        return leftParamRes;
-    }
     std::vector<std::vector<std::string>> res;
-    std::vector<std::vector<std::string>> rightParamRes = findAttribute(rightParam);
-    std::unordered_map<std::string, std::unordered_set<std::string>> tempMap;
-    for (auto pair : leftParamRes) {
-        tempMap[pair[1]].insert(pair[0]);
+
+    if (isLeftParamFixed) {
+        if (isRightParamFixed) {
+            if (leftParamValue == rightParamValue) {
+                res.push_back({leftParamValue, rightParamValue});
+            }
+        }
+        else {
+            res = findAttribute(rightParam);
+            res.erase(std::remove_if(res.begin(), res.end(),
+                                     [&](const std::vector<std::string>& item) {
+                                         return item[1] != leftParamValue;
+                                     }),
+                      res.end());
+            for (auto& item : res) {
+                std::swap(item[0], item[1]);
+            }
+        }
     }
-    for (auto pair : rightParamRes) {
-        for (auto item : tempMap[pair[1]]) {
-            res.push_back({item, pair[0]});
+    else {
+        if (isRightParamFixed) {
+            res = findAttribute(leftParam);
+            res.erase(std::remove_if(res.begin(), res.end(),
+                                     [&](const std::vector<std::string>& item) {
+                                         return item[1] != rightParamValue;
+                                     }),
+                      res.end());
+        }
+        else {
+            std::vector<std::vector<std::string>> leftParamRes = findAttribute(leftParam);
+
+            std::vector<std::vector<std::string>> rightParamRes = findAttribute(rightParam);
+            std::unordered_map<std::string, std::unordered_set<std::string>> tempMap;
+            for (auto pair : leftParamRes) {
+                tempMap[pair[1]].insert(pair[0]);
+            }
+            for (auto pair : rightParamRes) {
+                for (auto item : tempMap[pair[1]]) {
+                    res.push_back({item, pair[0]});
+                }
+            }
         }
     }
 
