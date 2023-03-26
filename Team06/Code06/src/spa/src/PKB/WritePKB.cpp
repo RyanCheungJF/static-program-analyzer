@@ -22,7 +22,7 @@ void WritePKB::setParentT(StmtNum parent, std::unordered_set<StmtNum> children) 
     pkbInstance->setParentT(parent, children);
 }
 
-void WritePKB::setProcedure(ProcName p, std::unordered_set<StmtNum> lines) {
+void WritePKB::setProcedure(ProcName p, std::unordered_set<StmtNum>& lines) {
     pkbInstance->setProcedure(p, lines);
 }
 

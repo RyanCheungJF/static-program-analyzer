@@ -50,7 +50,7 @@ void PKB::setParentT(StmtNum parent, std::unordered_set<StmtNum> children) {
     parentTStorage->write(parent, children);
 }
 
-void PKB::setProcedure(ProcName p, std::unordered_set<StmtNum> lines) {
+void PKB::setProcedure(ProcName p, std::unordered_set<StmtNum>& lines) {
     procedureStorage->writeProcedure(p, lines);
 }
 
