@@ -55,9 +55,9 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynVar(Para
     std::vector<std::vector<std::string>> res;
 
     std::unordered_set<StmtNum> stmtNums = *rlStorage->getLeftItems(paramString2);
-    std::unordered_set<StmtNum> typedStmtNums = *stmtStorage->getStatementNumbers(param1.getTypeString());
     for (StmtNum stmtNum : stmtNums) {
-        if (typedStmtNums.find(stmtNum) != typedStmtNums.end()) {
+        if (stmtStorage->getStatementNumbers(param1.getTypeString()).find(stmtNum) !=
+                stmtStorage->getStatementNumbers(param1.getTypeString()).end()) {
             std::string stmtNumString = to_string(stmtNum);
             res.push_back({stmtNumString, paramString2});
         }
@@ -68,8 +68,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynVar(Para
 std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynWildcard(Parameter param1) {
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum> typedStmtNums = *stmtStorage->getStatementNumbers(param1.getTypeString());
-    for (auto typedStmtNum : typedStmtNums) {
+    for (auto typedStmtNum : stmtStorage->getStatementNumbers(param1.getTypeString())) {
         std::unordered_set<Ent> entities = *rlStorage->getRightItems(typedStmtNum);
         for (auto entity : entities) {
             std::string stmtNumString = to_string(typedStmtNum);

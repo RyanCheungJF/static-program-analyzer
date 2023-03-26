@@ -176,8 +176,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
     }
     else if (p.isStatementRef(p)) {
         std::string typeString = param->getTypeString();
-        std::unordered_set<StmtNum> stmtNums = *statementStorage->getStatementNumbers(typeString);
-        for (auto stmtNum : stmtNums) {
+        for (StmtNum stmtNum : statementStorage->getStatementNumbers(typeString)) {
             res.push_back(to_string(stmtNum));
         }
     }
@@ -226,9 +225,8 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
     std::vector<std::vector<std::string>> res;
 
     if (Parameter::isStatementRef(param)) {
-        std::unordered_set<StmtNum> stmtNums = *statementStorage->getStatementNumbers(param.getTypeString());
         if (attrType == AppConstants::PROCEDURE) {
-            for (auto stmtNum : stmtNums) {
+            for (StmtNum stmtNum : statementStorage->getStatementNumbers(param.getTypeString())) {
                 ProcName procName = procedureStorage->getProcedure(stmtNum);
                 res.push_back({std::to_string(stmtNum), procName});
             }
@@ -236,14 +234,14 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
         // assumes that QPS is correct in only allowing varName for reads and prints,
         // since reads and prints will only have 1 variable tied to them
         else if (attrType == AppConstants::VARIABLE) {
-            for (auto stmtNum : stmtNums) {
+            for (StmtNum stmtNum : statementStorage->getStatementNumbers(param.getTypeString())) {
                 Ent var = *entityStorage->getEntities(stmtNum).begin();
                 res.push_back({std::to_string(stmtNum), var});
             }
         }
         // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
         else if (attrType == AppConstants::STMTNO) {
-            for (auto stmtNum : stmtNums) {
+            for (StmtNum stmtNum : statementStorage->getStatementNumbers(param.getTypeString())) {
                 res.push_back({std::to_string(stmtNum), std::to_string(stmtNum)});
             }
         }
@@ -298,11 +296,11 @@ std::unordered_set<Ent>* PKB::getModifiesP(ProcName name) {
     return modifiesStorage->getRightItems(name);
 }
 
-std::unordered_set<StmtNum>* PKB::getIfStatementNumbers() {
+std::unordered_set<StmtNum>& PKB::getIfStatementNumbers() {
     return statementStorage->getStatementNumbers(IF);
 }
 
-std::unordered_set<StmtNum>* PKB::getWhileStatementNumbers() {
+std::unordered_set<StmtNum>& PKB::getWhileStatementNumbers() {
     return statementStorage->getStatementNumbers(WHILE);
 }
 

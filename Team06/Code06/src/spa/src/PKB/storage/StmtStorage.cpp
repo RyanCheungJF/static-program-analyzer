@@ -14,27 +14,16 @@ bool StmtStorage::checkStatement(Stmt stmt, StmtNum num) {
     return stmt_stmtNum[stmt].find(num) != stmt_stmtNum[stmt].end();
 }
 
-std::unordered_set<StmtNum>* StmtStorage::getStatementNumbers(Stmt s) {
-//    if (s == AppConstants::STMT) { //todo: explore if this can be done at compile time
-//        std::unordered_set<StmtNum> res;
-//        for (auto i : stmt_stmtNum) {
-//            auto p = stmt_stmtNum.at(i.first);
-//            for (auto v : p) {
-//                res.insert(v);
-//            }
-//        }
-//        return res;
-//    }
-
+std::unordered_set<StmtNum>& StmtStorage::getStatementNumbers(Stmt s) {
     if (stmt_stmtNum.find(s) == stmt_stmtNum.end()) {
-        return &emptyStmtNum;
+        return emptyStmtNum;
     }
-    return &stmt_stmtNum[s];
+    return stmt_stmtNum[s];
 }
 
-std::unordered_set<Stmt>* StmtStorage::getStatementType(StmtNum num) {
+std::unordered_set<Stmt>& StmtStorage::getStatementType(StmtNum num) {
     if (stmtNum_stmt.find(num) == stmtNum_stmt.end()) {
-        return &emptyStmt;
+        return emptyStmt;
     }
-    return &stmtNum_stmt[num];
+    return stmtNum_stmt[num];
 }

@@ -385,7 +385,7 @@ TEST_CASE("StmtStorage WritePKB ReadPKB Facade") {
 
     SECTION("StmtStorage WritePKB ReadPKB Facade: getIfStatementNumbers()") {
         std::vector<StmtNum> expected = {11, 111, 112};
-        auto res = *readPkb.getIfStatementNumbers();
+        auto res = readPkb.getIfStatementNumbers();
         std::vector<StmtNum> actual;
         for (StmtNum num : res) {
             actual.push_back(num);
@@ -397,7 +397,7 @@ TEST_CASE("StmtStorage WritePKB ReadPKB Facade") {
 
     SECTION("StmtStorage WritePKB ReadPKB Facade: getWhileStatementNumbers()") {
         std::vector<StmtNum> expected = {12, 222, 333};
-        auto res = *readPkb.getWhileStatementNumbers();
+        auto res = readPkb.getWhileStatementNumbers();
         std::vector<StmtNum> actual;
         for (StmtNum num : res) {
             actual.push_back(num);

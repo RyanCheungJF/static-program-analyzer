@@ -22,9 +22,9 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleIntSyn(Paramet
     std::vector<std::vector<std::string>> res;
 
     std::unordered_set<StmtNum> stmtNums = *rlStorage->getRightItems(stoi(paramString1));
-    std::unordered_set<StmtNum> typedStmtNums = *stmtStorage->getStatementNumbers(param2.getTypeString());
     for (StmtNum stmtNum : stmtNums) {
-        if (typedStmtNums.find(stmtNum) != typedStmtNums.end()) {
+        if (stmtStorage->getStatementNumbers(param2.getTypeString()).find(stmtNum) !=
+                stmtStorage->getStatementNumbers(param2.getTypeString()).end()) {
             std::string stmtNumString = to_string(stmtNum);
             res.push_back({paramString1, stmtNumString});
         }
@@ -49,9 +49,9 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynInt(Paramet
     std::vector<std::vector<std::string>> res;
 
     std::unordered_set<StmtNum> stmtNums = *rlStorage->getLeftItems(stoi(paramString2));
-    std::unordered_set<StmtNum> typedStmtNums = *stmtStorage->getStatementNumbers(param1.getTypeString());
     for (StmtNum stmtNum : stmtNums) {
-        if (typedStmtNums.find(stmtNum) != typedStmtNums.end()) {
+        if (stmtStorage->getStatementNumbers(param1.getTypeString()).find(stmtNum) !=
+                stmtStorage->getStatementNumbers(param1.getTypeString()).end()) {
             std::string stmtNumString = to_string(stmtNum);
             res.push_back({stmtNumString, paramString2});
         }
@@ -67,12 +67,11 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynSyn(Paramet
     if (paramString1 == paramString2)
         return res;
 
-    std::unordered_set<StmtNum> typedStmtNums1 = *stmtStorage->getStatementNumbers(param1.getTypeString());
-    std::unordered_set<StmtNum> typedStmtNums2 = *stmtStorage->getStatementNumbers(param2.getTypeString());
-    for (auto stmtNum : typedStmtNums1) {
+    for (auto stmtNum : stmtStorage->getStatementNumbers(param1.getTypeString())) {
         std::unordered_set<StmtNum> followers = *rlStorage->getRightItems(stmtNum);
         for (StmtNum follower : followers) {
-            if (typedStmtNums2.find(follower) != typedStmtNums2.end()) {
+            if (stmtStorage->getStatementNumbers(param2.getTypeString()).find(follower) !=
+                    stmtStorage->getStatementNumbers(param2.getTypeString()).end()) {
                 std::string stmtNumString1 = to_string(stmtNum);
                 std::string stmtNumString2 = to_string(follower);
                 res.push_back({stmtNumString1, stmtNumString2});
@@ -85,8 +84,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynSyn(Paramet
 std::vector<std::vector<std::string>> FollowsParentHandler::handleSynWildcard(Parameter param1) {
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum> typedStmtNums = *stmtStorage->getStatementNumbers(param1.getTypeString());
-    for (auto typedStmtNum : typedStmtNums) {
+    for (auto typedStmtNum : stmtStorage->getStatementNumbers(param1.getTypeString())) {
         std::unordered_set<StmtNum> followers = *rlStorage->getRightItems(typedStmtNum);
         for (StmtNum follower : followers) {
             std::string stmtNumString1 = to_string(typedStmtNum);
@@ -112,8 +110,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardInt(Pa
 std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardSyn(Parameter param2) {
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum> typedStmtNums = *stmtStorage->getStatementNumbers(param2.getTypeString());
-    for (auto typedStmtNum : typedStmtNums) {
+    for (auto typedStmtNum : stmtStorage->getStatementNumbers(param2.getTypeString())) {
         std::unordered_set<StmtNum> followees = *rlStorage->getLeftItems(typedStmtNum);
         for (StmtNum followee : followees) {
             std::string stmtNumString1 = to_string(followee);

@@ -38,8 +38,8 @@ void UsesModifiesExtractor::processProcedures(std::vector<ProcName> topoOrder) {
 
 void UsesModifiesExtractor::processContainerStatements() {
     std::unordered_set<StmtNum> containerStatements;
-    containerStatements.insert(readApi->getWhileStatementNumbers()->begin(), readApi->getWhileStatementNumbers()->end());
-    containerStatements.insert(readApi->getIfStatementNumbers()->begin(), readApi->getIfStatementNumbers()->end());
+    containerStatements.insert(readApi->getWhileStatementNumbers().begin(), readApi->getWhileStatementNumbers().end());
+    containerStatements.insert(readApi->getIfStatementNumbers().begin(), readApi->getIfStatementNumbers().end());
 
     for (StmtNum containerStmt : containerStatements) {
         std::unordered_set<Ent> usesVariables;

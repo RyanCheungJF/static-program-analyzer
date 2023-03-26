@@ -47,11 +47,11 @@ std::unordered_set<Ent>* ReadPKB::getModifiesP(ProcName name) {
     return pkbInstance->getModifiesP(name);
 }
 
-std::unordered_set<StmtNum>* ReadPKB::getIfStatementNumbers() {
+std::unordered_set<StmtNum>& ReadPKB::getIfStatementNumbers() {
     return pkbInstance->getIfStatementNumbers();
 }
 
-std::unordered_set<StmtNum>* ReadPKB::getWhileStatementNumbers() {
+std::unordered_set<StmtNum>& ReadPKB::getWhileStatementNumbers() {
     return pkbInstance->getWhileStatementNumbers();
 }
 

@@ -12,7 +12,7 @@ TEST_CASE("Check that all statements are recorded in StmtStorage") {
     sts.writeStatement(s, 3);
     sts.writeStatement(s, 6);
     sts.writeStatement(s, 9);
-    std::unordered_set<StmtNum> statementNums = *sts.getStatementNumbers(s);
+    std::unordered_set<StmtNum> statementNums = sts.getStatementNumbers(s);
     std::unordered_set<StmtNum> expected = {3, 6, 9};
     REQUIRE(unit_testing_utils::equals(expected, statementNums));
 }
@@ -21,7 +21,7 @@ TEST_CASE("Check that a statement does not appear in the source code, StmtStorag
     StmtStorage sts;
 
     Stmt s = AppConstants::IF;
-    std::unordered_set<StmtNum> statementNums = *sts.getStatementNumbers(s);
+    std::unordered_set<StmtNum> statementNums = sts.getStatementNumbers(s);
     REQUIRE(statementNums.empty());
 }
 
@@ -54,7 +54,7 @@ TEST_CASE("StmtStorage: getStatementNumbers(Stmt s): stmt") {
     Stmt stmt = AppConstants::STMT;
 
     SECTION("getStatementNumbers(Stmt s): empty storage") {
-        std::unordered_set<StmtNum> statementNums = *sts.getStatementNumbers(stmt);
+        std::unordered_set<StmtNum> statementNums = sts.getStatementNumbers(stmt);
         REQUIRE(statementNums.empty());
     }
     Stmt s1 = AppConstants::IF;
@@ -89,7 +89,7 @@ TEST_CASE("StmtStorage: getStatementNumbers(Stmt s): stmt") {
     sts.writeStatement(s6, 23);
 
     SECTION("getStatementNumbers(Stmt s): non-empty storage") {
-        std::unordered_set<StmtNum> statementNums = *sts.getStatementNumbers(stmt);
+        std::unordered_set<StmtNum> statementNums = sts.getStatementNumbers(stmt);
         std::unordered_set<StmtNum> expected = {3, 6, 9, 17, 22, 24, 5, 7, 9, 4, 8, 18, 20, 23};
         REQUIRE(unit_testing_utils::equals(expected, statementNums));
     }
