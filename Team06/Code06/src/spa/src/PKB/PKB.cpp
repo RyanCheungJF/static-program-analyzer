@@ -107,7 +107,7 @@ void PKB::writeWhilePattern(StmtNum num, std::unordered_set<Ent>& variables) {
 }
 
 void PKB::writeCFG(ProcName name,
-                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph) {
+                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph) {
     cfgStorage->writeCFG(name, graph);
 }
 

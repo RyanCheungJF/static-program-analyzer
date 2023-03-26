@@ -57,7 +57,7 @@ public:
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
     void writeCFG(ProcName name,
-                  std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph);
+                  std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph);
 
 private:
     PKB* pkbInstance = NULL;

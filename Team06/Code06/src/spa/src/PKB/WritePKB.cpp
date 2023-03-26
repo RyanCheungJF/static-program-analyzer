@@ -79,6 +79,6 @@ void WritePKB::writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expres
 }
 
 void WritePKB::writeCFG(
-    ProcName name, std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph) {
+    ProcName name, std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph) {
     pkbInstance->writeCFG(name, graph);
 }
