@@ -7,7 +7,7 @@ IfWhilePatternHandler::IfWhilePatternHandler(std::shared_ptr<PatternStorage> pat
 std::vector<std::vector<std::string>> IfWhilePatternHandler::handleVar(Ent ent) {
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum> stmtNums = patternStorage->getStmtNums(ent);
+    std::unordered_set<StmtNum> stmtNums = *patternStorage->getStmtNums(ent);
     for (auto stmtNum : stmtNums) {
         res.push_back({std::to_string(stmtNum), ent});
     }

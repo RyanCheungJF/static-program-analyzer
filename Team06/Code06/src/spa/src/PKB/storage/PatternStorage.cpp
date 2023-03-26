@@ -6,8 +6,11 @@ void PatternStorage::writePattern(StmtNum stmtNum, std::unordered_set<Ent>& vari
     }
 }
 
-std::unordered_set<StmtNum> PatternStorage::getStmtNums(Ent var) {
-    return varsToStmtNumMap[var];
+std::unordered_set<StmtNum>* PatternStorage::getStmtNums(Ent var) {
+    if (varsToStmtNumMap.find(var) == varsToStmtNumMap.end()) {
+        return &emptyStmtNums;
+    }
+    return &varsToStmtNumMap[var];
 }
 
 std::pair<std::vector<StmtNum>, std::vector<Ent>> PatternStorage::getAllPairs() {
