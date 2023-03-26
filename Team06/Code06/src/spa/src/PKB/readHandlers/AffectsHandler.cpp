@@ -65,7 +65,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     }
 
     // if both are not assign statements, should also just return nothing already
-    //todo: optimise and get at compile time
+    // todo: optimise and get at compile time
     std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
     std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
     if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
@@ -105,7 +105,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(Pro
 
     if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         allProcedures = procStorage->getProcNames();
-    } else {
+    }
+    else {
         allProcedures = {proc};
     }
 
@@ -184,7 +185,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTransitive() {
     std::vector<std::vector<std::string>> res;
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false, AppConstants::PROCEDURE_DOES_NOT_EXIST);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap =
+        buildAffectsGraph(false, AppConstants::PROCEDURE_DOES_NOT_EXIST);
 
     std::unordered_set<std::tuple<StmtNum, StmtNum, StmtNum>, hashFunctionTuple> seen;
     std::deque<std::tuple<StmtNum, StmtNum, StmtNum>> queue;
@@ -224,7 +226,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
 }
 
 // helper functions
-//TODO: optimise this to just return Ent instead of the entire data structure
+// TODO: optimise this to just return Ent instead of the entire data structure
 std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<Ent> variablesModifiedInA1,
                                                            std::unordered_set<Ent> variablesUsedInA2) {
 
@@ -293,7 +295,8 @@ std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffects
     return hashmap;
 }
 
-std::unordered_set<StmtNum> AffectsHandler::getAssignStatements(std::unordered_set<StmtNum> allProcStatements) { //todo: change to address
+std::unordered_set<StmtNum>
+AffectsHandler::getAssignStatements(std::unordered_set<StmtNum> allProcStatements) { // todo: change to address
 
     std::unordered_set<StmtNum> assignStatements;
     for (StmtNum num : allProcStatements) {
@@ -401,9 +404,12 @@ bool AffectsHandler::checkModifiedAssignReadCall(std::unordered_set<Ent> commonV
 
     // if a assignment, read, or procedure call, we check if the entitiesModifiedOnCurrentLine is the same as
     // commonVariables
-    if (stmtStorage->getStatementType(currentLine).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(currentLine).end() ||
-            stmtStorage->getStatementType(currentLine).find(AppConstants::READ) != stmtStorage->getStatementType(currentLine).end() ||
-            stmtStorage->getStatementType(currentLine).find(AppConstants::CALL) != stmtStorage->getStatementType(currentLine).end()) {
+    if (stmtStorage->getStatementType(currentLine).find(AppConstants::ASSIGN) !=
+            stmtStorage->getStatementType(currentLine).end() ||
+        stmtStorage->getStatementType(currentLine).find(AppConstants::READ) !=
+            stmtStorage->getStatementType(currentLine).end() ||
+        stmtStorage->getStatementType(currentLine).find(AppConstants::CALL) !=
+            stmtStorage->getStatementType(currentLine).end()) {
 
         for (Ent e : commonVariables) { // O(1) since there is only 1 variable
             if (entitiesModifiedOnCurrentLine.find(e) != entitiesModifiedOnCurrentLine.end()) {
@@ -430,7 +436,7 @@ bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::u
     std::deque<std::pair<StmtNum, StmtNum>> queue;
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-            *cfgStorage->getGraph(proc);
+        *cfgStorage->getGraph(proc);
 
     // curr.first is the previous node.
     // curr.second is the current node

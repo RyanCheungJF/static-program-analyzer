@@ -52,7 +52,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynVar(Para
 
     for (StmtNum stmtNum : rlStorage->getLeftItems(paramString2)) {
         if (stmtStorage->getStatementNumbers(param1.getTypeString()).find(stmtNum) !=
-                stmtStorage->getStatementNumbers(param1.getTypeString()).end()) {
+            stmtStorage->getStatementNumbers(param1.getTypeString()).end()) {
             std::string stmtNumString = to_string(stmtNum);
             res.push_back({stmtNumString, paramString2});
         }

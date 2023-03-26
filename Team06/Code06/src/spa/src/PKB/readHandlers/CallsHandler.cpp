@@ -37,7 +37,7 @@ std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcname(Param
 std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard() {
     std::vector<std::vector<std::string>> res;
     for (ProcName caller : callsStorage->getAllLeftItems()) {
-        for (ProcName callee :callsStorage->getRightItems(caller)) {
+        for (ProcName callee : callsStorage->getRightItems(caller)) {
             res.push_back({caller, callee});
         }
     }

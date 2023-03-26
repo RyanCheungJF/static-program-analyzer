@@ -23,7 +23,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleIntSyn(Paramet
 
     for (StmtNum stmtNum : rlStorage->getRightItems(stoi(paramString1))) {
         if (stmtStorage->getStatementNumbers(param2.getTypeString()).find(stmtNum) !=
-                stmtStorage->getStatementNumbers(param2.getTypeString()).end()) {
+            stmtStorage->getStatementNumbers(param2.getTypeString()).end()) {
             std::string stmtNumString = to_string(stmtNum);
             res.push_back({paramString1, stmtNumString});
         }
@@ -48,7 +48,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynInt(Paramet
 
     for (StmtNum stmtNum : rlStorage->getLeftItems(stoi(paramString2))) {
         if (stmtStorage->getStatementNumbers(param1.getTypeString()).find(stmtNum) !=
-                stmtStorage->getStatementNumbers(param1.getTypeString()).end()) {
+            stmtStorage->getStatementNumbers(param1.getTypeString()).end()) {
             std::string stmtNumString = to_string(stmtNum);
             res.push_back({stmtNumString, paramString2});
         }
@@ -67,7 +67,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynSyn(Paramet
     for (auto stmtNum : stmtStorage->getStatementNumbers(param1.getTypeString())) {
         for (StmtNum follower : rlStorage->getRightItems(stmtNum)) {
             if (stmtStorage->getStatementNumbers(param2.getTypeString()).find(follower) !=
-                    stmtStorage->getStatementNumbers(param2.getTypeString()).end()) {
+                stmtStorage->getStatementNumbers(param2.getTypeString()).end()) {
                 std::string stmtNumString1 = to_string(stmtNum);
                 std::string stmtNumString2 = to_string(follower);
                 res.push_back({stmtNumString1, stmtNumString2});
