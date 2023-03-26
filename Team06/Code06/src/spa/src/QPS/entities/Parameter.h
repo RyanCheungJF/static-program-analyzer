@@ -58,7 +58,7 @@ public:
     static bool isFixedIntOrWildCard(Parameter&);
     static bool isComparable(Parameter&, Parameter&);
     bool isFixedInt();
-    bool isFixedString();
+    bool isFixedStringType();
     bool isVariable();
     bool isStmt();
     bool isWildcard();

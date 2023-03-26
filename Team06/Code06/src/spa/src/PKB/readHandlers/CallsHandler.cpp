@@ -50,8 +50,8 @@ std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard() {
 }
 
 std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Parameter param2) {
-    bool isProcnameParam1 = param1.isFixedString();
-    bool isProcnameParam2 = param2.isFixedString();
+    bool isProcnameParam1 = param1.isFixedStringType();
+    bool isProcnameParam2 = param2.isFixedStringType();
     bool isWildcardParam1 = param1.isProcedureOnly() || param1.isWildcard();
     bool isWildcardParam2 = param2.isProcedureOnly() || param2.isWildcard();
 

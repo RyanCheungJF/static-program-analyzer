@@ -107,7 +107,7 @@ bool Parameter::isFixedInt() {
     return type == ParameterType::FIXED_INT;
 }
 
-bool Parameter::isFixedString() {
+bool Parameter::isFixedStringType() {
     return type == ParameterType::FIXED_STRING;
 }
 

@@ -9,15 +9,12 @@ NextHandler::NextHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr
 }
 
 std::vector<std::vector<std::string>> NextHandler::handle(Parameter param1, Parameter param2) {
-    ParameterType paramType1 = param1.getType();
-    ParameterType paramType2 = param2.getType();
-
-    bool isFixedIntParam1 = paramType1 == ParameterType::FIXED_INT;
-    bool isFixedIntParam2 = paramType2 == ParameterType::FIXED_INT;
-    bool isWildCardParam1 = paramType1 == ParameterType::WILDCARD;
-    bool isWildCardParam2 = paramType2 == ParameterType::WILDCARD;
-    bool isTypedStmtParam1 = stmtTypesSet.find(paramType1) != stmtTypesSet.end();
-    bool isTypedStmtParam2 = stmtTypesSet.find(paramType2) != stmtTypesSet.end();
+    bool isFixedIntParam1 = param1.isFixedInt();
+    bool isFixedIntParam2 = param2.isFixedInt();
+    bool isWildCardParam1 = param1.isWildcard();
+    bool isWildCardParam2 = param2.isWildcard();
+    bool isTypedStmtParam1 = Parameter::isStatementRef(param1) && !isFixedIntParam1 && !isWildCardParam1;
+    bool isTypedStmtParam2 = Parameter::isStatementRef(param2) && !isFixedIntParam2 && !isWildCardParam2;
 
     if (isTransitive) {
         return handleTransitive(param1, param2, isFixedIntParam1, isFixedIntParam2, isWildCardParam1, isWildCardParam2,

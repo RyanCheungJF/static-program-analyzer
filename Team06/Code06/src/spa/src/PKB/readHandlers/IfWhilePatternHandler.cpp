@@ -33,7 +33,7 @@ std::vector<std::vector<std::string>> IfWhilePatternHandler::handle(Pattern p) {
     Parameter lhs = *p.getEntRef();
     std::string lhsString = p.getEntRefValue();
 
-    if (lhs.isFixedString()) {
+    if (lhs.isFixedStringType()) {
         return handleVar(lhsString);
     }
     else {

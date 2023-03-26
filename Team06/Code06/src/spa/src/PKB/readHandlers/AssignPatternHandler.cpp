@@ -151,7 +151,7 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handle(Pattern p) {
     if (leftWildcard && rightWildcard)
         rhs = rhs.substr(1, rhs.length() - 2);
 
-    if (lhs.isFixedString()) {
+    if (lhs.isFixedStringType()) {
         if (rhs == "_") {
             return handleVarWildcard(lhsString);
         }
