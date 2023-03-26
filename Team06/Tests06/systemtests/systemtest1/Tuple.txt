@@ -41,5 +41,10 @@ Select <a1, a2> such that Next*(a1, a2) pattern a2(_, _"a"_)
 9 - comment
 variable v1, v2; procedure p; stmt s; print pp; call c; assign a1, a2; while w; if i; read r;
 Select <v1, v2, w, i> pattern w(v1, _) pattern i(v2, _, _)
-B A 34 31,B N 34 33,B a 34 31,B if 34 33,b A 34 31,b N 34 33,b a 34 31,b if 34 33,c A 27 31,c N 27 33,c a 27 31,c if 27 33,i A 25 31,i N 25 33,i a 25 31,i if 25 33,thisIsAVeryLongNameAndILikeApples A 25 31,thisIsAVeryLongNameAndILikeApples N 25 33,thisIsAVeryLongNameAndILikeApples a 25 31,thisIsAVeryLongNameAndILikeApples if 25 33,while A 30 31,while N 30 33,while a 30 31,while if 30 33
+B A 34 31, B N 34 33, B a 34 31, B if 34 33, b A 34 31, b N 34 33, b a 34 31, b if 34 33, c A 27 31, c N 27 33, c a 27 31, c if 27 33, i A 25 31, i N 25 33, i a 25 31, i if 25 33, thisIsAVeryLongNameAndILikeApples A 25 31, thisIsAVeryLongNameAndILikeApples N 25 33, thisIsAVeryLongNameAndILikeApples a 25 31, thisIsAVeryLongNameAndILikeApples if 25 33, while A 30 31, while N 30 33, while a 30 31, while if 30 33
+5000
+10 - comment
+call c;
+Select <c> such that Follows(1, 2)
+4
 5000

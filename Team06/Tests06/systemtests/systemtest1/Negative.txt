@@ -353,3 +353,8 @@ call c; procedure p; while w;
 Select BOOLEAN such that Affects(5, 7) and Affects*("conditionalSpam", 16) and Modifies("unknown", "b") and Uses(30, "while")
 SyntaxError
 5000
+72 - Boolean in tuple not allowed
+call c;
+Select <BOOLEAN, c> such that Follows(1, 2)
+SemanticError
+5000
