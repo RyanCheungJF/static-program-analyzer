@@ -159,19 +159,19 @@ std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
 
     ParameterType type = p.getType();
 
-    if (type == ParameterType::PROCEDURE) {
+    if (p.isProcedureOnly()) {
         std::unordered_set<ProcName> procs = procedureStorage->getProcNames();
         for (auto proc : procs) {
             res.push_back(proc);
         }
     }
-    else if (type == ParameterType::CONSTANT) {
+    else if (p.isConstant()) {
         std::unordered_set<Const> constants = constantStorage->getEntNames();
         for (auto constant : constants) {
             res.push_back(constant);
         }
     }
-    else if (type == ParameterType::VARIABLE) {
+    else if (p.isVariable()) {
         std::unordered_set<Ent> vars = entityStorage->getEntNames();
         for (auto var : vars) {
             res.push_back(var);
@@ -199,14 +199,15 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
         return res;
     }
 
-    ParameterType type = p.getPatternType();
+    Parameter patternSyn = *p.getPatternSyn();
+    ParameterType patternType = p.getPatternType();
 
-    if (type == ParameterType::ASSIGN) {
+    if (patternSyn.isAssign()) {
         AssignPatternHandler handler(assignPatternStorage);
         res = handler.handle(p);
     }
-    else if (ifWhilePatternMap.find(type) != ifWhilePatternMap.end()) {
-        IfWhilePatternHandler handler(ifWhilePatternMap.at(type));
+    else if (ifWhilePatternMap.find(patternType) != ifWhilePatternMap.end()) {
+        IfWhilePatternHandler handler(ifWhilePatternMap.at(patternType));
         res = handler.handle(p);
     }
 
@@ -252,14 +253,14 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
         }
     }
     // currently just returns a pair of duplicated values
-    else if (paramType == ParameterType::CONSTANT) {
+    else if (p.isConstant()) {
         std::unordered_set<Const> consts = constantStorage->getEntNames();
         for (auto constant : consts) {
             res.push_back({constant, constant});
         }
     }
     // currently just returns a pair of duplicated values
-    else if (paramType == ParameterType::VARIABLE) {
+    else if (p.isVariable()) {
         std::unordered_set<Ent> vars = entityStorage->getEntNames();
         for (auto var : vars) {
             res.push_back({var, var});
@@ -281,7 +282,7 @@ std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
     Parameter rightParam = c.getRightParam();
     std::vector<std::vector<std::string>> leftParamRes = findAttribute(leftParam);
 
-    if (rightParam.getType() == ParameterType::FIXED_STRING || rightParam.getType() == ParameterType::FIXED_INT) {
+    if (rightParam.isFixedInt() || rightParam.isFixedStringType()) {
         std::string rightParamValue = rightParam.getValue();
         leftParamRes.erase(std::remove_if(leftParamRes.begin(), leftParamRes.end(),
                                           [&](const std::vector<std::string>& item) {
