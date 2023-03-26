@@ -139,7 +139,7 @@ AssignPatternHandler::handleWildcardPattern(std::string rhs, bool (*checkTree)(E
 std::vector<std::vector<std::string>> AssignPatternHandler::handle(Pattern p) {
     std::string rhs = p.getExprSpecs()[0];
     std::string lhsString = p.getEntRefValue();
-    ParameterType lhsType = p.getEntRefType();
+    Parameter lhs = *p.getEntRef();
     bool leftWildcard = false;
     bool rightWildcard = false;
 
@@ -151,7 +151,7 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handle(Pattern p) {
     if (leftWildcard && rightWildcard)
         rhs = rhs.substr(1, rhs.length() - 2);
 
-    if (lhsType == ParameterType::FIXED_STRING) {
+    if (lhs.isFixedString()) {
         if (rhs == "_") {
             return handleVarWildcard(lhsString);
         }
@@ -162,7 +162,7 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handle(Pattern p) {
             return handleVarPattern(lhsString, rhs, isSameTree);
         }
     }
-    else if (lhsType == ParameterType::VARIABLE) {
+    else if (lhs.isVariable()) {
         if (rhs == "_") {
             return handleWildcardWildcard();
         }

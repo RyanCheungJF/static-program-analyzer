@@ -50,15 +50,13 @@ std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard() {
 }
 
 std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Parameter param2) {
-    ParameterType paramType1 = param1.getType();
-    ParameterType paramType2 = param2.getType();
-    bool isProcnameParam1 = paramType1 == ParameterType::FIXED_STRING;
-    bool isProcnameParam2 = paramType2 == ParameterType::FIXED_STRING;
-    bool isWildcardParam1 = paramType1 == ParameterType::PROCEDURE || paramType1 == ParameterType::WILDCARD;
-    bool isWildcardParam2 = paramType2 == ParameterType::PROCEDURE || paramType2 == ParameterType::WILDCARD;
+    bool isProcnameParam1 = param1.isFixedString();
+    bool isProcnameParam2 = param2.isFixedString();
+    bool isWildcardParam1 = param1.isProcedureOnly() || param1.isWildcard();
+    bool isWildcardParam2 = param2.isProcedureOnly() || param2.isWildcard();
 
     // based on the fact that there are no cycles in the source code
-    if (param1 == param2 && !(paramType1 == ParameterType::WILDCARD) && !(paramType2 == ParameterType::WILDCARD)) {
+    if (param1 == param2 && !param1.isWildcard() && !param2.isWildcard()) {
         return {};
     }
 
