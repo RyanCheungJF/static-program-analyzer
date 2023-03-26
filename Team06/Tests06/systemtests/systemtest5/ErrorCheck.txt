@@ -1228,3 +1228,13 @@ stmt s;
 Select s such that Affects  *(_, _)
 SyntaxError
 5000
+247 - invalid expression spec
+if i; while w;
+Select BOOLEAN pattern i("r!=d", _, _)
+SyntaxError
+5000
+248 - invalid variable
+if i; while w;
+Select BOOLEAN pattern w("23", _)
+SyntaxError
+5000
