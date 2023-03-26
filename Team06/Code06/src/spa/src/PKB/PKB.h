@@ -48,7 +48,7 @@ public:
     void setStatement(Stmt s, StmtNum line);
 
     // Sets the entity along with the statement line that the entities appears in
-    void setEntity(StmtNum line, std::unordered_set<Ent> entities);
+    void setEntity(StmtNum line, std::unordered_set<Ent>& entities);
 
     // Sets the entity along with the statement line that it appears in
     void setEntity(Ent e, StmtNum line);
@@ -59,7 +59,7 @@ public:
 
     // Sets the constants along with the statement line that the constants appears
     // in
-    void setConstant(StmtNum num, std::unordered_set<Const> constants);
+    void setConstant(StmtNum num, std::unordered_set<Const>& constants);
 
     void setCall(StmtNum callLine, ProcName procedure_being_called);
 

@@ -30,11 +30,11 @@ void WritePKB::setStatement(Stmt s, StmtNum line) {
     pkbInstance->setStatement(s, line);
 }
 
-void WritePKB::setEntity(StmtNum num, std::unordered_set<Ent> entities) {
+void WritePKB::setEntity(StmtNum num, std::unordered_set<Ent>& entities) {
     pkbInstance->setEntity(num, entities);
 }
 
-void WritePKB::setConstant(StmtNum num, std::unordered_set<Const> constants) {
+void WritePKB::setConstant(StmtNum num, std::unordered_set<Const>& constants) {
     pkbInstance->setConstant(num, constants);
 }
 

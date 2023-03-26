@@ -58,11 +58,11 @@ void PKB::setStatement(Stmt s, StmtNum line) {
     statementStorage->writeStatement(s, line);
 }
 
-void PKB::setEntity(StmtNum num, std::unordered_set<Ent> entities) {
+void PKB::setEntity(StmtNum num, std::unordered_set<Ent>& entities) {
     entityStorage->writeEntity(num, entities);
 }
 
-void PKB::setConstant(StmtNum num, std::unordered_set<Const> constants) {
+void PKB::setConstant(StmtNum num, std::unordered_set<Const>& constants) {
     constantStorage->writeEntity(num, constants);
 }
 
