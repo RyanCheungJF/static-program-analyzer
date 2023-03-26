@@ -179,7 +179,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
     }
     else if (p.isStatementRef(p)) {
         std::string typeString = param->getTypeString();
-        std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(typeString);
+        std::unordered_set<StmtNum> stmtNums = *statementStorage->getStatementNumbers(typeString);
         for (auto stmtNum : stmtNums) {
             res.push_back(to_string(stmtNum));
         }
@@ -229,7 +229,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
     std::vector<std::vector<std::string>> res;
 
     if (Parameter::isStatementRef(param)) {
-        std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(param.getTypeString());
+        std::unordered_set<StmtNum> stmtNums = *statementStorage->getStatementNumbers(param.getTypeString());
         if (attrType == AppConstants::PROCEDURE) {
             for (auto stmtNum : stmtNums) {
                 ProcName procName = procedureStorage->getProcedure(stmtNum);
@@ -304,11 +304,11 @@ std::unordered_set<Ent> PKB::getModifiesP(ProcName name) {
     return modifiesStorage->getRightItems(name);
 }
 
-std::unordered_set<StmtNum> PKB::getIfStatementNumbers() {
+std::unordered_set<StmtNum>* PKB::getIfStatementNumbers() {
     return statementStorage->getStatementNumbers(IF);
 }
 
-std::unordered_set<StmtNum> PKB::getWhileStatementNumbers() {
+std::unordered_set<StmtNum>* PKB::getWhileStatementNumbers() {
     return statementStorage->getStatementNumbers(WHILE);
 }
 

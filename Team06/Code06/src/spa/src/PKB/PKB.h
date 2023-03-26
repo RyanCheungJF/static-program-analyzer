@@ -125,10 +125,10 @@ public:
     std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
 
     // returns all statement numbers for if statement
-    std::unordered_set<StmtNum> getIfStatementNumbers();
+    std::unordered_set<StmtNum>* getIfStatementNumbers();
 
     // returns all statement numbers for while statement
-    std::unordered_set<StmtNum> getWhileStatementNumbers();
+    std::unordered_set<StmtNum>* getWhileStatementNumbers();
 
     // returns nested statement numbers of all if and while statements
     std::unordered_set<StmtNum> getContainedStatements(StmtNum containerNum);
