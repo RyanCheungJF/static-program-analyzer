@@ -1166,3 +1166,44 @@ TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
         REQUIRE(exists(result, "FALSE"));
     }
 }
+
+TEST_CASE("Select synonym with attributes") {
+    PKB pkb = buildPkb();
+    ReadPKB readPkb;
+    readPkb.setInstancePKB(pkb);
+    QPS qps;
+    vector<string> result;
+//    SECTION("Select with") {
+//        string query = R"(
+//        stmt s;
+//        Select s with s.stmt# = 2)";
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(result[0] == "2");
+//    }
+//
+//    SECTION("Select useless with") {
+//        string query = R"(
+//        stmt s;
+//        Select s with 2 = 2)";
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(result.size() == 13);
+//    }
+
+//    SECTION("Select procedure with attribute") {
+//        string query = R"(
+//        procedure p;
+//        Select p.procName)";
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(find(result.begin(), result.end(), "main") != result.end());
+//        REQUIRE(find(result.begin(), result.end(), "end") != result.end());
+//        REQUIRE(find(result.begin(), result.end(), "sub") != result.end());
+//    }
+
+    SECTION("Select procedure with attribute and such that clause") {
+        string query = R"(
+        procedure p;
+        Select p.procName such that Calls("main", p))";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result[0] == "sub");
+    }
+}
