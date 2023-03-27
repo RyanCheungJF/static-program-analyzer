@@ -157,6 +157,22 @@ TEST_CASE("parse / multiple such that clauses with dummy ands and true ands/ "
     CHECK(true);
 }
 
+TEST_CASE("parse / pattern pattern pattern clause/ "
+    "returns query object") {
+    string input = "Select pattern pattern pattern( pattern, \"pattern\")";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
+TEST_CASE("parse / with with with clause/ "
+    "returns query object") {
+    string input = "Select with with \"with\" = \"with\"";
+    SelectQueryParser sqp;
+    Query q = sqp.parse(input);
+    CHECK(true);
+}
+
 TEST_CASE("parseParameter / correct synonym, no attribute / returns Parameter") {
     SelectQueryParser sqp;
     string inputString = "thisIsIdent123";

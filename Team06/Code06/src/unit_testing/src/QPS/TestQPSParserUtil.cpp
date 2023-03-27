@@ -56,7 +56,7 @@ TEST_CASE("FindSuchThat / neither such nor that present / return empty vector") 
 }
 
 TEST_CASE("FindWith / one with present followed by fixed string / return correct index") {
-    vector<string> wordList = {"qwee", "asd", "with", "\"asd\"", "qwe", "123", ",asd"};
+    vector<string> wordList = {"qwee", "asd", "with", "\"asd\"", "=", "123", ",asd"};
     vector<int> expected = {2};
     vector<int> result = findWith(wordList);
 
@@ -64,7 +64,7 @@ TEST_CASE("FindWith / one with present followed by fixed string / return correct
 }
 
 TEST_CASE("FindWith / one with present followed by ident / return correct index") {
-    vector<string> wordList = {"qwee", "with", "stuff", "\"asd\"", "qwe", "123", ",asd"};
+    vector<string> wordList = {"qwee", "with", "stuff", ".procName", "=" "\"asd\"", "qwe", "123", ",asd"};
     vector<int> expected = {1};
     vector<int> result = findWith(wordList);
 
@@ -72,7 +72,7 @@ TEST_CASE("FindWith / one with present followed by ident / return correct index"
 }
 
 TEST_CASE("FindWith / one with present followed by integer / return correct index") {
-    vector<string> wordList = {"qwee", "with", "1", "\"asd\"", "qwe", "123", ",asd"};
+    vector<string> wordList = {"qwee", "with", "1", "=" "\"asd\"", "qwe", "123", ",asd"};
     vector<int> expected = {1};
     vector<int> result = findWith(wordList);
 
@@ -80,7 +80,7 @@ TEST_CASE("FindWith / one with present followed by integer / return correct inde
 }
 
 TEST_CASE("FindWith / one with present followed by with, similar to ident case / return index of first with") {
-    vector<string> wordList = {"qwee", "with", "with", ".qs", "=", "123", ",asd"};
+    vector<string> wordList = {"qwee", "with", "with", ".procName", "=", "123", ",asd"};
     vector<int> expected = {1};
     vector<int> result = findWith(wordList);
 
@@ -96,7 +96,7 @@ TEST_CASE("FindWith / one with present followed by bracket / return empty vector
 }
 
 TEST_CASE("FindWith / multiple with present with correct subsequent char / return all correct indexes") {
-    vector<string> wordList = {"qwee", "with", "\"", "asd\")", "with", "123", ",asd"};
+    vector<string> wordList = {"qwee", "with", "\"", "asd\"=123", "with", "123", "=asd.procName"};
     vector<int> expected = {1, 4};
     vector<int> result = findWith(wordList);
 
