@@ -86,6 +86,4 @@ private:
 
     bool checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::unordered_set<Ent> commonVariables);
 
-    //    std::unordered_set<StmtNum> getAssignStatements(std::unordered_set<StmtNum> allProcStatements);
-
 };
