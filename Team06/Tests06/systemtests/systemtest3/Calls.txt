@@ -33,3 +33,18 @@ procedure p1, p2;
 Select p1 such that Calls(p1, p2)
 Two, Three, Four, Five, One
 5000
+8 - comment
+procedure p1, p2; stmt s;
+Select p1 such that Calls(p1, s)
+SemanticError
+5000
+9 - comment
+procedure p1, p2; stmt s;
+Select p1 such that Calls(s, s)
+SemanticError
+5000
+9 - comment
+procedure p1, p2;
+Select p1 such that Calls(p1, p1)
+none
+5000

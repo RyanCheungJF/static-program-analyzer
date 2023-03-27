@@ -18,3 +18,58 @@ assign a;
 Select a such that Affects(23, a)
 25
 5000
+5 - comment
+stmt s;
+Select s such that Affects(29, 29)
+none
+5000
+6 - comment
+stmt s;
+Select s such that Affects(s, s)
+20
+5000
+7 - comment
+stmt s; print p;
+Select s such that Affects(p, p)
+none
+5000
+8 - comment
+stmt s; print p; call c; read r;
+Select s such that Affects(p, r)
+none
+5000
+9 - comment
+stmt s; print p; call c; read r;
+Select s such that Affects(r, c)
+none
+5000
+10 - comment
+stmt s; print p; call c; read r;
+Select s such that Affects(c, p)
+none
+5000
+11 - comment
+stmt s; print p; call c; read r;
+Select s such that Affects(22, 24)
+none
+5000
+12 - comment
+stmt s; print p; call c; read r;
+Select s such that Affects(17, 18)
+none
+5000
+13 - comment
+stmt s; print p; call c; read r;
+Select s such that Affects(4, 9)
+none
+5000
+14 - comment
+stmt s; print p; call c; read r;
+Select s such that Affects(13, 14)
+none
+5000
+15 - comment
+stmt s; print p; call c; read r;
+Select s such that Affects(5, 6)
+none
+5000

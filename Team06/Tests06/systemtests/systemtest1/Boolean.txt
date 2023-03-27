@@ -38,17 +38,17 @@ assign a;
 Select BOOLEAN pattern a(_, _"a"_)
 TRUE
 5000
-7 - comment
+9 - comment
 assign a;
 Select BOOLEAN pattern a(_, _" ((c - y) - z) "_)
 FALSE
 5000
-8 - comment
+10 - comment
 assign a;
 Select BOOLEAN pattern a(_, _)
 TRUE
 5000
-9 - comment
+11 - comment
 assign a;
 Select BOOLEAN
 TRUE
