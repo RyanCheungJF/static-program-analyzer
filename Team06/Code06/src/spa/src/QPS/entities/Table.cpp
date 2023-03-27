@@ -152,7 +152,7 @@ Table Table::updateValues(Parameter p, unordered_map<string, string> map) {
     int index;
     vector<vector<string>> newContents;
     for (int i = 0; i < headers.size(); i++) {
-        if(headers[i] == p) {
+        if (headers[i] == p) {
             index = i;
         }
     }

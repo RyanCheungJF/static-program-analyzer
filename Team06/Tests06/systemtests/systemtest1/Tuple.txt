@@ -48,13 +48,8 @@ call c;
 Select <c> such that Follows(1, 2)
 4
 5000
-5 - comment
-procedure p, q; variable v;
-Select v such that Modifies(p, v) and Calls(p, q)
-z, y, x, w, o, a, b, k, j, i
-5000
-6 - comment
-procedure p, q; variable v;
-Select <p, q> such that Calls(p, q)
-
+11 - comment
+call c; print p; read r; stmt s; assign a;
+Select <c, p, r> such that Follows(1, 2)
+4 32 1, 4 32 2, 4 32 3, 4 42 1, 4 42 2, 4 42 3, 4 36 1, 4 36 2, 4 36 3
 5000

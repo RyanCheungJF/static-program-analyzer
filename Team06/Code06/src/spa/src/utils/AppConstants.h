@@ -24,7 +24,6 @@ public:
     inline static const std::string CALL = "call";
     inline static const std::string IF = "if";
     inline static const std::string WHILE = "while";
-
     inline static const std::string STMT = "stmt";
     inline static const std::string VARIABLE = "variable";
     inline static const std::string CONSTANT = "constant";
@@ -34,6 +33,8 @@ public:
     inline static const std::string FIXED_INT = "fixed_int";
     inline static const std::string BOOLEAN = "BOOLEAN";
     inline static const std::string FIXED_STRING = "fixed_string";
+
+    inline static const std::string WILDCARD_VALUE = "_";
 
     // synonym attributes
     inline static const std::string PROCNAME = "procName";

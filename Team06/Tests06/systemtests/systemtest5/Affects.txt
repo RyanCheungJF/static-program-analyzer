@@ -28,3 +28,48 @@ assign a;
 Select a such that Affects(a, 154)
 none
 5000
+7 - comment
+assign a;
+Select a such that Affects(21, a)
+21, 22
+5000
+8 - comment
+assign a;
+Select a such that Affects(34, a)
+40, 55
+5000
+9 - comment
+assign a;
+Select a such that Affects(116, a)
+140
+5000
+9 - comment
+assign a;
+Select a such that Affects(116, a)
+140
+5000
+10 - comment
+assign a; stmt s;
+Select s such that Affects(141, s)
+146
+5000
+11 - comment
+assign a; stmt s;
+Select s such that Affects(173, s)
+185, 191
+5000
+12 - comment
+assign a; stmt s;
+Select s such that Affects(180, s)
+185
+5000
+12 - comment
+assign a; stmt s;
+Select s such that Affects(193, s) and Affects(s, 195)
+194
+5000
+13 - comment
+assign a; stmt s;
+Select s such that Affects(s, 146)
+141, 144
+5000

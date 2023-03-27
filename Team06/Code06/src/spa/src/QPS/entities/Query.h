@@ -30,6 +30,11 @@ public:
     vector<Comparison> comparisons;
     vector<Parameter*> getAllUncheckedSynonyms();
     bool validateAllParameters();
+
+private:
+    void evaluateRelationship(QueryDB&, ReadPKB&);
+    void evaluatePattern(QueryDB&, ReadPKB&);
+    void evaluateComparison(QueryDB&, ReadPKB&);
 };
 
 #endif // SPA_QUERY_H

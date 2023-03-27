@@ -19,7 +19,7 @@ public:
     vector<string> emptyVec = {};
     vector<string> falseVec = {"FALSE"};
     vector<string> trueVec = {"TRUE"};
-    Table emptyTable = Table({}, {});
+    static Table emptyTable;
 
 private:
     vector<Table> tableVector;
