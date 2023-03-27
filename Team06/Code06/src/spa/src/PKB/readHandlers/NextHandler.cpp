@@ -50,8 +50,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1
 }
 
 std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardNonT(Parameter intParam, bool isFindChildren) {
-    std::string intString = intParam.getValue();
-    StmtNum intValue = stoi(intString);
+    StmtNum intValue = intParam.getIntValue();
     ProcName proc = procStorage->getProcedure(intValue);
     std::vector<std::vector<std::string>> res;
 
@@ -66,8 +65,7 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardNonT(Paramet
 
 std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtNonT(Parameter intParam, Parameter stmtParam,
                                                                      bool isFindChildren) {
-    std::string intString = intParam.getValue();
-    StmtNum intValue = stoi(intString);
+    StmtNum intValue = intParam.getIntValue();
     Stmt stmtType = stmtParam.getTypeString();
     ProcName proc = procStorage->getProcedure(intValue);
     std::vector<std::vector<std::string>> res;
@@ -214,8 +212,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parame
 
 std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardTransitive(Parameter intParam,
                                                                                bool isFindChildren) {
-    std::string intString = intParam.getValue();
-    StmtNum intValue = stoi(intString);
+    StmtNum intValue = intParam.getIntValue();
     ProcName proc = procStorage->getProcedure(intValue);
     std::vector<std::vector<std::string>> res;
     if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
@@ -233,8 +230,7 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardTransitive(P
 
 std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtTransitive(Parameter intParam, Parameter stmtParam,
                                                                            bool isFindChildren) {
-    std::string intString = intParam.getValue();
-    StmtNum intValue = stoi(intString);
+    StmtNum intValue = intParam.getIntValue();
     Stmt stmtType = stmtParam.getTypeString();
     ProcName proc = procStorage->getProcedure(intValue);
     std::vector<std::vector<std::string>> res;

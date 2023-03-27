@@ -179,6 +179,10 @@ AttributeType Parameter::stringToAttribute(string s) {
     return iter->second;
 }
 
+int Parameter::getIntValue() {
+    return std::stoi(value);
+}
+
 string Parameter::getTypeString() const {
     for (pair<string, ParameterType> item : stringToTypeMap) {
         if (item.second == this->getType()) {
