@@ -187,9 +187,9 @@ private:
     std::shared_ptr<PatternStorage> ifPatternStorage;
     std::shared_ptr<PatternStorage> whilePatternStorage;
 
-    RelationshipCache relationshipCache;
-    ParameterCache parameterCache;
-    PatternCache patternCache;
+    std::shared_ptr<RelationshipCache> relationshipCache;
+    std::shared_ptr<ParameterCache> parameterCache;
+    std::shared_ptr<PatternCache> patternCache;
 
     std::unordered_map<RelationshipType, std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>>> followsParentMap = {
         {RelationshipType::FOLLOWS, NULL},

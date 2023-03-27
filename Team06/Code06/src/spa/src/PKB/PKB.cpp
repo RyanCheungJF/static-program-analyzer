@@ -20,6 +20,10 @@ void PKB::initializePkb() {
     this->callsStorage = std::make_shared<RelationshipStorage<Ent, Ent>>();
     this->callsTStorage = std::make_shared<RelationshipStorage<Ent, Ent>>();
 
+    this->relationshipCache = std::make_shared<RelationshipCache>();
+    this->patternCache = std::make_shared<PatternCache>();
+    this->parameterCache = std::make_shared<ParameterCache>();
+
     this->followsParentMap[RelationshipType::FOLLOWS] = followsStorage;
     this->followsParentMap[RelationshipType::FOLLOWST] = followsTStorage;
     this->followsParentMap[RelationshipType::PARENT] = parentStorage;
@@ -122,7 +126,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     Parameter param1 = params[0];
     Parameter param2 = params[1];
 
-    std::vector<std::vector<std::string>> res = relationshipCache.findResult(rs);
+    std::vector<std::vector<std::string>> res = relationshipCache->findResult(rs);
     if (!res.empty()) {
         return res;
     }
@@ -149,7 +153,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         res = handler.handle(param1, param2);
     }
     if (!res.empty()) {
-        relationshipCache.addResult(rs, res);
+        relationshipCache->addResult(rs, res);
     }
     return res;
 }
@@ -157,7 +161,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
 std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
     std::shared_ptr<Parameter> param = std::make_shared<Parameter>(p);
 
-    std::vector<std::string> res = parameterCache.findResult(param);
+    std::vector<std::string> res = parameterCache->findResult(param);
     if (!res.empty()) {
         return res;
     }
@@ -191,7 +195,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
     }
 
     if (!res.empty()) {
-        parameterCache.addResult(param, res);
+        parameterCache->addResult(param, res);
     }
 
     return res;
@@ -199,7 +203,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
 
 std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
     std::shared_ptr<Pattern> pattern = std::make_shared<Pattern>(p);
-    std::vector<std::vector<std::string>> res = patternCache.findResult(pattern);
+    std::vector<std::vector<std::string>> res = patternCache->findResult(pattern);
     if (!res.empty()) {
         return res;
     }
@@ -217,7 +221,7 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
     }
 
     if (!res.empty()) {
-        patternCache.addResult(pattern, res);
+        patternCache->addResult(pattern, res);
     }
 
     return res;
@@ -394,7 +398,7 @@ std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<S
 }
 
 void PKB::clearCache() {
-    relationshipCache.clearCache();
-    parameterCache.clearCache();
-    patternCache.clearCache();
+    relationshipCache->clearCache();
+    parameterCache->clearCache();
+    patternCache->clearCache();
 }
