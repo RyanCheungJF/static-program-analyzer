@@ -50,9 +50,10 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynVar(Para
     std::string paramString2 = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
+    std::unordered_set<StmtNum>& typedStmtNums = stmtStorage->getStatementNumbers(param1.getTypeString());
+
     for (StmtNum stmtNum : rlStorage->getLeftItems(paramString2)) {
-        if (stmtStorage->getStatementNumbers(param1.getTypeString()).find(stmtNum) !=
-            stmtStorage->getStatementNumbers(param1.getTypeString()).end()) {
+        if (typedStmtNums.find(stmtNum) != typedStmtNums.end()) {
             std::string stmtNumString = to_string(stmtNum);
             res.push_back({stmtNumString, paramString2});
         }
