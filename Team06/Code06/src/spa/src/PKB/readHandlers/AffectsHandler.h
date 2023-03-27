@@ -29,10 +29,12 @@ struct hashFunctionAffectsT {
 
 class AffectsHandler {
 public:
-    AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
-                   std::shared_ptr<ProcedureStorage> procStorage, std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
-                   std::shared_ptr<ModifiesUsesStorage> usesStorage,
-                   std::shared_ptr<ProcedureStorage> procAssignStmtStorage, bool isTransitive);
+    AffectsHandler(std::shared_ptr<CFGStorage>& cfgStorage, std::shared_ptr<StmtStorage>& stmtStorage,
+                   std::shared_ptr<ProcedureStorage>& procStorage,
+                   std::shared_ptr<ModifiesUsesStorage>& modifiesStorage,
+                   std::shared_ptr<ModifiesUsesStorage>& usesStorage,
+                   std::shared_ptr<ProcedureStorage>& procAssignStmtStorage, bool isTransitive);
+
     std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
 
 private:
@@ -85,5 +87,4 @@ private:
     bool checkModifiedAssignReadCall(std::unordered_set<Ent> commonVariables, StmtNum currentLine);
 
     bool checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::unordered_set<Ent> commonVariables);
-
 };

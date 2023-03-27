@@ -75,7 +75,7 @@ std::pair<StmtNum, ProcName> ReadPKB::getCallStmt(StmtNum s) {
     return pkbInstance->getCallStmt(s);
 }
 
-std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>*
+std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>&
 ReadPKB::getCFG(ProcName name) {
     return pkbInstance->getCFG(name);
 }

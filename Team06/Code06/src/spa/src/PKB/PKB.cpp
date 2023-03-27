@@ -116,7 +116,7 @@ void PKB::writeCFG(ProcName name,
     cfgStorage->writeCFG(name, graph);
 }
 
-std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relationship> rs) {
+std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relationship>& rs) {
     RelationshipType type = rs->getType();
     vector<Parameter> params = rs->getParameters();
     Parameter param1 = params[0];
@@ -389,7 +389,7 @@ std::unordered_set<ProcName>& PKB::getCallsT(ProcName p) {
     return callsTStorage->getRightItems(p);
 }
 
-std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>* PKB::getCFG(ProcName name) {
+std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& PKB::getCFG(ProcName name) {
     return cfgStorage->getGraph(name);
 }
 
