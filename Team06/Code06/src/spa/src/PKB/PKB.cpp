@@ -145,7 +145,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
         AffectsHandler handler(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
-                               type == RelationshipType::AFFECTST);
+                               procAssignStmtStorage, type == RelationshipType::AFFECTST);
         res = handler.handle(param1, param2);
     }
     if (!res.empty()) {

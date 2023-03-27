@@ -3,13 +3,16 @@
 AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
                                std::shared_ptr<ProcedureStorage> procStorage,
                                std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
-                               std::shared_ptr<ModifiesUsesStorage> usesStorage, bool isTransitive) {
+                               std::shared_ptr<ModifiesUsesStorage> usesStorage,
+                               std::shared_ptr<ProcedureStorage> procAssignStmtStorage, bool isTransitive) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
     this->procStorage = procStorage;
+    this->procAssignStmtStorage = procAssignStmtStorage;
     this->modifiesStorage = modifiesStorage;
     this->usesStorage = usesStorage;
     this->isTransitive = isTransitive;
+
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, Parameter param2) {
@@ -65,12 +68,14 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     }
 
     // if both are not assign statements, should also just return nothing already
-    // todo: optimise and get at compile time
-    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
-    std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
-    if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
+    if (!procAssignStmtStorage->checkProcedure(proc1, a1) || !procAssignStmtStorage->checkProcedure(proc1, a2)) {
         return {};
     }
+//    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc1);
+//    std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
+//    if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
+//        return {};
+//    }
 
     std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getRightItems(a1);
     std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getRightItems(a2);
@@ -85,9 +90,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     }
 
     return {{paramString1, paramString2}};
-    //    std::vector<std::vector<std::string>> res;
-    //    res.push_back({paramString1, paramString2});
-    //    return res;
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum a2) {
@@ -111,8 +113,9 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(Pro
     }
 
     for (ProcName proc : allProcedures) {
-        std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
-        std::unordered_set<StmtNum> assignStatements = getAssignStatements(procStatements);
+        std::unordered_set<StmtNum> assignStatements = procAssignStmtStorage->getProcedureStatementNumbers(proc);
+//        std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
+//        std::unordered_set<StmtNum> assignStatements = getAssignStatements(procStatements);
 
         for (StmtNum a1 : assignStatements) {
             std::vector<std::vector<std::string>> temp = handleIntWildcard(a1);
@@ -295,17 +298,17 @@ std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffects
     return hashmap;
 }
 
-std::unordered_set<StmtNum>
-AffectsHandler::getAssignStatements(std::unordered_set<StmtNum> allProcStatements) { // todo: change to address
-
-    std::unordered_set<StmtNum> assignStatements;
-    for (StmtNum num : allProcStatements) {
-        if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
-            assignStatements.insert(num);
-        }
-    }
-    return assignStatements;
-}
+//std::unordered_set<StmtNum>
+//AffectsHandler::getAssignStatements(std::unordered_set<StmtNum> allProcStatements) {
+//
+//    std::unordered_set<StmtNum> assignStatements;
+//    for (StmtNum num : allProcStatements) {
+//        if (stmtStorage->getStatementType(num).find(AppConstants::ASSIGN) != stmtStorage->getStatementType(num).end()) {
+//            assignStatements.insert(num);
+//        }
+//    }
+//    return assignStatements;
+//}
 
 std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(StmtNum a1, StmtNum a2) {
     bool isIntWildcard = a2 == AppConstants::NOT_USED_FIELD;
@@ -364,8 +367,10 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
         return {};
     }
 
-    std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
-    std::unordered_set<StmtNum> assignStatements = getAssignStatements(procStatements);
+
+    std::unordered_set<StmtNum> assignStatements = procAssignStmtStorage->getProcedureStatementNumbers(proc);
+//    std::unordered_set<StmtNum> procStatements = procStorage->getProcedureStatementNumbers(proc);
+//    std::unordered_set<StmtNum> assignStatements = getAssignStatements(procStatements);
 
     if (assignStatements.find(currA) == assignStatements.end()) {
         return {};
@@ -423,11 +428,14 @@ bool AffectsHandler::checkModifiedAssignReadCall(std::unordered_set<Ent> commonV
 bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::unordered_set<Ent> commonVariables) {
 
     // if either is not an assign statements, should also just return nothing already
-    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
-    std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
-    if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
+    if (!procAssignStmtStorage->checkProcedure(proc, a1) || !procAssignStmtStorage->checkProcedure(proc, a2)) {
         return false;
     }
+//    std::unordered_set<StmtNum> statements = procStorage->getProcedureStatementNumbers(proc);
+//    std::unordered_set<StmtNum> assignStatements = getAssignStatements(statements);
+//    if (assignStatements.find(a1) == assignStatements.end() || assignStatements.find(a2) == assignStatements.end()) {
+//        return false;
+//    }
 
     if (commonVariables.size() == 0) {
         return false;

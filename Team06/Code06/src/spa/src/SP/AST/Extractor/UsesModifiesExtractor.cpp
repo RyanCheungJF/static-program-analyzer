@@ -27,6 +27,7 @@ void UsesModifiesExtractor::processProcedures(std::vector<ProcName> topoOrder) {
                 currUsesVariables.insert(readApi->getUsesS(sn).begin(), readApi->getUsesS(sn).end());
                 currModifiesVariables.insert(readApi->getModifiesS(sn).begin(), readApi->getModifiesS(sn).end());
             }
+
             if (readApi->checkStatement(AppConstants::ASSIGN, sn)) {
                 writeApi->setProcAssignStmt(proc, sn);
             }

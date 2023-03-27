@@ -31,16 +31,17 @@ class AffectsHandler {
 public:
     AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
                    std::shared_ptr<ProcedureStorage> procStorage, std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
-                   std::shared_ptr<ModifiesUsesStorage> usesStorage, bool isTransitive);
+                   std::shared_ptr<ModifiesUsesStorage> usesStorage,
+                   std::shared_ptr<ProcedureStorage> procAssignStmtStorage, bool isTransitive);
     std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
 
 private:
     std::shared_ptr<CFGStorage> cfgStorage;
     std::shared_ptr<StmtStorage> stmtStorage;
     std::shared_ptr<ProcedureStorage> procStorage;
+    std::shared_ptr<ProcedureStorage> procAssignStmtStorage;
     std::shared_ptr<ModifiesUsesStorage> modifiesStorage;
     std::shared_ptr<ModifiesUsesStorage> usesStorage;
-    std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> parentTStorage;
     bool isTransitive;
 
     // Affects(1, 2)
@@ -77,8 +78,6 @@ private:
 
     std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted, ProcName proc);
 
-    std::unordered_set<StmtNum> getAssignStatements(std::unordered_set<StmtNum> allProcStatements);
-
     std::vector<std::vector<std::string>> bfsTraversalOneWildcard(StmtNum a1, StmtNum a2);
 
     std::vector<std::vector<std::string>> nonTransitiveOneIntOneWildcard(StmtNum a1, StmtNum a2);
@@ -87,5 +86,6 @@ private:
 
     bool checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::unordered_set<Ent> commonVariables);
 
-    bool checkHaveCommonWhileLoop(StmtNum a1, StmtNum a2);
+    //    std::unordered_set<StmtNum> getAssignStatements(std::unordered_set<StmtNum> allProcStatements);
+
 };
