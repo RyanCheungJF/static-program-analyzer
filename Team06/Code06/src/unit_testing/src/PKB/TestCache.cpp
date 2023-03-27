@@ -16,7 +16,8 @@ TEST_CASE("Test Relationship Cache") {
     params1.push_back(param2);
     shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::FOLLOWS, params1);
 
-    cache.addResult(rs1, {{"1", "2"}});
+    vector<vector<string>> cacheValue = {{"1", "2"}};
+    cache.addResult(rs1, cacheValue);
 
     param1 = Parameter("x", ParameterType::FIXED_STRING);
     param2 = Parameter("y", ParameterType::VARIABLE);
@@ -25,7 +26,8 @@ TEST_CASE("Test Relationship Cache") {
     params1.push_back(param2);
     rs1 = Relationship::makeRelationship(AppConstants::MODIFIES, params1);
 
-    cache.addResult(rs1, {{"x", "a"}, {"x", "b"}});
+    cacheValue = {{"x", "a"}, {"x", "b"}};
+    cache.addResult(rs1, cacheValue);
 
     SECTION("Cache hit") {
         SECTION("Follows(1, 2)") {
@@ -80,7 +82,8 @@ TEST_CASE("Test Parameter Cache") {
     Parameter p1 = Parameter("v", ParameterType::VARIABLE);
     shared_ptr<Parameter> param1 = make_shared<Parameter>(p1);
 
-    cache.addResult(param1, {"x", "y"});
+    vector<string> cacheValue = {"x", "y"};
+    cache.addResult(param1, cacheValue);
 
     // variable x;
     // Select x
@@ -123,8 +126,11 @@ TEST_CASE("Test Pattern Cache") {
     shared_ptr<Pattern> pattern1 = make_shared<Pattern>(p1);
     shared_ptr<Pattern> pattern2 = make_shared<Pattern>(p2);
 
-    cache.addResult(pattern1, {{"1", "z"}});
-    cache.addResult(pattern2, {{"2", "z"}});
+    vector<vector<string>> cacheValue1 = {{"1", "z"}};
+    vector<vector<string>> cacheValue2 = {{"2", "z"}};
+
+    cache.addResult(pattern1, cacheValue1);
+    cache.addResult(pattern2, cacheValue2);
 
     // Pattern a("z", "_b / c_")
     SECTION("Cache hit, Assign pattern") {
