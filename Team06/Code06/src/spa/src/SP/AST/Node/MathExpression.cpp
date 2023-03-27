@@ -8,7 +8,3 @@ MathExpression::MathExpression(Operator mathOperator, std::unique_ptr<Expression
     this->lhs = std::move(lhs);
     this->rhs = std::move(rhs);
 }
-
-void MathExpression::accept(ASTVisitor* visitor) {
-    visitor->visitExpression(this);
-}

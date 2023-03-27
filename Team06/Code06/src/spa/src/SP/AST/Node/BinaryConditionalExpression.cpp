@@ -9,7 +9,3 @@ BinaryConditionalExpression::BinaryConditionalExpression(Operator condOperator,
     this->lhs = std::move(lhs);
     this->rhs = std::move(rhs);
 }
-
-void BinaryConditionalExpression::accept(ASTVisitor* visitor) {
-    visitor->visitConditionalExpression(this);
-}

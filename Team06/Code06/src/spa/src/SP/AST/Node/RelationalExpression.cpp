@@ -8,7 +8,3 @@ RelationalExpression::RelationalExpression(Operator relationalOperator, std::uni
     this->lhs = std::move(lhs);
     this->rhs = std::move(rhs);
 }
-
-void RelationalExpression::accept(ASTVisitor* visitor) {
-    visitor->visitConditionalExpression(this);
-}
