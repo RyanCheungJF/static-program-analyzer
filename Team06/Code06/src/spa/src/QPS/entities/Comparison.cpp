@@ -67,7 +67,7 @@ bool Comparison::validateParams() {
     if (!rightParam.hasValidAttributeType()) {
         return false;
     }
-    if (leftParam.getComparisonType() != rightParam.getComparisonType()) {
+    if (!Parameter::isComparable(leftParam, rightParam)) {
         return false;
     }
     return true;

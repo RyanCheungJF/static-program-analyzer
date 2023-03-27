@@ -16,15 +16,11 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
 
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
-    ParameterType paramType1 = param1.getType();
-    ParameterType paramType2 = param2.getType();
 
-    bool isFixedIntParam1 = paramType1 == ParameterType::FIXED_INT;
-    bool isFixedIntParam2 = paramType2 == ParameterType::FIXED_INT;
-    bool isWildCardParam1 = paramType1 == ParameterType::STMT || paramType1 == ParameterType::WILDCARD ||
-                            paramType1 == ParameterType::ASSIGN;
-    bool isWildCardParam2 = paramType2 == ParameterType::STMT || paramType2 == ParameterType::WILDCARD ||
-                            paramType2 == ParameterType::ASSIGN;
+    bool isFixedIntParam1 = param1.isFixedInt();
+    bool isFixedIntParam2 = param2.isFixedInt();
+    bool isWildCardParam1 = param1.isAssign() || param1.isStmt() || param1.isWildcard();
+    bool isWildCardParam2 = param2.isAssign() || param2.isStmt() || param2.isWildcard();
 
     std::vector<std::vector<std::string>> temp;
     if (isTransitive) {
@@ -36,7 +32,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
                                    isWildCardParam1, isWildCardParam2);
     }
 
-    if ((paramString1 == paramString2) && (paramType1 != ParameterType::WILDCARD)) {
+    if ((paramString1 == paramString2) && !param1.isWildcard()) {
         std::vector<std::vector<std::string>> res;
         for (std::vector<std::string> curr : temp) {
             if (curr[0] == curr[1]) {

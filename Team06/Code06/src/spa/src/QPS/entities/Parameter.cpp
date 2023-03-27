@@ -103,6 +103,38 @@ bool Parameter::isFixedIntOrWildCard(Parameter& p) {
     return p.type == ParameterType::FIXED_INT || p.type == ParameterType::WILDCARD;
 }
 
+bool Parameter::isFixedInt() {
+    return type == ParameterType::FIXED_INT;
+}
+
+bool Parameter::isFixedStringType() {
+    return type == ParameterType::FIXED_STRING;
+}
+
+bool Parameter::isVariable() {
+    return type == ParameterType::VARIABLE;
+}
+
+bool Parameter::isStmt() {
+    return type == ParameterType::STMT;
+}
+
+bool Parameter::isWildcard() {
+    return type == ParameterType::WILDCARD;
+}
+
+bool Parameter::isAssign() {
+    return type == ParameterType::ASSIGN;
+}
+
+bool Parameter::isProcedureOnly() {
+    return type == ParameterType::PROCEDURE;
+}
+
+bool Parameter::isConstant() {
+    return type == ParameterType::CONSTANT;
+}
+
 bool Parameter::isComparable(Parameter& p1, Parameter& p2) {
     ParameterType p1CompType = p1.getComparisonType();
     ParameterType p2CompType = p2.getComparisonType();
@@ -186,7 +218,7 @@ ParameterType Parameter::getComparisonType() {
 }
 
 bool Parameter::operator==(const Parameter& p) const {
-    return type == p.type && value == p.value && attribute == p.attribute;
+    return type == p.type && value == p.value;
 }
 
 const unordered_map<string, ParameterType> Parameter::stringToTypeMap = {

@@ -154,7 +154,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     return res;
 }
 
-std::vector<std::string> PKB::findDesignEntities(Parameter p) {
+std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
     std::shared_ptr<Parameter> param = std::make_shared<Parameter>(p);
 
     std::vector<std::string> res = parameterCache.findResult(param);
@@ -164,24 +164,28 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
 
     ParameterType type = p.getType();
 
-    if (type == ParameterType::PROCEDURE) {
-        for (ProcName proc : procedureStorage->getProcNames()) {
+    if (p.isProcedureOnly()) {
+        std::unordered_set<ProcName>& procs = procedureStorage->getProcNames();
+        for (auto proc : procs) {
             res.push_back(proc);
         }
     }
-    else if (type == ParameterType::CONSTANT) {
-        for (Const constant : constantStorage->getEntNames()) {
+    else if (p.isConstant()) {
+        std::unordered_set<Const>& constants = constantStorage->getEntNames();
+        for (auto constant : constants) {
             res.push_back(constant);
         }
     }
-    else if (type == ParameterType::VARIABLE) {
-        for (Ent var : entityStorage->getEntNames()) {
+    else if (p.isVariable()) {
+        std::unordered_set<Ent>& vars = entityStorage->getEntNames();
+        for (auto var : vars) {
             res.push_back(var);
         }
     }
     else if (p.isStatementRef(p)) {
         std::string typeString = param->getTypeString();
-        for (StmtNum stmtNum : statementStorage->getStatementNumbers(typeString)) {
+        std::unordered_set<StmtNum>& stmtNums = statementStorage->getStatementNumbers(typeString);
+        for (auto stmtNum : stmtNums) {
             res.push_back(to_string(stmtNum));
         }
     }
@@ -193,21 +197,22 @@ std::vector<std::string> PKB::findDesignEntities(Parameter p) {
     return res;
 }
 
-std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
+std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
     std::shared_ptr<Pattern> pattern = std::make_shared<Pattern>(p);
     std::vector<std::vector<std::string>> res = patternCache.findResult(pattern);
     if (!res.empty()) {
         return res;
     }
 
-    ParameterType type = p.getPatternType();
+    Parameter patternSyn = *p.getPatternSyn();
+    ParameterType patternType = p.getPatternType();
 
-    if (type == ParameterType::ASSIGN) {
+    if (patternSyn.isAssign()) {
         AssignPatternHandler handler(assignPatternStorage);
         res = handler.handle(p);
     }
-    else if (ifWhilePatternMap.find(type) != ifWhilePatternMap.end()) {
-        IfWhilePatternHandler handler(ifWhilePatternMap.at(type));
+    else if (ifWhilePatternMap.find(patternType) != ifWhilePatternMap.end()) {
+        IfWhilePatternHandler handler(ifWhilePatternMap.at(patternType));
         res = handler.handle(p);
     }
 
@@ -218,55 +223,114 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern p) {
     return res;
 }
 
-// this function is incomplete and is currently done with a Stub. Please DO NOT CODE REVIEW this.
-// Waiting for QPS to complete parsing and sending of the With object
-std::vector<std::vector<std::string>> PKB::findAttribute(With w) {
-    Parameter param = w.syn;
-    ParameterType paramType = param.getType();
-    std::string attrType = w.attrType;
-    bool hasEquals = w.hasEquals;
-    std::string equalsValue = w.equalsValue;
+std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
+    AttributeType attrType = p.getAttribute();
+    ParameterType paramType = p.getType();
 
     std::vector<std::vector<std::string>> res;
 
-    if (Parameter::isStatementRef(param)) {
-        if (attrType == AppConstants::PROCEDURE) {
-            for (StmtNum stmtNum : statementStorage->getStatementNumbers(param.getTypeString())) {
-                ProcName procName = procedureStorage->getProcedure(stmtNum);
-                res.push_back({std::to_string(stmtNum), procName});
+    if (Parameter::isStatementRef(p)) {
+        std::unordered_set<StmtNum>& stmtNums = statementStorage->getStatementNumbers(p.getTypeString());
+        if (attrType == AttributeType::PROCNAME) {
+            for (auto stmtNum : stmtNums) {
+                std::pair<StmtNum, ProcName> numProcPair = callStorage->getCallStmt(stmtNum);
+                if (numProcPair.second == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
+                    continue;
+                }
+                res.push_back({std::to_string(stmtNum), numProcPair.second});
             }
         }
         // assumes that QPS is correct in only allowing varName for reads and prints,
         // since reads and prints will only have 1 variable tied to them
-        else if (attrType == AppConstants::VARIABLE) {
-            for (StmtNum stmtNum : statementStorage->getStatementNumbers(param.getTypeString())) {
+        else if (attrType == AttributeType::VARNAME) {
+            for (auto stmtNum : stmtNums) {
                 Ent var = *entityStorage->getEntities(stmtNum).begin();
                 res.push_back({std::to_string(stmtNum), var});
             }
         }
         // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
-        else if (attrType == AppConstants::STMTNO) {
-            for (StmtNum stmtNum : statementStorage->getStatementNumbers(param.getTypeString())) {
+        else if (attrType == AttributeType::STMTNO) {
+            for (auto stmtNum : stmtNums) {
                 res.push_back({std::to_string(stmtNum), std::to_string(stmtNum)});
             }
         }
     }
     // currently just returns a pair of duplicated values
-    else if (paramType == ParameterType::CONSTANT) {
-        for (Const constant : constantStorage->getEntNames()) {
+    else if (p.isConstant()) {
+        std::unordered_set<Const>& consts = constantStorage->getEntNames();
+        for (auto constant : consts) {
             res.push_back({constant, constant});
         }
     }
     // currently just returns a pair of duplicated values
-    else if (paramType == ParameterType::VARIABLE) {
-        for (Ent var : entityStorage->getEntNames()) {
+    else if (p.isVariable()) {
+        std::unordered_set<Ent>& vars = entityStorage->getEntNames();
+        for (auto var : vars) {
             res.push_back({var, var});
         }
     }
     // currently just returns a pair of duplicated values
     else {
-        for (ProcName proc : procedureStorage->getProcNames()) {
+        std::unordered_set<ProcName>& procs = procedureStorage->getProcNames();
+        for (ProcName proc : procs) {
             res.push_back({proc, proc});
+        }
+    }
+
+    return res;
+}
+
+// TODO: Consider refactoring?
+std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
+    Parameter leftParam = c.getLeftParam();
+    Parameter rightParam = c.getRightParam();
+    bool isLeftParamFixed = leftParam.isFixedInt() || leftParam.isFixedStringType();
+    bool isRightParamFixed = rightParam.isFixedInt() || rightParam.isFixedStringType();
+    Ent leftParamValue = leftParam.getValue();
+    Ent rightParamValue = rightParam.getValue();
+
+    std::vector<std::vector<std::string>> res;
+
+    if (isLeftParamFixed) {
+        if (isRightParamFixed) {
+            if (leftParamValue == rightParamValue) {
+                res.push_back({leftParamValue, rightParamValue});
+            }
+        }
+        else {
+            res = findAttribute(rightParam);
+            res.erase(std::remove_if(res.begin(), res.end(),
+                                     [&](const std::vector<std::string>& item) {
+                                         return item[1] != leftParamValue;
+                                     }),
+                      res.end());
+            for (auto& item : res) {
+                std::swap(item[0], item[1]);
+            }
+        }
+    }
+    else {
+        if (isRightParamFixed) {
+            res = findAttribute(leftParam);
+            res.erase(std::remove_if(res.begin(), res.end(),
+                                     [&](const std::vector<std::string>& item) {
+                                         return item[1] != rightParamValue;
+                                     }),
+                      res.end());
+        }
+        else {
+            std::vector<std::vector<std::string>> leftParamRes = findAttribute(leftParam);
+
+            std::vector<std::vector<std::string>> rightParamRes = findAttribute(rightParam);
+            std::unordered_map<std::string, std::unordered_set<std::string>> tempMap;
+            for (auto pair : leftParamRes) {
+                tempMap[pair[1]].insert(pair[0]);
+            }
+            for (auto pair : rightParamRes) {
+                for (auto item : tempMap[pair[1]]) {
+                    res.push_back({item, pair[0]});
+                }
+            }
         }
     }
 
