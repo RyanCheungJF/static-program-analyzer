@@ -50,7 +50,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynInt(Paramet
     std::string paramString2 = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum>& stmtNums = rlStorage->getRightItems(stoi(paramString2));
+    std::unordered_set<StmtNum>& stmtNums = rlStorage->getLeftItems(stoi(paramString2));
     std::unordered_set<StmtNum>& typedStmtNums = stmtStorage->getStatementNumbers(param1.getTypeString());
 
     for (StmtNum stmtNum : stmtNums) {
