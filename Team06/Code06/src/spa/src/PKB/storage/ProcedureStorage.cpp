@@ -12,7 +12,6 @@ void ProcedureStorage::writeProcedure(ProcName p, StmtNum num) {
     proc_stmtNum[p].insert(num);
     stmtNum_proc[num] = p;
     procedures.insert(p);
-
 }
 
 bool ProcedureStorage::checkProcedure(ProcName p, StmtNum num) {

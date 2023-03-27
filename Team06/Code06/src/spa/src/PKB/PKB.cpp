@@ -281,7 +281,7 @@ std::unordered_set<StmtNum>& PKB::getProcedureStatementNumbers(ProcName p) {
     return procedureStorage->getProcedureStatementNumbers(p);
 }
 
-std::unordered_set<StmtNum> &PKB::getProcAssignStmtNums(ProcName p) {
+std::unordered_set<StmtNum>& PKB::getProcAssignStmtNums(ProcName p) {
     return procAssignStmtStorage->getProcedureStatementNumbers(p);
 }
 

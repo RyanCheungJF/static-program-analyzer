@@ -7,20 +7,20 @@ void EntRefExtractorVisitor::visitProcedure(Procedure* procedure) {}
 void EntRefExtractorVisitor::visitStatementList(StatementList* statementList) {}
 
 void EntRefExtractorVisitor::visitReadStatement(ReadStatement* readStatement) {
-    std::unordered_set<Ent> temp = {readStatement->varName};
-    writeApi->setEntity(readStatement->statementNumber, temp);
-    writeApi->setModifiesS(readStatement->statementNumber, temp);
+    std::unordered_set<Ent> variable = {readStatement->varName};
+    writeApi->setEntity(readStatement->statementNumber, variable);
+    writeApi->setModifiesS(readStatement->statementNumber, variable);
 }
 
 void EntRefExtractorVisitor::visitPrintStatement(PrintStatement* printStatement) {
-    std::unordered_set<Ent> temp = {printStatement->varName};
-    writeApi->setEntity(printStatement->statementNumber, temp);
-    writeApi->setUsesS(printStatement->statementNumber, temp);
+    std::unordered_set<Ent> variable = {printStatement->varName};
+    writeApi->setEntity(printStatement->statementNumber, variable);
+    writeApi->setUsesS(printStatement->statementNumber, variable);
 }
 
 void EntRefExtractorVisitor::visitAssignStatement(AssignStatement* assignStatement) {
-    std::unordered_set<Ent> temp = {assignStatement->varName};
-    writeApi->setModifiesS(assignStatement->statementNumber, temp);
+    std::unordered_set<Ent> variable = {assignStatement->varName};
+    writeApi->setModifiesS(assignStatement->statementNumber, variable);
 
     std::unordered_set<Ent> variables;
     std::unordered_set<Const> constants;

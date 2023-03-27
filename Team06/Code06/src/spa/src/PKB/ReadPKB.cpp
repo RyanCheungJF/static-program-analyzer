@@ -27,7 +27,7 @@ std::unordered_set<StmtNum>& ReadPKB::getProcedureStatementNumbers(ProcName p) {
     return pkbInstance->getProcedureStatementNumbers(p);
 }
 
-std::unordered_set<StmtNum> &ReadPKB::getProcAssignStmtNums(ProcName p) {
+std::unordered_set<StmtNum>& ReadPKB::getProcAssignStmtNums(ProcName p) {
     return pkbInstance->getProcAssignStmtNums(p);
 }
 
