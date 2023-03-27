@@ -36,53 +36,56 @@ public:
     void setFollows(StmtNum left, StmtNum right);
 
     // Sets FollowsT relation in PKB
-    void setFollowsT(StmtNum followee, std::unordered_set<StmtNum> followers);
+    void setFollowsT(StmtNum followee, std::unordered_set<StmtNum>& followers);
 
     // Sets Parent relation in PKB
     void setParent(StmtNum parent, StmtNum child);
 
     // Sets ParentT relation in PKB
-    void setParentT(StmtNum parent, std::unordered_set<StmtNum> children);
+    void setParentT(StmtNum parent, std::unordered_set<StmtNum>& children);
 
     // Sets the statement along with the statement line that it appears in
     void setStatement(Stmt s, StmtNum line);
 
     // Sets the entity along with the statement line that the entities appears in
-    void setEntity(StmtNum line, std::unordered_set<Ent> entities);
+    void setEntity(StmtNum line, std::unordered_set<Ent>& entities);
 
     // Sets the entity along with the statement line that it appears in
     void setEntity(Ent e, StmtNum line);
 
     // Sets the procedure along with the statement lines that are in that
-    // procedure appears in
-    void setProcedure(ProcName p, std::unordered_set<StmtNum> lines);
+    // procedure it appears in
+    void setProcedure(ProcName p, std::unordered_set<StmtNum>& lines);
+
+    // Sets the procedure along with the assign statement lines that are in that procedure
+    void setProcAssignStmt(ProcName p, StmtNum num);
 
     // Sets the constants along with the statement line that the constants appears
     // in
-    void setConstant(StmtNum num, std::unordered_set<Const> constants);
+    void setConstant(StmtNum num, std::unordered_set<Const>& constants);
 
     void setCall(StmtNum callLine, ProcName procedure_being_called);
 
-    void setCalls(ProcName caller, std::unordered_set<ProcName> callees);
+    void setCalls(ProcName caller, std::unordered_set<ProcName>& callees);
 
-    void setCallsT(ProcName caller, std::unordered_set<ProcName> callees);
+    void setCallsT(ProcName caller, std::unordered_set<ProcName>& callees);
 
-    void setUsesS(StmtNum num, std::unordered_set<Ent> entities);
+    void setUsesS(StmtNum num, std::unordered_set<Ent>& entities);
 
-    void setUsesP(ProcName, std::unordered_set<Ent> entities);
+    void setUsesP(ProcName, std::unordered_set<Ent>& entities);
 
-    void setModifiesS(StmtNum num, std::unordered_set<Ent> entities);
+    void setModifiesS(StmtNum num, std::unordered_set<Ent>& entities);
 
-    void setModifiesP(ProcName, std::unordered_set<Ent> entities);
+    void setModifiesP(ProcName, std::unordered_set<Ent>& entities);
 
-    void writeIfPattern(StmtNum num, std::unordered_set<Ent> variables);
+    void writeIfPattern(StmtNum num, std::unordered_set<Ent>& variables);
 
-    void writeWhilePattern(StmtNum num, std::unordered_set<Ent> variables);
+    void writeWhilePattern(StmtNum num, std::unordered_set<Ent>& variables);
 
     void writePattern(std::string lhs, StmtNum num, std::unique_ptr<Expression> pointer);
 
     void writeCFG(ProcName name,
-                  std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph);
+                  std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph);
 
     std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship> rs);
 
@@ -98,26 +101,29 @@ public:
     bool checkStatement(Stmt stmt, StmtNum num);
 
     // returns all the statement lines that are contained in the given procedure
-    std::unordered_set<StmtNum> getProcedureStatementNumbers(ProcName p);
+    std::unordered_set<StmtNum>& getProcedureStatementNumbers(ProcName p);
+
+    // returns all the assign StmtNum in the given procedure
+    std::unordered_set<StmtNum>& getProcAssignStmtNums(ProcName p);
 
     // returns all the procedure names present in the source code
-    std::unordered_set<ProcName> getAllProcedureNames();
+    std::unordered_set<ProcName>& getAllProcedureNames();
 
     // returns the entire row of all Entities involved in the Uses(StmtNum, v)
     // relationship
-    std::unordered_set<Ent> getUsesS(StmtNum num);
+    std::unordered_set<Ent>& getUsesS(StmtNum num);
 
     // returns the entire row of all Entities involved in the Modifies(StmtNum, v)
     // relationship
-    std::unordered_set<Ent> getModifiesS(StmtNum num);
+    std::unordered_set<Ent>& getModifiesS(StmtNum num);
 
     // returns the entire row of all Entities involved in the Uses(ProcName, v)
     // relationship
-    std::unordered_set<Ent> getUsesP(ProcName name);
+    std::unordered_set<Ent>& getUsesP(ProcName name);
 
     // returns the entire row of all Entities involved in the Modifies(ProcName,
     // v) relationship
-    std::unordered_set<Ent> getModifiesP(ProcName name);
+    std::unordered_set<Ent>& getModifiesP(ProcName name);
 
     // returns the name of the procedure being called on line number s
     // if line s is not a call statement, it returns a pair {AppConstants::NOT_USED_FIELD,
@@ -125,19 +131,19 @@ public:
     std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
 
     // returns all statement numbers for if statement
-    std::unordered_set<StmtNum> getIfStatementNumbers();
+    std::unordered_set<StmtNum>& getIfStatementNumbers();
 
     // returns all statement numbers for while statement
-    std::unordered_set<StmtNum> getWhileStatementNumbers();
+    std::unordered_set<StmtNum>& getWhileStatementNumbers();
 
     // returns nested statement numbers of all if and while statements
-    std::unordered_set<StmtNum> getContainedStatements(StmtNum containerNum);
+    std::unordered_set<StmtNum>& getContainedStatements(StmtNum containerNum);
 
     // returns all the procedures that are called from a given procedure
-    std::unordered_set<ProcName> getCallsT(ProcName p);
+    std::unordered_set<ProcName>& getCallsT(ProcName p);
 
     // returns the cfg if it exists, else it returns an empty graph
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> getCFG(ProcName name);
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>* getCFG(ProcName name);
 
     // clears the caches in PKB
     void clearCache();
@@ -146,6 +152,7 @@ private:
     // STATEMENTS
     std::shared_ptr<StmtStorage> statementStorage;
     std::shared_ptr<ProcedureStorage> procedureStorage;
+    std::shared_ptr<ProcedureStorage> procAssignStmtStorage;
     std::shared_ptr<EntityStorage<Ent>> entityStorage;
     std::shared_ptr<EntityStorage<Const>> constantStorage;
     std::shared_ptr<CallStorage> callStorage;

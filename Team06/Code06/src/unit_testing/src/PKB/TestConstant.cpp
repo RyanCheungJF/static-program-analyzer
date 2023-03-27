@@ -4,9 +4,11 @@
 TEST_CASE("Checks that write and read works for constantStorage") {
     EntityStorage<Const> cs;
     Const c = "5";
-    cs.writeEntity(4, {c, "10"});
-    cs.writeEntity(8, {c});
-    cs.writeEntity(9, {c});
+    std::unordered_set<Const> val1 = {c, "10"};
+    std::unordered_set<Const> val2 = {c};
+    cs.writeEntity(4, val1);
+    cs.writeEntity(8, val2);
+    cs.writeEntity(9, val2);
     std::unordered_set<StmtNum> statementNums = cs.getEntityStmtNums(c);
 
     REQUIRE(statementNums.size() == 3);

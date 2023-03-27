@@ -93,23 +93,32 @@ PKB buildPkb() {
     writePkb.setStatement(AppConstants::READ, 5);
     writePkb.setStatement(AppConstants::READ, 10);
 
-    writePkb.setEntity(1, {"x"});
-    writePkb.setEntity(3, {"x", "y"});
-    writePkb.setEntity(4, {"x", "y"});
-    writePkb.setEntity(5, {"y"});
-    writePkb.setEntity(6, {"x"});
-    writePkb.setEntity(7, {"x"});
-    writePkb.setEntity(8, {"x", "y"});
-    writePkb.setEntity(9, {"count"});
-    writePkb.setEntity(10, {"x"});
-    writePkb.setEntity(11, {"x", "y", "z"});
-    writePkb.setEntity(13, {"end"});
+    std::unordered_set<Ent> val1 = {"x"};
+    std::unordered_set<Ent> val2 = {"x", "y"};
+    std::unordered_set<Ent> val3 = {"y"};
+    std::unordered_set<Ent> val4 = {"count"};
+    std::unordered_set<Ent> val5 = {"x", "y", "z"};
+    std::unordered_set<Ent> val6 = {"end"};
+    writePkb.setEntity(1, val1);
+    writePkb.setEntity(3, val2);
+    writePkb.setEntity(4, val2);
+    writePkb.setEntity(5, val3);
+    writePkb.setEntity(6, val1);
+    writePkb.setEntity(7, val1);
+    writePkb.setEntity(8, val2);
+    writePkb.setEntity(9, val4);
+    writePkb.setEntity(10, val1);
+    writePkb.setEntity(11, val5);
+    writePkb.setEntity(13, val6);
 
-    writePkb.setConstant(1, unordered_set<Const>{"1"});
-    writePkb.setConstant(4, unordered_set<Const>{"2"});
-    writePkb.setConstant(6, unordered_set<Const>{"2"});
-    writePkb.setConstant(8, unordered_set<Const>{"2"});
-    writePkb.setConstant(9, unordered_set<Const>{"0"});
+    std::unordered_set<Const> val7 = {"1"};
+    std::unordered_set<Const> val8 = {"2"};
+    std::unordered_set<Const> val9 = {"0"};
+    writePkb.setConstant(1, val7);
+    writePkb.setConstant(4, val8);
+    writePkb.setConstant(6, val8);
+    writePkb.setConstant(8, val8);
+    writePkb.setConstant(9, val9);
 
     writePkb.setFollows(1, 2);
     writePkb.setFollows(2, 3);
@@ -117,49 +126,66 @@ PKB buildPkb() {
     writePkb.setFollows(7, 8);
     writePkb.setFollows(8, 9);
 
-    writePkb.setFollowsT(1, unordered_set<int>{2, 3, 6});
-    writePkb.setFollowsT(2, unordered_set<int>{3, 6});
-    writePkb.setFollowsT(3, unordered_set<int>{6});
-    writePkb.setFollowsT(4, unordered_set<int>{5});
-    writePkb.setFollowsT(7, unordered_set<int>{8, 9, 12});
-    writePkb.setFollowsT(8, unordered_set<int>{9, 12});
+    std::unordered_set<StmtNum> val10 = {2, 3, 6};
+    std::unordered_set<StmtNum> val11 = {3, 6};
+    std::unordered_set<StmtNum> val12 = {6};
+    std::unordered_set<StmtNum> val13 = {5};
+    std::unordered_set<StmtNum> val14 = {8, 9, 12};
+    std::unordered_set<StmtNum> val15 = {9, 12};
+    writePkb.setFollowsT(1, val10);
+    writePkb.setFollowsT(2, val11);
+    writePkb.setFollowsT(3, val12);
+    writePkb.setFollowsT(4, val13);
+    writePkb.setFollowsT(7, val14);
+    writePkb.setFollowsT(8, val15);
 
     writePkb.setParent(3, 4);
     writePkb.setParent(3, 5);
     writePkb.setParent(9, 10);
     writePkb.setParent(9, 11);
 
-    writePkb.setParentT(3, {3, 4});
-    writePkb.setParentT(9, {10, 11});
+    std::unordered_set<StmtNum> val16 = {3, 4};
+    std::unordered_set<StmtNum> val17 = {10, 11};
+    writePkb.setParentT(3, val16);
+    writePkb.setParentT(9, val17);
 
-    writePkb.setUsesS(2, {"x", "y", "count"});
-    writePkb.setUsesS(3, {"x", "y"});
-    writePkb.setUsesS(4, {"x"});
-    writePkb.setUsesS(6, {"x"});
-    writePkb.setUsesS(7, {"x"});
-    writePkb.setUsesS(8, {"x"});
-    writePkb.setUsesS(9, {"x", "y", "count"});
-    writePkb.setUsesS(11, {"x", "y"});
-    writePkb.setUsesS(12, {"end"});
-    writePkb.setUsesP("main", {"x", "y", "count", "end"});
-    writePkb.setUsesP("sub", {"x", "y", "count", "end"});
-    writePkb.setUsesP("end", {"end"});
+    std::unordered_set<Ent> val18 = {"x", "y", "count"};
+    std::unordered_set<Ent> val19 = {"x", "y"};
+    std::unordered_set<Ent> val20 = {"x"};
+    std::unordered_set<Ent> val21 = {"end"};
+    std::unordered_set<Ent> val22 = {"x", "y", "count", "end"};
+    std::unordered_set<Ent> val23 = {"z"};
+    writePkb.setUsesS(2, val18);
+    writePkb.setUsesS(3, val19);
+    writePkb.setUsesS(4, val20);
+    writePkb.setUsesS(6, val20);
+    writePkb.setUsesS(7, val20);
+    writePkb.setUsesS(8, val20);
+    writePkb.setUsesS(9, val18);
+    writePkb.setUsesS(11, val19);
+    writePkb.setUsesS(12, val21);
+    writePkb.setUsesP("main", val22);
+    writePkb.setUsesP("sub", val22);
+    writePkb.setUsesP("end", val21);
 
-    writePkb.setModifiesS(1, {"x"});
-    writePkb.setModifiesS(2, {"x", "y", "z"});
-    writePkb.setModifiesS(4, {"y"});
-    writePkb.setModifiesS(5, {"y"});
-    writePkb.setModifiesS(6, {"x"});
-    writePkb.setModifiesS(8, {"y"});
-    writePkb.setModifiesS(10, {"x"});
-    writePkb.setModifiesS(11, {"z"});
-    writePkb.setModifiesP("main", {"x", "y", "z"});
-    writePkb.setModifiesP("sub", {"x", "y", "z"});
+    writePkb.setModifiesS(1, val20);
+    writePkb.setModifiesS(2, val5);
+    writePkb.setModifiesS(4, val3);
+    writePkb.setModifiesS(5, val3);
+    writePkb.setModifiesS(6, val20);
+    writePkb.setModifiesS(8, val3);
+    writePkb.setModifiesS(10, val20);
+    writePkb.setModifiesS(11, val23);
+    writePkb.setModifiesP("main", val5);
+    writePkb.setModifiesP("sub", val5);
 
-    writePkb.setCalls("main", {"sub"});
-    writePkb.setCalls("sub", {"end"});
-    writePkb.setCallsT("main", {"sub", "end"});
-    writePkb.setCallsT("sub", {"end"});
+    std::unordered_set<ProcName> val24 = {"sub"};
+    std::unordered_set<ProcName> val25 = {"end"};
+    std::unordered_set<ProcName> val26 = {"sub", "end"};
+    writePkb.setCalls("main", val24);
+    writePkb.setCalls("sub", val25);
+    writePkb.setCallsT("main", val26);
+    writePkb.setCallsT("sub", val25);
 
     string lhs = "x";
     unique_ptr<Expression> patternTree = pkb_utils::buildSubtree("1");
@@ -181,8 +207,8 @@ PKB buildPkb() {
     patternTree = pkb_utils::buildSubtree("x * y");
     writePkb.writePattern(lhs, 11, move(patternTree));
 
-    writePkb.setWhilePattern(3, {"x", "y"});
-    writePkb.setIfPattern(9, {"count"});
+    writePkb.setWhilePattern(3, val19);
+    writePkb.setIfPattern(9, val4);
 
     return pkb;
 }

@@ -9,10 +9,12 @@ using namespace std;
 
 TEST_CASE("Check Pattern Storage Write correctness") {
     PatternStorage ps;
-    ps.writePattern(1, {"x", "y"});
+    std::unordered_set<Ent> val1 = {"x", "y"};
+    ps.writePattern(1, val1);
 
     SECTION("Check Writes do not override existing values") {
-        ps.writePattern(2, {"y"});
+        std::unordered_set<Ent> temp = {"y"};
+        ps.writePattern(2, temp);
 
         unordered_set<StmtNum> res = ps.getStmtNums("y");
 
@@ -22,7 +24,8 @@ TEST_CASE("Check Pattern Storage Write correctness") {
     }
 
     SECTION("Check that writing existing values do not cause duplicates") {
-        ps.writePattern(1, {"x", "y"});
+        std::unordered_set<Ent> temp = {"x", "y"};
+        ps.writePattern(1, temp);
 
         unordered_set<StmtNum> res = ps.getStmtNums("y");
 
@@ -34,9 +37,12 @@ TEST_CASE("Check Pattern Storage Write correctness") {
 
 TEST_CASE("Check Pattern Storage Write and non-empty Gets") {
     PatternStorage ps;
-    ps.writePattern(1, {"x", "y"});
-    ps.writePattern(2, {"y", "z"});
-    ps.writePattern(3, {"z"});
+    std::unordered_set<Ent> temp1 = {"x", "y"};
+    std::unordered_set<Ent> temp2 = {"y", "z"};
+    std::unordered_set<Ent> temp3 = {"z"};
+    ps.writePattern(1, temp1);
+    ps.writePattern(2, temp2);
+    ps.writePattern(3, temp3);
 
     SECTION("Get statement numbers of existing pattern") {
         unordered_set<StmtNum> res = ps.getStmtNums("y");
@@ -62,9 +68,13 @@ TEST_CASE("Check Pattern Storage Write and non-empty Gets") {
 
 TEST_CASE("Check Pattern Storage Write and empty Gets") {
     PatternStorage ps;
-    ps.writePattern(1, {"x", "y"});
-    ps.writePattern(2, {"y", "z"});
-    ps.writePattern(3, {"z"});
+
+    std::unordered_set<Ent> temp1 = {"x", "y"};
+    std::unordered_set<Ent> temp2 = {"y", "z"};
+    std::unordered_set<Ent> temp3 = {"z"};
+    ps.writePattern(1, temp1);
+    ps.writePattern(2, temp2);
+    ps.writePattern(3, temp3);
 
     SECTION("Get statement numbers of non-existing pattern") {
         unordered_set<StmtNum> res = ps.getStmtNums("non-existing");
@@ -81,11 +91,14 @@ TEST_CASE("Test If/While Pattern on WritePKB and ReadPKB") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-    writePkb.setIfPattern(1, {"x", "y", "z"});
-    writePkb.setIfPattern(2, {"z"});
+    std::unordered_set<Ent> temp1 = {"x", "y", "z"};
+    std::unordered_set<Ent> temp2 = {"z"};
 
-    writePkb.setWhilePattern(1, {"x", "y", "z"});
-    writePkb.setWhilePattern(2, {"z"});
+    writePkb.setIfPattern(1, temp1);
+    writePkb.setIfPattern(2, temp2);
+
+    writePkb.setWhilePattern(1, temp1);
+    writePkb.setWhilePattern(2, temp2);
 
     SECTION("if(\"x\", _, _)") {
         Parameter param1 = Parameter("if", ParameterType::IF);
