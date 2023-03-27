@@ -4,6 +4,8 @@ QueryDB::QueryDB() {
     // Creates the QueryDB object
 }
 
+Table QueryDB::emptyTable = Table({}, {});
+
 void QueryDB::insertTable(Table table) {
     // Check if we have any duplicate parameters
     // if so do an intersection
@@ -49,7 +51,7 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
             if (param.hasAttribute()) {
                 contentVec = readPKB.findAttribute(param);
                 for (vector<string> s : contentVec) {
-                    table = Table({Parameter("_", ParameterType::WILDCARD), param}, contentVec);
+                    table = Table({Parameter(AppConstants::WILDCARD_VALUE, ParameterType::WILDCARD), param}, contentVec);
                     table = table.extractDesignEntities();
                 }
             }
@@ -66,7 +68,7 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
     if (!presentParams.empty()) {
         initialTable = initialTable.isEmptyTable()
                            ? extractColumns(presentParams, readPKB)
-                           : initialTable = extractColumns(presentParams, readPKB).cartesianProduct(initialTable);
+                           : extractColumns(presentParams, readPKB).cartesianProduct(initialTable);
     }
     if (hasEmptyTable()) {
         initialTable = emptyTable;
