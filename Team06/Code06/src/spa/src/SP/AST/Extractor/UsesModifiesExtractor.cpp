@@ -34,6 +34,10 @@ void UsesModifiesExtractor::processProcedures(std::vector<ProcName> topoOrder) {
                 currUsesVariables.insert(varsUsedAtStmt.begin(), varsUsedAtStmt.end());
                 currModifiesVariables.insert(varsModifiedAtStmt.begin(), varsModifiedAtStmt.end());
             }
+
+            if (readApi->checkStatement(AppConstants::ASSIGN, sn)) {
+                writeApi->setProcAssignStmt(proc, sn);
+            }
         }
         writeApi->setUsesP(proc, currUsesVariables);
         writeApi->setModifiesP(proc, currModifiesVariables);
@@ -51,7 +55,6 @@ void UsesModifiesExtractor::processContainerStatements() {
         usesVariables.insert(readApi->getUsesS(containerStmt).begin(), readApi->getUsesS(containerStmt).end());
         modifiesVariables.insert(readApi->getModifiesS(containerStmt).begin(),
                                  readApi->getModifiesS(containerStmt).end());
-
         for (StmtNum containedStmt : readApi->getContainedStatements(containerStmt)) {
             usesVariables.insert(readApi->getUsesS(containedStmt).begin(), readApi->getUsesS(containedStmt).end());
             modifiesVariables.insert(readApi->getModifiesS(containedStmt).begin(),

@@ -32,6 +32,9 @@ public:
     // procedure appears in
     void setProcedure(ProcName p, std::unordered_set<StmtNum>& lines);
 
+    // Sets the procedure along with the assign statement lines that are in that procedure
+    void setProcAssignStmt(ProcName p, StmtNum num);
+
     // Sets the constants along with the statement line that the constants appears
     // in
     void setConstant(StmtNum num, std::unordered_set<Const>& constants);

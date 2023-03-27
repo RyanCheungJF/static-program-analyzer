@@ -8,6 +8,12 @@ void ProcedureStorage::writeProcedure(ProcName p, std::unordered_set<StmtNum>& l
     procedures.insert(p);
 }
 
+void ProcedureStorage::writeProcedure(ProcName p, StmtNum num) {
+    proc_stmtNum[p].insert(num);
+    stmtNum_proc[num] = p;
+    procedures.insert(p);
+}
+
 bool ProcedureStorage::checkProcedure(ProcName p, StmtNum num) {
     if (proc_stmtNum.find(p) == proc_stmtNum.end()) {
         return false;

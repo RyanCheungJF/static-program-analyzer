@@ -67,8 +67,11 @@ public:
     void setEntity(StmtNum line, std::unordered_set<Ent>& entities);
 
     // Sets the procedure along with the statement lines that are in that
-    // procedure appears in
+    // procedure it appears in
     void setProcedure(ProcName p, std::unordered_set<StmtNum>& lines);
+
+    // Sets the procedure along with the assign statement lines that are in that procedure
+    void setProcAssignStmt(ProcName p, StmtNum num);
 
     // Sets the constants along with the statement line that the constants appears
     // in
@@ -114,6 +117,9 @@ public:
 
     // returns all the statement lines that are contained in the given procedure
     std::unordered_set<StmtNum>& getProcedureStatementNumbers(ProcName p);
+
+    // returns all the assign StmtNum in the given procedure
+    std::unordered_set<StmtNum>& getProcAssignStmtNums(ProcName p);
 
     // returns all the procedure names present in the source code
     std::unordered_set<ProcName>& getAllProcedureNames();
@@ -161,6 +167,7 @@ private:
     // STATEMENTS
     std::shared_ptr<StmtStorage> statementStorage;
     std::shared_ptr<ProcedureStorage> procedureStorage;
+    std::shared_ptr<ProcedureStorage> procAssignStmtStorage;
     std::shared_ptr<EntityStorage<Ent>> entityStorage;
     std::shared_ptr<EntityStorage<Const>> constantStorage;
     std::shared_ptr<CallStorage> callStorage;

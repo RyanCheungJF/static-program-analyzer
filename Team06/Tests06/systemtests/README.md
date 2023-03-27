@@ -28,6 +28,9 @@ Each folder contains a different program and has the following files:
    ```bash
    chmod u+x run.sh
    ./serve.sh
+
+   # alternatively
+   bash serve.sh
    ```
 
    What this does is that it starts up **all** the servers needed for system tests.
@@ -47,6 +50,9 @@ Each folder contains a different program and has the following files:
    ```bash
    chmod u+x run.sh
    ./run.sh
+
+   # alternatively
+   bash run.sh
    ```
 
    This will trigger each individual system test's `run` file.
@@ -81,6 +87,19 @@ E.g: To run `systemtest1`,
 
 5.  Visit `localhost:{PORT_OF_YOUR_CHOICE}` to view the test results.
 
+### _Automatically check for correctness_
+
+Given how we will have an increasing number of systemtests,
+it would be easier to aid your workflow by just seeing which systemtests are failing.
+
+To do so, you can run the python script found in this directory.
+
+```bash
+python3 check.py
+```
+
+It is also used in our CI to check for failing files.
+
 ### _Diagrams_
 
 The Control Flow Graphs for each system test can be found here for reference:
@@ -96,7 +115,3 @@ _systemtest2_
 _systemtest3_
 
 ![](/Team06/Tests06/systemtests/systemtest3/systest3cfg.png)
-
-### _Todo_
-
-- Tell which test cases are failing without going through them one by one

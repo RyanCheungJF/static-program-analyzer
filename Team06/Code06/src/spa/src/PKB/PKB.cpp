@@ -7,6 +7,7 @@ void PKB::initializePkb() {
     this->parentTStorage = std::make_shared<RelationshipStorage<StmtNum, StmtNum>>();
     this->statementStorage = std::make_shared<StmtStorage>();
     this->procedureStorage = std::make_shared<ProcedureStorage>();
+    this->procAssignStmtStorage = std::make_shared<ProcedureStorage>();
     this->entityStorage = std::make_shared<EntityStorage<Ent>>();
     this->constantStorage = std::make_shared<EntityStorage<Const>>();
     this->assignPatternStorage = std::make_shared<PatternWithExprStorage>();
@@ -52,6 +53,10 @@ void PKB::setParentT(StmtNum parent, std::unordered_set<StmtNum>& children) {
 
 void PKB::setProcedure(ProcName p, std::unordered_set<StmtNum>& lines) {
     procedureStorage->writeProcedure(p, lines);
+}
+
+void PKB::setProcAssignStmt(ProcName p, StmtNum num) {
+    procAssignStmtStorage->writeProcedure(p, num);
 }
 
 void PKB::setStatement(Stmt s, StmtNum line) {
@@ -140,7 +145,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
         AffectsHandler handler(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
-                               type == RelationshipType::AFFECTST);
+                               procAssignStmtStorage, type == RelationshipType::AFFECTST);
         res = handler.handle(param1, param2);
     }
     if (!res.empty()) {
@@ -338,6 +343,10 @@ bool PKB::checkStatement(Stmt stmt, StmtNum num) {
 
 std::unordered_set<StmtNum>& PKB::getProcedureStatementNumbers(ProcName p) {
     return procedureStorage->getProcedureStatementNumbers(p);
+}
+
+std::unordered_set<StmtNum>& PKB::getProcAssignStmtNums(ProcName p) {
+    return procAssignStmtStorage->getProcedureStatementNumbers(p);
 }
 
 std::unordered_set<ProcName>& PKB::getAllProcedureNames() {
