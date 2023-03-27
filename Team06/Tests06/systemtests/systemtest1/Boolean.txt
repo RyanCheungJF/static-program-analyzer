@@ -185,7 +185,7 @@ FALSE
 5000
 38 - Syntax Error for BOOLEAN
 procedure p;
-Select p such that Calls(p, p);
+Select BOOLEAN such that Calls(p, p);
 SyntaxError
 5000
 39 - Semantic Error for BOOLEAN
