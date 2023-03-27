@@ -15,7 +15,7 @@ TEST_CASE("CFGStorage, ReadPKB, WritePKB, no while loop") {
     readPkb.setInstancePKB(pkb);
 
     SECTION("CFGStorage: procedure does not exist") {
-        REQUIRE(readPkb.getCFG("doesNotExist").empty());
+        REQUIRE(readPkb.getCFG("doesNotExist")->empty());
     }
 
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph1 = {
@@ -28,8 +28,8 @@ TEST_CASE("CFGStorage, ReadPKB, WritePKB, no while loop") {
     ProcName proc1 = "proc1";
     writePkb.writeCFG(proc1, graph1);
 
-    auto j = readPkb.getCFG(proc1);
-    auto i = readPkb.getCFG("proc0");
+    auto j = *readPkb.getCFG(proc1);
+    auto i = *readPkb.getCFG("proc0");
 
     //  SECTION("CFGStorage: Next(n1, n2) given n1 find n2") {
     //    std::vector<StmtNum> res1 = readPkb.getNextRHS(3);

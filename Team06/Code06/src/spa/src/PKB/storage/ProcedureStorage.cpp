@@ -15,15 +15,14 @@ bool ProcedureStorage::checkProcedure(ProcName p, StmtNum num) {
     return proc_stmtNum[p].find(num) != proc_stmtNum[p].end();
 }
 
-std::unordered_set<StmtNum> ProcedureStorage::getProcedureStatementNumbers(ProcName p) {
+std::unordered_set<StmtNum>& ProcedureStorage::getProcedureStatementNumbers(ProcName p) {
     if (proc_stmtNum.find(p) == proc_stmtNum.end()) {
-        std::unordered_set<StmtNum> emptySet;
-        return emptySet;
+        return emptyStmtNums;
     }
-    return proc_stmtNum.at(p);
+    return proc_stmtNum[p];
 }
 
-std::unordered_set<ProcName> ProcedureStorage::getProcNames() {
+std::unordered_set<ProcName>& ProcedureStorage::getProcNames() {
     return procedures;
 }
 

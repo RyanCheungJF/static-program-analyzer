@@ -160,26 +160,26 @@ std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
     ParameterType type = p.getType();
 
     if (p.isProcedureOnly()) {
-        std::unordered_set<ProcName> procs = procedureStorage->getProcNames();
+        std::unordered_set<ProcName>& procs = procedureStorage->getProcNames();
         for (auto proc : procs) {
             res.push_back(proc);
         }
     }
     else if (p.isConstant()) {
-        std::unordered_set<Const> constants = constantStorage->getEntNames();
+        std::unordered_set<Const>& constants = constantStorage->getEntNames();
         for (auto constant : constants) {
             res.push_back(constant);
         }
     }
     else if (p.isVariable()) {
-        std::unordered_set<Ent> vars = entityStorage->getEntNames();
+        std::unordered_set<Ent>& vars = entityStorage->getEntNames();
         for (auto var : vars) {
             res.push_back(var);
         }
     }
     else if (p.isStatementRef(p)) {
         std::string typeString = param->getTypeString();
-        std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(typeString);
+        std::unordered_set<StmtNum>& stmtNums = statementStorage->getStatementNumbers(typeString);
         for (auto stmtNum : stmtNums) {
             res.push_back(to_string(stmtNum));
         }
@@ -225,7 +225,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
     std::vector<std::vector<std::string>> res;
 
     if (Parameter::isStatementRef(p)) {
-        std::unordered_set<StmtNum> stmtNums = statementStorage->getStatementNumbers(p.getTypeString());
+        std::unordered_set<StmtNum>& stmtNums = statementStorage->getStatementNumbers(p.getTypeString());
         if (attrType == AttributeType::PROCNAME) {
             for (auto stmtNum : stmtNums) {
                 std::pair<StmtNum, ProcName> numProcPair = callStorage->getCallStmt(stmtNum);
@@ -252,22 +252,22 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
     }
     // currently just returns a pair of duplicated values
     else if (p.isConstant()) {
-        std::unordered_set<Const> consts = constantStorage->getEntNames();
+        std::unordered_set<Const>& consts = constantStorage->getEntNames();
         for (auto constant : consts) {
             res.push_back({constant, constant});
         }
     }
     // currently just returns a pair of duplicated values
     else if (p.isVariable()) {
-        std::unordered_set<Ent> vars = entityStorage->getEntNames();
+        std::unordered_set<Ent>& vars = entityStorage->getEntNames();
         for (auto var : vars) {
             res.push_back({var, var});
         }
     }
     // currently just returns a pair of duplicated values
     else {
-        std::unordered_set<ProcName> procs = procedureStorage->getProcNames();
-        for (auto proc : procs) {
+        std::unordered_set<ProcName>& procs = procedureStorage->getProcNames();
+        for (ProcName proc : procs) {
             res.push_back({proc, proc});
         }
     }
@@ -336,39 +336,39 @@ bool PKB::checkStatement(Stmt stmt, StmtNum num) {
     return statementStorage->checkStatement(stmt, num);
 }
 
-std::unordered_set<StmtNum> PKB::getProcedureStatementNumbers(ProcName p) {
+std::unordered_set<StmtNum>& PKB::getProcedureStatementNumbers(ProcName p) {
     return procedureStorage->getProcedureStatementNumbers(p);
 }
 
-std::unordered_set<ProcName> PKB::getAllProcedureNames() {
+std::unordered_set<ProcName>& PKB::getAllProcedureNames() {
     return procedureStorage->getProcNames();
 }
 
-std::unordered_set<Ent> PKB::getUsesS(StmtNum num) {
+std::unordered_set<Ent>& PKB::getUsesS(StmtNum num) {
     return usesStorage->getRightItems(num);
 }
 
-std::unordered_set<Ent> PKB::getUsesP(ProcName name) {
+std::unordered_set<Ent>& PKB::getUsesP(ProcName name) {
     return usesStorage->getRightItems(name);
 }
 
-std::unordered_set<Ent> PKB::getModifiesS(StmtNum num) {
+std::unordered_set<Ent>& PKB::getModifiesS(StmtNum num) {
     return modifiesStorage->getRightItems(num);
 }
 
-std::unordered_set<Ent> PKB::getModifiesP(ProcName name) {
+std::unordered_set<Ent>& PKB::getModifiesP(ProcName name) {
     return modifiesStorage->getRightItems(name);
 }
 
-std::unordered_set<StmtNum> PKB::getIfStatementNumbers() {
+std::unordered_set<StmtNum>& PKB::getIfStatementNumbers() {
     return statementStorage->getStatementNumbers(IF);
 }
 
-std::unordered_set<StmtNum> PKB::getWhileStatementNumbers() {
+std::unordered_set<StmtNum>& PKB::getWhileStatementNumbers() {
     return statementStorage->getStatementNumbers(WHILE);
 }
 
-std::unordered_set<StmtNum> PKB::getContainedStatements(StmtNum containerNum) {
+std::unordered_set<StmtNum>& PKB::getContainedStatements(StmtNum containerNum) {
     return parentTStorage->getRightItems(containerNum);
 }
 
@@ -376,11 +376,11 @@ std::pair<StmtNum, ProcName> PKB::getCallStmt(StmtNum s) {
     return callStorage->getCallStmt(s);
 }
 
-std::unordered_set<ProcName> PKB::getCallsT(ProcName p) {
+std::unordered_set<ProcName>& PKB::getCallsT(ProcName p) {
     return callsTStorage->getRightItems(p);
 }
 
-std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> PKB::getCFG(ProcName name) {
+std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>* PKB::getCFG(ProcName name) {
     return cfgStorage->getGraph(name);
 }
 

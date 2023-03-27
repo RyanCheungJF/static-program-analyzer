@@ -10,25 +10,29 @@ void UsesModifiesExtractor::extract(std::vector<ProcName> topoOrder) {
 
 void UsesModifiesExtractor::processProcedures(std::vector<ProcName> topoOrder) {
     for (ProcName proc : topoOrder) {
-        auto procedureStmtNum = readApi->getProcedureStatementNumbers(proc);
         std::unordered_set<Ent> currUsesVariables;
         std::unordered_set<Ent> currModifiesVariables;
 
-        for (StmtNum sn : procedureStmtNum) {
+        auto& procedureStmtNum = readApi->getProcedureStatementNumbers(proc);
+
+        for (const StmtNum& sn : procedureStmtNum) {
             if (readApi->checkStatement(AppConstants::CALL, sn)) {
                 auto callStmt = readApi->getCallStmt(sn);
+                auto& varsUsedInCalledProc = readApi->getUsesP(callStmt.second);
+                auto& varsModifiedInCalledProc = readApi->getModifiesP(callStmt.second);
 
-                std::unordered_set<Ent> temp1 = readApi->getUsesP(callStmt.second);
-                writeApi->setUsesS(callStmt.first, temp1);
+                writeApi->setUsesS(callStmt.first, varsUsedInCalledProc);
+                writeApi->setModifiesS(callStmt.first, varsModifiedInCalledProc);
 
-                std::unordered_set<Ent> temp2 = readApi->getModifiesP(callStmt.second);
-                writeApi->setModifiesS(callStmt.first, temp2);
-                currUsesVariables.merge(readApi->getUsesP(callStmt.second));
-                currModifiesVariables.merge(readApi->getModifiesP(callStmt.second));
+                currUsesVariables.insert(varsUsedInCalledProc.begin(), varsUsedInCalledProc.end());
+                currModifiesVariables.insert(varsModifiedInCalledProc.begin(), varsModifiedInCalledProc.end());
             }
             else {
-                currUsesVariables.merge(readApi->getUsesS(sn));
-                currModifiesVariables.merge(readApi->getModifiesS(sn));
+                auto& varsUsedAtStmt = readApi->getUsesS(sn);
+                auto& varsModifiedAtStmt = readApi->getModifiesS(sn);
+
+                currUsesVariables.insert(varsUsedAtStmt.begin(), varsUsedAtStmt.end());
+                currModifiesVariables.insert(varsModifiedAtStmt.begin(), varsModifiedAtStmt.end());
             }
         }
         writeApi->setUsesP(proc, currUsesVariables);
@@ -37,15 +41,21 @@ void UsesModifiesExtractor::processProcedures(std::vector<ProcName> topoOrder) {
 }
 
 void UsesModifiesExtractor::processContainerStatements() {
-    auto containerStatements = readApi->getWhileStatementNumbers();
-    containerStatements.merge(readApi->getIfStatementNumbers());
+    std::unordered_set<StmtNum> containerStatements;
+    containerStatements.insert(readApi->getWhileStatementNumbers().begin(), readApi->getWhileStatementNumbers().end());
+    containerStatements.insert(readApi->getIfStatementNumbers().begin(), readApi->getIfStatementNumbers().end());
+
     for (StmtNum containerStmt : containerStatements) {
-        auto usesVariables = readApi->getUsesS(containerStmt);
-        auto modifiesVariables = readApi->getModifiesS(containerStmt);
-        auto containedStatements = readApi->getContainedStatements(containerStmt);
-        for (StmtNum containedStmt : containedStatements) {
-            usesVariables.merge(readApi->getUsesS(containedStmt));
-            modifiesVariables.merge(readApi->getModifiesS(containedStmt));
+        std::unordered_set<Ent> usesVariables;
+        std::unordered_set<Ent> modifiesVariables;
+        usesVariables.insert(readApi->getUsesS(containerStmt).begin(), readApi->getUsesS(containerStmt).end());
+        modifiesVariables.insert(readApi->getModifiesS(containerStmt).begin(),
+                                 readApi->getModifiesS(containerStmt).end());
+
+        for (StmtNum containedStmt : readApi->getContainedStatements(containerStmt)) {
+            usesVariables.insert(readApi->getUsesS(containedStmt).begin(), readApi->getUsesS(containedStmt).end());
+            modifiesVariables.insert(readApi->getModifiesS(containedStmt).begin(),
+                                     readApi->getModifiesS(containedStmt).end());
         }
         writeApi->setUsesS(containerStmt, usesVariables);
         writeApi->setModifiesS(containerStmt, modifiesVariables);
