@@ -30,6 +30,7 @@ public:
     vector<Comparison> comparisons;
     vector<Parameter*> getAllUncheckedSynonyms();
     bool validateAllParameters();
+
 private:
     void evaluateRelationship(QueryDB&, ReadPKB&);
     void evaluatePattern(QueryDB&, ReadPKB&);

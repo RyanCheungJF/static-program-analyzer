@@ -158,7 +158,7 @@ TEST_CASE("parse / multiple such that clauses with dummy ands and true ands/ "
 }
 
 TEST_CASE("parse / pattern pattern pattern clause/ "
-    "returns query object") {
+          "returns query object") {
     string input = "Select pattern pattern pattern( pattern, \"pattern\")";
     SelectQueryParser sqp;
     Query q = sqp.parse(input);
@@ -166,7 +166,7 @@ TEST_CASE("parse / pattern pattern pattern clause/ "
 }
 
 TEST_CASE("parse / with with with clause/ "
-    "returns query object") {
+          "returns query object") {
     string input = "Select with with \"with\" = \"with\"";
     SelectQueryParser sqp;
     Query q = sqp.parse(input);

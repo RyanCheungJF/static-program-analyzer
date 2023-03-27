@@ -55,7 +55,7 @@ vector<int> findPattern(const vector<string>& wordList) {
         else {
             bool found;
             string substr;
-            tie(substr, ignore, found) = extractSubStringUntilDelimiter(next, 0, string(1,OPENING_BRAC));
+            tie(substr, ignore, found) = extractSubStringUntilDelimiter(next, 0, string(1, OPENING_BRAC));
             if (!found || !isIdent(substr)) {
                 continue;
             }

@@ -494,8 +494,8 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
             AppConstants::FOLLOWS, {Parameter("as", ParameterType::ASSIGN), Parameter("s", ParameterType::STMT)});
         std::vector<std::vector<std::string>> follows13actual = readPKB.findRelationship(followsTest13);
         std::vector<std::vector<std::string>> follows13expected = {{"8", "9"}, {"9", "10"}};
-//        REQUIRE(follows13expected == follows13actual);
-//        REQUIRE(unit_testing_utils::equals(follows13expected, follows13actual));
+        //        REQUIRE(follows13expected == follows13actual);
+        //        REQUIRE(unit_testing_utils::equals(follows13expected, follows13actual));
     }
 
     SECTION("SP-PKB Integration: FollowsT") {

@@ -51,7 +51,8 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
             if (param.hasAttribute()) {
                 contentVec = readPKB.findAttribute(param);
                 for (vector<string> s : contentVec) {
-                    table = Table({Parameter(AppConstants::WILDCARD_VALUE, ParameterType::WILDCARD), param}, contentVec);
+                    table =
+                        Table({Parameter(AppConstants::WILDCARD_VALUE, ParameterType::WILDCARD), param}, contentVec);
                     table = table.extractDesignEntities();
                 }
             }
@@ -111,7 +112,7 @@ Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
             for (vector<string> kv : mapping) {
                 attributeMap.insert({kv[0], kv[1]});
             }
-            for (Table &t : temp) {
+            for (Table& t : temp) {
                 if (t.hasParameter(param)) {
                     t = t.updateValues(param, attributeMap);
                 }
@@ -129,4 +130,3 @@ Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
         return t;
     }
 }
-

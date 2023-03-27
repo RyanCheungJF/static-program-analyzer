@@ -64,7 +64,15 @@ TEST_CASE("FindWith / one with present followed by fixed string / return correct
 }
 
 TEST_CASE("FindWith / one with present followed by ident / return correct index") {
-    vector<string> wordList = {"qwee", "with", "stuff", ".procName", "=" "\"asd\"", "qwe", "123", ",asd"};
+    vector<string> wordList = {"qwee",
+                               "with",
+                               "stuff",
+                               ".procName",
+                               "="
+                               "\"asd\"",
+                               "qwe",
+                               "123",
+                               ",asd"};
     vector<int> expected = {1};
     vector<int> result = findWith(wordList);
 
@@ -72,7 +80,14 @@ TEST_CASE("FindWith / one with present followed by ident / return correct index"
 }
 
 TEST_CASE("FindWith / one with present followed by integer / return correct index") {
-    vector<string> wordList = {"qwee", "with", "1", "=" "\"asd\"", "qwe", "123", ",asd"};
+    vector<string> wordList = {"qwee",
+                               "with",
+                               "1",
+                               "="
+                               "\"asd\"",
+                               "qwe",
+                               "123",
+                               ",asd"};
     vector<int> expected = {1};
     vector<int> result = findWith(wordList);
 
