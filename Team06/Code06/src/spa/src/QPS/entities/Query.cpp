@@ -105,7 +105,7 @@ vector<Parameter*> Query::getAllUncheckedSynonyms() {
     for (int i = 0; i < comparisons.size(); i++) {
         vector<Parameter*> params = comparisons.at(i).getAllUncheckedSynonyms();
         for (int j = 0; j < params.size(); j++) {
-            synonyms.push_back(params.at(i));
+            synonyms.push_back(params.at(j));
         }
     }
     return synonyms;

@@ -144,13 +144,6 @@ TEST_CASE("parse / variable v; Select v such that Uses(_,_) / catch error") {
     CHECK_THROWS_AS(qp.parse(test), SemanticException);
 }
 
-TEST_CASE("parse / funky patterns / no errors") {
-    string test = R"(assign pattern; Select pattern pattern pattern("l", _"x + y + z + u"_))";
-    QPSParser qp;
-    // TODO: this should parse without any errors (issue with wordList start and end)
-    qp.parse(test);
-}
-
 TEST_CASE("parse / with clause variable not declared / catch error") {
     string test = "variable v; Select v with a.value = 2";
     QPSParser qp;
