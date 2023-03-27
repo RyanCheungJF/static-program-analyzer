@@ -20,7 +20,7 @@ public:
     Table extractColumns(vector<int>&);
     Table extractColumns(vector<Parameter>);
     Table cartesianProduct(Table);
-    vector<string> getResult();
+    vector<string> getResult(vector<Parameter>);
     bool isEmptyTable();
     Table updateValues(Parameter, unordered_map<string, string>);
 

@@ -388,3 +388,57 @@ TEST_CASE("fetch / insertion with intersection / fetch vector of params") {
     REQUIRE(find(res.begin(), res.end(), "j arithmetic conditionalSpam") != res.end());
     REQUIRE(find(res.begin(), res.end(), "i arithmetic conditionalSpam") != res.end());
 }
+
+TEST_CASE("fetch / table with 4 variables fetching 3 variables / return in correct order") {
+    QueryDB qdb;
+    ReadPKB readPKB;
+    vector<Parameter> header1 = {
+            Parameter("t", ParameterType::PRINT),
+            Parameter("v", ParameterType::VARIABLE),
+    };
+    vector<Parameter> header2 = {
+            Parameter("p", ParameterType::PROCEDURE),
+            Parameter("v", ParameterType::VARIABLE),
+    };
+    vector<Parameter> header3 = {
+            Parameter("c", ParameterType::CALL),
+    };
+    vector<vector<string>> content1 = {
+            {"1", "a"},
+            {"2", "b"},
+            {"3", "c"},
+    };
+    vector<vector<string>> content2 = {
+            {"4", "a"},
+            {"5", "a"},
+            {"6", "a"},
+            {"4", "b"},
+            {"5", "b"},
+            {"6", "b"},
+            {"4", "c"},
+            {"5", "c"},
+            {"6", "c"},
+    };
+    vector<vector<string>> content3 = {
+            {"999"},
+            {"888"},
+    };
+    Table t1(header1, content1);
+    Table t2(header2, content2);
+    Table t3(header3, content3);
+    qdb.insertTable(t1);
+    qdb.insertTable(t2);
+    qdb.insertTable(t3);
+    vector<string> res = qdb.fetch({
+        Parameter("t", ParameterType::PRINT),
+        Parameter("c", ParameterType::CALL),
+        Parameter("v", ParameterType::VARIABLE)
+        }, readPKB);
+
+    REQUIRE(find(res.begin(), res.end(), "1 999 a") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "1 888 a") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "2 999 b") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "2 888 b") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "3 999 c") != res.end());
+    REQUIRE(find(res.begin(), res.end(), "3 888 c") != res.end());
+}

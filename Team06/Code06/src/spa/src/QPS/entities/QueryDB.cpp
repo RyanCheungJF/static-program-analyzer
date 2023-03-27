@@ -72,7 +72,7 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
         initialTable = emptyTable;
     }
     return params[0].getType() == ParameterType::BOOLEAN ? hasEmptyTable() ? falseVec : trueVec
-                                                         : initialTable.getResult();
+                                                         : initialTable.getResult(params);
 }
 
 bool QueryDB::hasEmptyTable() {
@@ -86,6 +86,7 @@ bool QueryDB::hasEmptyTable() {
 
 Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
     // Assumes that each table has unique headers.
+    // extracts in any order
     vector<Table> temp;
     for (Table table : tableVector) {
         vector<Parameter> headers = table.getHeaders();
@@ -123,7 +124,7 @@ Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
         for (int i = 1; i < temp.size(); i++) {
             t = t.cartesianProduct(temp[i]);
         }
-        return t.extractColumns(params);
+        return t;
     }
 }
 

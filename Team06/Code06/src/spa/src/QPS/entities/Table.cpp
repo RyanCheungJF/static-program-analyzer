@@ -200,12 +200,21 @@ Table Table::extractColumns(vector<Parameter> params) {
     return extractColumns(indexes);
 }
 
-vector<string> Table::getResult() {
+vector<string> Table::getResult(vector<Parameter> params) {
     vector<string> res;
+    vector<int> indexOrder;
+    for (Parameter param : params) {
+        for (int i = 0; i < headers.size(); i++) {
+            if (param == headers[i]) {
+                indexOrder.push_back(i);
+                break;
+            }
+        }
+    }
     for (const vector<string>& stringVec : contents) {
         string row;
-        for (const string& s : stringVec) {
-            row += s;
+        for (int index : indexOrder) {
+            row += stringVec[index];
             row += " ";
         }
         // remove the extra space.
