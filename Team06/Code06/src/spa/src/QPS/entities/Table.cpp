@@ -12,11 +12,11 @@ bool Table::hasParameter(const Parameter& p) {
     return find(headers.begin(), headers.end(), p) != headers.end();
 }
 
-vector<Parameter> Table::getHeaders() {
+const vector<Parameter>& Table::getHeaders() const {
     return headers;
 }
 
-vector<vector<string>> Table::getContent() {
+const vector<vector<string>>& Table::getContent() const {
     return contents;
 }
 
@@ -46,13 +46,13 @@ vector<pair<int, int>> Table::getIntersectingIndex(Table t1, Table t2) {
 
 Table Table::cartesianProduct(Table table) {
     vector<Parameter> h1 = this->getHeaders();
-    vector<Parameter> h2 = table.getHeaders();
-    vector<vector<string>> c1 = this->getContent();
-    vector<vector<string>> c2 = table.getContent();
+    const vector<Parameter>& h2 = table.getHeaders();
+    const vector<vector<string>>& c1 = this->getContent();
+    const vector<vector<string>>& c2 = table.getContent();
     vector<vector<string>> c3;
     h1.insert(h1.end(), h2.begin(), h2.end());
     for (const vector<string>& row1 : c1) {
-        for (vector<string> row2 : c2) {
+        for (const vector<string>& row2 : c2) {
             vector<string> dupRow(row1);
             dupRow.insert(dupRow.end(), row2.begin(), row2.end());
             c3.push_back(dupRow);
@@ -68,7 +68,7 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
     // depending on how many values in the intersectingIndex vector.
     for (int i = 0; i < c1.size(); i++) {
         string key;
-        for (pair<int, int> intersectingIndex : intersectingIndexes) {
+        for (const pair<int, int>& intersectingIndex : intersectingIndexes) {
             if (key.empty()) {
                 key += c1[i][intersectingIndex.first];
             }
@@ -80,12 +80,12 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
     }
     vector<vector<string>> result;
     vector<int> indexesToRemove;
-    for (pair<int, int> intersectingIndex : intersectingIndexes) {
+    for (const pair<int, int>& intersectingIndex : intersectingIndexes) {
         indexesToRemove.push_back(intersectingIndex.first);
     }
     for (int i = 0; i < c2.size(); i++) {
         string key;
-        for (pair<int, int> intersectingIndex : intersectingIndexes) {
+        for (const pair<int, int>& intersectingIndex : intersectingIndexes) {
             if (key.empty()) {
                 key += c2[i][intersectingIndex.second];
             }
@@ -152,7 +152,7 @@ Table Table::updateValues(Parameter p, unordered_map<string, string> map) {
     int index;
     vector<vector<string>> newContents;
     for (int i = 0; i < headers.size(); i++) {
-        if(headers[i] == p) {
+        if (headers[i] == p) {
             index = i;
         }
     }
@@ -164,25 +164,34 @@ Table Table::updateValues(Parameter p, unordered_map<string, string> map) {
 }
 
 Table Table::extractColumns(vector<int>& indexes) {
-    vector<vector<string>> newContent;
+    std::unordered_set<vector<string>, VectorStringHash> newContent;
+    newContent.reserve(contents.size());
     vector<Parameter> newHeader;
+
     // I do not believe that there will be a case where the tables are empty.
     for (int index : indexes) {
         newHeader.push_back(headers[index]);
     }
-    for (vector<string> entry : contents) {
+
+    for (const vector<string>& entry : contents) {
         vector<string> newEntry;
         for (int index : indexes) {
             newEntry.push_back(entry[index]);
         }
-        if (find(newContent.begin(), newContent.end(), newEntry) == newContent.end()) {
-            newContent.push_back(newEntry);
+        if (newContent.find(newEntry) == newContent.end()) {
+            newContent.insert(newEntry);
         }
     }
-    return Table{newHeader, newContent};
+    vector<vector<string>> newContentVec;
+    newContentVec.reserve(newContent.size());
+    for (auto& entry : newContent) {
+        newContentVec.push_back(entry);
+    }
+
+    return Table{newHeader, newContentVec};
 }
 
-bool Table::isEmptyTable() {
+bool Table::isEmptyTable() const {
     return contents.empty();
 }
 

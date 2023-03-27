@@ -8,20 +8,31 @@
 
 using namespace std;
 
+struct VectorStringHash {
+    size_t operator()(const std::vector<std::string>& v) const {
+        std::hash<std::string> hasher;
+        size_t seed = 0;
+        for (std::string s : v) {
+            seed ^= hasher(s) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        }
+        return seed;
+    }
+};
+
 class Table {
 public:
     Table(vector<Parameter>, vector<vector<string>>);
     Table extractDesignEntities();
     bool hasParameter(const Parameter&);
-    vector<Parameter> getHeaders();
-    vector<vector<string>> getContent();
+    const vector<Parameter>& getHeaders() const;
+    const vector<vector<string>>& getContent() const;
     bool hasIntersectingParams(Table);
     Table intersectTable(Table);
     Table extractColumns(vector<int>&);
     Table extractColumns(vector<Parameter>);
     Table cartesianProduct(Table);
     vector<string> getResult(vector<Parameter>);
-    bool isEmptyTable();
+    bool isEmptyTable() const;
     Table updateValues(Parameter, unordered_map<string, string>);
 
 private:
