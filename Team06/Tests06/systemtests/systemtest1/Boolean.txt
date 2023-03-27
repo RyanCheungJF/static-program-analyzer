@@ -1,55 +1,205 @@
-1 - comment
-call c;
-Select BOOLEAN such that Next*(1, 16)
+1 - No constraints in query
+assign a;
+Select BOOLEAN
 TRUE
 5000
-2 - comment
+2 - BOOLEAN synonym (1)
+procedure BOOLEAN;
+Select BOOLEAN such that Calls(BOOLEAN, "arithmetic")
+none
+5000
+3 - BOOLEAN synonym (2)
+procedure BOOLEAN;
+Select BOOLEAN such that Calls(BOOLEAN, "conditionalSpam")
+arithmetic
+5000
+4 - BOOLEAN synonym (3)
+stmt BOOLEAN;
+Select BOOLEAN such that Parent(BOOLEAN, 5)
+none
+5000
+5 - Satisfies Calls
 call c; procedure p;
 Select BOOLEAN such that Calls(p, "conditionalSpam")
 TRUE
 5000
-3 - comment
+6 - None satisfies Calls
 call c; procedure p;
 Select BOOLEAN such that Calls(p, "arithmetic")
 FALSE
 5000
-4 - comment
-call c; procedure p; while w;
-Select BOOLEAN such that Affects(5, 7) and Modifies("conditionalSpam", "b") and Uses(30, "while")
+7 - Satisfies Calls*
+call c; procedure p;
+Select BOOLEAN such that Calls*(p, "conditionalSpam")
 TRUE
 5000
-5 - comment
-call c; procedure p; while w;
-Select BOOLEAN such that Affects(5, 7) and Affects*(13, 16) and Modifies("unknown", "b") and Uses(30, "while")
+8 - None satisfies Calls*
+call c; procedure p;
+Select BOOLEAN such that Calls*(p, "arithmetic")
 FALSE
 5000
-6 - comment
+9 - Satisfies Follows
+call c; stmt s;
+Select BOOLEAN such that Follows(c, s)
+TRUE
+5000
+10 - None satisfies Follows
+print pn; while w;
+Select BOOLEAN such that Follows(pn, w)
+FALSE
+5000
+11 - Satisfies Follows*
+read r;
+Select BOOLEAN such that Follows*(r, _)
+TRUE
+5000
+12 - None satisfies Follows*
+
+Select BOOLEAN such that Follows*(5, 3)
+FALSE
+5000
+13 - Satisfies Parent
+
+Select BOOLEAN such that Parent(_, _)
+TRUE
+5000
+14 - None satisfies Parent
+stmt s;
+Select BOOLEAN such that Parent(s, 1)
+FALSE
+5000
+15 - Satisfies Parent*
+stmt s; assign a;
+Select BOOLEAN such that Parent*(s, a)
+TRUE
+5000
+16 - None satisfies Parent*
+read r;
+Select BOOLEAN such that Parent*(r, _)
+FALSE
+5000
+17 - Satisfies Uses
+assign a;
+Select BOOLEAN such that Uses(a, "a")
+TRUE
+5000
+18 - None satisfies Uses
+read r;
+Select BOOLEAN such that Uses(r, "while")
+FALSE
+5000
+19 - Satisfies Modifies
+assign a;
+Select BOOLEAN such that Modifies(a, "a")
+TRUE
+5000
+20 - None satisfies Modifies
+print pn; variable v;
+Select BOOLEAN such that Modifies(pn, v)
+FALSE
+5000
+21 - Satisfies assign pattern (1)
 assign a;
 Select BOOLEAN pattern a("z", "a + b")
 TRUE
 5000
-7 - comment
+22 - Satisfies assign pattern (2)
 assign a;
 Select BOOLEAN pattern a(_, "1")
 TRUE
 5000
-8 -comment
+23 - Satisfies assign pattern (3)
 assign a;
 Select BOOLEAN pattern a(_, _"a"_)
 TRUE
 5000
-9 - comment
-assign a;
-Select BOOLEAN pattern a(_, _" ((c - y) - z) "_)
-FALSE
-5000
-10 - comment
+24 - Satisfies assign pattern (4)
 assign a;
 Select BOOLEAN pattern a(_, _)
 TRUE
 5000
-11 - comment
+25 - None satisfies assign pattern
 assign a;
-Select BOOLEAN
+Select BOOLEAN pattern a(_, _" ((c - y) - z) "_)
+FALSE
+5000
+26 - Satisfies Next
+call c;
+Select BOOLEAN such that Next(c, _)
 TRUE
+5000
+27 - None satisfies Next
+
+Select BOOLEAN such that Next(16, 1)
+FALSE
+5000
+28 - Satisfies Next*
+
+Select BOOLEAN such that Next*(1, 16)
+TRUE
+5000
+29 - None satisfies Next*
+read r; if i;
+Select BOOLEAN such that Next*(r, i)
+FALSE
+5000
+30 - Satisfies Affects
+assign a;
+Select BOOLEAN such that Affects(_, a)
+TRUE
+5000
+31 - None satisfies Affects
+read r;
+Select BOOLEAN such that Affects(r, _)
+FALSE
+5000
+32 - Satisfies Affects*
+stmt s;
+Select BOOLEAN such that Affects*(28, s)
+TRUE
+5000
+33 - None satisfies Affects*
+while w; if i;
+Select BOOLEAN such that Affects*(w, i)
+FALSE
+5000
+34 - Satisfies while pattern
+while w; variable v;
+Select BOOLEAN pattern w(v, _)
+TRUE
+5000
+35 - None satisfies while pattern
+while w;
+Select BOOLEAN pattern w("else", _)
+FALSE
+5000
+36 - Satisfies if pattern
+if i; variable v;
+Select BOOLEAN pattern i(v, _, _)
+TRUE
+5000
+37 - None satisfies if pattern
+if i;
+Select BOOLEAN pattern i("while", _, _)
+FALSE
+5000
+38 - Syntax Error for BOOLEAN
+procedure p;
+Select p such that Calls(p, p);
+SyntaxError
+5000
+39 - Semantic Error for BOOLEAN
+while w; variable v;
+Select BOOLEAN pattern w(v, _, _)
+SemanticError
+50000
+40 - Multi-constraint (1)
+call c; procedure p; while w;
+Select BOOLEAN such that Affects(5, 7) and Modifies("conditionalSpam", "b") and Uses(30, "while")
+TRUE
+5000
+41 - Multi-constraint (2)
+call c; procedure p; while w;
+Select BOOLEAN such that Affects(5, 7) and Affects*(13, 16) and Modifies("unknown", "b") and Uses(30, "while")
+FALSE
 5000
