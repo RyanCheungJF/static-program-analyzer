@@ -43,3 +43,8 @@ stmt a1, a2, a3;
 Select BOOLEAN such that Next*(a1, a2)
 TRUE
 5000
+10 - test follows* time
+stmt a1, a2, a3;
+Select BOOLEAN such that Follows*(a1, a2)
+TRUE
+5000
