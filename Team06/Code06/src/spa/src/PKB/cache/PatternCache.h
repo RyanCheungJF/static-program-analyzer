@@ -2,7 +2,8 @@
 #include "Cache.h"
 
 struct patternHash {
-    std::size_t operator()(shared_ptr<Pattern> const& pattern) const {
+    std::size_t operator()(const shared_ptr<Pattern>& pattern) const {
+        Parameter patternSyn = *pattern->getPatternSyn();
         // variable v1, v2;
         // pattern a(v1, _) and pattern a(v2, _) should have the same hash in PKB's context.
         std::size_t h1 = std::hash<ParameterType>{}(pattern->getPatternType());
@@ -10,7 +11,7 @@ struct patternHash {
         std::size_t h3 = std::hash<ParameterType>{}(pattern->getEntRefType());
 
         // only pattern a("x", _) and pattern a("x1", _) should have different hashes.
-        if (pattern->getPatternType() == ParameterType::FIXED_STRING) {
+        if (patternSyn.isFixedStringType()) {
             std::size_t h3 = std::hash<Parameter>{}(*pattern->getEntRef());
         }
         return ((h1 ^ (h2 << 1)) >> 1) ^ (h3 << 1);
@@ -18,7 +19,10 @@ struct patternHash {
 };
 
 struct patternEquals {
-    bool operator()(shared_ptr<Pattern> const& pattern1, shared_ptr<Pattern> const& pattern2) const {
+    bool operator()(const shared_ptr<Pattern>& pattern1, const shared_ptr<Pattern>& pattern2) const {
+        Parameter patternSyn1 = *pattern1->getPatternSyn();
+        Parameter patternSyn2 = *pattern2->getPatternSyn();
+
         // variable v1, v2;
         // pattern a(v1, _) and pattern a(v2, _) should be equal in PKB's context.
         bool check1 = pattern1->getPatternType() == pattern2->getPatternType();
@@ -26,7 +30,7 @@ struct patternEquals {
         bool check3 = pattern1->getEntRefType() == pattern2->getEntRefType();
 
         // only pattern a("x", _) and pattern a("x1", _) should not be equals
-        if (pattern1->getPatternType() == ParameterType::FIXED_STRING) {
+        if (patternSyn1.isFixedStringType()) {
             check3 = *pattern1->getEntRef() == *pattern2->getEntRef();
         }
 

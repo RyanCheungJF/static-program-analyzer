@@ -2,7 +2,7 @@
 #include "Cache.h"
 
 struct relationshipHash {
-    std::size_t operator()(shared_ptr<Relationship> const& rs) const {
+    std::size_t operator()(const shared_ptr<Relationship>& rs) const {
         std::vector<ParameterType> paramTypes = rs->getParameterTypes();
 
         std::size_t h1 = std::hash<RelationshipType>{}(rs->getType());
@@ -10,11 +10,11 @@ struct relationshipHash {
         std::size_t h3 = std::hash<ParameterType>{}(paramTypes[1]);
 
         std::vector<Parameter> params = rs->getParameters();
-        if (paramTypes[0] == ParameterType::FIXED_INT || paramTypes[0] == ParameterType::FIXED_STRING) {
+        if (params[0].isFixedInt() || params[0].isFixedStringType()) {
             h2 = std::hash<Parameter>{}(params[0]);
         }
 
-        if (paramTypes[1] == ParameterType::FIXED_INT || paramTypes[1] == ParameterType::FIXED_STRING) {
+        if (params[1].isFixedInt() || params[1].isFixedStringType()) {
             h3 = std::hash<Parameter>{}(params[1]);
         }
 
@@ -23,7 +23,7 @@ struct relationshipHash {
 };
 
 struct relationshipEquals {
-    bool operator()(shared_ptr<Relationship> const& rs1, shared_ptr<Relationship> const& rs2) const {
+    bool operator()(const shared_ptr<Relationship>& rs1, const shared_ptr<Relationship>& rs2) const {
         std::vector<ParameterType> paramTypes1 = rs1->getParameterTypes();
         std::vector<ParameterType> paramTypes2 = rs2->getParameterTypes();
 
@@ -33,11 +33,11 @@ struct relationshipEquals {
 
         std::vector<Parameter> params1 = rs1->getParameters();
         std::vector<Parameter> params2 = rs2->getParameters();
-        if (paramTypes1[0] == ParameterType::FIXED_INT || paramTypes1[0] == ParameterType::FIXED_STRING) {
+        if (params1[0].isFixedInt() || params1[0].isFixedStringType()) {
             check2 = params1[0] == params2[0];
         }
 
-        if (paramTypes1[1] == ParameterType::FIXED_INT || paramTypes1[1] == ParameterType::FIXED_STRING) {
+        if (params1[1].isFixedInt() || params1[1].isFixedStringType()) {
             check3 = params1[1] == params2[1];
         }
 
