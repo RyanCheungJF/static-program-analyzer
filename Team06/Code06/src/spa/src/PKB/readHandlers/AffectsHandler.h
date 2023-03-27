@@ -86,5 +86,4 @@ private:
     bool checkModifiedAssignReadCall(Ent commonVariable, StmtNum currentLine);
 
     bool checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, Ent commonVariable);
-
 };
