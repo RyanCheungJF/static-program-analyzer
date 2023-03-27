@@ -26,6 +26,10 @@ void WritePKB::setProcedure(ProcName p, std::unordered_set<StmtNum>& lines) {
     pkbInstance->setProcedure(p, lines);
 }
 
+void WritePKB::setProcAssignStmt(ProcName p, StmtNum num) {
+    pkbInstance->setProcAssignStmt(p, num);
+}
+
 void WritePKB::setStatement(Stmt s, StmtNum line) {
     pkbInstance->setStatement(s, line);
 }
