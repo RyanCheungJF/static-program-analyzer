@@ -44,7 +44,6 @@ class PKB : AppConstants {
         }
     };
 
-
 public:
     void initializePkb();
 

@@ -15,8 +15,6 @@ bool isName(string);
 bool isIdent(string);
 bool isSynonym(string);
 bool isPattern(string);
-bool startsWithLetter(string);
-bool startsLikeRef(string);
 bool isSelect(string);
 bool isInteger(string);
 bool isDeclaration(string);

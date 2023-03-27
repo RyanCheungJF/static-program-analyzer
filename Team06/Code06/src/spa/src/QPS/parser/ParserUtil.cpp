@@ -11,6 +11,7 @@ const string THAT = "that";
 const string PATTERN = "pattern";
 const string AND = "and";
 const string WITH = "with";
+const char OPENING_BRAC = '(';
 
 vector<int> findSuchThat(const vector<string>& wordList) {
     vector<int> suchThatStarts;
@@ -33,6 +34,7 @@ vector<int> findSuchThat(const vector<string>& wordList) {
 // TODO: refactor these find* functions
 vector<int> findPattern(const vector<string>& wordList) {
     vector<int> patternStarts;
+    int i = 0;
     for (int i = 0; i < wordList.size(); i++) {
         if (PATTERN != wordList[i]) {
             continue;
@@ -40,8 +42,23 @@ vector<int> findPattern(const vector<string>& wordList) {
         if (i == wordList.size() - 1) {
             continue;
         }
-        if (!startsWithLetter(wordList[i + 1])) {
-            continue;
+        string next = wordList[i + 1];
+        if (isIdent(next)) {
+            if (i + 2 >= wordList.size()) {
+                continue;
+            }
+            string secondNext = trim(wordList[i + 2]);
+            if (secondNext.at(0) != OPENING_BRAC) {
+                continue;
+            }
+        }
+        else {
+            bool found;
+            string substr;
+            tie(substr, ignore, found) = extractSubStringUntilDelimiter(next, 0, string(1, OPENING_BRAC));
+            if (!found || !isIdent(substr)) {
+                continue;
+            }
         }
         patternStarts.push_back(i);
     }
@@ -58,10 +75,17 @@ vector<int> findWith(const vector<string>& wordList) {
         if (i == wordList.size() - 1) {
             continue;
         }
-        if (!startsLikeRef(wordList[i + 1])) {
-            continue;
+        string comparisonString = "";
+        for (int j = i + 1; j < wordList.size(); j++) {
+            comparisonString += wordList[j];
+            if (!hasCorrectAttrCompForm(comparisonString)) {
+                comparisonString += " ";
+                continue;
+            }
+            withStarts.push_back(i);
+            i = j;
+            break;
         }
-        withStarts.push_back(i);
     }
     return withStarts;
 }

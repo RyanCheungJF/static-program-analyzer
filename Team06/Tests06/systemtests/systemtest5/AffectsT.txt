@@ -23,3 +23,38 @@ assign a;
 Select a such that Affects*(13, a)
 21, 22, 31
 5000
+6 - comment
+assign a;
+Select a such that Affects*(a, 140)
+116, 138
+5000
+7 - comment
+assign a;
+Select a such that Affects*(148, a) and Affects*(a, 191)
+149, 150, 151, 152, 153, 178, 183, 185, 189, 191
+5000
+8 - comment
+assign a;
+Select a such that Affects*(193, a) and Affects*(a, 203)
+194, 195, 196, 197, 198, 199, 200, 201, 202
+5000
+9 - comment
+assign a; stmt s;
+Select s such that Affects*(1, s)
+none
+5000
+10 - comment
+assign a; stmt s;
+Select a such that Affects*(193, a) and Affects*(a, 203) and Affects*(5, s)
+none
+5000
+11 - comment
+assign a; stmt s;
+Select a such that Affects*(8, a) and Affects*(13, a)
+31
+5000
+12 - comment
+assign a; stmt s;
+Select a such that Affects*(34, a)
+40, 55, 63, 65, 54
+5000

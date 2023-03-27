@@ -69,12 +69,12 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
 
     std::unordered_set<Ent> variablesModifiedInA1 = modifiesStorage->getRightItems(a1);
     std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getRightItems(a2);
-    std::unordered_set<Ent> commonVariables = getCommonVariables(variablesModifiedInA1, variablesUsedInA2);
-    if (commonVariables.empty()) {
+    Ent commonVariable = getCommonVariable(variablesModifiedInA1, variablesUsedInA2);
+    if (commonVariable == "") {
         return {};
     }
 
-    bool canReach = checkCanReach(a1, a2, proc1, commonVariables);
+    bool canReach = checkCanReach(a1, a2, proc1, commonVariable);
     if (!canReach) {
         return {};
     }
@@ -218,17 +218,16 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
 
 // helper functions
 // TODO: optimise this to just return Ent instead of the entire data structure
-std::unordered_set<Ent> AffectsHandler::getCommonVariables(std::unordered_set<Ent> variablesModifiedInA1,
-                                                           std::unordered_set<Ent> variablesUsedInA2) {
+Ent AffectsHandler::getCommonVariable(std::unordered_set<Ent>& variablesModifiedInA1,
+                                      std::unordered_set<Ent>& variablesUsedInA2) {
 
-    std::unordered_set<Ent> commonVariables;
     for (Ent e : variablesModifiedInA1) { // O(1) since there is really only 1 element
         if (variablesUsedInA2.find(e) != variablesUsedInA2.end()) {
-            commonVariables.insert(e);
+            return e;
         }
     }
 
-    return commonVariables;
+    return "";
 }
 
 std::vector<std::vector<std::string>>
@@ -357,9 +356,7 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
 
         std::unordered_set<Ent>& variablesInOtherA =
             isIntWildcard ? usesStorage->getRightItems(otherA) : modifiesStorage->getRightItems(otherA);
-        std::unordered_set<Ent> commonVariables = isIntWildcard
-                                                      ? getCommonVariables(variablesInCurrA, variablesInOtherA)
-                                                      : getCommonVariables(variablesInOtherA, variablesInCurrA);
+
         if (proc != procStorage->getProcedure(otherA)) {
             continue;
         }
@@ -376,7 +373,7 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
     return res;
 }
 
-bool AffectsHandler::checkModifiedAssignReadCall(std::unordered_set<Ent> commonVariables, StmtNum currentLine) {
+bool AffectsHandler::checkModifiedAssignReadCall(Ent commonVariable, StmtNum currentLine) {
 
     unordered_set<Ent>& entitiesModifiedOnCurrentLine = modifiesStorage->getRightItems(currentLine);
 
@@ -388,23 +385,21 @@ bool AffectsHandler::checkModifiedAssignReadCall(std::unordered_set<Ent> commonV
         stmtTypes.find(AppConstants::READ) != stmtTypes.end() ||
         stmtTypes.find(AppConstants::CALL) != stmtTypes.end()) {
 
-        for (Ent e : commonVariables) { // O(1) since there is only 1 variable
-            if (entitiesModifiedOnCurrentLine.find(e) != entitiesModifiedOnCurrentLine.end()) {
-                return true;
-            }
+        if (entitiesModifiedOnCurrentLine.find(commonVariable) != entitiesModifiedOnCurrentLine.end()) {
+            return true;
         }
     }
     return false;
 }
 
-bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::unordered_set<Ent> commonVariables) {
+bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, Ent commonVariable) {
 
     // if either is not an assign statements, should also just return nothing already
     if (!procAssignStmtStorage->checkProcedure(proc, a1) || !procAssignStmtStorage->checkProcedure(proc, a2)) {
         return false;
     }
 
-    if (commonVariables.size() == 0) {
+    if (commonVariable == "") {
         return false;
     }
 
@@ -422,7 +417,7 @@ bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::u
         if (curr.second == a2 && curr.first != AppConstants::DUMMY_NODE) {
             return true;
         }
-        else if (curr.first != AppConstants::DUMMY_NODE && checkModifiedAssignReadCall(commonVariables, curr.second)) {
+        else if (curr.first != AppConstants::DUMMY_NODE && checkModifiedAssignReadCall(commonVariable, curr.second)) {
             continue;
         }
         else if (seen.find(curr) != seen.end()) {

@@ -13,3 +13,8 @@ procedure p;
 Select BOOLEAN such that Calls*("call", p)
 FALSE
 5000
+4 - comment
+stmt s;
+Select BOOLEAN such that Affects(29, 29)
+FALSE
+5000
