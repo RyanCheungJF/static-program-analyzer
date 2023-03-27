@@ -65,7 +65,7 @@ public:
     std::unordered_set<StmtNum>& getContainedStatements(StmtNum containerNum);
 
     // returns a pointer to the CFG graph
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>*
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>&
     getCFG(ProcName name); // todo: delete if unused
 
 private:

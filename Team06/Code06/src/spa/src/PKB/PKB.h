@@ -99,7 +99,7 @@ public:
     void writeCFG(ProcName name,
                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph);
 
-    std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship> rs);
+    std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship>& rs);
 
     std::vector<std::string> findDesignEntities(Parameter& p);
 
@@ -157,7 +157,7 @@ public:
     std::unordered_set<ProcName>& getCallsT(ProcName p);
 
     // returns the cfg if it exists, else it returns an empty graph
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>* getCFG(ProcName name);
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& getCFG(ProcName name);
 
     // clears the caches in PKB
     void clearCache();
@@ -187,9 +187,9 @@ private:
     std::shared_ptr<PatternStorage> ifPatternStorage;
     std::shared_ptr<PatternStorage> whilePatternStorage;
 
-    RelationshipCache relationshipCache;
-    ParameterCache parameterCache;
-    PatternCache patternCache;
+    std::shared_ptr<RelationshipCache> relationshipCache;
+    std::shared_ptr<ParameterCache> parameterCache;
+    std::shared_ptr<PatternCache> patternCache;
 
     std::unordered_map<RelationshipType, std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>>> followsParentMap = {
         {RelationshipType::FOLLOWS, NULL},

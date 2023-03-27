@@ -9,7 +9,9 @@ std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcname(Param
     std::string callee = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
-    if (callsStorage->getRightItems(caller).find(callee) != callsStorage->getRightItems(caller).end()) {
+    std::unordered_set<Ent> callees = callsStorage->getRightItems(caller);
+
+    if (callees.find(callee) != callees.end()) {
         res.push_back({caller, callee});
     }
     return res;

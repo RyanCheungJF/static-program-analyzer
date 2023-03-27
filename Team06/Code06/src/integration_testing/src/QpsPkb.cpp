@@ -70,8 +70,15 @@ PKB buildPkb() {
     unordered_set<int> mainProcNums = {1, 2, 3, 4, 5, 6};
     writePkb.setProcedure("main", mainProcNums);
 
+    writePkb.setProcAssignStmt("main", 1);
+    writePkb.setProcAssignStmt("main", 4);
+    writePkb.setProcAssignStmt("main", 6);
+
     unordered_set<int> subProcNums = {7, 8, 9, 10, 11, 12};
     writePkb.setProcedure("sub", subProcNums);
+
+    writePkb.setProcAssignStmt("sub", 8);
+    writePkb.setProcAssignStmt("sub", 11);
 
     unordered_set<int> endProcNums = {13};
     writePkb.setProcedure("end", endProcNums);

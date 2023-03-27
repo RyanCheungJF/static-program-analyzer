@@ -12,16 +12,16 @@ bool Table::hasParameter(const Parameter& p) {
     return find(headers.begin(), headers.end(), p) != headers.end();
 }
 
-vector<Parameter> Table::getHeaders() {
+const vector<Parameter>& Table::getHeaders() const {
     return headers;
 }
 
-vector<vector<string>> Table::getContent() {
+const vector<vector<string>>& Table::getContent() const {
     return contents;
 }
 
-bool Table::hasIntersectingParams(Table t) {
-    vector<Parameter> headers = t.getHeaders();
+bool Table::hasIntersectingParams(Table& t) {
+    const vector<Parameter>& headers = t.getHeaders();
     for (const Parameter& p : headers) {
         if (this->hasParameter(p)) {
             return true;
@@ -30,7 +30,7 @@ bool Table::hasIntersectingParams(Table t) {
     return false;
 }
 
-vector<pair<int, int>> Table::getIntersectingIndex(Table t1, Table t2) {
+vector<pair<int, int>> Table::getIntersectingIndex(Table& t1, Table& t2) {
     vector<Parameter> h1 = t1.getHeaders();
     vector<Parameter> h2 = t2.getHeaders();
     vector<pair<int, int>> result;
@@ -44,15 +44,15 @@ vector<pair<int, int>> Table::getIntersectingIndex(Table t1, Table t2) {
     return result;
 }
 
-Table Table::cartesianProduct(Table table) {
+Table Table::cartesianProduct(Table& table) {
     vector<Parameter> h1 = this->getHeaders();
-    vector<Parameter> h2 = table.getHeaders();
-    vector<vector<string>> c1 = this->getContent();
-    vector<vector<string>> c2 = table.getContent();
+    const vector<Parameter>& h2 = table.getHeaders();
+    const vector<vector<string>>& c1 = this->getContent();
+    const vector<vector<string>>& c2 = table.getContent();
     vector<vector<string>> c3;
     h1.insert(h1.end(), h2.begin(), h2.end());
     for (const vector<string>& row1 : c1) {
-        for (vector<string> row2 : c2) {
+        for (const vector<string>& row2 : c2) {
             vector<string> dupRow(row1);
             dupRow.insert(dupRow.end(), row2.begin(), row2.end());
             c3.push_back(dupRow);
@@ -61,14 +61,14 @@ Table Table::cartesianProduct(Table table) {
     return Table{h1, c3};
 }
 
-vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector<vector<string>> c2,
+vector<vector<string>> Table::intersectContent(const vector<vector<string>>& c1, const vector<vector<string>>& c2,
                                                const vector<pair<int, int>>& intersectingIndexes) {
     unordered_multimap<string, int> hashmap;
     // we will use "value+value" as the key to the hashmap
     // depending on how many values in the intersectingIndex vector.
     for (int i = 0; i < c1.size(); i++) {
         string key;
-        for (pair<int, int> intersectingIndex : intersectingIndexes) {
+        for (const pair<int, int>& intersectingIndex : intersectingIndexes) {
             if (key.empty()) {
                 key += c1[i][intersectingIndex.first];
             }
@@ -80,12 +80,12 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
     }
     vector<vector<string>> result;
     vector<int> indexesToRemove;
-    for (pair<int, int> intersectingIndex : intersectingIndexes) {
+    for (const pair<int, int>& intersectingIndex : intersectingIndexes) {
         indexesToRemove.push_back(intersectingIndex.first);
     }
     for (int i = 0; i < c2.size(); i++) {
         string key;
-        for (pair<int, int> intersectingIndex : intersectingIndexes) {
+        for (const pair<int, int>& intersectingIndex : intersectingIndexes) {
             if (key.empty()) {
                 key += c2[i][intersectingIndex.second];
             }
@@ -109,7 +109,7 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
     return result;
 }
 
-vector<Parameter> Table::intersectHeader(vector<Parameter> h1, vector<Parameter> h2,
+vector<Parameter> Table::intersectHeader(const vector<Parameter>& h1, const vector<Parameter>& h2,
                                          const vector<pair<int, int>>& intersectingIndexes) {
     vector<Parameter> newHeader;
     for (int i = 0; i < h1.size(); i++) {
@@ -127,12 +127,12 @@ vector<Parameter> Table::intersectHeader(vector<Parameter> h1, vector<Parameter>
     return newHeader;
 }
 
-Table Table::intersectTable(Table t) {
-    vector<vector<string>> c1 = contents;
-    vector<vector<string>> c2 = t.getContent();
-    vector<Parameter> h1 = headers;
-    vector<Parameter> h2 = t.getHeaders();
-    vector<pair<int, int>> intersectingIndexes = getIntersectingIndex(*this, std::move(t));
+Table Table::intersectTable(Table& t) {
+    const vector<vector<string>>& c1 = contents;
+    const vector<vector<string>>& c2 = t.getContent();
+    const vector<Parameter>& h1 = headers;
+    const vector<Parameter>& h2 = t.getHeaders();
+    vector<pair<int, int>> intersectingIndexes = getIntersectingIndex(*this, t);
     vector<vector<string>> newContent = intersectContent(c1, c2, intersectingIndexes);
     vector<Parameter> newHeader = intersectHeader(h1, h2, intersectingIndexes);
     return Table{newHeader, newContent};
@@ -148,7 +148,7 @@ Table Table::extractDesignEntities() {
     return extractColumns(indexes);
 }
 
-Table Table::updateValues(Parameter p, unordered_map<string, string> map) {
+Table Table::updateValues(Parameter p, unordered_map<string, string>& map) {
     int index;
     vector<vector<string>> newContents;
     for (int i = 0; i < headers.size(); i++) {
@@ -156,7 +156,7 @@ Table Table::updateValues(Parameter p, unordered_map<string, string> map) {
             index = i;
         }
     }
-    for (vector<string> row : contents) {
+    for (vector<string>& row : contents) {
         row[index] = map[row[index]];
         newContents.push_back(row);
     }
@@ -164,29 +164,38 @@ Table Table::updateValues(Parameter p, unordered_map<string, string> map) {
 }
 
 Table Table::extractColumns(vector<int>& indexes) {
-    vector<vector<string>> newContent;
+    std::unordered_set<vector<string>, VectorStringHash> newContent;
+    newContent.reserve(contents.size());
     vector<Parameter> newHeader;
+
     // I do not believe that there will be a case where the tables are empty.
     for (int index : indexes) {
         newHeader.push_back(headers[index]);
     }
-    for (vector<string> entry : contents) {
+
+    for (const vector<string>& entry : contents) {
         vector<string> newEntry;
         for (int index : indexes) {
             newEntry.push_back(entry[index]);
         }
-        if (find(newContent.begin(), newContent.end(), newEntry) == newContent.end()) {
-            newContent.push_back(newEntry);
+        if (newContent.find(newEntry) == newContent.end()) {
+            newContent.insert(newEntry);
         }
     }
-    return Table{newHeader, newContent};
+    vector<vector<string>> newContentVec;
+    newContentVec.reserve(newContent.size());
+    for (auto& entry : newContent) {
+        newContentVec.push_back(entry);
+    }
+
+    return Table{newHeader, newContentVec};
 }
 
-bool Table::isEmptyTable() {
+bool Table::isEmptyTable() const {
     return contents.empty();
 }
 
-Table Table::extractColumns(vector<Parameter> params) {
+Table Table::extractColumns(vector<Parameter>& params) {
     // Assume that all the params called is confirmed to be present in the table
     vector<int> indexes;
     for (int i = 0; i < params.size(); i++) {
@@ -200,7 +209,7 @@ Table Table::extractColumns(vector<Parameter> params) {
     return extractColumns(indexes);
 }
 
-vector<string> Table::getResult(vector<Parameter> params) {
+vector<string> Table::getResult(vector<Parameter>& params) {
     vector<string> res;
     vector<int> indexOrder;
     for (Parameter param : params) {

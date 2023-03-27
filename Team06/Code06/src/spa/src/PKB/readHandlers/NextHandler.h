@@ -78,9 +78,13 @@ private:
     void addCFGRelatives(std::vector<std::vector<std::string>>& res, ProcName proc, StmtNum num, bool isFindChildren,
                          std::unordered_set<StmtNum>& filter);
 
-    void addCFGRelativesTransitive(std::vector<std::vector<std::string>>& res, CFG& graph,
+    void addCFGRelativesTransitive(std::vector<std::vector<std::string>>& res, const CFG& graph,
                                    std::deque<std::vector<StmtNum>>& queue, bool isFindChildren,
                                    std::unordered_set<StmtNum>& filterSet);
 
-    void initializeQueue(std::deque<std::vector<StmtNum>>& queue, CFG& graph, StmtNum num, bool isFindChildren);
+    void initializeQueue(std::deque<std::vector<StmtNum>>& queue, const CFG& graph, StmtNum num, bool isFindChildren);
+
+    const std::unordered_set<StmtNum>& findGraphRelative(const CFG& graph, StmtNum num, std::string relativeType);
+
+    std::unordered_set<StmtNum> emptySet;
 };

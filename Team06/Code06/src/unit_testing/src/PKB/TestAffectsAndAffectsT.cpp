@@ -141,6 +141,27 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 1")
     writePkb.setStatement(AppConstants::PRINT, 27);
     writePkb.setStatement(AppConstants::PRINT, 28);
 
+    writePkb.setProcAssignStmt(proc1, 2);
+    writePkb.setProcAssignStmt(proc1, 3);
+    writePkb.setProcAssignStmt(proc1, 5);
+    writePkb.setProcAssignStmt(proc1, 6);
+    writePkb.setProcAssignStmt(proc1, 7);
+    writePkb.setProcAssignStmt(proc1, 8);
+    writePkb.setProcAssignStmt(proc1, 9);
+    writePkb.setProcAssignStmt(proc1, 10);
+    writePkb.setProcAssignStmt(proc1, 11);
+    writePkb.setProcAssignStmt(proc1, 12);
+    writePkb.setProcAssignStmt(proc1, 13);
+    writePkb.setProcAssignStmt(proc1, 14);
+    writePkb.setProcAssignStmt(proc1, 18);
+    writePkb.setProcAssignStmt(proc1, 19);
+    writePkb.setProcAssignStmt(proc1, 20);
+    writePkb.setProcAssignStmt(proc1, 22);
+    writePkb.setProcAssignStmt(proc1, 24);
+    writePkb.setProcAssignStmt(proc1, 25);
+    writePkb.setProcAssignStmt(proc1, 26);
+    writePkb.setProcAssignStmt(proc2, 29);
+
     std::unordered_set<StmtNum> p1nums = {1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14,
                                           15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27};
     writePkb.setProcedure(proc1, p1nums);
@@ -666,6 +687,19 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 2")
     writePkb.setStatement(AppConstants::ASSIGN, 21);
     writePkb.setStatement(AppConstants::CALL, 22);
 
+    writePkb.setProcAssignStmt(proc1, 1);
+    writePkb.setProcAssignStmt(proc1, 2);
+    writePkb.setProcAssignStmt(proc1, 3);
+    writePkb.setProcAssignStmt(proc1, 4);
+    writePkb.setProcAssignStmt(proc1, 7);
+    writePkb.setProcAssignStmt(proc2, 11);
+    writePkb.setProcAssignStmt(proc2, 12);
+    writePkb.setProcAssignStmt(proc2, 13);
+    writePkb.setProcAssignStmt(proc2, 14);
+    writePkb.setProcAssignStmt(proc2, 19);
+    writePkb.setProcAssignStmt(proc3, 20);
+    writePkb.setProcAssignStmt(proc3, 21);
+
     std::unordered_set<StmtNum> proc1nums = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     std::unordered_set<StmtNum> proc2nums = {11, 12, 13, 14, 15, 16, 17, 18, 19};
     std::unordered_set<StmtNum> proc3nums = {20, 21, 22};
@@ -857,6 +891,12 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 3")
     writePkb.setStatement(AppConstants::ASSIGN, 6);
     writePkb.setStatement(AppConstants::ASSIGN, 7);
     writePkb.setStatement(AppConstants::ASSIGN, 8);
+
+    writePkb.setProcAssignStmt(proc1, 2);
+    writePkb.setProcAssignStmt(proc1, 5);
+    writePkb.setProcAssignStmt(proc1, 6);
+    writePkb.setProcAssignStmt(proc1, 7);
+    writePkb.setProcAssignStmt(proc1, 8);
 
     std::unordered_set<StmtNum> proc1nums = {1, 2, 3, 4, 5, 6, 7, 8};
     writePkb.setProcedure(proc1, proc1nums);
@@ -1059,6 +1099,17 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* Tem
     writePkb.setStatement(AppConstants::ASSIGN, 11);
     writePkb.setStatement(AppConstants::ASSIGN, 12);
 
+    writePkb.setProcAssignStmt(proc1, 1);
+    writePkb.setProcAssignStmt(proc1, 3);
+    writePkb.setProcAssignStmt(proc1, 5);
+    writePkb.setProcAssignStmt(proc1, 6);
+    writePkb.setProcAssignStmt(proc1, 7);
+    writePkb.setProcAssignStmt(proc1, 8);
+    writePkb.setProcAssignStmt(proc1, 9);
+    writePkb.setProcAssignStmt(proc1, 10);
+    writePkb.setProcAssignStmt(proc1, 11);
+    writePkb.setProcAssignStmt(proc1, 12);
+
     std::unordered_set<StmtNum> proc1nums = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     writePkb.setProcedure(proc1, proc1nums);
 
@@ -1249,6 +1300,10 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 5")
     writePkb.setStatement(AppConstants::PRINT, 9);
     writePkb.setStatement(AppConstants::CALL, 10);
     writePkb.setStatement(AppConstants::READ, 11);
+
+    writePkb.setProcAssignStmt(proc1, 3);
+    writePkb.setProcAssignStmt(proc1, 7);
+    writePkb.setProcAssignStmt(proc1, 8);
 
     std::unordered_set<StmtNum> proc1nums = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     writePkb.setProcedure(proc1, proc1nums);
@@ -1479,8 +1534,19 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* sys
 
     writePkb.setStatement(AppConstants::ASSIGN, 29);
 
+    writePkb.setProcAssignStmt(proc1, 8);
+    writePkb.setProcAssignStmt(proc1, 12);
+    writePkb.setProcAssignStmt(proc2, 16);
+    writePkb.setProcAssignStmt(proc2, 17);
+    writePkb.setProcAssignStmt(proc2, 20);
+    writePkb.setProcAssignStmt(proc2, 22);
+    writePkb.setProcAssignStmt(proc2, 23);
+    writePkb.setProcAssignStmt(proc2, 25);
+    writePkb.setProcAssignStmt(proc2, 26);
+    writePkb.setProcAssignStmt(proc3, 29);
+
     std::unordered_set<StmtNum> proc1nums = {1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12};
-    std::unordered_set<StmtNum> proc2nums = {113, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28};
+    std::unordered_set<StmtNum> proc2nums = {13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28};
     std::unordered_set<StmtNum> proc3nums = {29};
     writePkb.setProcedure(proc1, proc1nums);
     writePkb.setProcedure(proc2, proc2nums);

@@ -240,17 +240,17 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
     }
 
     SECTION("SP-PKB Integration: CFG") {
-        auto cfgA = *readPKB.getCFG("A");
+        auto cfgA = readPKB.getCFG("A");
         REQUIRE(cfgA[1]["parents"].empty());
         REQUIRE(cfgA[1]["children"].empty());
 
-        auto cfgB = *readPKB.getCFG("B");
+        auto cfgB = readPKB.getCFG("B");
         REQUIRE(cfgB[2]["parents"].empty());
         REQUIRE(cfgB[2]["children"] == std::unordered_set({3}));
         REQUIRE(cfgB[3]["parents"] == std::unordered_set({2}));
         REQUIRE(cfgB[3]["children"].empty());
 
-        auto cfgC = *readPKB.getCFG("C");
+        auto cfgC = readPKB.getCFG("C");
         REQUIRE(cfgC[4]["parents"].empty());
         REQUIRE(cfgC[4]["children"] == std::unordered_set({5}));
         REQUIRE(cfgC[5]["parents"] == std::unordered_set({4}));
@@ -613,7 +613,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
     }
 
     SECTION("SP-PKB Integration: CFG") {
-        auto cfgA = *readPKB.getCFG("A");
+        auto cfgA = readPKB.getCFG("A");
         REQUIRE(cfgA[1]["parents"].empty());
         REQUIRE(cfgA[1]["children"] == std::unordered_set({2}));
         REQUIRE(cfgA[2]["parents"] == std::unordered_set({1}));
@@ -635,7 +635,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
         REQUIRE(cfgA[10]["parents"] == std::unordered_set({9}));
         REQUIRE(cfgA[10]["children"] == std::unordered_set({7}));
 
-        auto cfgB = *readPKB.getCFG("B");
+        auto cfgB = readPKB.getCFG("B");
         REQUIRE(cfgA[11]["parents"].empty());
         REQUIRE(cfgA[11]["children"].empty());
     }
@@ -1028,7 +1028,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 3") {
     }
 
     SECTION("SP-PKB Integration: CFG") {
-        auto cfgA = *readPKB.getCFG("A");
+        auto cfgA = readPKB.getCFG("A");
         REQUIRE(cfgA[1]["parents"].empty());
         REQUIRE(cfgA[1]["children"] == std::unordered_set({2}));
         REQUIRE(cfgA[2]["parents"] == std::unordered_set({1}));
@@ -1036,19 +1036,19 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 3") {
         REQUIRE(cfgA[3]["parents"] == std::unordered_set({2}));
         REQUIRE(cfgA[3]["children"].empty());
 
-        auto cfgB = *readPKB.getCFG("B");
+        auto cfgB = readPKB.getCFG("B");
         REQUIRE(cfgB[4]["parents"].empty());
         REQUIRE(cfgB[4]["children"] == std::unordered_set({5}));
         REQUIRE(cfgB[5]["parents"] == std::unordered_set({4}));
         REQUIRE(cfgB[5]["children"].empty());
 
-        auto cfgC = *readPKB.getCFG("C");
+        auto cfgC = readPKB.getCFG("C");
         REQUIRE(cfgC[6]["parents"].empty());
         REQUIRE(cfgC[6]["children"] == std::unordered_set({7}));
         REQUIRE(cfgC[7]["parents"] == std::unordered_set({6}));
         REQUIRE(cfgC[7]["children"].empty());
 
-        auto cfgD = *readPKB.getCFG("D");
+        auto cfgD = readPKB.getCFG("D");
         REQUIRE(cfgD[8]["parents"] == std::unordered_set({10}));
         REQUIRE(cfgD[8]["children"] == std::unordered_set({9, 11}));
         REQUIRE(cfgD[9]["parents"] == std::unordered_set({8}));
@@ -1058,14 +1058,14 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 3") {
         REQUIRE(cfgD[11]["parents"] == std::unordered_set({8}));
         REQUIRE(cfgD[11]["children"].empty());
 
-        auto cfgE = *readPKB.getCFG("E");
+        auto cfgE = readPKB.getCFG("E");
         REQUIRE(cfgE[12]["parents"].empty());
         REQUIRE(cfgE[12]["children"] == std::unordered_set({13, 14}));
         REQUIRE(cfgE[13]["parents"] == std::unordered_set({12}));
         REQUIRE(cfgE[13]["children"] == std::unordered_set({15}));
         REQUIRE(cfgE[14]["parents"] == std::unordered_set({12}));
         REQUIRE(cfgE[14]["children"] == std::unordered_set({15}));
-        REQUIRE(cfgE[15]["parents"] == std::unordered_set({13, 14}));
+        REQUIRE(cfgE[15].at("parents") == std::unordered_set({13, 14}));
         REQUIRE(cfgE[15]["children"].empty());
     }
 

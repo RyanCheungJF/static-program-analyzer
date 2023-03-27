@@ -6,7 +6,7 @@
 
 class QPS {
 public:
-    vector<string> processQueries(string, ReadPKB&);
+    vector<string> processQueries(string&, ReadPKB&);
 };
 
 #endif // SPA_QPS_H

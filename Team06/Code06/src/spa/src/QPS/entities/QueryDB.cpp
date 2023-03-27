@@ -6,7 +6,7 @@ QueryDB::QueryDB() {
 
 Table QueryDB::emptyTable = Table({}, {});
 
-void QueryDB::insertTable(Table table) {
+void QueryDB::insertTable(Table& table) {
     // Check if we have any duplicate parameters
     // if so do an intersection
     vector<Parameter> inputHeaders = table.getHeaders();
@@ -41,7 +41,7 @@ bool QueryDB::hasParameter(Parameter& p) {
 vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
     vector<Parameter> presentParams;
     Table initialTable = emptyTable;
-    for (Parameter param : params) {
+    for (Parameter& param : params) {
         if (this->hasParameter(param)) {
             presentParams.push_back(param);
         }
@@ -58,8 +58,8 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
             }
             else {
                 vector<string> content = readPKB.findDesignEntities(param);
-                for (string c : content) {
-                    contentVec.push_back({c});
+                for (string& c : content) {
+                    contentVec.push_back(std::move(vector<string>{c}));
                 }
                 table = Table({param}, contentVec);
             }
@@ -79,7 +79,7 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
 }
 
 bool QueryDB::hasEmptyTable() {
-    for (Table t : tableVector) {
+    for (const Table& t : tableVector) {
         if (t.isEmptyTable()) {
             return true;
         }
@@ -91,10 +91,10 @@ Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
     // Assumes that each table has unique headers.
     // extracts in any order
     vector<Table> temp;
-    for (Table table : tableVector) {
+    for (Table& table : tableVector) {
         vector<Parameter> headers = table.getHeaders();
         vector<Parameter> paramsVec;
-        for (Parameter param : params) {
+        for (const Parameter& param : params) {
             if (find(headers.begin(), headers.end(), param) != headers.end()) {
                 paramsVec.push_back(param);
             }
@@ -105,11 +105,11 @@ Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
         Table extracted = table.extractColumns(paramsVec);
         temp.push_back(extracted);
     }
-    for (Parameter param : params) {
+    for (Parameter& param : params) {
         unordered_map<string, string> attributeMap;
         if (param.hasAttribute()) {
             vector<vector<string>> mapping = readPKB.findAttribute(param);
-            for (vector<string> kv : mapping) {
+            for (const vector<string>& kv : mapping) {
                 attributeMap.insert({kv[0], kv[1]});
             }
             for (Table& t : temp) {

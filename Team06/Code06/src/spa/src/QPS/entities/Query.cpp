@@ -19,7 +19,7 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
 }
 
 void Query::evaluateRelationship(QueryDB& queryDb, ReadPKB& readPKB) {
-    for (shared_ptr<Relationship> relation : this->relations) {
+    for (shared_ptr<Relationship>& relation : this->relations) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findRelationship(relation);
@@ -39,7 +39,7 @@ void Query::evaluateRelationship(QueryDB& queryDb, ReadPKB& readPKB) {
 }
 
 void Query::evaluatePattern(QueryDB& queryDb, ReadPKB& readPKB) {
-    for (Pattern pattern : this->patterns) {
+    for (Pattern& pattern : this->patterns) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findPattern(pattern);
@@ -60,7 +60,7 @@ void Query::evaluatePattern(QueryDB& queryDb, ReadPKB& readPKB) {
 }
 
 void Query::evaluateComparison(QueryDB& queryDb, ReadPKB& readPKB) {
-    for (Comparison comparison : this->comparisons) {
+    for (Comparison& comparison : this->comparisons) {
         vector<vector<string>> response = readPKB.findWith(comparison);
         if (response.empty()) {
             queryDb.insertTable(QueryDB::emptyTable);
