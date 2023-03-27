@@ -1,6 +1,6 @@
 #include "EntityStorage.h"
 
-template <typename T> void EntityStorage<T>::writeEntity(StmtNum num, std::unordered_set<T> entities) {
+template <typename T> void EntityStorage<T>::writeEntity(StmtNum num, std::unordered_set<T>& entities) {
     stmtNum_ent[num].insert(entities.begin(), entities.end());
     for (auto e : entities) {
         ent_stmtNum[e].insert(num);
@@ -23,17 +23,15 @@ template <typename T> std::unordered_set<StmtNum> EntityStorage<T>::getEntityStm
     return ent_stmtNum.at(e);
 }
 
-template <typename T> std::unordered_set<T> EntityStorage<T>::getEntities(StmtNum num) {
+template <typename T> std::unordered_set<T>& EntityStorage<T>::getEntities(StmtNum num) {
     if (stmtNum_ent.find(num) == stmtNum_ent.end()) {
-        std::unordered_set<T> emptySet;
-        return emptySet;
+        return emptySetStmtNums;
     }
     return stmtNum_ent.at(num);
 }
 
-template <typename T> std::unordered_set<T> EntityStorage<T>::getEntNames() {
+template <typename T> std::unordered_set<T>& EntityStorage<T>::getEntNames() {
     return entNames;
 }
 
-template class EntityStorage<Ent>;
-template class EntityStorage<Const>;
+template class EntityStorage<std::string>;

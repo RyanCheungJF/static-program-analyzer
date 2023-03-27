@@ -4,6 +4,8 @@ QueryDB::QueryDB() {
     // Creates the QueryDB object
 }
 
+Table QueryDB::emptyTable = Table({}, {});
+
 void QueryDB::insertTable(Table table) {
     // Check if we have any duplicate parameters
     // if so do an intersection
@@ -38,38 +40,41 @@ bool QueryDB::hasParameter(Parameter& p) {
 
 vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
     vector<Parameter> presentParams;
-    vector<Parameter> absentParams;
     Table initialTable = emptyTable;
     for (Parameter param : params) {
         if (this->hasParameter(param)) {
             presentParams.push_back(param);
         }
         else if (param.getType() != ParameterType::BOOLEAN) {
-            vector<string> content = readPKB.findDesignEntities(param);
-            vector<Parameter> paramVec = {param};
             vector<vector<string>> contentVec = {};
-            for (string c : content) {
-                contentVec.push_back({c});
-            }
-            Table table(paramVec, contentVec);
-            if (initialTable.isEmptyTable()) {
-                initialTable = table;
+            Table table = emptyTable;
+            if (param.hasAttribute()) {
+                contentVec = readPKB.findAttribute(param);
+                for (vector<string> s : contentVec) {
+                    table = Table({Parameter(AppConstants::WILDCARD_VALUE, ParameterType::WILDCARD), param}, contentVec);
+                    table = table.extractDesignEntities();
+                }
             }
             else {
-                initialTable = initialTable.cartesianProduct(table);
+                vector<string> content = readPKB.findDesignEntities(param);
+                for (string c : content) {
+                    contentVec.push_back({c});
+                }
+                table = Table({param}, contentVec);
             }
+            initialTable = initialTable.isEmptyTable() ? table : initialTable.cartesianProduct(table);
         }
     }
     if (!presentParams.empty()) {
         initialTable = initialTable.isEmptyTable()
-                           ? extractColumns(presentParams)
-                           : initialTable = extractColumns(presentParams).cartesianProduct(initialTable);
+                           ? extractColumns(presentParams, readPKB)
+                           : extractColumns(presentParams, readPKB).cartesianProduct(initialTable);
     }
     if (hasEmptyTable()) {
         initialTable = emptyTable;
     }
     return params[0].getType() == ParameterType::BOOLEAN ? hasEmptyTable() ? falseVec : trueVec
-                                                         : initialTable.getResult();
+                                                         : initialTable.getResult(params);
 }
 
 bool QueryDB::hasEmptyTable() {
@@ -81,8 +86,9 @@ bool QueryDB::hasEmptyTable() {
     return false;
 }
 
-Table QueryDB::extractColumns(vector<Parameter> params) {
+Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
     // Assumes that each table has unique headers.
+    // extracts in any order
     vector<Table> temp;
     for (Table table : tableVector) {
         vector<Parameter> headers = table.getHeaders();
@@ -98,6 +104,20 @@ Table QueryDB::extractColumns(vector<Parameter> params) {
         Table extracted = table.extractColumns(paramsVec);
         temp.push_back(extracted);
     }
+    for (Parameter param : params) {
+        unordered_map<string, string> attributeMap;
+        if (param.hasAttribute()) {
+            vector<vector<string>> mapping = readPKB.findAttribute(param);
+            for (vector<string> kv : mapping) {
+                attributeMap.insert({kv[0], kv[1]});
+            }
+            for (Table &t : temp) {
+                if (t.hasParameter(param)) {
+                    t = t.updateValues(param, attributeMap);
+                }
+            }
+        }
+    }
     if (temp.size() == 1) {
         return temp[0];
     }
@@ -106,6 +126,7 @@ Table QueryDB::extractColumns(vector<Parameter> params) {
         for (int i = 1; i < temp.size(); i++) {
             t = t.cartesianProduct(temp[i]);
         }
-        return t.extractColumns(params);
+        return t;
     }
 }
+

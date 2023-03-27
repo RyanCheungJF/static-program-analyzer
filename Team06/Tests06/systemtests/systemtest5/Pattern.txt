@@ -46,7 +46,7 @@ Select a pattern a("a", "((f * q * e - s * 9)) * (g + ((10 + a)) * y)")
 10 - exact match check (2)
 assign a; 
 Select a pattern a("a", "(f * (q * e) - s * 9) * (g + (10 + a) * y)")
-8
+none
 5000
 11 - exact match check (3)
 assign a; 
@@ -61,12 +61,12 @@ none
 13 - partial match check (2)
 assign a; 
 Select a pattern a("a", _"q * e"_)
-8
+none
 5000
 14 - partial match check (3)
 assign a; 
 Select a pattern a("a", _"(((q * e)))"_)
-8
+none
 5000
 15 - partial match check (4)
 assign a; 
@@ -77,4 +77,109 @@ none
 assign a; 
 Select a pattern a("a", _"(10)"_)
 8, 13
+5000
+17 - check left-associative (1)
+assign a; 
+Select a pattern a("h", _"c * z"_)
+none
+5000
+18 - check left-associative (2)
+assign a; 
+Select a pattern a("h", _"a * c"_)
+45
+5000
+19 - check left-associative (3)
+assign a; 
+Select a pattern a("l", _"x + y + z"_)
+18
+5000
+20 - check left-associative (4)
+assign a; 
+Select a pattern a("l", _"y + z"_)
+none
+5000
+21 - check left-associative (5)
+assign a; 
+Select a pattern a("l", _"z + u"_)
+none
+5000
+22 - check left-associative (6)
+assign a; 
+Select a pattern a("l", _"y + z + u + a + b"_)
+none
+5000
+23 - check left-associative (7)
+assign a; 
+Select a pattern a("l", _"x + y + z + u"_)
+18
+5000
+24 - syn-assign is pattern
+assign pattern; 
+Select pattern pattern pattern("l", _"x + y + z + u"_)
+18
+5000
+25 - handle large integers
+assign a; 
+Select a pattern a("y", _"2147483648"_)
+14
+5000
+26 - wildcard, wildcard
+while w; 
+Select w pattern w(_, _)
+7, 20, 85, 53, 181, 62, 72, 83, 89, 91, 98, 106, 143, 169, 188, 94, 103, 104, 109, 87, 105, 112, 179
+5000
+27 - var string, wildcard (1)
+while w; 
+Select w pattern w("z", _)
+20, 85, 53, 181, 94, 62, 91, 83, 89, 98, 143, 169, 179
+5000
+28 - var string, wildcard (2)
+while w; 
+Select w pattern w("a", _)
+72
+5000
+29 - var string, wildcard (3)
+while w; 
+Select w pattern w("b", _)
+7, 20, 85, 53, 181, 62, 72, 89, 91, 94, 98, 104, 143, 169
+5000
+30 - var synonym, wildcard
+while w; variable v;
+Select w pattern w(v, _)
+7, 20, 85, 53, 181, 62, 72, 83, 89, 91, 98, 106, 143, 169, 188, 94, 103, 104, 109, 87, 105, 112, 179
+5000
+31 - syn-while is pattern
+while pattern; 
+Select pattern pattern pattern("b", _)
+7, 20, 85, 53, 181, 62, 72, 89, 91, 94, 98, 104, 143, 169
+5000
+32 - wildcard, wildcard
+if i;
+Select i pattern i(_, _, _)
+37, 5, 11, 26, 118, 38, 56, 76, 132, 175, 119, 159, 154, 43, 73, 182, 46, 120, 117, 136, 39, 121, 127, 131, 44
+5000
+33 - var string, wildcard (1)
+if i;
+Select i pattern i("z", _, _)
+26, 154, 118, 46, 38, 43, 120, 56, 76, 131, 159, 175
+5000
+34 - var string, wildcard (2)
+if i;
+Select i pattern i("a", _, _)
+5, 37, 119, 159, 175, 154
+5000
+35 - var string, wildcard (3)
+if i;
+Select i pattern i("b", _, _)
+154, 26, 56, 121, 73, 76, 118, 182, 175
+5000
+36 - var synonym, wildcard
+if i; variable v;
+Select i pattern i(v, _, _)
+37, 5, 11, 26, 118, 38, 56, 76, 132, 175, 119, 159, 154, 43, 73, 182, 46, 120, 117, 136, 39, 121, 127, 131, 44
+5000
+37 - syn-if is pattern
+if pattern; 
+Select pattern pattern pattern("b", _, _)
+154, 26, 56, 121, 73, 76, 118, 182, 175
 5000

@@ -3,10 +3,12 @@
 
 TEST_CASE("Checks that write and read works for constantStorage") {
     EntityStorage<Const> cs;
-    Const c = 5;
-    cs.writeEntity(4, {c, 10});
-    cs.writeEntity(8, {c});
-    cs.writeEntity(9, {c});
+    Const c = "5";
+    std::unordered_set<Const> val1 = {c, "10"};
+    std::unordered_set<Const> val2 = {c};
+    cs.writeEntity(4, val1);
+    cs.writeEntity(8, val2);
+    cs.writeEntity(9, val2);
     std::unordered_set<StmtNum> statementNums = cs.getEntityStmtNums(c);
 
     REQUIRE(statementNums.size() == 3);
@@ -18,7 +20,7 @@ TEST_CASE("Checks that write and read works for constantStorage") {
 
 TEST_CASE("Check that if a constant does not appear in the source code, it should return an empty set") {
     EntityStorage<Const> cs;
-    Const c = 7;
+    Const c = "7";
     std::unordered_set<StmtNum> statementNums = cs.getEntityStmtNums(c);
 
     REQUIRE(statementNums.empty());
@@ -27,8 +29,8 @@ TEST_CASE("Check that if a constant does not appear in the source code, it shoul
 
 TEST_CASE("Check that given query for a constant and a statementNumber that it appears in, it returns true") {
     EntityStorage<Const> cs;
-    Const c = 8;
-    std::unordered_set<StmtNum> set = {c, 10, 13};
+    Const c = "8";
+    std::unordered_set<Const> set = {c, "10", "13"};
     cs.writeEntity(3, set);
 
     REQUIRE(cs.checkEntity(c, 3));
@@ -37,5 +39,5 @@ TEST_CASE("Check that given query for a constant and a statementNumber that it a
 
 TEST_CASE("Check that if a constant does not exist, it returns false") {
     EntityStorage<Const> cs;
-    REQUIRE(!cs.checkEntity(3, 4));
+    REQUIRE(!cs.checkEntity("3", 4));
 }

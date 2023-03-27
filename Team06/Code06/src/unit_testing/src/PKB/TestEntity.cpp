@@ -4,9 +4,10 @@
 TEST_CASE("Checks that write and read works for entityStorage") {
     EntityStorage<Ent> es;
     Ent e = "v";
-    es.writeEntity(3, {e});
-    es.writeEntity(6, {e});
-    es.writeEntity(9, {e});
+    std::unordered_set<Ent> vals = {e};
+    es.writeEntity(3, vals);
+    es.writeEntity(6, vals);
+    es.writeEntity(9, vals);
     std::unordered_set<StmtNum> statementNums = es.getEntityStmtNums(e);
 
     REQUIRE(statementNums.size() == 3);
@@ -28,7 +29,8 @@ TEST_CASE("Check that if an entity does not appear in the source code, it should
 TEST_CASE("Check that given query for an entity and a statementNumber that it appears in, it returns true") {
     EntityStorage<Ent> es;
     Ent e = "v";
-    es.writeEntity(3, {e});
+    std::unordered_set<Ent> vals = {e};
+    es.writeEntity(3, vals);
 
     REQUIRE(es.checkEntity(e, 3));
     REQUIRE(!es.checkEntity(e, 4));

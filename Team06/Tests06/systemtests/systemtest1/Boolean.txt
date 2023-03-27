@@ -14,7 +14,42 @@ Select BOOLEAN such that Calls(p, "arithmetic")
 FALSE
 5000
 4 - comment
-assign a;
-Select BOOLEAN pattern a(_, _" ((c - y) - z) "_))
+call c; procedure p; while w;
+Select BOOLEAN such that Affects(5, 7) and Modifies("conditionalSpam", "b") and Uses(30, "while")
+TRUE
+5000
+5 - comment
+call c; procedure p; while w;
+Select BOOLEAN such that Affects(5, 7) and Affects*(13, 16) and Modifies("unknown", "b") and Uses(30, "while")
 FALSE
+5000
+6 - comment
+assign a;
+Select BOOLEAN pattern a("z", "a + b")
+TRUE
+5000
+7 - comment
+assign a;
+Select BOOLEAN pattern a(_, "1")
+TRUE
+5000
+8 -comment
+assign a;
+Select BOOLEAN pattern a(_, _"a"_)
+TRUE
+5000
+7 - comment
+assign a;
+Select BOOLEAN pattern a(_, _" ((c - y) - z) "_)
+FALSE
+5000
+8 - comment
+assign a;
+Select BOOLEAN pattern a(_, _)
+TRUE
+5000
+9 - comment
+assign a;
+Select BOOLEAN
+TRUE
 5000

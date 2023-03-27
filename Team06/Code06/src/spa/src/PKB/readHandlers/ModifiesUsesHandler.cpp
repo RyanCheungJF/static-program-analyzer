@@ -20,9 +20,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntVar(Paramete
 std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntWildcard(Parameter fixedIntParam) {
     std::string fixedIntString = fixedIntParam.getValue();
     std::vector<std::vector<std::string>> res;
-
-    std::unordered_set<Ent> entities = rlStorage->getRightItems(stoi(fixedIntString));
-    for (auto entity : entities) {
+    for (Ent entity : rlStorage->getRightItems(stoi(fixedIntString))) {
         res.push_back({fixedIntString, entity});
     }
     return res;
@@ -42,9 +40,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcVar(Paramet
 std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcWildcard(Parameter fixedProcParam) {
     std::string fixedProc = fixedProcParam.getValue();
     std::vector<std::vector<std::string>> res;
-
-    std::unordered_set<Ent> entities = rlStorage->getRightItems(fixedProc);
-    for (auto entity : entities) {
+    for (Ent entity : rlStorage->getRightItems(fixedProc)) {
         res.push_back({fixedProc, entity});
     }
     return res;
@@ -54,10 +50,9 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynVar(Para
     std::string paramString2 = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum> stmtNums = rlStorage->getLeftItems(paramString2);
-    std::unordered_set<StmtNum> typedStmtNums = stmtStorage->getStatementNumbers(param1.getTypeString());
-    for (auto stmtNum : stmtNums) {
-        if (typedStmtNums.find(stmtNum) != typedStmtNums.end()) {
+    for (StmtNum stmtNum : rlStorage->getLeftItems(paramString2)) {
+        if (stmtStorage->getStatementNumbers(param1.getTypeString()).find(stmtNum) !=
+            stmtStorage->getStatementNumbers(param1.getTypeString()).end()) {
             std::string stmtNumString = to_string(stmtNum);
             res.push_back({stmtNumString, paramString2});
         }
@@ -68,10 +63,8 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynVar(Para
 std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynWildcard(Parameter param1) {
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum> typedStmtNums = stmtStorage->getStatementNumbers(param1.getTypeString());
-    for (auto typedStmtNum : typedStmtNums) {
-        std::unordered_set<Ent> entities = rlStorage->getRightItems(typedStmtNum);
-        for (auto entity : entities) {
+    for (auto typedStmtNum : stmtStorage->getStatementNumbers(param1.getTypeString())) {
+        for (Ent entity : rlStorage->getRightItems(typedStmtNum)) {
             std::string stmtNumString = to_string(typedStmtNum);
             res.push_back({stmtNumString, entity});
         }
@@ -83,8 +76,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcSynVar(Para
     std::string fixedVar = fixedVarParam.getValue();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<ProcName> procs = rlStorage->getProcs(fixedVar);
-    for (auto proc : procs) {
+    for (ProcName proc : rlStorage->getProcs(fixedVar)) {
         res.push_back({proc, fixedVar});
     }
     return res;
@@ -92,8 +84,8 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcSynVar(Para
 
 std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcSynWildcard() {
     std::vector<std::vector<std::string>> res;
-    for (auto proc : rlStorage->getAllProcs()) {
-        for (auto entity : rlStorage->getRightItems(proc)) {
+    for (ProcName proc : rlStorage->getAllProcs()) {
+        for (Ent entity : rlStorage->getRightItems(proc)) {
             res.push_back({proc, entity});
         }
     }
@@ -101,13 +93,10 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcSynWildcard
 }
 
 std::vector<std::vector<std::string>> ModifiesUsesHandler::handle(Parameter param1, Parameter param2) {
-
-    ParameterType param1Type = param1.getType();
-    ParameterType param2Type = param2.getType();
-    bool isIntParam1 = param1Type == ParameterType::FIXED_INT;
-    bool isStringParam1 = param1Type == ParameterType::FIXED_STRING;
-    bool isStringParam2 = param2Type == ParameterType::FIXED_STRING;
-    bool isProcParam1 = param1Type == ParameterType::PROCEDURE;
+    bool isIntParam1 = param1.isFixedInt();
+    bool isStringParam1 = param1.isFixedStringType();
+    bool isStringParam2 = param2.isFixedStringType();
+    bool isProcParam1 = param1.isProcedureOnly();
 
     if (isIntParam1) {
         if (isStringParam2) {

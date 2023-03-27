@@ -63,7 +63,7 @@ private:
 
     // helper functions
     std::unordered_map<ProcName, std::unordered_set<StmtNum>>
-    getProcedureLines(std::unordered_set<StmtNum> statementNumbers);
+    getProcedureLines(std::unordered_set<StmtNum>& statementNumbers);
 
     std::vector<std::vector<std::string>> handleNonTransitive(Parameter param1, Parameter param2, bool isFixedIntParam1,
                                                               bool isFixedIntParam2, bool isWildCardParam1,

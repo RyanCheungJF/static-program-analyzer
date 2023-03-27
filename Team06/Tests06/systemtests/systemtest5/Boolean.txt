@@ -1,0 +1,50 @@
+1 - comment
+if i; while w;
+Select BOOLEAN pattern i("a", _, _)
+TRUE
+5000
+2 - comment
+if i; while w; assign a;
+Select BOOLEAN pattern a(_, _"a*c"_)
+TRUE
+5000
+3 - comment
+if i; while w; assign a;
+Select BOOLEAN pattern a(_, _"c * z"_)
+FALSE
+5000
+4 - comment
+if i; while w; assign a;
+Select BOOLEAN pattern a(_, _"f - 0"_)
+FALSE
+5000
+5 - comment
+if i; while w; assign a;
+Select BOOLEAN pattern a(_, _"g * i"_)
+TRUE
+5000
+6 - comment
+if i; while w; assign a;
+Select BOOLEAN pattern a(_, _"i / t"_)
+FALSE
+5000
+7 - comment
+if i; while w; assign a;
+Select BOOLEAN pattern a(_, _"s + (p * (s + 1))"_)
+FALSE
+5000
+8 - comment
+if i; while w; assign a1, a2;
+Select BOOLEAN such that Next*(a1, a2) pattern a1(_, _"(a * d)"_) pattern a2(_, _"a + b"_)
+TRUE
+5000
+9 - comment
+if i; while w; assign a1, a2, a3;
+Select BOOLEAN such that Next*(a1, a2) and Next*(a1, a3) and Next*(a2, a3) pattern a1(_, _"a"_) pattern a2(_, _"x"_) pattern a3(_, _"frog"_)
+FALSE
+5000
+10 - comment
+variable v; procedure p;
+Select BOOLEAN such that Uses("G", "s")
+TRUE
+5000

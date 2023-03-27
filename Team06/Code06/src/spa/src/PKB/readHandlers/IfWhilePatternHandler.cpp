@@ -6,9 +6,7 @@ IfWhilePatternHandler::IfWhilePatternHandler(std::shared_ptr<PatternStorage> pat
 
 std::vector<std::vector<std::string>> IfWhilePatternHandler::handleVar(Ent ent) {
     std::vector<std::vector<std::string>> res;
-
-    std::unordered_set<StmtNum> stmtNums = patternStorage->getStmtNums(ent);
-    for (auto stmtNum : stmtNums) {
+    for (auto stmtNum : patternStorage->getStmtNums(ent)) {
         res.push_back({std::to_string(stmtNum), ent});
     }
 
@@ -30,10 +28,10 @@ std::vector<std::vector<std::string>> IfWhilePatternHandler::handleWildcard() {
 }
 
 std::vector<std::vector<std::string>> IfWhilePatternHandler::handle(Pattern p) {
-    ParameterType lhsType = p.getEntRefType();
+    Parameter lhs = *p.getEntRef();
     std::string lhsString = p.getEntRefValue();
 
-    if (lhsType == ParameterType::FIXED_STRING) {
+    if (lhs.isFixedStringType()) {
         return handleVar(lhsString);
     }
     else {

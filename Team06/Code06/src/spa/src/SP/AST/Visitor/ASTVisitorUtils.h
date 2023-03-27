@@ -28,26 +28,4 @@ void checkStatementHelper(std::vector<std::unique_ptr<Statement>>& statements, A
 void visitCondExprHelper(ConditionalExpression* condExpr, std::unordered_set<Ent>& variables,
                          std::unordered_set<Const>& constants);
 void visitExprHelper(Expression* expr, std::unordered_set<Ent>& variables, std::unordered_set<Const>& constants);
-void populateUsesModifies(WritePKB* writePKB, ReadPKB* readPKB, std::vector<ProcName> order);
-void processProcedures(WritePKB* writePKB, ReadPKB* readPKB, std::vector<ProcName> order);
-void processContainerStatements(WritePKB* writePKB, ReadPKB* readPKB);
 bool isContainerStatement(Statement* statement);
-void buildCFG(Procedure* proc, WritePKB* writePKB, ReadPKB* readPKB);
-void buildCFGHelper(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
-                    StatementList* stmtList, StmtNum loopedStmtNum);
-void connectNodesForCFG(std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& cfg,
-                        StmtNum curr, StmtNum next);
-void validateNoDuplicateProcedureName(std::vector<ProcName>& procedureNames);
-void validateCalledProceduresExist(std::vector<ProcName>& procedureNames,
-                                   std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap);
-std::vector<ProcName> validateNoCycles(std::vector<ProcName>& procedureNames,
-                                       std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
-                                       WritePKB* writePkb, ReadPKB* readPkb);
-void recurseCallStatementHelper(Statement* recurseStmt,
-                                std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
-                                ProcName parentProcedure);
-void checkCallStatementHelper(std::vector<std::unique_ptr<Statement>>& statements,
-                              std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
-                              ProcName parentProcedure);
-void populateCallsTable(std::unordered_map<ProcName, std::unordered_set<ProcName>>& procCallMap,
-                        std::vector<ProcName>& order, WritePKB* writePKB, ReadPKB* readPKB);

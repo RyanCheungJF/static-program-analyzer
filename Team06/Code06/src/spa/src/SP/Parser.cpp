@@ -202,16 +202,27 @@ std::unique_ptr<ConditionalExpression> Parser::parseConditionalExpression(std::d
 }
 
 std::unique_ptr<ConditionalExpression> Parser::parseBinaryConditionalExpression(std::deque<Token>& tokens) {
-    /* SIMPLE grammar is slightly complicated, as something like (3 + 2) > 0
-     * would get wrongly parsed as a cond_expr, instead of rel_expr, thus we
-     * handle this case here, by iterating through the nested expression, to
-     * check for a relational operator. If there isn't any, then we should parse
-     * it as a relational expression */
-    int idx = 0;
+    /* SIMPLE grammar is slightly complicated, as something like (3 + 2) > 0 would get
+     * wrongly parsed as a cond_expr, instead of rel_expr, thus we handle this case here,
+     * by iterating through the nested expression, to check for a relational operator.
+     * If there isn't any before the corresponding ), then we should parse it as a relational
+     * expression. Note it has to be the corresponding ), as something like
+     * ((a + b) > 3) && ((a + b) < 5) should be parsed as a binary conditional expression */
+    int stack = 1; // Start with '(' in stack
+    int idx = 1;
     bool parseAsRelExprFlag = true;
-    while (!tokens.at(idx).isType(TokenType::RIGHT_PARENTHESIS)) {
+    while (stack != 0) {
+        if (tokens.at(idx).isType(TokenType::LEFT_PARENTHESIS)) {
+            stack++;
+        }
+        if (tokens.at(idx).isType(TokenType::RIGHT_PARENTHESIS)) {
+            stack--;
+        }
         if (tokens.at(idx).isType(TokenType::RELATIONAL_OPR)) {
             parseAsRelExprFlag = false;
+        }
+        if (tokens.at(idx).isType(TokenType::ENDOFFILE)) {
+            throw SyntaxErrorException("Error in parsing binary conditional expression");
         }
         idx++;
     }
@@ -272,12 +283,16 @@ std::unique_ptr<Expression> Parser::parseExpression(std::deque<Token>& tokens) {
      *    expr: term(expr')
      *    expr': '+' term(expr') | '-' term(expr') | epsilon */
     auto lhs = parseTerm(tokens);
+    return parseExpressionHelper(tokens, std::move(lhs));
+}
 
+std::unique_ptr<Expression> Parser::parseExpressionHelper(std::deque<Token>& tokens, std::unique_ptr<Expression> lhs) {
     if (tokens.front().isType(TokenType::EXPR_ARITH_OPR)) {
         Operator mathOperator = tokens.front().value;
         tokens.pop_front(); // Pop the '+' or '-'
-        auto rhs = parseExpression(tokens);
-        return std::make_unique<MathExpression>(mathOperator, std::move(lhs), std::move(rhs));
+        auto rhs = parseTerm(tokens);
+        return parseExpressionHelper(tokens,
+                                     std::make_unique<MathExpression>(mathOperator, std::move(lhs), std::move(rhs)));
     }
     else { // Reached the epsilon
         return lhs;
@@ -290,12 +305,15 @@ std::unique_ptr<Expression> Parser::parseTerm(std::deque<Token>& tokens) {
      *    term: factor(term')
      *    term': '*' factor(term') | '/' factor(term') | '%' factor(term') | epsilon */
     auto lhs = parseFactor(tokens);
+    return parseTermHelper(tokens, std::move(lhs));
+}
 
+std::unique_ptr<Expression> Parser::parseTermHelper(std::deque<Token>& tokens, std::unique_ptr<Expression> lhs) {
     if (tokens.front().isType(TokenType::TERM_ARITH_OPR)) {
         Operator mathOperator = tokens.front().value;
         tokens.pop_front(); // Pop the '*' or '/' or '%'
-        auto rhs = parseTerm(tokens);
-        return std::make_unique<MathExpression>(mathOperator, std::move(lhs), std::move(rhs));
+        auto rhs = parseFactor(tokens);
+        return parseTermHelper(tokens, std::make_unique<MathExpression>(mathOperator, std::move(lhs), std::move(rhs)));
     }
     else { // Reached the epsilon
         return lhs;
@@ -326,7 +344,7 @@ std::unique_ptr<Expression> Parser::parseFactor(std::deque<Token>& tokens) {
 
 std::unique_ptr<Expression> Parser::parseConstant(std::deque<Token>& tokens) {
     // Rule: INTEGER
-    Const value = stoi(tokens.front().value);
+    Const value = tokens.front().value;
     tokens.pop_front();
     return std::make_unique<Constant>(value);
 }
