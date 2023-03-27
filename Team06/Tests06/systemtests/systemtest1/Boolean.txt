@@ -48,3 +48,8 @@ assign a;
 Select BOOLEAN pattern a(_, _)
 TRUE
 5000
+9 - comment
+assign a;
+Select BOOLEAN
+TRUE
+5000

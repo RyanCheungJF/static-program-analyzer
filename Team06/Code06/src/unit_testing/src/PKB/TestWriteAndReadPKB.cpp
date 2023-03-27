@@ -514,7 +514,6 @@ TEST_CASE("ModifiesStorage WritePKB ReadPKB Facade") {
     writePkb.setInstancePKB(pkb);
     readPkb.setInstancePKB(pkb);
 
-
     std::unordered_set<Ent> val1 = {"a", "b", "c"};
     std::unordered_set<Ent> val2 = {"a"};
     std::unordered_set<Ent> val3 = {"b", "x", "z"};
@@ -526,7 +525,7 @@ TEST_CASE("ModifiesStorage WritePKB ReadPKB Facade") {
     writePkb.setModifiesP("proc1", val1);
     writePkb.setModifiesP("proc2", val4);
 
-    SECTION("ModifiesStorage WritePKB ReadPKB Facade: getUsesS(StmtNum num) positive case") {
+    SECTION("ModifiesStorage WritePKB ReadPKB Facade: getModifiesS(StmtNum num) positive case") {
         std::vector<Ent> expected = {"a", "b", "c"};
         auto res = readPkb.getModifiesS(1);
         std::vector<Ent> actual;
@@ -538,7 +537,7 @@ TEST_CASE("ModifiesStorage WritePKB ReadPKB Facade") {
         REQUIRE(actual == expected);
     }
 
-    SECTION("ModifiesStorage WritePKB ReadPKB Facade: getUsesS(StmtNum num) negative case") {
+    SECTION("ModifiesStorage WritePKB ReadPKB Facade: getModifiesS(StmtNum num) negative case") {
         auto res = readPkb.getModifiesS(11);
         REQUIRE(res.empty());
     }

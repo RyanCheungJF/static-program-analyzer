@@ -1,6 +1,7 @@
 #include "StmtStorage.h"
 
 void StmtStorage::writeStatement(Stmt s, StmtNum line) {
+    stmt_stmtNum[AppConstants::STMT].insert(line);
     stmt_stmtNum[s].insert(line);
     stmtNum_stmt[line].insert(s);
     return;
@@ -13,28 +14,16 @@ bool StmtStorage::checkStatement(Stmt stmt, StmtNum num) {
     return stmt_stmtNum[stmt].find(num) != stmt_stmtNum[stmt].end();
 }
 
-std::unordered_set<StmtNum> StmtStorage::getStatementNumbers(Stmt s) {
-    std::unordered_set<StmtNum> res;
-    if (s == AppConstants::STMT) {
-        for (auto i : stmt_stmtNum) {
-            auto p = stmt_stmtNum.at(i.first);
-            for (auto v : p) {
-                res.insert(v);
-            }
-        }
-        return res;
-    }
+std::unordered_set<StmtNum>& StmtStorage::getStatementNumbers(Stmt s) {
     if (stmt_stmtNum.find(s) == stmt_stmtNum.end()) {
-        std::unordered_set<StmtNum> emptySet;
-        return emptySet;
+        return emptyStmtNum;
     }
-    return stmt_stmtNum.at(s);
+    return stmt_stmtNum[s];
 }
 
-std::unordered_set<Stmt> StmtStorage::getStatementType(StmtNum num) {
+std::unordered_set<Stmt>& StmtStorage::getStatementType(StmtNum num) {
     if (stmtNum_stmt.find(num) == stmtNum_stmt.end()) {
-        std::unordered_set<Stmt> emptySet;
-        return emptySet;
+        return emptyStmt;
     }
-    return stmtNum_stmt.at(num);
+    return stmtNum_stmt[num];
 }

@@ -1,5 +1,20 @@
 1 - comment
 procedure p1, p2;
-Select <p1.procName, p2> such that Calls(p1, p2) and Calls(p2, "Six")
-One Three, Four Five, Two Three
+Select <p1, p2> such that Calls(p1, p2) and Calls(p2, "Six")
+One Three, Four Five, Two Three, Five Three, Four Three
+5000
+2 - comment
+assign a; variable v;
+Select <a, v> pattern a(v, _"x"_)
+1 x, 2 y, 3 z, 11 y, 13 b
+5000
+3 - comment
+assign a; variable v; procedure p; call c;
+Select <p, c> pattern a(v, _"x"_)
+One 8, One 9, One 10, One 17, One 18, One 22, One 25, One 26, One 31, One 32, Two 8, Two 9, Two 10, Two 17, Two 18, Two 22, Two 25, Two 26, Two 31, Two 32, Three 8, Three 9, Three 10, Three 17, Three 18, Three 22, Three 25, Three 26, Three 31, Three 32, Four 8, Four 9, Four 10, Four 17, Four 18, Four 22, Four 25, Four 26, Four 31, Four 32, Five 8, Five 9, Five 10, Five 17, Five 18, Five 22, Five 25, Five 26, Five 31, Five 32, Six 8, Six 9, Six 10, Six 17, Six 18, Six 22, Six 25, Six 26, Six 31, Six 32
+5000
+4 - comment
+while w1, w2; if i;
+Select <w1, i, w2>
+5 16 5, 5 27 5, 5 30 5
 5000

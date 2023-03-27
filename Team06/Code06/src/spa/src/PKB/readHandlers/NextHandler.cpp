@@ -42,7 +42,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1
     }
 
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-        cfgStorage->getGraph(proc1);
+        *cfgStorage->getGraph(proc1);
     if (graph[n1][AppConstants::CHILDREN].find(n2) != graph[n1][AppConstants::CHILDREN].end()) {
         res.push_back({paramString1, paramString2});
     }
@@ -76,9 +76,8 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtNonT(Parameter i
         return res;
     }
 
-    std::unordered_set<StmtNum> stmtTypeLines = stmtStorage->getStatementNumbers(stmtType);
-    auto graph = cfgStorage->getGraph(proc);
-    addCFGRelatives(res, proc, intValue, isFindChildren, stmtTypeLines);
+    auto graph = *cfgStorage->getGraph(proc);
+    addCFGRelatives(res, proc, intValue, isFindChildren, stmtStorage->getStatementNumbers(stmtType));
     return res;
 }
 
@@ -86,8 +85,8 @@ std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardNonT(Parame
     Stmt stmtType = stmtParam.getTypeString();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum> stmtTypeLines = stmtStorage->getStatementNumbers(stmtType);
-    std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines = getProcedureLines(stmtTypeLines);
+    std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines =
+        getProcedureLines(stmtStorage->getStatementNumbers(stmtType));
 
     for (auto kv : procedure_lines) {
         ProcName proc = kv.first;
@@ -109,17 +108,15 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
         return res;
     }
 
-    std::unordered_set<StmtNum> stmtTypeLines1 = stmtStorage->getStatementNumbers(type1);
-    std::unordered_set<StmtNum> stmtTypeLines2 = stmtStorage->getStatementNumbers(type2);
-
-    bool isLines1Smaller = stmtTypeLines1.size() < stmtTypeLines2.size();
+    bool isLines1Smaller =
+        stmtStorage->getStatementNumbers(type1).size() < stmtStorage->getStatementNumbers(type2).size();
     std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines;
 
     if (isLines1Smaller) {
-        procedure_lines = getProcedureLines(stmtTypeLines1);
+        procedure_lines = getProcedureLines(stmtStorage->getStatementNumbers(type1));
     }
     else {
-        procedure_lines = getProcedureLines(stmtTypeLines2);
+        procedure_lines = getProcedureLines(stmtStorage->getStatementNumbers(type2));
     }
 
     for (auto kv : procedure_lines) {
@@ -127,10 +124,12 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
         std::unordered_set<StmtNum> lines = kv.second;
         for (StmtNum line : lines) {
             if (isLines1Smaller) {
-                addCFGRelatives(res, proc, line, AppConstants::IS_FIND_CHILDREN, stmtTypeLines2);
+                addCFGRelatives(res, proc, line, AppConstants::IS_FIND_CHILDREN,
+                                stmtStorage->getStatementNumbers(type2));
             }
             else {
-                addCFGRelatives(res, proc, line, !AppConstants::IS_FIND_CHILDREN, stmtTypeLines1);
+                addCFGRelatives(res, proc, line, !AppConstants::IS_FIND_CHILDREN,
+                                stmtStorage->getStatementNumbers(type1));
             }
         }
     }
@@ -138,12 +137,11 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
 }
 
 std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcard() {
-    std::unordered_set<ProcName> procedures = procStorage->getProcNames();
     std::vector<std::vector<std::string>> res;
 
-    for (ProcName proc : procedures) {
+    for (ProcName proc : procStorage->getProcNames()) {
         std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-            cfgStorage->getGraph(proc);
+            *cfgStorage->getGraph(proc);
 
         for (auto kv : graph) {
             StmtNum p = kv.first;
@@ -175,7 +173,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parame
 
     std::deque<std::vector<StmtNum>> queue;
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-        cfgStorage->getGraph(proc1);
+        *cfgStorage->getGraph(proc1);
     for (StmtNum child : graph[n1][AppConstants::CHILDREN]) {
         if (child == n2) {
             res.push_back({paramString1, paramString2});
@@ -217,7 +215,7 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardTransitive(P
     }
 
     std::deque<std::vector<StmtNum>> queue;
-    auto graph = cfgStorage->getGraph(proc);
+    auto graph = *cfgStorage->getGraph(proc);
     initializeQueue(queue, graph, intValue, isFindChildren);
 
     std::unordered_set<StmtNum> emptyFilter;
@@ -237,12 +235,11 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtTransitive(Param
         return res;
     }
 
-    std::unordered_set<StmtNum> stmttypeLines = stmtStorage->getStatementNumbers(stmtType);
     std::deque<std::vector<StmtNum>> queue;
-    auto graph = cfgStorage->getGraph(proc);
+    auto graph = *cfgStorage->getGraph(proc);
     initializeQueue(queue, graph, intValue, isFindChildren);
 
-    addCFGRelativesTransitive(res, graph, queue, isFindChildren, stmttypeLines);
+    addCFGRelativesTransitive(res, graph, queue, isFindChildren, stmtStorage->getStatementNumbers(stmtType));
 
     return res;
 }
@@ -252,15 +249,15 @@ std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardTransitive(
     Stmt stmtType = stmtParam.getTypeString();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum> stmtTypeLines = stmtStorage->getStatementNumbers(stmtType);
-    std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines = getProcedureLines(stmtTypeLines);
+    std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines =
+        getProcedureLines(stmtStorage->getStatementNumbers(stmtType));
 
     for (auto kv : procedure_lines) {
         ProcName proc = kv.first;
         std::unordered_set<StmtNum> lines = kv.second;
 
         std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-            cfgStorage->getGraph(proc);
+            *cfgStorage->getGraph(proc);
         for (StmtNum line : lines) {
 
             std::deque<std::vector<StmtNum>> queue;
@@ -277,24 +274,24 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransit
                                                                                     Parameter param2) {
     Stmt type = param1.getTypeString();
     Stmt type2 = param2.getTypeString();
-    std::unordered_set<StmtNum> stmttypeLines2 = stmtStorage->getStatementNumbers(type2);
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum> stmttypeLines = stmtStorage->getStatementNumbers(type);
-    std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines = getProcedureLines(stmttypeLines);
+    std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines =
+        getProcedureLines(stmtStorage->getStatementNumbers(type));
 
     for (auto kv : procedure_lines) {
         ProcName proc = kv.first;
         std::unordered_set<StmtNum> lines = kv.second;
 
         std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-            cfgStorage->getGraph(proc);
+            *cfgStorage->getGraph(proc);
         for (StmtNum line : lines) {
 
             std::deque<std::vector<StmtNum>> queue;
             initializeQueue(queue, graph, line, AppConstants::IS_FIND_CHILDREN);
 
-            addCFGRelativesTransitive(res, graph, queue, AppConstants::IS_FIND_CHILDREN, stmttypeLines2);
+            addCFGRelativesTransitive(res, graph, queue, AppConstants::IS_FIND_CHILDREN,
+                                      stmtStorage->getStatementNumbers(type2));
         }
     }
 
@@ -311,12 +308,11 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransit
 }
 
 std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcardTransitive() {
-    std::unordered_set<ProcName> procedures = procStorage->getProcNames();
     std::vector<std::vector<std::string>> res;
 
-    for (ProcName proc : procedures) {
+    for (ProcName proc : procStorage->getProcNames()) {
         std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph =
-            cfgStorage->getGraph(proc);
+            *cfgStorage->getGraph(proc);
 
         for (auto kv : graph) {
             StmtNum parent = kv.first;
@@ -334,7 +330,7 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcardTransit
 
 // helper functions
 std::unordered_map<ProcName, std::unordered_set<StmtNum>>
-NextHandler::getProcedureLines(std::unordered_set<StmtNum> statementNumbers) {
+NextHandler::getProcedureLines(std::unordered_set<StmtNum>& statementNumbers) {
     std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines;
     for (StmtNum num : statementNumbers) {
         ProcName proc = procStorage->getProcedure(num);
@@ -345,7 +341,7 @@ NextHandler::getProcedureLines(std::unordered_set<StmtNum> statementNumbers) {
 
 void NextHandler::addCFGRelatives(std::vector<std::vector<std::string>>& res, ProcName proc, StmtNum num,
                                   bool isFindChildren, std::unordered_set<StmtNum>& filterSet) {
-    auto graph = cfgStorage->getGraph(proc);
+    auto graph = *cfgStorage->getGraph(proc);
     std::unordered_set<StmtNum> relatives = graph[num][isFindChildren ? AppConstants::CHILDREN : AppConstants::PARENTS];
     bool isFilterEmpty = filterSet.empty();
 
