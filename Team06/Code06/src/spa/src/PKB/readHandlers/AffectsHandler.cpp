@@ -410,8 +410,7 @@ bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::u
 
     std::deque<std::pair<StmtNum, StmtNum>> queue;
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
-    const std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph =
-        cfgStorage->getGraph(proc);
+    const auto& graph = cfgStorage->getGraph(proc);
 
     // curr.first is the previous node.
     // curr.second is the current node
