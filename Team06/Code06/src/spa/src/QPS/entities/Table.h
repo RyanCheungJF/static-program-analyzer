@@ -26,22 +26,23 @@ public:
     bool hasParameter(const Parameter&);
     const vector<Parameter>& getHeaders() const;
     const vector<vector<string>>& getContent() const;
-    bool hasIntersectingParams(Table);
-    Table intersectTable(Table);
+    bool hasIntersectingParams(Table&);
+    Table intersectTable(Table&);
     Table extractColumns(vector<int>&);
-    Table extractColumns(vector<Parameter>);
-    Table cartesianProduct(Table);
-    vector<string> getResult(vector<Parameter>);
+    Table extractColumns(vector<Parameter>&);
+    Table cartesianProduct(Table&);
+    vector<string> getResult(vector<Parameter>&);
     bool isEmptyTable() const;
-    Table updateValues(Parameter, unordered_map<string, string>);
+    Table updateValues(Parameter, unordered_map<string, string>&);
 
 private:
     vector<Parameter> headers;
     vector<vector<string>> contents;
-    static vector<pair<int, int>> getIntersectingIndex(Table, Table);
-    static vector<vector<string>> intersectContent(vector<vector<string>>, vector<vector<string>>,
+    static vector<pair<int, int>> getIntersectingIndex(Table&, Table&);
+    static vector<vector<string>> intersectContent(const vector<vector<string>>&, const vector<vector<string>>&,
                                                    const vector<pair<int, int>>&);
-    static vector<Parameter> intersectHeader(vector<Parameter>, vector<Parameter>, const vector<pair<int, int>>&);
+    static vector<Parameter> intersectHeader(const vector<Parameter>&, const vector<Parameter>&,
+                                             const vector<pair<int, int>>&);
 };
 
 #endif // SPA_TABLE_H

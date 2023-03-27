@@ -6,7 +6,7 @@ QueryDB::QueryDB() {
 
 Table QueryDB::emptyTable = Table({}, {});
 
-void QueryDB::insertTable(Table table) {
+void QueryDB::insertTable(Table& table) {
     // Check if we have any duplicate parameters
     // if so do an intersection
     vector<Parameter> inputHeaders = table.getHeaders();
@@ -41,7 +41,7 @@ bool QueryDB::hasParameter(Parameter& p) {
 vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
     vector<Parameter> presentParams;
     Table initialTable = emptyTable;
-    for (Parameter param : params) {
+    for (Parameter& param : params) {
         if (this->hasParameter(param)) {
             presentParams.push_back(param);
         }
@@ -105,7 +105,7 @@ Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
         Table extracted = table.extractColumns(paramsVec);
         temp.push_back(extracted);
     }
-    for (Parameter param : params) {
+    for (Parameter& param : params) {
         unordered_map<string, string> attributeMap;
         if (param.hasAttribute()) {
             vector<vector<string>> mapping = readPKB.findAttribute(param);

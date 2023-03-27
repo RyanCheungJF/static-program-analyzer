@@ -20,8 +20,8 @@ const vector<vector<string>>& Table::getContent() const {
     return contents;
 }
 
-bool Table::hasIntersectingParams(Table t) {
-    vector<Parameter> headers = t.getHeaders();
+bool Table::hasIntersectingParams(Table& t) {
+    const vector<Parameter>& headers = t.getHeaders();
     for (const Parameter& p : headers) {
         if (this->hasParameter(p)) {
             return true;
@@ -30,7 +30,7 @@ bool Table::hasIntersectingParams(Table t) {
     return false;
 }
 
-vector<pair<int, int>> Table::getIntersectingIndex(Table t1, Table t2) {
+vector<pair<int, int>> Table::getIntersectingIndex(Table& t1, Table& t2) {
     vector<Parameter> h1 = t1.getHeaders();
     vector<Parameter> h2 = t2.getHeaders();
     vector<pair<int, int>> result;
@@ -44,7 +44,7 @@ vector<pair<int, int>> Table::getIntersectingIndex(Table t1, Table t2) {
     return result;
 }
 
-Table Table::cartesianProduct(Table table) {
+Table Table::cartesianProduct(Table& table) {
     vector<Parameter> h1 = this->getHeaders();
     const vector<Parameter>& h2 = table.getHeaders();
     const vector<vector<string>>& c1 = this->getContent();
@@ -61,7 +61,7 @@ Table Table::cartesianProduct(Table table) {
     return Table{h1, c3};
 }
 
-vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector<vector<string>> c2,
+vector<vector<string>> Table::intersectContent(const vector<vector<string>>& c1, const vector<vector<string>>& c2,
                                                const vector<pair<int, int>>& intersectingIndexes) {
     unordered_multimap<string, int> hashmap;
     // we will use "value+value" as the key to the hashmap
@@ -109,7 +109,7 @@ vector<vector<string>> Table::intersectContent(vector<vector<string>> c1, vector
     return result;
 }
 
-vector<Parameter> Table::intersectHeader(vector<Parameter> h1, vector<Parameter> h2,
+vector<Parameter> Table::intersectHeader(const vector<Parameter>& h1, const vector<Parameter>& h2,
                                          const vector<pair<int, int>>& intersectingIndexes) {
     vector<Parameter> newHeader;
     for (int i = 0; i < h1.size(); i++) {
@@ -127,12 +127,12 @@ vector<Parameter> Table::intersectHeader(vector<Parameter> h1, vector<Parameter>
     return newHeader;
 }
 
-Table Table::intersectTable(Table t) {
-    vector<vector<string>> c1 = contents;
-    vector<vector<string>> c2 = t.getContent();
-    vector<Parameter> h1 = headers;
-    vector<Parameter> h2 = t.getHeaders();
-    vector<pair<int, int>> intersectingIndexes = getIntersectingIndex(*this, std::move(t));
+Table Table::intersectTable(Table& t) {
+    const vector<vector<string>>& c1 = contents;
+    const vector<vector<string>>& c2 = t.getContent();
+    const vector<Parameter>& h1 = headers;
+    const vector<Parameter>& h2 = t.getHeaders();
+    vector<pair<int, int>> intersectingIndexes = getIntersectingIndex(*this, t);
     vector<vector<string>> newContent = intersectContent(c1, c2, intersectingIndexes);
     vector<Parameter> newHeader = intersectHeader(h1, h2, intersectingIndexes);
     return Table{newHeader, newContent};
@@ -148,7 +148,7 @@ Table Table::extractDesignEntities() {
     return extractColumns(indexes);
 }
 
-Table Table::updateValues(Parameter p, unordered_map<string, string> map) {
+Table Table::updateValues(Parameter p, unordered_map<string, string>& map) {
     int index;
     vector<vector<string>> newContents;
     for (int i = 0; i < headers.size(); i++) {
@@ -156,7 +156,7 @@ Table Table::updateValues(Parameter p, unordered_map<string, string> map) {
             index = i;
         }
     }
-    for (vector<string> row : contents) {
+    for (vector<string>& row : contents) {
         row[index] = map[row[index]];
         newContents.push_back(row);
     }
@@ -195,7 +195,7 @@ bool Table::isEmptyTable() const {
     return contents.empty();
 }
 
-Table Table::extractColumns(vector<Parameter> params) {
+Table Table::extractColumns(vector<Parameter>& params) {
     // Assume that all the params called is confirmed to be present in the table
     vector<int> indexes;
     for (int i = 0; i < params.size(); i++) {
@@ -209,7 +209,7 @@ Table Table::extractColumns(vector<Parameter> params) {
     return extractColumns(indexes);
 }
 
-vector<string> Table::getResult(vector<Parameter> params) {
+vector<string> Table::getResult(vector<Parameter>& params) {
     vector<string> res;
     vector<int> indexOrder;
     for (Parameter param : params) {

@@ -14,7 +14,7 @@
 class QueryDB {
 public:
     QueryDB();
-    void insertTable(Table);
+    void insertTable(Table&);
     vector<string> fetch(vector<Parameter>, ReadPKB&);
     vector<string> emptyVec = {};
     vector<string> falseVec = {"FALSE"};
