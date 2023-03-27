@@ -8,15 +8,25 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
     // I am going to assume here that since the object has been created it means
     // that the variables are correctly instantiated.
     QueryDB queryDb = QueryDB();
+    QueryDB* queryDBPointer = &queryDb;
     Table emptyTable({}, {});
-    for (shared_ptr<Relationship> relation : relations) {
+
+    evaluateRelationship(queryDb, readPKB);
+    evaluatePattern(queryDb, readPKB);
+    evaluateComparison(queryDb, readPKB);
+    vector<string> res = queryDb.fetch(selectParameters, readPKB);
+    return res;
+}
+
+void Query::evaluateRelationship(QueryDB& queryDb, ReadPKB& readPKB) {
+    for (shared_ptr<Relationship> relation : this->relations) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findRelationship(relation);
         vector<Parameter> params = relation->getParameters();
         Table table(params, response);
         if (response.empty()) {
-            queryDb.insertTable(emptyTable);
+            queryDb.insertTable(QueryDB::emptyTable);
             break;
         }
         // clauses that are just fixed ints or wild cards will just be
@@ -26,8 +36,10 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
             queryDb.insertTable(table);
         }
     }
+}
 
-    for (Pattern pattern : patterns) {
+void Query::evaluatePattern(QueryDB& queryDb, ReadPKB& readPKB) {
+    for (Pattern pattern : this->patterns) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findPattern(pattern);
@@ -36,7 +48,7 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
         vector<Parameter> headers{*patternSyn, *entRef};
         Table table(headers, response);
         if (response.empty()) {
-            queryDb.insertTable(emptyTable);
+            queryDb.insertTable(QueryDB::emptyTable);
             break;
         }
         // This will remove wild cards and FIXED INT from the table.
@@ -45,8 +57,22 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
             queryDb.insertTable(table);
         }
     }
-    vector<string> res = queryDb.fetch(selectParameters, readPKB);
-    return res;
+}
+
+void Query::evaluateComparison(QueryDB& queryDb, ReadPKB& readPKB) {
+    for (Comparison comparison : this->comparisons) {
+        vector<vector<string>> response = readPKB.findWith(comparison);
+        if (response.empty()) {
+            queryDb.insertTable(QueryDB::emptyTable);
+            break;
+        }
+        vector<Parameter> headers{comparison.getLeftParam(), comparison.getRightParam()};
+        Table table{headers, response};
+        table = table.extractDesignEntities();
+        if (!table.isEmptyTable()) {
+            queryDb.insertTable(table);
+        }
+    }
 }
 
 Query::Query() {}
@@ -91,7 +117,7 @@ vector<Parameter*> Query::getAllUncheckedSynonyms() {
     for (int i = 0; i < comparisons.size(); i++) {
         vector<Parameter*> params = comparisons.at(i).getAllUncheckedSynonyms();
         for (int j = 0; j < params.size(); j++) {
-            synonyms.push_back(params.at(i));
+            synonyms.push_back(params.at(j));
         }
     }
     return synonyms;

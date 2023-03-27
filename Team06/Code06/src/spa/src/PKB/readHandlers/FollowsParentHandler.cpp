@@ -125,12 +125,10 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardWildca
 }
 
 std::vector<std::vector<std::string>> FollowsParentHandler::handle(Parameter param1, Parameter param2) {
-    ParameterType paramType1 = param1.getType();
-    ParameterType paramType2 = param2.getType();
-    bool isIntParam1 = paramType1 == ParameterType::FIXED_INT;
-    bool isIntParam2 = paramType2 == ParameterType::FIXED_INT;
-    bool isSynonymParam1 = paramType1 != ParameterType::FIXED_INT && paramType1 != ParameterType::WILDCARD;
-    bool isSynonymParam2 = paramType2 != ParameterType::FIXED_INT && paramType2 != ParameterType::WILDCARD;
+    bool isIntParam1 = param1.isFixedInt();
+    bool isIntParam2 = param2.isFixedInt();
+    bool isSynonymParam1 = !param1.isFixedInt() && !param1.isWildcard();
+    bool isSynonymParam2 = !param2.isFixedInt() && !param2.isWildcard();
 
     if (isIntParam1) {
         if (isIntParam2) {

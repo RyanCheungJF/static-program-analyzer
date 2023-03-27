@@ -42,14 +42,6 @@ bool isPattern(string s) {
     return regex_match(trim(s), regex("^pattern$"));
 }
 
-bool startsWithLetter(string s) {
-    return regex_match(trim(s), regex("^[a-zA-Z].*"));
-}
-
-bool startsLikeRef(string s) {
-    return regex_match(trim(s), regex("^[a-zA-Z\"0-9].*"));
-}
-
 bool hasBalancedBrackets(string s) {
     int balance = 0;
     for (int i = 0; i < s.size(); i++) {
@@ -68,7 +60,7 @@ bool hasBalancedBrackets(string s) {
 }
 
 bool hasCorrectRelRefOrPatternForm(string s) {
-    bool regexMatched = regex_match(s, regex("^[a-zA-Z].*\(.*\)$"));
+    bool regexMatched = regex_match(s, regex("^\s*[a-zA-Z][a-zA-Z0-9]*\s*\(.*\)$"));
     bool bracketBalanced = hasBalancedBrackets(s);
     return regexMatched && bracketBalanced;
 }

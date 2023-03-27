@@ -2,7 +2,7 @@
 
 #include <queue>
 
-#include "../../unit_testing/src/stubs/With.h"
+#include "../QPS/entities/Comparison.h"
 #include "../QPS/entities/Pattern.h"
 #include "../QPS/entities/Relationship.h"
 #include "../utils/AppConstants.h"
@@ -28,6 +28,21 @@
 #include "utils/AppConstants.h"
 
 class PKB : AppConstants {
+    struct withClauseHash {
+        std::size_t operator()(std::vector<std::string> const& vec) const {
+            return std::hash<std::string>{}(vec[1]);
+        }
+    };
+
+    struct withClauseEquals {
+        bool operator()(shared_ptr<Pattern> const& pattern1, shared_ptr<Pattern> const& pattern2) const {
+            bool check1 = pattern1->getPatternType() == pattern2->getPatternType();
+            bool check2 = *pattern1->getEntRef() == *pattern2->getEntRef();
+            bool check3 = pattern1->getExprSpecs()[0] == pattern2->getExprSpecs()[0];
+
+            return check1 && check2 && check3;
+        }
+    };
 
 public:
     void initializePkb();
@@ -49,9 +64,6 @@ public:
 
     // Sets the entity along with the statement line that the entities appears in
     void setEntity(StmtNum line, std::unordered_set<Ent>& entities);
-
-    // Sets the entity along with the statement line that it appears in
-    void setEntity(Ent e, StmtNum line);
 
     // Sets the procedure along with the statement lines that are in that
     // procedure it appears in
@@ -89,12 +101,14 @@ public:
 
     std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship> rs);
 
-    std::vector<std::string> findDesignEntities(Parameter p);
+    std::vector<std::string> findDesignEntities(Parameter& p);
 
     // Returns relevant strings based on Pattern object passed
-    std::vector<std::vector<std::string>> findPattern(Pattern p);
+    std::vector<std::vector<std::string>> findPattern(Pattern& p);
 
-    std::vector<std::vector<std::string>> findAttribute(With w);
+    std::vector<std::vector<std::string>> findAttribute(Parameter& p);
+
+    std::vector<std::vector<std::string>> findWith(Comparison& c);
 
     // check if given a statement type and statement line number, whether that
     // statement line number is indeed of that statement type

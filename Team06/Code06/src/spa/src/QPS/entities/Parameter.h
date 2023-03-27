@@ -57,6 +57,14 @@ public:
     static bool isFixedStringOrWildcard(Parameter&);
     static bool isFixedIntOrWildCard(Parameter&);
     static bool isComparable(Parameter&, Parameter&);
+    bool isFixedInt();
+    bool isFixedStringType();
+    bool isVariable();
+    bool isStmt();
+    bool isWildcard();
+    bool isAssign();
+    bool isProcedureOnly();
+    bool isConstant();
     static ParameterType stringToType(string);
     bool isUncheckedSynonym();
     bool hasValidAttributeType();
@@ -82,7 +90,8 @@ template <> struct std::hash<Parameter> {
     std::size_t operator()(Parameter const& param) const {
         std::size_t h1 = std::hash<ParameterType>{}(param.getType());
         std::size_t h2 = std::hash<std::string>{}(param.getValue());
-        return h1 ^ (h2 << 1);
+        std::size_t h3 = std::hash<AttributeType>{}(param.getAttribute());
+        return ((h1 ^ (h2 << 1)) >> 1) ^ (h3 << 1);
     }
 };
 

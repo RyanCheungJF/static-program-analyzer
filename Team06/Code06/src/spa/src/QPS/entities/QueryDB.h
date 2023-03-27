@@ -19,11 +19,11 @@ public:
     vector<string> emptyVec = {};
     vector<string> falseVec = {"FALSE"};
     vector<string> trueVec = {"TRUE"};
-    Table emptyTable = Table({}, {});
+    static Table emptyTable;
 
 private:
     vector<Table> tableVector;
-    Table extractColumns(vector<Parameter>);
+    Table extractColumns(vector<Parameter>, ReadPKB&);
     bool hasEmptyTable();
     bool hasParameter(Parameter&);
 };

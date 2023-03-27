@@ -13,19 +13,26 @@ void UsesModifiesExtractor::processProcedures(std::vector<ProcName> topoOrder) {
         std::unordered_set<Ent> currUsesVariables;
         std::unordered_set<Ent> currModifiesVariables;
 
-        for (StmtNum sn : readApi->getProcedureStatementNumbers(proc)) {
+        auto& procedureStmtNum = readApi->getProcedureStatementNumbers(proc);
+
+        for (const StmtNum& sn : procedureStmtNum) {
             if (readApi->checkStatement(AppConstants::CALL, sn)) {
                 auto callStmt = readApi->getCallStmt(sn);
-                writeApi->setUsesS(callStmt.first, readApi->getUsesP(callStmt.second));
-                writeApi->setModifiesS(callStmt.first, readApi->getModifiesP(callStmt.second));
-                currUsesVariables.insert(readApi->getUsesP(callStmt.second).begin(),
-                                         readApi->getUsesP(callStmt.second).end());
-                currModifiesVariables.insert(readApi->getModifiesP(callStmt.second).begin(),
-                                             readApi->getModifiesP(callStmt.second).end());
+                auto& varsUsedInCalledProc = readApi->getUsesP(callStmt.second);
+                auto& varsModifiedInCalledProc = readApi->getModifiesP(callStmt.second);
+
+                writeApi->setUsesS(callStmt.first, varsUsedInCalledProc);
+                writeApi->setModifiesS(callStmt.first, varsModifiedInCalledProc);
+
+                currUsesVariables.insert(varsUsedInCalledProc.begin(), varsUsedInCalledProc.end());
+                currModifiesVariables.insert(varsModifiedInCalledProc.begin(), varsModifiedInCalledProc.end());
             }
             else {
-                currUsesVariables.insert(readApi->getUsesS(sn).begin(), readApi->getUsesS(sn).end());
-                currModifiesVariables.insert(readApi->getModifiesS(sn).begin(), readApi->getModifiesS(sn).end());
+                auto& varsUsedAtStmt = readApi->getUsesS(sn);
+                auto& varsModifiedAtStmt = readApi->getModifiesS(sn);
+
+                currUsesVariables.insert(varsUsedAtStmt.begin(), varsUsedAtStmt.end());
+                currModifiesVariables.insert(varsModifiedAtStmt.begin(), varsModifiedAtStmt.end());
             }
 
             if (readApi->checkStatement(AppConstants::ASSIGN, sn)) {
@@ -48,6 +55,7 @@ void UsesModifiesExtractor::processContainerStatements() {
         usesVariables.insert(readApi->getUsesS(containerStmt).begin(), readApi->getUsesS(containerStmt).end());
         modifiesVariables.insert(readApi->getModifiesS(containerStmt).begin(),
                                  readApi->getModifiesS(containerStmt).end());
+
         for (StmtNum containedStmt : readApi->getContainedStatements(containerStmt)) {
             usesVariables.insert(readApi->getUsesS(containedStmt).begin(), readApi->getUsesS(containedStmt).end());
             modifiesVariables.insert(readApi->getModifiesS(containedStmt).begin(),
