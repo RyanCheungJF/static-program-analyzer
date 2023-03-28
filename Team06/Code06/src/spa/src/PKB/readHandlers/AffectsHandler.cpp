@@ -83,14 +83,27 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum a2) {
-    return nonTransitiveOneIntOneWildcard(AppConstants::NOT_USED_FIELD, a2);
+    if (wildcardIntCache.find(a2) != wildcardIntCache.end()) {
+        return wildcardIntCache[a2];
+    }
+
+    wildcardIntCache[a2] = nonTransitiveOneIntOneWildcard(AppConstants::NOT_USED_FIELD, a2);
+    return wildcardIntCache[a2];
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum a1) {
-    return nonTransitiveOneIntOneWildcard(a1, AppConstants::NOT_USED_FIELD);
+    if (intWildcardCache.find(a1) != intWildcardCache.end()) {
+        return intWildcardCache[a1];
+    }
+
+    intWildcardCache[a1] = nonTransitiveOneIntOneWildcard(a1, AppConstants::NOT_USED_FIELD);
+    return intWildcardCache[a1];
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(ProcName proc) {
+    if (wildcardWildcardHit) {
+        return wildcardWildcardCache;
+    }
 
     std::vector<std::vector<std::string>> res;
     std::unordered_set<ProcName> allProcedures;
@@ -109,10 +122,16 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(Pro
             std::vector<std::vector<std::string>> temp = handleIntWildcard(a1);
             for (std::vector<std::string>& val : temp) {
                 res.push_back(val);
+
+                StmtNum a2 = std::stoi(val[1]);
+                wildcardIntCache[a2].push_back(val);
             }
         }
     }
-    return res;
+
+    wildcardWildcardHit = true;
+    wildcardWildcardCache = res;
+    return wildcardWildcardCache;
 }
 
 // Affects*
@@ -162,7 +181,13 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitiv
     if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return {};
     }
-    return bfsTraversalOneWildcard(a1, AppConstants::NOT_USED_FIELD);
+
+    if (intWildcardTransitiveCache.find(a1) != intWildcardTransitiveCache.end()) {
+        return intWildcardTransitiveCache[a1];
+    }
+
+    intWildcardTransitiveCache[a1] = bfsTraversalOneWildcard(a1, AppConstants::NOT_USED_FIELD);
+    return intWildcardTransitiveCache[a1];
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitive(StmtNum a2) {
@@ -171,14 +196,24 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
         return {};
     }
 
-    return bfsTraversalOneWildcard(AppConstants::NOT_USED_FIELD, a2);
+    if (wildcardIntTransitiveCache.find(a2) != wildcardIntTransitiveCache.end()) {
+        return wildcardIntTransitiveCache[a2];
+    }
+
+    wildcardIntTransitiveCache[a2] = bfsTraversalOneWildcard(AppConstants::NOT_USED_FIELD, a2);
+    return wildcardIntTransitiveCache[a2];
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTransitive() {
+    if (wildcardWildcardTransitiveHit) {
+        return wildcardWildcardTransitiveCache;
+    }
+
     std::vector<std::vector<std::string>> res;
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap =
         buildAffectsGraph(false, AppConstants::PROCEDURE_DOES_NOT_EXIST);
 
+    // <starting node, current node, next node>
     std::unordered_set<std::tuple<StmtNum, StmtNum, StmtNum>, hashFunctionTuple> seen;
     std::deque<std::tuple<StmtNum, StmtNum, StmtNum>> queue;
 
@@ -187,6 +222,11 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
         const std::unordered_set<StmtNum>& nums = kv.second;
         for (StmtNum num : nums) {
             queue.push_back({a1, a1, num});
+
+
+            std::vector<std::string> val = {std::to_string(a1), std::to_string(num)};
+            intWildcardCache[a1].push_back(val);
+            wildcardIntCache[num].push_back(val);
         }
     }
 
@@ -210,14 +250,19 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
     }
 
     for (const std::pair<StmtNum, StmtNum>& p : temp) {
-        res.push_back({std::to_string(p.first), std::to_string(p.second)});
+        std::vector<std::string> val = {std::to_string(p.first), std::to_string(p.second)};
+        res.push_back(val);
+
+        intWildcardTransitiveCache[p.first].push_back(val);
+        wildcardIntTransitiveCache[p.second].push_back(val);
     }
 
-    return res;
+    wildcardWildcardTransitiveHit = true;
+    wildcardWildcardTransitiveCache = res;
+    return wildcardWildcardTransitiveCache;
 }
 
 // helper functions
-// TODO: optimise this to just return Ent instead of the entire data structure
 Ent AffectsHandler::getCommonVariable(std::unordered_set<Ent>& variablesModifiedInA1,
                                       std::unordered_set<Ent>& variablesUsedInA2) {
 
@@ -276,13 +321,20 @@ std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(std::stri
 
 std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffectsGraph(bool isInverted, ProcName proc) {
 
+    if (procAffectsGraphMap.find(proc) != procAffectsGraphMap.end() &&
+        procAffectsGraphMap[proc].find(isInverted) != procAffectsGraphMap[proc].end()) {
+        return procAffectsGraphMap[proc][isInverted];
+    }
+
     // build the hop graph
     std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard(proc);
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
     for (std::vector<std::string> p : allValidAffects) {
         isInverted ? hashmap[stoi(p[1])].insert(stoi(p[0])) : hashmap[stoi(p[0])].insert(stoi(p[1]));
     }
-    return hashmap;
+
+    procAffectsGraphMap[proc][isInverted] = hashmap;
+    return procAffectsGraphMap[proc][isInverted];
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(StmtNum a1, StmtNum a2) {
@@ -295,6 +347,9 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
     // add from initial starting node
     for (StmtNum num : (isIntWildcard ? hashmap[a1] : hashmap[a2])) {
         isIntWildcard ? queue.push_back({a1, num}) : queue.push_back({num, a2});
+
+        isIntWildcard ? intWildcardCache[a1].push_back({std::to_string(a1), std::to_string(num)}) :
+            wildcardIntCache[a2].push_back({std::to_string(num), std::to_string(a2)});
     }
 
     // traverse until we see all possible combinations

@@ -8,6 +8,9 @@ src = os.listdir(r_path)
 error = False
 
 for entry in src:
+    if (entry == "systemtestsample"):
+        continue
+    
     subdir_path = os.path.join(r_path, entry)
     if os.path.isdir(subdir_path):
         subdir_entries = os.listdir(subdir_path)

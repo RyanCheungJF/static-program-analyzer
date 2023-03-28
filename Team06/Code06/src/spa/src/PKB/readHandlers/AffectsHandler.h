@@ -46,6 +46,24 @@ private:
     std::shared_ptr<ModifiesUsesStorage> usesStorage;
     bool isTransitive;
 
+    // cache data structures
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardCache;
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntCache;
+    std::vector<std::vector<std::string>> wildcardWildcardCache;
+    bool wildcardWildcardHit = false;
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardTransitiveCache;
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntTransitiveCache;
+    std::vector<std::vector<std::string>> wildcardWildcardTransitiveCache;
+    bool wildcardWildcardTransitiveHit = false;
+
+    std::unordered_map<ProcName, std::unordered_map<bool, std::unordered_map<StmtNum, unordered_set<StmtNum>>>>
+        procAffectsGraphMap;
+
+
+
+
+
+
     // Affects(1, 2)
     std::vector<std::vector<std::string>> handleIntInt(StmtNum a1, StmtNum a2);
     // Affects(a1, 2) or Affects(_, 2)
