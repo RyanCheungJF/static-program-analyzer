@@ -33,4 +33,18 @@ while w; variable v; procedure p;
 Select w such that Modifies(p, v) and Modifies("p", v) and Modifies(p, "v") and Modifies("p", "v")
 none
 5000
-
+8 - test next and affects time
+stmt a1, a2, a3;
+Select <a1, a2, a3> such that Next(a1, a2) and Affects(a1, a2) and Affects(a2, a3) and Next(a2, a3)
+132 133 134, 407 408 409
+5000
+9 - test next* time
+stmt a1, a2, a3;
+Select BOOLEAN such that Next*(a1, a2)
+TRUE
+5000
+10 - test follows* time
+stmt a1, a2, a3;
+Select BOOLEAN such that Follows*(a1, a2)
+TRUE
+5000

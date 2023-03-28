@@ -29,21 +29,43 @@ To run checkstyle, first install the `clang-format` package using `npm`.
 npm i
 ```
 
-Ensure that your `style.sh` script has executable permissions,
+Ensure that your `style.sh` and `styleall.sh` script has executable permissions,
 then run it to automatically style your code.
+
+`style.sh` automatically *targets* modified files based on Git,
+and is the formatter of choice used in Husky pre-commit checks.
+
+`styleall.sh` targets every single file, hence it will take a file to run.
+
+Feel free to use whichever suits your use case.
 
 ```bash
 chmod u+x style.sh
 ./style.sh
+
+# alternatively
+bash style.sh
 ```
 
 The checkstyle runs on all directories, and targets `.cpp` and `.h` files.
 
 To configure how the checkstyle looks, change the properties in `.clang-format`.
 
-#### _Todo_
+### Continuous Integration
 
-Optimize with husky pre commit hooks? 🥴
+As we support cross platform development, we have set up
+workflows for both Mac and Windows.
+These `.yml` files can be found in the `.github` folder.
+
+We have a formatter which check for code styling according to our `clang-format`.
+
+Each Mac and Windows workflow checks for compilation,
+and runs the respective unit and systemtests to check for correctness.
+
+Each workflow file depends on the respective `ci.bat/sh` file found in the systemtests.
+To configure them, it is recommened to view systemtest's README first.
+
+The workflow runs on pull request to `master` and pushes to our respective branches.
 
 # Team Members
 

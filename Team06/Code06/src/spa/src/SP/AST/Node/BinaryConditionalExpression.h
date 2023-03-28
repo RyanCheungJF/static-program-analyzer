@@ -13,6 +13,4 @@ public:
 
     BinaryConditionalExpression(Operator condOperator, std::unique_ptr<ConditionalExpression> lhs,
                                 std::unique_ptr<ConditionalExpression> rhs);
-
-    void accept(ASTVisitor* visitor) override;
 };

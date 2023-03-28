@@ -13,3 +13,18 @@ call c;
 Select BOOLEAN such that Next(30, 32)
 TRUE
 5000
+4 - comment
+assign a;
+Select BOOLEAN pattern a(_, _"x / z"_)
+FALSE
+5000
+5 - comment
+assign a;
+Select BOOLEAN pattern a(_, _"y * x"_)
+TRUE
+5000
+6 - comment
+assign a;
+Select BOOLEAN pattern a(_, _"a + y"_)
+FALSE
+5000

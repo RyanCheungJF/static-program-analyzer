@@ -29,18 +29,21 @@ struct hashFunctionAffectsT {
 
 class AffectsHandler {
 public:
-    AffectsHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
-                   std::shared_ptr<ProcedureStorage> procStorage, std::shared_ptr<ModifiesUsesStorage> modifiesStorage,
-                   std::shared_ptr<ModifiesUsesStorage> usesStorage, bool isTransitive);
+    AffectsHandler(std::shared_ptr<CFGStorage>& cfgStorage, std::shared_ptr<StmtStorage>& stmtStorage,
+                   std::shared_ptr<ProcedureStorage>& procStorage,
+                   std::shared_ptr<ModifiesUsesStorage>& modifiesStorage,
+                   std::shared_ptr<ModifiesUsesStorage>& usesStorage,
+                   std::shared_ptr<ProcedureStorage>& procAssignStmtStorage, bool isTransitive);
+
     std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
 
 private:
     std::shared_ptr<CFGStorage> cfgStorage;
     std::shared_ptr<StmtStorage> stmtStorage;
     std::shared_ptr<ProcedureStorage> procStorage;
+    std::shared_ptr<ProcedureStorage> procAssignStmtStorage;
     std::shared_ptr<ModifiesUsesStorage> modifiesStorage;
     std::shared_ptr<ModifiesUsesStorage> usesStorage;
-    std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> parentTStorage;
     bool isTransitive;
 
     // Affects(1, 2)
@@ -50,7 +53,7 @@ private:
     // Affects(1, a2) or Affects(1, _)
     std::vector<std::vector<std::string>> handleIntWildcard(StmtNum a1);
     // Affects(a1, a2) or Affects(_, _)
-    std::vector<std::vector<std::string>> handleWildcardWildcard();
+    std::vector<std::vector<std::string>> handleWildcardWildcard(ProcName proc);
 
     // Affects*(1, 2)
     std::vector<std::vector<std::string>> handleIntIntTransitive(StmtNum a1, StmtNum a2);
@@ -65,8 +68,7 @@ private:
     std::unordered_set<StmtNum> getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc,
                                                          std::unordered_set<Ent> commonVariables);
 
-    std::unordered_set<Ent> getCommonVariables(std::unordered_set<Ent> variablesModifiedInA1,
-                                               std::unordered_set<Ent> variablesUsedInA2);
+    Ent getCommonVariable(std::unordered_set<Ent>& variablesModifiedInA1, std::unordered_set<Ent>& variablesUsedInA2);
 
     std::vector<std::vector<std::string>> handleNonTransitive(std::string param1value, std::string param2value,
                                                               bool isFixedIntParam1, bool isFixedIntParam2,
@@ -75,15 +77,13 @@ private:
                                                            bool isFixedIntParam1, bool isFixedIntParam2,
                                                            bool isWildCardParam1, bool isWildCardParam2);
 
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted);
-
-    std::unordered_set<StmtNum> getAssignStatements(std::unordered_set<StmtNum> allProcStatements);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted, ProcName proc);
 
     std::vector<std::vector<std::string>> bfsTraversalOneWildcard(StmtNum a1, StmtNum a2);
 
     std::vector<std::vector<std::string>> nonTransitiveOneIntOneWildcard(StmtNum a1, StmtNum a2);
 
-    bool checkModifiedAssignReadCall(std::unordered_set<Ent> commonVariables, StmtNum currentLine);
+    bool checkModifiedAssignReadCall(Ent commonVariable, StmtNum currentLine);
 
-    bool checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, std::unordered_set<Ent> commonVariables);
+    bool checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, Ent commonVariable);
 };

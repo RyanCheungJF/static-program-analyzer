@@ -141,72 +141,153 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 1")
     writePkb.setStatement(AppConstants::PRINT, 27);
     writePkb.setStatement(AppConstants::PRINT, 28);
 
-    writePkb.setProcedure(
-        proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27});
+    writePkb.setProcAssignStmt(proc1, 2);
+    writePkb.setProcAssignStmt(proc1, 3);
+    writePkb.setProcAssignStmt(proc1, 5);
+    writePkb.setProcAssignStmt(proc1, 6);
+    writePkb.setProcAssignStmt(proc1, 7);
+    writePkb.setProcAssignStmt(proc1, 8);
+    writePkb.setProcAssignStmt(proc1, 9);
+    writePkb.setProcAssignStmt(proc1, 10);
+    writePkb.setProcAssignStmt(proc1, 11);
+    writePkb.setProcAssignStmt(proc1, 12);
+    writePkb.setProcAssignStmt(proc1, 13);
+    writePkb.setProcAssignStmt(proc1, 14);
+    writePkb.setProcAssignStmt(proc1, 18);
+    writePkb.setProcAssignStmt(proc1, 19);
+    writePkb.setProcAssignStmt(proc1, 20);
+    writePkb.setProcAssignStmt(proc1, 22);
+    writePkb.setProcAssignStmt(proc1, 24);
+    writePkb.setProcAssignStmt(proc1, 25);
+    writePkb.setProcAssignStmt(proc1, 26);
+    writePkb.setProcAssignStmt(proc2, 29);
+
+    std::unordered_set<StmtNum> p1nums = {1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14,
+                                          15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27};
+    writePkb.setProcedure(proc1, p1nums);
     writePkb.setStatement(AppConstants::ASSIGN, 28);
-    writePkb.setProcedure(proc2, {28});
+    std::unordered_set<StmtNum> p2nums = {28};
+    writePkb.setProcedure(proc2, p2nums);
 
-    writePkb.setModifiesS(1, {"y", "x", "v"});
-    writePkb.setModifiesS(2, {"y"});
-    writePkb.setModifiesS(3, {"x"});
-    writePkb.setModifiesS(4, {"v", "y"});
-    writePkb.setModifiesS(5, {"v"});
-    writePkb.setModifiesS(6, {"y"});
-    writePkb.setModifiesS(7, {"v"});
-    writePkb.setModifiesS(8, {"v"});
-    writePkb.setModifiesS(9, {"x"});
-    writePkb.setModifiesS(10, {"c"});
-    writePkb.setModifiesS(11, {"d"});
-    writePkb.setModifiesS(12, {"f"});
-    writePkb.setModifiesS(13, {"e"});
-    writePkb.setModifiesS(14, {"a"});
-    writePkb.setModifiesS(15, {"b"});
-    writePkb.setModifiesS(16, {"j"});
-    //    writePkb.setModifiesS(17, {});
-    writePkb.setModifiesS(18, {"d"});
-    writePkb.setModifiesS(19, {"h"});
-    writePkb.setModifiesS(20, {"i"});
-    //    writePkb.setModifiesS(21, {});
-    writePkb.setModifiesS(22, {"j"});
-    writePkb.setModifiesS(23, {"k", "l"});
-    writePkb.setModifiesS(24, {"k"});
-    writePkb.setModifiesS(25, {"l"});
-    writePkb.setModifiesS(26, {"m"});
-    writePkb.setModifiesP(proc1, {"y", "x", "v", "c", "d", "f", "e", "a", "b", "h", "j", "k", "l", "m", "i"});
+    std::unordered_set<Ent> ms1 = {"y", "x", "v"};
+    std::unordered_set<Ent> ms2 = {"y"};
+    std::unordered_set<Ent> ms3 = {"x"};
+    std::unordered_set<Ent> ms4 = {"v", "y"};
+    std::unordered_set<Ent> ms5 = {"v"};
+    std::unordered_set<Ent> ms6 = {"y"};
+    std::unordered_set<Ent> ms7 = {"v"};
+    std::unordered_set<Ent> ms8 = {"v"};
+    std::unordered_set<Ent> ms9 = {"x"};
+    std::unordered_set<Ent> ms10 = {"c"};
+    std::unordered_set<Ent> ms11 = {"d"};
+    std::unordered_set<Ent> ms12 = {"f"};
+    std::unordered_set<Ent> ms13 = {"e"};
+    std::unordered_set<Ent> ms14 = {"a"};
+    std::unordered_set<Ent> ms15 = {"b"};
+    std::unordered_set<Ent> ms16 = {"j"};
+    std::unordered_set<Ent> ms17 = {};
+    std::unordered_set<Ent> ms18 = {"d"};
+    std::unordered_set<Ent> ms19 = {"h"};
+    std::unordered_set<Ent> ms20 = {"i"};
+    std::unordered_set<Ent> ms21 = {};
+    std::unordered_set<Ent> ms22 = {"j"};
+    std::unordered_set<Ent> ms23 = {"k", "l"};
+    std::unordered_set<Ent> ms24 = {"k"};
+    std::unordered_set<Ent> ms25 = {"l"};
+    std::unordered_set<Ent> ms26 = {"m"};
+    writePkb.setModifiesS(1, ms1);
+    writePkb.setModifiesS(2, ms2);
+    writePkb.setModifiesS(3, ms3);
+    writePkb.setModifiesS(4, ms4);
+    writePkb.setModifiesS(5, ms5);
+    writePkb.setModifiesS(6, ms6);
+    writePkb.setModifiesS(7, ms7);
+    writePkb.setModifiesS(8, ms8);
+    writePkb.setModifiesS(9, ms9);
+    writePkb.setModifiesS(10, ms10);
+    writePkb.setModifiesS(11, ms11);
+    writePkb.setModifiesS(12, ms12);
+    writePkb.setModifiesS(13, ms13);
+    writePkb.setModifiesS(14, ms14);
+    writePkb.setModifiesS(15, ms15);
+    writePkb.setModifiesS(16, ms16);
+    writePkb.setModifiesS(17, ms17);
+    writePkb.setModifiesS(18, ms18);
+    writePkb.setModifiesS(19, ms19);
+    writePkb.setModifiesS(20, ms20);
+    writePkb.setModifiesS(21, ms21);
+    writePkb.setModifiesS(22, ms22);
+    writePkb.setModifiesS(23, ms23);
+    writePkb.setModifiesS(24, ms24);
+    writePkb.setModifiesS(25, ms25);
+    writePkb.setModifiesS(26, ms26);
 
-    writePkb.setModifiesS(29, {"j"});
-    writePkb.setModifiesP(proc2, {"j"});
+    std::unordered_set<Ent> mp1 = {"y", "x", "v", "c", "d", "f", "e", "a", "b", "h", "j", "k", "l", "m", "i"};
+    writePkb.setModifiesP(proc1, mp1);
 
-    writePkb.setUsesS(1, {"a", "b"});
-    writePkb.setUsesS(2, {"v"});
-    writePkb.setUsesS(3, {"x"});
-    writePkb.setUsesS(4, {"x", "v", "y"});
-    writePkb.setUsesS(5, {"y"});
-    writePkb.setUsesS(6, {"x"});
-    writePkb.setUsesS(7, {});
-    writePkb.setUsesS(8, {"v"});
-    writePkb.setUsesS(9, {"y"});
-    //    writePkb.setUsesS(10, {});
-    writePkb.setUsesS(11, {"c"});
-    writePkb.setUsesS(12, {"e"});
-    writePkb.setUsesS(13, {"g"});
-    writePkb.setUsesS(14, {"a"});
-    writePkb.setUsesS(17, {"d"});
-    writePkb.setUsesS(18, {"d"});
-    writePkb.setUsesS(19, {"h"});
-    writePkb.setUsesS(20, {"h", "i"});
-    //    writePkb.setUsesS(21, {});
-    writePkb.setUsesS(22, {"j"});
-    writePkb.setUsesS(23, {"k", "l"});
-    writePkb.setUsesS(24, {"l"});
-    writePkb.setUsesS(25, {"k"});
-    writePkb.setUsesS(26, {"i"});
-    writePkb.setUsesS(27, {"k"});
-    writePkb.setUsesS(28, {"l"});
-    writePkb.setUsesP(proc1, {"a", "b", "y", "x", "v", "c", "e", "g", "d", "h", "j", "k", "l", "i"});
+    std::unordered_set<Ent> ms29 = {"j"};
+    writePkb.setModifiesS(29, ms29);
+    writePkb.setModifiesP(proc2, ms29);
 
-    writePkb.setUsesS(29, {"j"});
-    writePkb.setUsesP(proc2, {"j"});
+    std::unordered_set<Ent> us1{"a", "b"};
+    std::unordered_set<Ent> us2{"v"};
+    std::unordered_set<Ent> us3{"x"};
+    std::unordered_set<Ent> us4{"x", "v", "y"};
+    std::unordered_set<Ent> us5{"y"};
+    std::unordered_set<Ent> us6{"x"};
+    std::unordered_set<Ent> us7{};
+    std::unordered_set<Ent> us8{"v"};
+    std::unordered_set<Ent> us9{"y"};
+    std::unordered_set<Ent> us10{};
+    std::unordered_set<Ent> us11{"c"};
+    std::unordered_set<Ent> us12{"e"};
+    std::unordered_set<Ent> us13{"g"};
+    std::unordered_set<Ent> us14{"a"};
+    std::unordered_set<Ent> us17{"d"};
+    std::unordered_set<Ent> us18{"d"};
+    std::unordered_set<Ent> us19{"h"};
+    std::unordered_set<Ent> us20{"h", "i"};
+    std::unordered_set<Ent> us21{};
+    std::unordered_set<Ent> us22{"j"};
+    std::unordered_set<Ent> us23{"k", "l"};
+    std::unordered_set<Ent> us24{"l"};
+    std::unordered_set<Ent> us25{"k"};
+    std::unordered_set<Ent> us26{"i"};
+    std::unordered_set<Ent> us27{"k"};
+    std::unordered_set<Ent> us28{"l"};
+    writePkb.setUsesS(1, us1);
+    writePkb.setUsesS(2, us2);
+    writePkb.setUsesS(3, us3);
+    writePkb.setUsesS(4, us4);
+    writePkb.setUsesS(5, us5);
+    writePkb.setUsesS(6, us6);
+    writePkb.setUsesS(7, us7);
+    writePkb.setUsesS(8, us8);
+    writePkb.setUsesS(9, us9);
+    writePkb.setUsesS(10, us10);
+    writePkb.setUsesS(11, us11);
+    writePkb.setUsesS(12, us12);
+    writePkb.setUsesS(13, us13);
+    writePkb.setUsesS(14, us14);
+    writePkb.setUsesS(17, us17);
+    writePkb.setUsesS(18, us18);
+    writePkb.setUsesS(19, us19);
+    writePkb.setUsesS(20, us20);
+    writePkb.setUsesS(21, us21);
+    writePkb.setUsesS(22, us22);
+    writePkb.setUsesS(23, us23);
+    writePkb.setUsesS(24, us24);
+    writePkb.setUsesS(25, us25);
+    writePkb.setUsesS(26, us26);
+    writePkb.setUsesS(27, us27);
+    writePkb.setUsesS(28, us28);
+
+    std::unordered_set<Ent> up1 = {"a", "b", "y", "x", "v", "c", "e", "g", "d", "h", "j", "k", "l", "i"};
+    writePkb.setUsesP(proc1, up1);
+
+    std::unordered_set<Ent> us29 = {"j"};
+    writePkb.setUsesS(29, us29);
+    writePkb.setUsesP(proc2, us29);
 
     SECTION("Affects(int, int)") {
         std::vector<Parameter> params1 = {Parameter("6", ParameterType::FIXED_INT),
@@ -606,56 +687,107 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 2")
     writePkb.setStatement(AppConstants::ASSIGN, 21);
     writePkb.setStatement(AppConstants::CALL, 22);
 
-    writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-    writePkb.setProcedure(proc2, {11, 12, 13, 14, 15, 16, 17, 18, 19});
-    writePkb.setProcedure(proc3, {20, 21, 22});
+    writePkb.setProcAssignStmt(proc1, 1);
+    writePkb.setProcAssignStmt(proc1, 2);
+    writePkb.setProcAssignStmt(proc1, 3);
+    writePkb.setProcAssignStmt(proc1, 4);
+    writePkb.setProcAssignStmt(proc1, 7);
+    writePkb.setProcAssignStmt(proc2, 11);
+    writePkb.setProcAssignStmt(proc2, 12);
+    writePkb.setProcAssignStmt(proc2, 13);
+    writePkb.setProcAssignStmt(proc2, 14);
+    writePkb.setProcAssignStmt(proc2, 19);
+    writePkb.setProcAssignStmt(proc3, 20);
+    writePkb.setProcAssignStmt(proc3, 21);
 
-    writePkb.setModifiesS(1, {"x"});
-    writePkb.setModifiesS(2, {"y"});
-    writePkb.setModifiesS(3, {"z"});
-    writePkb.setModifiesS(4, {"c"});
-    writePkb.setModifiesS(5, {"c"});
-    writePkb.setModifiesS(7, {"c"});
-    writePkb.setModifiesS(8, {"y", "a", "b", "c", "d", "e"}); // call Two
-    writePkb.setModifiesS(9, {"d", "e"});                     // call Three
+    std::unordered_set<StmtNum> proc1nums = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::unordered_set<StmtNum> proc2nums = {11, 12, 13, 14, 15, 16, 17, 18, 19};
+    std::unordered_set<StmtNum> proc3nums = {20, 21, 22};
+    writePkb.setProcedure(proc1, proc1nums);
+    writePkb.setProcedure(proc2, proc2nums);
+    writePkb.setProcedure(proc3, proc3nums);
 
-    writePkb.setModifiesS(11, {"y"});
-    writePkb.setModifiesS(12, {"a"});
-    writePkb.setModifiesS(13, {"b"});
-    writePkb.setModifiesS(14, {"c"});
-    writePkb.setModifiesS(15, {"b"});
-    writePkb.setModifiesS(16, {"d", "e", "a"});
-    writePkb.setModifiesS(17, {"d", "e"}); // call Three
-    writePkb.setModifiesS(19, {"a"});
+    std::unordered_set<Ent> ms1 = {"x"};
+    std::unordered_set<Ent> ms2 = {"y"};
+    std::unordered_set<Ent> ms3 = {"z"};
+    std::unordered_set<Ent> ms4 = {"c"};
+    std::unordered_set<Ent> ms5 = {"c"};
+    std::unordered_set<Ent> ms7 = {"c"};
+    std::unordered_set<Ent> ms8 = {"y", "a", "b", "c", "d", "e"};
+    std::unordered_set<Ent> ms9 = {"d", "e"};
+    std::unordered_set<Ent> ms11 = {"y"};
+    std::unordered_set<Ent> ms12 = {"a"};
+    std::unordered_set<Ent> ms13 = {"b"};
+    std::unordered_set<Ent> ms14 = {"c"};
+    std::unordered_set<Ent> ms15 = {"b"};
+    std::unordered_set<Ent> ms16 = {"d", "e", "a"};
+    std::unordered_set<Ent> ms17 = {"d", "e"};
+    std::unordered_set<Ent> ms19 = {"a"};
+    std::unordered_set<Ent> ms20 = {"d"};
+    std::unordered_set<Ent> ms21 = {"e"};
+    writePkb.setModifiesS(1, ms1);
+    writePkb.setModifiesS(2, ms2);
+    writePkb.setModifiesS(3, ms3);
+    writePkb.setModifiesS(4, ms4);
+    writePkb.setModifiesS(5, ms5);
+    writePkb.setModifiesS(7, ms7);
+    writePkb.setModifiesS(8, ms8);
+    writePkb.setModifiesS(9, ms9);
+    writePkb.setModifiesS(11, ms11);
+    writePkb.setModifiesS(12, ms12);
+    writePkb.setModifiesS(13, ms13);
+    writePkb.setModifiesS(14, ms14);
+    writePkb.setModifiesS(15, ms15);
+    writePkb.setModifiesS(16, ms16);
+    writePkb.setModifiesS(17, ms17);
+    writePkb.setModifiesS(19, ms19);
+    writePkb.setModifiesS(20, ms20);
+    writePkb.setModifiesS(21, ms21);
 
-    writePkb.setModifiesS(20, {"d"});
-    writePkb.setModifiesS(21, {"e"});
+    std::unordered_set<Ent> mp1 = {"x", "y", "z", "a", "b", "c", "d", "e"};
+    std::unordered_set<Ent> mp2 = {"y", "a", "b", "c", "d", "e"};
+    std::unordered_set<Ent> mp3 = {"d", "e"};
+    writePkb.setModifiesP(proc1, mp1);
+    writePkb.setModifiesP(proc2, mp2);
+    writePkb.setModifiesP(proc3, mp3);
 
-    writePkb.setModifiesP(proc1, {"x", "y", "z", "a", "b", "c", "d", "e"});
-    writePkb.setModifiesP(proc2, {"y", "a", "b", "c", "d", "e"});
-    writePkb.setModifiesP(proc3, {"d", "e"});
+    std::unordered_set<Ent> us1 = {"x"};
+    std::unordered_set<Ent> us2 = {"y", "x"};
+    std::unordered_set<Ent> us3 = {"x", "y", "c"};
+    std::unordered_set<Ent> us5 = {"x", "c", "a", "y", "z", "b", "d"};
+    std::unordered_set<Ent> us6 = {"c"};
+    std::unordered_set<Ent> us7 = {"c"};
+    std::unordered_set<Ent> us8 = {"x", "c", "a", "y", "z", "b", "c", "d"};
+    std::unordered_set<Ent> us9 = {"d"};
+    std::unordered_set<Ent> us11 = {"x"};
+    std::unordered_set<Ent> us12 = {"c"};
+    std::unordered_set<Ent> us13 = {"a", "y", "x", "z"};
+    std::unordered_set<Ent> us16 = {"b", "c", "d"};
+    std::unordered_set<Ent> us17 = {"d"};
+    std::unordered_set<Ent> us19 = {"b"};
+    std::unordered_set<Ent> us21 = {"d"};
+    writePkb.setUsesS(1, us1);
+    writePkb.setUsesS(2, us2);
+    writePkb.setUsesS(3, us3);
+    writePkb.setUsesS(5, us5);
+    writePkb.setUsesS(6, us6);
+    writePkb.setUsesS(7, us7);
+    writePkb.setUsesS(8, us8);
+    writePkb.setUsesS(9, us9);
+    writePkb.setUsesS(11, us11);
+    writePkb.setUsesS(12, us12);
+    writePkb.setUsesS(13, us13);
+    writePkb.setUsesS(16, us16);
+    writePkb.setUsesS(17, us17);
+    writePkb.setUsesS(19, us19);
+    writePkb.setUsesS(21, us21);
 
-    writePkb.setUsesS(1, {"x"});
-    writePkb.setUsesS(2, {"y", "x"});
-    writePkb.setUsesS(3, {"x", "y", "c"});
-    writePkb.setUsesS(5, {"x", "c", "a", "y", "z", "b", "d"}); // additional stuff inside
-    writePkb.setUsesS(6, {"c"});
-    writePkb.setUsesS(7, {"c"});
-    writePkb.setUsesS(8, {"x", "c", "a", "y", "z", "b", "c", "d"}); // call Two
-    writePkb.setUsesS(9, {"d"});                                    // call Three
-
-    writePkb.setUsesS(11, {"x"});
-    writePkb.setUsesS(12, {"c"});
-    writePkb.setUsesS(13, {"a", "y", "x", "z"});
-    writePkb.setUsesS(16, {"b", "c", "d"}); // additional stuff inside
-    writePkb.setUsesS(17, {"d"});           // call Three
-    writePkb.setUsesS(19, {"b"});
-
-    writePkb.setUsesS(21, {"d"});
-
-    writePkb.setUsesP(proc1, {"x", "y", "c", "a", "y", "z", "b", "d"});
-    writePkb.setUsesP(proc2, {"x", "c", "a", "y", "z", "b", "d"});
-    writePkb.setUsesP(proc3, {"d"});
+    std::unordered_set<Ent> up1 = {"x", "y", "c", "a", "y", "z", "b", "d"};
+    std::unordered_set<Ent> up2 = {"x", "c", "a", "y", "z", "b", "d"};
+    std::unordered_set<Ent> up3 = {"d"};
+    writePkb.setUsesP(proc1, up1);
+    writePkb.setUsesP(proc2, up2);
+    writePkb.setUsesP(proc3, up3);
 
     SECTION("Affects(int, int)") {
         std::vector<Parameter> params1 = {Parameter("7", ParameterType::FIXED_INT),
@@ -705,7 +837,6 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 2")
     }
 }
 
-// This test case's expected results are wrong
 TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 3") {
     /*
      *
@@ -761,28 +892,52 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 3")
     writePkb.setStatement(AppConstants::ASSIGN, 7);
     writePkb.setStatement(AppConstants::ASSIGN, 8);
 
-    writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8});
+    writePkb.setProcAssignStmt(proc1, 2);
+    writePkb.setProcAssignStmt(proc1, 5);
+    writePkb.setProcAssignStmt(proc1, 6);
+    writePkb.setProcAssignStmt(proc1, 7);
+    writePkb.setProcAssignStmt(proc1, 8);
 
-    writePkb.setModifiesS(1, {"b", "d", "a"});
-    writePkb.setModifiesS(2, {"d"});
-    writePkb.setModifiesS(3, {"b", "d", "a"});
-    writePkb.setModifiesS(4, {"a"});
-    writePkb.setModifiesS(5, {"a"});
-    writePkb.setModifiesS(6, {"b"});
-    writePkb.setModifiesS(7, {"d"});
-    writePkb.setModifiesS(8, {"b"});
+    std::unordered_set<StmtNum> proc1nums = {1, 2, 3, 4, 5, 6, 7, 8};
+    writePkb.setProcedure(proc1, proc1nums);
 
-    writePkb.setModifiesP(proc1, {"d", "a", "b"});
+    std::unordered_set<Ent> ms1 = {"b", "d", "a"};
+    std::unordered_set<Ent> ms2 = {"d"};
+    std::unordered_set<Ent> ms3 = {"b", "d", "a"};
+    std::unordered_set<Ent> ms4 = {"a"};
+    std::unordered_set<Ent> ms5 = {"a"};
+    std::unordered_set<Ent> ms6 = {"b"};
+    std::unordered_set<Ent> ms7 = {"d"};
+    std::unordered_set<Ent> ms8 = {"b"};
+    writePkb.setModifiesS(1, ms1);
+    writePkb.setModifiesS(2, ms2);
+    writePkb.setModifiesS(3, ms3);
+    writePkb.setModifiesS(4, ms4);
+    writePkb.setModifiesS(5, ms5);
+    writePkb.setModifiesS(6, ms6);
+    writePkb.setModifiesS(7, ms7);
+    writePkb.setModifiesS(8, ms8);
 
-    writePkb.setUsesS(1, {"v", "d", "a", "c", "b", "d", "e"});
-    writePkb.setUsesS(3, {"d", "a", "c", "b", "d", "e"});
-    writePkb.setUsesS(4, {"e", "d"});
-    writePkb.setUsesS(5, {"d", "e"});
-    writePkb.setUsesS(6, {"a", "c"});
-    writePkb.setUsesS(7, {"b"});
-    writePkb.setUsesS(8, {"d"});
+    std::unordered_set<Ent> mp1 = {"d", "a", "b"};
+    writePkb.setModifiesP(proc1, mp1);
 
-    writePkb.setUsesP(proc1, {"v", "d", "a", "c", "b", "d", "e"});
+    std::unordered_set<Ent> us1 = {"v", "d", "a", "c", "b", "d", "e"};
+    std::unordered_set<Ent> us3 = {"d", "a", "c", "b", "d", "e"};
+    std::unordered_set<Ent> us4 = {"e", "d"};
+    std::unordered_set<Ent> us5 = {"d", "e"};
+    std::unordered_set<Ent> us6 = {"a", "c"};
+    std::unordered_set<Ent> us7 = {"b"};
+    std::unordered_set<Ent> us8 = {"d"};
+    writePkb.setUsesS(1, us1);
+    writePkb.setUsesS(3, us3);
+    writePkb.setUsesS(4, us4);
+    writePkb.setUsesS(5, us5);
+    writePkb.setUsesS(6, us6);
+    writePkb.setUsesS(7, us7);
+    writePkb.setUsesS(8, us8);
+
+    std::unordered_set<Ent> up1 = {"v", "d", "a", "c", "b", "d", "e"};
+    writePkb.setUsesP(proc1, up1);
 
     SECTION("Affects(int, int)") {
         std::vector<Parameter> params1 = {Parameter("2", ParameterType::FIXED_INT),
@@ -944,27 +1099,59 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* Tem
     writePkb.setStatement(AppConstants::ASSIGN, 11);
     writePkb.setStatement(AppConstants::ASSIGN, 12);
 
-    writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
+    writePkb.setProcAssignStmt(proc1, 1);
+    writePkb.setProcAssignStmt(proc1, 3);
+    writePkb.setProcAssignStmt(proc1, 5);
+    writePkb.setProcAssignStmt(proc1, 6);
+    writePkb.setProcAssignStmt(proc1, 7);
+    writePkb.setProcAssignStmt(proc1, 8);
+    writePkb.setProcAssignStmt(proc1, 9);
+    writePkb.setProcAssignStmt(proc1, 10);
+    writePkb.setProcAssignStmt(proc1, 11);
+    writePkb.setProcAssignStmt(proc1, 12);
 
-    writePkb.setModifiesS(1, {"a"});
-    writePkb.setModifiesS(3, {"c"});
-    writePkb.setModifiesS(5, {"b"});
-    writePkb.setModifiesS(6, {"f"});
-    writePkb.setModifiesS(7, {"e"});
-    writePkb.setModifiesS(8, {"a"});
-    writePkb.setModifiesS(9, {"e"});
-    writePkb.setModifiesS(10, {"e"});
-    writePkb.setModifiesS(11, {"v"});
-    writePkb.setModifiesS(12, {"g"});
-    writePkb.setModifiesP(proc1, {"a", "c", "b", "f", "e", "v", "g"});
+    std::unordered_set<StmtNum> proc1nums = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    writePkb.setProcedure(proc1, proc1nums);
 
-    writePkb.setUsesS(6, {"a", "b"});
-    writePkb.setUsesS(8, {"a", "d", "f"});
-    writePkb.setUsesS(9, {"b", "c", "e"});
-    writePkb.setUsesS(10, {"b"});
-    writePkb.setUsesS(11, {"e"});
-    writePkb.setUsesS(12, {"a"});
-    writePkb.setUsesP(proc1, {"a", "b", "c", "d", "e", "f"});
+    std::unordered_set<Ent> ms1 = {"a"};
+    std::unordered_set<Ent> ms3 = {"c"};
+    std::unordered_set<Ent> ms5 = {"b"};
+    std::unordered_set<Ent> ms6 = {"f"};
+    std::unordered_set<Ent> ms7 = {"e"};
+    std::unordered_set<Ent> ms8 = {"a"};
+    std::unordered_set<Ent> ms9 = {"e"};
+    std::unordered_set<Ent> ms10 = {"e"};
+    std::unordered_set<Ent> ms11 = {"v"};
+    std::unordered_set<Ent> ms12 = {"g"};
+    writePkb.setModifiesS(1, ms1);
+    writePkb.setModifiesS(3, ms3);
+    writePkb.setModifiesS(5, ms5);
+    writePkb.setModifiesS(6, ms6);
+    writePkb.setModifiesS(7, ms7);
+    writePkb.setModifiesS(8, ms8);
+    writePkb.setModifiesS(9, ms9);
+    writePkb.setModifiesS(10, ms10);
+    writePkb.setModifiesS(11, ms11);
+    writePkb.setModifiesS(12, ms12);
+
+    std::unordered_set<Ent> mp1 = {"a", "c", "b", "f", "e", "v", "g"};
+    writePkb.setModifiesP(proc1, mp1);
+
+    std::unordered_set<Ent> us6 = {"a", "b"};
+    std::unordered_set<Ent> us8 = {"a", "d", "f"};
+    std::unordered_set<Ent> us9 = {"b", "c", "e"};
+    std::unordered_set<Ent> us10 = {"b"};
+    std::unordered_set<Ent> us11 = {"e"};
+    std::unordered_set<Ent> us12 = {"a"};
+    writePkb.setUsesS(6, us6);
+    writePkb.setUsesS(8, us8);
+    writePkb.setUsesS(9, us9);
+    writePkb.setUsesS(10, us10);
+    writePkb.setUsesS(11, us11);
+    writePkb.setUsesS(12, us12);
+
+    std::unordered_set<Ent> up1 = {"a", "b", "c", "d", "e", "f"};
+    writePkb.setUsesP(proc1, up1);
 
     SECTION("Affects(int, int)") {
         std::vector<Parameter> params1 = {Parameter("1", ParameterType::FIXED_INT),
@@ -1114,34 +1301,65 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* 5")
     writePkb.setStatement(AppConstants::CALL, 10);
     writePkb.setStatement(AppConstants::READ, 11);
 
-    writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
+    writePkb.setProcAssignStmt(proc1, 3);
+    writePkb.setProcAssignStmt(proc1, 7);
+    writePkb.setProcAssignStmt(proc1, 8);
 
-    writePkb.setModifiesS(1, {"c", "d", "f"});
-    writePkb.setModifiesS(2, {"c"});
-    writePkb.setModifiesS(3, {"c"});
-    writePkb.setModifiesS(4, {"c"});
-    writePkb.setModifiesS(5, {"c"});
-    writePkb.setModifiesS(6, {"c"});
-    writePkb.setModifiesS(7, {"c"});
-    writePkb.setModifiesS(8, {"d"});
-    writePkb.setModifiesS(9, {});
-    writePkb.setModifiesS(10, {"c"});
-    writePkb.setModifiesS(11, {"f"});
-    writePkb.setModifiesP(proc1, {"c", "d", "f"});
+    std::unordered_set<StmtNum> proc1nums = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    writePkb.setProcedure(proc1, proc1nums);
 
-    writePkb.setUsesS(1, {"a", "b", "c"});
-    writePkb.setUsesS(2, {"a", "b", "c"});
-    writePkb.setUsesS(3, {"a", "b"});
-    writePkb.setUsesS(4, {"c"});
-    writePkb.setUsesS(5, {"b", "c"});
-    writePkb.setUsesS(6, {"c"});
-    writePkb.setUsesS(7, {""});
-    writePkb.setUsesS(8, {"d", "e"});
-    writePkb.setUsesS(9, {"g"});
-    writePkb.setUsesS(10, {"c"});
-    writePkb.setUsesP(proc1, {"a", "b", "c", "d", "e", "g"});
+    std::unordered_set<Ent> ms1 = {"c", "d", "f"};
+    std::unordered_set<Ent> ms2 = {"c"};
+    std::unordered_set<Ent> ms3 = {"c"};
+    std::unordered_set<Ent> ms4 = {"c"};
+    std::unordered_set<Ent> ms5 = {"c"};
+    std::unordered_set<Ent> ms6 = {"c"};
+    std::unordered_set<Ent> ms7 = {"c"};
+    std::unordered_set<Ent> ms8 = {"d"};
+    std::unordered_set<Ent> ms9 = {};
+    std::unordered_set<Ent> ms10 = {"c"};
+    std::unordered_set<Ent> ms11 = {"f"};
+    writePkb.setModifiesS(1, ms1);
+    writePkb.setModifiesS(2, ms2);
+    writePkb.setModifiesS(3, ms3);
+    writePkb.setModifiesS(4, ms4);
+    writePkb.setModifiesS(5, ms5);
+    writePkb.setModifiesS(6, ms6);
+    writePkb.setModifiesS(7, ms7);
+    writePkb.setModifiesS(8, ms8);
+    writePkb.setModifiesS(9, ms9);
+    writePkb.setModifiesS(10, ms10);
+    writePkb.setModifiesS(11, ms11);
 
-    writePkb.setParentT(1, {2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
+    std::unordered_set<Ent> mp1 = {"c", "d", "f"};
+    writePkb.setModifiesP(proc1, mp1);
+
+    std::unordered_set<Ent> us1 = {"a", "b", "c"};
+    std::unordered_set<Ent> us2 = {"a", "b", "c"};
+    std::unordered_set<Ent> us3 = {"a", "b"};
+    std::unordered_set<Ent> us4 = {"c"};
+    std::unordered_set<Ent> us5 = {"b", "c"};
+    std::unordered_set<Ent> us6 = {"c"};
+    std::unordered_set<Ent> us7 = {""};
+    std::unordered_set<Ent> us8 = {"d", "e"};
+    std::unordered_set<Ent> us9 = {"g"};
+    std::unordered_set<Ent> us10 = {"c"};
+    writePkb.setUsesS(1, us1);
+    writePkb.setUsesS(2, us2);
+    writePkb.setUsesS(3, us3);
+    writePkb.setUsesS(4, us4);
+    writePkb.setUsesS(5, us5);
+    writePkb.setUsesS(6, us6);
+    writePkb.setUsesS(7, us7);
+    writePkb.setUsesS(8, us8);
+    writePkb.setUsesS(9, us9);
+    writePkb.setUsesS(10, us10);
+
+    std::unordered_set<Ent> up1 = {"a", "b", "c", "d", "e", "g"};
+    writePkb.setUsesP(proc1, up1);
+
+    std::unordered_set<StmtNum> proc1par = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    writePkb.setParentT(1, proc1par);
 
     SECTION("Affects(_, _)") {
         std::vector<Parameter> params1 = {Parameter("_", ParameterType::WILDCARD),
@@ -1316,85 +1534,178 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* sys
 
     writePkb.setStatement(AppConstants::ASSIGN, 29);
 
-    writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12});
-    writePkb.setProcedure(proc2, {113, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28});
-    writePkb.setProcedure(proc3, {29});
+    writePkb.setProcAssignStmt(proc1, 8);
+    writePkb.setProcAssignStmt(proc1, 12);
+    writePkb.setProcAssignStmt(proc2, 16);
+    writePkb.setProcAssignStmt(proc2, 17);
+    writePkb.setProcAssignStmt(proc2, 20);
+    writePkb.setProcAssignStmt(proc2, 22);
+    writePkb.setProcAssignStmt(proc2, 23);
+    writePkb.setProcAssignStmt(proc2, 25);
+    writePkb.setProcAssignStmt(proc2, 26);
+    writePkb.setProcAssignStmt(proc3, 29);
 
-    writePkb.setModifiesS(1, {"p0licemAN"});
-    writePkb.setModifiesS(2, {"p0liceWahMan"});
-    writePkb.setModifiesS(3, {"pOl3icEwOM5N"});
-    writePkb.setModifiesS(4, {"a", "i", "N", "x", "y", "read", "rEaD", "rEEE"});
-    writePkb.setModifiesS(5, {"read"});
-    writePkb.setModifiesS(6, {"read"});
-    writePkb.setModifiesS(7, {"rEaD"});
-    writePkb.setModifiesS(8, {"rEEE"});
-    writePkb.setModifiesS(9, {"a", "i", "N", "x", "y"});
-    //    writePkb.setModifiesS(10, {});
-    writePkb.setModifiesS(11, {"a"});
-    writePkb.setModifiesS(12, {"m0ArWeirdNaMe5AnDtH7sIsVer9Lon6AnDILov3Ch3rr1E2"});
-    writePkb.setModifiesP(
-        proc1, {"p0licemAN", "p0liceWahMan", "pOl3icEwOM5N", "a", "i", "N", "x", "y", "read", "rEaD", "rEEE"});
+    std::unordered_set<StmtNum> proc1nums = {1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12};
+    std::unordered_set<StmtNum> proc2nums = {13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28};
+    std::unordered_set<StmtNum> proc3nums = {29};
+    writePkb.setProcedure(proc1, proc1nums);
+    writePkb.setProcedure(proc2, proc2nums);
+    writePkb.setProcedure(proc3, proc3nums);
 
-    writePkb.setModifiesS(13, {"a"});
-    writePkb.setModifiesS(14, {"a"});
-    writePkb.setModifiesS(15, {"a"});
-    writePkb.setModifiesS(16, {"i"});
-    writePkb.setModifiesS(17, {"N"});
-    writePkb.setModifiesS(18, {"a", "i"});
-    writePkb.setModifiesS(19, {"a"});
-    writePkb.setModifiesS(20, {"i"});
-    writePkb.setModifiesS(21, {"i"});
-    writePkb.setModifiesS(22, {"x"});
-    writePkb.setModifiesS(23, {"y"});
-    writePkb.setModifiesS(24, {"x", "y"});
-    writePkb.setModifiesS(25, {"x"});
-    writePkb.setModifiesS(26, {"y"});
-    //    writePkb.setModifiesS(27, {});
-    //    writePkb.setModifiesS(28, {});
-    writePkb.setModifiesP(proc2, {"a", "i", "N", "x", "y"});
+    std::unordered_set<Ent> ms1 = {"p0licemAN"};
+    std::unordered_set<Ent> ms2 = {"p0liceWahMan"};
+    std::unordered_set<Ent> ms3 = {"pOl3icEwOM5N"};
+    std::unordered_set<Ent> ms4 = {"a", "i", "N", "x", "y", "read", "rEaD", "rEEE"};
+    std::unordered_set<Ent> ms5 = {"read"};
+    std::unordered_set<Ent> ms6 = {"read"};
+    std::unordered_set<Ent> ms7 = {"rEaD"};
+    std::unordered_set<Ent> ms8 = {"rEEE"};
+    std::unordered_set<Ent> ms9 = {"a", "i", "N", "x", "y"};
+    std::unordered_set<Ent> ms10 = {};
+    std::unordered_set<Ent> ms11 = {"a"};
+    std::unordered_set<Ent> ms12 = {"m0ArWeirdNaMe5AnDtH7sIsVer9Lon6AnDILov3Ch3rr1E2"};
+    writePkb.setModifiesS(1, ms1);
+    writePkb.setModifiesS(2, ms2);
+    writePkb.setModifiesS(3, ms3);
+    writePkb.setModifiesS(4, ms4);
+    writePkb.setModifiesS(5, ms5);
+    writePkb.setModifiesS(6, ms6);
+    writePkb.setModifiesS(7, ms7);
+    writePkb.setModifiesS(8, ms8);
+    writePkb.setModifiesS(9, ms9);
+    writePkb.setModifiesS(10, ms10);
+    writePkb.setModifiesS(11, ms11);
+    writePkb.setModifiesS(12, ms12);
 
-    writePkb.setModifiesS(29, {"a"});
-    writePkb.setModifiesP(proc3, {"a"});
+    std::unordered_set<Ent> mp1 = {"p0licemAN",
+                                   "p0liceWahMan",
+                                   "pOl3icEwOM5N",
+                                   "a",
+                                   "i",
+                                   "N",
+                                   "x",
+                                   "y",
+                                   "read",
+                                   "rEaD",
+                                   "rEEE",
+                                   "m0ArWeirdNaMe5AnDtH7sIsVer9Lon6AnDILov3Ch3rr1E2"};
+    writePkb.setModifiesP(proc1, mp1);
 
-    //    writePkb.setUsesS(1, {});
-    //    writePkb.setUsesS(2, {});
-    //    writePkb.setUsesS(3, {});
-    writePkb.setUsesS(4, {"p0licemAN", "p0liceWahMan", "rEaD", "read", "i", "N", "x", "y", AppConstants::PRINT});
-    //    writePkb.setUsesS(5, {});
-    //    writePkb.setUsesS(6, {});
-    //    writePkb.setUsesS(7, {});
-    writePkb.setUsesS(8, {"rEaD", "read"}); // rEeeeaD
-    writePkb.setUsesS(9, {"i", "N", "x", "y"});
-    writePkb.setUsesS(10, {AppConstants::PRINT});
-    //    writePkb.setUsesS(11, {});
-    //    writePkb.setUsesS(12, {});
-    writePkb.setUsesP(proc1, {"i", "N", "x", "y", "p0licemAN", "p0liceWahMan", "rEaD", "read", "i", "N", "x", "y",
-                              AppConstants::PRINT});
+    std::unordered_set<Ent> ms13 = {"a"};
+    std::unordered_set<Ent> ms14 = {"a"};
+    std::unordered_set<Ent> ms15 = {"a"};
+    std::unordered_set<Ent> ms16 = {"i"};
+    std::unordered_set<Ent> ms17 = {"N"};
+    std::unordered_set<Ent> ms18 = {"a", "i"};
+    std::unordered_set<Ent> ms19 = {"a"};
+    std::unordered_set<Ent> ms20 = {"i"};
+    std::unordered_set<Ent> ms21 = {"i"};
+    std::unordered_set<Ent> ms22 = {"x"};
+    std::unordered_set<Ent> ms23 = {"y"};
+    std::unordered_set<Ent> ms24 = {"x", "y"};
+    std::unordered_set<Ent> ms25 = {"x"};
+    std::unordered_set<Ent> ms26 = {"y"};
+    std::unordered_set<Ent> ms27 = {};
+    std::unordered_set<Ent> ms28 = {};
+    writePkb.setModifiesS(13, ms13);
+    writePkb.setModifiesS(14, ms14);
+    writePkb.setModifiesS(15, ms15);
+    writePkb.setModifiesS(16, ms16);
+    writePkb.setModifiesS(17, ms17);
+    writePkb.setModifiesS(18, ms18);
+    writePkb.setModifiesS(19, ms19);
+    writePkb.setModifiesS(20, ms20);
+    writePkb.setModifiesS(21, ms21);
+    writePkb.setModifiesS(22, ms22);
+    writePkb.setModifiesS(23, ms23);
+    writePkb.setModifiesS(24, ms24);
+    writePkb.setModifiesS(25, ms25);
+    writePkb.setModifiesS(26, ms26);
+    writePkb.setModifiesS(27, ms27);
+    writePkb.setModifiesS(28, ms28);
 
-    //    writePkb.setUsesS(13, {});
-    //    writePkb.setUsesS(14, {});
-    //    writePkb.setUsesS(15, {});
-    //    writePkb.setUsesS(16, {});
-    //    writePkb.setUsesS(17, {});
-    writePkb.setUsesS(18, {"i", "N"});
-    //    writePkb.setUsesS(19, {});
-    writePkb.setUsesS(20, {"i"});
-    writePkb.setUsesS(21, {"i"});
-    //    writePkb.setUsesS(22, {});
-    //    writePkb.setUsesS(23, {});
-    writePkb.setUsesS(24, {"x", "y"});
-    writePkb.setUsesS(25, {"y"});
-    writePkb.setUsesS(26, {"x"});
-    writePkb.setUsesS(27, {"x"});
-    writePkb.setUsesS(28, {"y"});
-    writePkb.setUsesP(proc2, {"i", "N", "x", "y"});
+    std::unordered_set<Ent> mp2 = {"a", "i", "N", "x", "y"};
+    writePkb.setModifiesP(proc2, mp2);
 
-    //    writePkb.setUsesS(29, {});
-    //    writePkb.setUsesP(proc3, {});
+    std::unordered_set<Ent> mp3 = {"a"};
+    writePkb.setModifiesS(29, mp3);
+    writePkb.setModifiesP(proc3, mp3);
 
-    writePkb.setParentT(4, {5, 6, 7, 8, 9, 10});
-    writePkb.setParentT(18, {19, 20, 21});
-    writePkb.setParentT(24, {25, 26});
+    std::unordered_set<Ent> us1 = {};
+    std::unordered_set<Ent> us2 = {};
+    std::unordered_set<Ent> us3 = {};
+    std::unordered_set<Ent> us4 = {"p0licemAN", "p0liceWahMan", "rEaD", "read", "i", "N", "x", "y", "print"};
+    std::unordered_set<Ent> us5 = {};
+    std::unordered_set<Ent> us6 = {};
+    std::unordered_set<Ent> us7 = {};
+    std::unordered_set<Ent> us8 = {"rEaD", "read"};
+    std::unordered_set<Ent> us9 = {"i", "N", "x", "y"};
+    std::unordered_set<Ent> us10 = {"print"};
+    std::unordered_set<Ent> us11 = {};
+    std::unordered_set<Ent> us12 = {};
+    writePkb.setUsesS(1, us1);
+    writePkb.setUsesS(2, us2);
+    writePkb.setUsesS(3, us3);
+    writePkb.setUsesS(4, us4);
+    writePkb.setUsesS(5, us5);
+    writePkb.setUsesS(6, us6);
+    writePkb.setUsesS(7, us7);
+    writePkb.setUsesS(8, us8);
+    writePkb.setUsesS(9, us9);
+    writePkb.setUsesS(10, us10);
+    writePkb.setUsesS(11, us11);
+    writePkb.setUsesS(12, us12);
+
+    std::unordered_set<Ent> up1 = {"i",    "N", "x", "y", "p0licemAN", "p0liceWahMan", "rEaD",
+                                   "read", "i", "N", "x", "y",         "print"};
+    writePkb.setUsesP(proc1, up1);
+
+    std::unordered_set<Ent> us13 = {};
+    std::unordered_set<Ent> us14 = {};
+    std::unordered_set<Ent> us15 = {};
+    std::unordered_set<Ent> us16 = {};
+    std::unordered_set<Ent> us17 = {};
+    std::unordered_set<Ent> us18 = {"i", "N"};
+    std::unordered_set<Ent> us19 = {};
+    std::unordered_set<Ent> us20 = {"i"};
+    std::unordered_set<Ent> us21 = {"i"};
+    std::unordered_set<Ent> us22 = {};
+    std::unordered_set<Ent> us23 = {};
+    std::unordered_set<Ent> us24 = {"x", "y"};
+    std::unordered_set<Ent> us25 = {"y"};
+    std::unordered_set<Ent> us26 = {"x"};
+    std::unordered_set<Ent> us27 = {"x"};
+    std::unordered_set<Ent> us28 = {"y"};
+    writePkb.setUsesS(13, us13);
+    writePkb.setUsesS(14, us14);
+    writePkb.setUsesS(15, us15);
+    writePkb.setUsesS(16, us16);
+    writePkb.setUsesS(17, us17);
+    writePkb.setUsesS(18, us18);
+    writePkb.setUsesS(19, us19);
+    writePkb.setUsesS(20, us20);
+    writePkb.setUsesS(21, us21);
+    writePkb.setUsesS(22, us22);
+    writePkb.setUsesS(23, us23);
+    writePkb.setUsesS(24, us24);
+    writePkb.setUsesS(25, us25);
+    writePkb.setUsesS(26, us26);
+    writePkb.setUsesS(27, us27);
+    writePkb.setUsesS(28, us28);
+
+    std::unordered_set<Ent> up2 = {"i", "N", "x", "y"};
+    writePkb.setUsesP(proc2, up2);
+
+    std::unordered_set<Ent> up3 = {};
+    writePkb.setUsesS(29, up3);
+    writePkb.setUsesP(proc3, up3);
+
+    std::unordered_set<StmtNum> parT4 = {5, 6, 7, 8, 9, 10};
+    std::unordered_set<StmtNum> parT18 = {19, 20, 21};
+    std::unordered_set<StmtNum> parT24 = {25, 26};
+    writePkb.setParentT(4, parT4);
+    writePkb.setParentT(18, parT18);
+    writePkb.setParentT(24, parT24);
 
     SECTION("Affects(int, int)") {
         std::vector<Parameter> params1 = {Parameter("3", ParameterType::FIXED_INT),

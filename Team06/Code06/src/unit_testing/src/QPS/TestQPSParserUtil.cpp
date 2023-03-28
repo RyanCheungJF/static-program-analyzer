@@ -22,7 +22,7 @@ TEST_CASE("FindSuchThat / multiple such that present / returns index of all "
     REQUIRE(expected == result);
 }
 
-TEST_CASE("FindSuchThat / only such, no that present / return -1") {
+TEST_CASE("FindSuchThat / only such, no that present / return empty vector") {
     vector<string> wordList = {"such", "such", "asdf", "such", "qwe", "123", ",asd"};
     vector<int> expected;
     vector<int> result = findSuchThat(wordList);
@@ -30,7 +30,7 @@ TEST_CASE("FindSuchThat / only such, no that present / return -1") {
     REQUIRE(expected == result);
 }
 
-TEST_CASE("FindSuchThat / only that, no such present / return -1") {
+TEST_CASE("FindSuchThat / only that, no such present / return empty vector") {
     vector<string> wordList = {"that", "that", "asdf", "that", "qwe", "123", ",asd"};
     vector<int> expected;
     vector<int> result = findSuchThat(wordList);
@@ -39,7 +39,7 @@ TEST_CASE("FindSuchThat / only that, no such present / return -1") {
 }
 
 TEST_CASE("FindSuchThat / both such that present, but not consecutive in that "
-          "order / return -1") {
+          "order / return empty vector") {
     vector<string> wordList = {"that", "such", "asdf", "that", "such", "123,", "that"};
     vector<int> expected;
     vector<int> result = findSuchThat(wordList);
@@ -47,10 +47,73 @@ TEST_CASE("FindSuchThat / both such that present, but not consecutive in that "
     REQUIRE(expected == result);
 }
 
-TEST_CASE("FindSuchThat / neither such nor that present / return -1") {
+TEST_CASE("FindSuchThat / neither such nor that present / return empty vector") {
     vector<string> wordList = {"qwee", "asd", "asdf", "vxx", "qwe", "123", ",asd"};
     vector<int> expected;
     vector<int> result = findSuchThat(wordList);
+
+    REQUIRE(expected == result);
+}
+
+TEST_CASE("FindWith / one with present followed by fixed string / return correct index") {
+    vector<string> wordList = {"qwee", "asd", "with", "\"asd\"", "=", "123", ",asd"};
+    vector<int> expected = {2};
+    vector<int> result = findWith(wordList);
+
+    REQUIRE(expected == result);
+}
+
+TEST_CASE("FindWith / one with present followed by ident / return correct index") {
+    vector<string> wordList = {"qwee",
+                               "with",
+                               "stuff",
+                               ".procName",
+                               "="
+                               "\"asd\"",
+                               "qwe",
+                               "123",
+                               ",asd"};
+    vector<int> expected = {1};
+    vector<int> result = findWith(wordList);
+
+    REQUIRE(expected == result);
+}
+
+TEST_CASE("FindWith / one with present followed by integer / return correct index") {
+    vector<string> wordList = {"qwee",
+                               "with",
+                               "1",
+                               "="
+                               "\"asd\"",
+                               "qwe",
+                               "123",
+                               ",asd"};
+    vector<int> expected = {1};
+    vector<int> result = findWith(wordList);
+
+    REQUIRE(expected == result);
+}
+
+TEST_CASE("FindWith / one with present followed by with, similar to ident case / return index of first with") {
+    vector<string> wordList = {"qwee", "with", "with", ".procName", "=", "123", ",asd"};
+    vector<int> expected = {1};
+    vector<int> result = findWith(wordList);
+
+    REQUIRE(expected == result);
+}
+
+TEST_CASE("FindWith / one with present followed by bracket / return empty vector") {
+    vector<string> wordList = {"qwee", "with", "(", "\"asd\")", "qwe", "123", ",asd"};
+    vector<int> expected = {};
+    vector<int> result = findWith(wordList);
+
+    REQUIRE(expected == result);
+}
+
+TEST_CASE("FindWith / multiple with present with correct subsequent char / return all correct indexes") {
+    vector<string> wordList = {"qwee", "with", "\"", "asd\"=123", "with", "123", "=asd.procName"};
+    vector<int> expected = {1, 4};
+    vector<int> result = findWith(wordList);
 
     REQUIRE(expected == result);
 }

@@ -12,6 +12,4 @@ public:
 
     MathExpression();
     MathExpression(Operator mathOperator, std::unique_ptr<Expression> lhs, std::unique_ptr<Expression> rhs);
-
-    void accept(ASTVisitor* visitor) override;
 };

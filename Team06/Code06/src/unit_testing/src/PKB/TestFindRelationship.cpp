@@ -28,7 +28,9 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Follows and FollowsT")
     shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::FOLLOWST, params2);
 
     writePkb.setFollows(1, 2);
-    writePkb.setFollowsT(1, {2, 3});
+
+    std::unordered_set<StmtNum> vals = {2, 3};
+    writePkb.setFollowsT(1, vals);
 
     auto res1 = readPkb.findRelationship(rs1);
     auto res2 = readPkb.findRelationship(rs2);

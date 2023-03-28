@@ -31,7 +31,9 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next*") {
     writePkb.setStatement(AppConstants::WHILE, 6);
     writePkb.setStatement(AppConstants::ASSIGN, 7);
     writePkb.setStatement(AppConstants::PRINT, 8);
-    writePkb.setProcedure(proc1, {1, 2, 3, 4, 5, 6, 7, 8});
+
+    std::unordered_set<StmtNum> vals = {1, 2, 3, 4, 5, 6, 7, 8};
+    writePkb.setProcedure(proc1, vals);
 
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> graph2 = {
         {9, {{AppConstants::PARENTS, {11}}, {AppConstants::CHILDREN, {10}}}},
@@ -45,7 +47,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next*") {
     writePkb.setStatement(AppConstants::ASSIGN, 10);
     writePkb.setStatement(AppConstants::ASSIGN, 11);
     writePkb.setStatement(AppConstants::PRINT, 12);
-    writePkb.setProcedure(proc2, {9, 10, 11, 12});
+    std::unordered_set<StmtNum> vals2 = {9, 10, 11, 12};
+    writePkb.setProcedure(proc2, vals2);
 
     SECTION("Next*(int, int)") {
         std::vector<Parameter> params = {Parameter("1", ParameterType::FIXED_INT),
@@ -278,7 +281,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next* - complex") {
     writePkb.setStatement(AppConstants::IF, 20);
     writePkb.setStatement(AppConstants::CALL, 21);
     writePkb.setStatement(AppConstants::WHILE, 22);
-    writePkb.setProcedure(proc3, {13, 14, 15, 16, 17, 18, 19, 20, 21, 22});
+    std::unordered_set<StmtNum> vals1 = {13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
+    writePkb.setProcedure(proc3, vals1);
 
     SECTION("Next*(_, _)") {
         std::vector<std::vector<std::string>> expected = {

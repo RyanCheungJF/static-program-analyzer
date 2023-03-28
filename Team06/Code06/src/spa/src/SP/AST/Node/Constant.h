@@ -10,6 +10,4 @@ public:
 
     Constant();
     Constant(Const value);
-
-    void accept(ASTVisitor* visitor) override;
 };

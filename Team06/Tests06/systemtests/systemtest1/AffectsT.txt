@@ -1,29 +1,644 @@
-1 - comment
+1 - read, wildcard
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Affects*(r, _)
+none
+5000
+2 - read, stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Affects*(r, s)
+none
+5000
+3 - print, wildcard
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Affects*(pn, _)
+none
+5000
+4 - print, stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Affects*(pn, s)
+none
+5000
+5 - call, wildcard
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Affects*(c, _)
+none
+5000
+6 - call, stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Affects*(c, s)
+none
+5000
+7 - while, wildcard
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Affects*(w, _)
+none
+5000
+8 - while, stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Affects*(w, s)
+none
+5000
+9 - if, wildcard
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Affects*(i, _)
+none
+5000
+10 - if, stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Affects*(i, s)
+none
+5000
+11 - assign, wildcard
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Affects*(a, _)
+10, 12, 13, 15, 17, 18, 20, 22, 26, 28, 35, 37, 38, 40, 41, 5, 6, 8, 9
+5000
+12 - assign, stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Affects*(a, s)
+10, 12, 13, 15, 17, 18, 20, 22, 26, 28, 35, 37, 38, 40, 41, 5, 6, 8, 9
+5000
+13 - wildcard, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Affects*(_, a1)
+10, 15, 16, 26, 35, 38, 39, 40, 41, 7, 8, 9
+5000
+14 - stmt, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Affects*(s, a1)
+10, 15, 16, 26, 35, 38, 39, 40, 41, 7, 8, 9
+5000
+15 - wildcard, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Affects*(_, r1)
+none
+5000
+16 - stmt, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Affects*(s, r1)
+none
+5000
+17 - wildcard, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Affects*(_, pn1)
+none
+5000
+18 - stmt, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Affects*(s, pn1)
+none
+5000
+19 - wildcard, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Affects*(_, i1)
+none
+5000
+20 - stmt, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Affects*(s, i1)
+none
+5000
+21 - wildcard, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Affects*(_, w1)
+none
+5000
+22 - stmt, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Affects*(s, w1)
+none
+5000
+23 - wildcard, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Affects*(_, c1)
+none
+5000
+24 - stmt, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Affects*(s, c1)
+none
+5000
+25 - call, stmt number
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Affects*(c, 5)
+none
+5000
+26 - read, stmt number
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Affects*(r, 3)
+none
+5000
+27 - print, stmt number
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Affects*(pn, 4)
+none
+5000
+28 - if, stmt number
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Affects*(i, 32)
+none
+5000
+29 - assign, stmt number (1)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Affects*(a, 35)
+20, 28, 35, 38, 37
+5000
+30 - assign, stmt number (2)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Affects*(a, 16)
+10, 12, 15, 13, 5, 6, 8, 9
+5000
+31 - while, stmt number
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Affects*(w, 25)
+none
+5000
+32 - stmt, stmt number (1)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select s such that Affects*(s, 5)
+none
+5000
+33 - stmt, stmt number (2)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select s such that Affects*(s, 42)
+none
+5000
+34 - stmt number, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Affects*(26, a1)
+26
+5000
+35 - stmt number, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Affects*(9, r1)
+none
+5000
+36 - stmt number, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Affects*(25, pn1)
+none
+5000
+37 - stmt number, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Affects*(38, i1)
+none
+5000
+38 - stmt number, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Affects*(29, w1)
+none
+5000
+39 - stmt number, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Affects*(9, c1)
+none
+5000
+40 - stmt number, stmt (1)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select s1 such that Affects*(28, s1)
+35, 38, 39
+5000
+41 - stmt number, stmt (2)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select s1 such that Affects*(5, s1)
+7, 8, 10, 16, 9
+5000
+42 - stmt number, stmt (3)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select s1 such that Affects*(9, s1)
+10, 16
+5000
+43 - stmt number, stmt number (1)
+print p;
+Select p such that Affects*(28, 38)
+32, 36, 42
+5000
+44 - stmt number, stmt number (2)
+print p;
+Select p such that Affects*(41, 41)
+32, 36, 42
+5000
+45 - read, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Affects*(r, r1)
+none
+5000
+46 - read, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Affects*(r, r1)
+none
+5000
+47 - read, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Affects*(r, pn1)
+none
+5000
+48 - read, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Affects*(r, pn1)
+none
+5000
+49 - read, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Affects*(r, c1)
+none
+5000
+50 - read, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Affects*(r, c1)
+none
+5000
+51 - read, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Affects*(r, w1)
+none
+5000
+52 - read, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Affects*(r, w1)
+none
+5000
+53 - read, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Affects*(r, i1)
+none
+5000
+54 - read, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Affects*(r, i1)
+none
+5000
+55 - read, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Affects*(r, a1)
+none
+5000
+56 - read, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Affects*(r, a1)
+none
+5000
+57 - print, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Affects*(pn, a1)
+none
+5000
+58 - print, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Affects*(pn, a1)
+none
+5000
+59 - print, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Affects*(pn, r1)
+none
+5000
+60 - print, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Affects*(pn, r1)
+none
+5000
+61 - print, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Affects*(pn, pn1)
+none
+5000
+62 - print, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Affects*(pn, pn1)
+none
+5000
+63 - print, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Affects*(pn, i1)
+none
+5000
+64 - print, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Affects*(pn, i1)
+none
+5000
+65 - print, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Affects*(pn, w1)
+none
+5000
+66 - print, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Affects*(pn, w1)
+none
+5000
+67 - print, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Affects*(pn, c1)
+none
+5000
+68 - print, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Affects*(pn, c1)
+none
+5000
+69 - call, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Affects*(c, r1)
+none
+5000
+70 - call, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Affects*(c, r1)
+none
+5000
+71 - call, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Affects*(c, pn1)
+none
+5000
+72 - call, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Affects*(c, pn1)
+none
+5000
+73 - call, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Affects*(c, c1)
+none
+5000
+74 - call, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Affects*(c, c1)
+none
+5000
+75 - call, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Affects*(c, i1)
+none
+5000
+76 - call, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Affects*(c, i1)
+none
+5000
+77 - call, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Affects*(c, w1)
+none
+5000
+78 - call, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Affects*(c, w1)
+none
+5000
+79 - call, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Affects*(c, a1)
+none
+5000
+80 - call, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Affects*(c, a1)
+none
+5000
+81 - if, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Affects*(i, r1)
+none
+5000
+82 - if, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Affects*(i, r1)
+none
+5000
+83 - if, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Affects*(i, pn1)
+none
+5000
+84 - if, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Affects*(i, pn1)
+none
+5000
+85 - if, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Affects*(i, c1)
+none
+5000
+86 - if, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Affects*(i, c1)
+none
+5000
+87 - if, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Affects*(i, i1)
+none
+5000
+88 - if, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Affects*(i, i1)
+none
+5000
+89 - if, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Affects*(i, w1)
+none
+5000
+90 - if, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Affects*(i, w1)
+none
+5000
+91 - if, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Affects*(i, a1)
+none
+5000
+92 - if, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Affects*(i, a1)
+none
+5000
+93 - while, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Affects*(w, r1)
+none
+5000
+94 - while, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Affects*(w, r1)
+none
+5000
+95 - while, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Affects*(w, pn1)
+none
+5000
+96 - while, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Affects*(w, pn1)
+none
+5000
+97 - while, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Affects*(w, c1)
+none
+5000
+98 - while, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Affects*(w, c1)
+none
+5000
+99 - while, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Affects*(w, i1)
+none
+5000
+100 - while, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Affects*(w, i1)
+none
+5000
+101 - while, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Affects*(w, w1)
+none
+5000
+102 - while, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Affects*(w, w1)
+none
+5000
+103 - while, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Affects*(w, a1)
+none
+5000
+104 - while, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Affects*(w, a1)
+none
+5000
+105 - assign, assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a1 such that Affects*(a, a1)
+10, 15, 16, 26, 35, 38, 39, 40, 41, 7, 8, 9
+5000
+106 - assign, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Affects*(a, r1)
+none
+5000
+107 - assign, read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r1 such that Affects*(a, r1)
+none
+5000
+108 - assign, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Affects*(a, pn1)
+none
+5000
+109 - assign, print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn1 such that Affects*(a, pn1)
+none
+5000
+110- assign, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Affects*(a, i1)
+none
+5000
+111 - assign, if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i1 such that Affects*(a, i1)
+none
+5000
+112 - assign, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Affects*(a, w1)
+none
+5000
+113 - assign, while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w1 such that Affects*(a, w1)
+none
+5000
+114 - assign, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Affects*(a, c1)
+none
+5000
+115 - assign, call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c1 such that Affects*(a, c1)
+none
+5000
+116 - same stmt
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select s such that Affects*(s, s)
+26, 35, 38, 40, 41
+5000
+117 - same read
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select r such that Affects*(r, r)
+none
+5000
+118- same print
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select pn such that Affects*(pn, pn)
+none
+5000
+119 - same call
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select c such that Affects*(c, c)
+none
+5000
+120 - same while
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Affects*(w, w)
+none
+5000
+121 - same if
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select i such that Affects*(i, i)
+none
+5000
+122 - same assign
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select a such that Affects*(a, a)
+26, 35, 38, 40, 41
+5000
+123 - same assign (2)
+stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign a, a1;
+Select w such that Affects*(a, a)
+25, 27, 30, 34
+5000
+125 - comment
 assign a; call c;
 Select c such that Affects*(13, 16)
 4
 5000
-2 - comment
+125 - comment
 assign a; call c;
 Select c such that Affects*(12, 16)
 4
 5000
-3 - comment
+126 - comment
 assign a; call c; print p;
 Select p such that Affects*(28, 38)
 32, 36, 42
 5000
-4 - comment
+127 - comment
 assign a;
 Select a such that Affects*(5, a)
 7, 8, 9, 10, 16
 5000
-5 - comment
+128 - comment
 assign a;
 Select a such that Affects*(a, 16)
 15, 13, 12, 10, 9, 8, 6, 5
 5000
-6 - comment
+129 - comment
 assign a;
 Select a such that Affects*(a, 39)
 38, 37, 28

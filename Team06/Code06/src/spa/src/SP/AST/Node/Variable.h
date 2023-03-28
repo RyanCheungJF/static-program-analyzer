@@ -10,6 +10,4 @@ public:
 
     Variable();
     Variable(Ent name);
-
-    void accept(ASTVisitor* visitor) override;
 };

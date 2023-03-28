@@ -2,4 +2,8 @@
 
 #include "Expression.h"
 
-class ConditionalExpression : public ASTNode {};
+class ConditionalExpression : public ASTNode {
+    void accept(ASTVisitor* visitor) override {
+        visitor->visitConditionalExpression(this);
+    }
+};

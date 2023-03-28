@@ -33,3 +33,8 @@ procedure p1, p2;
 Select p1 such that Calls*(_, _)
 One, Two, Three, Four, Five, Six
 5000
+8 - comment
+procedure p;
+Select p such that Calls*(p, p)
+none
+5000

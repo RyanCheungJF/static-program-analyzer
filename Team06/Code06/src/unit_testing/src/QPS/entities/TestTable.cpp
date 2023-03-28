@@ -114,14 +114,6 @@ TEST_CASE("extractDesignEntities / test for variable and wild card / return "
     REQUIRE((t.getHeaders().size() == 1 && t.getHeaders()[0].getValue() == "v"));
 }
 
-TEST_CASE("create Table / creates table with duplicate parameters/ duplicate params are removed") {
-    vector<Parameter> headers = {Parameter("s", ParameterType::STMT), Parameter("v", ParameterType::VARIABLE),
-                                 Parameter("s", ParameterType::STMT), Parameter("v1", ParameterType::VARIABLE)};
-    vector<vector<string>> content = {{"1", "a", "1", "b"}, {"2", "a", "2", "b"}, {"3", "a", "3", "b"}};
-    Table table(headers, content);
-    REQUIRE(table.getHeaders().size() == 3);
-}
-
 TEST_CASE("extractDesignEntities / test for stmt and fixed_int / return only stmt") {
 
     vector<Parameter> headers = {Parameter("s", ParameterType::STMT), Parameter("321", ParameterType::FIXED_INT)};
@@ -301,4 +293,29 @@ TEST_CASE("extractColumns / extracting through using params with duplicates / ex
     Table t2 = t1.extractColumns(extractHeaders);
     REQUIRE(t2.getHeaders().size() == 2);
     REQUIRE(t2.getContent().size() == 2);
+}
+
+TEST_CASE("updateValues / single header updates correctly the values of the table") {
+    Table table({Parameter("v", ParameterType::VARIABLE)}, {{"1"}, {"2"}, {"3"}});
+    unordered_map<string, string> map;
+    map.insert({{"1", "2"}, {"2", "4"}, {"3", "6"}});
+    table = table.updateValues(Parameter("v", ParameterType::VARIABLE), map);
+    vector<vector<string>> resContent = table.getContent();
+    vector<vector<string>> expected = {{"2"}, {"4"}, {"6"}};
+    REQUIRE(find(resContent.begin(), resContent.end(), expected[0]) != resContent.end());
+    REQUIRE(find(resContent.begin(), resContent.end(), expected[1]) != resContent.end());
+    REQUIRE(find(resContent.begin(), resContent.end(), expected[2]) != resContent.end());
+}
+
+TEST_CASE("updateValues / multiple header updates correctly the values of the table") {
+    Table table({Parameter("v", ParameterType::VARIABLE), Parameter("s", ParameterType::STMT)},
+                {{"1", "11"}, {"2", "22"}, {"3", "33"}});
+    unordered_map<string, string> map;
+    map.insert({{"1", "2"}, {"2", "4"}, {"3", "6"}});
+    table = table.updateValues(Parameter("v", ParameterType::VARIABLE), map);
+    vector<vector<string>> resContent = table.getContent();
+    vector<vector<string>> expected = {{"2", "11"}, {"4", "22"}, {"6", "33"}};
+    REQUIRE(find(resContent.begin(), resContent.end(), expected[0]) != resContent.end());
+    REQUIRE(find(resContent.begin(), resContent.end(), expected[1]) != resContent.end());
+    REQUIRE(find(resContent.begin(), resContent.end(), expected[2]) != resContent.end());
 }

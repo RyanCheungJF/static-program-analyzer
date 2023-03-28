@@ -196,8 +196,13 @@ TEST_CASE("isDesignEntity / empty string is not a design entity / return false")
 }
 
 TEST_CASE("isDesignEntity / stmt is a design entity / return true") {
-    string s = "stmt s";
+    string s = "stmt";
     REQUIRE(isDesignEntity(s));
+}
+
+TEST_CASE("isDesignEntity / stmts is NOT a design entity / return true") {
+    string s = "stmts";
+    REQUIRE(!isDesignEntity(s));
 }
 
 // isEntRef Test Cases
@@ -205,4 +210,66 @@ TEST_CASE("isDesignEntity / stmt is a design entity / return true") {
 TEST_CASE("isEntRef /  / return true") {
     string s = "Whatthe0fuck";
     REQUIRE(isEntRef(s));
+}
+
+// isDeclaration
+
+TEST_CASE("isDeclaration / variable v / is valid declaration") {
+    string s = "variable v";
+    REQUIRE(isDeclaration(s));
+}
+
+TEST_CASE("isDeclaration / variable a, b, c, d / is valid declaration") {
+    string s = "variable a, b, c, d";
+    REQUIRE(isDeclaration(s));
+}
+
+TEST_CASE("isDeclaration / variable 00 / is NOT valid declaration") {
+    string s = "variable 00";
+    REQUIRE(!isDeclaration(s));
+}
+
+TEST_CASE("isDeclaration / variable v, 00 / is NOT valid declaration") {
+    string s = "variable v, 00";
+    REQUIRE(!isDeclaration(s));
+}
+
+TEST_CASE("isDeclaration / vari able v / is NOT valid declaration") {
+    string s = "vari able v";
+    REQUIRE(!isDeclaration(s));
+}
+
+TEST_CASE("isDeclaration / variablee v / is NOT valid declaration") {
+    string s = "variablee v";
+    REQUIRE(!isDeclaration(s));
+}
+
+TEST_CASE("isDeclaration / variable v a / is NOT valid declaration") {
+    string s = "variable v a";
+    REQUIRE(!isDeclaration(s));
+}
+
+TEST_CASE("hasCorrectAttrCompForm / correct form / return true") {
+    string s = "asd . stmt# = 123";
+    REQUIRE(hasCorrectAttrCompForm(s));
+}
+
+TEST_CASE("hasCorrectAttrCompForm / missing right hand param / return false") {
+    string s = "asd . stmt# = ";
+    REQUIRE(!hasCorrectAttrCompForm(s));
+}
+
+TEST_CASE("hasCorrectAttrCompForm / missing left hand param / return false") {
+    string s = " = \"ks\"";
+    REQUIRE(!hasCorrectAttrCompForm(s));
+}
+
+TEST_CASE("hasCorrectAttrCompForm / missing comparator / return false") {
+    string s = "asd . stmt#";
+    REQUIRE(!hasCorrectAttrCompForm(s));
+}
+
+TEST_CASE("hasCorrectAttrCompForm / invalid whitespace in right param / return false") {
+    string s = "asd . stmt# = k s";
+    REQUIRE(!hasCorrectAttrCompForm(s));
 }

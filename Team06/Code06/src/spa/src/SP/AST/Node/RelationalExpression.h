@@ -13,6 +13,4 @@ public:
 
     RelationalExpression();
     RelationalExpression(Operator relationalOperator, std::unique_ptr<Expression> lhs, std::unique_ptr<Expression> rhs);
-
-    void accept(ASTVisitor* visitor) override;
 };

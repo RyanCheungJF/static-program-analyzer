@@ -5,7 +5,7 @@
 
 template <class T, typename valueType, typename hash, typename equals> class Cache {
 public:
-    void addResult(std::shared_ptr<T> key, valueType values) {
+    void addResult(std::shared_ptr<T> key, valueType& values) {
         cache[key] = values;
     }
 
