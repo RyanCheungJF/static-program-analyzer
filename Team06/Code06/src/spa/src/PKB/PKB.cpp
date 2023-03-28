@@ -38,10 +38,8 @@ void PKB::initializePkb() {
     this->callsMap[RelationshipType::CALLS] = callsStorage;
     this->callsMap[RelationshipType::CALLST] = callsTStorage;
 
-    this->affectsMap[RelationshipType::AFFECTS] = std::make_shared<AffectsHandler>(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
-                                                                                   procAssignStmtStorage, false);
-    this->affectsMap[RelationshipType::AFFECTST] = std::make_shared<AffectsHandler>(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
-                                                                                   procAssignStmtStorage, true);
+    this->affectsHandler = std::make_shared<AffectsHandler>(cfgStorage, statementStorage, procedureStorage,
+                                                            modifiesStorage, usesStorage, procAssignStmtStorage);
 }
 
 void PKB::setFollows(StmtNum followee, StmtNum follower) {
@@ -153,7 +151,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         res = handler.handle(param1, param2);
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
-        res = affectsMap[type]->handle(param1, param2);
+        res = affectsHandler->handle(param1, param2, type == RelationshipType::AFFECTST);
     }
     if (!res.empty()) {
         relationshipCache->addResult(rs, res);
@@ -169,7 +167,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
         return res;
     }
 
-    ParameterType type = p.getType(); //todo: is this dead code?
+    ParameterType type = p.getType(); // todo: is this dead code?
 
     if (p.isProcedureOnly()) {
         std::unordered_set<ProcName>& procs = procedureStorage->getProcNames();
@@ -404,4 +402,5 @@ void PKB::clearCache() {
     relationshipCache->clearCache();
     parameterCache->clearCache();
     patternCache->clearCache();
+    affectsHandler->clearCache();
 }

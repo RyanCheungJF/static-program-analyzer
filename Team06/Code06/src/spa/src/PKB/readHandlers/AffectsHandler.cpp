@@ -4,17 +4,16 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage>& cfgStorage, std::sha
                                std::shared_ptr<ProcedureStorage>& procStorage,
                                std::shared_ptr<ModifiesUsesStorage>& modifiesStorage,
                                std::shared_ptr<ModifiesUsesStorage>& usesStorage,
-                               std::shared_ptr<ProcedureStorage>& procAssignStmtStorage, bool isTransitive) {
+                               std::shared_ptr<ProcedureStorage>& procAssignStmtStorage) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
     this->procStorage = procStorage;
     this->procAssignStmtStorage = procAssignStmtStorage;
     this->modifiesStorage = modifiesStorage;
     this->usesStorage = usesStorage;
-    this->isTransitive = isTransitive;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, Parameter param2, bool isTransitive) {
 
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
@@ -215,7 +214,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
         for (StmtNum num : nums) {
             queue.push_back({a1, a1, num});
 
-
             std::vector<std::string> val = {std::to_string(a1), std::to_string(num)};
             intWildcardCache[a1].push_back(val);
             wildcardIntCache[num].push_back(val);
@@ -337,8 +335,8 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
     for (StmtNum num : (isIntWildcard ? hashmap[a1] : hashmap[a2])) {
         isIntWildcard ? queue.push_back({a1, num}) : queue.push_back({num, a2});
 
-        isIntWildcard ? intWildcardCache[a1].push_back({std::to_string(a1), std::to_string(num)}) :
-            wildcardIntCache[a2].push_back({std::to_string(num), std::to_string(a2)});
+        isIntWildcard ? intWildcardCache[a1].push_back({std::to_string(a1), std::to_string(num)})
+                      : wildcardIntCache[a2].push_back({std::to_string(num), std::to_string(a2)});
     }
 
     // traverse until we see all possible combinations
@@ -486,4 +484,12 @@ bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, Ent co
         }
     }
     return false;
+}
+
+void AffectsHandler::clearCache() {
+    intWildcardCache.clear();
+    wildcardIntCache.clear();
+    intWildcardTransitiveCache.clear();
+    wildcardIntTransitiveCache.clear();
+    procAffectsGraphMap.clear();
 }

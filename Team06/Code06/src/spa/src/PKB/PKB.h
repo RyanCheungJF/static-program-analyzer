@@ -207,9 +207,6 @@ private:
         {RelationshipType::CALLS, NULL}, {RelationshipType::CALLST, NULL}};
 
     std::unordered_set<RelationshipType> nextMap = {RelationshipType::NEXT, RelationshipType::NEXTT};
-//    std::unordered_set<RelationshipType> affectsMap = {RelationshipType::AFFECTS, RelationshipType::AFFECTST};
-    std::unordered_map<RelationshipType, std::shared_ptr<AffectsHandler>> affectsMap = {
-            {RelationshipType::AFFECTS, NULL},
-            {RelationshipType::AFFECTST, NULL}
-    };
+    std::unordered_set<RelationshipType> affectsMap = {RelationshipType::AFFECTS, RelationshipType::AFFECTST};
+    std::shared_ptr<AffectsHandler> affectsHandler;
 };

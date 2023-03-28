@@ -33,9 +33,11 @@ public:
                    std::shared_ptr<ProcedureStorage>& procStorage,
                    std::shared_ptr<ModifiesUsesStorage>& modifiesStorage,
                    std::shared_ptr<ModifiesUsesStorage>& usesStorage,
-                   std::shared_ptr<ProcedureStorage>& procAssignStmtStorage, bool isTransitive);
+                   std::shared_ptr<ProcedureStorage>& procAssignStmtStorage);
 
-    std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
+    std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2, bool isTransitive);
+
+    void clearCache();
 
 private:
     std::shared_ptr<CFGStorage> cfgStorage;
@@ -44,21 +46,8 @@ private:
     std::shared_ptr<ProcedureStorage> procAssignStmtStorage;
     std::shared_ptr<ModifiesUsesStorage> modifiesStorage;
     std::shared_ptr<ModifiesUsesStorage> usesStorage;
-    bool isTransitive;
 
-    // cache data structures
-    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardCache;
-    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntCache;
-
-    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardTransitiveCache;
-    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntTransitiveCache;
-
-    std::unordered_map<ProcName, std::unordered_map<bool, std::unordered_map<StmtNum, unordered_set<StmtNum>>>>
-        procAffectsGraphMap;
-
-
-
-
+    // handler methods
     // Affects(1, 2)
     std::vector<std::vector<std::string>> handleIntInt(StmtNum a1, StmtNum a2);
     // Affects(a1, 2) or Affects(_, 2)
@@ -99,4 +88,14 @@ private:
     bool checkModifiedAssignReadCall(Ent commonVariable, StmtNum currentLine);
 
     bool checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, Ent commonVariable);
+
+    // cache related data structures and methods
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardCache;
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntCache;
+
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardTransitiveCache;
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntTransitiveCache;
+
+    std::unordered_map<ProcName, std::unordered_map<bool, std::unordered_map<StmtNum, unordered_set<StmtNum>>>>
+        procAffectsGraphMap;
 };
