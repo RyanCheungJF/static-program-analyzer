@@ -111,14 +111,14 @@ TEST_CASE("insertTable / insertion of three tables with intersection / return "
     vector<string> bb = qdb.fetch({Parameter("v", ParameterType::VARIABLE)}, readPkb);
     vector<string> cc = qdb.fetch({Parameter("s2", ParameterType::STMT)}, readPkb);
     vector<string> dd = qdb.fetch({Parameter("a", ParameterType::ASSIGN)}, readPkb);
-    REQUIRE(find(aa.begin(),aa.end(), "1") != aa.end());
-    REQUIRE(find(aa.begin(),aa.end(), "2") != aa.end());
-    REQUIRE(find(aa.begin(),aa.end(), "3") != aa.end());
-    REQUIRE(find(bb.begin(),aa.end(), "x") != aa.end());
-    REQUIRE(find(bb.begin(),aa.end(), "y") != aa.end());
-    REQUIRE(find(cc.begin(),aa.end(), "4") != aa.end());
-    REQUIRE(find(cc.begin(),aa.end(), "5") != aa.end());
-    REQUIRE(find(dd.begin(),aa.end(), "99") != aa.end());
+    REQUIRE(find(aa.begin(), aa.end(), "1") != aa.end());
+    REQUIRE(find(aa.begin(), aa.end(), "2") != aa.end());
+    REQUIRE(find(aa.begin(), aa.end(), "3") != aa.end());
+    REQUIRE(find(bb.begin(), aa.end(), "x") != aa.end());
+    REQUIRE(find(bb.begin(), aa.end(), "y") != aa.end());
+    REQUIRE(find(cc.begin(), aa.end(), "4") != aa.end());
+    REQUIRE(find(cc.begin(), aa.end(), "5") != aa.end());
+    REQUIRE(find(dd.begin(), aa.end(), "99") != aa.end());
 }
 
 TEST_CASE("insertTable / intersecting headers but non intersecting content / "
@@ -173,15 +173,15 @@ TEST_CASE("insertTable / third table intersects with first two tables / return "
     vector<string> bb = qdb.fetch({Parameter("s2", ParameterType::STMT)}, readPKB);
     vector<string> cc = qdb.fetch({Parameter("x", ParameterType::VARIABLE)}, readPKB);
     vector<string> dd = qdb.fetch({Parameter("y", ParameterType::VARIABLE)}, readPKB);
-    REQUIRE(find(aa.begin(),aa.end(), "1") != aa.end());
-    REQUIRE(find(aa.begin(),aa.end(), "2") != aa.end());
-    REQUIRE(find(aa.begin(),aa.end(), "3") != aa.end());
-    REQUIRE(find(bb.begin(),aa.end(), "4") != aa.end());
-    REQUIRE(find(bb.begin(),aa.end(), "5") != aa.end());
-    REQUIRE(find(cc.begin(),aa.end(), "x") != aa.end());
-    REQUIRE(find(cc.begin(),aa.end(), "y") != aa.end());
-    REQUIRE(find(dd.begin(),aa.end(), "a") != aa.end());
-    REQUIRE(find(dd.begin(),aa.end(), "b") != aa.end());
+    REQUIRE(find(aa.begin(), aa.end(), "1") != aa.end());
+    REQUIRE(find(aa.begin(), aa.end(), "2") != aa.end());
+    REQUIRE(find(aa.begin(), aa.end(), "3") != aa.end());
+    REQUIRE(find(bb.begin(), aa.end(), "4") != aa.end());
+    REQUIRE(find(bb.begin(), aa.end(), "5") != aa.end());
+    REQUIRE(find(cc.begin(), aa.end(), "x") != aa.end());
+    REQUIRE(find(cc.begin(), aa.end(), "y") != aa.end());
+    REQUIRE(find(dd.begin(), aa.end(), "a") != aa.end());
+    REQUIRE(find(dd.begin(), aa.end(), "b") != aa.end());
 }
 
 TEST_CASE("insertTable / insert tables with empty content / tables can still "
