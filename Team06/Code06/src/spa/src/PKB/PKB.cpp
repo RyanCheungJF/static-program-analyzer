@@ -37,6 +37,11 @@ void PKB::initializePkb() {
 
     this->callsMap[RelationshipType::CALLS] = callsStorage;
     this->callsMap[RelationshipType::CALLST] = callsTStorage;
+
+    this->affectsMap[RelationshipType::AFFECTS] = std::make_shared<AffectsHandler>(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
+                                                                                   procAssignStmtStorage, false);
+    this->affectsMap[RelationshipType::AFFECTST] = std::make_shared<AffectsHandler>(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
+                                                                                   procAssignStmtStorage, true);
 }
 
 void PKB::setFollows(StmtNum followee, StmtNum follower) {
@@ -148,9 +153,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         res = handler.handle(param1, param2);
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
-        AffectsHandler handler(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
-                               procAssignStmtStorage, type == RelationshipType::AFFECTST);
-        res = handler.handle(param1, param2);
+        res = affectsMap[type]->handle(param1, param2);
     }
     if (!res.empty()) {
         relationshipCache->addResult(rs, res);

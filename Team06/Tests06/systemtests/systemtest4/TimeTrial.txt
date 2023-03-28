@@ -48,3 +48,8 @@ stmt a1, a2, a3;
 Select BOOLEAN such that Follows*(a1, a2)
 TRUE
 5000
+11 - test Affects* time along with subsequent affects
+assign a1, a2, a3;
+Select <a1, a2> such that Affects*(_, _) and Affects*(a1, 221) and Affects*(219, _) and Affects(219, 221) and Affects(219, a2) and Affects(a1, 221)
+219 221
+5000

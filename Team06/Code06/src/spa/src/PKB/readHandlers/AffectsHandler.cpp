@@ -101,9 +101,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(ProcName proc) {
-    if (wildcardWildcardHit) {
-        return wildcardWildcardCache;
-    }
 
     std::vector<std::vector<std::string>> res;
     std::unordered_set<ProcName> allProcedures;
@@ -129,9 +126,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(Pro
         }
     }
 
-    wildcardWildcardHit = true;
-    wildcardWildcardCache = res;
-    return wildcardWildcardCache;
+    return res;
 }
 
 // Affects*
@@ -205,9 +200,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTransitive() {
-    if (wildcardWildcardTransitiveHit) {
-        return wildcardWildcardTransitiveCache;
-    }
 
     std::vector<std::vector<std::string>> res;
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap =
@@ -256,10 +248,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
         intWildcardTransitiveCache[p.first].push_back(val);
         wildcardIntTransitiveCache[p.second].push_back(val);
     }
-
-    wildcardWildcardTransitiveHit = true;
-    wildcardWildcardTransitiveCache = res;
-    return wildcardWildcardTransitiveCache;
+    return res;
 }
 
 // helper functions
