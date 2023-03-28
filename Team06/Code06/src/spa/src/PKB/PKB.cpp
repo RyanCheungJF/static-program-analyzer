@@ -169,7 +169,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
         return res;
     }
 
-    ParameterType type = p.getType();
+    ParameterType type = p.getType(); //todo: is this dead code?
 
     if (p.isProcedureOnly()) {
         std::unordered_set<ProcName>& procs = procedureStorage->getProcNames();
