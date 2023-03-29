@@ -663,4 +663,20 @@ std::vector<std::vector<std::string>> NextHandler::handleTransitive(Parameter pa
 
 void NextHandler::clearCache() {
 
+    intWildcardCache.clear();
+    wildcardIntCache.clear();
+    intStmttypeCache.clear();
+    stmttypeIntCache.clear();
+    stmttypeWildcardCache.clear();
+    wildcardStmttypeCache.clear();
+    stmttypeStmttypeCache.clear();
+
+    intWildcardCacheTransitive.clear();
+    wildcardIntCacheTransitive.clear();
+    intStmttypeCacheTransitive.clear();
+    stmttypeIntCacheTransitive.clear();
+    stmttypeWildcardCacheTransitive.clear();
+    wildcardStmttypeCacheTransitive.clear();
+    stmttypeStmttypeCacheTransitive.clear();
+
 }
