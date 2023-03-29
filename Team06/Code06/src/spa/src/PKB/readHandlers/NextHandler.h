@@ -9,8 +9,10 @@
 class NextHandler {
 public:
     NextHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
-                std::shared_ptr<ProcedureStorage> procStorage, bool isTransitive);
-    std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
+                std::shared_ptr<ProcedureStorage> procStorage);
+    std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2, bool isTransitive);
+
+    void clearCache();
 
 private:
     std::shared_ptr<CFGStorage> cfgStorage;
@@ -21,7 +23,6 @@ private:
         {ParameterType::ASSIGN, AppConstants::ASSIGN}, {ParameterType::PRINT, AppConstants::PRINT},
         {ParameterType::READ, AppConstants::READ},     {ParameterType::CALL, AppConstants::CALL},
         {ParameterType::STMT, AppConstants::STMT}};
-    bool isTransitive;
 
     // e.g. Next(1, 2)
     std::vector<std::vector<std::string>> handleIntInt(Parameter param1, Parameter param2);
@@ -87,4 +88,25 @@ private:
     const std::unordered_set<StmtNum>& findGraphRelative(const CFG& graph, StmtNum num, std::string relativeType);
 
     std::unordered_set<StmtNum> emptySet;
+
+    // cache related data structures and methods
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardCache;
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntCache;
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::vector<std::vector<std::string>>>>
+            intStmttypeCache;
+    std::unordered_map<std::string, std::unordered_map<StmtNum, std::vector<std::vector<std::string>>>>
+            stmttypeIntCache;
+    std::unordered_map<std::string, std::vector<std::vector<std::string>>> stmttypeWildcardCache;
+    std::unordered_map<std::string, std::vector<std::vector<std::string>>> wildcardStmttypeCache;
+    std::unordered_map<std::string, std::unordered_map<std::string, std::vector<std::vector<std::string>>>>
+        stmttypeStmttypeCache;
+
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardTransitiveCache;
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntTransitiveCache;
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::vector<std::vector<std::string>>>>
+            intStmttypeCacheTransitive;
+    std::unordered_map<std::string, std::unordered_map<StmtNum, std::vector<std::vector<std::string>>>>
+            stmttypeIntCacheTransitive;
+
+
 };

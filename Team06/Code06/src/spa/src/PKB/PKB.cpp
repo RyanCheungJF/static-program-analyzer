@@ -40,6 +40,9 @@ void PKB::initializePkb() {
 
     this->affectsHandler = std::make_unique<AffectsHandler>(cfgStorage, statementStorage, procedureStorage,
                                                             modifiesStorage, usesStorage, procAssignStmtStorage);
+
+    this->nextHandler = std::make_unique<NextHandler>(cfgStorage, statementStorage, procedureStorage);
+
 }
 
 void PKB::setFollows(StmtNum followee, StmtNum follower) {
@@ -147,8 +150,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         res = handler.handle(param1, param2);
     }
     else if (nextMap.find(type) != nextMap.end()) {
-        NextHandler handler(cfgStorage, statementStorage, procedureStorage, type == RelationshipType::NEXTT);
-        res = handler.handle(param1, param2);
+        res = nextHandler->handle(param1, param2, type == RelationshipType::NEXTT);
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
         res = affectsHandler->handle(param1, param2, type == RelationshipType::AFFECTST);
@@ -403,4 +405,5 @@ void PKB::clearCache() {
     parameterCache->clearCache();
     patternCache->clearCache();
     affectsHandler->clearCache();
+    nextHandler->clearCache();
 }
