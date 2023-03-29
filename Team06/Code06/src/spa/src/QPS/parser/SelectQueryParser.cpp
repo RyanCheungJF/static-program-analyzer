@@ -140,6 +140,9 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
             Parameter param = parseParameter(elemString);
             params.push_back(param);
         }
+        if (params.size() == 1 && params[0].getValue() == AppConstants::BOOLEAN) {
+            throw SemanticException();
+        }
         return params;
     }
     // single select parameter

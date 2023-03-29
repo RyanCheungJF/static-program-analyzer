@@ -30,15 +30,15 @@ public:
     Table intersectTable(Table&);
     Table extractColumns(vector<int>&);
     Table extractColumns(vector<Parameter>&);
-    Table cartesianProduct(Table&);
+    void cartesianProduct(Table&);
     vector<string> getResult(vector<Parameter>&);
     bool isEmptyTable() const;
-    Table updateValues(Parameter, unordered_map<string, string>&);
+    void updateValues(Parameter, unordered_map<string, string>&);
 
 private:
     vector<Parameter> headers;
     vector<vector<string>> contents;
-    static vector<pair<int, int>> getIntersectingIndex(Table&, Table&);
+    vector<pair<int, int>> getIntersectingIndex(Table&);
     static vector<vector<string>> intersectContent(const vector<vector<string>>&, const vector<vector<string>>&,
                                                    const vector<pair<int, int>>&);
     static vector<Parameter> intersectHeader(const vector<Parameter>&, const vector<Parameter>&,

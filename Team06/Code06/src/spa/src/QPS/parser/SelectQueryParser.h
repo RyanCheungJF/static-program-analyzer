@@ -13,6 +13,7 @@
 #include "QPS/entities/Query.h"
 #include "QPS/entities/Relationship.h"
 #include "exceptions/Exception.h"
+#include "exceptions/SemanticException.h"
 
 using namespace std;
 

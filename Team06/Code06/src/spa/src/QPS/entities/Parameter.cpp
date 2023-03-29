@@ -163,6 +163,10 @@ void Parameter::updateSynonymType(ParameterType pt) {
     type = pt;
 }
 
+void Parameter::updateAttributeType(AttributeType at) {
+    attribute = at;
+}
+
 ParameterType Parameter::stringToType(string s) {
     auto iter = Parameter::stringToTypeMap.find(s);
     if (iter == stringToTypeMap.end()) {

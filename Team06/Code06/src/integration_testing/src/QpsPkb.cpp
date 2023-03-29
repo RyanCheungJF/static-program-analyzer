@@ -1248,4 +1248,23 @@ TEST_CASE("Select synonym with attributes") {
         REQUIRE(result.size() == 1);
         REQUIRE(exists(result, "sub"));
     }
+
+    SECTION("Select same variable but different attributes with some clause") {
+        string query = R"(
+        call c;
+        variable v;
+        Select <c.stmt#, c.procName> such that Uses(c,v))";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(exists(result, "2 sub"));
+        REQUIRE(exists(result, "12 end"));
+    }
+
+    SECTION("Select <BOOLEAN> should fail") {
+        string query = R"(
+        call c;
+        variable v;
+        Select <BOOLEAN> such that Uses(c,v))";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(exists(result, "SemanticError"));
+    }
 }

@@ -181,9 +181,9 @@ TEST_CASE("cartesianProduct / simple 2 element tables / result in total 4 elemen
     vector<vector<string>> c2 = {{"c", "333"}, {"d", "444"}};
     Table t1 = Table(h1, c1);
     Table t2 = Table(h2, c2);
-    Table t3 = t1.cartesianProduct(t2);
-    vector<Parameter> h3 = t3.getHeaders();
-    vector<vector<string>> c3 = t3.getContent();
+    t1.cartesianProduct(t2);
+    vector<Parameter> h3 = t1.getHeaders();
+    vector<vector<string>> c3 = t1.getContent();
     REQUIRE(c3.size() == 4);
 }
 
@@ -194,9 +194,9 @@ TEST_CASE("cartesianProduct / product with second table with empty content / sho
     vector<vector<string>> c2 = {};
     Table t1 = Table(h1, c1);
     Table t2 = Table(h2, c2);
-    Table t3 = t1.cartesianProduct(t2);
-    vector<vector<string>> c3 = t3.getContent();
-    vector<Parameter> h3 = t3.getHeaders();
+    t1.cartesianProduct(t2);
+    vector<vector<string>> c3 = t1.getContent();
+    vector<Parameter> h3 = t1.getHeaders();
     REQUIRE(h3.size() == 4);
     REQUIRE(c3.empty());
 }
@@ -208,9 +208,9 @@ TEST_CASE("cartesianProduct / product with first table with empty content / shou
     vector<vector<string>> c2 = {};
     Table t1 = Table(h1, c1);
     Table t2 = Table(h2, c2);
-    Table t3 = t2.cartesianProduct(t1);
-    vector<vector<string>> c3 = t3.getContent();
-    vector<Parameter> h3 = t3.getHeaders();
+    t2.cartesianProduct(t1);
+    vector<vector<string>> c3 = t2.getContent();
+    vector<Parameter> h3 = t2.getHeaders();
     REQUIRE(h3.size() == 4);
     REQUIRE(c3.empty());
 }
@@ -237,10 +237,10 @@ TEST_CASE("cartesianProduct / massive 26 element tables / result in total 4 elem
     Table t1 = Table(h1, c1);
     Table t2 = Table(h2, c2);
     Table t3 = Table(h3, c3);
-    Table t4 = t1.cartesianProduct(t2);
-    Table t5 = t4.cartesianProduct(t3);
-    vector<Parameter> h5 = t5.getHeaders();
-    vector<vector<string>> c5 = t5.getContent();
+    t1.cartesianProduct(t2);
+    t1.cartesianProduct(t3);
+    vector<Parameter> h5 = t1.getHeaders();
+    vector<vector<string>> c5 = t1.getContent();
     REQUIRE(h5.size() == 6);
     REQUIRE(c5.size() == 26 * 26 * 26);
 }
@@ -299,7 +299,7 @@ TEST_CASE("updateValues / single header updates correctly the values of the tabl
     Table table({Parameter("v", ParameterType::VARIABLE)}, {{"1"}, {"2"}, {"3"}});
     unordered_map<string, string> map;
     map.insert({{"1", "2"}, {"2", "4"}, {"3", "6"}});
-    table = table.updateValues(Parameter("v", ParameterType::VARIABLE), map);
+    table.updateValues(Parameter("v", ParameterType::VARIABLE), map);
     vector<vector<string>> resContent = table.getContent();
     vector<vector<string>> expected = {{"2"}, {"4"}, {"6"}};
     REQUIRE(find(resContent.begin(), resContent.end(), expected[0]) != resContent.end());
@@ -312,7 +312,7 @@ TEST_CASE("updateValues / multiple header updates correctly the values of the ta
                 {{"1", "11"}, {"2", "22"}, {"3", "33"}});
     unordered_map<string, string> map;
     map.insert({{"1", "2"}, {"2", "4"}, {"3", "6"}});
-    table = table.updateValues(Parameter("v", ParameterType::VARIABLE), map);
+    table.updateValues(Parameter("v", ParameterType::VARIABLE), map);
     vector<vector<string>> resContent = table.getContent();
     vector<vector<string>> expected = {{"2", "11"}, {"4", "22"}, {"6", "33"}};
     REQUIRE(find(resContent.begin(), resContent.end(), expected[0]) != resContent.end());
