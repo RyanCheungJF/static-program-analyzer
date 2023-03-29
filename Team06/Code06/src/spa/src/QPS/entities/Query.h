@@ -23,13 +23,15 @@ public:
     vector<string> evaluate(ReadPKB&);
     Query();
     Query(const Query&);
-    Query(vector<Parameter>&, vector<shared_ptr<Relationship>>&, vector<Pattern>&, vector<Comparison>&);
+    Query(vector<Parameter>&, vector<shared_ptr<Relationship>>&, vector<Pattern>&, vector<Comparison>&, bool);
     vector<shared_ptr<Relationship>> relations;
     vector<Parameter> selectParameters;
     vector<Pattern> patterns;
     vector<Comparison> comparisons;
+    bool isSelectTuple;
     vector<Parameter*> getAllUncheckedSynonyms();
     bool validateAllParameters();
+    bool booleanParamCheck();
 
 private:
     void evaluateRelationship(QueryDB&, ReadPKB&);

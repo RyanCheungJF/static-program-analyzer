@@ -168,6 +168,32 @@ TEST_CASE("parse / with clause variable empty string / catch syntax error") {
     CHECK_THROWS_AS(qp.parse(test), SyntaxException);
 }
 
+TEST_CASE("parse / select <BOOLEAN> should not work / catch semantic error") {
+    string query = R"(
+        call c;
+        variable v;
+        Select <BOOLEAN> such that Uses(c,v))";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(query), SemanticException);
+}
+
+TEST_CASE("parse / select <BOOLEAN> should work if BOOLEAN is declared / parse without errors") {
+    string query = R"(
+        stmt BOOLEAN;
+        Select <BOOLEAN> such that Follows(BOOLEAN,2))";
+    QPSParser qp;
+    vector<Query> q = qp.parse(query);
+    REQUIRE(true);
+}
+
+TEST_CASE("parse / select <BOOLEAN, s> should work if BOOLEAN is not declared / catch semantic error") {
+    string query = R"(
+        stmt s;
+        Select <BOOLEAN, s> such that Follows(s,2))";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(query), SemanticException);
+}
+
 TEST_CASE("splitQuery / splitting variable v; Select v; should give error / "
           "catch error") {
     string test = "variable v; Select v ; ";

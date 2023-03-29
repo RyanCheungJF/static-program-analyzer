@@ -39,9 +39,9 @@ TEST_CASE("intersectTable / intersecting large tables / return true") {
     auto start = high_resolution_clock::now();
     Table t1(h1, c1);
     Table t2(h2, c2);
-    Table t3 = t1.intersectTable(t2);
-    vector<Parameter> h3 = t3.getHeaders();
-    vector<vector<string>> c3 = t3.getContent();
+    t1.intersectTable(t2);
+    vector<Parameter> h3 = t1.getHeaders();
+    vector<vector<string>> c3 = t1.getContent();
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
     // Content size should be 8 * 8 * 4 = 256
@@ -56,9 +56,9 @@ TEST_CASE("intersectTable / intersection of one parameter is working / return tr
     vector<vector<string>> c2 = {{"d", "1"}, {"e", "2"}, {"f", "4"}};
     Table t1(h1, c1);
     Table t2(h2, c2);
-    Table t3 = t1.intersectTable(t2);
-    vector<Parameter> h3 = t3.getHeaders();
-    vector<vector<string>> c3 = t3.getContent();
+    t1.intersectTable(t2);
+    vector<Parameter> h3 = t1.getHeaders();
+    vector<vector<string>> c3 = t1.getContent();
     bool rightSize = h3.size() == 3 && c3.size() == 2;
     bool rightHeaders = h3[0].getValue() == "v" && h3[1].getValue() == "v1" && h3[2].getValue() == "s";
     REQUIRE((rightSize && rightHeaders));

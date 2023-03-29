@@ -9,6 +9,7 @@ Table QueryDB::emptyTable = Table({}, {});
 void QueryDB::insertTable(Table& table) {
     // Check if we have any duplicate parameters
     // if so do an intersection
+    table.removeDuplicates();
     vector<Parameter> inputHeaders = table.getHeaders();
     vector<Parameter> seenParameters;
     vector<Table> oldTableVector = tableVector;
@@ -22,7 +23,7 @@ void QueryDB::insertTable(Table& table) {
         }
         else {
             // intersect the two tables
-            table = table.intersectTable(t);
+            table.intersectTable(t);
         }
     }
     // This may push empty tables into the tableVector

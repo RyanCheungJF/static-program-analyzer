@@ -13,6 +13,7 @@ Query SelectQueryParser::parse(string selectQuery) {
     vector<Pattern> tempPatterns;
     vector<Comparison> comparisons;
     vector<Comparison> tempComparisons;
+    bool isSelectTuple;
     for (tuple<ClauseType, int, int> clause : clausePositions) {
         ClauseType ct;
         int clauseStart, clauseEnd;
@@ -31,13 +32,13 @@ Query SelectQueryParser::parse(string selectQuery) {
             comparisons.insert(comparisons.end(), tempComparisons.begin(), tempComparisons.end());
             break;
         case ClauseType::SELECT:
-            selectParams = parseSelectClause(wordList, clauseStart, clauseEnd);
+            tie(selectParams, isSelectTuple) = parseSelectClause(wordList, clauseStart, clauseEnd);
             break;
         default:
             break;
         }
     }
-    Query query(selectParams, relations, patterns, comparisons);
+    Query query(selectParams, relations, patterns, comparisons, isSelectTuple);
     return query;
 }
 
@@ -113,7 +114,7 @@ vector<Parameter> SelectQueryParser::extractSelectTuple(vector<string>& wordList
 /*
 assumes start and end won't be -1 i.e. select clause must exist
 */
-vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList, int start, int end) {
+tuple<vector<Parameter>, bool> SelectQueryParser::parseSelectClause(vector<string>& wordList, int start, int end) {
     vector<Parameter> params;
     if (end - start < 2) {
         // select clause does not exist
@@ -124,7 +125,8 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
                                 "start position for wordList");
     }
     start = start + 1;
-    if (isTupleStart(wordList[start])) {
+    bool isSelectTuple = isTupleStart(wordList[start]);
+    if (isSelectTuple) {
         // it is a tuple select clause
         vector<string> paramStrings;
         string tupleString;
@@ -140,10 +142,7 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
             Parameter param = parseParameter(elemString);
             params.push_back(param);
         }
-        if (params.size() == 1 && params[0].getValue() == AppConstants::BOOLEAN) {
-            throw SemanticException();
-        }
-        return params;
+        return make_tuple(params, isSelectTuple);
     }
     // single select parameter
     string elemString = "";
@@ -155,7 +154,7 @@ vector<Parameter> SelectQueryParser::parseSelectClause(vector<string>& wordList,
     }
     Parameter param = parseParameter(elemString);
     params.push_back(param);
-    return params;
+    return make_tuple(params, isSelectTuple);
 }
 
 vector<shared_ptr<Relationship>> SelectQueryParser::parseSuchThatClause(vector<string>& wordList, int start, int end) {

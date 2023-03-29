@@ -415,3 +415,39 @@ TEST_CASE("fetch / table with 4 variables fetching 3 variables / return in corre
     REQUIRE(find(res.begin(), res.end(), "3 999 c") != res.end());
     REQUIRE(find(res.begin(), res.end(), "3 888 c") != res.end());
 }
+
+TEST_CASE("queryDB fetch / case of (a,a) (a,b) (a,b) intersect tables and fetch a should work") {
+    QueryDB qdb;
+    ReadPKB readPKB;
+    vector<Parameter> h1 = {
+            Parameter("a", ParameterType::ASSIGN),
+            Parameter("a", ParameterType::ASSIGN),
+    };
+    vector<Parameter> h2 = {
+            Parameter("a", ParameterType::ASSIGN),
+    };
+    vector<Parameter> h3 = {
+            Parameter("a", ParameterType::ASSIGN),
+    };
+    vector<vector<string>> c1 = {
+            {"29", "29"}
+    };
+    vector<vector<string>> c2 = {
+            {"28"},
+            {"29"},
+            {"4"},
+    };
+    vector<vector<string>> c3 = {
+            {"29"},
+            {"26"},
+            {"3"},
+    };
+    Table t1 = Table(h1, c1);
+    Table t2 = Table(h2, c2);
+    Table t3 = Table(h3, c3);
+    qdb.insertTable(t1);
+    qdb.insertTable(t2);
+    qdb.insertTable(t3);
+    vector<string> res = qdb.fetch({Parameter("a", ParameterType::ASSIGN)}, readPKB);
+    REQUIRE(find(res.begin(), res.end(), "29") != res.end());
+}

@@ -27,13 +27,14 @@ public:
     const vector<Parameter>& getHeaders() const;
     const vector<vector<string>>& getContent() const;
     bool hasIntersectingParams(Table&);
-    Table intersectTable(Table&);
+    void intersectTable(Table&);
     Table extractColumns(vector<int>&);
     Table extractColumns(vector<Parameter>&);
     void cartesianProduct(Table&);
     vector<string> getResult(vector<Parameter>&);
     bool isEmptyTable() const;
     void updateValues(Parameter, unordered_map<string, string>&);
+    void removeDuplicates();
 
 private:
     vector<Parameter> headers;

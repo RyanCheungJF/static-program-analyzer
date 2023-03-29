@@ -1234,8 +1234,7 @@ TEST_CASE("Select synonym with attributes") {
         string query = R"(
         procedure p;
         Select p.procName)";
-        result = qps.processQueries(query, readPkb);
-        REQUIRE(find(result.begin(), result.end(), "main") != result.end());
+        result = qps.processQueries(query, readPkb);REQUIRE(find(result.begin(), result.end(), "main") != result.end());
         REQUIRE(find(result.begin(), result.end(), "end") != result.end());
         REQUIRE(find(result.begin(), result.end(), "sub") != result.end());
     }
@@ -1257,14 +1256,5 @@ TEST_CASE("Select synonym with attributes") {
         result = qps.processQueries(query, readPkb);
         REQUIRE(exists(result, "2 sub"));
         REQUIRE(exists(result, "12 end"));
-    }
-
-    SECTION("Select <BOOLEAN> should fail") {
-        string query = R"(
-        call c;
-        variable v;
-        Select <BOOLEAN> such that Uses(c,v))";
-        result = qps.processQueries(query, readPkb);
-        REQUIRE(exists(result, "SemanticError"));
     }
 }

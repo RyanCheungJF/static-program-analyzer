@@ -117,6 +117,7 @@ vector<Parameter> Table::intersectHeader(const vector<Parameter>& h1, const vect
         for (pair<int, int> inter : intersectingIndexes) {
             if (inter.first == i) {
                 isIntersect = true;
+                break;
             }
         }
         if (!isIntersect) {
@@ -127,7 +128,7 @@ vector<Parameter> Table::intersectHeader(const vector<Parameter>& h1, const vect
     return newHeader;
 }
 
-Table Table::intersectTable(Table& t) {
+void Table::intersectTable(Table& t) {
     const vector<vector<string>>& c1 = contents;
     const vector<vector<string>>& c2 = t.getContent();
     const vector<Parameter>& h1 = headers;
@@ -135,7 +136,8 @@ Table Table::intersectTable(Table& t) {
     vector<pair<int, int>> intersectingIndexes = this->getIntersectingIndex(t);
     vector<vector<string>> newContent = intersectContent(c1, c2, intersectingIndexes);
     vector<Parameter> newHeader = intersectHeader(h1, h2, intersectingIndexes);
-    return Table{newHeader, newContent};
+    headers = newHeader;
+    contents = newContent;
 }
 
 Table Table::extractDesignEntities() {
@@ -206,6 +208,31 @@ Table Table::extractColumns(vector<Parameter>& params) {
         }
     }
     return extractColumns(indexes);
+}
+
+void Table::removeDuplicates() {
+    vector<int> duplicateIndexes;
+    vector<Parameter> newHeader = headers;
+    headers.clear();
+    for (int i = 0; i < newHeader.size(); i++) {
+        if (!hasParameter(newHeader[i])) {
+            this->headers.push_back(newHeader[i]);
+        }
+        else {
+            duplicateIndexes.push_back(i);
+        }
+    }
+    if (!duplicateIndexes.empty()) {
+        vector<vector<string>> newContent = contents;
+        contents.clear();
+        for (vector<string> content : newContent) {
+            for (int index : duplicateIndexes) {
+                content.erase(content.begin() + index);
+            }
+            this->contents.push_back(content);
+        }
+    }
+
 }
 
 vector<string> Table::getResult(vector<Parameter>& params) {
