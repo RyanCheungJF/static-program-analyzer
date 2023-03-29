@@ -92,13 +92,13 @@ private:
     // cache related data structures and methods
     std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardCache;
     std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntCache;
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::vector<std::vector<std::string>>>>
+    std::unordered_map<StmtNum, std::unordered_map<Stmt, std::vector<std::vector<std::string>>>>
             intStmttypeCache;
-    std::unordered_map<std::string, std::unordered_map<StmtNum, std::vector<std::vector<std::string>>>>
+    std::unordered_map<Stmt, std::unordered_map<StmtNum, std::vector<std::vector<std::string>>>>
             stmttypeIntCache;
-    std::unordered_map<std::string, std::vector<std::vector<std::string>>> stmttypeWildcardCache;
-    std::unordered_map<std::string, std::vector<std::vector<std::string>>> wildcardStmttypeCache;
-    std::unordered_map<std::string, std::unordered_map<std::string, std::vector<std::vector<std::string>>>> //todo: check with xingwei that this is not needed?
+    std::unordered_map<Stmt, std::vector<std::vector<std::string>>> stmttypeWildcardCache;
+    std::unordered_map<Stmt, std::vector<std::vector<std::string>>> wildcardStmttypeCache;
+    std::unordered_map<Stmt, std::unordered_map<Stmt, std::vector<std::vector<std::string>>>> //todo: check with xingwei that this is not needed?
         stmttypeStmttypeCache;
 
     std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardTransitiveCache;

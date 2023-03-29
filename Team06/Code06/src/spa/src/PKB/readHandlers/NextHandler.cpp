@@ -178,6 +178,15 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
         }
     }
 
+    for (std::vector<std::string> val : res) {
+        StmtNum line1 = std::stoi(val[0]);
+        StmtNum line2 = std::stoi(val[1]);
+        Stmt line1type = stmtStorage->getStatementType(line1);
+        Stmt line2type = stmtStorage->getStatementType(line2);
+        intStmttypeCache[line1][line2type].push_back(val);
+        stmttypeIntCache[line1type][line2].push_back(val);
+    }
+
     stmttypeStmttypeCache[type1][type2] = res;
     return stmttypeStmttypeCache[type1][type2];
 }
@@ -198,6 +207,13 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcard() {
 
                 intWildcardCache[p].push_back(val);
                 wildcardIntCache[child].push_back(val);
+                Stmt type1 = stmtStorage->getStatementType(p);
+                Stmt type2 = stmtStorage->getStatementType(child);
+                intStmttypeCache[p][type2].push_back(val);
+                stmttypeIntCache[type1][child].push_back(val);
+                stmttypeWildcardCache[type1].push_back(val);
+                wildcardStmttypeCache[type2].push_back(val);
+                stmttypeStmttypeCache[type1][type2].push_back(val);
             }
         }
     }

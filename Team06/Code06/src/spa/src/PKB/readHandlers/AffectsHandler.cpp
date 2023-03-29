@@ -421,11 +421,11 @@ bool AffectsHandler::checkModifiedAssignReadCall(Ent commonVariable, StmtNum cur
 
     // if a assignment, read, or procedure call, we check if the entitiesModifiedOnCurrentLine is the same as
     // commonVariables
-    std::unordered_set<Ent>& stmtTypes = stmtStorage->getStatementType(currentLine);
+    Stmt stmtType = stmtStorage->getStatementType(currentLine);
 
-    if (stmtTypes.find(AppConstants::ASSIGN) != stmtTypes.end() ||
-        stmtTypes.find(AppConstants::READ) != stmtTypes.end() ||
-        stmtTypes.find(AppConstants::CALL) != stmtTypes.end()) {
+    if (stmtType == AppConstants::ASSIGN ||
+            stmtType == AppConstants::READ ||
+            stmtType == AppConstants::CALL) {
 
         if (entitiesModifiedOnCurrentLine.find(commonVariable) != entitiesModifiedOnCurrentLine.end()) {
             return true;
