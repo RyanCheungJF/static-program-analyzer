@@ -48,3 +48,8 @@ procedure p;
 Select p
 arithmetic, conditionalSpam
 5000
+11 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select x 
+0, 1, 2, 3, 5, 7, 10, 42, 145
+5000
