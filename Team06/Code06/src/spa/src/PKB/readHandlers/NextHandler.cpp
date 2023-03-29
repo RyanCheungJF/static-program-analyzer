@@ -190,6 +190,7 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
     return stmttypeStmttypeCache[type1][type2];
 }
 
+// todo: double check that this is cached already
 std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcard() {
     std::vector<std::vector<std::string>> res;
 
@@ -388,10 +389,21 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransit
     Stmt type = param1.getTypeString();
     Stmt type2 = param2.getTypeString();
 
-//    if (stmttypeStmttypeCacheTransitive.find(type) != stmttypeStmttypeCacheTransitive.end() &&
-//            stmttypeStmttypeCacheTransitive[type].find(type2) != stmttypeStmttypeCacheTransitive[type].end()) {
-//        return stmttypeStmttypeCacheTransitive[type][type2];
-//    }
+    if (stmttypeStmttypeCacheTransitive.find(type) != stmttypeStmttypeCacheTransitive.end() &&
+            stmttypeStmttypeCacheTransitive[type].find(type2) != stmttypeStmttypeCacheTransitive[type].end()) {
+
+        std::vector<std::vector<std::string>> res = stmttypeStmttypeCacheTransitive[type][type2];
+
+        // if both synonyms are the same, filter non-matching answers
+        if (param1 == param2) {
+            res.erase(std::remove_if(res.begin(), res.end(),
+                                     [&](const std::vector<std::string>& pair) {
+                                         return pair[0] != pair[1];
+                                     }),
+                      res.end());
+        }
+        return res;
+    }
 
     std::vector<std::vector<std::string>> res;
 
@@ -413,6 +425,8 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransit
         }
     }
 
+    stmttypeStmttypeCacheTransitive[type][type2] = res;
+
     // if both synonyms are the same, filter non-matching answers
     if (param1 == param2) {
         res.erase(std::remove_if(res.begin(), res.end(),
@@ -421,11 +435,10 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransit
                                  }),
                   res.end());
     }
-
-//    stmttypeStmttypeCacheTransitive[type][type2] = res;
     return res;
 }
 
+// todo: double check that this is cached already
 std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcardTransitive() {
     std::vector<std::vector<std::string>> res;
 
