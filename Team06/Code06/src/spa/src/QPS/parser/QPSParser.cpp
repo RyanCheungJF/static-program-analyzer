@@ -32,10 +32,13 @@ vector<Query> QPSParser::parse(string qpsQuery) {
     }
     vStore = parseDeclarations(declarations);
     // need to do it this way cos dealing with pointer
-    for (int i = 0; i < queryVec.size(); i++) {
-        checkSynonyms(&queryVec.at(i), vStore);
+    for (Query& query : queryVec) {
+        checkSynonyms(&query, vStore);
+        vector<Parameter> selectParams = query.selectParameters;
+        if (query.booleanParamCheck()) {
+            throw SemanticException();
+        }
     }
-
     return queryVec;
 }
 

@@ -114,11 +114,11 @@ TEST_CASE("insertTable / insertion of three tables with intersection / return "
     REQUIRE(find(aa.begin(), aa.end(), "1") != aa.end());
     REQUIRE(find(aa.begin(), aa.end(), "2") != aa.end());
     REQUIRE(find(aa.begin(), aa.end(), "3") != aa.end());
-    REQUIRE(find(bb.begin(), aa.end(), "x") != aa.end());
-    REQUIRE(find(bb.begin(), aa.end(), "y") != aa.end());
-    REQUIRE(find(cc.begin(), aa.end(), "4") != aa.end());
-    REQUIRE(find(cc.begin(), aa.end(), "5") != aa.end());
-    REQUIRE(find(dd.begin(), aa.end(), "99") != aa.end());
+    REQUIRE(find(bb.begin(), bb.end(), "x") != bb.end());
+    REQUIRE(find(bb.begin(), bb.end(), "y") != bb.end());
+    REQUIRE(find(cc.begin(), cc.end(), "4") != cc.end());
+    REQUIRE(find(cc.begin(), cc.end(), "5") != cc.end());
+    REQUIRE(find(dd.begin(), dd.end(), "99") != dd.end());
 }
 
 TEST_CASE("insertTable / intersecting headers but non intersecting content / "
@@ -142,7 +142,6 @@ TEST_CASE("insertTable / intersecting headers but non intersecting content / "
     vector<vector<string>> expectedCols = {{}, {}, {}, {}};
     vector<Parameter> expectedParams = {Parameter("s1", ParameterType::STMT), Parameter("v", ParameterType::VARIABLE),
                                         Parameter("s2", ParameterType::STMT), Parameter("a", ParameterType::ASSIGN)};
-    vector<string> aa = qdb.fetch({Parameter("s1", ParameterType::STMT)}, readPKB);
     bool a = qdb.fetch({Parameter("s1", ParameterType::STMT)}, readPKB) == expectedCols[0];
     bool b = qdb.fetch({Parameter("v", ParameterType::VARIABLE)}, readPKB) == expectedCols[1];
     bool c = qdb.fetch({Parameter("s2", ParameterType::STMT)}, readPKB) == expectedCols[2];
@@ -176,12 +175,12 @@ TEST_CASE("insertTable / third table intersects with first two tables / return "
     REQUIRE(find(aa.begin(), aa.end(), "1") != aa.end());
     REQUIRE(find(aa.begin(), aa.end(), "2") != aa.end());
     REQUIRE(find(aa.begin(), aa.end(), "3") != aa.end());
-    REQUIRE(find(bb.begin(), aa.end(), "4") != aa.end());
-    REQUIRE(find(bb.begin(), aa.end(), "5") != aa.end());
-    REQUIRE(find(cc.begin(), aa.end(), "x") != aa.end());
-    REQUIRE(find(cc.begin(), aa.end(), "y") != aa.end());
-    REQUIRE(find(dd.begin(), aa.end(), "a") != aa.end());
-    REQUIRE(find(dd.begin(), aa.end(), "b") != aa.end());
+    REQUIRE(find(bb.begin(), bb.end(), "4") != bb.end());
+    REQUIRE(find(bb.begin(), bb.end(), "5") != bb.end());
+    REQUIRE(find(cc.begin(), cc.end(), "x") != cc.end());
+    REQUIRE(find(cc.begin(), cc.end(), "y") != cc.end());
+    REQUIRE(find(dd.begin(), dd.end(), "a") != dd.end());
+    REQUIRE(find(dd.begin(), dd.end(), "b") != dd.end());
 }
 
 TEST_CASE("insertTable / insert tables with empty content / tables can still "
@@ -415,4 +414,40 @@ TEST_CASE("fetch / table with 4 variables fetching 3 variables / return in corre
     REQUIRE(find(res.begin(), res.end(), "2 888 b") != res.end());
     REQUIRE(find(res.begin(), res.end(), "3 999 c") != res.end());
     REQUIRE(find(res.begin(), res.end(), "3 888 c") != res.end());
+}
+
+TEST_CASE("queryDB fetch / case of (a,a) (a,b) (a,b) intersect tables and fetch a should work") {
+    QueryDB qdb;
+    ReadPKB readPKB;
+    vector<Parameter> h1 = {
+            Parameter("a", ParameterType::ASSIGN),
+            Parameter("a", ParameterType::ASSIGN),
+    };
+    vector<Parameter> h2 = {
+            Parameter("a", ParameterType::ASSIGN),
+    };
+    vector<Parameter> h3 = {
+            Parameter("a", ParameterType::ASSIGN),
+    };
+    vector<vector<string>> c1 = {
+            {"29", "29"}
+    };
+    vector<vector<string>> c2 = {
+            {"28"},
+            {"29"},
+            {"4"},
+    };
+    vector<vector<string>> c3 = {
+            {"29"},
+            {"26"},
+            {"3"},
+    };
+    Table t1 = Table(h1, c1);
+    Table t2 = Table(h2, c2);
+    Table t3 = Table(h3, c3);
+    qdb.insertTable(t1);
+    qdb.insertTable(t2);
+    qdb.insertTable(t3);
+    vector<string> res = qdb.fetch({Parameter("a", ParameterType::ASSIGN)}, readPKB);
+    REQUIRE(find(res.begin(), res.end(), "29") != res.end());
 }
