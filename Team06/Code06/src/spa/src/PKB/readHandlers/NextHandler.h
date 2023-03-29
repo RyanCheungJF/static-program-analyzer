@@ -101,12 +101,19 @@ private:
     std::unordered_map<Stmt, std::unordered_map<Stmt, std::vector<std::vector<std::string>>>> //todo: check with xingwei that this is not needed?
         stmttypeStmttypeCache;
 
-    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardTransitiveCache;
-    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntTransitiveCache;
-    std::unordered_map<StmtNum, std::unordered_map<std::string, std::vector<std::vector<std::string>>>>
+
+
+
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardCacheTransitive;
+    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntCacheTransitive;
+    std::unordered_map<StmtNum, std::unordered_map<Stmt, std::vector<std::vector<std::string>>>>
             intStmttypeCacheTransitive;
-    std::unordered_map<std::string, std::unordered_map<StmtNum, std::vector<std::vector<std::string>>>>
+    std::unordered_map<Stmt, std::unordered_map<StmtNum, std::vector<std::vector<std::string>>>>
             stmttypeIntCacheTransitive;
+    std::unordered_map<Stmt, std::vector<std::vector<std::string>>> stmttypeWildcardCacheTransitive;
+    std::unordered_map<Stmt, std::vector<std::vector<std::string>>> wildcardStmttypeCacheTransitive;
+    std::unordered_map<Stmt, std::unordered_map<Stmt, std::vector<std::vector<std::string>>>> //todo: check with xingwei that this is not needed?
+        stmttypeStmttypeCacheTransitive;
 
 
 };
