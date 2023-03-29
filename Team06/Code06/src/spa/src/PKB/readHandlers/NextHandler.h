@@ -98,7 +98,7 @@ private:
             stmttypeIntCache;
     std::unordered_map<std::string, std::vector<std::vector<std::string>>> stmttypeWildcardCache;
     std::unordered_map<std::string, std::vector<std::vector<std::string>>> wildcardStmttypeCache;
-    std::unordered_map<std::string, std::unordered_map<std::string, std::vector<std::vector<std::string>>>>
+    std::unordered_map<std::string, std::unordered_map<std::string, std::vector<std::vector<std::string>>>> //todo: check with xingwei that this is not needed?
         stmttypeStmttypeCache;
 
     std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardTransitiveCache;

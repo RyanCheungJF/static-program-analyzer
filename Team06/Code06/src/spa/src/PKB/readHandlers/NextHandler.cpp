@@ -142,16 +142,14 @@ std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardNonT(Parame
 std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parameter param1, Parameter param2) {
     Stmt type1 = param1.getTypeString();
     Stmt type2 = param2.getTypeString();
-
-    if (stmttypeStmttypeCache.find(type1) != stmttypeStmttypeCache.end() &&
-            stmttypeStmttypeCache[type1].find(type2) != stmttypeStmttypeCache[type1].end()) {
-        return stmttypeStmttypeCache[type1][type2];
-    }
-
-
     std::vector<std::vector<std::string>> res;
     if (param1 == param2) {
         return res;
+    }
+
+    if (stmttypeStmttypeCache.find(type1) != stmttypeStmttypeCache.end() &&
+        stmttypeStmttypeCache[type1].find(type2) != stmttypeStmttypeCache[type1].end()) {
+        return stmttypeStmttypeCache[type1][type2];
     }
 
     bool isLines1Smaller =
