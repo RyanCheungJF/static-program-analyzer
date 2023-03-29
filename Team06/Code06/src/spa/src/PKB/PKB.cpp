@@ -38,7 +38,7 @@ void PKB::initializePkb() {
     this->callsMap[RelationshipType::CALLS] = callsStorage;
     this->callsMap[RelationshipType::CALLST] = callsTStorage;
 
-    this->affectsHandler = std::make_shared<AffectsHandler>(cfgStorage, statementStorage, procedureStorage,
+    this->affectsHandler = std::make_unique<AffectsHandler>(cfgStorage, statementStorage, procedureStorage,
                                                             modifiesStorage, usesStorage, procAssignStmtStorage);
 }
 

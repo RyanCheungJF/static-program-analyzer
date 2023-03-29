@@ -208,5 +208,5 @@ private:
 
     std::unordered_set<RelationshipType> nextMap = {RelationshipType::NEXT, RelationshipType::NEXTT};
     std::unordered_set<RelationshipType> affectsMap = {RelationshipType::AFFECTS, RelationshipType::AFFECTST};
-    std::shared_ptr<AffectsHandler> affectsHandler;
+    std::unique_ptr<AffectsHandler> affectsHandler;
 };
