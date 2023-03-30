@@ -16,7 +16,7 @@ public:
     bool validateParams();
     bool hasValidComparisonTypes();
     static Comparison makeComparison(string o, Parameter leftP, Parameter rightP);
-
+    bool operator==(const Comparison&) const;
 private:
     Parameter leftParam;
     Parameter rightParam;
