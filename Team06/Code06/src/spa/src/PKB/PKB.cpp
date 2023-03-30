@@ -23,6 +23,7 @@ void PKB::initializePkb() {
     this->relationshipCache = std::make_shared<RelationshipCache>();
     this->patternCache = std::make_shared<PatternCache>();
     this->parameterCache = std::make_shared<ParameterCache>();
+    this->attributeCache = std::make_shared<AttributeCache>();
 
     this->followsParentMap[RelationshipType::FOLLOWS] = followsStorage;
     this->followsParentMap[RelationshipType::FOLLOWST] = followsTStorage;
@@ -230,8 +231,11 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
 std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
     AttributeType attrType = p.getAttribute();
     ParameterType paramType = p.getType();
-
-    std::vector<std::vector<std::string>> res;
+    std::shared_ptr<Parameter> param = std::make_shared<Parameter>(p);
+    std::vector<std::vector<std::string>> res = attributeCache->findResult(param);
+    if (!res.empty()) {
+        return res;
+    }
 
     if (Parameter::isStatementRef(p)) {
         std::unordered_set<StmtNum>& stmtNums = statementStorage->getStatementNumbers(p.getTypeString());
@@ -280,7 +284,9 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
             res.push_back({proc, proc});
         }
     }
-
+    if (!res.empty()) {
+        attributeCache->addResult(param, res);
+    }
     return res;
 }
 
@@ -401,4 +407,5 @@ void PKB::clearCache() {
     relationshipCache->clearCache();
     parameterCache->clearCache();
     patternCache->clearCache();
+    attributeCache->clearCache();
 }
