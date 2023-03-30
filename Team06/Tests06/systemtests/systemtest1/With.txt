@@ -128,3 +128,48 @@ print p; call c; read r1, r2, r3; while w; if i; procedure proc; stmt s; assign 
 Select <r1, r2, r3> with r1.varName = "a" with r2.varName = "b" with r3.varName = "c"
 1 2 3
 5000
+27 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select s.stmt# such that Affects(s, 10)
+9
+5000
+28 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select r.varName with r.stmt# = 1
+a
+5000
+29 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select c.stmt# with c.procName = "conditionalSpam"
+4
+5000
+30 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select i.stmt# with proc.procName = "arithmetic"
+31, 33
+5000
+31 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select c.stmt# with c.procName = "conditionalSpam"
+4
+5000
+32 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select w.stmt# such that Next*(27, w)
+25, 27, 30, 34
+5000
+33 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select i.stmt# such that Next*(34, i)
+33, 31
+5000
+34 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select x.value
+0, 1, 2, 3, 5, 7, 10, 42, 145
+5000
+35 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x; variable v;
+Select v.varName
+z, y, w, o, a, b, c, x, k, j, i, A, B, N, thisIsAVeryLongNameAndILikeApples, while, if, else
+5000
