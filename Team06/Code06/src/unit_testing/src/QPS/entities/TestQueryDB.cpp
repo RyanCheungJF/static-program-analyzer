@@ -114,11 +114,11 @@ TEST_CASE("insertTable / insertion of three tables with intersection / return "
     REQUIRE(find(aa.begin(), aa.end(), "1") != aa.end());
     REQUIRE(find(aa.begin(), aa.end(), "2") != aa.end());
     REQUIRE(find(aa.begin(), aa.end(), "3") != aa.end());
-    REQUIRE(find(bb.begin(), aa.end(), "x") != aa.end());
-    REQUIRE(find(bb.begin(), aa.end(), "y") != aa.end());
-    REQUIRE(find(cc.begin(), aa.end(), "4") != aa.end());
-    REQUIRE(find(cc.begin(), aa.end(), "5") != aa.end());
-    REQUIRE(find(dd.begin(), aa.end(), "99") != aa.end());
+    REQUIRE(find(bb.begin(), bb.end(), "x") != bb.end());
+    REQUIRE(find(bb.begin(), bb.end(), "y") != bb.end());
+    REQUIRE(find(cc.begin(), cc.end(), "4") != cc.end());
+    REQUIRE(find(cc.begin(), cc.end(), "5") != cc.end());
+    REQUIRE(find(dd.begin(), dd.end(), "99") != dd.end());
 }
 
 TEST_CASE("insertTable / intersecting headers but non intersecting content / "
@@ -176,12 +176,12 @@ TEST_CASE("insertTable / third table intersects with first two tables / return "
     REQUIRE(find(aa.begin(), aa.end(), "1") != aa.end());
     REQUIRE(find(aa.begin(), aa.end(), "2") != aa.end());
     REQUIRE(find(aa.begin(), aa.end(), "3") != aa.end());
-    REQUIRE(find(bb.begin(), aa.end(), "4") != aa.end());
-    REQUIRE(find(bb.begin(), aa.end(), "5") != aa.end());
-    REQUIRE(find(cc.begin(), aa.end(), "x") != aa.end());
-    REQUIRE(find(cc.begin(), aa.end(), "y") != aa.end());
-    REQUIRE(find(dd.begin(), aa.end(), "a") != aa.end());
-    REQUIRE(find(dd.begin(), aa.end(), "b") != aa.end());
+    REQUIRE(find(bb.begin(), bb.end(), "4") != bb.end());
+    REQUIRE(find(bb.begin(), bb.end(), "5") != bb.end());
+    REQUIRE(find(cc.begin(), cc.end(), "x") != cc.end());
+    REQUIRE(find(cc.begin(), cc.end(), "y") != cc.end());
+    REQUIRE(find(dd.begin(), dd.end(), "a") != dd.end());
+    REQUIRE(find(dd.begin(), dd.end(), "b") != dd.end());
 }
 
 TEST_CASE("insertTable / insert tables with empty content / tables can still "
