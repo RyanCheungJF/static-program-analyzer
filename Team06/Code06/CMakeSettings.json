@@ -20,7 +20,19 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
-      "inheritEnvironments": [ "msvc_x64_x64" ]
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "variables": [
+        {
+          "name": "AUTOTESTER_LIBRARY_DEBUG",
+          "value": "D:/Uni Stuff/Year 3 Sem 2/CS3203/22s2-cp-spa-team-06/Team06/Code06/lib/autotester/AMD64/Windows/Release/autotester.lib",
+          "type": "FILEPATH"
+        },
+        {
+          "name": "AUTOTESTER_LIBRARY_RELEASE",
+          "value": "D:/Uni Stuff/Year 3 Sem 2/CS3203/22s2-cp-spa-team-06/Team06/Code06/lib/autotester/AMD64/Windows/Release/autotester.lib",
+          "type": "FILEPATH"
+        }
+      ]
     }
   ]
 }
