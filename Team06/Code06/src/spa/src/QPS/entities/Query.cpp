@@ -162,6 +162,14 @@ bool Query::booleanParamCheck() {
 }
 
 bool Query::operator==(const Query& q) const
-{
-    return relations == q.relations && selectParameters == q.selectParameters && patterns == q.patterns && comparisons == q.comparisons && isSelectTuple == q.isSelectTuple;
+{   
+    if (q.relations.size() != relations.size()) {
+        return false;
+    }
+    for (int i = 0; i < relations.size(); i++) {
+        if (!(*(relations.at(i)) == *(q.relations.at(i)))) {
+            return false;
+        }
+    }
+    return selectParameters == q.selectParameters && patterns == q.patterns && comparisons == q.comparisons && isSelectTuple == q.isSelectTuple;
 }

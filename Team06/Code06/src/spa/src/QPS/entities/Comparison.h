@@ -5,6 +5,7 @@
 enum class ComparisonOperator {
     EQUALS,
 };
+
 class Comparison {
 public:
     Comparison();
