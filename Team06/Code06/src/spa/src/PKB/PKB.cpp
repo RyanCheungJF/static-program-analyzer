@@ -37,12 +37,6 @@ void PKB::initializePkb() {
 
     this->callsMap[RelationshipType::CALLS] = callsStorage;
     this->callsMap[RelationshipType::CALLST] = callsTStorage;
-
-    this->affectsHandler = std::make_unique<AffectsHandler>(cfgStorage, statementStorage, procedureStorage,
-                                                            modifiesStorage, usesStorage, procAssignStmtStorage);
-
-    this->nextHandler = std::make_unique<NextHandler>(cfgStorage, statementStorage, procedureStorage);
-
 }
 
 void PKB::setFollows(StmtNum followee, StmtNum follower) {
@@ -169,7 +163,8 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
 
     }
     else if (nextMap.find(type) != nextMap.end()) {
-        res = nextHandler->handle(param1, param2, type == RelationshipType::NEXTT);
+        NextHandler handler(cfgStorage, statementStorage, procedureStorage, type == RelationshipType::NEXTT);
+        res = handler.handle(param1, param2);
 
         std::cout << "\n\nAT NEXT HANDLER NOW. DONE WITH CALCULATIONS. BELOW ARE THE RESULTS\n";
         for (std::vector<std::string> curr : res) {
@@ -177,8 +172,9 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         }
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
-        res = affectsHandler->handle(param1, param2, type == RelationshipType::AFFECTST);
-
+        AffectsHandler handler(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
+                            procAssignStmtStorage, type == RelationshipType::AFFECTST);
+        res = handler.handle(param1, param2);
 
         std::cout << "\n\nAT AFFECTS HANDLER NOW. DONE WITH CALCULATIONS. BELOW ARE THE RESULTS\n";
         for (std::vector<std::string> curr : res) {
@@ -482,6 +478,4 @@ void PKB::clearCache() {
     relationshipCache->clearCache();
     parameterCache->clearCache();
     patternCache->clearCache();
-    affectsHandler->clearCache();
-    nextHandler->clearCache();
 }
