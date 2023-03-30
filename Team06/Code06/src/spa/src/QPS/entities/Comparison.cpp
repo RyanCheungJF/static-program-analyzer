@@ -24,6 +24,13 @@ ComparisonOperator Comparison::getOperator() {
     return op;
 }
 
+std::pair<ParameterType, ParameterType> Comparison::getParameterTypes() {
+    return {leftParam.getType(), rightParam.getType()};
+}
+std::pair<AttributeType, AttributeType> Comparison::getParameterAttributes() {
+    return {leftParam.getAttribute(), rightParam.getAttribute()};
+}
+
 vector<Parameter*> Comparison::getAllUncheckedSynonyms() {
     vector<Parameter*> synonyms;
     if (leftParam.isUncheckedSynonym()) {
