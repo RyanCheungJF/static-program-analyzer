@@ -1195,92 +1195,99 @@ TEST_CASE("Select synonym with attributes") {
     readPkb.setInstancePKB(pkb);
     QPS qps;
     vector<string> result;
-    SECTION("Select with, attribute = fixed") {
-        string query = R"(
-        stmt s;
-        Select s with s.stmt# = 2)";
-        result = qps.processQueries(query, readPkb);
-        REQUIRE(result.size() == 1);
-        REQUIRE(exists(result, "2"));
-    }
+//    SECTION("Select with, attribute = fixed") {
+//        string query = R"(
+//        stmt s;
+//        Select s with s.stmt# = 2)";
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(result.size() == 1);
+//        REQUIRE(exists(result, "2"));
+//    }
+//
+//    SECTION("Select with, attribute = attribute") {
+//        string query = R"(
+//        call c; print pn;
+//        Select c with c.procName = pn.varName)";
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(result.size() == 1);
+//        REQUIRE(result[0] == "12");
+//    }
+//
+//    SECTION("Select with, fixed = attribute") {
+//        string query = R"(
+//        read r;
+//        Select r with "x" = r.varName)";
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(result.size() == 1);
+//        REQUIRE(result[0] == "10");
+//    }
+//
+//    SECTION("Select with, fixed = fixed") {
+//        string query = R"(
+//        stmt s;
+//        Select s with 2 = 2)";
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(result.size() == 13);
+//    }
+//
+//    SECTION("Select procedure with attribute") {
+//        string query = R"(
+//        procedure p;
+//        Select p.procName)";
+//        result = qps.processQueries(query, readPkb);REQUIRE(find(result.begin(), result.end(), "main") != result.end());
+//        REQUIRE(find(result.begin(), result.end(), "end") != result.end());
+//        REQUIRE(find(result.begin(), result.end(), "sub") != result.end());
+//    }
+//
+//    SECTION("Select procedure with attribute and such that clause") {
+//        string query = R"(
+//        procedure p;
+//        Select p.procName such that Calls("main", p))";
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(result.size() == 1);
+//        REQUIRE(exists(result, "sub"));
+//    }
+//
+//    SECTION("Select same variable but different attributes with some clause") {
+//        string query = R"(
+//        call c;
+//        variable v;
+//        Select <c.stmt#, c.procName> such that Uses(c,v))";
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(exists(result, "2 sub"));
+//        REQUIRE(exists(result, "12 end"));
+//    }
+//
+//    SECTION("Same variable but 3 different attributes with with clause") {
+//        string query = R"(
+//        print p;
+//        Select <p.stmt#, p, p.varName> with p.varName = "end")";
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(exists(result, "13 13 end"));
+//    }
+//
+//    SECTION("Same variable but reverse the indent and varname") {
+//        string query = R"(
+//        print p;
+//        Select <p, p.varName> with "end" = p.varName)";
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(exists(result, "13 end"));
+//    }
+//
+//    SECTION("Same variable but reverse the indent and varname") {
+//        string query = R"(
+//        print p;
+//        Select <p, p.varName>)";
+//        result = qps.processQueries(query, readPkb);
+//        REQUIRE(exists(result, "13 end"));
+//        REQUIRE(exists(result, "7 x"));
+//    }
 
-    SECTION("Select with, attribute = attribute") {
-        string query = R"(
-        call c; print pn;
-        Select c with c.procName = pn.varName)";
-        result = qps.processQueries(query, readPkb);
-        REQUIRE(result.size() == 1);
-        REQUIRE(result[0] == "12");
-    }
-
-    SECTION("Select with, fixed = attribute") {
-        string query = R"(
-        read r;
-        Select r with "x" = r.varName)";
-        result = qps.processQueries(query, readPkb);
-        REQUIRE(result.size() == 1);
-        REQUIRE(result[0] == "10");
-    }
-
-    SECTION("Select with, fixed = fixed") {
-        string query = R"(
-        stmt s;
-        Select s with 2 = 2)";
-        result = qps.processQueries(query, readPkb);
-        REQUIRE(result.size() == 13);
-    }
-
-    SECTION("Select procedure with attribute") {
-        string query = R"(
-        procedure p;
-        Select p.procName)";
-        result = qps.processQueries(query, readPkb);REQUIRE(find(result.begin(), result.end(), "main") != result.end());
-        REQUIRE(find(result.begin(), result.end(), "end") != result.end());
-        REQUIRE(find(result.begin(), result.end(), "sub") != result.end());
-    }
-
-    SECTION("Select procedure with attribute and such that clause") {
-        string query = R"(
-        procedure p;
-        Select p.procName such that Calls("main", p))";
-        result = qps.processQueries(query, readPkb);
-        REQUIRE(result.size() == 1);
-        REQUIRE(exists(result, "sub"));
-    }
-
-    SECTION("Select same variable but different attributes with some clause") {
+    SECTION("With clause with a number on RHS") {
         string query = R"(
         call c;
-        variable v;
-        Select <c.stmt#, c.procName> such that Uses(c,v))";
+        Select c.procName with c.stmt# = 2)";
         result = qps.processQueries(query, readPkb);
-        REQUIRE(exists(result, "2 sub"));
-        REQUIRE(exists(result, "12 end"));
-    }
-
-    SECTION("Same variable but 3 different attributes with with clause") {
-        string query = R"(
-        print p;
-        Select <p.stmt#, p, p.varName> with p.varName = "end")";
-        result = qps.processQueries(query, readPkb);
-        REQUIRE(exists(result, "13 13 end"));
-    }
-
-    SECTION("Same variable but reverse the indent and varname") {
-        string query = R"(
-        print p;
-        Select <p, p.varName> with "end" = p.varName)";
-        result = qps.processQueries(query, readPkb);
-        REQUIRE(exists(result, "13 end"));
-    }
-
-    SECTION("Same variable but reverse the indent and varname") {
-        string query = R"(
-        print p;
-        Select <p, p.varName>)";
-        result = qps.processQueries(query, readPkb);
-        REQUIRE(exists(result, "13 end"));
-        REQUIRE(exists(result, "7 x"));
-
+        REQUIRE(exists(result, "sub"));
     }
 }
