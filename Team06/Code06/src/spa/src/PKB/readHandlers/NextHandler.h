@@ -98,7 +98,9 @@ private:
             stmttypeIntCache;
     std::unordered_map<Stmt, std::vector<std::vector<std::string>>> stmttypeWildcardCache;
     std::unordered_map<Stmt, std::vector<std::vector<std::string>>> wildcardStmttypeCache;
-    std::unordered_map<Stmt, std::unordered_map<Stmt, std::vector<std::vector<std::string>>>> //todo: check with xingwei that this is not needed?
+
+    //todo: check with xingwei that this is not needed? I think it would still be good given query: Next*(a, w) and Next(a, w)
+    std::unordered_map<Stmt, std::unordered_map<Stmt, std::vector<std::vector<std::string>>>>
         stmttypeStmttypeCache;
 
 

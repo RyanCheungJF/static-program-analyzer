@@ -215,8 +215,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
             queue.push_back({a1, a1, num});
 
             std::vector<std::string> val = {std::to_string(a1), std::to_string(num)};
-            intWildcardCache[a1].push_back(val);
-            wildcardIntCache[num].push_back(val);
+
+            // below is done at buildAffectsGraph() since it uses handleWildcardWildcard()
+//            intWildcardCache[a1].push_back(val);
+//            wildcardIntCache[num].push_back(val);
         }
     }
 
@@ -335,8 +337,9 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
     for (StmtNum num : (isIntWildcard ? hashmap[a1] : hashmap[a2])) {
         isIntWildcard ? queue.push_back({a1, num}) : queue.push_back({num, a2});
 
-        isIntWildcard ? intWildcardCache[a1].push_back({std::to_string(a1), std::to_string(num)})
-                      : wildcardIntCache[a2].push_back({std::to_string(num), std::to_string(a2)});
+        // below is done at buildAffectsGraph() since it uses handleWildcardWildcard()
+//        isIntWildcard ? intWildcardCache[a1].push_back({std::to_string(a1), std::to_string(num)})
+//                      : wildcardIntCache[a2].push_back({std::to_string(num), std::to_string(a2)});
     }
 
     // traverse until we see all possible combinations
@@ -468,7 +471,6 @@ bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, Ent co
 
         seen.insert(curr);
 
-        // added on 27/3. Check with darren if correct
         if (graph.find(curr.second) == graph.end()) {
             continue;
         }
