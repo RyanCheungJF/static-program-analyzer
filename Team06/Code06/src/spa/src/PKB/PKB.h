@@ -10,6 +10,7 @@
 #include "cache/PatternCache.h"
 #include "cache/RelationshipCache.h"
 #include "cache/AttributeCache.h"
+#include "cache/ComparisonCache.h"
 #include "readHandlers/AffectsHandler.h"
 #include "readHandlers/AssignPatternHandler.h"
 #include "readHandlers/CallsHandler.h"
@@ -192,6 +193,7 @@ private:
     std::shared_ptr<ParameterCache> parameterCache;
     std::shared_ptr<PatternCache> patternCache;
     std::shared_ptr<AttributeCache> attributeCache;
+    std::shared_ptr<ComparisonCache> comparisonCache;
 
     std::unordered_map<RelationshipType, std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>>> followsParentMap = {
         {RelationshipType::FOLLOWS, NULL},

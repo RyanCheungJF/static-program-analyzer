@@ -27,6 +27,11 @@ ComparisonOperator Comparison::getOperator() {
 std::pair<ParameterType, ParameterType> Comparison::getParameterTypes() {
     return {leftParam.getType(), rightParam.getType()};
 }
+
+std::pair<std::string, std::string> Comparison::getParameterValues() {
+    return {leftParam.getValue(), rightParam.getValue()};
+}
+
 std::pair<AttributeType, AttributeType> Comparison::getParameterAttributes() {
     return {leftParam.getAttribute(), rightParam.getAttribute()};
 }

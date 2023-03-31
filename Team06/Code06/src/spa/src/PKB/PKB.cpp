@@ -24,6 +24,7 @@ void PKB::initializePkb() {
     this->patternCache = std::make_shared<PatternCache>();
     this->parameterCache = std::make_shared<ParameterCache>();
     this->attributeCache = std::make_shared<AttributeCache>();
+    this->comparisonCache = std::make_shared<ComparisonCache>();
 
     this->followsParentMap[RelationshipType::FOLLOWS] = followsStorage;
     this->followsParentMap[RelationshipType::FOLLOWST] = followsTStorage;
@@ -292,14 +293,17 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
 
 // TODO: Consider refactoring?
 std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
+    std::shared_ptr<Comparison> comp = std::make_shared<Comparison>(c);
+    std::vector<std::vector<std::string>> res = comparisonCache->findResult(comp);
+    if (!res.empty()) {
+        return res;
+    }
     Parameter leftParam = c.getLeftParam();
     Parameter rightParam = c.getRightParam();
     bool isLeftParamFixed = leftParam.isFixedInt() || leftParam.isFixedStringType();
     bool isRightParamFixed = rightParam.isFixedInt() || rightParam.isFixedStringType();
     Ent leftParamValue = leftParam.getValue();
     Ent rightParamValue = rightParam.getValue();
-
-    std::vector<std::vector<std::string>> res;
 
     if (isLeftParamFixed) {
         if (isRightParamFixed) {
@@ -408,4 +412,5 @@ void PKB::clearCache() {
     parameterCache->clearCache();
     patternCache->clearCache();
     attributeCache->clearCache();
+    comparisonCache->clearCache();
 }
