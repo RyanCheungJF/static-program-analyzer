@@ -414,7 +414,6 @@ std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
             }
         }
     }
-
     return res;
 }
 

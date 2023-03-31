@@ -47,27 +47,39 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
             presentParams.push_back(param);
         }
         else if (param.getType() != ParameterType::BOOLEAN) {
-            vector<vector<string>> contentVec = {};
-            Table table = emptyTable;
-            if (param.hasAttribute()) {
-                contentVec = readPKB.findAttribute(param);
-                for (vector<string> s : contentVec) {
-                    table =
-                        Table({Parameter(AppConstants::WILDCARD_VALUE, ParameterType::WILDCARD), param}, contentVec);
-                    table = table.extractDesignEntities();
+            if (initialTable.hasParameter(param)) {
+                vector<Parameter> newHeader = initialTable.getHeaders();
+                newHeader.push_back(param);
+                initialTable = initialTable.extractColumns(newHeader);
+                unordered_map<string, string> attributeMap;
+                vector<vector<string>> mapping = readPKB.findAttribute(param);
+                for (const vector<string>& kv : mapping) {
+                    attributeMap.insert({kv[0], kv[1]});
                 }
-            }
-            else {
-                vector<string> content = readPKB.findDesignEntities(param);
-                for (string& c : content) {
-                    contentVec.push_back(std::move(vector<string>{c}));
-                }
-                table = Table({param}, contentVec);
-            }
-            if (initialTable.isEmptyTable()) {
-                initialTable = table;
+                initialTable.updateValues(param, attributeMap);
             } else {
-                initialTable.cartesianProduct(table);
+                vector<vector<string>> contentVec = {};
+                Table table = emptyTable;
+                if (param.hasAttribute()) {
+                    contentVec = readPKB.findAttribute(param);
+                    for (vector<string> s : contentVec) {
+                        table =
+                            Table({Parameter(AppConstants::WILDCARD_VALUE, ParameterType::WILDCARD), param}, contentVec);
+                        table = table.extractDesignEntities();
+                    }
+                }
+                else {
+                    vector<string> content = readPKB.findDesignEntities(param);
+                    for (string& c : content) {
+                        contentVec.push_back(std::move(vector<string>{c}));
+                    }
+                    table = Table({param}, contentVec);
+                }
+                if (initialTable.isEmptyTable()) {
+                    initialTable = table;
+                } else {
+                    initialTable.cartesianProduct(table);
+                }
             }
         }
     }
