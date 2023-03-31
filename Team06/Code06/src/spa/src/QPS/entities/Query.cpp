@@ -47,7 +47,6 @@ void Query::evaluatePattern(QueryDB& queryDb, ReadPKB& readPKB) {
             queryDb.insertTable(QueryDB::emptyTable);
             break;
         }
-        cout<<"notEmpty\n";
         Parameter* patternSyn = pattern.getPatternSyn();
         Parameter* entRef = pattern.getEntRef();
         vector<Parameter> headers{*patternSyn, *entRef};
