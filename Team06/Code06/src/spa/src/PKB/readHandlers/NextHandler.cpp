@@ -426,6 +426,10 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransit
     }
 
     stmttypeStmttypeCacheTransitive[type][type2] = res;
+    for (std::vector<std::string> val : res) {
+        stmttypeWildcardCacheTransitive[type].push_back(val);
+        wildcardStmttypeCacheTransitive[type2].push_back(val);
+    }
 
     // if both synonyms are the same, filter non-matching answers
     if (param1 == param2) {
