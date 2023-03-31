@@ -30,8 +30,9 @@ struct patternEquals {
         bool check3 = pattern1->getEntRefType() == pattern2->getEntRefType();
 
         // only pattern a("x", _) and pattern a("x1", _) should not be equals
-        if (patternSyn1.isFixedStringType()) {
-            check3 = *pattern1->getEntRef() == *pattern2->getEntRef();
+        Parameter patternEnt1 = *pattern1->getEntRef();
+        if (patternEnt1.isFixedStringType()) {
+            check3 = patternEnt1 == *pattern2->getEntRef();
         }
 
         return check1 && check2 && check3;

@@ -135,12 +135,10 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         FollowsParentHandler handler(followsParentMap.at(type), statementStorage);
         res = handler.handle(param1, param2);
 
-
         std::cout << "\n\nAT Follows / Parent HANDLER NOW. DONE WITH CALCULATIONS. BELOW ARE THE RESULTS\n";
         for (std::vector<std::string> curr : res) {
             std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
         }
-
     }
     else if (modifiesUsesMap.find(type) != modifiesUsesMap.end()) {
         ModifiesUsesHandler handler(modifiesUsesMap.at(type), statementStorage);
@@ -150,7 +148,6 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         for (std::vector<std::string> curr : res) {
             std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
         }
-
     }
     else if (callsMap.find(type) != callsMap.end()) {
         CallsHandler handler(callsMap.at(type));
@@ -160,7 +157,6 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         for (std::vector<std::string> curr : res) {
             std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
         }
-
     }
     else if (nextMap.find(type) != nextMap.end()) {
         NextHandler handler(cfgStorage, statementStorage, procedureStorage, type == RelationshipType::NEXTT);
@@ -173,14 +169,13 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
         AffectsHandler handler(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
-                            procAssignStmtStorage, type == RelationshipType::AFFECTST);
+                               procAssignStmtStorage, type == RelationshipType::AFFECTST);
         res = handler.handle(param1, param2);
 
         std::cout << "\n\nAT AFFECTS HANDLER NOW. DONE WITH CALCULATIONS. BELOW ARE THE RESULTS\n";
         for (std::vector<std::string> curr : res) {
             std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
         }
-
     }
     if (!res.empty()) {
         relationshipCache->addResult(rs, res);
@@ -245,25 +240,23 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
         AssignPatternHandler handler(assignPatternStorage);
         res = handler.handle(p);
 
-        std::cout << "\n\nAssign Pattern Handler: " + p.getPatternSyn()->getValue() + "(" + p.getEntRefValue() + ", " + p.getExprSpecs()[0] + ")\n";
+        std::cout << "\n\nAssign Pattern Handler: " + p.getPatternSyn()->getValue() + "(" + p.getEntRefValue() + ", " +
+                         p.getExprSpecs()[0] + ")\n";
         for (std::vector<std::string> curr : res) {
             std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
         }
         std::cout << "\n";
-
-
     }
     else if (ifWhilePatternMap.find(patternType) != ifWhilePatternMap.end()) {
         IfWhilePatternHandler handler(ifWhilePatternMap.at(patternType));
         res = handler.handle(p);
 
-
-        std::cout << "\n\nIfWhile Pattern Handler: " + p.getPatternSyn()->getValue() + "(" + p.getEntRefValue() + ", " + p.getExprSpecs()[0] + ")\n";
+        std::cout << "\n\nIfWhile Pattern Handler: " + p.getPatternSyn()->getValue() + "(" + p.getEntRefValue() + ", " +
+                         p.getExprSpecs()[0] + ")\n";
         for (std::vector<std::string> curr : res) {
             std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
         }
         std::cout << "\n";
-
     }
 
     if (!res.empty()) {
@@ -305,13 +298,11 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
             }
         }
 
-
         std::cout << "\n\nIn FindAttribute for STMT_REF now. BELOW ARE THE RESULTS\n";
         for (std::vector<std::string> curr : res) {
             std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
         }
         std::cout << "\n";
-
     }
     // currently just returns a pair of duplicated values
     else if (p.isConstant()) {
@@ -320,13 +311,11 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
             res.push_back({constant, constant});
         }
 
-
         std::cout << "\n\nIn FindAttribute for CONSTANTS now. BELOW ARE THE RESULTS\n";
         for (std::vector<std::string> curr : res) {
             std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
         }
         std::cout << "\n";
-
     }
     // currently just returns a pair of duplicated values
     else if (p.isVariable()) {
@@ -334,7 +323,6 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
         for (auto var : vars) {
             res.push_back({var, var});
         }
-
 
         std::cout << "\n\nIn FindAttribute for VARIABLES now. BELOW ARE THE RESULTS\n";
         for (std::vector<std::string> curr : res) {
@@ -354,8 +342,6 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
             std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
         }
         std::cout << "\n";
-
-
     }
 
     return res;
