@@ -6,3 +6,4 @@
 ../../../../../build/src/autotester/autotester source.txt Pattern.txt out-Pattern.xml
 ../../../../../build/src/autotester/autotester source.txt Affects.txt out-Affects.xml
 ../../../../../build/src/autotester/autotester source.txt AffectsT.txt out-AffectsT.xml
+../../../../../build/src/autotester/autotester source.txt With.txt out-With.xml

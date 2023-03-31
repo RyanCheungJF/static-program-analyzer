@@ -1,0 +1,175 @@
+1 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with p.stmt# = 36
+36
+5000
+2 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with p.stmt#          =              36
+36
+5000
+3 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with p.stmt#=36
+36
+5000
+4 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p with p.stmt# = 36
+36
+5000
+5 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p with p.stmt# = 36 with p.stmt# = 36 with p.stmt# = 36
+36
+5000
+6 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p with p.stmt# = 36 with p.stmt# = 37 with p.stmt# = 36
+none
+5000
+7 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p with p.stmt# = x.value
+42
+5000
+8 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select r with r.stmt# = x.value with r.stmt# = r.stmt#
+1, 2, 3
+5000
+9 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p with p.stmt# = x.value with p.stmt# = p.stmt# with p.stmt# = 42
+42
+5000
+10 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p with p.stmt# = x.value with p.stmt# = p.stmt# with p.stmt# = 36
+none
+5000
+11 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p with p.stmt# = x.value with p.stmt# = p.stmt# with x.value = 42
+42
+5000
+12 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select r with r.stmt# = x.value with r.stmt# = r.stmt# with x.value = 2
+2
+5000
+13 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select c with x.value = x.value
+4
+5000
+14 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select x with x.value = x.value
+0, 1, 2, 3, 5, 7, 10, 42, 145
+5000
+15 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x, y;
+Select x with x.value = y.value
+0, 1, 2, 3, 5, 7, 10, 42, 145
+5000
+16 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x, y;
+Select BOOLEAN such that Follows(1, 2) with p.stmt# = 36
+TRUE
+5000
+17 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x, y;
+Select <p, proc> with p.stmt# = 36 such that Follows(1, 2) with proc.procName = "arithmetic"
+36 arithmetic
+5000
+18 - comment
+print p; call c; read r; while w1, w2, w3; if i; procedure proc; stmt s; assign a; constant x, y;
+Select w1 with w1.stmt# = w2.stmt# such that Parent(w1, i) and Parent*(w2, w3)
+30
+5000
+19 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x, y;
+Select i with i.stmt# = 31 and i.stmt# = 33
+none
+5000
+20 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x, y;
+Select <r, c> such that Follows(r, c) with r.stmt# = x.value and r.stmt# = y.value
+3 4
+5000
+21 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x, y;
+Select a with a.stmt# = x.value
+10, 7, 5
+5000
+22 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x, y;
+Select c with c.procName = "arithmetic"
+none
+5000
+23 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x, y;
+Select proc with proc.procName = "arithmetic"
+arithmetic
+5000
+24 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x, y;
+Select c with c.procName = "conditionalSpam"
+4
+5000
+25 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x, y; variable v;
+Select a such that Uses(a, v) with v.varName = "w"
+9, 10, 16
+5000
+26 - comment
+print p; call c; read r1, r2, r3; while w; if i; procedure proc; stmt s; assign a; constant x, y; variable v;
+Select <r1, r2, r3> with r1.varName = "a" with r2.varName = "b" with r3.varName = "c"
+1 2 3
+5000
+27 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select s.stmt# such that Affects(s, 10)
+9
+5000
+28 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select r.varName with r.stmt# = 1
+a
+5000
+29 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select c.stmt# with c.procName = "conditionalSpam"
+4
+5000
+30 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select i.stmt# with proc.procName = "arithmetic"
+31, 33
+5000
+31 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select c.stmt# with c.procName = "conditionalSpam"
+4
+5000
+32 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select w.stmt# such that Next*(27, w)
+25, 27, 30, 34
+5000
+33 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select i.stmt# such that Next*(34, i)
+33, 31
+5000
+34 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select x.value
+0, 1, 2, 3, 5, 7, 10, 42, 145
+5000
+35 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x; variable v;
+Select v.varName
+z, y, w, o, a, b, c, x, k, j, i, A, B, N, thisIsAVeryLongNameAndILikeApples, while, if, else
+5000

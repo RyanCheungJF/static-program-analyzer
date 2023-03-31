@@ -1,4 +1,4 @@
-::..\..\..\Code06\build\src\autotester\Release\autotester.exe source.txt MultiClause.txt out-MultiClause.xml
+..\..\..\Code06\build\src\autotester\Release\autotester.exe source.txt MultiClause.txt out-MultiClause.xml
 ..\..\..\Code06\build\src\autotester\Release\autotester.exe source.txt Calls.txt out-Calls.xml
 ..\..\..\Code06\build\src\autotester\Release\autotester.exe source.txt CallsT.txt out-CallsT.xml
 ..\..\..\Code06\build\src\autotester\Release\autotester.exe source.txt Next.txt out-Next.xml

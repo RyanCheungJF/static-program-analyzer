@@ -1,0 +1,40 @@
+1 - comment
+procedure p1, p2, p3, p4;
+Select <p1, p2, p3, p4> such that Calls(p1, p2) and Calls*(p2, p3) with p3.procName = "Three" such that Calls*(p3, p4)
+One Two Three Six, One Four Three Six, Two Four Three Six, Four Five Three Six
+5000
+2 - comment
+if i; variable v;
+Select v.varName such that Uses(i, v)
+b, c, x, y, z, d, e, endpoint
+5000
+3 - comment
+if i; variable v;
+Select v.varName such that Uses(i, v) with i.stmt# = 30
+y, z, d, endpoint
+5000
+4 - comment
+variable v; procedure p;
+Select v.varName with p.procName = "Three" such that Modifies(p, v)
+d, e
+5000
+5 - comment
+variable v; procedure p; print pn;
+Select v.varName such that Uses(pn, v)
+d, e, c, endpoint
+5000
+6 - comment
+assign a;
+Select a.stmt# pattern a(_, _"x"_)
+1, 2, 3, 11, 13
+5000
+7 - comment
+call c1, c2;
+Select <c1.procName, c2.stmt#> such that Follows(c1, c2)
+Two 9, Three 10, Three 18, Three 26
+5000
+8 - comment
+constant x; assign a;
+Select x with x.value = a.stmt#
+1, 2
+5000

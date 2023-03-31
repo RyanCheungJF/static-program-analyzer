@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#../../../../../build/src/autotester/autotester source.txt MultiClause.txt out-MultiClause.xml
+../../../../../build/src/autotester/autotester source.txt MultiClause.txt out-MultiClause.xml
 ../../../../../build/src/autotester/autotester source.txt Calls.txt out-Calls.xml
 ../../../../../build/src/autotester/autotester source.txt CallsT.txt out-CallsT.xml
 ../../../../../build/src/autotester/autotester source.txt Next.txt out-Next.xml

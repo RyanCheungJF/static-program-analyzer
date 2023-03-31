@@ -1,0 +1,35 @@
+1 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x; variable v;
+Select c.stmt# with c.procName = "call"
+11, 13, 14, 15, 19
+5000
+2 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x; variable v;
+Select s.stmt# such that Modifies(s, v) with v.varName = "a"
+29, 19, 15, 14, 13, 11, 18, 4, 9
+5000
+3 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x; variable v;
+Select i.stmt# such that Parent*(i, c) and Parent*(i, r) with r.varName = "read" with c.procName = "noindent"
+4
+5000
+4 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x; variable v;
+Select a with x.value = a.stmt#
+8
+5000
+5 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x; variable v;
+Select a.stmt# pattern a(_, "x")
+26
+5000
+6 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x; variable v;
+Select a.stmt# pattern a(_, "x") with a.stmt# = 25
+none
+5000
+7 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x; variable v;
+Select i.stmt# such that Parent(i, a) pattern i("x", _, _) pattern a(_, "y")
+24
+5000

@@ -28,7 +28,7 @@ while w;
 Select w such that Affects*(_, _)
 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 76, 78, 80, 81, 195, 207, 213, 237, 286
 5000
-7 - Test Cache
+7 - test Cache
 while w; variable v; procedure p;
 Select w such that Modifies(p, v) and Modifies("p", v) and Modifies(p, "v") and Modifies("p", "v")
 none
@@ -48,8 +48,8 @@ stmt a1, a2, a3;
 Select BOOLEAN such that Follows*(a1, a2)
 TRUE
 5000
-11 - test Affects* time along with subsequent affects
-assign a1, a2, a3;
-Select <a1, a2> such that Affects*(_, _) and Affects*(a1, 221) and Affects*(219, _) and Affects(219, 221) and Affects(219, a2) and Affects(a1, 221)
-219 221
+11 - test affects* and next*
+stmt s1, s2, s3;
+Select s1 such that Next*(s1, s2) and Next*(s1, s3) and Affects*(s1, s2) and Next*(s2, s3) and Affects*(s2, s3)
+100, 101, 105, 106, 107, 118, 119, 122, 123, 127, 128, 132, 204, 205, 206, 296, 297, 302, 407, 56, 57, 77, 79, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99
 5000

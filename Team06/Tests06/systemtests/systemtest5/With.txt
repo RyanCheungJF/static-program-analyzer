@@ -1,0 +1,50 @@
+1 - comment
+print p; call c1, c2; read r; while w; if i; procedure proc; stmt s; assign a;
+Select <c1.stmt#, c2.procName> such that Next*(c1, c2) with c1.procName = c2.procName
+1 B, 75 D, 77 D, 60 D, 81 G, 59 F, 30 F, 108 E
+5000
+2 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select <r.stmt#, p.stmt#, r.varName> with r.varName = p.varName
+134 145 b, 166 160 x, 170 27 e, 174 172 j, 186 172 j, 2 12 a, 2 163 a, 2 33 a, 23 10 c, 23 129 c, 23 167 c, 23 4 c, 24 139 d, 24 28 d, 25 27 e, 3 145 b, 50 49 print, 82 51 f
+5000
+3 - comment
+call c; procedure proc;
+Select <proc.procName, c.procName, c.stmt#> with proc.procName = c.procName with proc.procName = "D"
+D D 60, D D 75, D D 77
+5000
+4 - comment
+print p;
+Select p.varName with p.stmt# = 4
+c
+5000
+5 - comment
+print p;
+Select p.stmt# with p.varName = "c"
+4, 10, 129, 167
+5000
+6 - comment
+if i; while w;
+Select <i.stmt#, w.stmt#> such that Next*(i, w) and Next*(w, i)
+26 20, 56 53, 56 62, 73 72, 76 72, 182 181, 182 184, 182 188
+5000
+7 - comment
+assign a, b, c, d, e;
+Select a.stmt# such that Affects(a, b) and Affects(b, c) and Affects(c, d) and Affects(d, e)
+8, 9, 13, 17, 21, 22, 34, 54, 55, 61, 63, 64, 65, 148, 149, 150, 151, 152, 153, 161, 173, 178, 180, 183, 185, 189, 191, 193, 194, 195, 196, 197, 198, 199 
+5000
+8 - comment
+if i;
+Select i.stmt# pattern i("d", _, _)
+5, 11, 26, 37, 38, 56, 76, 118, 132
+5000
+9 - comment
+print p; constant x;
+Select p with p.stmt# = x.value
+4, 10, 12, 27, 28, 36, 42, 51, 52, 57, 66, 80, 96, 145, 163
+5000
+10 - comment
+assign a;
+Select a.stmt# pattern a("z", _)
+204, 40, 22, 17
+5000
