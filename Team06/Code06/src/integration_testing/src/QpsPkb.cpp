@@ -1257,4 +1257,30 @@ TEST_CASE("Select synonym with attributes") {
         REQUIRE(exists(result, "2 sub"));
         REQUIRE(exists(result, "12 end"));
     }
+
+    SECTION("Same variable but 3 different attributes with with clause") {
+        string query = R"(
+        print p;
+        Select <p.stmt#, p, p.varName> with p.varName = "end")";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(exists(result, "13 13 end"));
+    }
+
+    SECTION("Same variable but reverse the indent and varname") {
+        string query = R"(
+        print p;
+        Select <p, p.varName> with "end" = p.varName)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(exists(result, "13 end"));
+    }
+
+    SECTION("Same variable but reverse the indent and varname") {
+        string query = R"(
+        print p;
+        Select <p, p.varName>)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(exists(result, "13 end"));
+        REQUIRE(exists(result, "7 x"));
+
+    }
 }

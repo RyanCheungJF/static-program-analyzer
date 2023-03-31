@@ -240,7 +240,7 @@ vector<string> Table::getResult(vector<Parameter>& params) {
     vector<int> indexOrder;
     for (Parameter& param : params) {
         for (int i = 0; i < headers.size(); i++) {
-            if (param == headers[i] && (!param.hasAttribute() || param.getAttribute() == headers[i].getAttribute())) {
+            if (param == headers[i] && param.getAttribute() == headers[i].getAttribute()) {
                 indexOrder.push_back(i);
                 break;
             }
