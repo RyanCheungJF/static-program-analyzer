@@ -114,8 +114,6 @@ private:
             stmttypeIntCacheTransitive;
     std::unordered_map<Stmt, std::vector<std::vector<std::string>>> stmttypeWildcardCacheTransitive;
     std::unordered_map<Stmt, std::vector<std::vector<std::string>>> wildcardStmttypeCacheTransitive;
-    std::unordered_map<Stmt, std::unordered_map<Stmt, std::vector<std::vector<std::string>>>> //todo: check with xingwei that this is not needed?
-        stmttypeStmttypeCacheTransitive;
 
 
 };
