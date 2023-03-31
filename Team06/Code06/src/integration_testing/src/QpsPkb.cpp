@@ -1234,8 +1234,7 @@ TEST_CASE("Select synonym with attributes") {
         string query = R"(
         procedure p;
         Select p.procName)";
-        result = qps.processQueries(query, readPkb);
-        REQUIRE(find(result.begin(), result.end(), "main") != result.end());
+        result = qps.processQueries(query, readPkb);REQUIRE(find(result.begin(), result.end(), "main") != result.end());
         REQUIRE(find(result.begin(), result.end(), "end") != result.end());
         REQUIRE(find(result.begin(), result.end(), "sub") != result.end());
     }
@@ -1247,5 +1246,15 @@ TEST_CASE("Select synonym with attributes") {
         result = qps.processQueries(query, readPkb);
         REQUIRE(result.size() == 1);
         REQUIRE(exists(result, "sub"));
+    }
+
+    SECTION("Select same variable but different attributes with some clause") {
+        string query = R"(
+        call c;
+        variable v;
+        Select <c.stmt#, c.procName> such that Uses(c,v))";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(exists(result, "2 sub"));
+        REQUIRE(exists(result, "12 end"));
     }
 }

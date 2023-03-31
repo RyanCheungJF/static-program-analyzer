@@ -70,6 +70,7 @@ public:
     bool hasValidAttributeType();
     bool hasAttribute();
     void updateSynonymType(ParameterType);
+    void updateAttributeType(AttributeType);
     int getIntValue();
     string getTypeString() const;
     bool operator==(const Parameter&) const;

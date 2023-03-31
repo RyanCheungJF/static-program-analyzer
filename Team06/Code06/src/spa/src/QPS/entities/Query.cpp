@@ -82,13 +82,15 @@ Query::Query(const Query& q) {
     selectParameters = q.selectParameters;
     patterns = q.patterns;
     comparisons = q.comparisons;
+    isSelectTuple = q.isSelectTuple;
 }
 
-Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector<Pattern>& ps, vector<Comparison>& cs) {
+Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector<Pattern>& ps, vector<Comparison>& cs, bool ist) {
     selectParameters = ss;
     relations = rs;
     patterns = ps;
     comparisons = cs;
+    isSelectTuple = ist;
 }
 
 vector<Parameter*> Query::getAllUncheckedSynonyms() {
@@ -153,4 +155,8 @@ bool Query::validateAllParameters() {
     }
 
     return true;
+}
+
+bool Query::booleanParamCheck() {
+    return selectParameters.size() == 1 && selectParameters[0].getType() == ParameterType::BOOLEAN && isSelectTuple;
 }
