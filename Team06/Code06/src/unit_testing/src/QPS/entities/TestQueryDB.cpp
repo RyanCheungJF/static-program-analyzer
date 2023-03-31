@@ -420,27 +420,25 @@ TEST_CASE("queryDB fetch / case of (a,a) (a,b) (a,b) intersect tables and fetch 
     QueryDB qdb;
     ReadPKB readPKB;
     vector<Parameter> h1 = {
-            Parameter("a", ParameterType::ASSIGN),
-            Parameter("a", ParameterType::ASSIGN),
+        Parameter("a", ParameterType::ASSIGN),
+        Parameter("a", ParameterType::ASSIGN),
     };
     vector<Parameter> h2 = {
-            Parameter("a", ParameterType::ASSIGN),
+        Parameter("a", ParameterType::ASSIGN),
     };
     vector<Parameter> h3 = {
-            Parameter("a", ParameterType::ASSIGN),
+        Parameter("a", ParameterType::ASSIGN),
     };
-    vector<vector<string>> c1 = {
-            {"29", "29"}
-    };
+    vector<vector<string>> c1 = {{"29", "29"}};
     vector<vector<string>> c2 = {
-            {"28"},
-            {"29"},
-            {"4"},
+        {"28"},
+        {"29"},
+        {"4"},
     };
     vector<vector<string>> c3 = {
-            {"29"},
-            {"26"},
-            {"3"},
+        {"29"},
+        {"26"},
+        {"3"},
     };
     Table t1 = Table(h1, c1);
     Table t2 = Table(h2, c2);

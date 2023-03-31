@@ -66,7 +66,8 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
             }
             if (initialTable.isEmptyTable()) {
                 initialTable = table;
-            } else {
+            }
+            else {
                 initialTable.cartesianProduct(table);
             }
         }
@@ -75,7 +76,8 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
         Table extracted = extractColumns(presentParams, readPKB);
         if (initialTable.isEmptyTable()) {
             initialTable = extracted;
-        } else {
+        }
+        else {
             initialTable.cartesianProduct(extracted);
         }
     }

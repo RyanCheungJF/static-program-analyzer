@@ -1234,7 +1234,8 @@ TEST_CASE("Select synonym with attributes") {
         string query = R"(
         procedure p;
         Select p.procName)";
-        result = qps.processQueries(query, readPkb);REQUIRE(find(result.begin(), result.end(), "main") != result.end());
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(find(result.begin(), result.end(), "main") != result.end());
         REQUIRE(find(result.begin(), result.end(), "end") != result.end());
         REQUIRE(find(result.begin(), result.end(), "sub") != result.end());
     }
