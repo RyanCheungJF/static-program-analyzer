@@ -248,3 +248,90 @@ TEST_CASE("Test Pattern Cache") {
         REQUIRE(equals(res, expected));
     }
 }
+
+TEST_CASE("Test Attribute Cache") {
+    AttributeCache cache;
+
+    // call c;
+    // Select c.procName
+    Parameter p1 = Parameter("c", ParameterType::CALL, AttributeType::PROCNAME);
+    shared_ptr<Parameter> param1 = make_shared<Parameter>(p1);
+
+    vector<vector<string>> cacheValue = {{"1", "main"}};
+    cache.addResult(param1, cacheValue);
+
+    // variable v;
+    // Select v.varName
+    Parameter p2 = Parameter("v", ParameterType::VARIABLE, AttributeType::VARNAME);
+    shared_ptr<Parameter> param2 = make_shared<Parameter>(p2);
+
+    cacheValue = {{"var", "var"}};
+    cache.addResult(param2, cacheValue);
+    
+    SECTION("Cache Hit") {
+        // call c;
+        // Select c.procName
+        SECTION("find c.procName") {
+            Parameter p3 = Parameter("c", ParameterType::CALL, AttributeType::PROCNAME);
+            shared_ptr<Parameter> param3 = make_shared<Parameter>(p3);
+
+            vector<vector<string>> res = cache.findResult(param3);
+            vector<vector<string>> expected = {{"1", "main"}};
+            REQUIRE(equals(res, expected));
+        }
+
+        // call c1;
+        // Select c1.procName
+        SECTION("find c1.procName") {
+            Parameter p3 = Parameter("c1", ParameterType::CALL, AttributeType::PROCNAME);
+            shared_ptr<Parameter> param3 = make_shared<Parameter>(p3);
+
+            vector<vector<string>> res = cache.findResult(param3);
+            vector<vector<string>> expected = {{"1", "main"}};
+            REQUIRE(equals(res, expected));
+        }
+
+        // variable v1;
+        // Select v1.varName
+        SECTION("find c1.procName") {
+            Parameter p3 = Parameter("v1", ParameterType::VARIABLE, AttributeType::VARNAME);
+            shared_ptr<Parameter> param3 = make_shared<Parameter>(p3);
+
+            vector<vector<string>> res = cache.findResult(param3);
+            vector<vector<string>> expected = {{"var", "var"}};
+            REQUIRE(equals(res, expected));
+        }
+    }
+
+    SECTION("Cache Miss") {
+        // call c;
+        // Select c.stmt#
+        SECTION("find c.stmt#") {
+            Parameter p3 = Parameter("c", ParameterType::CALL, AttributeType::STMTNO);
+            shared_ptr<Parameter> param3 = make_shared<Parameter>(p3);
+
+            vector<vector<string>> res = cache.findResult(param3);
+            REQUIRE(res.empty());
+        }
+
+        // print c;
+        // Select c.varName
+        SECTION("find c.varName") {
+            Parameter p3 = Parameter("c", ParameterType::PRINT, AttributeType::VARNAME);
+            shared_ptr<Parameter> param3 = make_shared<Parameter>(p3);
+
+            vector<vector<string>> res = cache.findResult(param3);
+            REQUIRE(res.empty());
+        }
+
+        // constant c;
+        // Select c.value
+        SECTION("find c.value") {
+            Parameter p3 = Parameter("c", ParameterType::CONSTANT, AttributeType::VALUE);
+            shared_ptr<Parameter> param3 = make_shared<Parameter>(p3);
+
+            vector<vector<string>> res = cache.findResult(param3);
+            REQUIRE(res.empty());
+        }
+    }
+}
