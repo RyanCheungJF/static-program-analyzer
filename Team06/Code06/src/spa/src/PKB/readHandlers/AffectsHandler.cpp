@@ -50,19 +50,29 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
 std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, StmtNum a2) {
     std::string paramString1 = std::to_string(a1);
     std::string paramString2 = std::to_string(a2);
+
+    std::vector<std::string> val = {paramString1, paramString2};
+    if (intIntCache.find(val) != intIntCache.end() &&
+        intIntCache[val]) {
+        return {val};
+    }
+
     ProcName proc1 = procStorage->getProcedure(a1);
     ProcName proc2 = procStorage->getProcedure(a2);
 
     // either not in any procedure, or both are not in the same procedure
     if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST || proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
+        intIntCache[val] = false;
         return {};
     }
     else if (proc1 != proc2) {
+        intIntCache[val] = false;
         return {};
     }
 
     // if both are not assign statements, should also just return nothing already
     if (!procAssignStmtStorage->checkProcedure(proc1, a1) || !procAssignStmtStorage->checkProcedure(proc1, a2)) {
+        intIntCache[val] = false;
         return {};
     }
 
@@ -70,15 +80,19 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     std::unordered_set<Ent> variablesUsedInA2 = usesStorage->getRightItems(a2);
     Ent commonVariable = getCommonVariable(variablesModifiedInA1, variablesUsedInA2);
     if (commonVariable == "") {
+        intIntCache[val] = false;
         return {};
     }
 
     bool canReach = checkCanReach(a1, a2, proc1, commonVariable);
     if (!canReach) {
+        intIntCache[val] = false;
         return {};
     }
 
-    return {{paramString1, paramString2}};
+    intIntCache[val] = true;
+    std::vector<std::vector<std::string>> res = {val};
+    return res;
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum a2) {
@@ -99,6 +113,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum 
     return intWildcardCache[a1];
 }
 
+// todo: change to short-circuit code. BUT WE NEED TO KEEP THIS. change this to some other name since it is currently used for other calls eg Affects*(int, _)
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(ProcName proc) {
 
     std::vector<std::vector<std::string>> res;
@@ -116,6 +131,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(Pro
 
         for (StmtNum a1 : assignStatements) {
             std::vector<std::vector<std::string>> temp = handleIntWildcard(a1);
+
             for (std::vector<std::string>& val : temp) {
                 res.push_back(val);
 
@@ -130,14 +146,25 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(Pro
 
 // Affects*
 std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(StmtNum a1, StmtNum a2) {
+    std::string paramString1 = std::to_string(a1);
+    std::string paramString2 = std::to_string(a2);
+
+    std::vector<std::string> val = {paramString1, paramString2};
+    if (intIntTransitiveCache.find(val) != intIntTransitiveCache.end() &&
+            intIntTransitiveCache[val]) {
+        return {val};
+    }
+
     ProcName proc1 = procStorage->getProcedure(a1);
     ProcName proc2 = procStorage->getProcedure(a2);
     std::vector<std::vector<std::string>> res;
 
     if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST || proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
+        intIntTransitiveCache[val] = false;
         return res;
     }
     else if (proc1 != proc2) {
+        intIntTransitiveCache[val] = false;
         return res;
     }
 
@@ -154,7 +181,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
         queue.pop_front();
 
         if (curr.second == a2) {
-            res.push_back({std::to_string(a1), std::to_string(a2)});
+            std::vector<std::string> tempVal = {std::to_string(a1), std::to_string(a2)};
+            intIntTransitiveCache[tempVal] = true;
+
+            res.push_back(tempVal);
             return res;
         }
 
@@ -165,8 +195,14 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
 
         for (StmtNum num : hashmap[curr.second]) {
             queue.push_front({curr.second, num});
+
+            std::vector<std::string> tempVal = {std::to_string(a1), std::to_string(num)};
+            intIntTransitiveCache[tempVal] = true;
         }
     }
+
+    std::vector<std::string> tempVal = {std::to_string(a1), std::to_string(a2)};
+    intIntTransitiveCache[tempVal] = false;
     return res;
 }
 
@@ -215,10 +251,6 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTran
             queue.push_back({a1, a1, num});
 
             std::vector<std::string> val = {std::to_string(a1), std::to_string(num)};
-
-            // below is done at buildAffectsGraph() since it uses handleWildcardWildcard()
-//            intWildcardCache[a1].push_back(val);
-//            wildcardIntCache[num].push_back(val);
         }
     }
 
@@ -336,10 +368,6 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
     // add from initial starting node
     for (StmtNum num : (isIntWildcard ? hashmap[a1] : hashmap[a2])) {
         isIntWildcard ? queue.push_back({a1, num}) : queue.push_back({num, a2});
-
-        // below is done at buildAffectsGraph() since it uses handleWildcardWildcard()
-//        isIntWildcard ? intWildcardCache[a1].push_back({std::to_string(a1), std::to_string(num)})
-//                      : wildcardIntCache[a2].push_back({std::to_string(num), std::to_string(a2)});
     }
 
     // traverse until we see all possible combinations
@@ -374,6 +402,11 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
         isIntWildcard ? res.push_back({paramString, std::to_string(p.second)})
                       : res.push_back({std::to_string(p.first), paramString});
     }
+
+    for (std::vector<std::string> val : res) {
+        intIntTransitiveCache[val] = true;
+    }
+
     return res;
 }
 
@@ -393,14 +426,8 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
         return {};
     }
 
-    std::unordered_set<Ent>& variablesInCurrA =
-        isIntWildcard ? modifiesStorage->getRightItems(currA) : usesStorage->getRightItems(currA);
     std::vector<std::vector<std::string>> res;
-
     for (StmtNum otherA : assignStatements) {
-
-        std::unordered_set<Ent>& variablesInOtherA =
-            isIntWildcard ? usesStorage->getRightItems(otherA) : modifiesStorage->getRightItems(otherA);
 
         if (proc != procStorage->getProcedure(otherA)) {
             continue;
@@ -410,8 +437,10 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
             isIntWildcard ? handleIntInt(currA, otherA) : handleIntInt(otherA, currA);
 
         if (!temp.empty()) {
-            isIntWildcard ? res.push_back({paramString, std::to_string(otherA)})
-                          : res.push_back({std::to_string(otherA), paramString});
+            std::vector<std::string> val;
+            isIntWildcard ? val = {paramString, std::to_string(otherA)} : val = {std::to_string(otherA), paramString};
+            res.push_back(val);
+            intIntCache[val] = true;
         }
     }
 
@@ -489,8 +518,11 @@ bool AffectsHandler::checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, Ent co
 }
 
 void AffectsHandler::clearCache() {
+    intIntCache.clear();
     intWildcardCache.clear();
     wildcardIntCache.clear();
+
+    intIntTransitiveCache.clear();
     intWildcardTransitiveCache.clear();
     wildcardIntTransitiveCache.clear();
     procAffectsGraphMap.clear();

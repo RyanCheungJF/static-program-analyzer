@@ -27,6 +27,12 @@ struct hashFunctionAffectsT {
     }
 };
 
+struct hashFunctionIntInt {
+    size_t operator()(const std::vector<std::string>& x) const {
+        return (stoi(x[0]) * 501) + stoi(x[1]);
+    }
+};
+
 class AffectsHandler {
 public:
     AffectsHandler(std::shared_ptr<CFGStorage>& cfgStorage, std::shared_ptr<StmtStorage>& stmtStorage,
@@ -90,9 +96,11 @@ private:
     bool checkCanReach(StmtNum a1, StmtNum a2, ProcName proc, Ent commonVariable);
 
     // cache related data structures and methods
+    std::unordered_map<std::vector<std::string>, bool, hashFunctionIntInt> intIntCache;
     std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardCache;
     std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntCache;
 
+    std::unordered_map<std::vector<std::string>, bool, hashFunctionIntInt> intIntTransitiveCache;
     std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardTransitiveCache;
     std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntTransitiveCache;
 
