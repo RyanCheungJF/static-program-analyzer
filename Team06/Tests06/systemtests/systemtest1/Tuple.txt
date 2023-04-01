@@ -146,7 +146,7 @@ Select <pr, pr.varName>
 30 - comment
 constant c;
 Select <c, c.value>
-1 1, 2 2, 0 0, 7 7, 3 3, 10 10, 5 5, 145 145
+1 1, 2 2, 0 0, 7 7, 3 3, 10 10, 5 5, 145 145, 42 42
 5000
 31 - comment
 read r;
@@ -162,4 +162,9 @@ Select <cl, cl.procName>
 procedure p;
 Select <p, p.procName>
 conditionalSpam conditionalSpam, arithmetic arithmetic
+5000
+34 - comment
+assign a1, a2;
+Select <a1, a2> such that Next(a1, a2) pattern a1("i",_) pattern a2("a",_) 
+17 18
 5000
