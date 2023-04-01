@@ -145,6 +145,8 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         for (std::vector<std::string> curr : res) {
             std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
         }
+        std::cout << "\n";
+
     }
     else if (modifiesUsesMap.find(type) != modifiesUsesMap.end()) {
         ModifiesUsesHandler handler(modifiesUsesMap.at(type), statementStorage);
@@ -154,21 +156,39 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         for (std::vector<std::string> curr : res) {
             std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
         }
+        std::cout << "\n";
+
     }
     else if (callsMap.find(type) != callsMap.end()) {
         CallsHandler handler(callsMap.at(type));
         res = handler.handle(param1, param2);
 
-        std::cout << "\n\nAT Call / Calls HANDLER NOW. DONE WITH CALCULATIONS. BELOW ARE THE RESULTS\n";
+        std::cout << "\n\nAT Calls / Calls* HANDLER NOW. DONE WITH CALCULATIONS. BELOW ARE THE RESULTS\n";
         for (std::vector<std::string> curr : res) {
             std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
         }
+        std::cout << "\n";
+
     }
     else if (nextMap.find(type) != nextMap.end()) {
         res = nextHandler->handle(param1, param2, type == RelationshipType::NEXTT);
+
+        std::cout << "\n\nAT Next / Next* HANDLER NOW. DONE WITH CALCULATIONS. BELOW ARE THE RESULTS\n";
+        for (std::vector<std::string> curr : res) {
+            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
+        }
+        std::cout << "\n";
+
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
         res = affectsHandler->handle(param1, param2, type == RelationshipType::AFFECTST);
+
+        std::cout << "\n\nAT Affects / Affects* HANDLER NOW. DONE WITH CALCULATIONS. BELOW ARE THE RESULTS\n";
+        for (std::vector<std::string> curr : res) {
+            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
+        }
+        std::cout << "\n";
+
     }
     if (!res.empty()) {
         relationshipCache->addResult(rs, res);
