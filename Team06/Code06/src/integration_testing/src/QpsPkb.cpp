@@ -1234,8 +1234,7 @@ TEST_CASE("Select synonym with attributes") {
         string query = R"(
         procedure p;
         Select p.procName)";
-        result = qps.processQueries(query, readPkb);
-        REQUIRE(find(result.begin(), result.end(), "main") != result.end());
+        result = qps.processQueries(query, readPkb);REQUIRE(find(result.begin(), result.end(), "main") != result.end());
         REQUIRE(find(result.begin(), result.end(), "end") != result.end());
         REQUIRE(find(result.begin(), result.end(), "sub") != result.end());
     }
@@ -1246,6 +1245,49 @@ TEST_CASE("Select synonym with attributes") {
         Select p.procName such that Calls("main", p))";
         result = qps.processQueries(query, readPkb);
         REQUIRE(result.size() == 1);
+        REQUIRE(exists(result, "sub"));
+    }
+
+    SECTION("Select same variable but different attributes with some clause") {
+        string query = R"(
+        call c;
+        variable v;
+        Select <c.stmt#, c.procName> such that Uses(c,v))";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(exists(result, "2 sub"));
+        REQUIRE(exists(result, "12 end"));
+    }
+
+    SECTION("Same variable but 3 different attributes with with clause") {
+        string query = R"(
+        print p;
+        Select <p.stmt#, p, p.varName> with p.varName = "end")";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(exists(result, "13 13 end"));
+    }
+
+    SECTION("Same variable but reverse the indent and varname") {
+        string query = R"(
+        print p;
+        Select <p, p.varName> with "end" = p.varName)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(exists(result, "13 end"));
+    }
+
+    SECTION("Same variable but reverse the indent and varname") {
+        string query = R"(
+        print p;
+        Select <p, p.varName>)";
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(exists(result, "13 end"));
+        REQUIRE(exists(result, "7 x"));
+    }
+
+    SECTION("With clause with a number on RHS") {
+        string query = R"(
+        call c;
+        Select c.procName with c.stmt# = 2)";
+        result = qps.processQueries(query, readPkb);
         REQUIRE(exists(result, "sub"));
     }
 }

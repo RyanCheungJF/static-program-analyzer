@@ -198,6 +198,7 @@ TEST_CASE("Test Pattern Cache") {
         REQUIRE(equals(res, expected));
     }
 
+    // pattern a("z", "b / c")
     SECTION("Cache miss, Pattern a(\"z\", \"b / c\")") {
         Parameter param6 = Parameter("a", ParameterType::ASSIGN);
         Parameter param7 = Parameter("z", ParameterType::FIXED_STRING);
@@ -210,9 +211,23 @@ TEST_CASE("Test Pattern Cache") {
         REQUIRE(equals(res, expected));
     }
 
+    // pattern a(z, "_b / c_")
     SECTION("Cache miss, Pattern a(z, \"_b / c_\")") {
         Parameter param6 = Parameter("a", ParameterType::ASSIGN);
         Parameter param7 = Parameter("z", ParameterType::VARIABLE);
+        vector<string> exprSpecs = {"_b / c_"};
+        Pattern p3 = Pattern(param6, param7, exprSpecs);
+        shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
+
+        vector<vector<string>> res = cache.findResult(pattern3);
+        vector<vector<string>> expected = {};
+        REQUIRE(equals(res, expected));
+    }
+
+    // pattern a("y", "_b / c_")
+    SECTION("Cache miss, Pattern a(\"y\", \"_b / c_\")") {
+        Parameter param6 = Parameter("a", ParameterType::ASSIGN);
+        Parameter param7 = Parameter("y", ParameterType::FIXED_STRING);
         vector<string> exprSpecs = {"_b / c_"};
         Pattern p3 = Pattern(param6, param7, exprSpecs);
         shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
