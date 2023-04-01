@@ -194,6 +194,16 @@ TEST_CASE("parse / select <BOOLEAN, s> should work if BOOLEAN is not declared / 
     REQUIRE_THROWS_AS(qp.parse(query), SemanticException);
 }
 
+TEST_CASE("parse / multiple while pattern clauses / parse correctly") {
+    string query = R"(
+        stmt s;
+        while w1, w2;
+        Select <s, w1, w2> such that Next*(w1, s) and Next*(s, w2) pattern w1("CS2103",_) and w2("CS2030",_))";
+    QPSParser qp;
+    vector<Query> q = qp.parse(query);
+    REQUIRE(true);
+}
+
 TEST_CASE("splitQuery / splitting variable v; Select v; should give error / "
           "catch error") {
     string test = "variable v; Select v ; ";
