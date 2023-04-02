@@ -1107,6 +1107,16 @@ TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
         REQUIRE(exists(result, "8 9"));
     }
 
+    SECTION("no clauses, select multiple of the same variable no attributes") {
+        string query = R"(
+        call c;
+        Select <c, c>)";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(exists(result, "2 2"));
+        REQUIRE(exists(result, "12 12"));
+    }
+
     SECTION("2 clauses with 2 distinct variables select tuple no cartesian product") {
         string query = R"(
         stmt s1, s2;
