@@ -63,11 +63,9 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
                 Table table = emptyTable;
                 if (param.hasAttribute()) {
                     contentVec = readPKB.findAttribute(param);
-                    for (vector<string> s : contentVec) {
-                        table =
-                            Table({ Parameter(AppConstants::WILDCARD_VALUE, ParameterType::WILDCARD), param }, contentVec);
-                        table = table.extractDesignEntities();
-                    }
+                    table =
+                        Table({ Parameter(AppConstants::WILDCARD_VALUE, ParameterType::WILDCARD), param }, contentVec);
+                    table = table.extractDesignEntities();
                 }
                 else {
                     vector<string> content = readPKB.findDesignEntities(param);
