@@ -88,32 +88,4 @@ private:
     const std::unordered_set<StmtNum>& findGraphRelative(const CFG& graph, StmtNum num, std::string relativeType);
 
     std::unordered_set<StmtNum> emptySet;
-
-    // cache related data structures and methods
-    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardCache;
-    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntCache;
-    std::unordered_map<StmtNum, std::unordered_map<Stmt, std::vector<std::vector<std::string>>>>
-            intStmttypeCache;
-    std::unordered_map<Stmt, std::unordered_map<StmtNum, std::vector<std::vector<std::string>>>>
-            stmttypeIntCache;
-    std::unordered_map<Stmt, std::vector<std::vector<std::string>>> stmttypeWildcardCache;
-    std::unordered_map<Stmt, std::vector<std::vector<std::string>>> wildcardStmttypeCache;
-
-    //todo: check with xingwei that this is not needed? I think it would still be good given query: Next*(a, w) and Next(a, w)
-    std::unordered_map<Stmt, std::unordered_map<Stmt, std::vector<std::vector<std::string>>>>
-        stmttypeStmttypeCache;
-
-
-
-
-    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardCacheTransitive;
-    std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntCacheTransitive;
-    std::unordered_map<StmtNum, std::unordered_map<Stmt, std::vector<std::vector<std::string>>>>
-            intStmttypeCacheTransitive;
-    std::unordered_map<Stmt, std::unordered_map<StmtNum, std::vector<std::vector<std::string>>>>
-            stmttypeIntCacheTransitive;
-    std::unordered_map<Stmt, std::vector<std::vector<std::string>>> stmttypeWildcardCacheTransitive;
-    std::unordered_map<Stmt, std::vector<std::vector<std::string>>> wildcardStmttypeCacheTransitive;
-
-
 };

@@ -51,13 +51,6 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardNonT(Paramet
     StmtNum intValue = intParam.getIntValue();
     ProcName proc = procStorage->getProcedure(intValue);
 
-    if (isFindChildren && intWildcardCache.find(intValue) != intWildcardCache.end()) {
-        return intWildcardCache[intValue];
-    } else if (!isFindChildren && wildcardIntCache.find(intValue) != wildcardIntCache.end()) {
-        return wildcardIntCache[intValue];
-    }
-
-
     std::vector<std::vector<std::string>> res;
 
     if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
@@ -67,12 +60,6 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardNonT(Paramet
     std::unordered_set<StmtNum> emptyFilter;
     addCFGRelatives(res, proc, intValue, isFindChildren, emptyFilter);
 
-    if (isFindChildren) {
-        intWildcardCache[intValue] = res;
-    } else if (!isFindChildren) {
-        wildcardIntCache[intValue] = res;
-    }
-
     return res;
 }
 
@@ -80,14 +67,6 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtNonT(Parameter i
                                                                      bool isFindChildren) {
     StmtNum intValue = intParam.getIntValue();
     Stmt stmtType = stmtParam.getTypeString();
-
-    if (isFindChildren && intStmttypeCache.find(intValue) != intStmttypeCache.end() &&
-            intStmttypeCache[intValue].find(stmtType) != intStmttypeCache[intValue].end()) {
-        return intStmttypeCache[intValue][stmtType];
-    } else if (!isFindChildren && stmttypeIntCache.find(stmtType) != stmttypeIntCache.end() &&
-            stmttypeIntCache[stmtType].find(intValue) != stmttypeIntCache[stmtType].end()) {
-        return stmttypeIntCache[stmtType][intValue];
-    }
 
     ProcName proc = procStorage->getProcedure(intValue);
     std::vector<std::vector<std::string>> res;
@@ -98,23 +77,11 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtNonT(Parameter i
 
     addCFGRelatives(res, proc, intValue, isFindChildren, stmtStorage->getStatementNumbers(stmtType));
 
-    if (isFindChildren) {
-        intStmttypeCache[intValue][stmtType] = res;
-    } else if (!isFindChildren) {
-        stmttypeIntCache[stmtType][intValue] = res;
-    }
-
     return res;
 }
 
 std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardNonT(Parameter stmtParam, bool isFindChildren) {
     Stmt stmtType = stmtParam.getTypeString();
-
-    if (isFindChildren && stmttypeWildcardCache.find(stmtType) != stmttypeWildcardCache.end()) {
-        return stmttypeWildcardCache[stmtType];
-    } else if (!isFindChildren && wildcardStmttypeCache.find(stmtType) != wildcardStmttypeCache.end()) {
-        return wildcardStmttypeCache[stmtType];
-    }
 
     std::vector<std::vector<std::string>> res;
     std::unordered_map<ProcName, std::unordered_set<StmtNum>> procedure_lines =
@@ -129,12 +96,6 @@ std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardNonT(Parame
         }
     }
 
-
-    if (isFindChildren) {
-        stmttypeWildcardCache[stmtType] = res;
-    } else if (!isFindChildren) {
-        wildcardStmttypeCache[stmtType] = res;
-    }
     return res;
 }
 
@@ -144,11 +105,6 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
     std::vector<std::vector<std::string>> res;
     if (param1 == param2) {
         return res;
-    }
-
-    if (stmttypeStmttypeCache.find(type1) != stmttypeStmttypeCache.end() &&
-        stmttypeStmttypeCache[type1].find(type2) != stmttypeStmttypeCache[type1].end()) {
-        return stmttypeStmttypeCache[type1][type2];
     }
 
     bool isLines1Smaller =
@@ -177,17 +133,7 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
         }
     }
 
-    for (std::vector<std::string> val : res) {
-        StmtNum line1 = std::stoi(val[0]);
-        StmtNum line2 = std::stoi(val[1]);
-        Stmt line1type = stmtStorage->getStatementType(line1);
-        Stmt line2type = stmtStorage->getStatementType(line2);
-        intStmttypeCache[line1][line2type].push_back(val);
-        stmttypeIntCache[line1type][line2].push_back(val);
-    }
-
-    stmttypeStmttypeCache[type1][type2] = res;
-    return stmttypeStmttypeCache[type1][type2];
+    return res;
 }
 
 // todo: double check that this is cached already
@@ -204,16 +150,6 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcard() {
             for (StmtNum child : children) {
                 std::vector<std::string> val = {std::to_string(p), std::to_string(child)};
                 res.push_back(val);
-
-                intWildcardCache[p].push_back(val);
-                wildcardIntCache[child].push_back(val);
-                Stmt type1 = stmtStorage->getStatementType(p);
-                Stmt type2 = stmtStorage->getStatementType(child);
-                intStmttypeCache[p][type2].push_back(val);
-                stmttypeIntCache[type1][child].push_back(val);
-                stmttypeWildcardCache[type1].push_back(val);
-                wildcardStmttypeCache[type2].push_back(val);
-                stmttypeStmttypeCache[type1][type2].push_back(val);
             }
         }
     }
@@ -282,12 +218,6 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardTransitive(P
                                                                                bool isFindChildren) {
     StmtNum intValue = intParam.getIntValue();
 
-    if (isFindChildren && intWildcardCacheTransitive.find(intValue) != intWildcardCacheTransitive.end()) {
-        return intWildcardCacheTransitive[intValue];
-    } else if (!isFindChildren && wildcardIntCacheTransitive.find(intValue) != wildcardIntCacheTransitive.end()) {
-        return wildcardIntCacheTransitive[intValue];
-    }
-
     ProcName proc = procStorage->getProcedure(intValue);
     std::vector<std::vector<std::string>> res;
     if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
@@ -301,11 +231,6 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardTransitive(P
     std::unordered_set<StmtNum> emptyFilter;
     addCFGRelativesTransitive(res, graph, queue, isFindChildren, emptyFilter);
 
-    if (isFindChildren) {
-        intWildcardCacheTransitive[intValue] = res;
-    } else if (!isFindChildren) {
-        wildcardIntCacheTransitive[intValue] = res;
-    }
     return res;
 }
 
@@ -313,15 +238,6 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtTransitive(Param
                                                                            bool isFindChildren) {
     StmtNum intValue = intParam.getIntValue();
     Stmt stmtType = stmtParam.getTypeString();
-
-    if (isFindChildren && intStmttypeCacheTransitive.find(intValue) != intStmttypeCacheTransitive.end() &&
-        intStmttypeCacheTransitive[intValue].find(stmtType) != intStmttypeCacheTransitive[intValue].end()) {
-        return intStmttypeCacheTransitive[intValue][stmtType];
-    } else if (!isFindChildren && stmttypeIntCacheTransitive.find(stmtType) != stmttypeIntCacheTransitive.end() &&
-        stmttypeIntCacheTransitive[stmtType].find(intValue) != stmttypeIntCacheTransitive[stmtType].end()) {
-        return stmttypeIntCacheTransitive[stmtType][intValue];
-    }
-
 
     ProcName proc = procStorage->getProcedure(intValue);
     std::vector<std::vector<std::string>> res;
@@ -336,24 +252,12 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtTransitive(Param
 
     addCFGRelativesTransitive(res, graph, queue, isFindChildren, stmtStorage->getStatementNumbers(stmtType));
 
-
-    if (isFindChildren) {
-        intStmttypeCacheTransitive[intValue][stmtType] = res;
-    } else if (!isFindChildren) {
-        stmttypeIntCacheTransitive[stmtType][intValue] = res;
-    }
     return res;
 }
 
 std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardTransitive(Parameter stmtParam,
                                                                                 bool isFindChildren) {
     Stmt stmtType = stmtParam.getTypeString();
-
-    if (isFindChildren && stmttypeWildcardCacheTransitive.find(stmtType) != stmttypeWildcardCacheTransitive.end()) {
-        return stmttypeWildcardCacheTransitive[stmtType];
-    } else if (!isFindChildren && wildcardStmttypeCacheTransitive.find(stmtType) != wildcardStmttypeCacheTransitive.end()) {
-        return wildcardStmttypeCacheTransitive[stmtType];
-    }
 
     std::vector<std::vector<std::string>> res;
 
@@ -365,21 +269,13 @@ std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardTransitive(
         std::unordered_set<StmtNum> lines = kv.second;
 
         const auto& graph = cfgStorage->getGraph(proc);
-
         for (StmtNum line : lines) {
-
             std::deque<std::vector<StmtNum>> queue;
             initializeQueue(queue, graph, line, isFindChildren);
 
             std::unordered_set<StmtNum> emptyFilter;
             addCFGRelativesTransitive(res, graph, queue, isFindChildren, emptyFilter);
         }
-    }
-
-    if (isFindChildren) {
-        stmttypeWildcardCacheTransitive[stmtType] = res;
-    } else if (!isFindChildren) {
-        wildcardStmttypeCacheTransitive[stmtType] = res;
     }
     return res;
 }
@@ -407,11 +303,6 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransit
             std::unordered_set<StmtNum>& type2StmtNums = stmtStorage->getStatementNumbers(type2);
             addCFGRelativesTransitive(res, graph, queue, AppConstants::IS_FIND_CHILDREN, type2StmtNums);
         }
-    }
-
-    for (std::vector<std::string> val : res) {
-        stmttypeWildcardCacheTransitive[type].push_back(val);
-        wildcardStmttypeCacheTransitive[type2].push_back(val);
     }
 
     // if both synonyms are the same, filter non-matching answers
@@ -494,19 +385,9 @@ void NextHandler::initializeQueue(std::deque<std::vector<StmtNum>>& queue, const
 
         if (isFindChildren) {
             queue.push_back({num, relative});
-
-            std::vector<std::string> val = {std::to_string(num), std::to_string(relative)};
-            intWildcardCache[num].push_back(val);
-            intStmttypeCache[num][type2].push_back(val);
-            stmttypeWildcardCache[type1].push_back(val);
         }
         else {
             queue.push_back({relative, num});
-
-            std::vector<std::string> val = {std::to_string(relative), std::to_string(num)};
-            wildcardIntCache[num].push_back(val);
-            stmttypeIntCache[type1][num].push_back(val);
-            wildcardStmttypeCache[type2].push_back(val);
         }
     }
 }
@@ -646,23 +527,4 @@ std::vector<std::vector<std::string>> NextHandler::handleTransitive(Parameter pa
         }
     }
     return std::vector<std::vector<std::string>>();
-}
-
-void NextHandler::clearCache() {
-
-    intWildcardCache.clear();
-    wildcardIntCache.clear();
-    intStmttypeCache.clear();
-    stmttypeIntCache.clear();
-    stmttypeWildcardCache.clear();
-    wildcardStmttypeCache.clear();
-    stmttypeStmttypeCache.clear();
-
-    intWildcardCacheTransitive.clear();
-    wildcardIntCacheTransitive.clear();
-    intStmttypeCacheTransitive.clear();
-    stmttypeIntCacheTransitive.clear();
-    stmttypeWildcardCacheTransitive.clear();
-    wildcardStmttypeCacheTransitive.clear();
-
 }
