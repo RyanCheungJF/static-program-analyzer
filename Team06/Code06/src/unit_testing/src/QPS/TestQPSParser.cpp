@@ -237,6 +237,12 @@ TEST_CASE("parse / select <BOOLEAN, s> should work if BOOLEAN is not declared / 
     REQUIRE_THROWS_AS(qp.parse(query), SemanticException);
 }
 
+TEST_CASE("parse / with clause comparing string to int / throws semantic error") {
+    string query = "Select BOOLEAN with \"abcd\" = 8";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(query), SemanticException);
+}
+
 TEST_CASE("splitQuery / splitting variable v; Select v; should give error / "
           "catch error") {
     string test = "variable v; Select v ; ";
