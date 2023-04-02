@@ -88,10 +88,11 @@ Query::Query(const Query& q) {
     isSelectTuple = q.isSelectTuple;
 }
 
-Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector<Pattern>& ps, vector<Comparison>& cs, bool ist) {
+Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector<Pattern>& ps, vector<Comparison>& cs,
+             bool ist) {
     selectParameters = ss;
     relations = rs;
-    make_heap(relations.begin(), relations.end(), sharedPtrCompare::cmp<Relationship>);
+    make_heap(relations.begin(), relations.end(), SharedPtrCompare::cmp<Relationship>);
     patterns = ps;
     comparisons = cs;
     isSelectTuple = ist;
@@ -165,8 +166,7 @@ bool Query::booleanParamCheck() {
     return selectParameters.size() == 1 && selectParameters[0].getType() == ParameterType::BOOLEAN && isSelectTuple;
 }
 
-bool Query::operator==(const Query& q) const
-{   
+bool Query::operator==(const Query& q) const {
     if (q.relations.size() != relations.size()) {
         return false;
     }
@@ -175,5 +175,6 @@ bool Query::operator==(const Query& q) const
             return false;
         }
     }
-    return selectParameters == q.selectParameters && patterns == q.patterns && comparisons == q.comparisons && isSelectTuple == q.isSelectTuple;
+    return selectParameters == q.selectParameters && patterns == q.patterns && comparisons == q.comparisons &&
+           isSelectTuple == q.isSelectTuple;
 }

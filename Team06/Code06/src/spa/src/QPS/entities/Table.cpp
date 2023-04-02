@@ -232,7 +232,6 @@ void Table::removeDuplicates() {
             this->contents.push_back(content);
         }
     }
-
 }
 
 vector<string> Table::getResult(vector<Parameter>& params) {

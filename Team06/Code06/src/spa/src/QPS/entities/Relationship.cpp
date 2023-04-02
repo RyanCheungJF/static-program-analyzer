@@ -57,13 +57,11 @@ bool Relationship::operator==(const Relationship& r) const {
     return type == r.type && params == r.params;
 }
 
-bool Relationship::operator>(const Relationship& r) const
-{
+bool Relationship::operator>(const Relationship& r) const {
     return evalPriority > r.evalPriority;
 }
 
-bool Relationship::operator<(const Relationship& r) const
-{
+bool Relationship::operator<(const Relationship& r) const {
     return evalPriority < r.evalPriority;
 }
 
@@ -71,8 +69,7 @@ RelationshipType Relationship::getType() const {
     return type;
 }
 
-double Relationship::getPriority()
-{   
+double Relationship::getPriority() {
     int fixedValCounter = 0;
     for (int i = 0; i < params.size(); i++) {
         if (params.at(i).isFixedValue()) {

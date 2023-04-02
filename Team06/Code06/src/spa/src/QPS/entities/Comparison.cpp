@@ -77,7 +77,6 @@ const unordered_map<string, ComparisonOperator> Comparison::stringToOpMap = {
     {AppConstants::OP_EQUALS, ComparisonOperator::EQUALS},
 };
 
-bool Comparison::operator==(const Comparison& c) const
-{
+bool Comparison::operator==(const Comparison& c) const {
     return leftParam == c.leftParam && rightParam == c.rightParam && op == c.op;
 }

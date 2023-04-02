@@ -11,11 +11,11 @@
 #include "PKB/ReadPKB.h"
 #include "Parameter.h"
 #include "Pattern.h"
+#include "QPS/entityComparators/SharedPtrCompare.h"
 #include "QueryDB.h"
 #include "Relationship.h"
 #include "Table.h"
 #include "exceptions/SyntaxException.h"
-#include "QPS/entityComparators/sharedPtrCompare.h"
 
 using namespace std;
 
@@ -34,6 +34,7 @@ public:
     bool validateAllParameters();
     bool booleanParamCheck();
     bool operator==(const Query&) const;
+
 private:
     void evaluateRelationship(QueryDB&, ReadPKB&);
     void evaluatePattern(QueryDB&, ReadPKB&);
