@@ -57,20 +57,20 @@ private:
     // Affects(1, 2)
     std::vector<std::vector<std::string>> handleIntInt(StmtNum a1, StmtNum a2);
     // Affects(a1, 2) or Affects(_, 2)
-    std::vector<std::vector<std::string>> handleWildcardInt(StmtNum a2);
+    std::vector<std::vector<std::string>> handleWildcardInt(StmtNum a2, bool isEarlyReturn);
     // Affects(1, a2) or Affects(1, _)
-    std::vector<std::vector<std::string>> handleIntWildcard(StmtNum a1);
+    std::vector<std::vector<std::string>> handleIntWildcard(StmtNum a1, bool isEarlyReturn);
     // Affects(a1, a2) or Affects(_, _)
-    std::vector<std::vector<std::string>> handleWildcardWildcard(ProcName proc);
+    std::vector<std::vector<std::string>> handleWildcardWildcard(ProcName proc, bool isEarlyReturn);
 
     // Affects*(1, 2)
     std::vector<std::vector<std::string>> handleIntIntTransitive(StmtNum a1, StmtNum a2);
     // Affects*(a1, 2) or Affects*(_, 2)
-    std::vector<std::vector<std::string>> handleWildcardIntTransitive(StmtNum a2);
+    std::vector<std::vector<std::string>> handleWildcardIntTransitive(StmtNum a2, bool isEarlyReturn);
     // Affects*(1, a2) or Affects*(1, _)
-    std::vector<std::vector<std::string>> handleIntWildcardTransitive(StmtNum a1);
+    std::vector<std::vector<std::string>> handleIntWildcardTransitive(StmtNum a1, bool isEarlyReturn);
     // Affects*(a1, a2) or Affects*(_, _)
-    std::vector<std::vector<std::string>> handleWildcardWildcardTransitive();
+    std::vector<std::vector<std::string>> handleWildcardWildcardTransitive(bool isEarlyReturn);
 
     // helper methods
     std::unordered_set<StmtNum> getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc,
@@ -80,16 +80,19 @@ private:
 
     std::vector<std::vector<std::string>> handleNonTransitive(std::string param1value, std::string param2value,
                                                               bool isFixedIntParam1, bool isFixedIntParam2,
-                                                              bool isWildCardParam1, bool isWildCardParam2);
+                                                              bool isWildCardParam1, bool isWildCardParam2,
+                                                              bool isAssignStmtParam1, bool isAssignStmtParam2);
     std::vector<std::vector<std::string>> handleTransitive(std::string param1value, std::string param2value,
                                                            bool isFixedIntParam1, bool isFixedIntParam2,
-                                                           bool isWildCardParam1, bool isWildCardParam2);
+                                                           bool isWildCardParam1, bool isWildCardParam2,
+                                                           bool isAssignStmtParam1, bool isAssignStmtParam2);
 
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted, ProcName proc);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted, ProcName proc,
+                                                                          bool isEarlyReturn);
 
-    std::vector<std::vector<std::string>> bfsTraversalOneWildcard(StmtNum a1, StmtNum a2);
+    std::vector<std::vector<std::string>> bfsTraversalOneWildcard(StmtNum a1, StmtNum a2, bool isEarlyReturn);
 
-    std::vector<std::vector<std::string>> nonTransitiveOneIntOneWildcard(StmtNum a1, StmtNum a2);
+    std::vector<std::vector<std::string>> nonTransitiveOneIntOneWildcard(StmtNum a1, StmtNum a2, bool isEarlyReturn);
 
     bool checkModifiedAssignReadCall(Ent commonVariable, StmtNum currentLine);
 

@@ -20,17 +20,19 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
 
     bool isFixedIntParam1 = param1.isFixedInt();
     bool isFixedIntParam2 = param2.isFixedInt();
-    bool isWildCardParam1 = param1.isAssign() || param1.isStmt() || param1.isWildcard();
-    bool isWildCardParam2 = param2.isAssign() || param2.isStmt() || param2.isWildcard();
+    bool isWildCardParam1 = param1.isWildcard();
+    bool isWildCardParam2 = param2.isWildcard();
+    bool isAssignStmtParam1 = param1.isAssign() || param1.isStmt();
+    bool isAssignStmtParam2 = param2.isAssign() || param2.isStmt();
 
     std::vector<std::vector<std::string>> temp;
     if (isTransitive) {
         temp = handleTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2,
-                                isWildCardParam1, isWildCardParam2);
+                                isWildCardParam1, isWildCardParam2, isAssignStmtParam1, isAssignStmtParam2);
     }
     else {
         temp = handleNonTransitive(param1.getValue(), param2.getValue(), isFixedIntParam1, isFixedIntParam2,
-                                   isWildCardParam1, isWildCardParam2);
+                                   isWildCardParam1, isWildCardParam2, isAssignStmtParam1, isAssignStmtParam2);
     }
 
     if ((paramString1 == paramString2) && !param1.isWildcard()) {
@@ -52,8 +54,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     std::string paramString2 = std::to_string(a2);
 
     std::vector<std::string> val = {paramString1, paramString2};
-    if (intIntCache.find(val) != intIntCache.end() &&
-        intIntCache[val]) {
+    if (intIntCache.find(val) != intIntCache.end() && intIntCache[val]) {
         return {val};
     }
 
@@ -95,26 +96,38 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     return res;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum a2) {
+std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum a2, bool isEarlyReturn) {
     if (wildcardIntCache.find(a2) != wildcardIntCache.end()) {
         return wildcardIntCache[a2];
     }
 
-    wildcardIntCache[a2] = nonTransitiveOneIntOneWildcard(AppConstants::NOT_USED_FIELD, a2);
-    return wildcardIntCache[a2];
+    std::vector<std::vector<std::string>> res =
+        nonTransitiveOneIntOneWildcard(AppConstants::NOT_USED_FIELD, a2, isEarlyReturn);
+
+    if (!isEarlyReturn) {
+        wildcardIntCache[a2] = res;
+    }
+
+    return res;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum a1) {
+std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum a1, bool isEarlyReturn) {
     if (intWildcardCache.find(a1) != intWildcardCache.end()) {
         return intWildcardCache[a1];
     }
+    std::vector<std::vector<std::string>> res =
+        nonTransitiveOneIntOneWildcard(a1, AppConstants::NOT_USED_FIELD, isEarlyReturn);
 
-    intWildcardCache[a1] = nonTransitiveOneIntOneWildcard(a1, AppConstants::NOT_USED_FIELD);
-    return intWildcardCache[a1];
+    if (!isEarlyReturn) {
+        intWildcardCache[a1] = res;
+    }
+
+    return res;
 }
 
-// todo: change to short-circuit code. BUT WE NEED TO KEEP THIS. change this to some other name since it is currently used for other calls eg Affects*(int, _)
-std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(ProcName proc) {
+// todo: change to short-circuit code. BUT WE NEED TO KEEP THIS. change this to some other name since it is currently
+// used for other calls eg Affects*(int, _)
+std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(ProcName proc, bool isEarlyReturn) {
 
     std::vector<std::vector<std::string>> res;
     std::unordered_set<ProcName> allProcedures;
@@ -130,10 +143,14 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(Pro
         const std::unordered_set<StmtNum>& assignStatements = procAssignStmtStorage->getProcedureStatementNumbers(proc);
 
         for (StmtNum a1 : assignStatements) {
-            std::vector<std::vector<std::string>> temp = handleIntWildcard(a1);
+            std::vector<std::vector<std::string>> temp = handleIntWildcard(a1, isEarlyReturn);
 
             for (std::vector<std::string>& val : temp) {
                 res.push_back(val);
+
+                if (isEarlyReturn) {
+                    return res;
+                }
 
                 StmtNum a2 = std::stoi(val[1]);
                 wildcardIntCache[a2].push_back(val);
@@ -150,8 +167,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
     std::string paramString2 = std::to_string(a2);
 
     std::vector<std::string> val = {paramString1, paramString2};
-    if (intIntTransitiveCache.find(val) != intIntTransitiveCache.end() &&
-            intIntTransitiveCache[val]) {
+    if (intIntTransitiveCache.find(val) != intIntTransitiveCache.end() && intIntTransitiveCache[val]) {
         return {val};
     }
 
@@ -168,7 +184,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
         return res;
     }
 
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(false, proc1);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap =
+        buildAffectsGraph(false, proc1, !AppConstants::IS_EARLY_RETURN);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
     for (StmtNum num : hashmap[a1]) {
@@ -206,7 +223,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
     return res;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitive(StmtNum a1) {
+std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitive(StmtNum a1, bool isEarlyReturn) {
     ProcName proc1 = procStorage->getProcedure(a1);
     if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return {};
@@ -216,11 +233,17 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcardTransitiv
         return intWildcardTransitiveCache[a1];
     }
 
-    intWildcardTransitiveCache[a1] = bfsTraversalOneWildcard(a1, AppConstants::NOT_USED_FIELD);
-    return intWildcardTransitiveCache[a1];
+    std::vector<std::vector<std::string>> res =
+        bfsTraversalOneWildcard(a1, AppConstants::NOT_USED_FIELD, isEarlyReturn);
+
+    if (!isEarlyReturn) {
+        intWildcardTransitiveCache[a1] = res;
+    }
+
+    return res;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitive(StmtNum a2) {
+std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitive(StmtNum a2, bool isEarlyReturn) {
     ProcName proc2 = procStorage->getProcedure(a2);
     if (proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return {};
@@ -230,15 +253,27 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardIntTransitiv
         return wildcardIntTransitiveCache[a2];
     }
 
-    wildcardIntTransitiveCache[a2] = bfsTraversalOneWildcard(AppConstants::NOT_USED_FIELD, a2);
-    return wildcardIntTransitiveCache[a2];
+    std::vector<std::vector<std::string>> res =
+        bfsTraversalOneWildcard(AppConstants::NOT_USED_FIELD, a2, isEarlyReturn);
+
+    if (!isEarlyReturn) {
+        wildcardIntTransitiveCache[a2] = res;
+    }
+
+    return res;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTransitive() {
+std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcardTransitive(bool isEarlyReturn) {
 
     std::vector<std::vector<std::string>> res;
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap =
-        buildAffectsGraph(false, AppConstants::PROCEDURE_DOES_NOT_EXIST);
+        buildAffectsGraph(false, AppConstants::PROCEDURE_DOES_NOT_EXIST, isEarlyReturn);
+
+    std::cout << hashmap.size() << " hashmap size" << endl;
+
+    if (isEarlyReturn && hashmap.size() > 0) {
+        return {{"earlyReturn", "earlyReturn"}};
+    }
 
     // <starting node, current node, next node>
     std::unordered_set<std::tuple<StmtNum, StmtNum, StmtNum>, hashFunctionTuple> seen;
@@ -298,21 +333,22 @@ Ent AffectsHandler::getCommonVariable(std::unordered_set<Ent>& variablesModified
 
 std::vector<std::vector<std::string>>
 AffectsHandler::handleNonTransitive(std::string param1value, std::string param2value, bool isFixedIntParam1,
-                                    bool isFixedIntParam2, bool isWildCardParam1, bool isWildCardParam2) {
+                                    bool isFixedIntParam2, bool isWildCardParam1, bool isWildCardParam2,
+                                    bool isAssignStmtParam1, bool isAssignStmtParam2) {
     if (isFixedIntParam1) {
         if (isFixedIntParam2) {
             return handleIntInt(stoi(param1value), stoi(param2value));
         }
-        else if (isWildCardParam2) {
-            return handleIntWildcard(stoi(param1value));
+        else if (isWildCardParam2 || isAssignStmtParam2) {
+            return handleIntWildcard(stoi(param1value), isWildCardParam2);
         }
     }
-    else if (isWildCardParam1) {
+    else if (isWildCardParam1 || isAssignStmtParam1) {
         if (isFixedIntParam2) {
-            return handleWildcardInt(stoi(param2value));
+            return handleWildcardInt(stoi(param2value), isWildCardParam1);
         }
-        else if (isWildCardParam2) {
-            return handleWildcardWildcard(AppConstants::PROCEDURE_DOES_NOT_EXIST);
+        else if (isWildCardParam2 || isAssignStmtParam2) {
+            return handleWildcardWildcard(AppConstants::PROCEDURE_DOES_NOT_EXIST, isWildCardParam1 && isWildCardParam2);
         }
     }
     return std::vector<std::vector<std::string>>();
@@ -320,27 +356,30 @@ AffectsHandler::handleNonTransitive(std::string param1value, std::string param2v
 
 std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(std::string param1value, std::string param2value,
                                                                        bool isFixedIntParam1, bool isFixedIntParam2,
-                                                                       bool isWildCardParam1, bool isWildCardParam2) {
+                                                                       bool isWildCardParam1, bool isWildCardParam2,
+                                                                       bool isAssignStmtParam1,
+                                                                       bool isAssignStmtParam2) {
     if (isFixedIntParam1) {
         if (isFixedIntParam2) {
             return handleIntIntTransitive(stoi(param1value), stoi(param2value));
         }
-        else if (isWildCardParam2) {
-            return handleIntWildcardTransitive(stoi(param1value));
+        else if (isWildCardParam2 || isAssignStmtParam2) {
+            return handleIntWildcardTransitive(stoi(param1value), isWildCardParam2);
         }
     }
-    else if (isWildCardParam1) {
+    else if (isWildCardParam1 || isAssignStmtParam1) {
         if (isFixedIntParam2) {
-            return handleWildcardIntTransitive(stoi(param2value));
+            return handleWildcardIntTransitive(stoi(param2value), isWildCardParam1);
         }
-        else if (isWildCardParam2) {
-            return handleWildcardWildcardTransitive();
+        else if (isWildCardParam2 || isAssignStmtParam2) {
+            return handleWildcardWildcardTransitive(isWildCardParam1 && isWildCardParam2);
         }
     }
     return std::vector<std::vector<std::string>>();
 }
 
-std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffectsGraph(bool isInverted, ProcName proc) {
+std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffectsGraph(bool isInverted, ProcName proc,
+                                                                                      bool isEarlyReturn) {
 
     if (procAffectsGraphMap.find(proc) != procAffectsGraphMap.end() &&
         procAffectsGraphMap[proc].find(isInverted) != procAffectsGraphMap[proc].end()) {
@@ -348,26 +387,37 @@ std::unordered_map<StmtNum, unordered_set<StmtNum>> AffectsHandler::buildAffects
     }
 
     // build the hop graph
-    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard(proc);
+    // should only have 1 value in hop graph if early return
+    std::vector<std::vector<std::string>> allValidAffects = handleWildcardWildcard(proc, isEarlyReturn);
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap;
     for (std::vector<std::string> p : allValidAffects) {
         isInverted ? hashmap[stoi(p[1])].insert(stoi(p[0])) : hashmap[stoi(p[0])].insert(stoi(p[1]));
     }
 
-    procAffectsGraphMap[proc][isInverted] = hashmap;
-    return procAffectsGraphMap[proc][isInverted];
+    if (!isEarlyReturn) {
+        procAffectsGraphMap[proc][isInverted] = hashmap;
+    }
+
+    return hashmap;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(StmtNum a1, StmtNum a2) {
+std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(StmtNum a1, StmtNum a2,
+                                                                              bool isEarlyReturn) {
     bool isIntWildcard = a2 == AppConstants::NOT_USED_FIELD;
     ProcName proc = isIntWildcard ? procStorage->getProcedure(a1) : procStorage->getProcedure(a2);
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap = buildAffectsGraph(!isIntWildcard, proc);
+    std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap =
+        buildAffectsGraph(!isIntWildcard, proc, isEarlyReturn);
     std::unordered_set<std::pair<StmtNum, StmtNum>, hashFunctionAffectsT> seen;
     std::deque<std::pair<StmtNum, StmtNum>> queue;
 
     // add from initial starting node
     for (StmtNum num : (isIntWildcard ? hashmap[a1] : hashmap[a2])) {
         isIntWildcard ? queue.push_back({a1, num}) : queue.push_back({num, a2});
+    }
+
+    if (isEarlyReturn && !queue.empty()) {
+        auto pair = queue.front();
+        return {{std::to_string(pair.first), std::to_string(pair.second)}};
     }
 
     // traverse until we see all possible combinations
@@ -410,7 +460,8 @@ std::vector<std::vector<std::string>> AffectsHandler::bfsTraversalOneWildcard(St
     return res;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWildcard(StmtNum a1input, StmtNum a2input) {
+std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWildcard(StmtNum a1input, StmtNum a2input,
+                                                                                     bool isEarlyReturn) {
     bool isIntWildcard = (a2input == AppConstants::NOT_USED_FIELD);
     std::string paramString = isIntWildcard ? std::to_string(a1input) : std::to_string(a2input);
     StmtNum currA = isIntWildcard ? a1input : a2input;
@@ -441,6 +492,9 @@ std::vector<std::vector<std::string>> AffectsHandler::nonTransitiveOneIntOneWild
             isIntWildcard ? val = {paramString, std::to_string(otherA)} : val = {std::to_string(otherA), paramString};
             res.push_back(val);
             intIntCache[val] = true;
+            if (isEarlyReturn) {
+                return res;
+            }
         }
     }
 
@@ -455,9 +509,7 @@ bool AffectsHandler::checkModifiedAssignReadCall(Ent commonVariable, StmtNum cur
     // commonVariables
     Stmt stmtType = stmtStorage->getStatementType(currentLine);
 
-    if (stmtType == AppConstants::ASSIGN ||
-            stmtType == AppConstants::READ ||
-            stmtType == AppConstants::CALL) {
+    if (stmtType == AppConstants::ASSIGN || stmtType == AppConstants::READ || stmtType == AppConstants::CALL) {
 
         if (entitiesModifiedOnCurrentLine.find(commonVariable) != entitiesModifiedOnCurrentLine.end()) {
             return true;
