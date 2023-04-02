@@ -15,6 +15,7 @@
 #include "Relationship.h"
 #include "Table.h"
 #include "exceptions/SyntaxException.h"
+#include "QPS/entityComparators/sharedPtrCompare.h"
 
 using namespace std;
 

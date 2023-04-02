@@ -32,6 +32,7 @@ public:
     bool validateParams();
     RelationshipType type;
     vector<Parameter> params;
+    double evalPriority;
     Relationship();
     Relationship(const Relationship&);
     Relationship(RelationshipType, vector<Parameter>&);
@@ -40,9 +41,13 @@ public:
     vector<ParameterType> getParameterTypes();
     vector<std::string> getParameterValues();
     RelationshipType getType() const;
+
     bool operator==(const Relationship&) const;
+    bool operator>(const Relationship&) const;
+    bool operator<(const Relationship&) const;
 
 private:
+    double getPriority();
     static const unordered_map<string, RelationshipType> stringToTypeMap;
     static const unordered_map<RelationshipType, shared_ptr<SyntaxValidator<Relationship>>> typeToSyntaxValidatorMap;
     static const unordered_map<RelationshipType, vector<unordered_set<ParameterType>>> typeToParameterTypes;

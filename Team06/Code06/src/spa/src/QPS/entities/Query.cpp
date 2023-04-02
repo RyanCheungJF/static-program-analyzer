@@ -19,7 +19,8 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
 }
 
 void Query::evaluateRelationship(QueryDB& queryDb, ReadPKB& readPKB) {
-    for (shared_ptr<Relationship>& relation : this->relations) {
+    for (int i = 0; i < this->relations.size(); i++) {
+        shared_ptr<Relationship>& relation = this->relations.at(i);
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findRelationship(relation);
@@ -75,7 +76,9 @@ void Query::evaluateComparison(QueryDB& queryDb, ReadPKB& readPKB) {
     }
 }
 
-Query::Query() {}
+Query::Query() {
+    isSelectTuple = false;
+}
 
 Query::Query(const Query& q) {
     relations = q.relations;
@@ -88,6 +91,7 @@ Query::Query(const Query& q) {
 Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector<Pattern>& ps, vector<Comparison>& cs, bool ist) {
     selectParameters = ss;
     relations = rs;
+    make_heap(relations.begin(), relations.end(), sharedPtrCompare::cmp<Relationship>);
     patterns = ps;
     comparisons = cs;
     isSelectTuple = ist;

@@ -18,6 +18,7 @@ shared_ptr<Relationship> Relationship::makeRelationship(string type, vector<Para
 Relationship::Relationship(const Relationship& r) {
     type = r.type;
     params = r.params;
+    evalPriority = getPriority();
 }
 
 vector<Parameter*> Relationship::getAllUncheckedSynonyms() {
@@ -56,8 +57,30 @@ bool Relationship::operator==(const Relationship& r) const {
     return type == r.type && params == r.params;
 }
 
+bool Relationship::operator>(const Relationship& r) const
+{
+    return evalPriority > r.evalPriority;
+}
+
+bool Relationship::operator<(const Relationship& r) const
+{
+    return evalPriority < r.evalPriority;
+}
+
 RelationshipType Relationship::getType() const {
     return type;
+}
+
+double Relationship::getPriority()
+{   
+    int fixedValCounter = 0;
+    for (int i = 0; i < params.size(); i++) {
+        if (params.at(i).isFixedValue()) {
+            fixedValCounter++;
+        }
+    }
+    double priority = fixedValCounter / params.size();
+    return priority;
 }
 
 bool Relationship::validateParams() {
@@ -71,11 +94,13 @@ bool Relationship::validateParams() {
 
 Relationship::Relationship() {
     type = RelationshipType::UNKNOWN;
+    evalPriority = 0;
 }
 
 Relationship::Relationship(RelationshipType t, vector<Parameter>& ps) {
     type = t;
     params = ps;
+    evalPriority = getPriority();
 }
 
 // TODO: update this to throw error if not found
