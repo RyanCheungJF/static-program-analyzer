@@ -154,13 +154,6 @@ TEST_CASE("isSelect / empty string is not a select statement / return false") {
     REQUIRE(!isSelect(s));
 }
 
-// Check with LY on why select is strictly ^Select$
-
-// TEST_CASE("isSelect / Select ___ is a select statement / return true") {
-//     string s = "Select aaaaaaaaaaa";
-//     REQUIRE(isSelect(s));
-// }
-
 TEST_CASE("isSelect / ___ Select is not a select statement / return false") {
     string s = "aaa Select";
     REQUIRE(!isSelect(s));

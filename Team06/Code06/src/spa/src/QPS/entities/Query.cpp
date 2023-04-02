@@ -160,3 +160,16 @@ bool Query::validateAllParameters() {
 bool Query::booleanParamCheck() {
     return selectParameters.size() == 1 && selectParameters[0].getType() == ParameterType::BOOLEAN && isSelectTuple;
 }
+
+bool Query::operator==(const Query& q) const
+{   
+    if (q.relations.size() != relations.size()) {
+        return false;
+    }
+    for (int i = 0; i < relations.size(); i++) {
+        if (!(*(relations.at(i)) == *(q.relations.at(i)))) {
+            return false;
+        }
+    }
+    return selectParameters == q.selectParameters && patterns == q.patterns && comparisons == q.comparisons && isSelectTuple == q.isSelectTuple;
+}
