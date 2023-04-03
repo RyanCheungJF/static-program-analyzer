@@ -122,12 +122,12 @@ std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parame
         const std::unordered_set<StmtNum>& lines = kv.second;
         for (StmtNum line : lines) {
             if (isLines1Smaller) {
-                addCFGRelatives(res, proc, line, IS_FIND_CHILDREN,
-                                stmtStorage->getStatementNumbers(type2), !AppConstants::IS_EARLY_RETURN);
+                addCFGRelatives(res, proc, line, IS_FIND_CHILDREN, stmtStorage->getStatementNumbers(type2),
+                                !AppConstants::IS_EARLY_RETURN);
             }
             else {
-                addCFGRelatives(res, proc, line, !IS_FIND_CHILDREN,
-                                stmtStorage->getStatementNumbers(type1), !AppConstants::IS_EARLY_RETURN);
+                addCFGRelatives(res, proc, line, !IS_FIND_CHILDREN, stmtStorage->getStatementNumbers(type1),
+                                !AppConstants::IS_EARLY_RETURN);
             }
         }
     }
