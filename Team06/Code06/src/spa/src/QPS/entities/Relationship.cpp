@@ -70,14 +70,46 @@ RelationshipType Relationship::getType() const {
 }
 
 double Relationship::getPriority() {
-    int fixedValCounter = 0;
+    int wildcardCounter = 0;
+    int stmtCounter = 0;
+    int othersCounter = 0; //subtype of stmt or procedure
+
     for (int i = 0; i < params.size(); i++) {
         if (params.at(i).isFixedValue()) {
-            fixedValCounter++;
+            continue; // in PKB, (int, int) calls are the lowest priority
+        } else if (params.at(i).isWildcard()) {
+            wildcardCounter++;
+        } else if (params.at(i).isStmt()) {
+            stmtCounter++;
+        } else {
+            othersCounter++;
         }
     }
-    double priority = fixedValCounter / params.size();
-    return priority;
+
+    //todo: check with shee hui if this is ok or we have to replace the magic values with AppConstant
+    if (transitiveRelationships.find(type) != transitiveRelationships.end()) {
+        if (wildcardCounter == 2) {
+            return 0;
+        } else if (stmtCounter == 2) {
+            return 1;
+        } else if (othersCounter == 2) {
+            return 2;
+        } else if (stmtCounter == 1 || othersCounter == 1) {
+            return 3;
+        }
+        return 4;
+    } else {
+        if (wildcardCounter == 2) {
+            return 5;
+        } else if (stmtCounter == 2) {
+            return 6;
+        } else if (othersCounter == 2) {
+            return 7;
+        } else if (stmtCounter == 1 || othersCounter == 1) {
+            return 8;
+        }
+        return 9;
+    }
 }
 
 bool Relationship::validateParams() {
@@ -196,4 +228,9 @@ const unordered_map<RelationshipType, vector<unordered_set<ParameterType>>> Rela
          stmtRefs,
          stmtRefs,
      }},
+};
+
+const unordered_set<RelationshipType> Relationship::transitiveRelationships = {
+        RelationshipType::AFFECTST, RelationshipType::NEXTT, RelationshipType::CALLST,
+        RelationshipType::FOLLOWST, RelationshipType::PARENTT,
 };

@@ -92,7 +92,7 @@ Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector
              bool ist) {
     selectParameters = ss;
     relations = rs;
-    make_heap(relations.begin(), relations.end(), SharedPtrCompare::cmp<Relationship>);
+    std::sort(relations.begin(), relations.end(), SharedPtrCompare::cmp<Relationship>);
     patterns = ps;
     comparisons = cs;
     isSelectTuple = ist;

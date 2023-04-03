@@ -56,6 +56,8 @@ private:
     static const unordered_set<ParameterType> procedureRefs;
     static const unordered_set<ParameterType> procOrStmtRefs;
     static RelationshipType stringToType(string);
+
+    static const unordered_set<RelationshipType> transitiveRelationships;
 };
 
 template <> struct std::hash<Relationship> {
