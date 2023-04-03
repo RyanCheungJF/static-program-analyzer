@@ -613,3 +613,13 @@ stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign
 Select w such that Follows(a, a)
 none
 5000
+124 - follows with 0
+call c;
+Select c such that Follows(0, 1)
+none
+5000
+125 - follows with out of bounds
+call c;
+Select c such that Follows(42, 43)
+none
+5000
