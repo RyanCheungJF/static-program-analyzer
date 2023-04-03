@@ -290,9 +290,8 @@ TEST_CASE("Checks that given a wildcard and a wildcard, ReadPKB returns relevant
     params.push_back(param2);
     shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWS, params);
 
-    std::vector<std::vector<std::string>> check = {{"1", "2"}};
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(unit_testing_utils::equals(check, res));
+    REQUIRE(unit_testing_utils::equals(AppConstants::EARLY_RETURN_RES, res));
 }
 
 TEST_CASE("Checks that given a followee, if it does not have a certain follower, readPKB returns an empty vector") {

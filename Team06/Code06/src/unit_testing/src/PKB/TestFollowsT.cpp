@@ -358,8 +358,6 @@ TEST_CASE("Checks for cases e.g. Follows*(_, _)") {
     shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWST, params);
 
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(res.size() == 3);
-    REQUIRE(contains(res, {"1", "2"}));
-    REQUIRE(contains(res, {"1", "3"}));
-    REQUIRE(contains(res, {"2", "3"}));
+    REQUIRE(res.size() == 1);
+    REQUIRE(res == AppConstants::EARLY_RETURN_RES);
 }

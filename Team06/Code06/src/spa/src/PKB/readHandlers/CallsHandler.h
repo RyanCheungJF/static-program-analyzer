@@ -21,5 +21,5 @@ private:
     std::vector<std::vector<std::string>> handleWildcardProcname(Parameter param2);
 
     // e.g. CallsT(_, _)
-    std::vector<std::vector<std::string>> handleWildcardWildcard();
+    std::vector<std::vector<std::string>> handleWildcardWildcard(bool isEarlyReturn);
 };

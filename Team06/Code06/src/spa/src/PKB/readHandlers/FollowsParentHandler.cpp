@@ -126,8 +126,8 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardWildca
     std::vector<std::vector<std::string>> res;
 
     for (StmtNum followee : rlStorage->getAllLeftItems()) {
-        for (StmtNum follower : rlStorage->getRightItems(followee)) {
-            res.push_back({std::to_string(followee), std::to_string(follower)});
+        if (!rlStorage->getRightItems(followee).empty()) {
+            return AppConstants::EARLY_RETURN_RES;
         }
     }
     return res;

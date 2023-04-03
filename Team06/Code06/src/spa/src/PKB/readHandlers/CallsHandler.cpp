@@ -36,11 +36,14 @@ std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcname(Param
     return res;
 }
 
-std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard() {
+std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard(bool isEarlyReturn) {
     std::vector<std::vector<std::string>> res;
     for (ProcName caller : callsStorage->getAllLeftItems()) {
+        if (isEarlyReturn) {
+            return AppConstants::EARLY_RETURN_RES;
+        }
         for (ProcName callee : callsStorage->getRightItems(caller)) {
-            res.push_back({caller, callee});
+            res.push_back({caller, callee});   
         }
     }
     return res;
@@ -49,11 +52,11 @@ std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard() {
 std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Parameter param2) {
     bool isProcnameParam1 = param1.isFixedStringType();
     bool isProcnameParam2 = param2.isFixedStringType();
-    bool isWildcardParam1 = param1.isProcedureOnly() || param1.isWildcard();
-    bool isWildcardParam2 = param2.isProcedureOnly() || param2.isWildcard();
+    bool isWildcardParam1 = param1.isWildcard();
+    bool isWildcardParam2 = param2.isWildcard();
 
     // based on the fact that there are no cycles in the source code
-    if (param1 == param2 && !param1.isWildcard() && !param2.isWildcard()) {
+    if (param1 == param2 && !isWildcardParam1 && !isWildcardParam2) {
         return {};
     }
 
@@ -67,7 +70,10 @@ std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Par
         return handleWildcardProcname(param2);
     }
     else if (isWildcardParam1 && isWildcardParam2) {
-        return handleWildcardWildcard();
+        return handleWildcardWildcard(AppConstants::IS_EARLY_RETURN);
+    }
+    else if (param1.isProcedureOnly() || param2.isProcedureOnly()) {
+        return handleWildcardWildcard(!AppConstants::IS_EARLY_RETURN);
     }
     return std::vector<std::vector<std::string>>();
 }
