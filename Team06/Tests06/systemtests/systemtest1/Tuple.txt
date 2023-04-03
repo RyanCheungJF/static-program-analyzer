@@ -1,55 +1,410 @@
-1 - comment
-while w1, w2, w3;
-Select <w1, w2, w3> such that Parent*(w1, w2) and Parent*(w2, w3)
-25 27 30, 27 30 34, 25 27 34, 25 30 34
+1 - No clauses, Select variable 
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <v>
+A, B, N, a, b, c, else, i, if, j, k, o, thisIsAVeryLongNameAndILikeApples, w, while, x, y, z
 5000
-2 - comment
-while w1, w2, w3;
-Select <w1, w2, w1> such that Parent*(w1, w2) and Parent*(w2, w3)
-25 27 25, 27 30 27, 25 30 25
+2 - No clauses, Select read
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r>
+1, 2, 3
 5000
-3 - comment
-while w1, w2, w3;
-Select <w1, w1, w1, w1> such that Parent*(w1, w2) and Parent*(w2, w3)
-25 25 25 25, 27 27 27 27
+3 - No clauses, Select print
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <pn>
+32, 36, 42
 5000
-4 - comment
-procedure p, q; variable v;
-Select <p, q, v> such that Modifies(p, v) and Calls(p, q)
-arithmetic conditionalSpam z, arithmetic conditionalSpam y, arithmetic conditionalSpam x, arithmetic conditionalSpam w, arithmetic conditionalSpam o, arithmetic conditionalSpam a, arithmetic conditionalSpam b, arithmetic conditionalSpam k, arithmetic conditionalSpam j, arithmetic conditionalSpam i, arithmetic conditionalSpam A, arithmetic conditionalSpam B, arithmetic conditionalSpam N, arithmetic conditionalSpam else, arithmetic conditionalSpam while, arithmetic conditionalSpam if, arithmetic conditionalSpam thisIsAVeryLongNameAndILikeApples, arithmetic conditionalSpam c
+4 - No clauses, Select print, print
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <pn, pn>
+32 32, 36 36, 42 42
 5000
-5 - comment
-procedure p; stmt s; print pp; call c; assign a1, a2; while w; if i; read r;
-Select <a1, a2> such that Affects(a1, a2)
-5 7, 5 8, 6 7, 6 8, 8 9, 9 10, 10 16, 12 16, 13 15, 15 16, 18 26, 20 35, 22 40, 28 35, 37 38, 28 38, 28 39, 38 39, 38 35, 17 41, 26 26, 35 35, 38 38, 40 40, 41 41
+5 - No clauses, Select read, while
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r, w>
+1 25, 1 27, 1 30, 1 34, 2 25, 2 27, 2 30, 2 34, 3 25, 3 27, 3 30, 3 34
 5000
-6 - comment
-procedure p; stmt s; print pp; call c; assign a1, a2; while w; if i; read r;
-Select <w, i> such that Follows(1, 2)
-25 31, 25 33, 27 31, 27 33, 30 31, 30 33, 34 31, 34 33
+6 - No clauses, Select print, print.varName
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <pn, pn.varName>
+32 A, 36 B, 42 while
 5000
-7 - comment
-variable v; procedure p; stmt s; print pp; call c; assign a1, a2; while w; if i; read r;
-Select <a1, v, pp> such that Modifies(a1, v) and Uses(pp, v) and Affects(a1, a1)
-38 while 42
+7 - No clauses, Select constant, constant.value
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <c, c.value>
+1 1, 2 2, 0 0, 7 7, 3 3, 10 10, 5 5, 145 145, 42 42
 5000
-8 - comment
-variable v; procedure p; stmt s; print pp; call c; assign a1, a2; while w; if i; read r;
-Select <a1, a2> such that Next*(a1, a2) pattern a2(_, _"a"_)
-5 6, 5 7, 5 8, 6 7, 6 8, 7 8, 5 16, 6 16, 7 16, 8 16, 9 16, 10 16, 11 16, 12 16, 13 16, 14 16, 15 16, 17 26, 18 26, 19 26, 20 26, 21 26, 22 26, 23 26, 24 26, 26 26, 28 26, 29 26, 35 26, 37 26, 38 26, 39 26, 40 26, 41 26
+8 - No clauses, Select call, call.procName
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <cl, cl.procName>
+4 conditionalSpam
 5000
-9 - comment
-variable v1, v2; procedure p; stmt s; print pp; call c; assign a1, a2; while w; if i; read r;
-Select <v1, v2, w, i> pattern w(v1, _) pattern i(v2, _, _)
-B A 34 31, B N 34 33, B a 34 31, B if 34 33, b A 34 31, b N 34 33, b a 34 31, b if 34 33, c A 27 31, c N 27 33, c a 27 31, c if 27 33, i A 25 31, i N 25 33, i a 25 31, i if 25 33, thisIsAVeryLongNameAndILikeApples A 25 31, thisIsAVeryLongNameAndILikeApples N 25 33, thisIsAVeryLongNameAndILikeApples a 25 31, thisIsAVeryLongNameAndILikeApples if 25 33, while A 30 31, while N 30 33, while a 30 31, while if 30 33
+9 - No clauses, Select procedure, procedure.procName
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <p, p.procName>
+conditionalSpam conditionalSpam, arithmetic arithmetic
 5000
-10 - comment
+10 - No clauses, Select assign, read
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <a, r>
+10 1, 10 2, 10 3, 11 1, 11 2, 11 3, 12 1, 12 2, 12 3, 13 1, 13 2, 13 3, 14 1, 14 2, 14 3, 15 1, 15 2, 15 3, 16 1, 16 2, 16 3, 17 1, 17 2, 17 3, 18 1, 18 2, 18 3, 19 1, 19 2, 19 3, 20 1, 20 2, 20 3, 21 1, 21 2, 21 3, 22 1, 22 2, 22 3, 23 1, 23 2, 23 3, 24 1, 24 2, 24 3, 26 1, 26 2, 26 3, 28 1, 28 2, 28 3, 29 1, 29 2, 29 3, 35 1, 35 2, 35 3, 37 1, 37 2, 37 3, 38 1, 38 2, 38 3, 39 1, 39 2, 39 3, 40 1, 40 2, 40 3, 41 1, 41 2, 41 3, 5 1, 5 2, 5 3, 6 1, 6 2, 6 3, 7 1, 7 2, 7 3, 8 1, 8 2, 8 3, 9 1, 9 2, 9 3
+5000
+11 - No clauses, Select assign.stmt#, read
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <a.stmt#, r>
+10 1, 10 2, 10 3, 11 1, 11 2, 11 3, 12 1, 12 2, 12 3, 13 1, 13 2, 13 3, 14 1, 14 2, 14 3, 15 1, 15 2, 15 3, 16 1, 16 2, 16 3, 17 1, 17 2, 17 3, 18 1, 18 2, 18 3, 19 1, 19 2, 19 3, 20 1, 20 2, 20 3, 21 1, 21 2, 21 3, 22 1, 22 2, 22 3, 23 1, 23 2, 23 3, 24 1, 24 2, 24 3, 26 1, 26 2, 26 3, 28 1, 28 2, 28 3, 29 1, 29 2, 29 3, 35 1, 35 2, 35 3, 37 1, 37 2, 37 3, 38 1, 38 2, 38 3, 39 1, 39 2, 39 3, 40 1, 40 2, 40 3, 41 1, 41 2, 41 3, 5 1, 5 2, 5 3, 6 1, 6 2, 6 3, 7 1, 7 2, 7 3, 8 1, 8 2, 8 3, 9 1, 9 2, 9 3
+5000
+12 - No clauses, Select assign, read.stmt#
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <a, r.stmt#>
+10 1, 10 2, 10 3, 11 1, 11 2, 11 3, 12 1, 12 2, 12 3, 13 1, 13 2, 13 3, 14 1, 14 2, 14 3, 15 1, 15 2, 15 3, 16 1, 16 2, 16 3, 17 1, 17 2, 17 3, 18 1, 18 2, 18 3, 19 1, 19 2, 19 3, 20 1, 20 2, 20 3, 21 1, 21 2, 21 3, 22 1, 22 2, 22 3, 23 1, 23 2, 23 3, 24 1, 24 2, 24 3, 26 1, 26 2, 26 3, 28 1, 28 2, 28 3, 29 1, 29 2, 29 3, 35 1, 35 2, 35 3, 37 1, 37 2, 37 3, 38 1, 38 2, 38 3, 39 1, 39 2, 39 3, 40 1, 40 2, 40 3, 41 1, 41 2, 41 3, 5 1, 5 2, 5 3, 6 1, 6 2, 6 3, 7 1, 7 2, 7 3, 8 1, 8 2, 8 3, 9 1, 9 2, 9 3
+5000
+13 - No clauses, Select assign.stmt#, read.stmt#
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <a.stmt#, r.stmt#>
+10 1, 10 2, 10 3, 11 1, 11 2, 11 3, 12 1, 12 2, 12 3, 13 1, 13 2, 13 3, 14 1, 14 2, 14 3, 15 1, 15 2, 15 3, 16 1, 16 2, 16 3, 17 1, 17 2, 17 3, 18 1, 18 2, 18 3, 19 1, 19 2, 19 3, 20 1, 20 2, 20 3, 21 1, 21 2, 21 3, 22 1, 22 2, 22 3, 23 1, 23 2, 23 3, 24 1, 24 2, 24 3, 26 1, 26 2, 26 3, 28 1, 28 2, 28 3, 29 1, 29 2, 29 3, 35 1, 35 2, 35 3, 37 1, 37 2, 37 3, 38 1, 38 2, 38 3, 39 1, 39 2, 39 3, 40 1, 40 2, 40 3, 41 1, 41 2, 41 3, 5 1, 5 2, 5 3, 6 1, 6 2, 6 3, 7 1, 7 2, 7 3, 8 1, 8 2, 8 3, 9 1, 9 2, 9 3
+5000
+14 - No clauses, Select print, if
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <pn, i>
+32 31, 32 33, 36 31, 36 33, 42 31, 42 33
+5000
+15 - No clauses, Select print, if.stmt#
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <pn, i.stmt#>
+32 31, 32 33, 36 31, 36 33, 42 31, 42 33
+5000
+16 - No clauses, Select print.stmt#, if
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <pn.stmt#, i>
+32 31, 32 33, 36 31, 36 33, 42 31, 42 33
+5000
+17 - No clauses, Select print.stmt#, if.stmt#
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <pn.stmt#, i.stmt#>
+32 31, 32 33, 36 31, 36 33, 42 31, 42 33
+5000
+18 - No clauses, Select read.varName, procedure.varName
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r.varName, p.procName>
+a arithmetic, a conditionalSpam, b arithmetic, b conditionalSpam, c arithmetic, c conditionalSpam
+5000
+19 - No clauses, Select read.varName, read.varName
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r.varName, r.varName>
+a a, b b, c c
+5000
+20 - No clauses, Select read.stmt#, read.varName
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r.stmt#, r.varName>
+1 a, 2 b, 3 c
+5000
+21 - No clauses, Select procedure.procName, variable.varName
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <p.procName, v.varName>
+arithmetic A, arithmetic B, arithmetic N, arithmetic a, arithmetic b, arithmetic c, arithmetic else, arithmetic i, arithmetic if, arithmetic j, arithmetic k, arithmetic o, arithmetic thisIsAVeryLongNameAndILikeApples, arithmetic w, arithmetic while, arithmetic x, arithmetic y, arithmetic z, conditionalSpam A, conditionalSpam B, conditionalSpam N, conditionalSpam a, conditionalSpam b, conditionalSpam c, conditionalSpam else, conditionalSpam i, conditionalSpam if, conditionalSpam j, conditionalSpam k, conditionalSpam o, conditionalSpam thisIsAVeryLongNameAndILikeApples, conditionalSpam w, conditionalSpam while, conditionalSpam x, conditionalSpam y, conditionalSpam z
+5000
+22 - No clauses, Select procedure.procName, procedure.procName
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <p.procName, p.procName>
+arithmetic arithmetic, conditionalSpam conditionalSpam
+5000
+23 - No clauses, Select procedure, procedure
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <p, p>
+arithmetic arithmetic, conditionalSpam conditionalSpam
+5000
+24 - No clauses, Select different procedure.procName
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <p.procName, p1.procName>
+arithmetic arithmetic, arithmetic conditionalSpam, conditionalSpam arithmetic, conditionalSpam conditionalSpam
+5000
+25 - No clauses, Select read.varName, procedure.procName, print.stmt#
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r.varName, p.procName, pn.stmt#>
+a arithmetic 32, a arithmetic 36, a arithmetic 42, a conditionalSpam 32, a conditionalSpam 36, a conditionalSpam 42, b arithmetic 32, b arithmetic 36, b arithmetic 42, b conditionalSpam 32, b conditionalSpam 36, b conditionalSpam 42, c arithmetic 32, c arithmetic 36, c arithmetic 42, c conditionalSpam 32, c conditionalSpam 36, c conditionalSpam 42
+5000
+26 - No clauses, Select read.varName, procedure, print.stmt#
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r.varName, p, pn.stmt#>
+a arithmetic 32, a arithmetic 36, a arithmetic 42, a conditionalSpam 32, a conditionalSpam 36, a conditionalSpam 42, b arithmetic 32, b arithmetic 36, b arithmetic 42, b conditionalSpam 32, b conditionalSpam 36, b conditionalSpam 42, c arithmetic 32, c arithmetic 36, c arithmetic 42, c conditionalSpam 32, c conditionalSpam 36, c conditionalSpam 42
+5000
+27 - No clauses, Select read.varName, print, print.stmt#
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r.varName, pn, pn.stmt#>
+a 32 32, a 36 36, a 42 42, b 32 32, b 36 36, b 42 42, c 32 32, c 36 36, c 42 42
+5000
+28 - No clauses, Select print1, print, print.stmt#
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <pn1, pn, pn.stmt#>
+32 32 32, 32 36 36, 32 42 42, 36 32 32, 36 36 36, 36 42 42, 42 32 32, 42 36 36, 42 42 42
+5000
+29 - No clauses, Select read.varName, variable, print.stmt#
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r.varName, v, pn.stmt#>
+a A 32, a A 36, a A 42, a B 32, a B 36, a B 42, a N 32, a N 36, a N 42, a a 32, a a 36, a a 42, a b 32, a b 36, a b 42, a c 32, a c 36, a c 42, a else 32, a else 36, a else 42, a i 32, a i 36, a i 42, a if 32, a if 36, a if 42, a j 32, a j 36, a j 42, a k 32, a k 36, a k 42, a o 32, a o 36, a o 42, a thisIsAVeryLongNameAndILikeApples 32, a thisIsAVeryLongNameAndILikeApples 36, a thisIsAVeryLongNameAndILikeApples 42, a w 32, a w 36, a w 42, a while 32, a while 36, a while 42, a x 32, a x 36, a x 42, a y 32, a y 36, a y 42, a z 32, a z 36, a z 42, b A 32, b A 36, b A 42, b B 32, b B 36, b B 42, b N 32, b N 36, b N 42, b a 32, b a 36, b a 42, b b 32, b b 36, b b 42, b c 32, b c 36, b c 42, b else 32, b else 36, b else 42, b i 32, b i 36, b i 42, b if 32, b if 36, b if 42, b j 32, b j 36, b j 42, b k 32, b k 36, b k 42, b o 32, b o 36, b o 42, b thisIsAVeryLongNameAndILikeApples 32, b thisIsAVeryLongNameAndILikeApples 36, b thisIsAVeryLongNameAndILikeApples 42, b w 32, b w 36, b w 42, b while 32, b while 36, b while 42, b x 32, b x 36, b x 42, b y 32, b y 36, b y 42, b z 32, b z 36, b z 42, c A 32, c A 36, c A 42, c B 32, c B 36, c B 42, c N 32, c N 36, c N 42, c a 32, c a 36, c a 42, c b 32, c b 36, c b 42, c c 32, c c 36, c c 42, c else 32, c else 36, c else 42, c i 32, c i 36, c i 42, c if 32, c if 36, c if 42, c j 32, c j 36, c j 42, c k 32, c k 36, c k 42, c o 32, c o 36, c o 42, c thisIsAVeryLongNameAndILikeApples 32, c thisIsAVeryLongNameAndILikeApples 36, c thisIsAVeryLongNameAndILikeApples 42, c w 32, c w 36, c w 42, c while 32, c while 36, c while 42, c x 32, c x 36, c x 42, c y 32, c y 36, c y 42, c z 32, c z 36, c z 42
+5000
+30 - No clauses, Select read.varName, proc.procName, print
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r.varName, p.procName, pn>
+a arithmetic 32, a arithmetic 36, a arithmetic 42, a conditionalSpam 32, a conditionalSpam 36, a conditionalSpam 42, b arithmetic 32, b arithmetic 36, b arithmetic 42, b conditionalSpam 32, b conditionalSpam 36, b conditionalSpam 42, c arithmetic 32, c arithmetic 36, c arithmetic 42, c conditionalSpam 32, c conditionalSpam 36, c conditionalSpam 42
+5000
+31 - No clauses, Select read.varName, read.stmt#, read.varName
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r.varName, r.stmt#, r.varName>
+a 1 a, b 2 b, c 3 c
+5000
+32 - No clauses, Select read.varName, read, read.varName
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r.varName, r, r.varName>
+a 1 a, b 2 b, c 3 c
+5000
+33 - No clauses, Select read.varName, read, read1.varName
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r.varName, r, r1.varName>
+a 1 a, a 1 b, a 1 c, b 2 a, b 2 b, b 2 c, c 3 a, c 3 b, c 3 c
+5000
+34 - No clauses, Select print, print, print
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <pn, pn, pn>
+32 32 32, 36 36 36, 42 42 42
+5000
+35 - No clauses, Select read, while, if
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r, w, i>
+1 25 31, 1 25 33, 1 27 31, 1 27 33, 1 30 31, 1 30 33, 1 34 31, 1 34 33, 2 25 31, 2 25 33, 2 27 31, 2 27 33, 2 30 31, 2 30 33, 2 34 31, 2 34 33, 3 25 31, 3 25 33, 3 27 31, 3 27 33, 3 30 31, 3 30 33, 3 34 31, 3 34 33
+5000
+36 - No clauses, Select read, print, variable, procedure
+stmt s, s1; read r, r1; print pn, pn1; call cl, cl1; while w, w1; if i, i1; assign a, a1; constant c, c1; procedure p, p1; variable v, v1;
+Select <r, pn, v, p>
+1 32 A arithmetic, 1 32 A conditionalSpam, 1 32 B arithmetic, 1 32 B conditionalSpam, 1 32 N arithmetic, 1 32 N conditionalSpam, 1 32 a arithmetic, 1 32 a conditionalSpam, 1 32 b arithmetic, 1 32 b conditionalSpam, 1 32 c arithmetic, 1 32 c conditionalSpam, 1 32 else arithmetic, 1 32 else conditionalSpam, 1 32 i arithmetic, 1 32 i conditionalSpam, 1 32 if arithmetic, 1 32 if conditionalSpam, 1 32 j arithmetic, 1 32 j conditionalSpam, 1 32 k arithmetic, 1 32 k conditionalSpam, 1 32 o arithmetic, 1 32 o conditionalSpam, 1 32 thisIsAVeryLongNameAndILikeApples arithmetic, 1 32 thisIsAVeryLongNameAndILikeApples conditionalSpam, 1 32 w arithmetic, 1 32 w conditionalSpam, 1 32 while arithmetic, 1 32 while conditionalSpam, 1 32 x arithmetic, 1 32 x conditionalSpam, 1 32 y arithmetic, 1 32 y conditionalSpam, 1 32 z arithmetic, 1 32 z conditionalSpam, 1 36 A arithmetic, 1 36 A conditionalSpam, 1 36 B arithmetic, 1 36 B conditionalSpam, 1 36 N arithmetic, 1 36 N conditionalSpam, 1 36 a arithmetic, 1 36 a conditionalSpam, 1 36 b arithmetic, 1 36 b conditionalSpam, 1 36 c arithmetic, 1 36 c conditionalSpam, 1 36 else arithmetic, 1 36 else conditionalSpam, 1 36 i arithmetic, 1 36 i conditionalSpam, 1 36 if arithmetic, 1 36 if conditionalSpam, 1 36 j arithmetic, 1 36 j conditionalSpam, 1 36 k arithmetic, 1 36 k conditionalSpam, 1 36 o arithmetic, 1 36 o conditionalSpam, 1 36 thisIsAVeryLongNameAndILikeApples arithmetic, 1 36 thisIsAVeryLongNameAndILikeApples conditionalSpam, 1 36 w arithmetic, 1 36 w conditionalSpam, 1 36 while arithmetic, 1 36 while conditionalSpam, 1 36 x arithmetic, 1 36 x conditionalSpam, 1 36 y arithmetic, 1 36 y conditionalSpam, 1 36 z arithmetic, 1 36 z conditionalSpam, 1 42 A arithmetic, 1 42 A conditionalSpam, 1 42 B arithmetic, 1 42 B conditionalSpam, 1 42 N arithmetic, 1 42 N conditionalSpam, 1 42 a arithmetic, 1 42 a conditionalSpam, 1 42 b arithmetic, 1 42 b conditionalSpam, 1 42 c arithmetic, 1 42 c conditionalSpam, 1 42 else arithmetic, 1 42 else conditionalSpam, 1 42 i arithmetic, 1 42 i conditionalSpam, 1 42 if arithmetic, 1 42 if conditionalSpam, 1 42 j arithmetic, 1 42 j conditionalSpam, 1 42 k arithmetic, 1 42 k conditionalSpam, 1 42 o arithmetic, 1 42 o conditionalSpam, 1 42 thisIsAVeryLongNameAndILikeApples arithmetic, 1 42 thisIsAVeryLongNameAndILikeApples conditionalSpam, 1 42 w arithmetic, 1 42 w conditionalSpam, 1 42 while arithmetic, 1 42 while conditionalSpam, 1 42 x arithmetic, 1 42 x conditionalSpam, 1 42 y arithmetic, 1 42 y conditionalSpam, 1 42 z arithmetic, 1 42 z conditionalSpam, 2 32 A arithmetic, 2 32 A conditionalSpam, 2 32 B arithmetic, 2 32 B conditionalSpam, 2 32 N arithmetic, 2 32 N conditionalSpam, 2 32 a arithmetic, 2 32 a conditionalSpam, 2 32 b arithmetic, 2 32 b conditionalSpam, 2 32 c arithmetic, 2 32 c conditionalSpam, 2 32 else arithmetic, 2 32 else conditionalSpam, 2 32 i arithmetic, 2 32 i conditionalSpam, 2 32 if arithmetic, 2 32 if conditionalSpam, 2 32 j arithmetic, 2 32 j conditionalSpam, 2 32 k arithmetic, 2 32 k conditionalSpam, 2 32 o arithmetic, 2 32 o conditionalSpam, 2 32 thisIsAVeryLongNameAndILikeApples arithmetic, 2 32 thisIsAVeryLongNameAndILikeApples conditionalSpam, 2 32 w arithmetic, 2 32 w conditionalSpam, 2 32 while arithmetic, 2 32 while conditionalSpam, 2 32 x arithmetic, 2 32 x conditionalSpam, 2 32 y arithmetic, 2 32 y conditionalSpam, 2 32 z arithmetic, 2 32 z conditionalSpam, 2 36 A arithmetic, 2 36 A conditionalSpam, 2 36 B arithmetic, 2 36 B conditionalSpam, 2 36 N arithmetic, 2 36 N conditionalSpam, 2 36 a arithmetic, 2 36 a conditionalSpam, 2 36 b arithmetic, 2 36 b conditionalSpam, 2 36 c arithmetic, 2 36 c conditionalSpam, 2 36 else arithmetic, 2 36 else conditionalSpam, 2 36 i arithmetic, 2 36 i conditionalSpam, 2 36 if arithmetic, 2 36 if conditionalSpam, 2 36 j arithmetic, 2 36 j conditionalSpam, 2 36 k arithmetic, 2 36 k conditionalSpam, 2 36 o arithmetic, 2 36 o conditionalSpam, 2 36 thisIsAVeryLongNameAndILikeApples arithmetic, 2 36 thisIsAVeryLongNameAndILikeApples conditionalSpam, 2 36 w arithmetic, 2 36 w conditionalSpam, 2 36 while arithmetic, 2 36 while conditionalSpam, 2 36 x arithmetic, 2 36 x conditionalSpam, 2 36 y arithmetic, 2 36 y conditionalSpam, 2 36 z arithmetic, 2 36 z conditionalSpam, 2 42 A arithmetic, 2 42 A conditionalSpam, 2 42 B arithmetic, 2 42 B conditionalSpam, 2 42 N arithmetic, 2 42 N conditionalSpam, 2 42 a arithmetic, 2 42 a conditionalSpam, 2 42 b arithmetic, 2 42 b conditionalSpam, 2 42 c arithmetic, 2 42 c conditionalSpam, 2 42 else arithmetic, 2 42 else conditionalSpam, 2 42 i arithmetic, 2 42 i conditionalSpam, 2 42 if arithmetic, 2 42 if conditionalSpam, 2 42 j arithmetic, 2 42 j conditionalSpam, 2 42 k arithmetic, 2 42 k conditionalSpam, 2 42 o arithmetic, 2 42 o conditionalSpam, 2 42 thisIsAVeryLongNameAndILikeApples arithmetic, 2 42 thisIsAVeryLongNameAndILikeApples conditionalSpam, 2 42 w arithmetic, 2 42 w conditionalSpam, 2 42 while arithmetic, 2 42 while conditionalSpam, 2 42 x arithmetic, 2 42 x conditionalSpam, 2 42 y arithmetic, 2 42 y conditionalSpam, 2 42 z arithmetic, 2 42 z conditionalSpam, 3 32 A arithmetic, 3 32 A conditionalSpam, 3 32 B arithmetic, 3 32 B conditionalSpam, 3 32 N arithmetic, 3 32 N conditionalSpam, 3 32 a arithmetic, 3 32 a conditionalSpam, 3 32 b arithmetic, 3 32 b conditionalSpam, 3 32 c arithmetic, 3 32 c conditionalSpam, 3 32 else arithmetic, 3 32 else conditionalSpam, 3 32 i arithmetic, 3 32 i conditionalSpam, 3 32 if arithmetic, 3 32 if conditionalSpam, 3 32 j arithmetic, 3 32 j conditionalSpam, 3 32 k arithmetic, 3 32 k conditionalSpam, 3 32 o arithmetic, 3 32 o conditionalSpam, 3 32 thisIsAVeryLongNameAndILikeApples arithmetic, 3 32 thisIsAVeryLongNameAndILikeApples conditionalSpam, 3 32 w arithmetic, 3 32 w conditionalSpam, 3 32 while arithmetic, 3 32 while conditionalSpam, 3 32 x arithmetic, 3 32 x conditionalSpam, 3 32 y arithmetic, 3 32 y conditionalSpam, 3 32 z arithmetic, 3 32 z conditionalSpam, 3 36 A arithmetic, 3 36 A conditionalSpam, 3 36 B arithmetic, 3 36 B conditionalSpam, 3 36 N arithmetic, 3 36 N conditionalSpam, 3 36 a arithmetic, 3 36 a conditionalSpam, 3 36 b arithmetic, 3 36 b conditionalSpam, 3 36 c arithmetic, 3 36 c conditionalSpam, 3 36 else arithmetic, 3 36 else conditionalSpam, 3 36 i arithmetic, 3 36 i conditionalSpam, 3 36 if arithmetic, 3 36 if conditionalSpam, 3 36 j arithmetic, 3 36 j conditionalSpam, 3 36 k arithmetic, 3 36 k conditionalSpam, 3 36 o arithmetic, 3 36 o conditionalSpam, 3 36 thisIsAVeryLongNameAndILikeApples arithmetic, 3 36 thisIsAVeryLongNameAndILikeApples conditionalSpam, 3 36 w arithmetic, 3 36 w conditionalSpam, 3 36 while arithmetic, 3 36 while conditionalSpam, 3 36 x arithmetic, 3 36 x conditionalSpam, 3 36 y arithmetic, 3 36 y conditionalSpam, 3 36 z arithmetic, 3 36 z conditionalSpam, 3 42 A arithmetic, 3 42 A conditionalSpam, 3 42 B arithmetic, 3 42 B conditionalSpam, 3 42 N arithmetic, 3 42 N conditionalSpam, 3 42 a arithmetic, 3 42 a conditionalSpam, 3 42 b arithmetic, 3 42 b conditionalSpam, 3 42 c arithmetic, 3 42 c conditionalSpam, 3 42 else arithmetic, 3 42 else conditionalSpam, 3 42 i arithmetic, 3 42 i conditionalSpam, 3 42 if arithmetic, 3 42 if conditionalSpam, 3 42 j arithmetic, 3 42 j conditionalSpam, 3 42 k arithmetic, 3 42 k conditionalSpam, 3 42 o arithmetic, 3 42 o conditionalSpam, 3 42 thisIsAVeryLongNameAndILikeApples arithmetic, 3 42 thisIsAVeryLongNameAndILikeApples conditionalSpam, 3 42 w arithmetic, 3 42 w conditionalSpam, 3 42 while arithmetic, 3 42 while conditionalSpam, 3 42 x arithmetic, 3 42 x conditionalSpam, 3 42 y arithmetic, 3 42 y conditionalSpam, 3 42 z arithmetic, 3 42 z conditionalSpam
+5000
+37 - Single clause (1)
 call c;
 Select <c> such that Follows(1, 2)
 4
 5000
-11 - comment
+38 - Single clause (2)
+procedure p; stmt s; print pp; call c; assign a1, a2; while w; if i; read r;
+Select <a1, a2> such that Affects(a1, a2)
+5 7, 5 8, 6 7, 6 8, 8 9, 9 10, 10 16, 12 16, 13 15, 15 16, 18 26, 20 35, 22 40, 28 35, 37 38, 28 38, 28 39, 38 39, 38 35, 17 41, 26 26, 35 35, 38 38, 40 40, 41 41
+5000
+39 - Single clause (3)
+procedure p; stmt s; print pn; call c; assign a1, a2; while w; if i; read r;
+Select <w, i> such that Follows(1, 2)
+25 31, 25 33, 27 31, 27 33, 30 31, 30 33, 34 31, 34 33
+5000
+40 - Single clause (4)
 call c; print p; read r; stmt s; assign a;
 Select <c, p, r> such that Follows(1, 2)
 4 32 1, 4 32 2, 4 32 3, 4 42 1, 4 42 2, 4 42 3, 4 36 1, 4 36 2, 4 36 3
+5000
+41 - Single clause (5)
+read r; while w; variable v;
+Select <v, w> such that Modifies(r, v)
+a 25, a 27, a 30, a 34, b 25, b 27, b 30, b 34, c 25, c 27, c 30, c 34
+5000
+42 - Single clause (6)
+call c; if ifs; variable v;
+Select <v, ifs> such that Uses(c, v)
+A 31, A 33, B 31, B 33, N 31, N 33, a 31, a 33, b 31, b 33, c 31, c 33, else 31, else 33, i 31, i 33, if 31, if 33, thisIsAVeryLongNameAndILikeApples 31, thisIsAVeryLongNameAndILikeApples 33, while 31, while 33
+5000
+43 - Single clause (7)
+print pr; assign a; read r;
+Select <a, pr> such that Follows(pr, r)
+none
+5000
+44 - Single clause (8)
+read r; while w; variable v;
+Select <w, v> such that Uses(r, v)
+none
+5000
+45 - Single clause (9)
+stmt s1, s2;
+Select <s1, s2> such that Parent(s1, s2)
+25 26, 25 27, 25 41, 27 28, 27 29, 27 30, 27 39, 27 40, 30 31, 30 37, 30 38, 31 32, 31 33, 33 34, 33 36, 34 35
+5000
+46 - Single clause (10)
+assign a; stmt s;
+Select <a, s> such that Parent(a, s)
+none
+5000
+47 - Single clause (11)
+read r; while w; variable v;
+Select <r, v, w> such that Modifies(w, v)
+1 a 25, 1 b 25, 1 b 27, 1 b 30, 1 b 34, 1 c 25, 1 c 27, 1 else 25, 1 else 27, 1 else 30, 1 i 25, 1 if 25, 1 if 27, 1 while 25, 1 while 27, 1 while 30, 2 a 25, 2 b 25, 2 b 27, 2 b 30, 2 b 34, 2 c 25, 2 c 27, 2 else 25, 2 else 27, 2 else 30, 2 i 25, 2 if 25, 2 if 27, 2 while 25, 2 while 27, 2 while 30, 3 a 25, 3 b 25, 3 b 27, 3 b 30, 3 b 34, 3 c 25, 3 c 27, 3 else 25, 3 else 27, 3 else 30, 3 i 25, 3 if 25, 3 if 27, 3 while 25, 3 while 27, 3 while 30
+5000
+48 - Single clause (12)
+call c; if ifs; variable v;
+Select <ifs, c, v> such that Uses(c, v)
+31 4 A, 31 4 B, 31 4 N, 31 4 a, 31 4 b, 31 4 c, 31 4 else, 31 4 i, 31 4 if, 31 4 thisIsAVeryLongNameAndILikeApples, 31 4 while, 33 4 A, 33 4 B, 33 4 N, 33 4 a, 33 4 b, 33 4 c, 33 4 else, 33 4 i, 33 4 if, 33 4 thisIsAVeryLongNameAndILikeApples, 33 4 while
+5000
+49 - Single clause (13)
+print pr; assign a; read r;
+Select <r, a, pr> such that Follows(pr, r)
+none
+5000
+50 - Single clause (14)
+read r; while w; variable v;
+Select <r, w, v> such that Uses(r, v)
+none
+5000
+51 - Single clause (15)
+call c; stmt s; procedure p;
+Select <c, s, p> such that Follows(c, s)
+4 5 arithmetic, 4 5 conditionalSpam
+5000
+52 - Two clauses (1)
+while w1, w2, w3;
+Select <w1, w2, w3> such that Parent*(w1, w2) and Parent*(w2, w3)
+25 27 30, 27 30 34, 25 27 34, 25 30 34
+5000
+53 - Two clauses (2)
+while w1, w2, w3;
+Select <w1, w2, w1> such that Parent*(w1, w2) and Parent*(w2, w3)
+25 27 25, 27 30 27, 25 30 25
+5000
+54 - Two clauses (3)
+while w1, w2, w3;
+Select <w1, w1, w1, w1> such that Parent*(w1, w2) and Parent*(w2, w3)
+25 25 25 25, 27 27 27 27
+5000
+55 - Two clauses (4)
+procedure p, q; variable v;
+Select <p, q, v> such that Modifies(p, v) and Calls(p, q)
+arithmetic conditionalSpam z, arithmetic conditionalSpam y, arithmetic conditionalSpam x, arithmetic conditionalSpam w, arithmetic conditionalSpam o, arithmetic conditionalSpam a, arithmetic conditionalSpam b, arithmetic conditionalSpam k, arithmetic conditionalSpam j, arithmetic conditionalSpam i, arithmetic conditionalSpam A, arithmetic conditionalSpam B, arithmetic conditionalSpam N, arithmetic conditionalSpam else, arithmetic conditionalSpam while, arithmetic conditionalSpam if, arithmetic conditionalSpam thisIsAVeryLongNameAndILikeApples, arithmetic conditionalSpam c
+5000
+56 - Two clauses (5)
+variable v; procedure p; stmt s; print pp; call c; assign a1, a2; while w; if i; read r;
+Select <a1, a2> such that Next*(a1, a2) pattern a2(_, _"a"_)
+5 6, 5 7, 5 8, 6 7, 6 8, 7 8, 5 16, 6 16, 7 16, 8 16, 9 16, 10 16, 11 16, 12 16, 13 16, 14 16, 15 16, 17 26, 18 26, 19 26, 20 26, 21 26, 22 26, 23 26, 24 26, 26 26, 28 26, 29 26, 35 26, 37 26, 38 26, 39 26, 40 26, 41 26
+5000
+57 - Two clauses (6)
+stmt s1, s2; variable v;
+Select <s1, s2, v> such that Parent(s1, s2) and Modifies(s2, v)
+25 26 a, 25 27 b, 25 27 c, 25 27 else, 25 27 if, 25 27 while, 25 41 i, 27 28 while, 27 29 if, 27 30 b, 27 30 else, 27 30 while, 27 39 if, 27 40 c, 30 31 b, 30 37 else, 30 38 while, 31 33 b, 33 34 b, 34 35 b
+5000
+58 - Two clauses (7)
+print pr; read r; variable v;
+Select <pr, r, v> such that Follows(pr, r) such that Uses(r, v)
+none
+5000
+59 - Two clauses (8)
+variable v1, v2; procedure p; stmt s; print pp; call c; assign a1, a2; while w; if i; read r;
+Select <v1, v2, w, i> pattern w(v1, _) pattern i(v2, _, _)
+B A 34 31, B N 34 33, B a 34 31, B if 34 33, b A 34 31, b N 34 33, b a 34 31, b if 34 33, c A 27 31, c N 27 33, c a 27 31, c if 27 33, i A 25 31, i N 25 33, i a 25 31, i if 25 33, thisIsAVeryLongNameAndILikeApples A 25 31, thisIsAVeryLongNameAndILikeApples N 25 33, thisIsAVeryLongNameAndILikeApples a 25 31, thisIsAVeryLongNameAndILikeApples if 25 33, while A 30 31, while N 30 33, while a 30 31, while if 30 33
+5000
+60 - Three clauses (1)
+variable v; procedure p; stmt s; print pp; call c; assign a1, a2; while w; if i; read r;
+Select <a1, v, pp> such that Modifies(a1, v) and Uses(pp, v) and Affects(a1, a1)
+38 while 42
+5000
+61 - Three clauses (2)
+assign a1, a2;
+Select <a1, a2> such that Next(a1, a2) pattern a1("i",_) pattern a2("a",_) 
+17 18
+5000
+62 - Three clauses (3)
+read r; stmt s; assign a; variable v;
+Select <r, s> such that Modifies(r, v) and Uses(s, v) pattern a(v, _"a"_)
+1 16, 1 25, 1 26, 1 27, 1 30, 1 31, 1 4, 1 5, 1 7, 1 8, 1 6
+5000
+63 - Three clauses (4)
+stmt s1, s2; variable v; if ifs;
+Select <s2, v> such that Modifies(s2, v) and Follows*(s1, s2) and Parent*(s1, ifs)
+37 else, 38 while, 39 if, 40 c, 41 i
+5000
+64 - Three clauses (5)
+stmt s1, s2; while w;
+Select <s1, s2, w> such that Follows(s1, s2) and Parent(w, s2) and Next(w, s1)
+26 27 25, 28 29 27, 31 37 30
+5000
+65 - Three clauses (6)
+assign a; stmt s; procedure p;
+Select <a, p> such that Parent(s, a) and Parent(s, 38) and Calls*("arithmetic", p)
+37 conditionalSpam, 38 conditionalSpam
+5000
+66 - Three clauses (7)
+stmt s; constant c; call cl;
+Select <s, cl> with c.value = s.stmt# and cl.procName = "conditionalSpam" such that Uses(s, "a")
+5 4, 7 4
+5000
+67 - Three clauses (8)
+stmt s; constant c; call cl;
+Select <s, cl.procName> with c.value = s.stmt# and cl.procName = "conditionalSpam" such that Uses(s, "a")
+5 conditionalSpam, 7 conditionalSpam
+5000
+68 - Four clauses (1)
+while w1, w2; stmt s;
+Select <s, w1, w2> such that Next*(w1, s) and Next*(s, w2) pattern w1("i",_) and w2("c",_)
+25 25 27, 26 25 27, 27 25 27, 28 25 27, 29 25 27, 30 25 27, 31 25 27, 32 25 27, 33 25 27, 34 25 27, 35 25 27, 36 25 27, 37 25 27, 38 25 27, 39 25 27, 40 25 27, 41 25 27
+5000
+69 - Four clauses (2)
+assign a1, a2, a3; call c;
+Select <a1, a2> such that Modifies(c, _) and Affects(a1, a2) and Affects(a2, a1) and Affects(a2, a3)
+26 26, 35 35, 38 38, 40 40, 41 41
+5000
+70 - Four clauses (3)
+assign a1, a2; variable v; stmt s;
+Select <a1, a2> such that Uses(a1, v) and Next*(s, a2) and Affects(a1, a2) pattern a2(_, _"a"_)
+10 16, 15 16, 26 26, 5 7, 5 8, 6 7, 6 8
+5000 
+71 - Four clauses (4)
+stmt s1, s2, s3, s4, s5, s6;
+Select <s1, s3> such that Parent(s1, s2) and Parent(s2, s3) and Parent(s3, s4) and Parent(s4, s5)
+25 30, 27 31, 30 33
+5000
+72 - Four clauses (5)
+stmt s1, s2, s3, s4, s5, s6;
+Select <s1, s3> such that Parent*(s1, s2) and Parent*(s2, s3) and Parent*(s3, s4) and Parent*(s4, s5)
+25 30, 25 31, 25 33, 27 31, 27 33, 30 33
+5000
+73 - Five clauses (1)
+stmt s; constant c; stmt s1; assign a; variable v;
+Select <s, s1, v, c> such that Uses(s1,"a") such that Modifies("conditionalSpam", v) with s.stmt# = c.value and c.value = 1 and s.stmt# = 1
+1 16 A 1, 1 16 B 1, 1 16 N 1, 1 16 a 1, 1 16 b 1, 1 16 c 1, 1 16 else 1, 1 16 i 1, 1 16 if 1, 1 16 thisIsAVeryLongNameAndILikeApples 1, 1 16 while 1, 1 25 A 1, 1 25 B 1, 1 25 N 1, 1 25 a 1, 1 25 b 1, 1 25 c 1, 1 25 else 1, 1 25 i 1, 1 25 if 1, 1 25 thisIsAVeryLongNameAndILikeApples 1, 1 25 while 1, 1 26 A 1, 1 26 B 1, 1 26 N 1, 1 26 a 1, 1 26 b 1, 1 26 c 1, 1 26 else 1, 1 26 i 1, 1 26 if 1, 1 26 thisIsAVeryLongNameAndILikeApples 1, 1 26 while 1, 1 27 A 1, 1 27 B 1, 1 27 N 1, 1 27 a 1, 1 27 b 1, 1 27 c 1, 1 27 else 1, 1 27 i 1, 1 27 if 1, 1 27 thisIsAVeryLongNameAndILikeApples 1, 1 27 while 1, 1 30 A 1, 1 30 B 1, 1 30 N 1, 1 30 a 1, 1 30 b 1, 1 30 c 1, 1 30 else 1, 1 30 i 1, 1 30 if 1, 1 30 thisIsAVeryLongNameAndILikeApples 1, 1 30 while 1, 1 31 A 1, 1 31 B 1, 1 31 N 1, 1 31 a 1, 1 31 b 1, 1 31 c 1, 1 31 else 1, 1 31 i 1, 1 31 if 1, 1 31 thisIsAVeryLongNameAndILikeApples 1, 1 31 while 1, 1 4 A 1, 1 4 B 1, 1 4 N 1, 1 4 a 1, 1 4 b 1, 1 4 c 1, 1 4 else 1, 1 4 i 1, 1 4 if 1, 1 4 thisIsAVeryLongNameAndILikeApples 1, 1 4 while 1, 1 5 A 1, 1 5 B 1, 1 5 N 1, 1 5 a 1, 1 5 b 1, 1 5 c 1, 1 5 else 1, 1 5 i 1, 1 5 if 1, 1 5 thisIsAVeryLongNameAndILikeApples 1, 1 5 while 1, 1 6 A 1, 1 6 B 1, 1 6 N 1, 1 6 a 1, 1 6 b 1, 1 6 c 1, 1 6 else 1, 1 6 i 1, 1 6 if 1, 1 6 thisIsAVeryLongNameAndILikeApples 1, 1 6 while 1, 1 7 A 1, 1 7 B 1, 1 7 N 1, 1 7 a 1, 1 7 b 1, 1 7 c 1, 1 7 else 1, 1 7 i 1, 1 7 if 1, 1 7 thisIsAVeryLongNameAndILikeApples 1, 1 7 while 1, 1 8 A 1, 1 8 B 1, 1 8 N 1, 1 8 a 1, 1 8 b 1, 1 8 c 1, 1 8 else 1, 1 8 i 1, 1 8 if 1, 1 8 thisIsAVeryLongNameAndILikeApples 1, 1 8 while 1
+5000
+74 - Five clauses (2)
+stmt s, s1, s2; assign a, a1, a2; variable v, v1, v2; while w, w1, w2; if ifs, ifs1, ifs2; call c, c1, c2; read r, r1, r2; print pn, pn1, pn2; procedure p, q; constant cn, cn1;
+Select <s, pn, ifs> such that Modifies (s, "a") and Follows* (s, pn) and Modifies (w, "a") and Uses (pn, "while") and Follows (w, pn)
+18 42 31, 18 42 33, 25 42 31, 25 42 33
+5000
+75 - Five clauses (3)
+stmt s, s1, s2, s3; assign a, a1, a2; variable v, v1, v2; while w, w1, w2; if ifs, ifs1, ifs2; call c, c1, c2; read r, r1, r2; print pn, pn1, pn2; procedure p, q; constant cn, cn1;
+Select <v, s, s1, s2, s3> such that Uses (s, v) and Follows (s, s1) and Uses (s1, v) and Follows (s1, s2) and Uses (s2, v) and Follows (s2, s3)
+a 4 5 6 7, a 5 6 7 8, a 6 7 8 9, c 6 7 8 9
+5000
+76 - Five clauses (4)
+stmt s, s1, s2; assign a, a1, a2; variable v, v1, v2; while w, w1, w2; if ifs, ifs1, ifs2; call c, c1, c2; read r, r1, r2; print pn, pn1, pn2; procedure p, q; constant cn, cn1;
+Select <s, s1, s2, a, a1> such that Parent (s, s1) and Parent (s1, s2) and Parent* (s, s2) and Parent* (s1, a) and Parent* (s2, a1)
+25 27 30 28 35, 25 27 30 28 37, 25 27 30 28 38, 25 27 30 29 35, 25 27 30 29 37, 25 27 30 29 38, 25 27 30 35 35, 25 27 30 35 37, 25 27 30 35 38, 25 27 30 37 35, 25 27 30 37 37, 25 27 30 37 38, 25 27 30 38 35, 25 27 30 38 37, 25 27 30 38 38, 25 27 30 39 35, 25 27 30 39 37, 25 27 30 39 38, 25 27 30 40 35, 25 27 30 40 37, 25 27 30 40 38, 27 30 31 35 35, 27 30 31 37 35, 27 30 31 38 35, 30 31 33 35 35, 31 33 34 35 35
+5000
+77 - Five clauses (5)
+stmt s, s1, s2; assign a, a1, a2; variable v, v1, v2; while w, w1, w2; if ifs, ifs1, ifs2; call c, c1, c2; read r, r1, r2; print pn, pn1, pn2; procedure p, q; constant cn, cn1;
+Select <v, a, c, w> such that Uses (a, v) and Next*(a, a1) and Next (a, w) and Modifies (a, "b") pattern a (_, _"b"_)
+b 35 4 34, while 35 4 34
+5000
+78 - 6 clauses (1)
+stmt s1, s2, s3, s4, s5, s6, s7;
+Select <s1, s4> such that Follows*(s1, s2) and Follows*(s2, s3) and Follows*(s3, s4) and Follows*(s4, s5) and Follows*(s5, s6) and Follows*(s6, s7)
+1 10, 1 11, 1 12, 1 13, 1 4, 1 5, 1 6, 1 7, 1 8, 1 9, 10 13, 17 20, 17 21, 17 22, 17 23, 18 21, 18 22, 18 23, 19 22, 19 23, 2 10, 2 11, 2 12, 2 13, 2 5, 2 6, 2 7, 2 8, 2 9, 20 23, 3 10, 3 11, 3 12, 3 13, 3 6, 3 7, 3 8, 3 9, 4 10, 4 11, 4 12, 4 13, 4 7, 4 8, 4 9, 5 10, 5 11, 5 12, 5 13, 5 8, 5 9, 6 10, 6 11, 6 12, 6 13, 6 9, 7 10, 7 11, 7 12, 7 13, 8 11, 8 12, 8 13, 9 12, 9 13
+5000
+79- 6 clauses (2)
+stmt s, s1, s2; assign a, a1, a2; variable v, v1, v2; while w, w1, w2; if ifs, ifs1, ifs2; call c, c1, c2; read r, r1, r2; print pn, pn1, pn2; procedure p, q; constant cn, cn1;
+Select <s, a, r, s1, w, s1, ifs> such that Parent* (s, a) pattern a (_, _) such that Next*(a, a) and Follows (s1, a) and Follows (w, s1) and Parent (w, ifs)
+25 40 1 39 30 39 31, 25 40 2 39 30 39 31, 25 40 3 39 30 39 31, 27 40 1 39 30 39 31, 27 40 2 39 30 39 31, 27 40 3 39 30 39 31
+5000
+80 - 7 clauses
+stmt s, s1, s2; assign a, a1, a2; variable v, v1, v2; while w, w1, w2; if ifs, ifs1, ifs2; call c, c1, c2; read r, r1, r2; print pn, pn1, pn2; procedure p, q; constant cn, cn1;
+Select <s, s1, s2, c, w> such that Uses (s, "a") and Parent* (s1, s) and Parent* (s1, s2) and Uses (s2, "a") and Follows (a, s2) and Next*(s2, w) pattern w ("while", _)
+26 25 27 4 30, 26 25 30 4 30, 27 25 27 4 30, 27 25 30 4 30, 30 25 27 4 30, 30 25 30 4 30, 30 27 30 4 30, 31 25 27 4 30, 31 25 30 4 30, 31 27 30 4 30
+5000
+81 - 8 clauses
+stmt s, s1, s2; assign a, a1, a2; variable v, v1, v2; while w, w1, w2; if ifs, ifs1, ifs2; call c, c1, c2; read r, r1, r2; print pn, pn1, pn2; procedure p, q; constant cn, cn1;
+Select <a, ifs, ifs1, ifs2> such that Uses (a, "a") and Modifies (a, "a") pattern a (_, _"a"_) such that Parent (w, a) and Uses (ifs, "a") and Parent (ifs1, w1) and Uses (ifs1, "N") and Parent (ifs2, w1)
+26 31 33 33
+5000
+82 - 9 clauses
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
+Select <s1, s4> such that Follows(s1, s2) and Follows(s2, s3) and Follows(s3, s4) and Follows(s4, s5) and Follows(s5, s6) and Follows(s6, s7) and Follows(s7, s8) and Follows(s8, s9) and Follows(s9, s10)
+17 20, 4 7, 5 8, 6 9, 7 10, 1 4, 2 5, 3 6
 5000

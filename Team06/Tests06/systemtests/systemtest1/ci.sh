@@ -19,3 +19,4 @@
 ../../../../../build/src/autotester/autotester source.txt AffectsT.txt out-AffectsT.xml
 ../../../../../build/src/autotester/autotester source.txt Boolean.txt out-Boolean.xml
 ../../../../../build/src/autotester/autotester source.txt Tuple.txt out-Tuple.xml
+../../../../../build/src/autotester/autotester source.txt With.txt out-With.xml

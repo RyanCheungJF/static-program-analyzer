@@ -1,12 +1,12 @@
 1 - comment
 procedure p1, p2, p3, p4;
 Select p1 such that Calls(p1, p2) and Calls(p2, p3) and Calls(p3, p4) with p4.procName = "Six"
-One, Two
+One, Two, Four
 5000
 2 - comment
 procedure p1, p2, p3, p4; if i; variable v;
 Select p1 such that Calls(p3, p4) and Calls(p1, p2) and Calls(p2, p3) with p4.procName = "Six" such that Modifies(i, v) with v.varName = "a"
-Two
+Two, Four, One
 5000
 3 - comment
 procedure p1, p2, p3, p4;
@@ -14,7 +14,27 @@ Select BOOLEAN such that Calls*(p1, p2) with p1.procName = "One" and p2.procName
 TRUE
 5000
 4 - comment
-stmt s; procedure p; if i1, i2; while w; call c; variable v; print p; read r; assign a;
-Select c such that Parent(i1, c) and Parent(i2, i1) and Follows*(i2, c) and Next*(i2, c) and Next(i2, i1) and Next(i1, c)
+if i1, i2; while w; call c; variable v; print p; read r; assign a;
+Select c such that Parent(i1, c) 
+17, 18, 31, 32
+5000
+5 - comment
+if i1, i2; while w; call c; variable v; print p; read r; assign a;
+Select c such that Parent(i1, c) and Parent(i2, i1) and Next*(i2, c) and Next*(i2, c) and Next(i2, i1) and Next(i1, c)
 31, 32
+5000
+6 - comment
+variable v; assign a; stmt s;
+Select <a, v> such that Modifies(a, v) and Uses(a, v) and Parent(s, a)
+7 c
+5000
+7 - comment
+call c1, c2;
+Select <c1, c2> such that Next*(c1, c2) and Follows(c1, c2)
+8 9, 9 10, 17 18, 25 26
+5000
+8 - comment
+if i; while w;
+Select <w, i> pattern i("y", _, _) pattern w("y", _)
+5 27, 5 30
 5000

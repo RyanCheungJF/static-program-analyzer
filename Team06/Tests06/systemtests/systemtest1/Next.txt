@@ -743,3 +743,13 @@ stmt s; while w; if i; call c; print p; read r;
 Select r such that Next(r, 2)
 1
 5000
+137 - comment
+stmt s;
+Select s such that Next(0, 1)
+none
+5000
+138 - comment
+stmt s;
+Select s such that Next(42, 43)
+none
+5000

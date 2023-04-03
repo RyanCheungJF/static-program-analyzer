@@ -35,7 +35,7 @@ Each folder contains a different program and has the following files:
 
    What this does is that it starts up **all** the servers needed for system tests.
 
-   i.e If there are 6 system tests, ports 8100, 8200, 8300, ..., 8600 will be used up.
+   i.e If there are 5 system tests, ports 8100, 8200, 8300, ..., 8500 will be used up.
 
 3. Everytime you change a test case and want to re run the output, run the following from the same directory:
 

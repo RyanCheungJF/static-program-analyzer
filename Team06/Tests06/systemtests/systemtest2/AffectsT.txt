@@ -33,3 +33,23 @@ assign a;
 Select a such that Affects*(a, 26)
 22
 5000
+8 - comment
+stmt s;
+Select s such that Affects*(s, _)
+16, 22, 23, 6, 20
+5000
+9 - comment
+stmt s;
+Select s such that Affects*(_, s)
+8, 20, 25, 26
+5000
+10 - comment
+stmt s;
+Select s such that Affects*(s, _) and Affects*(_, s)
+20
+5000
+21 - comment
+stmt s;
+Select s such that Affects(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29
+5000
