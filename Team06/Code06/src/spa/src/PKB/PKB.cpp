@@ -169,8 +169,6 @@ std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
         return res;
     }
 
-    ParameterType type = p.getType(); // todo: is this dead code?
-
     if (p.isProcedureOnly()) {
         std::unordered_set<ProcName>& procs = procedureStorage->getProcNames();
         for (auto proc : procs) {
@@ -216,24 +214,10 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
     if (patternSyn.isAssign()) {
         AssignPatternHandler handler(assignPatternStorage);
         res = handler.handle(p);
-
-        std::cout << "\n\nAssign Pattern Handler: " + p.getPatternSyn()->getValue() + "(" + p.getEntRefValue() + ", " +
-                         p.getExprSpecs()[0] + ")\n";
-        for (std::vector<std::string> curr : res) {
-            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
-        }
-        std::cout << "\n";
     }
     else if (ifWhilePatternMap.find(patternType) != ifWhilePatternMap.end()) {
         IfWhilePatternHandler handler(ifWhilePatternMap.at(patternType));
         res = handler.handle(p);
-
-        std::cout << "\n\nIfWhile Pattern Handler: " + p.getPatternSyn()->getValue() + "(" + p.getEntRefValue() + ", " +
-                         p.getExprSpecs()[0] + ")\n";
-        for (std::vector<std::string> curr : res) {
-            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
-        }
-        std::cout << "\n";
     }
 
     if (!res.empty()) {
