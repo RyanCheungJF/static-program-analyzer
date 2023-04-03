@@ -184,6 +184,9 @@ AttributeType Parameter::stringToAttribute(string s) {
 }
 
 int Parameter::getIntValue() {
+    if (type != ParameterType::FIXED_INT) {
+        return -1;
+    }
     return std::stoi(value);
 }
 
