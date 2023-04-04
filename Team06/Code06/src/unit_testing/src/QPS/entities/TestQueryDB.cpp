@@ -41,11 +41,11 @@ TEST_CASE("insertTable / inserting large table / return true") {
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     ReadPKB readPKB;
-    vector<string> content = qdb.fetch({Parameter("v", ParameterType::VARIABLE), Parameter("s", ParameterType::STMT),
-                                        Parameter("vv", ParameterType::VARIABLE), Parameter("s1", ParameterType::STMT),
-                                        Parameter("v1", ParameterType::VARIABLE), Parameter("s2", ParameterType::STMT),
-                                        Parameter("ss", ParameterType::STMT)},
-                                       readPKB);
+    vector<Parameter> fetchParams = {Parameter("v", ParameterType::VARIABLE),  Parameter("s", ParameterType::STMT),
+                                     Parameter("vv", ParameterType::VARIABLE), Parameter("s1", ParameterType::STMT),
+                                     Parameter("v1", ParameterType::VARIABLE), Parameter("s2", ParameterType::STMT),
+                                     Parameter("ss", ParameterType::STMT)};
+    vector<string> content = qdb.fetch(fetchParams, readPKB);
     REQUIRE(content.size() == 256);
 }
 
@@ -103,22 +103,16 @@ TEST_CASE("insertTable / insertion of three tables with intersection / return "
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     qdb.insertTable(t3);
-    vector<string> finalContent = qdb.fetch(params1, readPkb);
-    vector<vector<string>> expectedCols = {{"1", "2", "3"}, {"x", "y"}, {"4", "5"}, {"99"}};
-    vector<Parameter> expectedParams = {Parameter("s1", ParameterType::STMT), Parameter("v", ParameterType::VARIABLE),
-                                        Parameter("s2", ParameterType::STMT), Parameter("a", ParameterType::ASSIGN)};
-    vector<string> aa = qdb.fetch({Parameter("s1", ParameterType::STMT)}, readPkb);
-    vector<string> bb = qdb.fetch({Parameter("v", ParameterType::VARIABLE)}, readPkb);
-    vector<string> cc = qdb.fetch({Parameter("s2", ParameterType::STMT)}, readPkb);
-    vector<string> dd = qdb.fetch({Parameter("a", ParameterType::ASSIGN)}, readPkb);
-    REQUIRE(find(aa.begin(), aa.end(), "1") != aa.end());
-    REQUIRE(find(aa.begin(), aa.end(), "2") != aa.end());
-    REQUIRE(find(aa.begin(), aa.end(), "3") != aa.end());
-    REQUIRE(find(bb.begin(), bb.end(), "x") != bb.end());
-    REQUIRE(find(bb.begin(), bb.end(), "y") != bb.end());
-    REQUIRE(find(cc.begin(), cc.end(), "4") != cc.end());
-    REQUIRE(find(cc.begin(), cc.end(), "5") != cc.end());
-    REQUIRE(find(dd.begin(), dd.end(), "99") != dd.end());
+    vector<Parameter> fetchParams = {
+        Parameter("s1", ParameterType::STMT),
+        Parameter("v", ParameterType::VARIABLE),
+        Parameter("s2", ParameterType::STMT),
+        Parameter("a", ParameterType::ASSIGN),
+    };
+    vector<string> finalContent = qdb.fetch(fetchParams, readPkb);
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "1 x 4 99") != finalContent.end());
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "2 y 5 99") != finalContent.end());
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "3 y 5 99") != finalContent.end());
 }
 
 TEST_CASE("insertTable / intersecting headers but non intersecting content / "
@@ -138,19 +132,14 @@ TEST_CASE("insertTable / intersecting headers but non intersecting content / "
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     qdb.insertTable(t3);
-    vector<string> finalContent = qdb.fetch(params1, readPKB);
-    vector<vector<string>> expectedCols = {{}, {}, {}, {}};
-    vector<Parameter> expectedParams = {Parameter("s1", ParameterType::STMT), Parameter("v", ParameterType::VARIABLE),
-                                        Parameter("s2", ParameterType::STMT), Parameter("a", ParameterType::ASSIGN)};
-    bool a = qdb.fetch({Parameter("s1", ParameterType::STMT)}, readPKB) == expectedCols[0];
-    bool b = qdb.fetch({Parameter("v", ParameterType::VARIABLE)}, readPKB) == expectedCols[1];
-    bool c = qdb.fetch({Parameter("s2", ParameterType::STMT)}, readPKB) == expectedCols[2];
-    bool d = qdb.fetch({Parameter("a", ParameterType::ASSIGN)}, readPKB) == expectedCols[3];
-    REQUIRE((a && b && c && d));
+    vector<Parameter> fetchParams = {Parameter("s1", ParameterType::STMT), Parameter("v", ParameterType::VARIABLE),
+                                     Parameter("s2", ParameterType::STMT), Parameter("a", ParameterType::ASSIGN)};
+    vector<string> finalContent = qdb.fetch(fetchParams, readPKB);
+    REQUIRE(finalContent.empty());
 }
 
 TEST_CASE("insertTable / third table intersects with first two tables / return "
-          "ONE empty table") {
+          "correct intersection result") {
 
     QueryDB qdb;
     ReadPKB readPKB;
@@ -166,21 +155,13 @@ TEST_CASE("insertTable / third table intersects with first two tables / return "
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     qdb.insertTable(t3);
-    vector<string> finalContent = qdb.fetch(params1, readPKB);
-    vector<vector<string>> expectedCols = {{"1", "2", "3"}, {"4", "5"}, {"x", "y"}, {"a", "b"}};
-    vector<string> aa = qdb.fetch({Parameter("s1", ParameterType::STMT)}, readPKB);
-    vector<string> bb = qdb.fetch({Parameter("s2", ParameterType::STMT)}, readPKB);
-    vector<string> cc = qdb.fetch({Parameter("x", ParameterType::VARIABLE)}, readPKB);
-    vector<string> dd = qdb.fetch({Parameter("y", ParameterType::VARIABLE)}, readPKB);
-    REQUIRE(find(aa.begin(), aa.end(), "1") != aa.end());
-    REQUIRE(find(aa.begin(), aa.end(), "2") != aa.end());
-    REQUIRE(find(aa.begin(), aa.end(), "3") != aa.end());
-    REQUIRE(find(bb.begin(), bb.end(), "4") != bb.end());
-    REQUIRE(find(bb.begin(), bb.end(), "5") != bb.end());
-    REQUIRE(find(cc.begin(), cc.end(), "x") != cc.end());
-    REQUIRE(find(cc.begin(), cc.end(), "y") != cc.end());
-    REQUIRE(find(dd.begin(), dd.end(), "a") != dd.end());
-    REQUIRE(find(dd.begin(), dd.end(), "b") != dd.end());
+    vector<Parameter> fetchParams = {Parameter("s1", ParameterType::STMT), Parameter("s2", ParameterType::STMT),
+                                     Parameter("x", ParameterType::VARIABLE), Parameter("y", ParameterType::VARIABLE)};
+    vector<string> finalContent = qdb.fetch(fetchParams, readPKB);
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "3 5 y b") != finalContent.end());
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "2 5 y b") != finalContent.end());
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "3 4 y a") != finalContent.end());
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "1 4 x a") != finalContent.end());
 }
 
 TEST_CASE("insertTable / insert tables with empty content / tables can still "
@@ -200,11 +181,10 @@ TEST_CASE("insertTable / insert tables with empty content / tables can still "
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     qdb.insertTable(t3);
-    bool a = qdb.fetch({Parameter("s1", ParameterType::STMT)}, readPKB).empty();
-    bool b = qdb.fetch({Parameter("s2", ParameterType::STMT)}, readPKB).empty();
-    bool c = qdb.fetch({Parameter("x", ParameterType::VARIABLE)}, readPKB).empty();
-    bool d = qdb.fetch({Parameter("y", ParameterType::VARIABLE)}, readPKB).empty();
-    REQUIRE((a && b && c && d));
+    vector<Parameter> fetchParams = {Parameter("s1", ParameterType::STMT), Parameter("s2", ParameterType::STMT),
+                                     Parameter("x", ParameterType::VARIABLE), Parameter("y", ParameterType::VARIABLE)};
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
+    REQUIRE(res.empty());
 }
 
 TEST_CASE("insertTable / insert tables with with content / tables correctly insert and fetch "
@@ -222,9 +202,9 @@ TEST_CASE("insertTable / insert tables with with content / tables correctly inse
     Table t2(params2, content1);
     qdb.insertTable(t1);
     qdb.insertTable(t2);
-    vector<string> res = qdb.fetch({Parameter("w1", ParameterType::WHILE), Parameter("w2", ParameterType::WHILE),
-                                    Parameter("w3", ParameterType::WHILE)},
-                                   readPKB);
+    vector<Parameter> fetchParams = {Parameter("w1", ParameterType::WHILE), Parameter("w2", ParameterType::WHILE),
+                                     Parameter("w3", ParameterType::WHILE)};
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(res.begin(), res.end(), "25 27 30") != res.end());
     REQUIRE(find(res.begin(), res.end(), "25 27 34") != res.end());
     REQUIRE(find(res.begin(), res.end(), "25 30 34") != res.end());
@@ -247,9 +227,9 @@ TEST_CASE("insertTable / insert tables with with content, non intersecting / tab
     Table t2(params2, content2);
     qdb.insertTable(t2);
     qdb.insertTable(t1);
-    vector<string> res = qdb.fetch({Parameter("w1", ParameterType::WHILE), Parameter("w2", ParameterType::WHILE),
-                                    Parameter("w3", ParameterType::WHILE)},
-                                   readPKB);
+    vector<Parameter> fetchParams = {Parameter("w1", ParameterType::WHILE), Parameter("w2", ParameterType::WHILE),
+                                     Parameter("w3", ParameterType::WHILE)};
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(res.begin(), res.end(), "25 27 25") != res.end());
     REQUIRE(find(res.begin(), res.end(), "25 30 25") != res.end());
     REQUIRE(find(res.begin(), res.end(), "25 34 25") != res.end());
@@ -278,9 +258,9 @@ TEST_CASE("fetch / fetching duplicate parameters / returns duplicate parameters 
     vector<Parameter> params1 = {Parameter("v", ParameterType::VARIABLE), Parameter("v2", ParameterType::VARIABLE)};
     Table t1(params1, content1);
     qdb.insertTable(t1);
-    vector<string> res = qdb.fetch({Parameter("v", ParameterType::VARIABLE), Parameter("v", ParameterType::VARIABLE),
-                                    Parameter("v2", ParameterType::VARIABLE)},
-                                   readPKB);
+    vector<Parameter> fetchParams = {Parameter("v", ParameterType::VARIABLE), Parameter("v", ParameterType::VARIABLE),
+                                     Parameter("v2", ParameterType::VARIABLE)};
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(res.begin(), res.end(), "a a b") != res.end());
     REQUIRE(find(res.begin(), res.end(), "c c d") != res.end());
     REQUIRE(find(res.begin(), res.end(), "e e f") != res.end());
@@ -294,11 +274,10 @@ TEST_CASE("fetch / insertion of table with duplicate params but only fetching fi
     vector<Parameter> params1 = {Parameter("v", ParameterType::VARIABLE), Parameter("v", ParameterType::VARIABLE)};
     Table t1(params1, content1);
     qdb.insertTable(t1);
-    vector<string> res = qdb.fetch(
-        {
-            Parameter("v", ParameterType::VARIABLE),
-        },
-        readPKB);
+    vector<Parameter> fetchParams = {
+        Parameter("v", ParameterType::VARIABLE),
+    };
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(res.begin(), res.end(), "a") != res.end());
     REQUIRE(find(res.begin(), res.end(), "c") != res.end());
     REQUIRE(find(res.begin(), res.end(), "e") != res.end());
@@ -322,11 +301,10 @@ TEST_CASE("fetch / insertion with intersection / fetch single parameter") {
     Table t2(params2, content2);
     qdb.insertTable(t1);
     qdb.insertTable(t2);
-    vector<string> res = qdb.fetch(
-        {
-            Parameter("v", ParameterType::VARIABLE),
-        },
-        readPKB);
+    vector<Parameter> fetchParams = {
+        Parameter("v", ParameterType::VARIABLE),
+    };
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(res.begin(), res.end(), "z") != res.end());
     REQUIRE(find(res.begin(), res.end(), "y") != res.end());
     REQUIRE(find(res.begin(), res.end(), "x") != res.end());
@@ -357,9 +335,9 @@ TEST_CASE("fetch / insertion with intersection / fetch vector of params") {
     Table t2(params2, content2);
     qdb.insertTable(t1);
     qdb.insertTable(t2);
-    vector<string> res = qdb.fetch({Parameter("v", ParameterType::VARIABLE), Parameter("p", ParameterType::PROCEDURE),
-                                    Parameter("q", ParameterType::PROCEDURE)},
-                                   readPKB);
+    vector<Parameter> fetchParams = {Parameter("v", ParameterType::VARIABLE), Parameter("p", ParameterType::PROCEDURE),
+                                     Parameter("q", ParameterType::PROCEDURE)};
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(res.begin(), res.end(), "z arithmetic conditionalSpam") != res.end());
     REQUIRE(find(res.begin(), res.end(), "y arithmetic conditionalSpam") != res.end());
     REQUIRE(find(res.begin(), res.end(), "x arithmetic conditionalSpam") != res.end());
@@ -404,9 +382,9 @@ TEST_CASE("fetch / table with 4 variables fetching 3 variables / return in corre
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     qdb.insertTable(t3);
-    vector<string> res = qdb.fetch({Parameter("t", ParameterType::PRINT), Parameter("c", ParameterType::CALL),
-                                    Parameter("v", ParameterType::VARIABLE)},
-                                   readPKB);
+    vector<Parameter> fetchParams = {Parameter("t", ParameterType::PRINT), Parameter("c", ParameterType::CALL),
+                                     Parameter("v", ParameterType::VARIABLE)};
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
 
     REQUIRE(find(res.begin(), res.end(), "1 999 a") != res.end());
     REQUIRE(find(res.begin(), res.end(), "1 888 a") != res.end());
@@ -446,7 +424,8 @@ TEST_CASE("queryDB fetch / case of (a,a) (a,b) (a,b) intersect tables and fetch 
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     qdb.insertTable(t3);
-    vector<string> res = qdb.fetch({Parameter("a", ParameterType::ASSIGN)}, readPKB);
+    vector<Parameter> fetchParams = {Parameter("a", ParameterType::ASSIGN)};
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(res.begin(), res.end(), "29") != res.end());
 }
 
@@ -555,12 +534,11 @@ TEST_CASE("queryDB fetch / multiple Next Next* and patterns") {
     Table t2 = Table(h2, c2);
     qdb.insertTable(t1);
     qdb.insertTable(t2);
-    vector<string> res = qdb.fetch(
-        {
-            Parameter("s", ParameterType::STMT),
-            Parameter("w1", ParameterType::WHILE),
-            Parameter("w2", ParameterType::WHILE),
-        },
-        readPKB);
+    vector<Parameter> fetchParams = {
+        Parameter("s", ParameterType::STMT),
+        Parameter("w1", ParameterType::WHILE),
+        Parameter("w2", ParameterType::WHILE),
+    };
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(res.size() == 91);
 }

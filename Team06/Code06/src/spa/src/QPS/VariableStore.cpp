@@ -18,7 +18,7 @@ void VariableStore::insertVariable(Parameter p) {
     }
 }
 
-bool VariableStore::hasVariable(Parameter p) {
+bool VariableStore::hasVariable(Parameter &p) {
     return !(store.find(p.getValue()) == store.end());
 }
 

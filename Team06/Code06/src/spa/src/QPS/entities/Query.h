@@ -32,6 +32,7 @@ public:
     vector<Parameter*> getAllUncheckedSynonyms();
     bool validateAllParameters();
     bool booleanParamCheck();
+    bool operator==(const Query&) const;
 
 private:
     void evaluateRelationship(QueryDB&, ReadPKB&);

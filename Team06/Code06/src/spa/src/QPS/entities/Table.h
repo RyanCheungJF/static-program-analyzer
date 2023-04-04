@@ -22,18 +22,18 @@ struct VectorStringHash {
 class Table {
 public:
     Table(vector<Parameter>, vector<vector<string>>);
-    Table extractDesignEntities();
+    void extractDesignEntities();
     bool hasParameter(const Parameter&);
     const vector<Parameter>& getHeaders() const;
     const vector<vector<string>>& getContent() const;
     bool hasIntersectingParams(Table&);
     void intersectTable(Table&);
-    Table extractColumns(vector<int>&);
-    Table extractColumns(vector<Parameter>&);
+    void extractColumns(vector<int>&);
+    void extractColumns(vector<Parameter>&);
     void cartesianProduct(Table&);
     vector<string> getResult(vector<Parameter>&);
     bool isEmptyTable() const;
-    void updateValues(Parameter, unordered_map<string, string>&);
+    void updateValues(Parameter&, unordered_map<string, string>&);
     void removeDuplicates();
 
 private:
