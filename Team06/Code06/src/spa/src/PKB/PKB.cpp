@@ -23,6 +23,8 @@ void PKB::initializePkb() {
     this->relationshipCache = std::make_shared<RelationshipCache>();
     this->patternCache = std::make_shared<PatternCache>();
     this->parameterCache = std::make_shared<ParameterCache>();
+    this->attributeCache = std::make_shared<AttributeCache>();
+    this->comparisonCache = std::make_shared<ComparisonCache>();
 
     this->followsParentMap[RelationshipType::FOLLOWS] = followsStorage;
     this->followsParentMap[RelationshipType::FOLLOWST] = followsTStorage;
@@ -230,8 +232,11 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
 std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
     AttributeType attrType = p.getAttribute();
     ParameterType paramType = p.getType();
-
-    std::vector<std::vector<std::string>> res;
+    std::shared_ptr<Parameter> param = std::make_shared<Parameter>(p);
+    std::vector<std::vector<std::string>> res = attributeCache->findResult(param);
+    if (!res.empty()) {
+        return res;
+    }
 
     if (Parameter::isStatementRef(p)) {
         std::unordered_set<StmtNum>& stmtNums = statementStorage->getStatementNumbers(p.getTypeString());
@@ -280,20 +285,25 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
             res.push_back({proc, proc});
         }
     }
-
+    if (!res.empty()) {
+        attributeCache->addResult(param, res);
+    }
     return res;
 }
 
 // TODO: Consider refactoring?
 std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
+    std::shared_ptr<Comparison> comp = std::make_shared<Comparison>(c);
+    std::vector<std::vector<std::string>> res = comparisonCache->findResult(comp);
+    if (!res.empty()) {
+        return res;
+    }
     Parameter leftParam = c.getLeftParam();
     Parameter rightParam = c.getRightParam();
     bool isLeftParamFixed = leftParam.isFixedInt() || leftParam.isFixedStringType();
     bool isRightParamFixed = rightParam.isFixedInt() || rightParam.isFixedStringType();
     Ent leftParamValue = leftParam.getValue();
     Ent rightParamValue = rightParam.getValue();
-
-    std::vector<std::vector<std::string>> res;
 
     if (isLeftParamFixed) {
         if (isRightParamFixed) {
@@ -401,4 +411,6 @@ void PKB::clearCache() {
     parameterCache->clearCache();
     patternCache->clearCache();
     affectsHandler->clearCache();
+    attributeCache->clearCache();
+    comparisonCache->clearCache();
 }

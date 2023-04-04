@@ -13,9 +13,13 @@ public:
     Parameter getLeftParam();
     Parameter getRightParam();
     ComparisonOperator getOperator();
+    std::pair<ParameterType, ParameterType> getParameterTypes();
+    std::pair<std::string, std::string> getParameterValues();
+    std::pair<AttributeType, AttributeType> getParameterAttributes();
     vector<Parameter*> getAllUncheckedSynonyms();
     bool validateParams();
     bool hasValidComparisonTypes();
+    bool operator==(const Comparison&) const;
     static Comparison makeComparison(string o, Parameter leftP, Parameter rightP);
     bool operator==(const Comparison&) const;
 
