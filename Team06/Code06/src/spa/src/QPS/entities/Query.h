@@ -33,6 +33,7 @@ public:
     bool validateAllParameters();
     bool booleanParamCheck();
     bool operator==(const Query&) const;
+
 private:
     void evaluateRelationship(QueryDB&, ReadPKB&);
     void evaluatePattern(QueryDB&, ReadPKB&);

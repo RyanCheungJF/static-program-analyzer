@@ -167,8 +167,7 @@ bool Query::booleanParamCheck() {
     return selectParameters.size() == 1 && selectParameters[0].getType() == ParameterType::BOOLEAN && isSelectTuple;
 }
 
-bool Query::operator==(const Query& q) const
-{   
+bool Query::operator==(const Query& q) const {
     if (q.relations.size() != relations.size()) {
         return false;
     }
@@ -177,5 +176,6 @@ bool Query::operator==(const Query& q) const
             return false;
         }
     }
-    return selectParameters == q.selectParameters && patterns == q.patterns && comparisons == q.comparisons && isSelectTuple == q.isSelectTuple;
+    return selectParameters == q.selectParameters && patterns == q.patterns && comparisons == q.comparisons &&
+           isSelectTuple == q.isSelectTuple;
 }
