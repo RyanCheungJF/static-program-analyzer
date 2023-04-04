@@ -55,7 +55,7 @@ vector<string> QueryDB::fetch(vector<Parameter>& params, ReadPKB& readPKB) {
     }
     Table extracted = extractColumns(params, readPKB);
     return params[0].getType() == ParameterType::BOOLEAN ? hasEmptyTable() ? falseVec : trueVec
-        : extracted.getResult(params);
+                                                         : extracted.getResult(params);
 }
 
 bool QueryDB::hasEmptyTable() {
@@ -93,7 +93,7 @@ Table QueryDB::extractColumns(vector<Parameter>& params, ReadPKB& readPKB) {
             unordered_map<string, string> attributeMap;
             vector<vector<string>> mapping = readPKB.findAttribute(param);
             for (const vector<string>& kv : mapping) {
-                attributeMap.insert({ kv[0], kv[1] });
+                attributeMap.insert({kv[0], kv[1]});
             }
             for (Table& t : temp) {
                 if (t.hasParameter(param)) {

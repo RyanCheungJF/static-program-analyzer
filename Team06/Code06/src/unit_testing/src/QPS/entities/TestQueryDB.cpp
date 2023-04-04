@@ -41,12 +41,11 @@ TEST_CASE("insertTable / inserting large table / return true") {
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     ReadPKB readPKB;
-    vector<Parameter> fetchParams = {Parameter("v", ParameterType::VARIABLE), Parameter("s", ParameterType::STMT),
+    vector<Parameter> fetchParams = {Parameter("v", ParameterType::VARIABLE),  Parameter("s", ParameterType::STMT),
                                      Parameter("vv", ParameterType::VARIABLE), Parameter("s1", ParameterType::STMT),
                                      Parameter("v1", ParameterType::VARIABLE), Parameter("s2", ParameterType::STMT),
                                      Parameter("ss", ParameterType::STMT)};
-    vector<string> content = qdb.fetch(fetchParams,
-                                       readPKB);
+    vector<string> content = qdb.fetch(fetchParams, readPKB);
     REQUIRE(content.size() == 256);
 }
 
@@ -105,16 +104,15 @@ TEST_CASE("insertTable / insertion of three tables with intersection / return "
     qdb.insertTable(t2);
     qdb.insertTable(t3);
     vector<Parameter> fetchParams = {
-            Parameter("s1", ParameterType::STMT),
-            Parameter("v", ParameterType::VARIABLE),
-            Parameter("s2", ParameterType::STMT),
-            Parameter("a", ParameterType::ASSIGN),
+        Parameter("s1", ParameterType::STMT),
+        Parameter("v", ParameterType::VARIABLE),
+        Parameter("s2", ParameterType::STMT),
+        Parameter("a", ParameterType::ASSIGN),
     };
     vector<string> finalContent = qdb.fetch(fetchParams, readPkb);
     REQUIRE(find(finalContent.begin(), finalContent.end(), "1 x 4 99") != finalContent.end());
     REQUIRE(find(finalContent.begin(), finalContent.end(), "2 y 5 99") != finalContent.end());
     REQUIRE(find(finalContent.begin(), finalContent.end(), "3 y 5 99") != finalContent.end());
-
 }
 
 TEST_CASE("insertTable / intersecting headers but non intersecting content / "
@@ -135,7 +133,7 @@ TEST_CASE("insertTable / intersecting headers but non intersecting content / "
     qdb.insertTable(t2);
     qdb.insertTable(t3);
     vector<Parameter> fetchParams = {Parameter("s1", ParameterType::STMT), Parameter("v", ParameterType::VARIABLE),
-                                        Parameter("s2", ParameterType::STMT), Parameter("a", ParameterType::ASSIGN)};
+                                     Parameter("s2", ParameterType::STMT), Parameter("a", ParameterType::ASSIGN)};
     vector<string> finalContent = qdb.fetch(fetchParams, readPKB);
     REQUIRE(finalContent.empty());
 }
@@ -157,12 +155,8 @@ TEST_CASE("insertTable / third table intersects with first two tables / return "
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     qdb.insertTable(t3);
-    vector<Parameter> fetchParams = {
-            Parameter("s1", ParameterType::STMT),
-            Parameter("s2", ParameterType::STMT),
-            Parameter("x", ParameterType::VARIABLE),
-            Parameter("y", ParameterType::VARIABLE)
-    };
+    vector<Parameter> fetchParams = {Parameter("s1", ParameterType::STMT), Parameter("s2", ParameterType::STMT),
+                                     Parameter("x", ParameterType::VARIABLE), Parameter("y", ParameterType::VARIABLE)};
     vector<string> finalContent = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(finalContent.begin(), finalContent.end(), "3 5 y b") != finalContent.end());
     REQUIRE(find(finalContent.begin(), finalContent.end(), "2 5 y b") != finalContent.end());
@@ -187,12 +181,8 @@ TEST_CASE("insertTable / insert tables with empty content / tables can still "
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     qdb.insertTable(t3);
-    vector<Parameter> fetchParams = {
-            Parameter("s1", ParameterType::STMT),
-            Parameter("s2", ParameterType::STMT),
-            Parameter("x", ParameterType::VARIABLE),
-            Parameter("y", ParameterType::VARIABLE)
-    };
+    vector<Parameter> fetchParams = {Parameter("s1", ParameterType::STMT), Parameter("s2", ParameterType::STMT),
+                                     Parameter("x", ParameterType::VARIABLE), Parameter("y", ParameterType::VARIABLE)};
     vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(res.empty());
 }
@@ -214,8 +204,7 @@ TEST_CASE("insertTable / insert tables with with content / tables correctly inse
     qdb.insertTable(t2);
     vector<Parameter> fetchParams = {Parameter("w1", ParameterType::WHILE), Parameter("w2", ParameterType::WHILE),
                                      Parameter("w3", ParameterType::WHILE)};
-    vector<string> res = qdb.fetch(fetchParams,
-                                   readPKB);
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(res.begin(), res.end(), "25 27 30") != res.end());
     REQUIRE(find(res.begin(), res.end(), "25 27 34") != res.end());
     REQUIRE(find(res.begin(), res.end(), "25 30 34") != res.end());
@@ -240,8 +229,7 @@ TEST_CASE("insertTable / insert tables with with content, non intersecting / tab
     qdb.insertTable(t1);
     vector<Parameter> fetchParams = {Parameter("w1", ParameterType::WHILE), Parameter("w2", ParameterType::WHILE),
                                      Parameter("w3", ParameterType::WHILE)};
-    vector<string> res = qdb.fetch(fetchParams,
-                                   readPKB);
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(res.begin(), res.end(), "25 27 25") != res.end());
     REQUIRE(find(res.begin(), res.end(), "25 30 25") != res.end());
     REQUIRE(find(res.begin(), res.end(), "25 34 25") != res.end());
@@ -272,8 +260,7 @@ TEST_CASE("fetch / fetching duplicate parameters / returns duplicate parameters 
     qdb.insertTable(t1);
     vector<Parameter> fetchParams = {Parameter("v", ParameterType::VARIABLE), Parameter("v", ParameterType::VARIABLE),
                                      Parameter("v2", ParameterType::VARIABLE)};
-    vector<string> res = qdb.fetch(fetchParams,
-                                   readPKB);
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(res.begin(), res.end(), "a a b") != res.end());
     REQUIRE(find(res.begin(), res.end(), "c c d") != res.end());
     REQUIRE(find(res.begin(), res.end(), "e e f") != res.end());
@@ -288,11 +275,9 @@ TEST_CASE("fetch / insertion of table with duplicate params but only fetching fi
     Table t1(params1, content1);
     qdb.insertTable(t1);
     vector<Parameter> fetchParams = {
-            Parameter("v", ParameterType::VARIABLE),
+        Parameter("v", ParameterType::VARIABLE),
     };
-    vector<string> res = qdb.fetch(
-        fetchParams,
-        readPKB);
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(res.begin(), res.end(), "a") != res.end());
     REQUIRE(find(res.begin(), res.end(), "c") != res.end());
     REQUIRE(find(res.begin(), res.end(), "e") != res.end());
@@ -317,11 +302,9 @@ TEST_CASE("fetch / insertion with intersection / fetch single parameter") {
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     vector<Parameter> fetchParams = {
-            Parameter("v", ParameterType::VARIABLE),
+        Parameter("v", ParameterType::VARIABLE),
     };
-    vector<string> res = qdb.fetch(
-        fetchParams,
-        readPKB);
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(res.begin(), res.end(), "z") != res.end());
     REQUIRE(find(res.begin(), res.end(), "y") != res.end());
     REQUIRE(find(res.begin(), res.end(), "x") != res.end());
@@ -354,8 +337,7 @@ TEST_CASE("fetch / insertion with intersection / fetch vector of params") {
     qdb.insertTable(t2);
     vector<Parameter> fetchParams = {Parameter("v", ParameterType::VARIABLE), Parameter("p", ParameterType::PROCEDURE),
                                      Parameter("q", ParameterType::PROCEDURE)};
-    vector<string> res = qdb.fetch(fetchParams,
-                                   readPKB);
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
     REQUIRE(find(res.begin(), res.end(), "z arithmetic conditionalSpam") != res.end());
     REQUIRE(find(res.begin(), res.end(), "y arithmetic conditionalSpam") != res.end());
     REQUIRE(find(res.begin(), res.end(), "x arithmetic conditionalSpam") != res.end());
@@ -402,8 +384,7 @@ TEST_CASE("fetch / table with 4 variables fetching 3 variables / return in corre
     qdb.insertTable(t3);
     vector<Parameter> fetchParams = {Parameter("t", ParameterType::PRINT), Parameter("c", ParameterType::CALL),
                                      Parameter("v", ParameterType::VARIABLE)};
-    vector<string> res = qdb.fetch(fetchParams,
-                                   readPKB);
+    vector<string> res = qdb.fetch(fetchParams, readPKB);
 
     REQUIRE(find(res.begin(), res.end(), "1 999 a") != res.end());
     REQUIRE(find(res.begin(), res.end(), "1 888 a") != res.end());
@@ -452,149 +433,112 @@ TEST_CASE("queryDB fetch / multiple Next Next* and patterns") {
     QueryDB qdb;
     ReadPKB readPKB;
     vector<Parameter> h1 = {
-            Parameter("w1", ParameterType::WHILE),
-            Parameter("s", ParameterType::STMT),
+        Parameter("w1", ParameterType::WHILE),
+        Parameter("s", ParameterType::STMT),
     };
     vector<Parameter> h2 = {
-            Parameter("s", ParameterType::STMT),
-            Parameter("w2", ParameterType::WHILE),
+        Parameter("s", ParameterType::STMT),
+        Parameter("w2", ParameterType::WHILE),
     };
     vector<vector<string>> c1 = {
-            {"36", "37"},
-            {"36", "39"},
-            {"36", "38"},
-            {"36", "41"},
-            {"36", "40"},
-            {"36", "36"},
-            {"18", "19"},
-            {"18", "20"},
-            {"18", "18"},
-            {"18", "21"},
-            {"18", "14"},
-            {"18", "15"},
-            {"18", "22"},
-            {"18", "16"},
-            {"18", "17"},
-            {"20", "21"},
-            {"20", "14"},
-            {"20", "20"},
-            {"20", "15"},
-            {"20", "22"},
-            {"20", "16"},
-            {"20", "18"},
-            {"20", "17"},
-            {"20", "19"},
-            {"14", "15"},
-            {"14", "22"},
-            {"14", "16"},
-            {"14", "14"},
-            {"14", "18"},
-            {"14", "17"},
-            {"14", "19"},
-            {"14", "20"},
-            {"14", "21"},
-            {"24", "25"},
-            {"24", "29"},
-            {"24", "26"},
-            {"24", "31"},
-            {"24", "30"},
-            {"24", "28"},
-            {"24", "27"},
-            {"24", "24"},
-            {"9", "10"},
-            {"9", "11"},
-            {"9", "9"},
-            {"9", "12"},
+        {"36", "37"}, {"36", "39"}, {"36", "38"}, {"36", "41"}, {"36", "40"}, {"36", "36"}, {"18", "19"}, {"18", "20"},
+        {"18", "18"}, {"18", "21"}, {"18", "14"}, {"18", "15"}, {"18", "22"}, {"18", "16"}, {"18", "17"}, {"20", "21"},
+        {"20", "14"}, {"20", "20"}, {"20", "15"}, {"20", "22"}, {"20", "16"}, {"20", "18"}, {"20", "17"}, {"20", "19"},
+        {"14", "15"}, {"14", "22"}, {"14", "16"}, {"14", "14"}, {"14", "18"}, {"14", "17"}, {"14", "19"}, {"14", "20"},
+        {"14", "21"}, {"24", "25"}, {"24", "29"}, {"24", "26"}, {"24", "31"}, {"24", "30"}, {"24", "28"}, {"24", "27"},
+        {"24", "24"}, {"9", "10"},  {"9", "11"},  {"9", "9"},   {"9", "12"},
     };
     vector<vector<string>> c2 = {
-            {"1", "14"},
-            {"1", "9"},
-            {"1", "24"},
-            {"1", "18"},
-            {"1", "20"},
-            {"2", "14"},
-            {"2," "9"},
-            {"2", "24"},
-            {"2", "18"},
-            {"2", "20"},
-            {"3", "14"},
-            {"3", "9"},
-            {"3", "24"},
-            {"3", "18"},
-            {"3", "20"},
-            {"4", "14"},
-            {"4", "9"},
-            {"4", "24"},
-            {"4," "18"},
-            {"4", "20"},
-            {"5", "14"},
-            {"5", "9"},
-            {"5", "24"},
-            {"5", "18"},
-            {"5", "20"},
-            {"6", "14"},
-            {"6", "9"},
-            {"6", "24"},
-            {"6", "18"},
-            {"6", "20"},
-            {"7", "14"},
-            {"7", "9"},
-            {"7", "24"},
-            {"7", "18"},
-            {"7", "20"},
-            {"8", "9"},
-            {"9", "9"},
-            {"10", "9"},
-            {"13", "14"},
-            {"13", "24"},
-            {"13", "18"},
-            {"13", "20"},
-            {"14", "14"},
-            {"14", "18"},
-            {"14", "20"},
-            {"15", "14"},
-            {"15", "18"},
-            {"15", "20"},
-            {"16", "18"},
-            {"16", "20"},
-            {"16", "14"},
-            {"17", "14"},
-            {"17", "18"},
-            {"17", "20"},
-            {"18", "20"},
-            {"18", "18"},
-            {"18", "14"},
-            {"19", "18"},
-            {"19", "20"},
-            {"19", "14"},
-            {"20", "14"},
-            {"20", "20"},
-            {"20", "18"},
-            {"21", "20"},
-            {"21", "14"},
-            {"21", "18"},
-            {"22", "14"},
-            {"22", "18"},
-            {"22", "20"},
-            {"23", "24"},
-            {"24", "24"},
-            {"25", "24"},
-            {"26", "24"},
-            {"27", "24"},
-            {"28", "24"},
-            {"36", "36"},
-            {"37", "36"},
-            {"38", "36"},
+        {"1", "14"},
+        {"1", "9"},
+        {"1", "24"},
+        {"1", "18"},
+        {"1", "20"},
+        {"2", "14"},
+        {"2,"
+         "9"},
+        {"2", "24"},
+        {"2", "18"},
+        {"2", "20"},
+        {"3", "14"},
+        {"3", "9"},
+        {"3", "24"},
+        {"3", "18"},
+        {"3", "20"},
+        {"4", "14"},
+        {"4", "9"},
+        {"4", "24"},
+        {"4,"
+         "18"},
+        {"4", "20"},
+        {"5", "14"},
+        {"5", "9"},
+        {"5", "24"},
+        {"5", "18"},
+        {"5", "20"},
+        {"6", "14"},
+        {"6", "9"},
+        {"6", "24"},
+        {"6", "18"},
+        {"6", "20"},
+        {"7", "14"},
+        {"7", "9"},
+        {"7", "24"},
+        {"7", "18"},
+        {"7", "20"},
+        {"8", "9"},
+        {"9", "9"},
+        {"10", "9"},
+        {"13", "14"},
+        {"13", "24"},
+        {"13", "18"},
+        {"13", "20"},
+        {"14", "14"},
+        {"14", "18"},
+        {"14", "20"},
+        {"15", "14"},
+        {"15", "18"},
+        {"15", "20"},
+        {"16", "18"},
+        {"16", "20"},
+        {"16", "14"},
+        {"17", "14"},
+        {"17", "18"},
+        {"17", "20"},
+        {"18", "20"},
+        {"18", "18"},
+        {"18", "14"},
+        {"19", "18"},
+        {"19", "20"},
+        {"19", "14"},
+        {"20", "14"},
+        {"20", "20"},
+        {"20", "18"},
+        {"21", "20"},
+        {"21", "14"},
+        {"21", "18"},
+        {"22", "14"},
+        {"22", "18"},
+        {"22", "20"},
+        {"23", "24"},
+        {"24", "24"},
+        {"25", "24"},
+        {"26", "24"},
+        {"27", "24"},
+        {"28", "24"},
+        {"36", "36"},
+        {"37", "36"},
+        {"38", "36"},
     };
     Table t1 = Table(h1, c1);
     Table t2 = Table(h2, c2);
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     vector<Parameter> fetchParams = {
-            Parameter("s", ParameterType::STMT),
-            Parameter("w1", ParameterType::WHILE),
-            Parameter("w2", ParameterType::WHILE),
+        Parameter("s", ParameterType::STMT),
+        Parameter("w1", ParameterType::WHILE),
+        Parameter("w2", ParameterType::WHILE),
     };
     vector<string> res = qdb.fetch(fetchParams, readPKB);
-    REQUIRE(res.size()==91);
+    REQUIRE(res.size() == 91);
 }

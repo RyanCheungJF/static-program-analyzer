@@ -135,8 +135,8 @@ TEST_CASE("extractDesignEntities / test for fixed_string, read and stmt / "
     vector<vector<string>> content = {{"abc", "6", "7"}};
     Table table(headers, content);
     table.extractDesignEntities();
-    REQUIRE(
-        (table.getHeaders().size() == 2 && table.getHeaders()[0].getValue() == "rd" && table.getHeaders()[1].getValue() == "s"));
+    REQUIRE((table.getHeaders().size() == 2 && table.getHeaders()[0].getValue() == "rd" &&
+             table.getHeaders()[1].getValue() == "s"));
 }
 
 TEST_CASE("extractDesignEntities / test for call and fixed_string / returns call") {
@@ -155,8 +155,8 @@ TEST_CASE("extractDesignEntities / test constant, procedure and") {
     vector<vector<string>> content = {{"999", "main"}};
     Table table(headers, content);
     table.extractDesignEntities();
-    REQUIRE(
-        (table.getHeaders().size() == 2 && table.getHeaders()[0].getValue() == "c" && table.getHeaders()[1].getValue() == "proc"));
+    REQUIRE((table.getHeaders().size() == 2 && table.getHeaders()[0].getValue() == "c" &&
+             table.getHeaders()[1].getValue() == "proc"));
 }
 
 TEST_CASE("extractDesignEntities / test synonym ifs assign / return ifs, assign") {
@@ -170,8 +170,8 @@ TEST_CASE("extractDesignEntities / test synonym ifs assign / return ifs, assign"
     Table table(headers, content);
     vector<int> indexes = {};
     table.extractDesignEntities();
-    REQUIRE(
-        (table.getHeaders().size() == 2 && table.getHeaders()[0].getValue() == "ifs" && table.getHeaders()[1].getValue() == "a"));
+    REQUIRE((table.getHeaders().size() == 2 && table.getHeaders()[0].getValue() == "ifs" &&
+             table.getHeaders()[1].getValue() == "a"));
 }
 
 TEST_CASE("cartesianProduct / simple 2 element tables / result in total 4 element table") {
