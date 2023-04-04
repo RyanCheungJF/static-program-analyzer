@@ -150,7 +150,7 @@ void Table::extractDesignEntities() {
     this->extractColumns(indexes);
 }
 
-void Table::updateValues(Parameter p, unordered_map<string, string>& map) {
+void Table::updateValues(Parameter& p, unordered_map<string, string>& map) {
     int index = 0;
     for (int i = 0; i < headers.size(); i++) {
         if (headers[i] == p && !headers[i].hasAttribute()) {

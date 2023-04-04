@@ -8,8 +8,6 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
     // I am going to assume here that since the object has been created it means
     // that the variables are correctly instantiated.
     QueryDB queryDb = QueryDB();
-    QueryDB* queryDBPointer = &queryDb;
-    Table emptyTable({}, {});
 
     evaluateRelationship(queryDb, readPKB);
     evaluatePattern(queryDb, readPKB);

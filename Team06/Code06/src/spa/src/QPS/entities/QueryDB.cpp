@@ -39,7 +39,7 @@ bool QueryDB::hasParameter(Parameter& p) {
     return false;
 }
 
-vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
+vector<string> QueryDB::fetch(vector<Parameter>& params, ReadPKB& readPKB) {
     for (Parameter& param : params) {
         if (!this->hasParameter(param) && param.getType() != ParameterType::BOOLEAN) {
             vector<vector<string>> contentVec = {};
@@ -67,7 +67,7 @@ bool QueryDB::hasEmptyTable() {
     return false;
 }
 
-Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
+Table QueryDB::extractColumns(vector<Parameter>& params, ReadPKB& readPKB) {
     // Assumes that each table has unique headers.
     // extracts in any order
     if (params[0].getType() == ParameterType::BOOLEAN || hasEmptyTable()) {

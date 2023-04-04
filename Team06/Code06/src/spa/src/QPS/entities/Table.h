@@ -33,7 +33,7 @@ public:
     void cartesianProduct(Table&);
     vector<string> getResult(vector<Parameter>&);
     bool isEmptyTable() const;
-    void updateValues(Parameter, unordered_map<string, string>&);
+    void updateValues(Parameter&, unordered_map<string, string>&);
     void removeDuplicates();
 
 private:

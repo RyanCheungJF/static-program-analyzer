@@ -299,7 +299,8 @@ TEST_CASE("updateValues / single header updates correctly the values of the tabl
     Table table({Parameter("v", ParameterType::VARIABLE)}, {{"1"}, {"2"}, {"3"}});
     unordered_map<string, string> map;
     map.insert({{"1", "2"}, {"2", "4"}, {"3", "6"}});
-    table.updateValues(Parameter("v", ParameterType::VARIABLE), map);
+    Parameter p = Parameter("v", ParameterType::VARIABLE);
+    table.updateValues(p, map);
     vector<vector<string>> resContent = table.getContent();
     vector<vector<string>> expected = {{"2"}, {"4"}, {"6"}};
     REQUIRE(find(resContent.begin(), resContent.end(), expected[0]) != resContent.end());
@@ -312,7 +313,8 @@ TEST_CASE("updateValues / multiple header updates correctly the values of the ta
                 {{"1", "11"}, {"2", "22"}, {"3", "33"}});
     unordered_map<string, string> map;
     map.insert({{"1", "2"}, {"2", "4"}, {"3", "6"}});
-    table.updateValues(Parameter("v", ParameterType::VARIABLE), map);
+    Parameter p = Parameter("v", ParameterType::VARIABLE);
+    table.updateValues(p, map);
     vector<vector<string>> resContent = table.getContent();
     vector<vector<string>> expected = {{"2", "11"}, {"4", "22"}, {"6", "33"}};
     REQUIRE(find(resContent.begin(), resContent.end(), expected[0]) != resContent.end());
