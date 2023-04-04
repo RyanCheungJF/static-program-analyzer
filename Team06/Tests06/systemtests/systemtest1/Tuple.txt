@@ -53,3 +53,123 @@ call c; print p; read r; stmt s; assign a;
 Select <c, p, r> such that Follows(1, 2)
 4 32 1, 4 32 2, 4 32 3, 4 42 1, 4 42 2, 4 42 3, 4 36 1, 4 36 2, 4 36 3
 5000
+12 - comment
+print pr;
+Select <pr, pr>
+32 32, 36 36, 42 42
+5000
+13 - comment
+read r; while w;
+Select <r, w>
+1 25, 1 27, 1 30, 1 34, 2 25, 2 27, 2 30, 2 34, 3 25, 3 27, 3 30, 3 34
+5000
+14 - comment
+read r; while w; variable v;
+Select <v, w> such that Modifies(r, v)
+a 25, a 27, a 30, a 34, b 25, b 27, b 30, b 34, c 25, c 27, c 30, c 34
+5000
+15 - comment
+call c; if ifs; variable v;
+Select <v, ifs> such that Uses(c, v)
+A 31, A 33, B 31, B 33, N 31, N 33, a 31, a 33, b 31, b 33, c 31, c 33, else 31, else 33, i 31, i 33, if 31, if 33, thisIsAVeryLongNameAndILikeApples 31, thisIsAVeryLongNameAndILikeApples 33, while 31, while 33
+5000
+16 - comment
+print pr; assign a; read r;
+Select <a, pr> such that Follows(pr, r)
+none
+5000
+17 - comment
+read r; while w; variable v;
+Select <w, v> such that Uses(r, v)
+none
+5000
+18 - comment
+stmt s1, s2;
+Select <s1, s2> such that Parent(s1, s2)
+25 26, 25 27, 25 41, 27 28, 27 29, 27 30, 27 39, 27 40, 30 31, 30 37, 30 38, 31 32, 31 33, 33 34, 33 36, 34 35
+5000
+19 - comment
+assign a; stmt s;
+Select <a, s> such that Parent(a, s)
+none
+5000
+20 - comment
+print pr;
+Select <pr, pr, pr>
+32 32 32, 36 36 36, 42 42 42
+5000
+21 - comment
+read r; while w; if ifs;
+Select <r, w, ifs>
+1 25 31, 1 25 33, 1 27 31, 1 27 33, 1 30 31, 1 30 33, 1 34 31, 1 34 33, 2 25 31, 2 25 33, 2 27 31, 2 27 33, 2 30 31, 2 30 33, 2 34 31, 2 34 33, 3 25 31, 3 25 33, 3 27 31, 3 27 33, 3 30 31, 3 30 33, 3 34 31, 3 34 33
+5000
+22 - comment
+read r; while w; variable v;
+Select <r, v, w> such that Modifies(w, v)
+1 a 25, 1 b 25, 1 b 27, 1 b 30, 1 b 34, 1 c 25, 1 c 27, 1 else 25, 1 else 27, 1 else 30, 1 i 25, 1 if 25, 1 if 27, 1 while 25, 1 while 27, 1 while 30, 2 a 25, 2 b 25, 2 b 27, 2 b 30, 2 b 34, 2 c 25, 2 c 27, 2 else 25, 2 else 27, 2 else 30, 2 i 25, 2 if 25, 2 if 27, 2 while 25, 2 while 27, 2 while 30, 3 a 25, 3 b 25, 3 b 27, 3 b 30, 3 b 34, 3 c 25, 3 c 27, 3 else 25, 3 else 27, 3 else 30, 3 i 25, 3 if 25, 3 if 27, 3 while 25, 3 while 27, 3 while 30
+5000
+23 - comment
+call c; if ifs; variable v;
+Select <ifs, c, v> such that Uses(c, v)
+31 4 A, 31 4 B, 31 4 N, 31 4 a, 31 4 b, 31 4 c, 31 4 else, 31 4 i, 31 4 if, 31 4 thisIsAVeryLongNameAndILikeApples, 31 4 while, 33 4 A, 33 4 B, 33 4 N, 33 4 a, 33 4 b, 33 4 c, 33 4 else, 33 4 i, 33 4 if, 33 4 thisIsAVeryLongNameAndILikeApples, 33 4 while
+5000
+24 - comment
+print pr; assign a; read r;
+Select <r, a, pr> such that Follows(pr, r)
+none
+5000
+25 - comment
+read r; while w; variable v;
+Select <r, w, v> such that Uses(r, v)
+none
+5000
+26 - comment
+call c; stmt s; procedure p;
+Select <c, s, p> such that Follows(c, s)
+4 5 arithmetic, 4 5 conditionalSpam
+5000
+27 - comment
+stmt s1, s2; variable v;
+Select <s1, s2, v> such that Parent(s1, s2) and Modifies(s2, v)
+25 26 a, 25 27 b, 25 27 c, 25 27 else, 25 27 if, 25 27 while, 25 41 i, 27 28 while, 27 29 if, 27 30 b, 27 30 else, 27 30 while, 27 39 if, 27 40 c, 30 31 b, 30 37 else, 30 38 while, 31 33 b, 33 34 b, 34 35 b
+5000
+28 - comment
+print pr; read r; variable v;
+Select <pr, r, v> such that Follows(pr, r) such that Uses(r, v)
+none
+5000
+29 - comment
+print pr;
+Select <pr, pr.varName>
+32 A, 36 B, 42 while
+5000
+30 - comment
+constant c;
+Select <c, c.value>
+1 1, 2 2, 0 0, 7 7, 3 3, 10 10, 5 5, 145 145, 42 42
+5000
+31 - comment
+read r;
+Select <r, r.stmt#, r.varName>
+1 1 a, 2 2 b, 3 3 c
+5000
+32 - comment
+call cl;
+Select <cl, cl.procName>
+4 conditionalSpam
+5000
+33 - comment
+procedure p;
+Select <p, p.procName>
+conditionalSpam conditionalSpam, arithmetic arithmetic
+5000
+34 - comment
+assign a1, a2;
+Select <a1, a2> such that Next(a1, a2) pattern a1("i",_) pattern a2("a",_) 
+17 18
+5000
+35 - Next*, Next*, pattern, pattern
+while w1, w2; stmt s;
+Select <s, w1, w2> such that Next*(w1, s) and Next*(s, w2) pattern w1("i",_) and w2("c",_)
+25 25 27, 26 25 27, 27 25 27, 28 25 27, 29 25 27, 30 25 27, 31 25 27, 32 25 27, 33 25 27, 34 25 27, 35 25 27, 36 25 27, 37 25 27, 38 25 27, 39 25 27, 40 25 27, 41 25 27
+5000

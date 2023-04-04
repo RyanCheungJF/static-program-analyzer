@@ -116,7 +116,7 @@ void PKB::writeWhilePattern(StmtNum num, std::unordered_set<Ent>& variables) {
 }
 
 void PKB::writeCFG(ProcName name,
-                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph) {
+    std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph) {
     cfgStorage->writeCFG(name, graph);
 }
 
@@ -134,23 +134,48 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
     if (followsParentMap.find(type) != followsParentMap.end()) {
         FollowsParentHandler handler(followsParentMap.at(type), statementStorage);
         res = handler.handle(param1, param2);
+
+        std::cout << "\n\nAT Follows / Parent HANDLER NOW. DONE WITH CALCULATIONS. BELOW ARE THE RESULTS\n";
+        for (std::vector<std::string> curr : res) {
+            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
+        }
     }
     else if (modifiesUsesMap.find(type) != modifiesUsesMap.end()) {
         ModifiesUsesHandler handler(modifiesUsesMap.at(type), statementStorage);
         res = handler.handle(param1, param2);
+
+        std::cout << "\n\nAT USES & MODIFIES HANDLER NOW. DONE WITH CALCULATIONS. BELOW ARE THE RESULTS\n";
+        for (std::vector<std::string> curr : res) {
+            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
+        }
     }
     else if (callsMap.find(type) != callsMap.end()) {
         CallsHandler handler(callsMap.at(type));
         res = handler.handle(param1, param2);
+
+        std::cout << "\n\nAT Call / Calls HANDLER NOW. DONE WITH CALCULATIONS. BELOW ARE THE RESULTS\n";
+        for (std::vector<std::string> curr : res) {
+            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
+        }
     }
     else if (nextMap.find(type) != nextMap.end()) {
         NextHandler handler(cfgStorage, statementStorage, procedureStorage, type == RelationshipType::NEXTT);
         res = handler.handle(param1, param2);
+
+        std::cout << "\n\nAT NEXT HANDLER NOW. DONE WITH CALCULATIONS. BELOW ARE THE RESULTS\n";
+        for (std::vector<std::string> curr : res) {
+            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
+        }
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
         AffectsHandler handler(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
-                               procAssignStmtStorage, type == RelationshipType::AFFECTST);
+            procAssignStmtStorage, type == RelationshipType::AFFECTST);
         res = handler.handle(param1, param2);
+
+        std::cout << "\n\nAT AFFECTS HANDLER NOW. DONE WITH CALCULATIONS. BELOW ARE THE RESULTS\n";
+        for (std::vector<std::string> curr : res) {
+            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
+        }
     }
     if (!res.empty()) {
         relationshipCache->addResult(rs, res);
@@ -166,7 +191,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
         return res;
     }
 
-    ParameterType type = p.getType();
+    ParameterType type = p.getType(); // todo: is this dead code?
 
     if (p.isProcedureOnly()) {
         std::unordered_set<ProcName>& procs = procedureStorage->getProcNames();
@@ -214,10 +239,24 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
     if (patternSyn.isAssign()) {
         AssignPatternHandler handler(assignPatternStorage);
         res = handler.handle(p);
+
+        std::cout << "\n\nAssign Pattern Handler: " + p.getPatternSyn()->getValue() + "(" + p.getEntRefValue() + ", " +
+            p.getExprSpecs()[0] + ")\n";
+        for (std::vector<std::string> curr : res) {
+            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
+        }
+        std::cout << "\n";
     }
     else if (ifWhilePatternMap.find(patternType) != ifWhilePatternMap.end()) {
         IfWhilePatternHandler handler(ifWhilePatternMap.at(patternType));
         res = handler.handle(p);
+
+        std::cout << "\n\nIfWhile Pattern Handler: " + p.getPatternSyn()->getValue() + "(" + p.getEntRefValue() + ", " +
+            p.getExprSpecs()[0] + ")\n";
+        for (std::vector<std::string> curr : res) {
+            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
+        }
+        std::cout << "\n";
     }
 
     if (!res.empty()) {
@@ -241,7 +280,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
                 if (numProcPair.second == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
                     continue;
                 }
-                res.push_back({std::to_string(stmtNum), numProcPair.second});
+                res.push_back({ std::to_string(stmtNum), numProcPair.second });
             }
         }
         // assumes that QPS is correct in only allowing varName for reads and prints,
@@ -249,36 +288,60 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
         else if (attrType == AttributeType::VARNAME) {
             for (auto stmtNum : stmtNums) {
                 Ent var = *entityStorage->getEntities(stmtNum).begin();
-                res.push_back({std::to_string(stmtNum), var});
+                res.push_back({ std::to_string(stmtNum), var });
             }
         }
         // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
         else if (attrType == AttributeType::STMTNO) {
             for (auto stmtNum : stmtNums) {
-                res.push_back({std::to_string(stmtNum), std::to_string(stmtNum)});
+                res.push_back({ std::to_string(stmtNum), std::to_string(stmtNum) });
             }
         }
+
+        std::cout << "\n\nIn FindAttribute for STMT_REF now. BELOW ARE THE RESULTS\n";
+        for (std::vector<std::string> curr : res) {
+            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
+        }
+        std::cout << "\n";
     }
     // currently just returns a pair of duplicated values
     else if (p.isConstant()) {
         std::unordered_set<Const>& consts = constantStorage->getEntNames();
         for (auto constant : consts) {
-            res.push_back({constant, constant});
+            res.push_back({ constant, constant });
         }
+
+        std::cout << "\n\nIn FindAttribute for CONSTANTS now. BELOW ARE THE RESULTS\n";
+        for (std::vector<std::string> curr : res) {
+            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
+        }
+        std::cout << "\n";
     }
     // currently just returns a pair of duplicated values
     else if (p.isVariable()) {
         std::unordered_set<Ent>& vars = entityStorage->getEntNames();
         for (auto var : vars) {
-            res.push_back({var, var});
+            res.push_back({ var, var });
         }
+
+        std::cout << "\n\nIn FindAttribute for VARIABLES now. BELOW ARE THE RESULTS\n";
+        for (std::vector<std::string> curr : res) {
+            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
+        }
+        std::cout << "\n";
     }
     // currently just returns a pair of duplicated values
     else {
         std::unordered_set<ProcName>& procs = procedureStorage->getProcNames();
         for (ProcName proc : procs) {
-            res.push_back({proc, proc});
+            res.push_back({ proc, proc });
         }
+
+        std::cout << "\n\nIn FindAttribute for PROCNAMES (?) now. BELOW ARE THE RESULTS\n";
+        for (std::vector<std::string> curr : res) {
+            std::cout << "{" << curr[0] + ", " << curr[1] << "}\n";
+        }
+        std::cout << "\n";
     }
 
     return res;
@@ -298,16 +361,16 @@ std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
     if (isLeftParamFixed) {
         if (isRightParamFixed) {
             if (leftParamValue == rightParamValue) {
-                res.push_back({leftParamValue, rightParamValue});
+                res.push_back({ leftParamValue, rightParamValue });
             }
         }
         else {
             res = findAttribute(rightParam);
             res.erase(std::remove_if(res.begin(), res.end(),
-                                     [&](const std::vector<std::string>& item) {
-                                         return item[1] != leftParamValue;
-                                     }),
-                      res.end());
+                [&](const std::vector<std::string>& item) {
+                    return item[1] != leftParamValue;
+                }),
+                res.end());
             for (auto& item : res) {
                 std::swap(item[0], item[1]);
             }
@@ -317,10 +380,10 @@ std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
         if (isRightParamFixed) {
             res = findAttribute(leftParam);
             res.erase(std::remove_if(res.begin(), res.end(),
-                                     [&](const std::vector<std::string>& item) {
-                                         return item[1] != rightParamValue;
-                                     }),
-                      res.end());
+                [&](const std::vector<std::string>& item) {
+                    return item[1] != rightParamValue;
+                }),
+                res.end());
         }
         else {
             std::vector<std::vector<std::string>> leftParamRes = findAttribute(leftParam);
@@ -332,12 +395,11 @@ std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
             }
             for (auto pair : rightParamRes) {
                 for (auto item : tempMap[pair[1]]) {
-                    res.push_back({item, pair[0]});
+                    res.push_back({ item, pair[0] });
                 }
             }
         }
     }
-
     return res;
 }
 

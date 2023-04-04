@@ -40,50 +40,22 @@ bool QueryDB::hasParameter(Parameter& p) {
 }
 
 vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
-    vector<Parameter> presentParams;
-    Table initialTable = emptyTable;
     for (Parameter& param : params) {
-        if (this->hasParameter(param)) {
-            presentParams.push_back(param);
-        }
-        else if (param.getType() != ParameterType::BOOLEAN) {
+        if (!this->hasParameter(param) && param.getType() != ParameterType::BOOLEAN) {
             vector<vector<string>> contentVec = {};
-            Table table = emptyTable;
-            if (param.hasAttribute()) {
-                contentVec = readPKB.findAttribute(param);
-                for (vector<string> s : contentVec) {
-                    table =
-                        Table({Parameter(AppConstants::WILDCARD_VALUE, ParameterType::WILDCARD), param}, contentVec);
-                    table = table.extractDesignEntities();
-                }
+            vector<string> content = readPKB.findDesignEntities(param);
+            for (string& c : content) {
+                contentVec.push_back(std::move(vector<string>{c}));
             }
-            else {
-                vector<string> content = readPKB.findDesignEntities(param);
-                for (string& c : content) {
-                    contentVec.push_back(std::move(vector<string>{c}));
-                }
-                table = Table({param}, contentVec);
-            }
-            if (initialTable.isEmptyTable()) {
-                initialTable = table;
-            } else {
-                initialTable.cartesianProduct(table);
-            }
+            Parameter p(param);
+            p.updateAttributeType(AttributeType::NONE);
+            Table table({p}, contentVec);
+            this->insertTable(table);
         }
     }
-    if (!presentParams.empty()) {
-        Table extracted = extractColumns(presentParams, readPKB);
-        if (initialTable.isEmptyTable()) {
-            initialTable = extracted;
-        } else {
-            initialTable.cartesianProduct(extracted);
-        }
-    }
-    if (hasEmptyTable()) {
-        initialTable = emptyTable;
-    }
+    Table extracted = extractColumns(params, readPKB);
     return params[0].getType() == ParameterType::BOOLEAN ? hasEmptyTable() ? falseVec : trueVec
-                                                         : initialTable.getResult(params);
+        : extracted.getResult(params);
 }
 
 bool QueryDB::hasEmptyTable() {
@@ -98,6 +70,9 @@ bool QueryDB::hasEmptyTable() {
 Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
     // Assumes that each table has unique headers.
     // extracts in any order
+    if (params[0].getType() == ParameterType::BOOLEAN || hasEmptyTable()) {
+        return emptyTable;
+    }
     vector<Table> temp;
     for (Table& table : tableVector) {
         vector<Parameter> headers = table.getHeaders();
@@ -118,7 +93,7 @@ Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
         if (param.hasAttribute()) {
             vector<vector<string>> mapping = readPKB.findAttribute(param);
             for (const vector<string>& kv : mapping) {
-                attributeMap.insert({kv[0], kv[1]});
+                attributeMap.insert({ kv[0], kv[1] });
             }
             for (Table& t : temp) {
                 if (t.hasParameter(param)) {
