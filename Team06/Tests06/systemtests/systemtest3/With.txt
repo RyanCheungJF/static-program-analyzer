@@ -38,3 +38,28 @@ constant x; assign a;
 Select x with x.value = a.stmt#
 1, 2
 5000
+9 - comment
+call c; variable v;
+Select <c, v.varName> with c.stmt# = 17 such that Uses(c, v)
+17 d, 17 endpoint
+5000
+10 - comment
+read r; variable v;
+Select <r.stmt#, v> with r.stmt# = 28 such that Modifies(r, v)
+28 d
+5000
+11 - comment
+read r1, r2; variable v;
+Select <r1.stmt#, v> with r1.stmt# = 28 such that Modifies(r2, v)
+28 b, 28 d
+5000
+12 - comment
+read r1, r2; variable v;
+Select <r1.stmt#, v> with r1.stmt# = 27 such that Modifies(r2, v)
+none
+5000
+13 - comment
+read r1, r2; variable v;
+Select <r1.stmt#, v> such that Modifies(r2, v) with r1.stmt# = r2.stmt#
+15 b, 28 d
+5000

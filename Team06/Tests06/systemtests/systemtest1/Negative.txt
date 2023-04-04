@@ -528,3 +528,53 @@ print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; consta
 Select proc with proc.procName = _"conditional"_
 SyntaxError
 5000
+106 - single quotations in with
+
+Select BOOLEAN with "" = ''
+SyntaxError
+5000
+107 - negative comparison in with
+
+Select BOOLEAN with -1 = -1
+SyntaxError
+5000
+108 - comapring empty strings in with
+
+Select BOOLEAN with "" = ""
+SyntaxError
+5000
+109 - comparing empty strings in with
+
+Select BOOLEAN with "" = " "
+SyntaxError
+5000
+110 - comparing empty strings in with
+
+Select BOOLEAN with " " = " "
+SyntaxError
+5000
+111 - triple equality in with
+
+Selct BOOLEAN with 0 = 0 = 0
+SyntaxError
+5000
+112 - nested tuple
+assign a1, a2;
+Selct <a1, <a2>> with Affects(a1, a2)
+SyntaxError
+5000
+113 - double arrows in tuple
+assign a;
+Select <<a>> such that Next*(a, a)
+SyntaxError
+5000
+114 - invalid whitespace in with
+
+Select BOOLEAN with " abcd " = " ab cd "
+SyntaxError
+5000
+115 - invalid comparisons in with
+
+Select BOOLEAN with "abcd" = 8
+SemanticError
+5000

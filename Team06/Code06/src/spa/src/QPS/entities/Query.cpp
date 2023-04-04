@@ -90,7 +90,8 @@ Query::Query(const Query& q) {
     isSelectTuple = q.isSelectTuple;
 }
 
-Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector<Pattern>& ps, vector<Comparison>& cs, bool ist) {
+Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector<Pattern>& ps, vector<Comparison>& cs,
+             bool ist) {
     selectParameters = ss;
     relations = rs;
     patterns = ps;

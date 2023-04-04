@@ -151,7 +151,7 @@ Table Table::extractDesignEntities() {
 }
 
 void Table::updateValues(Parameter p, unordered_map<string, string>& map) {
-    int index;
+    int index = 0;
     for (int i = 0; i < headers.size(); i++) {
         if (headers[i] == p && !headers[i].hasAttribute()) {
             headers[i].updateAttributeType(p.getAttribute());
@@ -232,7 +232,6 @@ void Table::removeDuplicates() {
             this->contents.push_back(content);
         }
     }
-
 }
 
 vector<string> Table::getResult(vector<Parameter>& params) {

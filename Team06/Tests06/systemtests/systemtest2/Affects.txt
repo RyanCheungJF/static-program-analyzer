@@ -73,3 +73,13 @@ stmt s; print p; call c; read r;
 Select s such that Affects(5, 6)
 none
 5000
+16 - comment
+stmt s;
+Select s such that Affects(s, _)
+16, 22, 23, 6, 20
+5000
+17 - comment
+stmt s;
+Select s such that Affects(_, s)
+8, 20, 25, 26
+5000

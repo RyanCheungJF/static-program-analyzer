@@ -173,3 +173,88 @@ print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; consta
 Select v.varName
 z, y, w, o, a, b, c, x, k, j, i, A, B, N, thisIsAVeryLongNameAndILikeApples, while, if, else
 5000
+36 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select c with 4 = c.stmt#
+4
+5000
+37 - comment
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select c with 4 = c.stmt# with "conditionalSpam" = c.procName
+4
+5000
+38 - weird equality
+
+Select BOOLEAN with 0 = 0
+TRUE
+5000
+39 - weird equality
+
+Select BOOLEAN with 0 = 1
+FALSE
+5000
+40 - weird equality
+
+Select BOOLEAN with 1 = 0
+FALSE
+5000
+41 - weird equality
+
+Select BOOLEAN with 2 = 2
+TRUE
+5000
+42 - weird equality
+
+Select BOOLEAN with 10000 = 1000
+FALSE
+5000
+43 - weird equality
+
+Select BOOLEAN with "a" = "A"
+FALSE
+5000
+44 - whitespace
+
+Select BOOLEAN with " a" = "a"
+TRUE
+5000
+45 - whitespace
+
+Select BOOLEAN with " a " = " a "
+TRUE
+5000
+46 - whitespace
+
+Select BOOLEAN with "a" = "a "
+TRUE
+5000
+47 - whitespace
+
+Select BOOLEAN with "a " = "a "
+TRUE
+5000
+48 - whitespace
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select c with 4 = c.stmt# with "conditionalSpam " = c.procName
+4
+5000
+49 - whitespace
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select c with 4 = c.stmt# with "                 conditionalSpam       " = c.procName
+4
+5000
+50 - whitespace
+
+Select BOOLEAN with "   aAa " = " aAa   "
+TRUE
+5000
+51 - capitalization
+
+Select BOOLEAN with "   aAa " = " aaa   "
+FALSE
+5000
+52 - combination
+
+Select BOOLEAN with 1000 = 1000 with 2 = 2 with "aaa" = "aaa" with "  bb   " = "  bb   "
+TRUE
+5000

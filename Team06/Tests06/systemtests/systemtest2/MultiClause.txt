@@ -28,3 +28,23 @@ stmt s; procedure p;
 Select BOOLEAN such that Affects*(s, s) and Calls*(p, p)
 FALSE
 5000
+7 - comment
+stmt s;
+Select s such that Affects*(s, s) and Next*(s, s)
+20
+5000
+8 - comment
+while w; if i;
+Select w pattern w("i", _)
+18
+5000
+9 - comment
+stmt s;
+Select s such that Affects*(_, _) and Next*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29
+5000
+10 - comment
+if i; variable v;
+Select <i, v> such that Modifies(i, v) with v.varName = "y"
+4 y, 24 y
+5000
