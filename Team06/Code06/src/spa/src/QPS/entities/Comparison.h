@@ -21,7 +21,6 @@ public:
     bool hasValidComparisonTypes();
     bool operator==(const Comparison&) const;
     static Comparison makeComparison(string o, Parameter leftP, Parameter rightP);
-    bool operator==(const Comparison&) const;
 
 private:
     Parameter leftParam;
