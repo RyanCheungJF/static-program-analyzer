@@ -103,22 +103,16 @@ TEST_CASE("insertTable / insertion of three tables with intersection / return "
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     qdb.insertTable(t3);
-    vector<string> finalContent = qdb.fetch(params1, readPkb);
-    vector<vector<string>> expectedCols = {{"1", "2", "3"}, {"x", "y"}, {"4", "5"}, {"99"}};
-    vector<Parameter> expectedParams = {Parameter("s1", ParameterType::STMT), Parameter("v", ParameterType::VARIABLE),
-                                        Parameter("s2", ParameterType::STMT), Parameter("a", ParameterType::ASSIGN)};
-    vector<string> aa = qdb.fetch({Parameter("s1", ParameterType::STMT)}, readPkb);
-    vector<string> bb = qdb.fetch({Parameter("v", ParameterType::VARIABLE)}, readPkb);
-    vector<string> cc = qdb.fetch({Parameter("s2", ParameterType::STMT)}, readPkb);
-    vector<string> dd = qdb.fetch({Parameter("a", ParameterType::ASSIGN)}, readPkb);
-    REQUIRE(find(aa.begin(), aa.end(), "1") != aa.end());
-    REQUIRE(find(aa.begin(), aa.end(), "2") != aa.end());
-    REQUIRE(find(aa.begin(), aa.end(), "3") != aa.end());
-    REQUIRE(find(bb.begin(), bb.end(), "x") != bb.end());
-    REQUIRE(find(bb.begin(), bb.end(), "y") != bb.end());
-    REQUIRE(find(cc.begin(), cc.end(), "4") != cc.end());
-    REQUIRE(find(cc.begin(), cc.end(), "5") != cc.end());
-    REQUIRE(find(dd.begin(), dd.end(), "99") != dd.end());
+    vector<string> finalContent = qdb.fetch({
+        Parameter("s1", ParameterType::STMT),
+        Parameter("v", ParameterType::VARIABLE),
+        Parameter("s2", ParameterType::STMT),
+        Parameter("a", ParameterType::ASSIGN),
+        }, readPkb);
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "1 x 4 99") != finalContent.end());
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "2 y 5 99") != finalContent.end());
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "3 y 5 99") != finalContent.end());
+
 }
 
 TEST_CASE("insertTable / intersecting headers but non intersecting content / "
@@ -138,19 +132,14 @@ TEST_CASE("insertTable / intersecting headers but non intersecting content / "
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     qdb.insertTable(t3);
-    vector<string> finalContent = qdb.fetch(params1, readPKB);
-    vector<vector<string>> expectedCols = {{}, {}, {}, {}};
-    vector<Parameter> expectedParams = {Parameter("s1", ParameterType::STMT), Parameter("v", ParameterType::VARIABLE),
+    vector<Parameter> fetchParams = {Parameter("s1", ParameterType::STMT), Parameter("v", ParameterType::VARIABLE),
                                         Parameter("s2", ParameterType::STMT), Parameter("a", ParameterType::ASSIGN)};
-    bool a = qdb.fetch({Parameter("s1", ParameterType::STMT)}, readPKB) == expectedCols[0];
-    bool b = qdb.fetch({Parameter("v", ParameterType::VARIABLE)}, readPKB) == expectedCols[1];
-    bool c = qdb.fetch({Parameter("s2", ParameterType::STMT)}, readPKB) == expectedCols[2];
-    bool d = qdb.fetch({Parameter("a", ParameterType::ASSIGN)}, readPKB) == expectedCols[3];
-    REQUIRE((a && b && c && d));
+    vector<string> finalContent = qdb.fetch(fetchParams, readPKB);
+    REQUIRE(finalContent.empty());
 }
 
 TEST_CASE("insertTable / third table intersects with first two tables / return "
-          "ONE empty table") {
+          "correct intersection result") {
 
     QueryDB qdb;
     ReadPKB readPKB;
@@ -166,21 +155,17 @@ TEST_CASE("insertTable / third table intersects with first two tables / return "
     qdb.insertTable(t1);
     qdb.insertTable(t2);
     qdb.insertTable(t3);
-    vector<string> finalContent = qdb.fetch(params1, readPKB);
-    vector<vector<string>> expectedCols = {{"1", "2", "3"}, {"4", "5"}, {"x", "y"}, {"a", "b"}};
-    vector<string> aa = qdb.fetch({Parameter("s1", ParameterType::STMT)}, readPKB);
-    vector<string> bb = qdb.fetch({Parameter("s2", ParameterType::STMT)}, readPKB);
-    vector<string> cc = qdb.fetch({Parameter("x", ParameterType::VARIABLE)}, readPKB);
-    vector<string> dd = qdb.fetch({Parameter("y", ParameterType::VARIABLE)}, readPKB);
-    REQUIRE(find(aa.begin(), aa.end(), "1") != aa.end());
-    REQUIRE(find(aa.begin(), aa.end(), "2") != aa.end());
-    REQUIRE(find(aa.begin(), aa.end(), "3") != aa.end());
-    REQUIRE(find(bb.begin(), bb.end(), "4") != bb.end());
-    REQUIRE(find(bb.begin(), bb.end(), "5") != bb.end());
-    REQUIRE(find(cc.begin(), cc.end(), "x") != cc.end());
-    REQUIRE(find(cc.begin(), cc.end(), "y") != cc.end());
-    REQUIRE(find(dd.begin(), dd.end(), "a") != dd.end());
-    REQUIRE(find(dd.begin(), dd.end(), "b") != dd.end());
+    vector<Parameter> fetchParams = {
+            Parameter("s1", ParameterType::STMT),
+            Parameter("s2", ParameterType::STMT),
+            Parameter("x", ParameterType::VARIABLE),
+            Parameter("y", ParameterType::VARIABLE)
+    };
+    vector<string> finalContent = qdb.fetch(fetchParams, readPKB);
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "3 5 y b") != finalContent.end());
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "2 5 y b") != finalContent.end());
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "3 4 y a") != finalContent.end());
+    REQUIRE(find(finalContent.begin(), finalContent.end(), "1 4 x a") != finalContent.end());
 }
 
 TEST_CASE("insertTable / insert tables with empty content / tables can still "

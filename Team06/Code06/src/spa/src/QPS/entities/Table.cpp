@@ -140,14 +140,14 @@ void Table::intersectTable(Table& t) {
     contents = newContent;
 }
 
-Table Table::extractDesignEntities() {
+void Table::extractDesignEntities() {
     vector<int> indexes;
     for (int i = 0; i < headers.size(); i++) {
         if (Parameter::isDsgEntity(headers[i])) {
             indexes.push_back(i);
         }
     }
-    return extractColumns(indexes);
+    this->extractColumns(indexes);
 }
 
 void Table::updateValues(Parameter p, unordered_map<string, string>& map) {
@@ -164,7 +164,7 @@ void Table::updateValues(Parameter p, unordered_map<string, string>& map) {
     }
 }
 
-Table Table::extractColumns(vector<int>& indexes) {
+void Table::extractColumns(vector<int>& indexes) {
     std::unordered_set<vector<string>, VectorStringHash> newContent;
     newContent.reserve(contents.size());
     vector<Parameter> newHeader;
@@ -188,15 +188,15 @@ Table Table::extractColumns(vector<int>& indexes) {
     for (auto& entry : newContent) {
         newContentVec.push_back(entry);
     }
-
-    return Table{newHeader, newContentVec};
+    this->headers = newHeader;
+    this->contents = newContentVec;
 }
 
 bool Table::isEmptyTable() const {
     return contents.empty();
 }
 
-Table Table::extractColumns(vector<Parameter>& params) {
+void Table::extractColumns(vector<Parameter>& params) {
     // Assume that all the params called is confirmed to be present in the table
     vector<int> indexes;
     for (int i = 0; i < params.size(); i++) {
@@ -207,7 +207,7 @@ Table Table::extractColumns(vector<Parameter>& params) {
             }
         }
     }
-    return extractColumns(indexes);
+    extractColumns(indexes);
 }
 
 void Table::removeDuplicates() {

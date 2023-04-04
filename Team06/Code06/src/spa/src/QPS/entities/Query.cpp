@@ -31,7 +31,7 @@ void Query::evaluateRelationship(QueryDB& queryDb, ReadPKB& readPKB) {
         }
         // clauses that are just fixed ints or wild cards will just be
         // taken as true and not be inserted into the tableVec
-        table = table.extractDesignEntities();
+        table.extractDesignEntities();
         if (!table.isEmptyTable()) {
             queryDb.insertTable(table);
         }
@@ -52,7 +52,7 @@ void Query::evaluatePattern(QueryDB& queryDb, ReadPKB& readPKB) {
         vector<Parameter> headers{*patternSyn, *entRef};
         Table table(headers, response);
         // This will remove wild cards and FIXED INT from the table.
-        table = table.extractDesignEntities();
+        table.extractDesignEntities();
         if (!table.isEmptyTable()) {
             queryDb.insertTable(table);
         }
@@ -73,7 +73,7 @@ void Query::evaluateComparison(QueryDB& queryDb, ReadPKB& readPKB) {
         rightParam.updateAttributeType(AttributeType::NONE);
         vector<Parameter> headers{leftParam, rightParam};
         Table table{headers, response};
-        table = table.extractDesignEntities();
+        table.extractDesignEntities();
         if (!table.isEmptyTable()) {
             queryDb.insertTable(table);
         }

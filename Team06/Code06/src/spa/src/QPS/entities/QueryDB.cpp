@@ -85,12 +85,12 @@ Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
         if (paramsVec.empty()) {
             continue;
         }
-        Table extracted = table.extractColumns(paramsVec);
-        temp.push_back(extracted);
+        table.extractColumns(paramsVec);
+        temp.push_back(table);
     }
     for (Parameter& param : params) {
-        unordered_map<string, string> attributeMap;
         if (param.hasAttribute()) {
+            unordered_map<string, string> attributeMap;
             vector<vector<string>> mapping = readPKB.findAttribute(param);
             for (const vector<string>& kv : mapping) {
                 attributeMap.insert({ kv[0], kv[1] });
