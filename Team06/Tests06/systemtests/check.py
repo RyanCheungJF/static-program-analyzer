@@ -4,8 +4,6 @@ import platform
 import xml.etree.ElementTree as ET
 
 r_path = Path('Team06/Tests06/systemtests/')
-if (platform.system() == "Darwin"):
-    r_path = os.getcwd()
 
 src = os.listdir(r_path)
 error = False

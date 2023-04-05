@@ -48,3 +48,18 @@ if i; variable v;
 Select <i, v> such that Modifies(i, v) with v.varName = "y"
 4 y, 24 y
 5000
+11 - comment
+while BOOLEAN;
+Select BOOLEAN pattern BOOLEAN("N", _)
+18
+5000
+12 - comment
+call BOOLEAN;
+Select BOOLEAN such that Follows(1, 2)
+9, 11, 13, 14, 15, 19
+5000
+13 - comment
+print BOOLEAN;
+Select BOOLEAN with BOOLEAN.stmt# = 28
+28
+5000

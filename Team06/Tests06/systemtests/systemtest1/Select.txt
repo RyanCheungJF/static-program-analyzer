@@ -53,3 +53,13 @@ print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; consta
 Select x 
 0, 1, 2, 3, 5, 7, 10, 42, 145
 5000
+12 - comment
+procedure such;
+Select such such that Follows(1, 2)
+arithmetic, conditionalSpam
+5000
+13 - comment
+procedure Select;
+Select Select such that Follows(1, 2)
+arithmetic, conditionalSpam
+5000

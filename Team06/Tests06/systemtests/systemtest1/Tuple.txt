@@ -408,3 +408,13 @@ stmt s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
 Select <s1, s4> such that Follows(s1, s2) and Follows(s2, s3) and Follows(s3, s4) and Follows(s4, s5) and Follows(s5, s6) and Follows(s6, s7) and Follows(s7, s8) and Follows(s8, s9) and Follows(s9, s10)
 17 20, 4 7, 5 8, 6 9, 7 10, 1 4, 2 5, 3 6
 5000
+83 - BOOLEAN declared as an alias
+assign a, BOOLEAN;
+Select <a, BOOLEAN> such that Affects(a, BOOLEAN)
+10 16, 12 16, 13 15, 15 16, 17 41, 18 26, 20 35, 22 40, 26 26, 28 35, 28 38, 28 39, 35 35, 37 38, 38 35, 38 38, 38 39, 40 40, 41 41, 5 7, 5 8, 6 7, 6 8, 8 9, 9 10
+5000
+84 - BOOLEAN declared as an alias
+call BOOLEAN;
+Select <BOOLEAN> such that Follows(1, 2)
+4
+5000
