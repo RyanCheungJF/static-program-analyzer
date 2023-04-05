@@ -10,6 +10,7 @@ public:
     Parameter patternSyn;
     Parameter entRef;
     vector<string> exprSpecs;
+    double evalPriority;
     Pattern();
     Pattern(const Pattern&);
     Pattern(Parameter, Parameter, vector<string>&);
@@ -22,8 +23,12 @@ public:
     ParameterType getEntRefType();
     std::string getEntRefValue();
     bool operator==(const Pattern&) const;
+    bool operator>(const Pattern&) const;
+    bool operator<(const Pattern&) const;
+    double getPriority();
 
 private:
+    double calcPriority();
     static const unordered_map<int, shared_ptr<SyntaxValidator<Pattern>>> paramCountToValidatorMap;
 };
 

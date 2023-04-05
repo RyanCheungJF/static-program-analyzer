@@ -36,9 +36,9 @@ public:
     bool operator==(const Query&) const;
 
 private:
-    void evaluateRelationship(QueryDB&, ReadPKB&);
-    void evaluatePattern(QueryDB&, ReadPKB&);
-    void evaluateComparison(QueryDB&, ReadPKB&);
+    bool evaluateRelationship(QueryDB&, ReadPKB&);
+    bool evaluatePattern(QueryDB&, ReadPKB&);
+    bool evaluateComparison(QueryDB&, ReadPKB&);
 };
 
 #endif // SPA_QUERY_H

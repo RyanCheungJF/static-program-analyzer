@@ -18,7 +18,7 @@ shared_ptr<Relationship> Relationship::makeRelationship(string type, vector<Para
 Relationship::Relationship(const Relationship& r) {
     type = r.type;
     params = r.params;
-    evalPriority = getPriority();
+    evalPriority = calcPriority();
 }
 
 vector<Parameter*> Relationship::getAllUncheckedSynonyms() {
@@ -69,48 +69,38 @@ RelationshipType Relationship::getType() const {
     return type;
 }
 
-double Relationship::getPriority() {
+double Relationship::getPriority()
+{
+    return evalPriority;
+}
+
+double Relationship::calcPriority() {
+    //Highest prio goes first
     int wildcardCounter = 0;
     int stmtCounter = 0;
+    int fixedValCounter = 0;
     int othersCounter = 0; //subtype of stmt or procedure
 
     for (int i = 0; i < params.size(); i++) {
         if (params.at(i).isFixedValue()) {
-            continue; // in PKB, (int, int) calls are the lowest priority
-        } else if (params.at(i).isWildcard()) {
+            fixedValCounter++;
+        } 
+        else if (params.at(i).isWildcard()) {
             wildcardCounter++;
-        } else if (params.at(i).isStmt()) {
+        }
+        else if (params.at(i).isStmt()) {
             stmtCounter++;
-        } else {
+        }
+        else {
             othersCounter++;
         }
     }
 
-    //todo: check with shee hui if this is ok or we have to replace the magic values with AppConstant
-    if (transitiveRelationships.find(type) != transitiveRelationships.end()) {
-        if (wildcardCounter == 2) {
-            return 0;
-        } else if (stmtCounter == 2) {
-            return 1;
-        } else if (othersCounter == 2) {
-            return 2;
-        } else if (stmtCounter == 1 || othersCounter == 1) {
-            return 3;
-        }
-        return 4;
-    } else {
-        if (wildcardCounter == 2) {
-            return 5;
-        } else if (stmtCounter == 2) {
-            return 6;
-        } else if (othersCounter == 2) {
-            return 7;
-        } else if (stmtCounter == 1 || othersCounter == 1) {
-            return 8;
-        }
-        return 9;
-    }
+    double prio = wildcardCounter * AppConstants::wildcardWeight + stmtCounter * AppConstants::stmtWeight + fixedValCounter * AppConstants::fixedValWeight + othersCounter * AppConstants::otherWeight + typeToPriority.find(type)->second * AppConstants::typeWeight;
+    return prio;
 }
+
+
 
 bool Relationship::validateParams() {
     for (int i = 0; i < params.size(); i++) {
@@ -234,3 +224,15 @@ const unordered_set<RelationshipType> Relationship::transitiveRelationships = {
         RelationshipType::AFFECTST, RelationshipType::NEXTT, RelationshipType::CALLST,
         RelationshipType::FOLLOWST, RelationshipType::PARENTT,
 };
+
+
+//This can be changed to any order
+const unordered_map<RelationshipType, int> Relationship::typeToPriority = {
+        {RelationshipType::FOLLOWS, 5}, {RelationshipType::FOLLOWST, 4},
+        {RelationshipType::PARENT, 7},  {RelationshipType::PARENTT, 6},
+        {RelationshipType::USES, 9},   {RelationshipType::MODIFIES, 8},
+        {RelationshipType::NEXT, 1},    {RelationshipType::NEXTT, 0},
+        {RelationshipType::CALLS, 11},   {RelationshipType::CALLST, 10},
+        {RelationshipType::AFFECTS, 3}, {RelationshipType::AFFECTST, 2},
+};
+
