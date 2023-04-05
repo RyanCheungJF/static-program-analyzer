@@ -117,10 +117,10 @@ Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector
         std::sort(relations.begin(), relations.end(), SharedPtrCompare::cmp<Relationship>);
     }
     if (patterns.size() > 1) {
-        std::sort(patterns.begin(), patterns.end());
+        std::sort(patterns.begin(), patterns.end(), greater());
     }
     if (comparisons.size() > 1) {
-        std::sort(comparisons.begin(), comparisons.end());
+        std::sort(comparisons.begin(), comparisons.end(), greater());
     }
 }
 
