@@ -78,16 +78,17 @@ double Relationship::calcPriority() {
     int wildcardCounter = 0;
     int stmtCounter = 0;
     int fixedValCounter = 0;
-    int othersCounter = 0; // subtype of stmt or procedure
+    int othersCounter = 0; // subtype of stmt or procedure or variable
 
     for (int i = 0; i < params.size(); i++) {
-        if (params.at(i).isFixedValue()) {
+        Parameter currParam = params.at(i);
+        if (currParam.isFixedValue()) {
             fixedValCounter++;
         }
-        else if (params.at(i).isWildcard()) {
+        else if (currParam.isWildcard()) {
             wildcardCounter++;
         }
-        else if (params.at(i).isStmt()) {
+        else if (currParam.isStmt()) {
             stmtCounter++;
         }
         else {
@@ -95,9 +96,16 @@ double Relationship::calcPriority() {
         }
     }
 
-    double prio = wildcardCounter * AppConstants::wildcardWeight + stmtCounter * AppConstants::stmtWeight +
-                  fixedValCounter * AppConstants::fixedValWeight + othersCounter * AppConstants::otherWeight +
+    double prio = stmtCounter * AppConstants::stmtWeight + fixedValCounter * AppConstants::fixedValWeight +
+                  othersCounter * AppConstants::otherWeight +
                   typeToPriority.find(type)->second * AppConstants::typeWeight;
+
+    if (stmtCounter > 0 || othersCounter > 0) {
+        prio += wildcardCounter * AppConstants::wildcardWeightWithSyn;
+    } else {
+        prio += wildcardCounter * AppConstants::wildcardWeight;
+    }
+
     return prio;
 }
 
@@ -226,8 +234,8 @@ const unordered_set<RelationshipType> Relationship::transitiveRelationships = {
 
 // This can be changed to any order
 const unordered_map<RelationshipType, int> Relationship::typeToPriority = {
-    {RelationshipType::FOLLOWS, 5}, {RelationshipType::FOLLOWST, 4}, {RelationshipType::PARENT, 7},
-    {RelationshipType::PARENTT, 6}, {RelationshipType::USES, 9},     {RelationshipType::MODIFIES, 8},
-    {RelationshipType::NEXT, 1},    {RelationshipType::NEXTT, 0},    {RelationshipType::CALLS, 11},
-    {RelationshipType::CALLST, 10}, {RelationshipType::AFFECTS, 3},  {RelationshipType::AFFECTST, 2},
+    {RelationshipType::FOLLOWS, 10}, {RelationshipType::FOLLOWST, 4}, {RelationshipType::PARENT, 9},
+    {RelationshipType::PARENTT, 3},  {RelationshipType::USES, 7},     {RelationshipType::MODIFIES, 8},
+    {RelationshipType::NEXT, 6},     {RelationshipType::NEXTT, -8000},    {RelationshipType::CALLS, 11},
+    {RelationshipType::CALLST, 5},   {RelationshipType::AFFECTS, -7999},  {RelationshipType::AFFECTST, -7998},
 };
