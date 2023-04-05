@@ -39,9 +39,8 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleIntWildcard(Pa
 
     std::unordered_set<StmtNum>& stmtNums = rlStorage->getRightItems(stoi(paramString1));
 
-    for (StmtNum stmtNum : stmtNums) {
-        std::string stmtNumString = to_string(stmtNum);
-        res.push_back({paramString1, stmtNumString});
+    if (!stmtNums.empty()) {
+        return AppConstants::EARLY_RETURN_RES;
     }
     return res;
 }
@@ -102,9 +101,10 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardInt(Pa
     std::string paramString2 = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
-    for (StmtNum stmtNum : rlStorage->getLeftItems(stoi(paramString2))) {
-        std::string stmtNumString = to_string(stmtNum);
-        res.push_back({stmtNumString, paramString2});
+    std::unordered_set<StmtNum>& stmtNums = rlStorage->getLeftItems(stoi(paramString2));
+    
+    if (!stmtNums.empty()) {
+        return AppConstants::EARLY_RETURN_RES;
     }
     return res;
 }

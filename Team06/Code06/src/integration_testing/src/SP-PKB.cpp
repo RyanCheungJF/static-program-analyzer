@@ -141,13 +141,13 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
         REQUIRE(follows5actual.empty());
 
         shared_ptr<Relationship> followsTest7 = Relationship::makeRelationship(
-            AppConstants::FOLLOWS, {Parameter("4", ParameterType::FIXED_INT), Parameter("_", ParameterType::WILDCARD)});
+            AppConstants::FOLLOWS, {Parameter("4", ParameterType::FIXED_INT), Parameter("s1", ParameterType::STMT)});
         std::vector<std::vector<std::string>> follows7actual = readPKB.findRelationship(followsTest7);
         std::vector<std::vector<std::string>> follows7expected = {{"4", "5"}};
         REQUIRE(follows7expected == follows7actual);
 
         shared_ptr<Relationship> followsTest8 = Relationship::makeRelationship(
-            AppConstants::FOLLOWS, {Parameter("_", ParameterType::WILDCARD), Parameter("6", ParameterType::FIXED_INT)});
+            AppConstants::FOLLOWS, {Parameter("s2", ParameterType::STMT), Parameter("6", ParameterType::FIXED_INT)});
         std::vector<std::vector<std::string>> follows8actual = readPKB.findRelationship(followsTest8);
         std::vector<std::vector<std::string>> follows8expected = {{"5", "6"}};
         REQUIRE(follows8expected == follows8actual);
@@ -193,7 +193,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
     SECTION("SP-PKB Integration: FollowsT") {
         shared_ptr<Relationship> followsTTest1 =
             Relationship::makeRelationship(AppConstants::FOLLOWST, {Parameter("4", ParameterType::FIXED_INT),
-                                                                    Parameter("_", ParameterType::WILDCARD)});
+                                                                    Parameter("s1", ParameterType::STMT)});
         std::vector<std::vector<std::string>> followsT1actual = readPKB.findRelationship(followsTTest1);
         std::vector<std::vector<std::string>> followsT1expected = {{"4", "5"}, {"4", "6"}};
         std::sort(followsT1actual.begin(), followsT1actual.end());
@@ -450,13 +450,13 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
         REQUIRE(follows6actual.empty());
 
         shared_ptr<Relationship> followsTest7 = Relationship::makeRelationship(
-            AppConstants::FOLLOWS, {Parameter("4", ParameterType::FIXED_INT), Parameter("_", ParameterType::WILDCARD)});
+            AppConstants::FOLLOWS, {Parameter("4", ParameterType::FIXED_INT), Parameter("s1", ParameterType::STMT)});
         std::vector<std::vector<std::string>> follows7actual = readPKB.findRelationship(followsTest7);
         std::vector<std::vector<std::string>> follows7expected = {{"4", "7"}};
         REQUIRE(follows7expected == follows7actual);
 
         shared_ptr<Relationship> followsTest8 = Relationship::makeRelationship(
-            AppConstants::FOLLOWS, {Parameter("_", ParameterType::WILDCARD), Parameter("9", ParameterType::FIXED_INT)});
+            AppConstants::FOLLOWS, {Parameter("s2", ParameterType::STMT), Parameter("9", ParameterType::FIXED_INT)});
         std::vector<std::vector<std::string>> follows8actual = readPKB.findRelationship(followsTest8);
         std::vector<std::vector<std::string>> follows8expected = {{"8", "9"}};
         REQUIRE(follows8expected == follows8actual);
@@ -502,7 +502,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
     SECTION("SP-PKB Integration: FollowsT") {
         shared_ptr<Relationship> followsTTest1 =
             Relationship::makeRelationship(AppConstants::FOLLOWST, {Parameter("4", ParameterType::FIXED_INT),
-                                                                    Parameter("_", ParameterType::WILDCARD)});
+                                                                    Parameter("s1", ParameterType::STMT)});
         std::vector<std::vector<std::string>> followsT1actual = readPKB.findRelationship(followsTTest1);
         std::vector<std::vector<std::string>> followsT1expected = {{"4", "7"}};
         std::sort(followsT1actual.begin(), followsT1actual.end());
@@ -511,7 +511,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
 
         shared_ptr<Relationship> followsTTest2 =
             Relationship::makeRelationship(AppConstants::FOLLOWST, {Parameter("1", ParameterType::FIXED_INT),
-                                                                    Parameter("_", ParameterType::WILDCARD)});
+                                                                    Parameter("s2", ParameterType::STMT)});
         std::vector<std::vector<std::string>> followsT2actual = readPKB.findRelationship(followsTTest2);
         std::vector<std::vector<std::string>> followsT2expected = {{"1", "2"}, {"1", "3"}};
         std::sort(followsT2actual.begin(), followsT2actual.end());
@@ -865,13 +865,13 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 3") {
         REQUIRE(follows2actual.empty());
 
         shared_ptr<Relationship> followsTest3 = Relationship::makeRelationship(
-            AppConstants::FOLLOWS, {Parameter("8", ParameterType::FIXED_INT), Parameter("_", ParameterType::WILDCARD)});
+            AppConstants::FOLLOWS, {Parameter("8", ParameterType::FIXED_INT), Parameter("s1", ParameterType::STMT)});
         std::vector<std::vector<std::string>> follows3actual = readPKB.findRelationship(followsTest3);
         std::vector<std::vector<std::string>> follows3expected = {{"8", "11"}};
         REQUIRE(follows3expected == follows3actual);
 
         shared_ptr<Relationship> followsTest4 =
-            Relationship::makeRelationship(AppConstants::FOLLOWS, {Parameter("_", ParameterType::WILDCARD),
+            Relationship::makeRelationship(AppConstants::FOLLOWS, {Parameter("s2", ParameterType::STMT),
                                                                    Parameter("15", ParameterType::FIXED_INT)});
         std::vector<std::vector<std::string>> follows4actual = readPKB.findRelationship(followsTest4);
         std::vector<std::vector<std::string>> follows4expected = {{"12", "15"}};
@@ -904,7 +904,7 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 3") {
     SECTION("SP-PKB Integration: FollowsT") {
         shared_ptr<Relationship> followsTTest1 =
             Relationship::makeRelationship(AppConstants::FOLLOWST, {Parameter("1", ParameterType::FIXED_INT),
-                                                                    Parameter("_", ParameterType::WILDCARD)});
+                                                                    Parameter("s", ParameterType::STMT)});
         std::vector<std::vector<std::string>> followsT1actual = readPKB.findRelationship(followsTTest1);
         std::vector<std::vector<std::string>> followsT1expected = {{"1", "2"}, {"1", "3"}};
         std::sort(followsT1actual.begin(), followsT1actual.end());
