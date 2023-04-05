@@ -59,8 +59,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLS, params1);
 
         auto res = readPkb.findRelationship(rs1);
-        vector<vector<string>> expected = {{"proc1", "proc2"}};
-        REQUIRE(res == expected);
+        REQUIRE(res == AppConstants::EARLY_RETURN_RES);
     }
 
     SECTION("Calls(fixed_string, fixed_string)") {
@@ -99,8 +98,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
 
         auto res = readPkb.findRelationship(rs1);
-        vector<vector<string>> expected = {{"proc1", "proc2"}, {"proc1", "proc3"}};
-        REQUIRE(equals(res, expected));
+        REQUIRE(equals(res, AppConstants::EARLY_RETURN_RES));
     }
 
     SECTION("Calls*(fixed_string, proc synonym)") {
@@ -139,7 +137,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Calls and CallsT") {
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::CALLST, params1);
 
         auto res = readPkb.findRelationship(rs1);
-        REQUIRE(res.size() == 1);
+        REQUIRE(res == AppConstants::EARLY_RETURN_RES);
     }
 
     SECTION("Calls(p, p)") {
