@@ -92,10 +92,8 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
                                           Parameter("_", ParameterType::WILDCARD)};
         shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
 
-        std::vector<std::vector<std::string>> expected = {{"1", "a"}, {"1", "b"}, {"1", "c"}};
+        std::vector<std::vector<std::string>> expected = AppConstants::EARLY_RETURN_RES;
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
-        std::sort(actual.begin(), actual.end());
-        std::sort(expected.begin(), expected.end());
         REQUIRE(actual == expected);
     }
 
@@ -108,8 +106,6 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
 
         std::vector<std::vector<std::string>> expected = {};
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
-        std::sort(actual.begin(), actual.end());
-        std::sort(expected.begin(), expected.end());
         REQUIRE(actual == expected);
     }
 
@@ -231,7 +227,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
                                           Parameter("_", ParameterType::WILDCARD)};
         shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::MODIFIES, params2);
 
-        std::vector<std::vector<std::string>> expected = {{"proc1", "a"}, {"proc1", "b"}, {"proc1", "c"}};
+        std::vector<std::vector<std::string>> expected = AppConstants::EARLY_RETURN_RES;
         std::vector<std::vector<std::string>> actual = readPkb.findRelationship(rs2);
         REQUIRE(equals(actual, expected));
     }

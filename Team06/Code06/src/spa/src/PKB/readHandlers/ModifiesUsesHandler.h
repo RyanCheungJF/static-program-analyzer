@@ -18,13 +18,13 @@ private:
     std::vector<std::vector<std::string>> handleIntVar(Parameter param1, Parameter param2);
 
     // e.g. Uses(2, v) OR Uses(2, _)
-    std::vector<std::vector<std::string>> handleIntWildcard(Parameter fixedIntParam);
+    std::vector<std::vector<std::string>> handleIntWildcard(Parameter fixedIntParam, bool isEarlyReturn);
 
     // e.g. Uses("main", "x")
     std::vector<std::vector<std::string>> handleProcVar(Parameter param1, Parameter param2);
 
     // e.g. Uses("main", v) OR Uses("main", _)
-    std::vector<std::vector<std::string>> handleProcWildcard(Parameter fixedProcParam);
+    std::vector<std::vector<std::string>> handleProcWildcard(Parameter fixedProcParam, bool isEarlyReturn);
 
     // e.g. Uses(s, "x")
     std::vector<std::vector<std::string>> handleStmtSynVar(Parameter param1, Parameter param2);
