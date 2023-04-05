@@ -86,23 +86,19 @@ bool Pattern::operator==(const Pattern& p) const {
     return patternSyn == p.patternSyn && entRef == p.entRef && exprSpecs == p.exprSpecs;
 }
 
-bool Pattern::operator>(const Pattern& p) const
-{
+bool Pattern::operator>(const Pattern& p) const {
     return evalPriority > p.evalPriority;
 }
 
-bool Pattern::operator<(const Pattern& p) const
-{
+bool Pattern::operator<(const Pattern& p) const {
     return evalPriority < p.evalPriority;
 }
 
-double Pattern::getPriority()
-{
+double Pattern::getPriority() {
     return evalPriority;
 }
 
-double Pattern::calcPriority()
-{
+double Pattern::calcPriority() {
     int wildcardCounter = 0;
     int fixedValCounter = 0;
 

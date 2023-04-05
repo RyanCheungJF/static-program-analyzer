@@ -69,22 +69,21 @@ RelationshipType Relationship::getType() const {
     return type;
 }
 
-double Relationship::getPriority()
-{
+double Relationship::getPriority() {
     return evalPriority;
 }
 
 double Relationship::calcPriority() {
-    //Highest prio goes first
+    // Highest prio goes first
     int wildcardCounter = 0;
     int stmtCounter = 0;
     int fixedValCounter = 0;
-    int othersCounter = 0; //subtype of stmt or procedure
+    int othersCounter = 0; // subtype of stmt or procedure
 
     for (int i = 0; i < params.size(); i++) {
         if (params.at(i).isFixedValue()) {
             fixedValCounter++;
-        } 
+        }
         else if (params.at(i).isWildcard()) {
             wildcardCounter++;
         }
@@ -96,11 +95,11 @@ double Relationship::calcPriority() {
         }
     }
 
-    double prio = wildcardCounter * AppConstants::wildcardWeight + stmtCounter * AppConstants::stmtWeight + fixedValCounter * AppConstants::fixedValWeight + othersCounter * AppConstants::otherWeight + typeToPriority.find(type)->second * AppConstants::typeWeight;
+    double prio = wildcardCounter * AppConstants::wildcardWeight + stmtCounter * AppConstants::stmtWeight +
+                  fixedValCounter * AppConstants::fixedValWeight + othersCounter * AppConstants::otherWeight +
+                  typeToPriority.find(type)->second * AppConstants::typeWeight;
     return prio;
 }
-
-
 
 bool Relationship::validateParams() {
     for (int i = 0; i < params.size(); i++) {
@@ -221,18 +220,14 @@ const unordered_map<RelationshipType, vector<unordered_set<ParameterType>>> Rela
 };
 
 const unordered_set<RelationshipType> Relationship::transitiveRelationships = {
-        RelationshipType::AFFECTST, RelationshipType::NEXTT, RelationshipType::CALLST,
-        RelationshipType::FOLLOWST, RelationshipType::PARENTT,
+    RelationshipType::AFFECTST, RelationshipType::NEXTT,   RelationshipType::CALLST,
+    RelationshipType::FOLLOWST, RelationshipType::PARENTT,
 };
 
-
-//This can be changed to any order
+// This can be changed to any order
 const unordered_map<RelationshipType, int> Relationship::typeToPriority = {
-        {RelationshipType::FOLLOWS, 5}, {RelationshipType::FOLLOWST, 4},
-        {RelationshipType::PARENT, 7},  {RelationshipType::PARENTT, 6},
-        {RelationshipType::USES, 9},   {RelationshipType::MODIFIES, 8},
-        {RelationshipType::NEXT, 1},    {RelationshipType::NEXTT, 0},
-        {RelationshipType::CALLS, 11},   {RelationshipType::CALLST, 10},
-        {RelationshipType::AFFECTS, 3}, {RelationshipType::AFFECTST, 2},
+    {RelationshipType::FOLLOWS, 5}, {RelationshipType::FOLLOWST, 4}, {RelationshipType::PARENT, 7},
+    {RelationshipType::PARENTT, 6}, {RelationshipType::USES, 9},     {RelationshipType::MODIFIES, 8},
+    {RelationshipType::NEXT, 1},    {RelationshipType::NEXTT, 0},    {RelationshipType::CALLS, 11},
+    {RelationshipType::CALLST, 10}, {RelationshipType::AFFECTS, 3},  {RelationshipType::AFFECTST, 2},
 };
-

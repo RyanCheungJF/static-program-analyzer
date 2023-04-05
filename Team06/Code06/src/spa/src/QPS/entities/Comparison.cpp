@@ -83,23 +83,19 @@ bool Comparison::operator==(const Comparison& c) const {
     return leftParam == c.leftParam && rightParam == c.rightParam && op == c.op;
 }
 
-bool Comparison::operator>(const Comparison& c) const
-{
+bool Comparison::operator>(const Comparison& c) const {
     return evalPriority > c.evalPriority;
 }
 
-bool Comparison::operator<(const Comparison& c) const
-{
+bool Comparison::operator<(const Comparison& c) const {
     return evalPriority < c.evalPriority;
 }
 
-double Comparison::getPriority()
-{
+double Comparison::getPriority() {
     return evalPriority;
 }
 
-double Comparison::calcPriority()
-{
+double Comparison::calcPriority() {
     int wildcardCounter = 0;
     int fixedValCounter = 0;
 

@@ -13,20 +13,20 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
 
     bool isNotEmptyResult;
 
-    //Evaluate the most restricted type first
+    // Evaluate the most restricted type first
     isNotEmptyResult = evaluateComparison(queryDb, readPKB);
     if (isNotEmptyResult) {
-        //early termination code here
+        // early termination code here
     }
 
     isNotEmptyResult = evaluatePattern(queryDb, readPKB);
     if (isNotEmptyResult) {
-        //early termination code here
+        // early termination code here
     }
 
     isNotEmptyResult = evaluateRelationship(queryDb, readPKB);
     if (isNotEmptyResult) {
-        //early termination code here
+        // early termination code here
     }
 
     vector<string> res = queryDb.fetch(selectParameters, readPKB);
