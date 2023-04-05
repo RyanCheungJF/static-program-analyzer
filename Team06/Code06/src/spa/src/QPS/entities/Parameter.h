@@ -57,6 +57,7 @@ public:
     static bool isFixedStringOrWildcard(Parameter&);
     static bool isFixedIntOrWildCard(Parameter&);
     static bool isComparable(Parameter&, Parameter&);
+    bool isFixedValue();
     bool isFixedInt();
     bool isFixedStringType();
     bool isVariable();
@@ -70,6 +71,7 @@ public:
     bool hasValidAttributeType();
     bool hasAttribute();
     void updateSynonymType(ParameterType);
+    void updateAttributeType(AttributeType);
     int getIntValue();
     string getTypeString() const;
     bool operator==(const Parameter&) const;

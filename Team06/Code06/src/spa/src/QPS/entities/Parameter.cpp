@@ -144,6 +144,10 @@ bool Parameter::isComparable(Parameter& p1, Parameter& p2) {
     return p1CompType == p2CompType;
 }
 
+bool Parameter::isFixedValue() {
+    return isFixedInt() || isFixedStringType();
+}
+
 bool Parameter::isUncheckedSynonym() {
     return type == ParameterType::SYNONYM;
 }
@@ -161,6 +165,10 @@ void Parameter::updateSynonymType(ParameterType pt) {
         throw InternalException("Error: Parameter.updateSynonymType parameter is not a synonym.");
     }
     type = pt;
+}
+
+void Parameter::updateAttributeType(AttributeType at) {
+    attribute = at;
 }
 
 ParameterType Parameter::stringToType(string s) {

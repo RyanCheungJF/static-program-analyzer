@@ -10,7 +10,17 @@ TEST_CASE("parse / given valid string with such that clause / parse into "
     string test = "stmt s; variable v    ;\n     Select v such that Follows (s, 1) ";
     QPSParser qp;
     vector<Query> queries = qp.parse(test);
-    REQUIRE(true);
+
+    vector<Parameter> selectParams{Parameter("v", ParameterType::VARIABLE)};
+    Parameter rel1Param1("s", ParameterType::STMT);
+    Parameter rel1Param2("1", ParameterType::FIXED_INT);
+    vector<Parameter> rel1Params{rel1Param1, rel1Param2};
+    vector<shared_ptr<Relationship>> relationships{Relationship::makeRelationship(AppConstants::FOLLOWS, rel1Params)};
+    vector<Pattern> patterns{};
+    vector<Comparison> comparisons{};
+    bool isSelectTuple = false;
+    Query q(selectParams, relationships, patterns, comparisons, isSelectTuple);
+    REQUIRE(q == queries.at(0));
 }
 
 TEST_CASE("parse / select tuple, variables not declared / Semantic Error") {
@@ -43,7 +53,20 @@ TEST_CASE("parse / given valid string with such that and pattern clause / "
                   "Follows (s, 1) pattern a (v, _\"a + b\"_) ";
     QPSParser qp;
     vector<Query> queries = qp.parse(test);
-    REQUIRE(true);
+
+    vector<Parameter> selectParams{Parameter("v", ParameterType::VARIABLE)};
+    Parameter rel1Param1("s", ParameterType::STMT);
+    Parameter rel1Param2("1", ParameterType::FIXED_INT);
+    vector<Parameter> rel1Params{rel1Param1, rel1Param2};
+    vector<shared_ptr<Relationship>> relationships{Relationship::makeRelationship(AppConstants::FOLLOWS, rel1Params)};
+    Parameter pat1Syn("a", ParameterType::ASSIGN);
+    Parameter pat1Ent("v", ParameterType::VARIABLE);
+    vector<string> pat1Expr{"_a+b_"};
+    vector<Pattern> patterns{Pattern(pat1Syn, pat1Ent, pat1Expr)};
+    vector<Comparison> comparisons{};
+    bool isSelectTuple = false;
+    Query q(selectParams, relationships, patterns, comparisons, isSelectTuple);
+    REQUIRE(q == queries.at(0));
 }
 
 TEST_CASE("parse / create ifs pattern clause no issues / parse into correct "
@@ -51,7 +74,17 @@ TEST_CASE("parse / create ifs pattern clause no issues / parse into correct "
     string test = "variable v; if a; Select v pattern a (v, _, _) ";
     QPSParser qp;
     vector<Query> queries = qp.parse(test);
-    REQUIRE(true);
+
+    vector<Parameter> selectParams{Parameter("v", ParameterType::VARIABLE)};
+    vector<shared_ptr<Relationship>> relationships{};
+    Parameter pat1Syn("a", ParameterType::IF);
+    Parameter pat1Ent("v", ParameterType::VARIABLE);
+    vector<string> pat1Expr{"_", "_"};
+    vector<Pattern> patterns{Pattern(pat1Syn, pat1Ent, pat1Expr)};
+    vector<Comparison> comparisons{};
+    bool isSelectTuple = false;
+    Query q(selectParams, relationships, patterns, comparisons, isSelectTuple);
+    REQUIRE(q == queries.at(0));
 }
 
 TEST_CASE("parse / create ifs pattern clause last param is not a wildcard / "
@@ -166,6 +199,48 @@ TEST_CASE("parse / with clause variable empty string / catch syntax error") {
     string test = "variable v; procedure p; Select v with p.procName = \"\"";
     QPSParser qp;
     CHECK_THROWS_AS(qp.parse(test), SyntaxException);
+}
+
+TEST_CASE("parse / select <BOOLEAN> should not work / catch semantic error") {
+    string query = R"(
+        call c;
+        variable v;
+        Select <BOOLEAN> such that Uses(c,v))";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(query), SemanticException);
+}
+
+TEST_CASE("parse / select <BOOLEAN> should work if BOOLEAN is declared / parse without errors") {
+    string query = R"(
+        stmt BOOLEAN;
+        Select <BOOLEAN> such that Follows(BOOLEAN,2))";
+    QPSParser qp;
+    vector<Query> queries = qp.parse(query);
+
+    vector<Parameter> selectParams{Parameter("BOOLEAN", ParameterType::STMT)};
+    Parameter rel1Param1("BOOLEAN", ParameterType::STMT);
+    Parameter rel1Param2("2", ParameterType::FIXED_INT);
+    vector<Parameter> rel1Params{rel1Param1, rel1Param2};
+    vector<shared_ptr<Relationship>> relationships{Relationship::makeRelationship(AppConstants::FOLLOWS, rel1Params)};
+    vector<Pattern> patterns{};
+    vector<Comparison> comparisons{};
+    bool isSelectTuple = true;
+    Query q(selectParams, relationships, patterns, comparisons, isSelectTuple);
+    REQUIRE(q == queries.at(0));
+}
+
+TEST_CASE("parse / select <BOOLEAN, s> should work if BOOLEAN is not declared / catch semantic error") {
+    string query = R"(
+        stmt s;
+        Select <BOOLEAN, s> such that Follows(s,2))";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(query), SemanticException);
+}
+
+TEST_CASE("parse / with clause comparing string to int / throws semantic error") {
+    string query = "Select BOOLEAN with \"abcd\" = 8";
+    QPSParser qp;
+    REQUIRE_THROWS_AS(qp.parse(query), SemanticException);
 }
 
 TEST_CASE("splitQuery / splitting variable v; Select v; should give error / "

@@ -9,6 +9,7 @@ Table QueryDB::emptyTable = Table({}, {});
 void QueryDB::insertTable(Table& table) {
     // Check if we have any duplicate parameters
     // if so do an intersection
+    table.removeDuplicates();
     vector<Parameter> inputHeaders = table.getHeaders();
     vector<Parameter> seenParameters;
     vector<Table> oldTableVector = tableVector;
@@ -22,7 +23,7 @@ void QueryDB::insertTable(Table& table) {
         }
         else {
             // intersect the two tables
-            table = table.intersectTable(t);
+            table.intersectTable(t);
         }
     }
     // This may push empty tables into the tableVector
@@ -63,13 +64,22 @@ vector<string> QueryDB::fetch(vector<Parameter> params, ReadPKB& readPKB) {
                 }
                 table = Table({param}, contentVec);
             }
-            initialTable = initialTable.isEmptyTable() ? table : initialTable.cartesianProduct(table);
+            if (initialTable.isEmptyTable()) {
+                initialTable = table;
+            }
+            else {
+                initialTable.cartesianProduct(table);
+            }
         }
     }
     if (!presentParams.empty()) {
-        initialTable = initialTable.isEmptyTable()
-                           ? extractColumns(presentParams, readPKB)
-                           : extractColumns(presentParams, readPKB).cartesianProduct(initialTable);
+        Table extracted = extractColumns(presentParams, readPKB);
+        if (initialTable.isEmptyTable()) {
+            initialTable = extracted;
+        }
+        else {
+            initialTable.cartesianProduct(extracted);
+        }
     }
     if (hasEmptyTable()) {
         initialTable = emptyTable;
@@ -114,7 +124,7 @@ Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
             }
             for (Table& t : temp) {
                 if (t.hasParameter(param)) {
-                    t = t.updateValues(param, attributeMap);
+                    t.updateValues(param, attributeMap);
                 }
             }
         }
@@ -125,7 +135,7 @@ Table QueryDB::extractColumns(vector<Parameter> params, ReadPKB& readPKB) {
     else {
         Table t = temp[0];
         for (int i = 1; i < temp.size(); i++) {
-            t = t.cartesianProduct(temp[i]);
+            t.cartesianProduct(temp[i]);
         }
         return t;
     }

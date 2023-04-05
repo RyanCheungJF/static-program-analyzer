@@ -18,6 +18,7 @@ shared_ptr<Relationship> Relationship::makeRelationship(string type, vector<Para
 Relationship::Relationship(const Relationship& r) {
     type = r.type;
     params = r.params;
+    evalPriority = calcPriority();
 }
 
 vector<Parameter*> Relationship::getAllUncheckedSynonyms() {
@@ -56,8 +57,48 @@ bool Relationship::operator==(const Relationship& r) const {
     return type == r.type && params == r.params;
 }
 
+bool Relationship::operator>(const Relationship& r) const {
+    return evalPriority > r.evalPriority;
+}
+
+bool Relationship::operator<(const Relationship& r) const {
+    return evalPriority < r.evalPriority;
+}
+
 RelationshipType Relationship::getType() const {
     return type;
+}
+
+double Relationship::getPriority() {
+    return evalPriority;
+}
+
+double Relationship::calcPriority() {
+    // Highest prio goes first
+    int wildcardCounter = 0;
+    int stmtCounter = 0;
+    int fixedValCounter = 0;
+    int othersCounter = 0; // subtype of stmt or procedure
+
+    for (int i = 0; i < params.size(); i++) {
+        if (params.at(i).isFixedValue()) {
+            fixedValCounter++;
+        }
+        else if (params.at(i).isWildcard()) {
+            wildcardCounter++;
+        }
+        else if (params.at(i).isStmt()) {
+            stmtCounter++;
+        }
+        else {
+            othersCounter++;
+        }
+    }
+
+    double prio = wildcardCounter * AppConstants::wildcardWeight + stmtCounter * AppConstants::stmtWeight +
+                  fixedValCounter * AppConstants::fixedValWeight + othersCounter * AppConstants::otherWeight +
+                  typeToPriority.find(type)->second * AppConstants::typeWeight;
+    return prio;
 }
 
 bool Relationship::validateParams() {
@@ -71,11 +112,13 @@ bool Relationship::validateParams() {
 
 Relationship::Relationship() {
     type = RelationshipType::UNKNOWN;
+    evalPriority = 0;
 }
 
 Relationship::Relationship(RelationshipType t, vector<Parameter>& ps) {
     type = t;
     params = ps;
+    evalPriority = getPriority();
 }
 
 // TODO: update this to throw error if not found
@@ -174,4 +217,17 @@ const unordered_map<RelationshipType, vector<unordered_set<ParameterType>>> Rela
          stmtRefs,
          stmtRefs,
      }},
+};
+
+const unordered_set<RelationshipType> Relationship::transitiveRelationships = {
+    RelationshipType::AFFECTST, RelationshipType::NEXTT,   RelationshipType::CALLST,
+    RelationshipType::FOLLOWST, RelationshipType::PARENTT,
+};
+
+// This can be changed to any order
+const unordered_map<RelationshipType, int> Relationship::typeToPriority = {
+    {RelationshipType::FOLLOWS, 5}, {RelationshipType::FOLLOWST, 4}, {RelationshipType::PARENT, 7},
+    {RelationshipType::PARENTT, 6}, {RelationshipType::USES, 9},     {RelationshipType::MODIFIES, 8},
+    {RelationshipType::NEXT, 1},    {RelationshipType::NEXTT, 0},    {RelationshipType::CALLS, 11},
+    {RelationshipType::CALLST, 10}, {RelationshipType::AFFECTS, 3},  {RelationshipType::AFFECTST, 2},
 };

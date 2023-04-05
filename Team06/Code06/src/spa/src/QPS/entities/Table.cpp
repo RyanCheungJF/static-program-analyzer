@@ -4,8 +4,8 @@
 
 Table::Table(vector<Parameter> headers, vector<vector<string>> contents) {
     vector<int> duplicateIndexes;
-    this->headers = headers;
-    this->contents = contents;
+    this->headers = std::move(headers);
+    this->contents = std::move(contents);
 }
 
 bool Table::hasParameter(const Parameter& p) {
@@ -21,8 +21,8 @@ const vector<vector<string>>& Table::getContent() const {
 }
 
 bool Table::hasIntersectingParams(Table& t) {
-    const vector<Parameter>& headers = t.getHeaders();
-    for (const Parameter& p : headers) {
+    const vector<Parameter>& h2 = t.getHeaders();
+    for (const Parameter& p : h2) {
         if (this->hasParameter(p)) {
             return true;
         }
@@ -30,13 +30,13 @@ bool Table::hasIntersectingParams(Table& t) {
     return false;
 }
 
-vector<pair<int, int>> Table::getIntersectingIndex(Table& t1, Table& t2) {
-    vector<Parameter> h1 = t1.getHeaders();
+vector<pair<int, int>> Table::getIntersectingIndex(Table& t2) {
+    // TODO: change this to accept only one table?
     vector<Parameter> h2 = t2.getHeaders();
     vector<pair<int, int>> result;
-    for (int i = 0; i < h1.size(); i++) {
+    for (int i = 0; i < headers.size(); i++) {
         for (int j = 0; j < h2.size(); j++) {
-            if (h1[i] == h2[j]) {
+            if (headers[i] == h2[j]) {
                 result.emplace_back(i, j);
             }
         }
@@ -44,21 +44,21 @@ vector<pair<int, int>> Table::getIntersectingIndex(Table& t1, Table& t2) {
     return result;
 }
 
-Table Table::cartesianProduct(Table& table) {
-    vector<Parameter> h1 = this->getHeaders();
+void Table::cartesianProduct(Table& table) {
     const vector<Parameter>& h2 = table.getHeaders();
     const vector<vector<string>>& c1 = this->getContent();
     const vector<vector<string>>& c2 = table.getContent();
     vector<vector<string>> c3;
-    h1.insert(h1.end(), h2.begin(), h2.end());
+    headers.insert(headers.end(), h2.begin(), h2.end());
     for (const vector<string>& row1 : c1) {
         for (const vector<string>& row2 : c2) {
+            // duplicates the row
             vector<string> dupRow(row1);
             dupRow.insert(dupRow.end(), row2.begin(), row2.end());
             c3.push_back(dupRow);
         }
     }
-    return Table{h1, c3};
+    contents = c3;
 }
 
 vector<vector<string>> Table::intersectContent(const vector<vector<string>>& c1, const vector<vector<string>>& c2,
@@ -117,6 +117,7 @@ vector<Parameter> Table::intersectHeader(const vector<Parameter>& h1, const vect
         for (pair<int, int> inter : intersectingIndexes) {
             if (inter.first == i) {
                 isIntersect = true;
+                break;
             }
         }
         if (!isIntersect) {
@@ -127,15 +128,16 @@ vector<Parameter> Table::intersectHeader(const vector<Parameter>& h1, const vect
     return newHeader;
 }
 
-Table Table::intersectTable(Table& t) {
+void Table::intersectTable(Table& t) {
     const vector<vector<string>>& c1 = contents;
     const vector<vector<string>>& c2 = t.getContent();
     const vector<Parameter>& h1 = headers;
     const vector<Parameter>& h2 = t.getHeaders();
-    vector<pair<int, int>> intersectingIndexes = getIntersectingIndex(*this, t);
+    vector<pair<int, int>> intersectingIndexes = this->getIntersectingIndex(t);
     vector<vector<string>> newContent = intersectContent(c1, c2, intersectingIndexes);
     vector<Parameter> newHeader = intersectHeader(h1, h2, intersectingIndexes);
-    return Table{newHeader, newContent};
+    headers = newHeader;
+    contents = newContent;
 }
 
 Table Table::extractDesignEntities() {
@@ -148,19 +150,18 @@ Table Table::extractDesignEntities() {
     return extractColumns(indexes);
 }
 
-Table Table::updateValues(Parameter p, unordered_map<string, string>& map) {
+void Table::updateValues(Parameter p, unordered_map<string, string>& map) {
     int index;
-    vector<vector<string>> newContents;
     for (int i = 0; i < headers.size(); i++) {
-        if (headers[i] == p) {
+        if (headers[i] == p && !headers[i].hasAttribute()) {
+            headers[i].updateAttributeType(p.getAttribute());
             index = i;
+            break;
         }
     }
     for (vector<string>& row : contents) {
         row[index] = map[row[index]];
-        newContents.push_back(row);
     }
-    return Table{headers, newContents};
 }
 
 Table Table::extractColumns(vector<int>& indexes) {
@@ -209,12 +210,36 @@ Table Table::extractColumns(vector<Parameter>& params) {
     return extractColumns(indexes);
 }
 
+void Table::removeDuplicates() {
+    vector<int> duplicateIndexes;
+    vector<Parameter> newHeader = headers;
+    headers.clear();
+    for (int i = 0; i < newHeader.size(); i++) {
+        if (!hasParameter(newHeader[i])) {
+            this->headers.push_back(newHeader[i]);
+        }
+        else {
+            duplicateIndexes.push_back(i);
+        }
+    }
+    if (!duplicateIndexes.empty()) {
+        vector<vector<string>> newContent = contents;
+        contents.clear();
+        for (vector<string> content : newContent) {
+            for (int index : duplicateIndexes) {
+                content.erase(content.begin() + index);
+            }
+            this->contents.push_back(content);
+        }
+    }
+}
+
 vector<string> Table::getResult(vector<Parameter>& params) {
     vector<string> res;
     vector<int> indexOrder;
-    for (Parameter param : params) {
+    for (Parameter& param : params) {
         for (int i = 0; i < headers.size(); i++) {
-            if (param == headers[i]) {
+            if (param == headers[i] && (!param.hasAttribute() || param.getAttribute() == headers[i].getAttribute())) {
                 indexOrder.push_back(i);
                 break;
             }

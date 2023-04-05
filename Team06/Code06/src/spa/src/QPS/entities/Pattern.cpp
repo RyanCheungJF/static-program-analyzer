@@ -3,18 +3,22 @@
 #include "../syntaxValidator/PatThreeParamSyntaxValidator.h"
 #include "../syntaxValidator/PatTwoParamSyntaxValidator.h"
 
-Pattern::Pattern() {}
+Pattern::Pattern() {
+    evalPriority = 0;
+}
 
 Pattern::Pattern(const Pattern& p) {
     patternSyn = p.patternSyn;
     entRef = p.entRef;
     exprSpecs = p.exprSpecs;
+    evalPriority = calcPriority();
 }
 
 Pattern::Pattern(Parameter p, Parameter ent, vector<string>& es) {
     patternSyn = p;
     entRef = ent;
     exprSpecs = es;
+    evalPriority = calcPriority();
 }
 
 Pattern Pattern::makePattern(Parameter p, Parameter ent, vector<string>& es) {
@@ -80,6 +84,42 @@ std::string Pattern::getEntRefValue() {
 
 bool Pattern::operator==(const Pattern& p) const {
     return patternSyn == p.patternSyn && entRef == p.entRef && exprSpecs == p.exprSpecs;
+}
+
+bool Pattern::operator>(const Pattern& p) const {
+    return evalPriority > p.evalPriority;
+}
+
+bool Pattern::operator<(const Pattern& p) const {
+    return evalPriority < p.evalPriority;
+}
+
+double Pattern::getPriority() {
+    return evalPriority;
+}
+
+double Pattern::calcPriority() {
+    int wildcardCounter = 0;
+    int fixedValCounter = 0;
+
+    if (entRef.isFixedValue()) {
+        fixedValCounter++;
+    }
+    else {
+        wildcardCounter++;
+    }
+
+    for (int i = 0; i < exprSpecs.size(); i++) {
+        if (isWildCard(exprSpecs.at(i))) {
+            wildcardCounter++;
+        }
+        else {
+            fixedValCounter++;
+        }
+    }
+
+    double prio = wildcardCounter * AppConstants::wildcardWeight + fixedValCounter * AppConstants::fixedValWeight;
+    return prio;
 }
 
 shared_ptr<SyntaxValidator<Pattern>> patTwoParamVal =

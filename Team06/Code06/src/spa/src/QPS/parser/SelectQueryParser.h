@@ -13,6 +13,7 @@
 #include "QPS/entities/Query.h"
 #include "QPS/entities/Relationship.h"
 #include "exceptions/Exception.h"
+#include "exceptions/SemanticException.h"
 
 using namespace std;
 
@@ -32,7 +33,7 @@ private:
     map<ClauseType, vector<int>> getClauseStarts(vector<string>& wordList);
     vector<tuple<ClauseType, int, int>> getClausePositions(map<ClauseType, vector<int>> clauseStarts,
                                                            int wordListLength);
-    vector<Parameter> parseSelectClause(vector<string>& wordList, int start, int end);
+    tuple<vector<Parameter>, bool> parseSelectClause(vector<string>& wordList, int start, int end);
     vector<shared_ptr<Relationship>> parseSuchThatClause(vector<string>& wordList, int start, int end);
     vector<Pattern> parsePatternClause(vector<string>& wordList, int start, int end);
     vector<Comparison> parseWithClause(vector<string>& wordList, int start, int end);
