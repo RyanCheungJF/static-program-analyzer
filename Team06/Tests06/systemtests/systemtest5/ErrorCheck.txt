@@ -1238,3 +1238,208 @@ if i; while w;
 Select BOOLEAN pattern w("23", _)
 SyntaxError
 5000
+249 - attrCompare (procName, non-name)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with p.procName = "123"
+SyntaxError
+5000
+251 - attrCompare (procName, name without double quotes)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with p.procName = abc
+SyntaxError
+5000
+252 - attrCompare (procName, value)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with p.procName = c.value
+SemanticError
+5000
+253 - attrCompare (procName, stmt#)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with p.procName = cl.stmt#
+SemanticError
+500
+254 - attrCompare (value, non-integer)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with c.value = a123
+SyntaxError
+5000
+255 - attrCompare (value, integer but with double quotes)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with c.value = "123"
+SyntaxError
+5000
+256 - attrCompare (value, procName)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with c.value = p.procName
+SemanticError
+5000
+257 - attrCompare (value, varName)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with c.value = v.varName
+SemanticError
+5000
+258 - attrCompare (stmt#, non-integer)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with s.stmt# = a123
+SyntaxError
+5000
+259 - attrCompare (stmt#, integer but with double quotes)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with s.stmt# = "123"
+SyntaxError
+5000
+260 - attrCompare (stmt#, procName)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with s.stmt# = p.procName
+SemanticError
+5000
+261 - attrCompare (stmt#, varName)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with s.stmt# = v.varName
+SemanticError
+5000
+262 - attrRef (stmt# of procedure)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with p.stmt# = 12
+SemanticError
+5000
+263 - attrRef (value of procedure)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with p.value = 12
+SemanticError
+5000
+264 - attrRef (varName of procedure)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with p.varName = "a"
+SemanticError
+5000
+265 - attrRef (value of stmt)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with s.value = 12
+SemanticError
+5000
+266 - attrRef (varName of stmt)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with s.varName = "a"
+SemanticError
+5000
+267 - attrRef (procName of stmt)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with s.procName = "a"
+SemanticError
+5000
+268 - attrRef (stmt# of constant)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with c.stmt# = 12
+SemanticError
+5000
+269 - attrRef (varName of constant)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with c.varName = "a"
+SemanticError
+5000
+270 - attrRef (procName of constant)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with c.procName = "a"
+SemanticError
+5000
+271 - attrRef (value of call statement)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with cl.value = 12
+SemanticError
+5000
+272 - attrRef (varName of call statement)
+procedure p; call cl; constant c; stmt s; variable v;
+Select BOOLEAN with cl.varName = "a"
+SemanticError
+5000
+273 - BOOLEAN inside tuple not declared as synonym
+procedure p;
+Select <BOOLEAN>
+SemanticError
+5000
+274 - Missing angle bracket
+procedure p;
+Select <p.procName
+SyntaxError
+5000
+275 - Extra ,
+procedure p;
+Select <p.procName, >
+SyntaxError
+5000
+276 - Undeclared synonym in tuple
+procedure p;
+Select <p1.procName>
+SemanticError
+5000
+277 - Invalid spacing in tuple
+procedure p1;
+Select <p  1.  procName>
+SyntaxError
+5000
+278 - BOOLEAN inside tuple not declared as synonym but with another elem
+procedure p1;
+Select <p1.procName, BOOLEAN>
+SemanticError
+5000
+279 - mispelled with
+procedure p;
+Select BOOLEAN witth p.procName = "p1"
+SyntaxError
+5000
+280 - mispelled procName
+procedure p;
+Select BOOLEAN with p.procname = "p1"
+SyntaxError
+5000
+281 - mispelled varName
+read r;
+Select BOOLEAN with r.Varname = "a"
+SyntaxError
+5000
+282 - mispelled stmt#
+read r;
+Select BOOLEAN with r.stmt## = 12
+SyntaxError
+5000
+283 - mispelled value
+constant c;
+Select BOOLEAN with c.val = 12
+SyntaxError
+5000
+284 - Select Boolean
+constant c;
+Select Boolean with c.value = 12
+SemanticError
+5000
+285 - such that used twice
+assign a; while w;
+Select a such that Modifies(a, "x") and such that Next*(1, a)
+SyntaxError
+5000
+286 - connect pattern-cl and such-that cl using and
+assign a; while w;
+Select a such that Parent*(w, a) and pattern a("x", _)
+SyntaxError
+5000
+287 - connect such-that cl and with cl using and
+assign a; while w;
+Select a such that Parent*(w, a) and with a.stmt# = 12
+SyntaxError
+5000
+288 - connect pattern cl and with cl using and
+assign a; while w;
+Select a pattern a("x", _) and with a.stmt# = 12
+SyntaxError
+5000
+289 - with used twice
+assign a; while w;
+Select a with a.stmt# = 12 and with w.stmt# = 13
+SyntaxError
+5000
+290 - pattern used twice
+assign a; while w;
+Select a pattern a("x", _) and pattern w(_,_)
+SyntaxError
+5000

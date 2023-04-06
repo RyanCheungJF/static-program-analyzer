@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#../../../Code06/cmake-build-debug/src/autotester/autotester source.txt MultiClause.txt out-MultiClause.xml
+../../../Code06/cmake-build-debug/src/autotester/autotester source.txt MultiClause.txt out-MultiClause.xml
 
 ../../../Code06/cmake-build-debug/src/autotester/autotester source.txt Calls.txt out-Calls.xml
 ../../../Code06/cmake-build-debug/src/autotester/autotester source.txt CallsT.txt out-CallsT.xml
@@ -17,3 +17,5 @@
 ../../../Code06/cmake-build-debug/src/autotester/autotester source.txt Boolean.txt out-Boolean.xml
 
 ../../../Code06/cmake-build-debug/src/autotester/autotester source.txt Tuple.txt out-Tuple.xml
+
+../../../Code06/cmake-build-debug/src/autotester/autotester source.txt With.txt out-With.xml

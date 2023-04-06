@@ -28,3 +28,5 @@
 ../../../Code06/cmake-build-debug/src/autotester/autotester source.txt Boolean.txt out-Boolean.xml
 
 ../../../Code06/cmake-build-debug/src/autotester/autotester source.txt Tuple.txt out-Tuple.xml
+
+../../../Code06/cmake-build-debug/src/autotester/autotester source.txt With.txt out-With.xml

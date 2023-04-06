@@ -43,14 +43,14 @@ void Query::evaluatePattern(QueryDB& queryDb, ReadPKB& readPKB) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findPattern(pattern);
-        Parameter* patternSyn = pattern.getPatternSyn();
-        Parameter* entRef = pattern.getEntRef();
-        vector<Parameter> headers{*patternSyn, *entRef};
-        Table table(headers, response);
         if (response.empty()) {
             queryDb.insertTable(QueryDB::emptyTable);
             break;
         }
+        Parameter* patternSyn = pattern.getPatternSyn();
+        Parameter* entRef = pattern.getEntRef();
+        vector<Parameter> headers{*patternSyn, *entRef};
+        Table table(headers, response);
         // This will remove wild cards and FIXED INT from the table.
         table = table.extractDesignEntities();
         if (!table.isEmptyTable()) {
@@ -66,7 +66,12 @@ void Query::evaluateComparison(QueryDB& queryDb, ReadPKB& readPKB) {
             queryDb.insertTable(QueryDB::emptyTable);
             break;
         }
-        vector<Parameter> headers{comparison.getLeftParam(), comparison.getRightParam()};
+        Parameter leftParam = comparison.getLeftParam();
+        Parameter rightParam = comparison.getRightParam();
+        // resets parameter attribute as it will no longer be used until select evaluation.
+        leftParam.updateAttributeType(AttributeType::NONE);
+        rightParam.updateAttributeType(AttributeType::NONE);
+        vector<Parameter> headers{leftParam, rightParam};
         Table table{headers, response};
         table = table.extractDesignEntities();
         if (!table.isEmptyTable()) {
@@ -82,13 +87,16 @@ Query::Query(const Query& q) {
     selectParameters = q.selectParameters;
     patterns = q.patterns;
     comparisons = q.comparisons;
+    isSelectTuple = q.isSelectTuple;
 }
 
-Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector<Pattern>& ps, vector<Comparison>& cs) {
+Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector<Pattern>& ps, vector<Comparison>& cs,
+             bool ist) {
     selectParameters = ss;
     relations = rs;
     patterns = ps;
     comparisons = cs;
+    isSelectTuple = ist;
 }
 
 vector<Parameter*> Query::getAllUncheckedSynonyms() {
@@ -153,4 +161,8 @@ bool Query::validateAllParameters() {
     }
 
     return true;
+}
+
+bool Query::booleanParamCheck() {
+    return selectParameters.size() == 1 && selectParameters[0].getType() == ParameterType::BOOLEAN && isSelectTuple;
 }
