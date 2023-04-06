@@ -18,7 +18,7 @@ shared_ptr<Relationship> Relationship::makeRelationship(string type, vector<Para
 Relationship::Relationship(const Relationship& r) {
     type = r.type;
     params = r.params;
-    evalPriority = calcPriority();
+    evalPriority = r.evalPriority;
 }
 
 vector<Parameter*> Relationship::getAllUncheckedSynonyms() {
@@ -119,6 +119,7 @@ double Relationship::calcPriority() {
         prio = AppConstants::highestPriority;
     }
 
+    this->evalPriority = prio;
     return prio;
 }
 
@@ -139,7 +140,7 @@ Relationship::Relationship() {
 Relationship::Relationship(RelationshipType t, vector<Parameter>& ps) {
     type = t;
     params = ps;
-    evalPriority = getPriority();
+    evalPriority = 0;
 }
 
 // TODO: update this to throw error if not found

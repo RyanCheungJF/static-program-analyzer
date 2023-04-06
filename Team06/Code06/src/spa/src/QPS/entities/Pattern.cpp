@@ -11,14 +11,14 @@ Pattern::Pattern(const Pattern& p) {
     patternSyn = p.patternSyn;
     entRef = p.entRef;
     exprSpecs = p.exprSpecs;
-    evalPriority = calcPriority();
+    evalPriority = 0;
 }
 
 Pattern::Pattern(Parameter p, Parameter ent, vector<string>& es) {
     patternSyn = p;
     entRef = ent;
     exprSpecs = es;
-    evalPriority = calcPriority();
+    evalPriority = 0;
 }
 
 Pattern Pattern::makePattern(Parameter p, Parameter ent, vector<string>& es) {
@@ -119,6 +119,7 @@ double Pattern::calcPriority() {
     }
 
     double prio = wildcardCounter * AppConstants::wildcardWeight + fixedValCounter * AppConstants::fixedValWeight;
+    this->evalPriority = prio;
     return prio;
 }
 

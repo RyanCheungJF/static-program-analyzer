@@ -45,10 +45,10 @@ public:
     bool operator==(const Relationship&) const;
     bool operator>(const Relationship&) const;
     bool operator<(const Relationship&) const;
+    double calcPriority();
 
 private:
     double evalPriority;
-    double calcPriority();
     static const unordered_map<string, RelationshipType> stringToTypeMap;
     static const unordered_map<RelationshipType, shared_ptr<SyntaxValidator<Relationship>>> typeToSyntaxValidatorMap;
     static const unordered_map<RelationshipType, vector<unordered_set<ParameterType>>> typeToParameterTypes;

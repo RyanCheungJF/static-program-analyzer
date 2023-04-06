@@ -113,15 +113,6 @@ Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector
     patterns = ps;
     comparisons = cs;
     isSelectTuple = ist;
-    if (relations.size() > 1) {
-        std::sort(relations.begin(), relations.end(), SharedPtrCompare::cmp<Relationship>);
-    }
-    if (patterns.size() > 1) {
-        std::sort(patterns.begin(), patterns.end(), greater());
-    }
-    if (comparisons.size() > 1) {
-        std::sort(comparisons.begin(), comparisons.end(), greater());
-    }
 }
 
 vector<Parameter*> Query::getAllUncheckedSynonyms() {
@@ -203,4 +194,26 @@ bool Query::operator==(const Query& q) const {
     }
     return selectParameters == q.selectParameters && patterns == q.patterns && comparisons == q.comparisons &&
            isSelectTuple == q.isSelectTuple;
+}
+
+void Query::updateEvalOrder()
+{
+    if (relations.size() > 0) {
+        for (int i = 0; i < relations.size(); i++) {
+            relations.at(i)->calcPriority();
+        }
+        std::sort(relations.begin(), relations.end(), SharedPtrCompare::cmp<Relationship>);
+    }
+    if (patterns.size() > 0) {
+        for (int i = 0; i < patterns.size(); i++) {
+            patterns.at(i).calcPriority();
+        }
+        std::sort(patterns.begin(), patterns.end(), greater());
+    }
+    if (comparisons.size() > 0) {
+        for (int i = 0; i < comparisons.size(); i++) {
+            comparisons.at(i).calcPriority();
+        }
+        std::sort(comparisons.begin(), comparisons.end(), greater());
+    }
 }

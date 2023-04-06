@@ -26,9 +26,9 @@ public:
     bool operator>(const Pattern&) const;
     bool operator<(const Pattern&) const;
     double getPriority();
+    double calcPriority();
 
 private:
-    double calcPriority();
     static const unordered_map<int, shared_ptr<SyntaxValidator<Pattern>>> paramCountToValidatorMap;
 };
 

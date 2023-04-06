@@ -34,6 +34,7 @@ public:
     bool validateAllParameters();
     bool booleanParamCheck();
     bool operator==(const Query&) const;
+    void updateEvalOrder();
 
 private:
     bool evaluateRelationship(QueryDB&, ReadPKB&);

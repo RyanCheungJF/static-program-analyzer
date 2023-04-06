@@ -20,6 +20,7 @@ TEST_CASE("parse / given valid string with such that clause / parse into "
     vector<Comparison> comparisons{};
     bool isSelectTuple = false;
     Query q(selectParams, relationships, patterns, comparisons, isSelectTuple);
+    q.updateEvalOrder();
     REQUIRE(q == queries.at(0));
 }
 
@@ -66,6 +67,7 @@ TEST_CASE("parse / given valid string with such that and pattern clause / "
     vector<Comparison> comparisons{};
     bool isSelectTuple = false;
     Query q(selectParams, relationships, patterns, comparisons, isSelectTuple);
+    q.updateEvalOrder();
     REQUIRE(q == queries.at(0));
 }
 
@@ -226,6 +228,7 @@ TEST_CASE("parse / select <BOOLEAN> should work if BOOLEAN is declared / parse w
     vector<Comparison> comparisons{};
     bool isSelectTuple = true;
     Query q(selectParams, relationships, patterns, comparisons, isSelectTuple);
+    q.updateEvalOrder();
     REQUIRE(q == queries.at(0));
 }
 

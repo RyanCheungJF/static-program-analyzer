@@ -11,7 +11,7 @@ Comparison::Comparison(ComparisonOperator o, Parameter leftP, Parameter rightP) 
     op = o;
     leftParam = leftP;
     rightParam = rightP;
-    evalPriority = calcPriority();
+    evalPriority = 0;
 }
 
 Parameter Comparison::getLeftParam() {
@@ -114,5 +114,6 @@ double Comparison::calcPriority() {
     }
 
     double prio = wildcardCounter * AppConstants::wildcardWeight + fixedValCounter * AppConstants::fixedValWeight;
+    this->evalPriority = prio;
     return prio;
 }
