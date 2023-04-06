@@ -79,6 +79,7 @@ double Relationship::calcPriority() {
     int stmtCounter = 0;
     int fixedValCounter = 0;
     int othersCounter = 0; // subtype of stmt or procedure or variable
+    int stmtSubtypeNotAssignCounter = 0; // subtype of stmt that is not assign
 
     for (int i = 0; i < params.size(); i++) {
         Parameter currParam = params.at(i);
@@ -91,6 +92,9 @@ double Relationship::calcPriority() {
         else if (currParam.isStmt()) {
             stmtCounter++;
         }
+        else if (currParam.isIf() || currParam.isWhile() || currParam.isPrint() || currParam.isRead() || currParam.isCall()) {
+            stmtSubtypeNotAssignCounter++;
+        }
         else {
             othersCounter++;
         }
@@ -102,7 +106,12 @@ double Relationship::calcPriority() {
 
     if (stmtCounter > 0 || othersCounter > 0) {
         prio += wildcardCounter * AppConstants::wildcardWeightWithSyn;
-    } else {
+    }
+    else if ((type == RelationshipType::AFFECTST || type == RelationshipType::AFFECTS) &&
+            (stmtSubtypeNotAssignCounter > 0)) {
+        prio = 12 + (2 * AppConstants::fixedValWeight);
+    }
+    else {
         prio += wildcardCounter * AppConstants::wildcardWeight;
     }
 

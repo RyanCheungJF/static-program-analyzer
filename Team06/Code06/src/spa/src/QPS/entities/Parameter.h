@@ -62,6 +62,11 @@ public:
     bool isFixedStringType();
     bool isVariable();
     bool isStmt();
+    bool isIf();
+    bool isWhile();
+    bool isPrint();
+    bool isRead();
+    bool isCall();
     bool isWildcard();
     bool isAssign();
     bool isProcedureOnly();
