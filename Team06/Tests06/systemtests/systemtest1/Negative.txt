@@ -358,3 +358,223 @@ call c;
 Select <BOOLEAN, c> such that Follows(1, 2)
 SemanticError
 5000
+73 - missing hashtag in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with p.stmt=36
+SyntaxError
+5000
+74 - missing equals in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with p.stmt#36
+SyntaxError
+5000
+75 - missing selector in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with stmt#=36
+SyntaxError
+5000
+76 - missing dot in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with pstmt#=36
+SyntaxError
+5000
+77 - using quotations on stmt number in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with p.stmt#="36"
+SyntaxError
+5000
+78 - incorrect spelling in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with p.statement#=36
+SyntaxError
+5000
+79 - incorrect caps in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with p.Stmt#=36
+SyntaxError
+5000
+80 - costant in variableName in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with p.varName=36
+SemanticError
+5000
+81 - single quotations in variableName in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with p.varName='conditionalSpam'
+SyntaxError
+5000
+82 - procName on print in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with p.procName="conditionalSpam"
+SemanticError
+5000
+83 - incorrect caps in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with p.varname="conditionalSpam"
+SyntaxError
+5000
+84 - undefined var in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a;
+Select p such that Follows(1, 2) with ifs.varname="conditionalSpam"
+SyntaxError
+5000
+85 - equality in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p such that Follows(1, 2) with p.stmt# == 36
+SyntaxError
+5000
+86 - not equal in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p such that Follows(1, 2) with p.stmt# != 36
+SyntaxError
+5000
+87 - comaprison in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p such that Follows(1, 2) with p.stmt# <= 36
+SyntaxError
+5000
+87 - double with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p such that Follows(1, 2) with with p.stmt# <= 36
+SyntaxError
+5000
+88 - double with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p such that Follows(1, 2) with with p.stmt# <= 36
+SyntaxError
+5000
+89 - spaces in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p such that Follows(1, 2) w i t h p.stmt# = 36
+SyntaxError
+5000
+90 - double dots in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p such that Follows(1, 2) wwith p..stmt# = 36
+SyntaxError
+5000
+91 - commas in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p such that Follows(1, 2) wwith p,stmt# = 36
+SyntaxError
+5000
+92 - commas in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p such that Follows(1, 2) wwith p,stmt# = 36
+SyntaxError
+5000
+93 - chained missing keyword in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select BOOLEAN such that Follows(1, 2) with p.stmt# = 36 p.stmt# = 36
+SyntaxError
+5000
+94 - chained missing keyword in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select BOOLEAN such that Follows(1, 2) with p.stmt# = 36,  p.stmt# = 36
+SyntaxError
+5000
+95 - chained missing keyword in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select BOOLEAN such that Follows(1, 2) with p.stmt# = 36, with p.stmt# = 36
+SyntaxError
+5000
+96 - using s as an alias for stmt in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select BOOLEAN such that Follows(1, 2) with p.s# = 36
+SyntaxError
+5000
+97 - comparing procName to a constant value in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select BOOLEAN such that Follows(1, 2) with proc.procName = x.value
+SemanticError
+5000
+98 - comparing value to string in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select BOOLEAN such that Follows(1, 2) with x.value = "aaa"
+SemanticError
+5000
+99 - comparing stmt# to string in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select BOOLEAN such that Follows(1, 2) with p.stmt# = "aaa"
+SemanticError
+5000
+100 - arithmetic in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select BOOLEAN such that Follows(1, 2) with p.stmt#=37-1
+SyntaxError
+5000
+101 - such that instead of with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select i such that i.stmt# = 31 and i.stmt# = 33
+SyntaxError
+5000
+102 - constant without value in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x;
+Select p with p.stmt# = x
+SyntaxError
+5000
+103 - constant is not a stmt even though it is a number in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x, y;
+Select <x, y> such that Follows(x, y) with r.stmt# = x.value and r.stmt# = y.value
+SemanticError
+5000
+104 - constant is not a stmt even though it is a number in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x, y;
+Select <x, y> such that Follows(r.stmt#, c.stmt#)
+SyntaxError
+5000
+105 - wildcard in with
+print p; call c; read r; while w; if i; procedure proc; stmt s; assign a; constant x, y;
+Select proc with proc.procName = _"conditional"_
+SyntaxError
+5000
+106 - single quotations in with
+
+Select BOOLEAN with "" = ''
+SyntaxError
+5000
+107 - negative comparison in with
+
+Select BOOLEAN with -1 = -1
+SyntaxError
+5000
+108 - comapring empty strings in with
+
+Select BOOLEAN with "" = ""
+SyntaxError
+5000
+109 - comparing empty strings in with
+
+Select BOOLEAN with "" = " "
+SyntaxError
+5000
+110 - comparing empty strings in with
+
+Select BOOLEAN with " " = " "
+SyntaxError
+5000
+111 - triple equality in with
+
+Selct BOOLEAN with 0 = 0 = 0
+SyntaxError
+5000
+112 - nested tuple
+assign a1, a2;
+Selct <a1, <a2>> with Affects(a1, a2)
+SyntaxError
+5000
+113 - double arrows in tuple
+assign a;
+Select <<a>> such that Next*(a, a)
+SyntaxError
+5000
+114 - invalid whitespace in with
+
+Select BOOLEAN with " abcd " = " ab cd "
+SyntaxError
+5000
+115 - invalid comparisons in with
+
+Select BOOLEAN with "abcd" = 8
+SemanticError
+5000

@@ -13,3 +13,18 @@ assign a;
 Select a such that Affects*(a, 19)
 none
 5000
+4 - comment
+stmt s;
+Select s such that Affects*(s, _)
+1, 2, 4, 7, 11, 12, 20
+5000
+5 - comment
+stmt s;
+Select s such that Affects*(_, s)
+2, 3, 7, 13, 21
+5000
+6 - comment
+stmt s;
+Select s such that Affects*(_, s) and Affects*(s, _)
+2, 7
+5000

@@ -18,3 +18,13 @@ assign a;
 Select a such that Affects(13, a)
 none
 5000
+5 - comment
+stmt s;
+Select s such that Affects(s, _)
+1, 2, 4, 7, 11, 12, 20
+5000
+6 - comment
+stmt s;
+Select s such that Affects(_, s)
+2, 3, 7, 13, 21
+5000
