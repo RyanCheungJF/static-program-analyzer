@@ -4,6 +4,8 @@
 
 .vscode/
 
+check-local-macos.py
+
 ### C++ ###
 # Prerequisites
 *.d

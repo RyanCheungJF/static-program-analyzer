@@ -144,6 +144,10 @@ bool Parameter::isComparable(Parameter& p1, Parameter& p2) {
     return p1CompType == p2CompType;
 }
 
+bool Parameter::isFixedValue() {
+    return isFixedInt() || isFixedStringType();
+}
+
 bool Parameter::isUncheckedSynonym() {
     return type == ParameterType::SYNONYM;
 }

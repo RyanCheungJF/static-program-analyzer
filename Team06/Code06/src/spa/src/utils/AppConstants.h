@@ -106,4 +106,13 @@ public:
     inline static const int DUMMY_NODE = 0;
     inline static const std::string PROCEDURE_DOES_NOT_EXIST = "procedure does not exist";
     inline static const int IS_FIND_CHILDREN = true;
+
+    // EvalPriority related
+    inline static const double wildcardWeight = 100;
+    inline static const double wildcardWeightEarlyReturn = 9999;
+    inline static const double stmtWeight = 100;
+    inline static const double fixedValWeight = 10000;
+    inline static const double otherWeight = 1000;
+    inline static const double typeWeight = 1;
+    inline static const double highestPriority = 100000;
 };
