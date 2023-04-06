@@ -235,7 +235,7 @@ TEST_CASE("Single Select Query") {
     SECTION("adhoc test to try out ordering") {
         string query = R"(
 		assign a; variable v; while w1; if i1; stmt s1, s2; procedure p1; call c1;
-		Select a such that Follows*(1, a) pattern a(v, _"x"_) such that Next*(_, _) and Next*(a, s2) such that Affects*(a, _) and Affects(s1, s2) and Affects*(1, _) and Affects(i1, w1) such that Affects(a, _) with v.varName = p1.procName with p1.procName = "proc1" and s1.stmt# = 5 with s2.stmt# = s1.stmt# such that Parent(1, 2) and Calls*(_, p1) pattern w1("x", _) pattern i1(v, _,   _ ) and a("s", "t") and a("u", _) pattern a(_, _))";
+		Select a such that Follows*(1, a) and Next*(s1, s2) and Next*(s1, _) pattern a(v, _"x"_) such that Next*(_, _) and Next*(a, s2) such that Affects*(a, _) and Affects(s1, s2) and Affects*(1, _) and Affects(i1, w1) such that Affects(a, _) with v.varName = p1.procName with p1.procName = "proc1" and s1.stmt# = 5 with s2.stmt# = s1.stmt# such that Parent(1, 2) and Calls*(_, p1) pattern w1("x", _) pattern i1(v, _,   _ ) and a("s", "t") and a("u", _) pattern a(_, _))";
 
         result = qps.processQueries(query, readPkb);
 //        vector<string> expected = {"Error"};
