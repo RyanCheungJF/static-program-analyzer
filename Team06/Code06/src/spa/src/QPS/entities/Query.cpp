@@ -11,23 +11,9 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
     QueryDB* queryDBPointer = &queryDb;
     Table emptyTable({}, {});
 
-    bool isNotEmptyResult;
-
-    // Evaluate the most restricted type first
-    isNotEmptyResult = evaluateComparison(queryDb, readPKB);
-    if (isNotEmptyResult) {
-        // early termination code here
-    }
-
-    isNotEmptyResult = evaluatePattern(queryDb, readPKB);
-    if (isNotEmptyResult) {
-        // early termination code here
-    }
-
-    isNotEmptyResult = evaluateRelationship(queryDb, readPKB);
-    if (isNotEmptyResult) {
-        // early termination code here
-    }
+    evaluateComparison(queryDb, readPKB)
+    && evaluatePattern(queryDb, readPKB)
+    && evaluateRelationship(queryDb, readPKB);
 
     vector<string> res = queryDb.fetch(selectParameters, readPKB);
     return res;
@@ -47,7 +33,7 @@ bool Query::evaluateRelationship(QueryDB& queryDb, ReadPKB& readPKB) {
         }
         // clauses that are just fixed ints or wild cards will just be
         // taken as true and not be inserted into the tableVec
-        table = table.extractDesignEntities();
+        table.extractDesignEntities();
         if (!table.isEmptyTable()) {
             queryDb.insertTable(table);
         }
@@ -69,7 +55,7 @@ bool Query::evaluatePattern(QueryDB& queryDb, ReadPKB& readPKB) {
             return false;
         }
         // This will remove wild cards and FIXED INT from the table.
-        table = table.extractDesignEntities();
+        table.extractDesignEntities();
         if (!table.isEmptyTable()) {
             queryDb.insertTable(table);
         }
@@ -84,9 +70,13 @@ bool Query::evaluateComparison(QueryDB& queryDb, ReadPKB& readPKB) {
             queryDb.insertTable(QueryDB::emptyTable);
             return false;
         }
-        vector<Parameter> headers{comparison.getLeftParam(), comparison.getRightParam()};
+        Parameter leftParam = comparison.getLeftParam();
+        Parameter rightParam = comparison.getRightParam();
+        leftParam.updateAttributeType(AttributeType::NONE);
+        rightParam.updateAttributeType(AttributeType::NONE);
+        vector<Parameter> headers{leftParam, rightParam};
         Table table{headers, response};
-        table = table.extractDesignEntities();
+        table.extractDesignEntities();
         if (!table.isEmptyTable()) {
             queryDb.insertTable(table);
         }
