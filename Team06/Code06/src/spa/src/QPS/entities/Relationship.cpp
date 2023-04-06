@@ -79,7 +79,7 @@ double Relationship::calcPriority() {
     int stmtCounter = 0;
     int fixedValCounter = 0;
     int othersCounter = 0; // subtype of stmt or procedure or variable
-    int stmtSubtypeNotAssignCounter = 0; // subtype of stmt that is not assign
+    int assignCounter = 0;
 
     for (int i = 0; i < params.size(); i++) {
         Parameter currParam = params.at(i);
@@ -92,11 +92,12 @@ double Relationship::calcPriority() {
         else if (currParam.isStmt()) {
             stmtCounter++;
         }
-        else if (currParam.isIf() || currParam.isWhile() || currParam.isPrint() || currParam.isRead() || currParam.isCall()) {
-            stmtSubtypeNotAssignCounter++;
-        }
         else {
             othersCounter++;
+        }
+
+        if (currParam.isAssign()) {
+            assignCounter++;
         }
     }
 
@@ -105,14 +106,17 @@ double Relationship::calcPriority() {
                   typeToPriority.find(type)->second * AppConstants::typeWeight;
 
     if (stmtCounter > 0 || othersCounter > 0) {
-        prio += wildcardCounter * AppConstants::wildcardWeightWithSyn;
-    }
-    else if ((type == RelationshipType::AFFECTST || type == RelationshipType::AFFECTS) &&
-            (stmtSubtypeNotAssignCounter > 0)) {
-        prio = 12 + (2 * AppConstants::fixedValWeight);
+        prio += wildcardCounter * AppConstants::wildcardWeight;
     }
     else {
-        prio += wildcardCounter * AppConstants::wildcardWeight;
+        prio += wildcardCounter * AppConstants::wildcardWeightEarlyReturn;
+    }
+
+    // checks for cases like Affects*(call, _) or Affects(print, assign)
+    // and pushes them to the front of the queue
+    if ((type == RelationshipType::AFFECTST || type == RelationshipType::AFFECTS) &&
+             (othersCounter - assignCounter > 0)) {
+        prio = AppConstants::highestPriority;
     }
 
     return prio;
@@ -243,8 +247,8 @@ const unordered_set<RelationshipType> Relationship::transitiveRelationships = {
 
 // This can be changed to any order
 const unordered_map<RelationshipType, int> Relationship::typeToPriority = {
-    {RelationshipType::FOLLOWS, 10}, {RelationshipType::FOLLOWST, 4}, {RelationshipType::PARENT, 9},
-    {RelationshipType::PARENTT, 3},  {RelationshipType::USES, 7},     {RelationshipType::MODIFIES, 8},
-    {RelationshipType::NEXT, 6},     {RelationshipType::NEXTT, -8000},    {RelationshipType::CALLS, 11},
-    {RelationshipType::CALLST, 5},   {RelationshipType::AFFECTS, -7999},  {RelationshipType::AFFECTST, -7998},
+    {RelationshipType::FOLLOWS, 10}, {RelationshipType::FOLLOWST, 4},    {RelationshipType::PARENT, 9},
+    {RelationshipType::PARENTT, 3},  {RelationshipType::USES, 7},        {RelationshipType::MODIFIES, 8},
+    {RelationshipType::NEXT, 6},     {RelationshipType::NEXTT, -8000},   {RelationshipType::CALLS, 11},
+    {RelationshipType::CALLST, 5},   {RelationshipType::AFFECTS, -7999}, {RelationshipType::AFFECTST, -7998},
 };

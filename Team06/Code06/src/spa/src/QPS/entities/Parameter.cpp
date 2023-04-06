@@ -119,26 +119,6 @@ bool Parameter::isStmt() {
     return type == ParameterType::STMT;
 }
 
-bool Parameter::isIf() {
-    return type == ParameterType::IF;
-}
-
-bool Parameter::isWhile() {
-    return type == ParameterType::WHILE;
-}
-
-bool Parameter::isPrint() {
-    return type == ParameterType::PRINT;
-}
-
-bool Parameter::isRead() {
-    return type == ParameterType::READ;
-}
-
-bool Parameter::isCall() {
-    return type == ParameterType::CALL;
-}
-
 bool Parameter::isWildcard() {
     return type == ParameterType::WILDCARD;
 }
