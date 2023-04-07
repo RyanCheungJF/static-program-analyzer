@@ -2,6 +2,5 @@
 
 NotConditionalExpression::NotConditionalExpression() : condExpr() {}
 
-NotConditionalExpression::NotConditionalExpression(std::unique_ptr<ConditionalExpression> condExpr) {
-    this->condExpr = std::move(condExpr);
-}
+NotConditionalExpression::NotConditionalExpression(std::unique_ptr<ConditionalExpression> condExpr)
+    : condExpr(std::move(condExpr)) {}

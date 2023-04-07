@@ -2,6 +2,4 @@
 
 Constant::Constant() : value() {}
 
-Constant::Constant(Const value) {
-    this->value = value;
-}
+Constant::Constant(Const value) : value(value) {}

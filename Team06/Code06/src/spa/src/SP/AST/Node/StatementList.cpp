@@ -2,9 +2,7 @@
 
 StatementList::StatementList() : statements() {}
 
-StatementList::StatementList(std::vector<std::unique_ptr<Statement>> statements) {
-    this->statements = std::move(statements);
-}
+StatementList::StatementList(std::vector<std::unique_ptr<Statement>> statements) : statements(std::move(statements)) {}
 
 StmtNum StatementList::getStmtNumForStmtIdx(int idx) {
     return statements[idx]->statementNumber;

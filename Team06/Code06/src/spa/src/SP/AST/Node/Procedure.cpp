@@ -2,10 +2,8 @@
 
 Procedure::Procedure() : procedureName(), statementList() {}
 
-Procedure::Procedure(ProcName procedureName, std::unique_ptr<StatementList> statementList) {
-    this->procedureName = procedureName;
-    this->statementList = std::move(statementList);
-}
+Procedure::Procedure(ProcName procedureName, std::unique_ptr<StatementList> statementList)
+    : procedureName(procedureName), statementList(std::move(statementList)) {}
 
 std::vector<std::unique_ptr<Statement>>& Procedure::getStatements() {
     return statementList->statements;
