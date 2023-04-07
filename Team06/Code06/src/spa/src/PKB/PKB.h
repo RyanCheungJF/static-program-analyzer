@@ -213,5 +213,5 @@ private:
     std::unordered_set<RelationshipType> affectsMap = {RelationshipType::AFFECTS, RelationshipType::AFFECTST};
 
     // HELPER FUNCTIONS
-    void PKB::filterAttributeResult(std::vector<std::vector<std::string>>& res, std::string val);
+    void filterAttributeResult(std::vector<std::vector<std::string>>& res, std::string val);
 };
