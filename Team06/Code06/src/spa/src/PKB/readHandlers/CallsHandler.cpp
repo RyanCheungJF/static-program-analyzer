@@ -4,7 +4,7 @@ void CallsHandler::setStorage(std::shared_ptr<RelationshipStorage<Ent, Ent>> cal
     this->callsStorage = callsStorage;
 }
 
-std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcname(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcname(Parameter& param1, Parameter& param2) {
     std::string caller = param1.getValue();
     std::string callee = param2.getValue();
     std::vector<std::vector<std::string>> res;
@@ -17,7 +17,7 @@ std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcname(Param
     return res;
 }
 
-std::vector<std::vector<std::string>> CallsHandler::handleProcnameWildcard(Parameter param1, bool isEarlyReturn) {
+std::vector<std::vector<std::string>> CallsHandler::handleProcnameWildcard(Parameter& param1, bool isEarlyReturn) {
     std::string caller = param1.getValue();
     std::vector<std::vector<std::string>> res;
 
@@ -33,7 +33,7 @@ std::vector<std::vector<std::string>> CallsHandler::handleProcnameWildcard(Param
     return res;
 }
 
-std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcname(Parameter param2, bool isEarlyReturn) {
+std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcname(Parameter& param2, bool isEarlyReturn) {
     std::string callee = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
@@ -62,7 +62,7 @@ std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard(bool 
     return res;
 }
 
-std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> CallsHandler::handle(Parameter& param1, Parameter& param2) {
     bool isProcnameParam1 = param1.isFixedStringType();
     bool isProcnameParam2 = param2.isFixedStringType();
     bool isWildcardParam1 = param1.isWildcard();

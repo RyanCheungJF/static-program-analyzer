@@ -1,14 +1,14 @@
 #include "FollowsParentHandler.h"
 
-FollowsParentHandler::FollowsParentHandler(std::shared_ptr<StmtStorage> stmtStorage) {
+FollowsParentHandler::FollowsParentHandler(std::shared_ptr<StmtStorage>& stmtStorage) {
     this->stmtStorage = stmtStorage;
 }
 
-void FollowsParentHandler::setStorage(shared_ptr<RelationshipStorage<StmtNum, StmtNum>> rlstorage) {
+void FollowsParentHandler::setStorage(shared_ptr<RelationshipStorage<StmtNum, StmtNum>>& rlstorage) {
     this->rlStorage = rlstorage;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleIntInt(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleIntInt(Parameter& param1, Parameter& param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
     std::vector<std::vector<std::string>> res;
@@ -19,7 +19,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleIntInt(Paramet
     return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleIntSyn(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleIntSyn(Parameter& param1, Parameter& param2) {
     std::string paramString1 = param1.getValue();
     std::vector<std::vector<std::string>> res;
 
@@ -35,7 +35,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleIntSyn(Paramet
     return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleIntWildcard(Parameter param1) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleIntWildcard(Parameter& param1) {
     std::string paramString1 = param1.getValue();
     std::vector<std::vector<std::string>> res;
 
@@ -47,7 +47,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleIntWildcard(Pa
     return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleSynInt(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleSynInt(Parameter& param1, Parameter& param2) {
     std::string paramString2 = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
@@ -63,7 +63,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynInt(Paramet
     return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleSynSyn(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleSynSyn(Parameter& param1, Parameter& param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
     std::vector<std::vector<std::string>> res;
@@ -86,7 +86,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynSyn(Paramet
     return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleSynWildcard(Parameter param1) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleSynWildcard(Parameter& param1) {
     std::vector<std::vector<std::string>> res;
 
     for (auto typedStmtNum : stmtStorage->getStatementNumbers(param1.getTypeString())) {
@@ -99,7 +99,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynWildcard(Pa
     return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardInt(Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardInt(Parameter& param2) {
     std::string paramString2 = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
@@ -111,7 +111,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardInt(Pa
     return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardSyn(Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardSyn(Parameter& param2) {
     std::vector<std::vector<std::string>> res;
 
     for (auto typedStmtNum : stmtStorage->getStatementNumbers(param2.getTypeString())) {
@@ -135,7 +135,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardWildca
     return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handle(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> FollowsParentHandler::handle(Parameter& param1, Parameter& param2) {
     bool isIntParam1 = param1.isFixedInt();
     bool isIntParam2 = param2.isFixedInt();
     bool isSynonymParam1 = !param1.isFixedInt() && !param1.isWildcard();

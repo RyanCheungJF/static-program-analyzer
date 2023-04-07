@@ -1,13 +1,13 @@
 #include "NextHandler.h"
 
-NextHandler::NextHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
-                         std::shared_ptr<ProcedureStorage> procStorage) {
+NextHandler::NextHandler(std::shared_ptr<CFGStorage>& cfgStorage, std::shared_ptr<StmtStorage>& stmtStorage,
+                         std::shared_ptr<ProcedureStorage>& procStorage) {
     this->cfgStorage = cfgStorage;
     this->stmtStorage = stmtStorage;
     this->procStorage = procStorage;
 }
 
-std::vector<std::vector<std::string>> NextHandler::handle(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> NextHandler::handle(Parameter& param1, Parameter& param2) {
     bool isFixedIntParam1 = param1.isFixedInt();
     bool isFixedIntParam2 = param2.isFixedInt();
     bool isWildCardParam1 = param1.isWildcard();
@@ -23,7 +23,7 @@ std::vector<std::vector<std::string>> NextHandler::handle(Parameter param1, Para
                                isTypedStmtParam1, isTypedStmtParam2);
 }
 
-std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter& param1, Parameter& param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
     StmtNum n1 = stoi(paramString1);
@@ -47,7 +47,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntInt(Parameter param1
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardNonT(Parameter intParam, bool isFindChildren) {
+std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardNonT(Parameter& intParam, bool isFindChildren) {
     StmtNum intValue = intParam.getIntValue();
     ProcName proc = procStorage->getProcedure(intValue);
 
@@ -63,7 +63,7 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardNonT(Paramet
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtNonT(Parameter intParam, Parameter stmtParam,
+std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtNonT(Parameter& intParam, Parameter& stmtParam,
                                                                      bool isFindChildren) {
     StmtNum intValue = intParam.getIntValue();
     Stmt stmtType = stmtParam.getTypeString();
@@ -80,7 +80,7 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtNonT(Parameter i
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardNonT(Parameter stmtParam, bool isFindChildren) {
+std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardNonT(Parameter& stmtParam, bool isFindChildren) {
     Stmt stmtType = stmtParam.getTypeString();
 
     std::vector<std::vector<std::string>> res;
@@ -98,7 +98,7 @@ std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardNonT(Parame
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parameter& param1, Parameter& param2) {
     Stmt type1 = param1.getTypeString();
     Stmt type2 = param2.getTypeString();
     std::vector<std::vector<std::string>> res;
@@ -158,7 +158,7 @@ std::vector<std::vector<std::string>> NextHandler::handleWildcardWildcard() {
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parameter& param1, Parameter& param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
     StmtNum n1 = stoi(paramString1);
@@ -216,7 +216,7 @@ std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parame
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardTransitive(Parameter intParam,
+std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardTransitive(Parameter& intParam,
                                                                                bool isFindChildren) {
     StmtNum intValue = intParam.getIntValue();
 
@@ -236,7 +236,7 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardTransitive(P
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtTransitive(Parameter intParam, Parameter stmtParam,
+std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtTransitive(Parameter& intParam, Parameter& stmtParam,
                                                                            bool isFindChildren) {
     StmtNum intValue = intParam.getIntValue();
     Stmt stmtType = stmtParam.getTypeString();
@@ -258,7 +258,7 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtTransitive(Param
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardTransitive(Parameter stmtParam,
+std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardTransitive(Parameter& stmtParam,
                                                                                 bool isFindChildren) {
     Stmt stmtType = stmtParam.getTypeString();
 
@@ -283,8 +283,8 @@ std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardTransitive(
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransitive(Parameter param1,
-                                                                                    Parameter param2) {
+std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransitive(Parameter& param1,
+                                                                                    Parameter& param2) {
     Stmt type = param1.getTypeString();
     Stmt type2 = param2.getTypeString();
 
@@ -438,7 +438,7 @@ const std::unordered_set<StmtNum>& NextHandler::findGraphRelative(const CFG& gra
     return allRelatives.at(relativeType);
 }
 
-std::vector<std::vector<std::string>> NextHandler::handleNonTransitive(Parameter param1, Parameter param2,
+std::vector<std::vector<std::string>> NextHandler::handleNonTransitive(Parameter& param1, Parameter& param2,
                                                                        bool isFixedIntParam1, bool isFixedIntParam2,
                                                                        bool isWildCardParam1, bool isWildCardParam2,
                                                                        bool isTypedStmtParam1, bool isTypedStmtParam2) {
@@ -479,7 +479,7 @@ std::vector<std::vector<std::string>> NextHandler::handleNonTransitive(Parameter
     return std::vector<std::vector<std::string>>();
 }
 
-std::vector<std::vector<std::string>> NextHandler::handleTransitive(Parameter param1, Parameter param2,
+std::vector<std::vector<std::string>> NextHandler::handleTransitive(Parameter& param1, Parameter& param2,
                                                                     bool isFixedIntParam1, bool isFixedIntParam2,
                                                                     bool isWildCardParam1, bool isWildCardParam2,
                                                                     bool isTypedStmtParam1, bool isTypedStmtParam2) {

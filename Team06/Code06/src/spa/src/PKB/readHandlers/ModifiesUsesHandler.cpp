@@ -1,15 +1,15 @@
 #include "ModifiesUsesHandler.h"
 
 ModifiesUsesHandler::ModifiesUsesHandler(
-                                         std::shared_ptr<StmtStorage> stmtStorage) {
+                                         std::shared_ptr<StmtStorage>& stmtStorage) {
     this->stmtStorage = stmtStorage;
 }
 
-void ModifiesUsesHandler::setStorage(std::shared_ptr<ModifiesUsesStorage> rlStorage) {
+void ModifiesUsesHandler::setStorage(std::shared_ptr<ModifiesUsesStorage>& rlStorage) {
     this->rlStorage = rlStorage;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntVar(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntVar(Parameter& param1, Parameter& param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
     std::vector<std::vector<std::string>> res;
@@ -20,7 +20,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntVar(Paramete
     return res;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntWildcard(Parameter fixedIntParam,
+std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntWildcard(Parameter& fixedIntParam,
                                                                              bool isEarlyReturn) {
     std::string fixedIntString = fixedIntParam.getValue();
     std::vector<std::vector<std::string>> res;
@@ -37,7 +37,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntWildcard(Par
     return res;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcVar(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcVar(Parameter& param1, Parameter& param2) {
     std::string paramString1 = param1.getValue();
     std::string paramString2 = param2.getValue();
     std::vector<std::vector<std::string>> res;
@@ -48,7 +48,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcVar(Paramet
     return res;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcWildcard(Parameter fixedProcParam,
+std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcWildcard(Parameter& fixedProcParam,
                                                                               bool isEarlyReturn) {
     std::string fixedProc = fixedProcParam.getValue();
     std::vector<std::vector<std::string>> res;
@@ -65,7 +65,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcWildcard(Pa
     return res;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynVar(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynVar(Parameter& param1, Parameter& param2) {
     std::string paramString2 = param2.getValue();
     std::vector<std::vector<std::string>> res;
 
@@ -80,7 +80,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynVar(Para
     return res;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynWildcard(Parameter param1) {
+std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynWildcard(Parameter& param1) {
     std::vector<std::vector<std::string>> res;
 
     for (auto typedStmtNum : stmtStorage->getStatementNumbers(param1.getTypeString())) {
@@ -92,7 +92,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynWildcard
     return res;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcSynVar(Parameter fixedVarParam) {
+std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcSynVar(Parameter& fixedVarParam) {
     std::string fixedVar = fixedVarParam.getValue();
     std::vector<std::vector<std::string>> res;
 
@@ -112,7 +112,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcSynWildcard
     return res;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handle(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> ModifiesUsesHandler::handle(Parameter& param1, Parameter& param2) {
     bool isIntParam1 = param1.isFixedInt();
     bool isStringParam1 = param1.isFixedStringType();
     bool isStringParam2 = param2.isFixedStringType();

@@ -13,7 +13,7 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage>& cfgStorage, std::sha
     this->usesStorage = usesStorage;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, Parameter param2) {
+std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter& param1, Parameter& param2) {
 
     StmtNum paramInt1 = param1.getIntValue();
     StmtNum paramInt2 = param2.getIntValue();

@@ -42,7 +42,7 @@ public:
                    std::shared_ptr<ModifiesUsesStorage>& usesStorage,
                    std::shared_ptr<ProcedureStorage>& procAssignStmtStorage);
 
-    std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
+    std::vector<std::vector<std::string>> handle(Parameter& param1, Parameter& param2);
 
     void clearCache();
 
