@@ -41,16 +41,27 @@ Pattern Pattern::makePattern(Parameter p, Parameter ent, vector<string>& es) {
     return processedPat;
 }
 
-Parameter* Pattern::getPatternSyn() {
-    return &patternSyn;
+Parameter Pattern::getPatternSyn() const {
+    return patternSyn;
 }
 
-Parameter* Pattern::getEntRef() {
-    return &entRef;
+Parameter Pattern::getEntRef() const {
+    return entRef;
 }
 
-vector<string> Pattern::getExprSpecs() {
+vector<string> Pattern::getExprSpecs() const {
     return exprSpecs;
+}
+
+vector<Parameter*> Pattern::getAllUncheckedSynonyms() {
+    vector<Parameter*> synonyms;
+    if (patternSyn.isUncheckedSynonym()) {
+        synonyms.push_back(&patternSyn);
+    }
+    if (entRef.isUncheckedSynonym()) {
+        synonyms.push_back(&entRef);
+    }
+    return synonyms;
 }
 
 bool Pattern::validateParams() {
@@ -70,15 +81,15 @@ bool Pattern::validateParams() {
     }
 }
 
-ParameterType Pattern::getPatternType() {
+ParameterType Pattern::getPatternType() const {
     return patternSyn.getType();
 }
 
-ParameterType Pattern::getEntRefType() {
+ParameterType Pattern::getEntRefType() const {
     return entRef.getType();
 }
 
-std::string Pattern::getEntRefValue() {
+std::string Pattern::getEntRefValue() const {
     return entRef.getValue();
 }
 

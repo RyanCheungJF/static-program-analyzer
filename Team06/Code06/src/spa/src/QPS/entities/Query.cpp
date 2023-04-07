@@ -44,9 +44,9 @@ bool Query::evaluatePattern(QueryDB& queryDb, ReadPKB& readPKB) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findPattern(pattern);
-        Parameter* patternSyn = pattern.getPatternSyn();
-        Parameter* entRef = pattern.getEntRef();
-        vector<Parameter> headers{*patternSyn, *entRef};
+        Parameter patternSyn = pattern.getPatternSyn();
+        Parameter entRef = pattern.getEntRef();
+        vector<Parameter> headers{patternSyn, entRef};
         Table table(headers, response);
         if (response.empty()) {
             queryDb.insertTable(QueryDB::emptyTable);
@@ -117,13 +117,9 @@ vector<Parameter*> Query::getAllUncheckedSynonyms() {
         }
     }
     for (int i = 0; i < patterns.size(); i++) {
-        Parameter* entRef = patterns.at(i).getEntRef();
-        Parameter* patternSyn = patterns.at(i).getPatternSyn();
-        if (entRef->getType() == ParameterType::SYNONYM) {
-            synonyms.push_back(entRef);
-        }
-        if (patternSyn->getType() == ParameterType::SYNONYM) {
-            synonyms.push_back(patternSyn);
+        vector<Parameter*> params = patterns.at(i).getAllUncheckedSynonyms();
+        for (int j = 0; j < params.size(); j++) {
+            synonyms.push_back(params.at(j));
         }
     }
     for (int i = 0; i < comparisons.size(); i++) {
