@@ -5,13 +5,14 @@
 #include "../storage/CFGStorage.h"
 #include "../storage/ProcedureStorage.h"
 #include "../storage/StmtStorage.h"
+#include "RelationshipHandler.h"
 
-class NextHandler {
+class NextHandler : public RelationshipHandler {
 public:
     NextHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
                 std::shared_ptr<ProcedureStorage> procStorage);
 
-    std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2, bool isTransitive);
+    std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
 
 private:
     std::shared_ptr<CFGStorage> cfgStorage;

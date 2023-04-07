@@ -7,6 +7,7 @@
 #include "../storage/ProcedureStorage.h"
 #include "../storage/RelationshipStorage.h"
 #include "../storage/StmtStorage.h"
+#include "RelationshipHandler.h"
 
 struct hashFunctionTuple {
     int cantor(int a, int b) const {
@@ -33,7 +34,7 @@ struct hashFunctionIntInt {
     }
 };
 
-class AffectsHandler {
+class AffectsHandler : public RelationshipHandler {
 public:
     AffectsHandler(std::shared_ptr<CFGStorage>& cfgStorage, std::shared_ptr<StmtStorage>& stmtStorage,
                    std::shared_ptr<ProcedureStorage>& procStorage,
@@ -41,7 +42,7 @@ public:
                    std::shared_ptr<ModifiesUsesStorage>& usesStorage,
                    std::shared_ptr<ProcedureStorage>& procAssignStmtStorage);
 
-    std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2, bool isTransitive);
+    std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
 
     void clearCache();
 

@@ -1,9 +1,11 @@
 #include "FollowsParentHandler.h"
 
-FollowsParentHandler::FollowsParentHandler(std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> rlStorage,
-                                           std::shared_ptr<StmtStorage> stmtStorage) {
-    this->rlStorage = rlStorage;
+FollowsParentHandler::FollowsParentHandler(std::shared_ptr<StmtStorage> stmtStorage) {
     this->stmtStorage = stmtStorage;
+}
+
+void FollowsParentHandler::setStorage(shared_ptr<RelationshipStorage<StmtNum, StmtNum>> rlstorage) {
+    this->rlStorage = rlstorage;
 }
 
 std::vector<std::vector<std::string>> FollowsParentHandler::handleIntInt(Parameter param1, Parameter param2) {

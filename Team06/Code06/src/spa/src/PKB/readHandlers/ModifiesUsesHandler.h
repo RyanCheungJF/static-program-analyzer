@@ -4,12 +4,13 @@
 #include "../../QPS/entities/Parameter.h"
 #include "../storage/ModifiesUsesStorage.h"
 #include "../storage/StmtStorage.h"
+#include "RelationshipHandler.h"
 
-class ModifiesUsesHandler {
+class ModifiesUsesHandler : public RelationshipHandler {
 public:
-    ModifiesUsesHandler(std::shared_ptr<ModifiesUsesStorage> rlStorage, std::shared_ptr<StmtStorage> stmtStorage);
+    ModifiesUsesHandler(std::shared_ptr<StmtStorage> stmtStorage);
     std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
-
+    void setStorage(std::shared_ptr<ModifiesUsesStorage> rlStorage);
 private:
     std::shared_ptr<ModifiesUsesStorage> rlStorage;
     std::shared_ptr<StmtStorage> stmtStorage;

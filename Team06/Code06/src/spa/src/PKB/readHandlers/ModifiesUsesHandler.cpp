@@ -1,9 +1,12 @@
 #include "ModifiesUsesHandler.h"
 
-ModifiesUsesHandler::ModifiesUsesHandler(std::shared_ptr<ModifiesUsesStorage> rlStorage,
+ModifiesUsesHandler::ModifiesUsesHandler(
                                          std::shared_ptr<StmtStorage> stmtStorage) {
-    this->rlStorage = rlStorage;
     this->stmtStorage = stmtStorage;
+}
+
+void ModifiesUsesHandler::setStorage(std::shared_ptr<ModifiesUsesStorage> rlStorage) {
+    this->rlStorage = rlStorage;
 }
 
 std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntVar(Parameter param1, Parameter param2) {

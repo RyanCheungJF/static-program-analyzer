@@ -139,7 +139,7 @@ AssignPatternHandler::handleWildcardPattern(std::string rhs, bool (*checkTree)(E
 std::vector<std::vector<std::string>> AssignPatternHandler::handle(Pattern p) {
     std::string rhs = p.getExprSpecs()[0];
     std::string lhsString = p.getEntRefValue();
-    Parameter lhs = *p.getEntRef();
+    Parameter& lhs = p.getEntRef();
     bool leftWildcard = false;
     bool rightWildcard = false;
 

@@ -40,10 +40,12 @@ void PKB::initializePkb() {
     this->callsMap[RelationshipType::CALLS] = callsStorage;
     this->callsMap[RelationshipType::CALLST] = callsTStorage;
 
-    this->affectsHandler = std::make_unique<AffectsHandler>(cfgStorage, statementStorage, procedureStorage,
+    this->followsParentHandler = std::make_shared<FollowsParentHandler>(statementStorage);
+    this->modifiesUsesHandler = std::make_shared<ModifiesUsesHandler>(statementStorage);
+    this->callsHandler = std::make_shared<CallsHandler>();
+    this->affectsHandler = std::make_shared<AffectsHandler>(cfgStorage, statementStorage, procedureStorage,
                                                             modifiesStorage, usesStorage, procAssignStmtStorage);
-
-    this->nextHandler = std::make_unique<NextHandler>(cfgStorage, statementStorage, procedureStorage);
+    this->nextHandler = std::make_shared<NextHandler>(cfgStorage, statementStorage, procedureStorage);
 }
 
 void PKB::setFollows(StmtNum followee, StmtNum follower) {
@@ -138,24 +140,27 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         return res;
     }
 
+    std::shared_ptr<RelationshipHandler> handler = std::make_shared<RelationshipHandler>();
     if (followsParentMap.find(type) != followsParentMap.end()) {
-        FollowsParentHandler handler(followsParentMap.at(type), statementStorage);
-        res = handler.handle(param1, param2);
+        followsParentHandler->setStorage(followsParentMap.at(type));
+        handler = followsParentHandler;
     }
     else if (modifiesUsesMap.find(type) != modifiesUsesMap.end()) {
-        ModifiesUsesHandler handler(modifiesUsesMap.at(type), statementStorage);
-        res = handler.handle(param1, param2);
+        modifiesUsesHandler->setStorage(modifiesUsesMap.at(type));
+        handler = modifiesUsesHandler;
     }
     else if (callsMap.find(type) != callsMap.end()) {
-        CallsHandler handler(callsMap.at(type));
-        res = handler.handle(param1, param2);
+        callsHandler->setStorage(callsMap.at(type));
+        handler = callsHandler;
     }
     else if (nextMap.find(type) != nextMap.end()) {
-        res = nextHandler->handle(param1, param2, type == RelationshipType::NEXTT);
+        handler = nextHandler;
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
-        res = affectsHandler->handle(param1, param2, type == RelationshipType::AFFECTST);
+        handler = affectsHandler;
     }
+    handler->setIsTransitive(rs->isTransitive());
+    res = handler->handle(param1, param2);
 
     if (!res.empty()) {
         relationshipCache->addResult(rs, res);
@@ -164,9 +169,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
 }
 
 std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
-    std::shared_ptr<Parameter> param = std::make_shared<Parameter>(p);
-
-    std::vector<std::string> res = parameterCache->findResult(param);
+    std::vector<std::string> res = parameterCache->findResult(p);
     if (!res.empty()) {
         return res;
     }
@@ -190,7 +193,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
         }
     }
     else if (p.isStatementRef(p)) {
-        std::string typeString = param->getTypeString();
+        std::string typeString = p.getTypeString();
         std::unordered_set<StmtNum>& stmtNums = statementStorage->getStatementNumbers(typeString);
         for (auto stmtNum : stmtNums) {
             res.push_back(to_string(stmtNum));
@@ -198,19 +201,18 @@ std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
     }
 
     if (!res.empty()) {
-        parameterCache->addResult(param, res);
+        parameterCache->addResult(p, res);
     }
     return res;
 }
 
 std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
-    std::shared_ptr<Pattern> pattern = std::make_shared<Pattern>(p);
-    std::vector<std::vector<std::string>> res = patternCache->findResult(pattern);
+    std::vector<std::vector<std::string>> res = patternCache->findResult(p);
     if (!res.empty()) {
         return res;
     }
 
-    Parameter patternSyn = *p.getPatternSyn();
+    Parameter& patternSyn = p.getPatternSyn();
     ParameterType patternType = p.getPatternType();
 
     if (patternSyn.isAssign()) {
@@ -223,7 +225,7 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
     }
 
     if (!res.empty()) {
-        patternCache->addResult(pattern, res);
+        patternCache->addResult(p, res);
     }
 
     return res;
@@ -232,8 +234,7 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
 std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
     AttributeType attrType = p.getAttribute();
     ParameterType paramType = p.getType();
-    std::shared_ptr<Parameter> param = std::make_shared<Parameter>(p);
-    std::vector<std::vector<std::string>> res = attributeCache->findResult(param);
+    std::vector<std::vector<std::string>> res = attributeCache->findResult(p);
     if (!res.empty()) {
         return res;
     }
@@ -257,28 +258,24 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
                 res.push_back({std::to_string(stmtNum), var});
             }
         }
-        // currently just returns a pair of duplicated values. Maybe QPS can remove these trivial With clauses.
         else if (attrType == AttributeType::STMTNO) {
             for (auto stmtNum : stmtNums) {
                 res.push_back({std::to_string(stmtNum), std::to_string(stmtNum)});
             }
         }
     }
-    // currently just returns a pair of duplicated values
     else if (p.isConstant()) {
         std::unordered_set<Const>& consts = constantStorage->getEntNames();
         for (auto constant : consts) {
             res.push_back({constant, constant});
         }
     }
-    // currently just returns a pair of duplicated values
     else if (p.isVariable()) {
         std::unordered_set<Ent>& vars = entityStorage->getEntNames();
         for (auto var : vars) {
             res.push_back({var, var});
         }
     }
-    // currently just returns a pair of duplicated values
     else {
         std::unordered_set<ProcName>& procs = procedureStorage->getProcNames();
         for (ProcName proc : procs) {
@@ -286,22 +283,22 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
         }
     }
     if (!res.empty()) {
-        attributeCache->addResult(param, res);
+        attributeCache->addResult(p, res);
     }
     return res;
 }
 
-// TODO: Consider refactoring?
 std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
-    std::shared_ptr<Comparison> comp = std::make_shared<Comparison>(c);
-    std::vector<std::vector<std::string>> res = comparisonCache->findResult(comp);
+    std::vector<std::vector<std::string>> res = comparisonCache->findResult(c);
     if (!res.empty()) {
+        // rmb to remove
+        std::cout << "comp cache hit" << endl;
         return res;
     }
     Parameter leftParam = c.getLeftParam();
     Parameter rightParam = c.getRightParam();
-    bool isLeftParamFixed = leftParam.isFixedInt() || leftParam.isFixedStringType();
-    bool isRightParamFixed = rightParam.isFixedInt() || rightParam.isFixedStringType();
+    bool isLeftParamFixed = leftParam.isFixedValue();
+    bool isRightParamFixed = rightParam.isFixedValue();
     Ent leftParamValue = leftParam.getValue();
     Ent rightParamValue = rightParam.getValue();
 
@@ -313,11 +310,7 @@ std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
         }
         else {
             res = findAttribute(rightParam);
-            res.erase(std::remove_if(res.begin(), res.end(),
-                                     [&](const std::vector<std::string>& item) {
-                                         return item[1] != leftParamValue;
-                                     }),
-                      res.end());
+            filterAttributeResult(res, leftParamValue);
             for (auto& item : res) {
                 std::swap(item[0], item[1]);
             }
@@ -326,28 +319,35 @@ std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
     else {
         if (isRightParamFixed) {
             res = findAttribute(leftParam);
-            res.erase(std::remove_if(res.begin(), res.end(),
-                                     [&](const std::vector<std::string>& item) {
-                                         return item[1] != rightParamValue;
-                                     }),
-                      res.end());
+            filterAttributeResult(res, rightParamValue);
         }
         else {
             std::vector<std::vector<std::string>> leftParamRes = findAttribute(leftParam);
 
             std::vector<std::vector<std::string>> rightParamRes = findAttribute(rightParam);
             std::unordered_map<std::string, std::unordered_set<std::string>> tempMap;
-            for (auto pair : leftParamRes) {
+            for (auto& pair : leftParamRes) {
                 tempMap[pair[1]].insert(pair[0]);
             }
-            for (auto pair : rightParamRes) {
-                for (auto item : tempMap[pair[1]]) {
+            for (auto& pair : rightParamRes) {
+                for (auto& item : tempMap[pair[1]]) {
                     res.push_back({item, pair[0]});
                 }
             }
         }
     }
+    if (!res.empty()) {
+        comparisonCache->addResult(c, res);
+    }
     return res;
+}
+
+void PKB::filterAttributeResult(std::vector<std::vector<std::string>>& res, std::string val) {
+    res.erase(std::remove_if(res.begin(), res.end(),
+                             [&](const std::vector<std::string>& item) {
+                                 return item[1] != val;
+                             }),
+              res.end());
 }
 
 bool PKB::checkStatement(Stmt stmt, StmtNum num) {

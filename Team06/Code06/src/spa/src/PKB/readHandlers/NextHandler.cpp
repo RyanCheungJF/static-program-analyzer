@@ -7,7 +7,7 @@ NextHandler::NextHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr
     this->procStorage = procStorage;
 }
 
-std::vector<std::vector<std::string>> NextHandler::handle(Parameter param1, Parameter param2, bool isTransitive) {
+std::vector<std::vector<std::string>> NextHandler::handle(Parameter param1, Parameter param2) {
     bool isFixedIntParam1 = param1.isFixedInt();
     bool isFixedIntParam2 = param2.isFixedInt();
     bool isWildCardParam1 = param1.isWildcard();
@@ -15,7 +15,7 @@ std::vector<std::vector<std::string>> NextHandler::handle(Parameter param1, Para
     bool isTypedStmtParam1 = Parameter::isStatementRef(param1) && !isFixedIntParam1 && !isWildCardParam1;
     bool isTypedStmtParam2 = Parameter::isStatementRef(param2) && !isFixedIntParam2 && !isWildCardParam2;
 
-    if (isTransitive) {
+    if (this->isTransitive) {
         return handleTransitive(param1, param2, isFixedIntParam1, isFixedIntParam2, isWildCardParam1, isWildCardParam2,
                                 isTypedStmtParam1, isTypedStmtParam2);
     }

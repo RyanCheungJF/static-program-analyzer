@@ -28,7 +28,7 @@ std::vector<std::vector<std::string>> IfWhilePatternHandler::handleWildcard() {
 }
 
 std::vector<std::vector<std::string>> IfWhilePatternHandler::handle(Pattern p) {
-    Parameter lhs = *p.getEntRef();
+    Parameter lhs = p.getEntRef();
     std::string lhsString = p.getEntRefValue();
 
     if (lhs.isFixedStringType()) {

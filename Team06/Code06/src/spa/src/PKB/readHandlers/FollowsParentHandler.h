@@ -3,12 +3,13 @@
 #include "../../QPS/entities/Parameter.h"
 #include "../storage/RelationshipStorage.h"
 #include "../storage/StmtStorage.h"
+#include "RelationshipHandler.h"
 
-class FollowsParentHandler {
+class FollowsParentHandler : public RelationshipHandler {
 public:
-    FollowsParentHandler(std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> rlStorage,
-                         std::shared_ptr<StmtStorage> stmtStorage);
+    FollowsParentHandler(std::shared_ptr<StmtStorage> stmtStorage);
     std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
+    void setStorage(shared_ptr<RelationshipStorage<StmtNum, StmtNum>> rlStorage);
 
 private:
     std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> rlStorage;

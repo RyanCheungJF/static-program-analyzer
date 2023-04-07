@@ -1,6 +1,6 @@
 #include "CallsHandler.h"
 
-CallsHandler::CallsHandler(std::shared_ptr<RelationshipStorage<Ent, Ent>> callsStorage) {
+void CallsHandler::setStorage(std::shared_ptr<RelationshipStorage<Ent, Ent>> callsStorage) {
     this->callsStorage = callsStorage;
 }
 

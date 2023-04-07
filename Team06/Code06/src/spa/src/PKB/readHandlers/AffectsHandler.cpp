@@ -13,7 +13,7 @@ AffectsHandler::AffectsHandler(std::shared_ptr<CFGStorage>& cfgStorage, std::sha
     this->usesStorage = usesStorage;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, Parameter param2, bool isTransitive) {
+std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, Parameter param2) {
 
     StmtNum paramInt1 = param1.getIntValue();
     StmtNum paramInt2 = param2.getIntValue();
@@ -26,7 +26,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter param1, P
     bool isAssignStmtParam2 = param2.isAssign() || param2.isStmt();
 
     std::vector<std::vector<std::string>> temp;
-    if (isTransitive) {
+    if (this->isTransitive) {
         temp = handleTransitive(paramInt1, paramInt2, isFixedIntParam1, isFixedIntParam2, isWildCardParam1,
                                 isWildCardParam2, isAssignStmtParam1, isAssignStmtParam2);
     }

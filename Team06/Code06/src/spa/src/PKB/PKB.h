@@ -30,22 +30,6 @@
 #include "utils/AppConstants.h"
 
 class PKB : AppConstants {
-    struct withClauseHash {
-        std::size_t operator()(std::vector<std::string> const& vec) const {
-            return std::hash<std::string>{}(vec[1]);
-        }
-    };
-
-    struct withClauseEquals {
-        bool operator()(shared_ptr<Pattern> const& pattern1, shared_ptr<Pattern> const& pattern2) const {
-            bool check1 = pattern1->getPatternType() == pattern2->getPatternType();
-            bool check2 = *pattern1->getEntRef() == *pattern2->getEntRef();
-            bool check3 = pattern1->getExprSpecs()[0] == pattern2->getExprSpecs()[0];
-
-            return check1 && check2 && check3;
-        }
-    };
-
 public:
     void initializePkb();
 
@@ -101,15 +85,19 @@ public:
     void writeCFG(ProcName name,
                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph);
 
+    // Returns relevant results based on the type of Relationship object passed and its parameters.
     std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship>& rs);
 
+    // Returns relevant results based on the type of Parameter object passed.
     std::vector<std::string> findDesignEntities(Parameter& p);
 
-    // Returns relevant strings based on Pattern object passed
+    // Returns relevant results based on Pattern object passed.
     std::vector<std::vector<std::string>> findPattern(Pattern& p);
 
+    // Returns relevant results based on the Attributes of the Parameter object passed.
     std::vector<std::vector<std::string>> findAttribute(Parameter& p);
 
+    // Returns relevant results based on the Comparison object passed.
     std::vector<std::vector<std::string>> findWith(Comparison& c);
 
     // check if given a statement type and statement line number, whether that
@@ -189,12 +177,23 @@ private:
     std::shared_ptr<PatternStorage> ifPatternStorage;
     std::shared_ptr<PatternStorage> whilePatternStorage;
 
+    // CACHES
     std::shared_ptr<RelationshipCache> relationshipCache;
     std::shared_ptr<ParameterCache> parameterCache;
     std::shared_ptr<PatternCache> patternCache;
     std::shared_ptr<AttributeCache> attributeCache;
     std::shared_ptr<ComparisonCache> comparisonCache;
 
+    // HANDLERS
+    std::shared_ptr<FollowsParentHandler> followsParentHandler;
+    std::shared_ptr<ModifiesUsesHandler> modifiesUsesHandler;
+    std::shared_ptr<CallsHandler> callsHandler;
+    std::shared_ptr<AffectsHandler> affectsHandler;
+    std::shared_ptr<NextHandler> nextHandler;
+    std::shared_ptr<AssignPatternHandler> assignPatternHandler;
+    std::shared_ptr<IfWhilePatternHandler> ifWhilePatternHandler;
+
+    // MAPS
     std::unordered_map<RelationshipType, std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>>> followsParentMap = {
         {RelationshipType::FOLLOWS, NULL},
         {RelationshipType::FOLLOWST, NULL},
@@ -212,6 +211,7 @@ private:
 
     std::unordered_set<RelationshipType> nextMap = {RelationshipType::NEXT, RelationshipType::NEXTT};
     std::unordered_set<RelationshipType> affectsMap = {RelationshipType::AFFECTS, RelationshipType::AFFECTST};
-    std::unique_ptr<AffectsHandler> affectsHandler;
-    std::unique_ptr<NextHandler> nextHandler;
+
+    // HELPER FUNCTIONS
+    void PKB::filterAttributeResult(std::vector<std::vector<std::string>>& res, std::string val);
 };

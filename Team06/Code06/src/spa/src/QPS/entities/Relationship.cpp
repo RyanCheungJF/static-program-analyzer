@@ -69,6 +69,10 @@ RelationshipType Relationship::getType() const {
     return type;
 }
 
+bool Relationship::isTransitive() {
+    return transitiveRelationships.find(type) != transitiveRelationships.end();
+}
+
 double Relationship::getPriority() {
     return evalPriority;
 }

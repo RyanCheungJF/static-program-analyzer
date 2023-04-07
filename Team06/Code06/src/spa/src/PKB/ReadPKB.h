@@ -7,15 +7,19 @@ public:
     // Sets the pointer to the PKB instance if it is not set yet
     void setInstancePKB(PKB& pkb);
 
+    // Returns relevant results based on the type of Relationship object passed and its parameters.
     std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship>& rs);
 
+    // Returns relevant results based on the type of Parameter object passed.
     std::vector<std::string> findDesignEntities(Parameter& p);
 
     // Returns relevant strings based on Pattern object passed
     std::vector<std::vector<std::string>> findPattern(Pattern& p);
 
+    // Returns relevant results based on the Attributes of the Parameter object passed.
     std::vector<std::vector<std::string>> findAttribute(Parameter& p);
 
+    // Returns relevant results based on the Comparison object passed.
     std::vector<std::vector<std::string>> findWith(Comparison& c);
 
     // check if given a statement type and statement line number, whether that

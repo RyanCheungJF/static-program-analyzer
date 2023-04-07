@@ -2,11 +2,12 @@
 
 #include "../../QPS/entities/Parameter.h"
 #include "../storage/RelationshipStorage.h"
+#include "RelationshipHandler.h"
 
-class CallsHandler {
+class CallsHandler : public RelationshipHandler {
 public:
-    CallsHandler(std::shared_ptr<RelationshipStorage<Ent, Ent>> callsStorage);
     std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
+    void setStorage(std::shared_ptr<RelationshipStorage<Ent, Ent>> callsStorage);
 
 private:
     std::shared_ptr<RelationshipStorage<Ent, Ent>> callsStorage;

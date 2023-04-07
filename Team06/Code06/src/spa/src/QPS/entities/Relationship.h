@@ -41,6 +41,7 @@ public:
     vector<ParameterType> getParameterTypes();
     vector<std::string> getParameterValues();
     RelationshipType getType() const;
+    bool isTransitive();
     double getPriority();
     bool operator==(const Relationship&) const;
     bool operator>(const Relationship&) const;
