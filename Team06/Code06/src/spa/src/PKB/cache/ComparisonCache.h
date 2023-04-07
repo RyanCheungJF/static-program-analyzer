@@ -2,16 +2,16 @@
 #include "Cache.h"
 
 struct comparisonHash {
-    std::size_t operator()(const shared_ptr<Comparison>& comp) const {
-        Parameter leftParam = comp->getLeftParam();
-        Parameter rightParam = comp->getRightParam();
-        std::pair<ParameterType, ParameterType> paramTypes = comp->getParameterTypes();
-        std::pair<std::string, std::string> paramValues = comp->getParameterValues();
-        std::pair<AttributeType, AttributeType> attrTypes = comp->getParameterAttributes();
+    std::size_t operator()(const Comparison& comp) const {
+        Parameter& leftParam = comp.getLeftParam();
+        Parameter& rightParam = comp.getRightParam();
+        std::pair<ParameterType, ParameterType> paramTypes = comp.getParameterTypes();
+        std::pair<std::string, std::string> paramValues = comp.getParameterValues();
+        std::pair<AttributeType, AttributeType> attrTypes = comp.getParameterAttributes();
 
         std::size_t h1 = std::hash<ParameterType>{}(paramTypes.first);
         std::size_t h2 = std::hash<ParameterType>{}(paramTypes.second);
-        std::size_t h3 = std::hash<ComparisonOperator>{}(comp->getOperator());
+        std::size_t h3 = std::hash<ComparisonOperator>{}(comp.getOperator());
 
         if (leftParam.isFixedInt() || leftParam.isFixedStringType()) {
             std::size_t temp = std::hash<std::string>{}(paramValues.first);
@@ -36,20 +36,20 @@ struct comparisonHash {
 };
 
 struct comparisonEquals {
-    bool operator()(const shared_ptr<Comparison>& comp1, const shared_ptr<Comparison>& comp2) const {
-        std::pair<ParameterType, ParameterType> paramTypes1 = comp1->getParameterTypes();
-        std::pair<ParameterType, ParameterType> paramTypes2 = comp2->getParameterTypes();
-        std::pair<std::string, std::string> paramValues1 = comp1->getParameterValues();
-        std::pair<std::string, std::string> paramValues2 = comp2->getParameterValues();
-        std::pair<AttributeType, AttributeType> attrTypes1 = comp1->getParameterAttributes();
-        std::pair<AttributeType, AttributeType> attrTypes2 = comp2->getParameterAttributes();
+    bool operator()(const Comparison& comp1, const Comparison& comp2) const {
+        std::pair<ParameterType, ParameterType> paramTypes1 = comp1.getParameterTypes();
+        std::pair<ParameterType, ParameterType> paramTypes2 = comp2.getParameterTypes();
+        std::pair<std::string, std::string> paramValues1 = comp1.getParameterValues();
+        std::pair<std::string, std::string> paramValues2 = comp2.getParameterValues();
+        std::pair<AttributeType, AttributeType> attrTypes1 = comp1.getParameterAttributes();
+        std::pair<AttributeType, AttributeType> attrTypes2 = comp2.getParameterAttributes();
 
         bool check1 = paramTypes1.first == paramTypes2.first;
         bool check2 = paramTypes1.second == paramTypes2.second;
-        bool check3 = comp1->getOperator() == comp2->getOperator();
+        bool check3 = comp1.getOperator() == comp2.getOperator();
 
-        Parameter leftParam1 = comp1->getLeftParam();
-        Parameter rightParam1 = comp1->getRightParam();
+        Parameter& leftParam1 = comp1.getLeftParam();
+        Parameter& rightParam1 = comp1.getRightParam();
 
         if (leftParam1.isFixedInt() || leftParam1.isFixedStringType()) {
             check1 = check1 && paramValues1.first == paramValues2.first;

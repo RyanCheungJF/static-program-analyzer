@@ -48,5 +48,5 @@ struct relationshipEquals {
     }
 };
 
-class RelationshipCache
-    : public Cache<Relationship, std::vector<std::vector<std::string>>, relationshipHash, relationshipEquals> {};
+class RelationshipCache : public Cache<shared_ptr<Relationship>, std::vector<std::vector<std::string>>,
+                                       relationshipHash, relationshipEquals> {};

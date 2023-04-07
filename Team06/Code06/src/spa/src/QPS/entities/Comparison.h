@@ -9,12 +9,12 @@ class Comparison {
 public:
     Comparison();
     Comparison(ComparisonOperator o, Parameter leftP, Parameter rightP);
-    Parameter getLeftParam();
-    Parameter getRightParam();
-    ComparisonOperator getOperator();
-    std::pair<ParameterType, ParameterType> getParameterTypes();
-    std::pair<std::string, std::string> getParameterValues();
-    std::pair<AttributeType, AttributeType> getParameterAttributes();
+    Parameter getLeftParam() const;
+    Parameter getRightParam() const;
+    ComparisonOperator getOperator() const;
+    std::pair<ParameterType, ParameterType> getParameterTypes() const;
+    std::pair<std::string, std::string> getParameterValues() const;
+    std::pair<AttributeType, AttributeType> getParameterAttributes() const;
     vector<Parameter*> getAllUncheckedSynonyms();
     bool validateParams();
     bool hasValidComparisonTypes();

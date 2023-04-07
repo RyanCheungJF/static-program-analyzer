@@ -14,27 +14,27 @@ Comparison::Comparison(ComparisonOperator o, Parameter leftP, Parameter rightP) 
     evalPriority = 0;
 }
 
-Parameter Comparison::getLeftParam() {
+Parameter Comparison::getLeftParam() const {
     return leftParam;
 }
 
-Parameter Comparison::getRightParam() {
+Parameter Comparison::getRightParam() const {
     return rightParam;
 }
 
-ComparisonOperator Comparison::getOperator() {
+ComparisonOperator Comparison::getOperator() const {
     return op;
 }
 
-std::pair<ParameterType, ParameterType> Comparison::getParameterTypes() {
+std::pair<ParameterType, ParameterType> Comparison::getParameterTypes() const {
     return {leftParam.getType(), rightParam.getType()};
 }
 
-std::pair<std::string, std::string> Comparison::getParameterValues() {
+std::pair<std::string, std::string> Comparison::getParameterValues() const {
     return {leftParam.getValue(), rightParam.getValue()};
 }
 
-std::pair<AttributeType, AttributeType> Comparison::getParameterAttributes() {
+std::pair<AttributeType, AttributeType> Comparison::getParameterAttributes() const {
     return {leftParam.getAttribute(), rightParam.getAttribute()};
 }
 
