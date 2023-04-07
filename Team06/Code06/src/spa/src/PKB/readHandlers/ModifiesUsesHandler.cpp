@@ -17,7 +17,8 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntVar(Paramete
     return res;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntWildcard(Parameter fixedIntParam, bool isEarlyReturn) {
+std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntWildcard(Parameter fixedIntParam,
+                                                                             bool isEarlyReturn) {
     std::string fixedIntString = fixedIntParam.getValue();
     std::vector<std::vector<std::string>> res;
 
@@ -44,7 +45,8 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcVar(Paramet
     return res;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcWildcard(Parameter fixedProcParam, bool isEarlyReturn) {
+std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcWildcard(Parameter fixedProcParam,
+                                                                              bool isEarlyReturn) {
     std::string fixedProc = fixedProcParam.getValue();
     std::vector<std::vector<std::string>> res;
 

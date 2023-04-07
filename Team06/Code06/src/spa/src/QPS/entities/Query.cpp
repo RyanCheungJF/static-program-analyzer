@@ -11,9 +11,7 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
     QueryDB* queryDBPointer = &queryDb;
     Table emptyTable({}, {});
 
-    evaluateComparison(queryDb, readPKB)
-    && evaluatePattern(queryDb, readPKB)
-    && evaluateRelationship(queryDb, readPKB);
+    evaluateComparison(queryDb, readPKB) && evaluatePattern(queryDb, readPKB) && evaluateRelationship(queryDb, readPKB);
 
     vector<string> res = queryDb.fetch(selectParameters, readPKB);
     return res;
@@ -186,8 +184,7 @@ bool Query::operator==(const Query& q) const {
            isSelectTuple == q.isSelectTuple;
 }
 
-void Query::updateEvalOrder()
-{
+void Query::updateEvalOrder() {
     if (relations.size() > 0) {
         for (int i = 0; i < relations.size(); i++) {
             relations.at(i)->calcPriority();

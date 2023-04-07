@@ -115,7 +115,7 @@ double Relationship::calcPriority() {
     // checks for cases like Affects*(call, _) or Affects(print, assign)
     // and pushes them to the front of the queue
     if ((type == RelationshipType::AFFECTST || type == RelationshipType::AFFECTS) &&
-             (othersCounter - assignCounter > 0)) {
+        (othersCounter - assignCounter > 0)) {
         prio = AppConstants::highestPriority;
     }
 

@@ -16,7 +16,8 @@ struct comparisonHash {
         if (leftParam.isFixedInt() || leftParam.isFixedStringType()) {
             std::size_t temp = std::hash<std::string>{}(paramValues.first);
             h1 = h1 ^ (temp << 1);
-        } else {
+        }
+        else {
             std::size_t temp = std::hash<AttributeType>{}(attrTypes.first);
             h1 = h1 ^ (temp << 1);
         }
@@ -24,7 +25,8 @@ struct comparisonHash {
         if (rightParam.isFixedInt() || rightParam.isFixedStringType()) {
             std::size_t temp = std::hash<std::string>{}(paramValues.second);
             h2 = h2 ^ (temp << 1);
-        } else {
+        }
+        else {
             std::size_t temp = std::hash<AttributeType>{}(attrTypes.second);
             h2 = h2 ^ (temp << 1);
         }
@@ -51,8 +53,9 @@ struct comparisonEquals {
 
         if (leftParam1.isFixedInt() || leftParam1.isFixedStringType()) {
             check1 = check1 && paramValues1.first == paramValues2.first;
-        } else {
-            check1 = check1 && attrTypes1.first == attrTypes2.first;   
+        }
+        else {
+            check1 = check1 && attrTypes1.first == attrTypes2.first;
         }
 
         if (rightParam1.isFixedInt() || rightParam1.isFixedStringType()) {

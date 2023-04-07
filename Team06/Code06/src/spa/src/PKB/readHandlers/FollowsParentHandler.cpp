@@ -102,7 +102,7 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardInt(Pa
     std::vector<std::vector<std::string>> res;
 
     std::unordered_set<StmtNum>& stmtNums = rlStorage->getLeftItems(stoi(paramString2));
-    
+
     if (!stmtNums.empty()) {
         return AppConstants::EARLY_RETURN_RES;
     }
