@@ -8,16 +8,20 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
     // I am going to assume here that since the object has been created it means
     // that the variables are correctly instantiated.
     QueryDB queryDb = QueryDB();
+    QueryDB* queryDBPointer = &queryDb;
+    Table emptyTable({}, {});
 
-    evaluateRelationship(queryDb, readPKB);
-    evaluatePattern(queryDb, readPKB);
-    evaluateComparison(queryDb, readPKB);
+    evaluateComparison(queryDb, readPKB)
+    && evaluatePattern(queryDb, readPKB)
+    && evaluateRelationship(queryDb, readPKB);
+
     vector<string> res = queryDb.fetch(selectParameters, readPKB);
     return res;
 }
 
-void Query::evaluateRelationship(QueryDB& queryDb, ReadPKB& readPKB) {
-    for (shared_ptr<Relationship>& relation : this->relations) {
+bool Query::evaluateRelationship(QueryDB& queryDb, ReadPKB& readPKB) {
+    for (int i = 0; i < this->relations.size(); i++) {
+        shared_ptr<Relationship>& relation = this->relations.at(i);
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findRelationship(relation);
@@ -25,7 +29,7 @@ void Query::evaluateRelationship(QueryDB& queryDb, ReadPKB& readPKB) {
         Table table(params, response);
         if (response.empty()) {
             queryDb.insertTable(QueryDB::emptyTable);
-            break;
+            return false;
         }
         // clauses that are just fixed ints or wild cards will just be
         // taken as true and not be inserted into the tableVec
@@ -34,39 +38,40 @@ void Query::evaluateRelationship(QueryDB& queryDb, ReadPKB& readPKB) {
             queryDb.insertTable(table);
         }
     }
+    return true;
 }
 
-void Query::evaluatePattern(QueryDB& queryDb, ReadPKB& readPKB) {
+bool Query::evaluatePattern(QueryDB& queryDb, ReadPKB& readPKB) {
     for (Pattern& pattern : this->patterns) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findPattern(pattern);
-        if (response.empty()) {
-            queryDb.insertTable(QueryDB::emptyTable);
-            break;
-        }
         Parameter* patternSyn = pattern.getPatternSyn();
         Parameter* entRef = pattern.getEntRef();
         vector<Parameter> headers{*patternSyn, *entRef};
         Table table(headers, response);
+        if (response.empty()) {
+            queryDb.insertTable(QueryDB::emptyTable);
+            return false;
+        }
         // This will remove wild cards and FIXED INT from the table.
         table.extractDesignEntities();
         if (!table.isEmptyTable()) {
             queryDb.insertTable(table);
         }
     }
+    return true;
 }
 
-void Query::evaluateComparison(QueryDB& queryDb, ReadPKB& readPKB) {
+bool Query::evaluateComparison(QueryDB& queryDb, ReadPKB& readPKB) {
     for (Comparison& comparison : this->comparisons) {
         vector<vector<string>> response = readPKB.findWith(comparison);
         if (response.empty()) {
             queryDb.insertTable(QueryDB::emptyTable);
-            break;
+            return false;
         }
         Parameter leftParam = comparison.getLeftParam();
         Parameter rightParam = comparison.getRightParam();
-        // resets parameter attribute as it will no longer be used until select evaluation.
         leftParam.updateAttributeType(AttributeType::NONE);
         rightParam.updateAttributeType(AttributeType::NONE);
         vector<Parameter> headers{leftParam, rightParam};
@@ -76,9 +81,12 @@ void Query::evaluateComparison(QueryDB& queryDb, ReadPKB& readPKB) {
             queryDb.insertTable(table);
         }
     }
+    return true;
 }
 
-Query::Query() {}
+Query::Query() {
+    isSelectTuple = false;
+}
 
 Query::Query(const Query& q) {
     relations = q.relations;
@@ -176,4 +184,26 @@ bool Query::operator==(const Query& q) const {
     }
     return selectParameters == q.selectParameters && patterns == q.patterns && comparisons == q.comparisons &&
            isSelectTuple == q.isSelectTuple;
+}
+
+void Query::updateEvalOrder()
+{
+    if (relations.size() > 0) {
+        for (int i = 0; i < relations.size(); i++) {
+            relations.at(i)->calcPriority();
+        }
+        std::sort(relations.begin(), relations.end(), SharedPtrCompare::cmp<Relationship>);
+    }
+    if (patterns.size() > 0) {
+        for (int i = 0; i < patterns.size(); i++) {
+            patterns.at(i).calcPriority();
+        }
+        std::sort(patterns.begin(), patterns.end(), greater());
+    }
+    if (comparisons.size() > 0) {
+        for (int i = 0; i < comparisons.size(); i++) {
+            comparisons.at(i).calcPriority();
+        }
+        std::sort(comparisons.begin(), comparisons.end(), greater());
+    }
 }

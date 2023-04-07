@@ -20,6 +20,7 @@ TEST_CASE("parse / given valid string with such that clause / parse into "
     vector<Comparison> comparisons{};
     bool isSelectTuple = false;
     Query q(selectParams, relationships, patterns, comparisons, isSelectTuple);
+    q.updateEvalOrder();
     REQUIRE(q == queries.at(0));
 }
 
@@ -66,6 +67,7 @@ TEST_CASE("parse / given valid string with such that and pattern clause / "
     vector<Comparison> comparisons{};
     bool isSelectTuple = false;
     Query q(selectParams, relationships, patterns, comparisons, isSelectTuple);
+    q.updateEvalOrder();
     REQUIRE(q == queries.at(0));
 }
 
@@ -226,6 +228,7 @@ TEST_CASE("parse / select <BOOLEAN> should work if BOOLEAN is declared / parse w
     vector<Comparison> comparisons{};
     bool isSelectTuple = true;
     Query q(selectParams, relationships, patterns, comparisons, isSelectTuple);
+    q.updateEvalOrder();
     REQUIRE(q == queries.at(0));
 }
 
@@ -237,14 +240,10 @@ TEST_CASE("parse / select <BOOLEAN, s> should work if BOOLEAN is not declared / 
     REQUIRE_THROWS_AS(qp.parse(query), SemanticException);
 }
 
-TEST_CASE("parse / multiple while pattern clauses / parse correctly") {
-    string query = R"(
-        stmt s;
-        while w1, w2;
-        Select <s, w1, w2> such that Next*(w1, s) and Next*(s, w2) pattern w1("CS2103",_) and w2("CS2030",_))";
+TEST_CASE("parse / with clause comparing string to int / throws semantic error") {
+    string query = "Select BOOLEAN with \"abcd\" = 8";
     QPSParser qp;
-    vector<Query> q = qp.parse(query);
-    REQUIRE(true);
+    REQUIRE_THROWS_AS(qp.parse(query), SemanticException);
 }
 
 TEST_CASE("splitQuery / splitting variable v; Select v; should give error / "

@@ -4,12 +4,14 @@
 
 Comparison::Comparison() {
     op = ComparisonOperator::EQUALS;
+    evalPriority = 0;
 }
 
 Comparison::Comparison(ComparisonOperator o, Parameter leftP, Parameter rightP) {
     op = o;
     leftParam = leftP;
     rightParam = rightP;
+    evalPriority = 0;
 }
 
 Parameter Comparison::getLeftParam() {
@@ -91,4 +93,39 @@ const unordered_map<string, ComparisonOperator> Comparison::stringToOpMap = {
 
 bool Comparison::operator==(const Comparison& c) const {
     return leftParam == c.leftParam && rightParam == c.rightParam && op == c.op;
+}
+
+bool Comparison::operator>(const Comparison& c) const {
+    return evalPriority > c.evalPriority;
+}
+
+bool Comparison::operator<(const Comparison& c) const {
+    return evalPriority < c.evalPriority;
+}
+
+double Comparison::getPriority() {
+    return evalPriority;
+}
+
+double Comparison::calcPriority() {
+    int wildcardCounter = 0;
+    int fixedValCounter = 0;
+
+    if (leftParam.isFixedValue()) {
+        fixedValCounter++;
+    }
+    else {
+        wildcardCounter++;
+    }
+
+    if (rightParam.isFixedValue()) {
+        fixedValCounter++;
+    }
+    else {
+        wildcardCounter++;
+    }
+
+    double prio = wildcardCounter * AppConstants::wildcardWeight + fixedValCounter * AppConstants::fixedValWeight;
+    this->evalPriority = prio;
+    return prio;
 }

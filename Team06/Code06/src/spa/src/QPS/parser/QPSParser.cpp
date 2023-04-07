@@ -38,6 +38,7 @@ vector<Query> QPSParser::parse(string qpsQuery) {
         if (query.booleanParamCheck()) {
             throw SemanticException();
         }
+        query.updateEvalOrder();
     }
     return queryVec;
 }
