@@ -46,6 +46,9 @@ void PKB::initializePkb() {
     this->affectsHandler = std::make_shared<AffectsHandler>(cfgStorage, statementStorage, procedureStorage,
                                                             modifiesStorage, usesStorage, procAssignStmtStorage);
     this->nextHandler = std::make_shared<NextHandler>(cfgStorage, statementStorage, procedureStorage);
+
+    this->assignPatternHandler = std::make_shared<AssignPatternHandler>(assignPatternStorage);
+    this->ifWhilePatternHandler = std::make_shared<IfWhilePatternHandler>();
 }
 
 void PKB::setFollows(StmtNum followee, StmtNum follower) {
@@ -140,7 +143,7 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         return res;
     }
 
-    std::shared_ptr<RelationshipHandler> handler = std::make_shared<RelationshipHandler>();
+    std::shared_ptr<RelationshipHandler> handler;
     if (followsParentMap.find(type) != followsParentMap.end()) {
         followsParentHandler->setStorage(followsParentMap.at(type));
         handler = followsParentHandler;
@@ -215,14 +218,15 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
     Parameter& patternSyn = p.getPatternSyn();
     ParameterType patternType = p.getPatternType();
 
+    shared_ptr<PatternHandler> handler;
     if (patternSyn.isAssign()) {
-        AssignPatternHandler handler(assignPatternStorage);
-        res = handler.handle(p);
+        handler = assignPatternHandler;
     }
     else if (ifWhilePatternMap.find(patternType) != ifWhilePatternMap.end()) {
-        IfWhilePatternHandler handler(ifWhilePatternMap.at(patternType));
-        res = handler.handle(p);
+        ifWhilePatternHandler->setStorage(ifWhilePatternMap.at(patternType));
+        handler = ifWhilePatternHandler;
     }
+    res = handler->handle(p);
 
     if (!res.empty()) {
         patternCache->addResult(p, res);

@@ -2,12 +2,12 @@
 #include "../../QPS/entities/Pattern.h"
 #include "../storage/PatternWithExprStorage.h"
 #include "../utils/utils.h"
+#include "PatternHandler.h"
 
-class AssignPatternHandler {
+class AssignPatternHandler : public PatternHandler {
 public:
-    AssignPatternHandler(std::shared_ptr<PatternWithExprStorage> patternStorage);
-
-    std::vector<std::vector<std::string>> handle(Pattern p);
+    AssignPatternHandler(std::shared_ptr<PatternWithExprStorage>& patternStorage);
+    std::vector<std::vector<std::string>> handle(Pattern& p);
 
 private:
     std::shared_ptr<PatternWithExprStorage> patternStorage;

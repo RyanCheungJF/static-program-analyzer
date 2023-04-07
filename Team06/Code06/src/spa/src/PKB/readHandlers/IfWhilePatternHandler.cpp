@@ -1,6 +1,6 @@
 #include "IfWhilePatternHandler.h"
 
-IfWhilePatternHandler::IfWhilePatternHandler(std::shared_ptr<PatternStorage> patternStorage) {
+void IfWhilePatternHandler::setStorage(std::shared_ptr<PatternStorage>& patternStorage) {
     this->patternStorage = patternStorage;
 }
 
@@ -27,7 +27,7 @@ std::vector<std::vector<std::string>> IfWhilePatternHandler::handleWildcard() {
     return res;
 }
 
-std::vector<std::vector<std::string>> IfWhilePatternHandler::handle(Pattern p) {
+std::vector<std::vector<std::string>> IfWhilePatternHandler::handle(Pattern& p) {
     Parameter lhs = p.getEntRef();
     std::string lhsString = p.getEntRefValue();
 

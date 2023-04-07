@@ -1,6 +1,6 @@
 #include "AssignPatternHandler.h"
 
-AssignPatternHandler::AssignPatternHandler(std::shared_ptr<PatternWithExprStorage> patternStorage) {
+AssignPatternHandler::AssignPatternHandler(std::shared_ptr<PatternWithExprStorage>& patternStorage) {
     this->patternStorage = patternStorage;
 }
 
@@ -136,7 +136,7 @@ AssignPatternHandler::handleWildcardPattern(std::string rhs, bool (*checkTree)(E
     return res;
 }
 
-std::vector<std::vector<std::string>> AssignPatternHandler::handle(Pattern p) {
+std::vector<std::vector<std::string>> AssignPatternHandler::handle(Pattern& p) {
     std::string rhs = p.getExprSpecs()[0];
     std::string lhsString = p.getEntRefValue();
     Parameter& lhs = p.getEntRef();
