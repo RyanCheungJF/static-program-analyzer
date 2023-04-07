@@ -18,7 +18,7 @@ public:
     vector<Parameter*> getAllUncheckedSynonyms();
     Parameter getPatternSyn() const;
     Parameter getEntRef() const;
-    vector<string> getExprSpecs()const;
+    vector<string> getExprSpecs() const;
     bool validateParams();
     ParameterType getPatternType() const;
     ParameterType getEntRefType() const;

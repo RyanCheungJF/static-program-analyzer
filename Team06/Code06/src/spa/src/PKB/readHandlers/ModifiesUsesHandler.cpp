@@ -1,7 +1,6 @@
 #include "ModifiesUsesHandler.h"
 
-ModifiesUsesHandler::ModifiesUsesHandler(
-                                         std::shared_ptr<StmtStorage>& stmtStorage) {
+ModifiesUsesHandler::ModifiesUsesHandler(std::shared_ptr<StmtStorage>& stmtStorage) {
     this->stmtStorage = stmtStorage;
 }
 
