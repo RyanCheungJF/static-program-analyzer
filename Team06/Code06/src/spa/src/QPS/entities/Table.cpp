@@ -143,7 +143,7 @@ void Table::intersectTable(Table& t) {
 void Table::extractDesignEntities() {
     vector<int> indexes;
     for (int i = 0; i < headers.size(); i++) {
-        if (Parameter::isDsgEntity(headers[i])) {
+        if (headers[i].isDsgEntity()) {
             indexes.push_back(i);
         }
     }

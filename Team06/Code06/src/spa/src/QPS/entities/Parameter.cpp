@@ -55,12 +55,12 @@ Parameter Parameter::makeParameter(string val, string attr) {
     return p;
 }
 
-bool Parameter::isSyntacticStatementRef(Parameter& p) {
-    return p.type == ParameterType::SYNONYM || isStatementRef(p);
+bool Parameter::isSyntacticStatementRef() const {
+    return type == ParameterType::SYNONYM || isStatementRef();
 }
 
-bool Parameter::isStatementRef(Parameter& p) {
-    switch (p.type) {
+bool Parameter::isStatementRef() const {
+    switch (type) {
     case ParameterType::STMT:
     case ParameterType::READ:
     case ParameterType::PRINT:
@@ -75,63 +75,63 @@ bool Parameter::isStatementRef(Parameter& p) {
     return false;
 }
 
-bool Parameter::isProcedure(Parameter& p) {
-    return p.type == ParameterType::PROCEDURE || p.type == ParameterType::FIXED_STRING;
+bool Parameter::isProcedure() const {
+    return type == ParameterType::PROCEDURE || type == ParameterType::FIXED_STRING;
 }
 
-bool Parameter::isDsgEntity(Parameter& p) {
-    return isDesignEntity(p.getTypeString());
+bool Parameter::isDsgEntity() const {
+    return isDesignEntity(getTypeString());
 }
 
-bool Parameter::isSyntacticEntityRef(Parameter& p) {
-    return p.type == ParameterType::SYNONYM || isEntityRef(p) || isProcedure(p);
+bool Parameter::isSyntacticEntityRef() const {
+    return type == ParameterType::SYNONYM || isEntityRef() || isProcedure();
 }
 
-bool Parameter::isEntityRef(Parameter& p) {
-    return p.type == ParameterType::VARIABLE || isFixedStringOrWildcard(p);
+bool Parameter::isEntityRef() const {
+    return type == ParameterType::VARIABLE || isFixedStringOrWildcard();
 }
 
-bool Parameter::isPatternSyn(Parameter& p) {
-    return p.type == ParameterType::ASSIGN || p.type == ParameterType::WHILE || p.type == ParameterType::IF;
+bool Parameter::isPatternSyn() const {
+    return type == ParameterType::ASSIGN || type == ParameterType::WHILE || type == ParameterType::IF;
 }
 
-bool Parameter::isFixedStringOrWildcard(Parameter& p) {
-    return p.type == ParameterType::FIXED_STRING || p.type == ParameterType::WILDCARD;
+bool Parameter::isFixedStringOrWildcard() const {
+    return type == ParameterType::FIXED_STRING || type == ParameterType::WILDCARD;
 }
 
-bool Parameter::isFixedIntOrWildCard(Parameter& p) {
-    return p.type == ParameterType::FIXED_INT || p.type == ParameterType::WILDCARD;
+bool Parameter::isFixedIntOrWildCard() const {
+    return type == ParameterType::FIXED_INT || type == ParameterType::WILDCARD;
 }
 
-bool Parameter::isFixedInt() {
+bool Parameter::isFixedInt() const {
     return type == ParameterType::FIXED_INT;
 }
 
-bool Parameter::isFixedStringType() {
+bool Parameter::isFixedStringType() const {
     return type == ParameterType::FIXED_STRING;
 }
 
-bool Parameter::isVariable() {
+bool Parameter::isVariable() const {
     return type == ParameterType::VARIABLE;
 }
 
-bool Parameter::isStmt() {
+bool Parameter::isStmt() const {
     return type == ParameterType::STMT;
 }
 
-bool Parameter::isWildcard() {
+bool Parameter::isWildcard() const {
     return type == ParameterType::WILDCARD;
 }
 
-bool Parameter::isAssign() {
+bool Parameter::isAssign() const {
     return type == ParameterType::ASSIGN;
 }
 
-bool Parameter::isProcedureOnly() {
+bool Parameter::isProcedureOnly() const {
     return type == ParameterType::PROCEDURE;
 }
 
-bool Parameter::isConstant() {
+bool Parameter::isConstant() const {
     return type == ParameterType::CONSTANT;
 }
 
@@ -144,7 +144,7 @@ bool Parameter::isComparable(Parameter& p1, Parameter& p2) {
     return p1CompType == p2CompType;
 }
 
-bool Parameter::isFixedValue() {
+bool Parameter::isFixedValue() const {
     return isFixedInt() || isFixedStringType();
 }
 
@@ -187,7 +187,7 @@ AttributeType Parameter::stringToAttribute(string s) {
     return iter->second;
 }
 
-int Parameter::getIntValue() {
+int Parameter::getIntValue() const {
     if (type != ParameterType::FIXED_INT) {
         return -1;
     }
@@ -196,7 +196,7 @@ int Parameter::getIntValue() {
 
 string Parameter::getTypeString() const {
     for (pair<string, ParameterType> item : stringToTypeMap) {
-        if (item.second == this->getType()) {
+        if (item.second == type) {
             return item.first;
         }
     }

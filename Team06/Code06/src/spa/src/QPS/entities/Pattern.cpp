@@ -22,7 +22,7 @@ Pattern::Pattern(Parameter p, Parameter ent, vector<string>& es) {
 }
 
 Pattern Pattern::makePattern(Parameter p, Parameter ent, vector<string>& es) {
-    if (!Parameter::isPatternSyn(p) && !(p.getType() == ParameterType::SYNONYM)) {
+    if (!p.isPatternSyn() && !(p.getType() == ParameterType::SYNONYM)) {
         throw SyntaxException();
     }
     int paramCount = 1 + es.size();
@@ -41,11 +41,11 @@ Pattern Pattern::makePattern(Parameter p, Parameter ent, vector<string>& es) {
     return processedPat;
 }
 
-Parameter Pattern::getPatternSyn() const {
+const Parameter& Pattern::getPatternSyn() const {
     return patternSyn;
 }
 
-Parameter Pattern::getEntRef() const {
+const Parameter& Pattern::getEntRef() const {
     return entRef;
 }
 
@@ -66,7 +66,7 @@ vector<Parameter*> Pattern::getAllUncheckedSynonyms() {
 
 bool Pattern::validateParams() {
     ParameterType patternType = patternSyn.getType();
-    if (!Parameter::isEntityRef(entRef)) {
+    if (!entRef.isEntityRef()) {
         return false;
     }
     switch (patternType) {
@@ -91,6 +91,10 @@ ParameterType Pattern::getEntRefType() const {
 
 std::string Pattern::getEntRefValue() const {
     return entRef.getValue();
+}
+
+bool Pattern::hasSyntacticEntityRef() const {
+    return entRef.isSyntacticEntityRef();
 }
 
 bool Pattern::operator==(const Pattern& p) const {

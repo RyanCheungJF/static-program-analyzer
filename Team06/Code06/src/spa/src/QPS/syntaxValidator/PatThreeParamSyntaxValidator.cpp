@@ -8,7 +8,7 @@ bool PatThreeParamSyntaxValidator::validate(Pattern& p) {
     if (!isWildCard(exprSpecs[1])) {
         throw SyntaxException();
     }
-    if (!Parameter::isSyntacticEntityRef(p.getEntRef())) {
+    if (!p.hasSyntacticEntityRef()) {
         throw SyntaxException();
     }
     return true;

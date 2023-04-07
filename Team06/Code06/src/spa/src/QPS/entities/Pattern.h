@@ -16,13 +16,14 @@ public:
     Pattern(Parameter, Parameter, vector<string>&);
     static Pattern makePattern(Parameter, Parameter, vector<string>&);
     vector<Parameter*> getAllUncheckedSynonyms();
-    Parameter getPatternSyn() const;
-    Parameter getEntRef() const;
+    const Parameter& getPatternSyn() const;
+    const Parameter& getEntRef() const;
     vector<string> getExprSpecs() const;
     bool validateParams();
     ParameterType getPatternType() const;
     ParameterType getEntRefType() const;
     std::string getEntRefValue() const;
+    bool hasSyntacticEntityRef() const;
     bool operator==(const Pattern&) const;
     bool operator>(const Pattern&) const;
     bool operator<(const Pattern&) const;
