@@ -18,6 +18,7 @@ public:
     vector<Parameter*> getAllUncheckedSynonyms();
     bool validateParams();
     bool hasValidComparisonTypes();
+    static Comparison makeComparison(string o, Parameter leftP, Parameter rightP);
     bool operator==(const Comparison&) const;
     bool operator>(const Comparison&) const;
     bool operator<(const Comparison&) const;
