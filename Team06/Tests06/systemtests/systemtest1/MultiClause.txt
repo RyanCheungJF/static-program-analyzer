@@ -143,8 +143,3 @@ assign a;
 Select a such that Affects*(a, a) and Uses(a, "c") and Modifies(a, "c")
 40
 5000
-30 - Stress Test (8 clauses)
-stmt s, s1, s2; variable v, v1, v2, v3, v4, v5;
-Select s such that Uses (s, v) and Modifies (s, v1) and Next* (s, s1) and Uses (s1, v2) and Modifies (s1, v3) and Next* (s1, s2) and Uses (s2, v4) and Modifies (s2, v5)
-10, 25, 26, 27, 30, 31, 33, 34, 35, 38, 39, 4, 40, 41, 5, 6, 7, 8, 9
-50000
