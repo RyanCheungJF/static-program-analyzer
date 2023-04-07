@@ -1,10 +1,10 @@
 #ifndef SPA_QPS_COMPARISON_H
 #define SPA_QPS_COMPARISON_H
-
 #include "Parameter.h"
 enum class ComparisonOperator {
     EQUALS,
 };
+
 class Comparison {
 public:
     Comparison();
@@ -12,12 +12,21 @@ public:
     Parameter getLeftParam();
     Parameter getRightParam();
     ComparisonOperator getOperator();
+    std::pair<ParameterType, ParameterType> getParameterTypes();
+    std::pair<std::string, std::string> getParameterValues();
+    std::pair<AttributeType, AttributeType> getParameterAttributes();
     vector<Parameter*> getAllUncheckedSynonyms();
     bool validateParams();
     bool hasValidComparisonTypes();
     static Comparison makeComparison(string o, Parameter leftP, Parameter rightP);
+    bool operator==(const Comparison&) const;
+    bool operator>(const Comparison&) const;
+    bool operator<(const Comparison&) const;
+    double getPriority();
+    double calcPriority();
 
 private:
+    double evalPriority;
     Parameter leftParam;
     Parameter rightParam;
     ComparisonOperator op;

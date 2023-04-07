@@ -4,12 +4,14 @@
 
 Comparison::Comparison() {
     op = ComparisonOperator::EQUALS;
+    evalPriority = 0;
 }
 
 Comparison::Comparison(ComparisonOperator o, Parameter leftP, Parameter rightP) {
     op = o;
     leftParam = leftP;
     rightParam = rightP;
+    evalPriority = 0;
 }
 
 Parameter Comparison::getLeftParam() {
@@ -22,6 +24,18 @@ Parameter Comparison::getRightParam() {
 
 ComparisonOperator Comparison::getOperator() {
     return op;
+}
+
+std::pair<ParameterType, ParameterType> Comparison::getParameterTypes() {
+    return {leftParam.getType(), rightParam.getType()};
+}
+
+std::pair<std::string, std::string> Comparison::getParameterValues() {
+    return {leftParam.getValue(), rightParam.getValue()};
+}
+
+std::pair<AttributeType, AttributeType> Comparison::getParameterAttributes() {
+    return {leftParam.getAttribute(), rightParam.getAttribute()};
 }
 
 vector<Parameter*> Comparison::getAllUncheckedSynonyms() {
@@ -76,3 +90,42 @@ bool Comparison::validateParams() {
 const unordered_map<string, ComparisonOperator> Comparison::stringToOpMap = {
     {AppConstants::OP_EQUALS, ComparisonOperator::EQUALS},
 };
+
+bool Comparison::operator==(const Comparison& c) const {
+    return leftParam == c.leftParam && rightParam == c.rightParam && op == c.op;
+}
+
+bool Comparison::operator>(const Comparison& c) const {
+    return evalPriority > c.evalPriority;
+}
+
+bool Comparison::operator<(const Comparison& c) const {
+    return evalPriority < c.evalPriority;
+}
+
+double Comparison::getPriority() {
+    return evalPriority;
+}
+
+double Comparison::calcPriority() {
+    int wildcardCounter = 0;
+    int fixedValCounter = 0;
+
+    if (leftParam.isFixedValue()) {
+        fixedValCounter++;
+    }
+    else {
+        wildcardCounter++;
+    }
+
+    if (rightParam.isFixedValue()) {
+        fixedValCounter++;
+    }
+    else {
+        wildcardCounter++;
+    }
+
+    double prio = wildcardCounter * AppConstants::wildcardWeight + fixedValCounter * AppConstants::fixedValWeight;
+    this->evalPriority = prio;
+    return prio;
+}

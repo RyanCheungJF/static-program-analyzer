@@ -9,8 +9,9 @@
 class NextHandler {
 public:
     NextHandler(std::shared_ptr<CFGStorage> cfgStorage, std::shared_ptr<StmtStorage> stmtStorage,
-                std::shared_ptr<ProcedureStorage> procStorage, bool isTransitive);
-    std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2);
+                std::shared_ptr<ProcedureStorage> procStorage);
+
+    std::vector<std::vector<std::string>> handle(Parameter param1, Parameter param2, bool isTransitive);
 
 private:
     std::shared_ptr<CFGStorage> cfgStorage;
@@ -21,7 +22,6 @@ private:
         {ParameterType::ASSIGN, AppConstants::ASSIGN}, {ParameterType::PRINT, AppConstants::PRINT},
         {ParameterType::READ, AppConstants::READ},     {ParameterType::CALL, AppConstants::CALL},
         {ParameterType::STMT, AppConstants::STMT}};
-    bool isTransitive;
 
     // e.g. Next(1, 2)
     std::vector<std::vector<std::string>> handleIntInt(Parameter param1, Parameter param2);
@@ -59,7 +59,7 @@ private:
     std::vector<std::vector<std::string>> handleStmttypeStmttypeTransitive(Parameter param1, Parameter param2);
 
     // e.g. Next*(s1, s2) or Next*(_, _)
-    std::vector<std::vector<std::string>> handleWildcardWildcardTransitive();
+    /*std::vector<std::vector<std::string>> handleWildcardWildcardTransitive();*/
 
     // helper functions
     std::unordered_map<ProcName, std::unordered_set<StmtNum>>
@@ -76,15 +76,17 @@ private:
                                                            bool isTypedStmtParam2);
 
     void addCFGRelatives(std::vector<std::vector<std::string>>& res, ProcName proc, StmtNum num, bool isFindChildren,
-                         std::unordered_set<StmtNum>& filter);
+                         std::unordered_set<StmtNum>& filter, bool isEarlyReturn);
 
     void addCFGRelativesTransitive(std::vector<std::vector<std::string>>& res, const CFG& graph,
                                    std::deque<std::vector<StmtNum>>& queue, bool isFindChildren,
-                                   std::unordered_set<StmtNum>& filterSet);
+                                   std::unordered_set<StmtNum>& filterSet, bool isEarlyReturn);
 
     void initializeQueue(std::deque<std::vector<StmtNum>>& queue, const CFG& graph, StmtNum num, bool isFindChildren);
 
     const std::unordered_set<StmtNum>& findGraphRelative(const CFG& graph, StmtNum num, std::string relativeType);
 
     std::unordered_set<StmtNum> emptySet;
+
+    inline static const bool IS_FIND_CHILDREN = true;
 };

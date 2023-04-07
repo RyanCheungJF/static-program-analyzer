@@ -17,10 +17,18 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntVar(Paramete
     return res;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntWildcard(Parameter fixedIntParam) {
+std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntWildcard(Parameter fixedIntParam,
+                                                                             bool isEarlyReturn) {
     std::string fixedIntString = fixedIntParam.getValue();
     std::vector<std::vector<std::string>> res;
-    for (Ent entity : rlStorage->getRightItems(stoi(fixedIntString))) {
+
+    std::unordered_set<Ent>& entities = rlStorage->getRightItems(stoi(fixedIntString));
+
+    if (isEarlyReturn && !entities.empty()) {
+        return AppConstants::EARLY_RETURN_RES;
+    }
+
+    for (Ent entity : entities) {
         res.push_back({fixedIntString, entity});
     }
     return res;
@@ -37,10 +45,18 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcVar(Paramet
     return res;
 }
 
-std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcWildcard(Parameter fixedProcParam) {
+std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcWildcard(Parameter fixedProcParam,
+                                                                              bool isEarlyReturn) {
     std::string fixedProc = fixedProcParam.getValue();
     std::vector<std::vector<std::string>> res;
-    for (Ent entity : rlStorage->getRightItems(fixedProc)) {
+
+    std::unordered_set<Ent>& entities = rlStorage->getRightItems(fixedProc);
+
+    if (isEarlyReturn && !entities.empty()) {
+        return AppConstants::EARLY_RETURN_RES;
+    }
+
+    for (Ent entity : entities) {
         res.push_back({fixedProc, entity});
     }
     return res;
@@ -98,13 +114,14 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handle(Parameter para
     bool isStringParam1 = param1.isFixedStringType();
     bool isStringParam2 = param2.isFixedStringType();
     bool isProcParam1 = param1.isProcedureOnly();
+    bool isWildcard2 = param2.isWildcard();
 
     if (isIntParam1) {
         if (isStringParam2) {
             return handleIntVar(param1, param2);
         }
         else {
-            return handleIntWildcard(param1);
+            return handleIntWildcard(param1, isWildcard2);
         }
     }
     else if (isStringParam1) {
@@ -112,7 +129,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handle(Parameter para
             return handleProcVar(param1, param2);
         }
         else {
-            return handleProcWildcard(param1);
+            return handleProcWildcard(param1, isWildcard2);
         }
     }
     else if (isProcParam1) {

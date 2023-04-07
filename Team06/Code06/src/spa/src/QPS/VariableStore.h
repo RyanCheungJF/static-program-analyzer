@@ -17,7 +17,7 @@ public:
     VariableStore();
     ParameterType getType(Parameter);
     void insertVariable(Parameter);
-    bool hasVariable(Parameter);
+    bool hasVariable(Parameter&);
     bool updateSynonym(Parameter*);
     string toString();
     unordered_map<string, Parameter> store;

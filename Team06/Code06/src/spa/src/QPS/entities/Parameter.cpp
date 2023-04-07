@@ -144,6 +144,10 @@ bool Parameter::isComparable(Parameter& p1, Parameter& p2) {
     return p1CompType == p2CompType;
 }
 
+bool Parameter::isFixedValue() {
+    return isFixedInt() || isFixedStringType();
+}
+
 bool Parameter::isUncheckedSynonym() {
     return type == ParameterType::SYNONYM;
 }
@@ -184,6 +188,9 @@ AttributeType Parameter::stringToAttribute(string s) {
 }
 
 int Parameter::getIntValue() {
+    if (type != ParameterType::FIXED_INT) {
+        return -1;
+    }
     return std::stoi(value);
 }
 

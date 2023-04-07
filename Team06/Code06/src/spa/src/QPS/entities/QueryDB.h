@@ -15,7 +15,7 @@ class QueryDB {
 public:
     QueryDB();
     void insertTable(Table&);
-    vector<string> fetch(vector<Parameter>, ReadPKB&);
+    vector<string> fetch(vector<Parameter>&, ReadPKB&);
     vector<string> emptyVec = {};
     vector<string> falseVec = {"FALSE"};
     vector<string> trueVec = {"TRUE"};
@@ -23,7 +23,7 @@ public:
 
 private:
     vector<Table> tableVector;
-    Table extractColumns(vector<Parameter>, ReadPKB&);
+    Table extractColumns(vector<Parameter>&, ReadPKB&);
     bool hasEmptyTable();
     bool hasParameter(Parameter&);
 };

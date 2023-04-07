@@ -6,6 +6,8 @@
 #include "../QPS/entities/Pattern.h"
 #include "../QPS/entities/Relationship.h"
 #include "../utils/AppConstants.h"
+#include "cache/AttributeCache.h"
+#include "cache/ComparisonCache.h"
 #include "cache/ParameterCache.h"
 #include "cache/PatternCache.h"
 #include "cache/RelationshipCache.h"
@@ -190,6 +192,8 @@ private:
     std::shared_ptr<RelationshipCache> relationshipCache;
     std::shared_ptr<ParameterCache> parameterCache;
     std::shared_ptr<PatternCache> patternCache;
+    std::shared_ptr<AttributeCache> attributeCache;
+    std::shared_ptr<ComparisonCache> comparisonCache;
 
     std::unordered_map<RelationshipType, std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>>> followsParentMap = {
         {RelationshipType::FOLLOWS, NULL},
@@ -208,4 +212,6 @@ private:
 
     std::unordered_set<RelationshipType> nextMap = {RelationshipType::NEXT, RelationshipType::NEXTT};
     std::unordered_set<RelationshipType> affectsMap = {RelationshipType::AFFECTS, RelationshipType::AFFECTST};
+    std::unique_ptr<AffectsHandler> affectsHandler;
+    std::unique_ptr<NextHandler> nextHandler;
 };

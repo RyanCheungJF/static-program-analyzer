@@ -23,6 +23,8 @@ void PKB::initializePkb() {
     this->relationshipCache = std::make_shared<RelationshipCache>();
     this->patternCache = std::make_shared<PatternCache>();
     this->parameterCache = std::make_shared<ParameterCache>();
+    this->attributeCache = std::make_shared<AttributeCache>();
+    this->comparisonCache = std::make_shared<ComparisonCache>();
 
     this->followsParentMap[RelationshipType::FOLLOWS] = followsStorage;
     this->followsParentMap[RelationshipType::FOLLOWST] = followsTStorage;
@@ -37,6 +39,11 @@ void PKB::initializePkb() {
 
     this->callsMap[RelationshipType::CALLS] = callsStorage;
     this->callsMap[RelationshipType::CALLST] = callsTStorage;
+
+    this->affectsHandler = std::make_unique<AffectsHandler>(cfgStorage, statementStorage, procedureStorage,
+                                                            modifiesStorage, usesStorage, procAssignStmtStorage);
+
+    this->nextHandler = std::make_unique<NextHandler>(cfgStorage, statementStorage, procedureStorage);
 }
 
 void PKB::setFollows(StmtNum followee, StmtNum follower) {
@@ -144,14 +151,12 @@ std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relations
         res = handler.handle(param1, param2);
     }
     else if (nextMap.find(type) != nextMap.end()) {
-        NextHandler handler(cfgStorage, statementStorage, procedureStorage, type == RelationshipType::NEXTT);
-        res = handler.handle(param1, param2);
+        res = nextHandler->handle(param1, param2, type == RelationshipType::NEXTT);
     }
     else if (affectsMap.find(type) != affectsMap.end()) {
-        AffectsHandler handler(cfgStorage, statementStorage, procedureStorage, modifiesStorage, usesStorage,
-                               procAssignStmtStorage, type == RelationshipType::AFFECTST);
-        res = handler.handle(param1, param2);
+        res = affectsHandler->handle(param1, param2, type == RelationshipType::AFFECTST);
     }
+
     if (!res.empty()) {
         relationshipCache->addResult(rs, res);
     }
@@ -165,8 +170,6 @@ std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
     if (!res.empty()) {
         return res;
     }
-
-    ParameterType type = p.getType(); // todo: is this dead code?
 
     if (p.isProcedureOnly()) {
         std::unordered_set<ProcName>& procs = procedureStorage->getProcNames();
@@ -197,7 +200,6 @@ std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
     if (!res.empty()) {
         parameterCache->addResult(param, res);
     }
-
     return res;
 }
 
@@ -230,8 +232,11 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
 std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
     AttributeType attrType = p.getAttribute();
     ParameterType paramType = p.getType();
-
-    std::vector<std::vector<std::string>> res;
+    std::shared_ptr<Parameter> param = std::make_shared<Parameter>(p);
+    std::vector<std::vector<std::string>> res = attributeCache->findResult(param);
+    if (!res.empty()) {
+        return res;
+    }
 
     if (Parameter::isStatementRef(p)) {
         std::unordered_set<StmtNum>& stmtNums = statementStorage->getStatementNumbers(p.getTypeString());
@@ -280,20 +285,25 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
             res.push_back({proc, proc});
         }
     }
-
+    if (!res.empty()) {
+        attributeCache->addResult(param, res);
+    }
     return res;
 }
 
 // TODO: Consider refactoring?
 std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
+    std::shared_ptr<Comparison> comp = std::make_shared<Comparison>(c);
+    std::vector<std::vector<std::string>> res = comparisonCache->findResult(comp);
+    if (!res.empty()) {
+        return res;
+    }
     Parameter leftParam = c.getLeftParam();
     Parameter rightParam = c.getRightParam();
     bool isLeftParamFixed = leftParam.isFixedInt() || leftParam.isFixedStringType();
     bool isRightParamFixed = rightParam.isFixedInt() || rightParam.isFixedStringType();
     Ent leftParamValue = leftParam.getValue();
     Ent rightParamValue = rightParam.getValue();
-
-    std::vector<std::vector<std::string>> res;
 
     if (isLeftParamFixed) {
         if (isRightParamFixed) {
@@ -400,4 +410,7 @@ void PKB::clearCache() {
     relationshipCache->clearCache();
     parameterCache->clearCache();
     patternCache->clearCache();
+    affectsHandler->clearCache();
+    attributeCache->clearCache();
+    comparisonCache->clearCache();
 }

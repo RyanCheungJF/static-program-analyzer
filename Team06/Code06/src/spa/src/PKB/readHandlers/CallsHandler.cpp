@@ -17,28 +17,44 @@ std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcname(Param
     return res;
 }
 
-std::vector<std::vector<std::string>> CallsHandler::handleProcnameWildcard(Parameter param1) {
+std::vector<std::vector<std::string>> CallsHandler::handleProcnameWildcard(Parameter param1, bool isEarlyReturn) {
     std::string caller = param1.getValue();
     std::vector<std::vector<std::string>> res;
 
-    for (ProcName i : callsStorage->getRightItems(caller)) {
-        res.push_back({caller, i});
-    }
-    return res;
-}
+    std::unordered_set<ProcName>& callees = callsStorage->getRightItems(caller);
 
-std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcname(Parameter param2) {
-    std::string callee = param2.getValue();
-    std::vector<std::vector<std::string>> res;
-    for (ProcName caller : callsStorage->getLeftItems(callee)) {
+    if (isEarlyReturn && !callees.empty()) {
+        return AppConstants::EARLY_RETURN_RES;
+    }
+
+    for (ProcName callee : callees) {
         res.push_back({caller, callee});
     }
     return res;
 }
 
-std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard() {
+std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcname(Parameter param2, bool isEarlyReturn) {
+    std::string callee = param2.getValue();
+    std::vector<std::vector<std::string>> res;
+
+    std::unordered_set<ProcName>& callers = callsStorage->getLeftItems(callee);
+
+    if (isEarlyReturn && !callers.empty()) {
+        return AppConstants::EARLY_RETURN_RES;
+    }
+
+    for (ProcName caller : callers) {
+        res.push_back({caller, callee});
+    }
+    return res;
+}
+
+std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard(bool isEarlyReturn) {
     std::vector<std::vector<std::string>> res;
     for (ProcName caller : callsStorage->getAllLeftItems()) {
+        if (isEarlyReturn) {
+            return AppConstants::EARLY_RETURN_RES;
+        }
         for (ProcName callee : callsStorage->getRightItems(caller)) {
             res.push_back({caller, callee});
         }
@@ -49,11 +65,11 @@ std::vector<std::vector<std::string>> CallsHandler::handleWildcardWildcard() {
 std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Parameter param2) {
     bool isProcnameParam1 = param1.isFixedStringType();
     bool isProcnameParam2 = param2.isFixedStringType();
-    bool isWildcardParam1 = param1.isProcedureOnly() || param1.isWildcard();
-    bool isWildcardParam2 = param2.isProcedureOnly() || param2.isWildcard();
+    bool isWildcardParam1 = param1.isWildcard();
+    bool isWildcardParam2 = param2.isWildcard();
 
     // based on the fact that there are no cycles in the source code
-    if (param1 == param2 && !param1.isWildcard() && !param2.isWildcard()) {
+    if (param1 == param2 && !isWildcardParam1 && !isWildcardParam2) {
         return {};
     }
 
@@ -61,13 +77,16 @@ std::vector<std::vector<std::string>> CallsHandler::handle(Parameter param1, Par
         if (isProcnameParam2) {
             return handleProcnameProcname(param1, param2);
         }
-        return handleProcnameWildcard(param1);
+        return handleProcnameWildcard(param1, isWildcardParam2);
     }
     else if (isProcnameParam2) {
-        return handleWildcardProcname(param2);
+        return handleWildcardProcname(param2, isWildcardParam1);
     }
     else if (isWildcardParam1 && isWildcardParam2) {
-        return handleWildcardWildcard();
+        return handleWildcardWildcard(AppConstants::IS_EARLY_RETURN);
+    }
+    else if (param1.isProcedureOnly() || param2.isProcedureOnly()) {
+        return handleWildcardWildcard(!AppConstants::IS_EARLY_RETURN);
     }
     return std::vector<std::vector<std::string>>();
 }

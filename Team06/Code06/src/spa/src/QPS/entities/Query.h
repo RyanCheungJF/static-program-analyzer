@@ -11,6 +11,7 @@
 #include "PKB/ReadPKB.h"
 #include "Parameter.h"
 #include "Pattern.h"
+#include "QPS/entityComparators/SharedPtrCompare.h"
 #include "QueryDB.h"
 #include "Relationship.h"
 #include "Table.h"
@@ -32,11 +33,13 @@ public:
     vector<Parameter*> getAllUncheckedSynonyms();
     bool validateAllParameters();
     bool booleanParamCheck();
+    bool operator==(const Query&) const;
+    void updateEvalOrder();
 
 private:
-    void evaluateRelationship(QueryDB&, ReadPKB&);
-    void evaluatePattern(QueryDB&, ReadPKB&);
-    void evaluateComparison(QueryDB&, ReadPKB&);
+    bool evaluateRelationship(QueryDB&, ReadPKB&);
+    bool evaluatePattern(QueryDB&, ReadPKB&);
+    bool evaluateComparison(QueryDB&, ReadPKB&);
 };
 
 #endif // SPA_QUERY_H
