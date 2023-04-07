@@ -38,3 +38,8 @@ if i; while w;
 Select <w, i> pattern i("y", _, _) pattern w("y", _)
 5 27, 5 30
 5000
+9 - comment
+procedure p; variable v;
+Select v such that Modifies(p, v) with p.procName = "Two"
+c, a, b, d, e, y
+5000

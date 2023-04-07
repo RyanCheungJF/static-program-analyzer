@@ -163,3 +163,28 @@ while w;
 Select w pattern w("else", _)
 none
 5000
+32 - comment
+while w;
+Select w pattern w("thisIsAVeryLongNameAndILikeApples", _)
+25
+5000
+33 - comment
+while w;
+Select w pattern w(_, "thisIsAVeryLongNameAndILikeApples")
+SemanticError
+5000
+34 - comment
+while w;
+Select w pattern w("i", "thisIsAVeryLongNameAndILikeApples")
+SemanticError
+5000
+35 - comment
+while w; if i;
+Select w pattern w(i, "thisIsAVeryLongNameAndILikeApples")
+SemanticError
+5000
+35 - comment
+while w; if i;
+Select w pattern w("i", _)
+25
+5000

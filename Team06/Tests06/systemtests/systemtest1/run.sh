@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd $(dirname $0)
 ../../../Code06/cmake-build-debug/src/autotester/autotester source.txt Select.txt out-Select.xml
 
 ../../../Code06/cmake-build-debug/src/autotester/autotester source.txt Follows.txt out-Follows.xml

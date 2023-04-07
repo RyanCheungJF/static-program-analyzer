@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd $(dirname $0)
 cd systemtest1/ 
 bash  run.sh
 cd ../systemtest2/
