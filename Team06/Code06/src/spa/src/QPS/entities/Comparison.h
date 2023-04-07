@@ -9,8 +9,8 @@ class Comparison {
 public:
     Comparison();
     Comparison(ComparisonOperator o, Parameter leftP, Parameter rightP);
-    Parameter getLeftParam() const;
-    Parameter getRightParam() const;
+    const Parameter& getLeftParam() const;
+    const Parameter& getRightParam() const;
     ComparisonOperator getOperator() const;
     std::pair<ParameterType, ParameterType> getParameterTypes() const;
     std::pair<std::string, std::string> getParameterValues() const;

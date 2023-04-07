@@ -195,7 +195,7 @@ std::vector<std::string> PKB::findDesignEntities(Parameter& p) {
             res.push_back(var);
         }
     }
-    else if (p.isStatementRef(p)) {
+    else if (p.isStatementRef()) {
         std::string typeString = p.getTypeString();
         std::unordered_set<StmtNum>& stmtNums = statementStorage->getStatementNumbers(typeString);
         for (auto stmtNum : stmtNums) {
@@ -215,7 +215,7 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
         return res;
     }
 
-    Parameter& patternSyn = p.getPatternSyn();
+    const Parameter& patternSyn = p.getPatternSyn();
     ParameterType patternType = p.getPatternType();
 
     shared_ptr<PatternHandler> handler;
@@ -243,7 +243,7 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
         return res;
     }
 
-    if (Parameter::isStatementRef(p)) {
+    if (p.isStatementRef()) {
         std::unordered_set<StmtNum>& stmtNums = statementStorage->getStatementNumbers(p.getTypeString());
         if (attrType == AttributeType::PROCNAME) {
             for (auto stmtNum : stmtNums) {

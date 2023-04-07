@@ -14,11 +14,11 @@ Comparison::Comparison(ComparisonOperator o, Parameter leftP, Parameter rightP) 
     evalPriority = 0;
 }
 
-Parameter Comparison::getLeftParam() const {
+const Parameter& Comparison::getLeftParam() const {
     return leftParam;
 }
 
-Parameter Comparison::getRightParam() const {
+const Parameter& Comparison::getRightParam() const {
     return rightParam;
 }
 

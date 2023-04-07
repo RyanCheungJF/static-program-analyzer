@@ -12,8 +12,8 @@ std::vector<std::vector<std::string>> NextHandler::handle(Parameter& param1, Par
     bool isFixedIntParam2 = param2.isFixedInt();
     bool isWildCardParam1 = param1.isWildcard();
     bool isWildCardParam2 = param2.isWildcard();
-    bool isTypedStmtParam1 = Parameter::isStatementRef(param1) && !isFixedIntParam1 && !isWildCardParam1;
-    bool isTypedStmtParam2 = Parameter::isStatementRef(param2) && !isFixedIntParam2 && !isWildCardParam2;
+    bool isTypedStmtParam1 = param1.isStatementRef() && !isFixedIntParam1 && !isWildCardParam1;
+    bool isTypedStmtParam2 = param2.isStatementRef() && !isFixedIntParam2 && !isWildCardParam2;
 
     if (this->isTransitive) {
         return handleTransitive(param1, param2, isFixedIntParam1, isFixedIntParam2, isWildCardParam1, isWildCardParam2,

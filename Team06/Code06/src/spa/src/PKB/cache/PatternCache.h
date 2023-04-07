@@ -3,7 +3,7 @@
 
 struct patternHash {
     std::size_t operator()(const Pattern& pattern) const {
-        Parameter& patternSyn = pattern.getPatternSyn();
+        const Parameter& patternSyn = pattern.getPatternSyn();
         // variable v1, v2;
         // pattern a(v1, _) and pattern a(v2, _) should have the same hash in PKB's context.
         std::size_t h1 = std::hash<ParameterType>{}(pattern.getPatternType());
@@ -20,8 +20,8 @@ struct patternHash {
 
 struct patternEquals {
     bool operator()(const Pattern& pattern1, const Pattern& pattern2) const {
-        Parameter& patternSyn1 = pattern1.getPatternSyn();
-        Parameter& patternSyn2 = pattern2.getPatternSyn();
+        const Parameter& patternSyn1 = pattern1.getPatternSyn();
+        const Parameter& patternSyn2 = pattern2.getPatternSyn();
 
         // variable v1, v2;
         // pattern a(v1, _) and pattern a(v2, _) should be equal in PKB's context.
@@ -30,7 +30,7 @@ struct patternEquals {
         bool check3 = pattern1.getEntRefType() == pattern2.getEntRefType();
 
         // only pattern a("x", _) and pattern a("x1", _) should not be equals
-        Parameter& patternEnt1 = pattern1.getEntRef();
+        const Parameter& patternEnt1 = pattern1.getEntRef();
         if (patternEnt1.isFixedStringType()) {
             check3 = patternEnt1 == pattern2.getEntRef();
         }

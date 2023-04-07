@@ -3,8 +3,8 @@
 
 struct comparisonHash {
     std::size_t operator()(const Comparison& comp) const {
-        Parameter& leftParam = comp.getLeftParam();
-        Parameter& rightParam = comp.getRightParam();
+        const Parameter& leftParam = comp.getLeftParam();
+        const Parameter& rightParam = comp.getRightParam();
         std::pair<ParameterType, ParameterType> paramTypes = comp.getParameterTypes();
         std::pair<std::string, std::string> paramValues = comp.getParameterValues();
         std::pair<AttributeType, AttributeType> attrTypes = comp.getParameterAttributes();
@@ -48,8 +48,8 @@ struct comparisonEquals {
         bool check2 = paramTypes1.second == paramTypes2.second;
         bool check3 = comp1.getOperator() == comp2.getOperator();
 
-        Parameter& leftParam1 = comp1.getLeftParam();
-        Parameter& rightParam1 = comp1.getRightParam();
+        const Parameter& leftParam1 = comp1.getLeftParam();
+        const Parameter& rightParam1 = comp1.getRightParam();
 
         if (leftParam1.isFixedInt() || leftParam1.isFixedStringType()) {
             check1 = check1 && paramValues1.first == paramValues2.first;
