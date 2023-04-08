@@ -87,7 +87,6 @@ vector<tuple<ClauseType, int, int>> SelectQueryParser::getClausePositions(map<Cl
     return res;
 }
 
-
 /*
 assumes start and end won't be -1 i.e. select clause must exist
 */
