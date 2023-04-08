@@ -103,10 +103,6 @@ bool Comparison::operator<(const Comparison& c) const {
     return evalPriority < c.evalPriority;
 }
 
-double Comparison::getPriority() {
-    return evalPriority;
-}
-
 double Comparison::calcPriority() {
     int wildcardCounter = 0;
     int fixedValCounter = 0;

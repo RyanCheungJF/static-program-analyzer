@@ -74,8 +74,6 @@ private:
     std::vector<std::vector<std::string>> handleStmtTypeStmtTypeTransitive();
 
     // helper methods
-    std::unordered_set<StmtNum> getControlFlowPathIntInt(StmtNum a1, StmtNum a2, ProcName proc,
-                                                         std::unordered_set<Ent> commonVariables);
 
     Ent getCommonVariable(std::unordered_set<Ent>& variablesModifiedInA1, std::unordered_set<Ent>& variablesUsedInA2);
 

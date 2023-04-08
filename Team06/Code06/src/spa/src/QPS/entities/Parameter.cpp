@@ -99,10 +99,6 @@ bool Parameter::isFixedStringOrWildcard() const {
     return type == ParameterType::FIXED_STRING || type == ParameterType::WILDCARD;
 }
 
-bool Parameter::isFixedIntOrWildCard() const {
-    return type == ParameterType::FIXED_INT || type == ParameterType::WILDCARD;
-}
-
 bool Parameter::isFixedInt() const {
     return type == ParameterType::FIXED_INT;
 }

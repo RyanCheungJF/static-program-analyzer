@@ -4,7 +4,7 @@
 #include "../entities/Relationship.h"
 #include "SyntaxValidator.h"
 
-// Validates relationships with parameters of type Entity Entity
+// Validates relationships with parameters of type (Entity, Entity)
 class RelEESyntaxValidator : public SyntaxValidator<Relationship> {
 public:
     bool validate(Relationship&);

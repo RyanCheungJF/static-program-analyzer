@@ -109,7 +109,6 @@ public:
     inline static const int NOT_USED_FIELD = -1;
     inline static const int DUMMY_NODE = 0;
     inline static const std::string PROCEDURE_DOES_NOT_EXIST = "procedure does not exist";
-    inline static const int IS_FIND_CHILDREN = true;
 
     // EvalPriority related
     inline static const double wildcardWeight = 100;

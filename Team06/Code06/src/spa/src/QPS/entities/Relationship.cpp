@@ -73,10 +73,6 @@ bool Relationship::isTransitive() {
     return transitiveRelationships.find(type) != transitiveRelationships.end();
 }
 
-double Relationship::getPriority() {
-    return evalPriority;
-}
-
 double Relationship::calcPriority() {
     // Highest prio goes first
     int wildcardCounter = 0;

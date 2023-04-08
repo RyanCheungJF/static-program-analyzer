@@ -505,7 +505,7 @@ bool AffectsHandler::checkModifiedAssignReadCall(Ent commonVariable, StmtNum cur
 
     unordered_set<Ent>& entitiesModifiedOnCurrentLine = modifiesStorage->getRightItems(currentLine);
 
-    // if a assignment, read, or procedure call, we check if the entitiesModifiedOnCurrentLine is the same as
+    // if an assignment, read, or procedure call, we check if the entitiesModifiedOnCurrentLine is the same as
     // commonVariables
     Stmt stmtType = stmtStorage->getStatementType(currentLine);
 

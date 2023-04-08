@@ -109,10 +109,6 @@ bool Pattern::operator<(const Pattern& p) const {
     return evalPriority < p.evalPriority;
 }
 
-double Pattern::getPriority() {
-    return evalPriority;
-}
-
 double Pattern::calcPriority() {
     int wildcardCounter = 0;
     int fixedValCounter = 0;

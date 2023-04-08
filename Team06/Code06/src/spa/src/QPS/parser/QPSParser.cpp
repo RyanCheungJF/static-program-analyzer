@@ -1,9 +1,4 @@
-//
-// Created by Faruq on 31/1/23.
-//
 #include "QPSParser.h"
-
-#include "../QPSGrammarUtils.h"
 
 QPSParser::QPSParser() {}
 

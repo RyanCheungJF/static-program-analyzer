@@ -87,29 +87,6 @@ vector<tuple<ClauseType, int, int>> SelectQueryParser::getClausePositions(map<Cl
     return res;
 }
 
-vector<Parameter> SelectQueryParser::extractSelectTuple(vector<string>& wordList, int start, int end) {
-    string tupleString;
-    vector<Parameter> params;
-    for (start; start < end; start++) {
-        // recreates tuple string with whitespace removed
-        tupleString += wordList[start];
-    }
-    if (tupleString.back() != AppConstants::GREATER) {
-        throw SyntaxException();
-    }
-    // gets rid of <>
-    tupleString.pop_back();
-    tupleString.erase(0, 1);
-    vector<string> synonyms = stringToWordListByDelimiter(tupleString, ",");
-    for (string synonym : synonyms) {
-        if (!isSynonym(synonym)) {
-            throw SyntaxException();
-        }
-        Parameter param = Parameter::makeParameter(synonym, AppConstants::SYNONYM);
-        params.push_back(param);
-    }
-    return params;
-}
 
 /*
 assumes start and end won't be -1 i.e. select clause must exist

@@ -22,7 +22,6 @@ public:
     bool operator==(const Comparison&) const;
     bool operator>(const Comparison&) const;
     bool operator<(const Comparison&) const;
-    double getPriority();
     double calcPriority();
 
 private:

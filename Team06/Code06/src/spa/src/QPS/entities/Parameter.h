@@ -55,7 +55,6 @@ public:
     bool isDsgEntity() const;
     bool isPatternSyn() const;
     bool isFixedStringOrWildcard() const;
-    bool isFixedIntOrWildCard() const;
     static bool isComparable(Parameter&, Parameter&);
     bool isFixedValue() const;
     bool isFixedInt() const;

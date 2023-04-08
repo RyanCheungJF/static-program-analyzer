@@ -4,7 +4,7 @@
 #include "../entities/Relationship.h"
 #include "SyntaxValidator.h"
 
-// Validates relationships with parameters of type Stmt Stmt
+// Validates relationships with parameters of type (Stmt, Stmt)
 class RelSSSyntaxValidator : public SyntaxValidator<Relationship> {
 public:
     bool validate(Relationship&);

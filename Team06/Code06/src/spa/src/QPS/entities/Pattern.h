@@ -27,7 +27,6 @@ public:
     bool operator==(const Pattern&) const;
     bool operator>(const Pattern&) const;
     bool operator<(const Pattern&) const;
-    double getPriority();
     double calcPriority();
 
 private:

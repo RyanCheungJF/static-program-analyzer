@@ -37,7 +37,6 @@ private:
     vector<shared_ptr<Relationship>> parseSuchThatClause(vector<string>& wordList, int start, int end);
     vector<Pattern> parsePatternClause(vector<string>& wordList, int start, int end);
     vector<Comparison> parseWithClause(vector<string>& wordList, int start, int end);
-    vector<Parameter> extractSelectTuple(vector<string>& wordList, int start, int end);
     vector<ClauseType> getAllClauseTypes();
     vector<string> splitClauseByAnds(vector<string>& wordList, int start, int end, function<bool(string)> formChecker);
 };

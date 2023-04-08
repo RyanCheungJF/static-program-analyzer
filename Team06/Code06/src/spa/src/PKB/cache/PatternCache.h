@@ -12,7 +12,7 @@ struct patternHash {
 
         // only pattern a("x", _) and pattern a("x1", _) should have different hashes.
         if (patternSyn.isFixedStringType()) {
-            std::size_t h3 = std::hash<Parameter>{}(pattern.getEntRef());
+            h3 = std::hash<Parameter>{}(pattern.getEntRef());
         }
         return ((h1 ^ (h2 << 1)) >> 1) ^ (h3 << 1);
     }
@@ -20,8 +20,6 @@ struct patternHash {
 
 struct patternEquals {
     bool operator()(const Pattern& pattern1, const Pattern& pattern2) const {
-        const Parameter& patternSyn1 = pattern1.getPatternSyn();
-        const Parameter& patternSyn2 = pattern2.getPatternSyn();
 
         // variable v1, v2;
         // pattern a(v1, _) and pattern a(v2, _) should be equal in PKB's context.

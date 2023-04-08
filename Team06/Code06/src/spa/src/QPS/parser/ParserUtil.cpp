@@ -34,7 +34,6 @@ vector<int> findSuchThat(const vector<string>& wordList) {
 // TODO: refactor these find* functions
 vector<int> findPattern(const vector<string>& wordList) {
     vector<int> patternStarts;
-    int i = 0;
     for (int i = 0; i < wordList.size(); i++) {
         if (PATTERN != wordList[i]) {
             continue;

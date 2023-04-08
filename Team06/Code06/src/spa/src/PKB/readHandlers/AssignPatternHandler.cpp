@@ -88,7 +88,6 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handleWildcardWildca
 
     for (auto const& row : *patternStorage->getAll()) {
         for (const auto& pair : row.second) {
-            Expression* actual = pair.second.get();
             std::vector<std::string> curr;
             curr.push_back(std::to_string(pair.first));
             curr.push_back(row.first);
