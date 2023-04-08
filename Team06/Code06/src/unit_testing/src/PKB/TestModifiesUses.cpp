@@ -96,7 +96,7 @@ TEST_CASE("ModifiesUsesStorage: writeP") {
         REQUIRE(res2.size() == input2_1.size());
 
         std::unordered_set<Ent> res3 = us.getRightItems("proc3");
-        REQUIRE(res3.size() == 0);
+        REQUIRE(res3.empty());
     }
 
     SECTION("ModifiesUsesStorage: exists(ProcName proc, Ent var)") {
@@ -118,7 +118,7 @@ TEST_CASE("ModifiesUsesStorage: writeP") {
         REQUIRE(res3.size() == 1);
 
         std::unordered_set<ProcName> res4 = us.getProcs("z");
-        REQUIRE(res4.size() == 0);
+        REQUIRE(res4.empty());
     }
 
     SECTION("ModifiesUsesStorage: getAllProcs()") {

@@ -35,7 +35,7 @@ TEST_CASE("Semantically Invalid Source Programs") {
 
         try {
             testDesignExtractor.populatePKB();
-        } catch (SemanticErrorException e) {
+        } catch (SemanticErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -51,7 +51,7 @@ TEST_CASE("Semantically Invalid Source Programs") {
 
         try {
             testDesignExtractor.populatePKB();
-        } catch (SemanticErrorException e) {
+        } catch (SemanticErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -68,7 +68,7 @@ TEST_CASE("Semantically Invalid Source Programs") {
 
         try {
             testDesignExtractor.populatePKB();
-        } catch (SemanticErrorException e) {
+        } catch (SemanticErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -84,7 +84,7 @@ TEST_CASE("Semantically Invalid Source Programs") {
 
         try {
             testDesignExtractor.populatePKB();
-        } catch (SemanticErrorException e) {
+        } catch (SemanticErrorException& e) {
             errorMessage = e.what();
         }
 

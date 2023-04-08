@@ -1,6 +1,3 @@
-//
-// Created by Faruq on 30/1/23.
-//
 #include "QPS/parser/DeclarationParser.h"
 #include "catch.hpp"
 using namespace std;

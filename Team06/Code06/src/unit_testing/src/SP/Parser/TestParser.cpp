@@ -272,7 +272,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -286,7 +286,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -300,7 +300,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -314,7 +314,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -328,7 +328,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -342,7 +342,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -356,7 +356,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
         REQUIRE(errorMessage.find("Unexpected token when parsing statement") != std::string::npos);
@@ -369,7 +369,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -383,7 +383,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -397,7 +397,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -411,7 +411,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -425,7 +425,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -439,7 +439,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -453,7 +453,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -467,7 +467,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -481,7 +481,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -495,7 +495,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -509,7 +509,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -523,7 +523,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -537,7 +537,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -551,7 +551,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -565,7 +565,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -579,7 +579,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -593,7 +593,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -607,7 +607,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -621,7 +621,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -635,7 +635,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -649,7 +649,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -663,7 +663,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -677,7 +677,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -691,7 +691,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -705,7 +705,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -719,7 +719,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -733,7 +733,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -747,7 +747,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -761,7 +761,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -775,7 +775,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -789,7 +789,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -803,7 +803,7 @@ TEST_CASE("Invalid Source Program") {
 
         try {
             testParser.parseProgram(tokenQueue);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -823,13 +823,13 @@ bool checkIfSameExpression(std::unique_ptr<Expression> expectedExpression,
         return CAST_TO(Variable, expected)->name == CAST_TO(Variable, actual)->name;
     }
     else if (CAST_TO(MathExpression, expected) && CAST_TO(MathExpression, actual)) {
-        auto expectedExpression = CAST_TO(MathExpression, expected);
-        auto actualExpression = CAST_TO(MathExpression, actual);
+        auto nxtExpectedExpression = CAST_TO(MathExpression, expected);
+        auto nxtActualExpression = CAST_TO(MathExpression, actual);
         bool isSameLeftExpression =
-            checkIfSameExpression(std::move(expectedExpression->lhs), std::move(actualExpression->lhs));
+            checkIfSameExpression(std::move(nxtExpectedExpression->lhs), std::move(nxtActualExpression->lhs));
         bool isSameRightExpression =
-            checkIfSameExpression(std::move(expectedExpression->rhs), std::move(actualExpression->rhs));
-        bool isSameOp = (expectedExpression->mathOperator == actualExpression->mathOperator);
+            checkIfSameExpression(std::move(nxtExpectedExpression->rhs), std::move(nxtActualExpression->rhs));
+        bool isSameOp = (nxtExpectedExpression->mathOperator == nxtActualExpression->mathOperator);
         return (isSameLeftExpression && isSameRightExpression && isSameOp);
     }
     else {
@@ -947,7 +947,7 @@ bool checkIfSameTree(std::unique_ptr<Program> expectedRoot, std::unique_ptr<Prog
         return false;
     }
 
-    // loop thru procedures
+    // loop through procedures
     for (int i = 0; i < expectedProcedures.size(); i++) {
         auto expectedStatements = std::move(expectedProcedures[i]->statementList);
         auto actualStatements = std::move(actualProcedures[i]->statementList);

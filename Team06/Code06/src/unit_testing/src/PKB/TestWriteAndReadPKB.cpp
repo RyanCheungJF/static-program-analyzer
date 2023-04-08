@@ -23,7 +23,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
 
     SECTION("findRelationship(shared_ptr<Relationship> rs): empty storage") {
         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
-        REQUIRE(res.size() == 0);
+        REQUIRE(res.empty());
     }
 
     std::unordered_set<Ent> val1 = {"a", "b", "c"};
@@ -152,7 +152,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses S") {
     }
 }
 
-//  : by default, all are failing since it is not part of Milestone 1's requirements. it is part of our TDD.
+// by default, all are failing since it is not part of Milestone 1's requirements. it is part of our TDD.
 TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -168,7 +168,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs), Modifies / Uses P") {
 
     SECTION("findRelationship(shared_ptr<Relationship> rs): empty storage") {
         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
-        REQUIRE(res.size() == 0);
+        REQUIRE(res.empty());
     }
 
     std::unordered_set<Ent> val1 = {"a", "b", "c"};

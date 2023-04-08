@@ -19,7 +19,7 @@ TEST_CASE("FollowsStorage: write(StmtNum followee, StmtNum follower)") {
 
     SECTION("getLeftWildcard(StmtNum leftStmtNum): empty storage") {
         std::unordered_set<StmtNum> res = fs.getLeftItems(2);
-        REQUIRE(res.size() == 0);
+        REQUIRE(res.empty());
     }
 
     fs.write(1, 2);

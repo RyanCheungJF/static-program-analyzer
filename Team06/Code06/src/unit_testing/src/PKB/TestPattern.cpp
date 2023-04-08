@@ -78,7 +78,7 @@ TEST_CASE("Check Pattern Storage Write and empty Gets") {
 
     SECTION("Get statement numbers of non-existing pattern") {
         unordered_set<StmtNum> res = ps.getStmtNums("non-existing");
-        REQUIRE(res.size() == 0);
+        REQUIRE(res.empty());
     }
 }
 
@@ -143,6 +143,6 @@ TEST_CASE("Test If/While Pattern on WritePKB and ReadPKB") {
         Pattern pattern = Pattern(param1, param2, exprSpecs);
 
         std::vector<std::vector<std::string>> res = readPkb.findPattern(pattern);
-        REQUIRE(res.size() == 0);
+        REQUIRE(res.empty());
     }
 }

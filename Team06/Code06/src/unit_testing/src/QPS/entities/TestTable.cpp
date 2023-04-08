@@ -100,7 +100,7 @@ TEST_CASE("selectColumns / select nothing / return true") {
     Table table(headers, content);
     vector<int> indexes = {};
     table.extractColumns(indexes);
-    REQUIRE(table.getHeaders().size() == 0);
+    REQUIRE(table.getHeaders().empty());
 }
 
 TEST_CASE("extractDesignEntities / test for variable and wild card / return "
