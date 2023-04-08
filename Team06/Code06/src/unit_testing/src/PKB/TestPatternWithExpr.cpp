@@ -11,7 +11,7 @@ TEST_CASE("PatternStorage: fringe cases") {
 
     SECTION("* getPatternWithLHS(std::string lhs): empty storage") {
         auto res = ps.getPatternWithLHS("x");
-        REQUIRE(res == NULL);
+        REQUIRE(res == nullptr);
     }
 
     std::string lhs = "z";
@@ -20,7 +20,7 @@ TEST_CASE("PatternStorage: fringe cases") {
 
     SECTION("* getPatternWithLHS(std::string lhs): non-empty storage, LHS not present") {
         auto res = ps.getPatternWithLHS("x");
-        REQUIRE(res == NULL);
+        REQUIRE(res == nullptr);
     }
 }
 

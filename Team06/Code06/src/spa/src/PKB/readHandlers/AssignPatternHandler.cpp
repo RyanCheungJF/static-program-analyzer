@@ -55,7 +55,7 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handleVarWildcard(st
 
     std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>* pointer =
         patternStorage->getPatternWithLHS(lhs);
-    if (pointer == NULL)
+    if (pointer == nullptr)
         return res;
 
     for (const auto& pair : *pointer) {
@@ -71,7 +71,7 @@ AssignPatternHandler::handleVarPattern(std::string lhs, std::string rhs, bool (*
 
     std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>* pointer =
         patternStorage->getPatternWithLHS(lhs);
-    if (pointer == NULL)
+    if (pointer == nullptr)
         return res;
 
     for (const auto& pair : *pointer) {

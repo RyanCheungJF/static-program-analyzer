@@ -17,34 +17,21 @@ std::vector<std::vector<std::string>> CallsHandler::handleProcnameProcname(Param
     return res;
 }
 
-std::vector<std::vector<std::string>> CallsHandler::handleProcnameWildcard(Parameter& param1, bool isEarlyReturn) {
-    std::string caller = param1.getValue();
+std::vector<std::vector<std::string>>
+CallsHandler::handleOneProcnameOneWildcard(Parameter& param, bool isProcnameWildcard, bool isEarlyReturn) {
+
+    std::string curr = param.getValue();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<ProcName>& callees = callsStorage->getRightItems(caller);
+    std::unordered_set<ProcName>& others =
+        isProcnameWildcard ? callsStorage->getRightItems(curr) : callsStorage->getLeftItems(curr);
 
-    if (isEarlyReturn && !callees.empty()) {
+    if (isEarlyReturn && !others.empty()) {
         return AppConstants::EARLY_RETURN_RES;
     }
 
-    for (ProcName callee : callees) {
-        res.push_back({caller, callee});
-    }
-    return res;
-}
-
-std::vector<std::vector<std::string>> CallsHandler::handleWildcardProcname(Parameter& param2, bool isEarlyReturn) {
-    std::string callee = param2.getValue();
-    std::vector<std::vector<std::string>> res;
-
-    std::unordered_set<ProcName>& callers = callsStorage->getLeftItems(callee);
-
-    if (isEarlyReturn && !callers.empty()) {
-        return AppConstants::EARLY_RETURN_RES;
-    }
-
-    for (ProcName caller : callers) {
-        res.push_back({caller, callee});
+    for (ProcName val : others) {
+        isProcnameWildcard ? res.push_back({curr, val}) : res.push_back({val, curr});
     }
     return res;
 }
@@ -77,10 +64,10 @@ std::vector<std::vector<std::string>> CallsHandler::handle(Parameter& param1, Pa
         if (isProcnameParam2) {
             return handleProcnameProcname(param1, param2);
         }
-        return handleProcnameWildcard(param1, isWildcardParam2);
+        return handleOneProcnameOneWildcard(param1, true, isWildcardParam2);
     }
     else if (isProcnameParam2) {
-        return handleWildcardProcname(param2, isWildcardParam1);
+        return handleOneProcnameOneWildcard(param2, false, isWildcardParam1);
     }
     else if (isWildcardParam1 && isWildcardParam2) {
         return handleWildcardWildcard(AppConstants::IS_EARLY_RETURN);

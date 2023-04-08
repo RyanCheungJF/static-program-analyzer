@@ -96,37 +96,31 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntInt(StmtNum a1, S
     return res;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleWildcardInt(StmtNum a2, bool isEarlyReturn) {
-    if (wildcardIntCache.find(a2) != wildcardIntCache.end()) {
+std::vector<std::vector<std::string>> AffectsHandler::handleOneIntOneWildcard(StmtNum a1, StmtNum a2,
+                                                                              bool isEarlyReturn) {
+
+    bool isIntWildcard = a2 == AppConstants::NOT_USED_FIELD;
+
+    if (isIntWildcard && intWildcardCache.find(a1) != intWildcardCache.end()) {
+        return intWildcardCache[a1];
+    }
+    else if (wildcardIntCache.find(a2) != wildcardIntCache.end()) {
         return wildcardIntCache[a2];
     }
 
     std::vector<std::vector<std::string>> res =
-        nonTransitiveOneIntOneWildcard(AppConstants::NOT_USED_FIELD, a2, isEarlyReturn);
+        isIntWildcard ? nonTransitiveOneIntOneWildcard(a1, AppConstants::NOT_USED_FIELD, isEarlyReturn)
+                      : nonTransitiveOneIntOneWildcard(AppConstants::NOT_USED_FIELD, a2, isEarlyReturn);
 
-    if (!isEarlyReturn) {
-        wildcardIntCache[a2] = res;
-    }
-
-    return res;
-}
-
-std::vector<std::vector<std::string>> AffectsHandler::handleIntWildcard(StmtNum a1, bool isEarlyReturn) {
-    if (intWildcardCache.find(a1) != intWildcardCache.end()) {
-        return intWildcardCache[a1];
-    }
-    std::vector<std::vector<std::string>> res =
-        nonTransitiveOneIntOneWildcard(a1, AppConstants::NOT_USED_FIELD, isEarlyReturn);
-
-    if (!isEarlyReturn) {
+    if (isIntWildcard && !isEarlyReturn) {
         intWildcardCache[a1] = res;
     }
-
+    else if (!isEarlyReturn) {
+        wildcardIntCache[a2] = res;
+    }
     return res;
 }
 
-// todo: change to short-circuit code. BUT WE NEED TO KEEP THIS. change this to some other name since it is currently
-// used for other calls eg Affects*(int, _)
 std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(ProcName proc, bool isEarlyReturn) {
 
     std::vector<std::vector<std::string>> res;
@@ -143,7 +137,8 @@ std::vector<std::vector<std::string>> AffectsHandler::handleWildcardWildcard(Pro
         const std::unordered_set<StmtNum>& assignStatements = procAssignStmtStorage->getProcedureStatementNumbers(proc);
 
         for (StmtNum a1 : assignStatements) {
-            std::vector<std::vector<std::string>> temp = handleIntWildcard(a1, isEarlyReturn);
+            std::vector<std::vector<std::string>> temp =
+                handleOneIntOneWildcard(a1, AppConstants::NOT_USED_FIELD, isEarlyReturn);
 
             for (std::vector<std::string>& val : temp) {
                 res.push_back(val);
@@ -222,32 +217,25 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
     return res;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleIntStmtTypeTransitive(StmtNum a1) {
-    ProcName proc1 = procStorage->getProcedure(a1);
-    if (proc1 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
+std::vector<std::vector<std::string>> AffectsHandler::handleOneIntOneStmtTypeTransitive(StmtNum a1, StmtNum a2) {
+
+    bool isIntStmttype = a2 == AppConstants::NOT_USED_FIELD;
+
+    ProcName proc = isIntStmttype ? procStorage->getProcedure(a1) : procStorage->getProcedure(a2);
+    if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return {};
     }
 
-    if (intWildcardTransitiveCache.find(a1) != intWildcardTransitiveCache.end()) {
+    if (isIntStmttype && intWildcardTransitiveCache.find(a1) != intWildcardTransitiveCache.end()) {
         return intWildcardTransitiveCache[a1];
     }
-
-    intWildcardTransitiveCache[a1] = bfsTraversalOneWildcard(a1, AppConstants::NOT_USED_FIELD);
-    return intWildcardTransitiveCache[a1];
-}
-
-std::vector<std::vector<std::string>> AffectsHandler::handleStmtTypeIntTransitive(StmtNum a2) {
-    ProcName proc2 = procStorage->getProcedure(a2);
-    if (proc2 == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
-        return {};
-    }
-
-    if (wildcardIntTransitiveCache.find(a2) != wildcardIntTransitiveCache.end()) {
+    else if (wildcardIntTransitiveCache.find(a2) != wildcardIntTransitiveCache.end()) {
         return wildcardIntTransitiveCache[a2];
     }
 
-    wildcardIntTransitiveCache[a2] = bfsTraversalOneWildcard(AppConstants::NOT_USED_FIELD, a2);
-    return wildcardIntTransitiveCache[a2];
+    isIntStmttype ? intWildcardTransitiveCache[a1] = bfsTraversalOneWildcard(a1, AppConstants::NOT_USED_FIELD)
+                  : wildcardIntTransitiveCache[a2] = bfsTraversalOneWildcard(AppConstants::NOT_USED_FIELD, a2);
+    return isIntStmttype ? intWildcardTransitiveCache[a1] : wildcardIntTransitiveCache[a2];
 }
 
 std::vector<std::vector<std::string>> AffectsHandler::handleStmtTypeStmtTypeTransitive() {
@@ -322,15 +310,15 @@ std::vector<std::vector<std::string>> AffectsHandler::handleNonTransitive(StmtNu
             return handleIntInt(param1Int, param2Int);
         }
         else if (isAssignStmtParam2) {
-            return handleIntWildcard(param1Int, !AppConstants::IS_EARLY_RETURN);
+            return handleOneIntOneWildcard(param1Int, AppConstants::NOT_USED_FIELD, !AppConstants::IS_EARLY_RETURN);
         }
         else if (isWildCardParam2) {
-            return handleIntWildcard(param1Int, AppConstants::IS_EARLY_RETURN);
+            return handleOneIntOneWildcard(param1Int, AppConstants::NOT_USED_FIELD, AppConstants::IS_EARLY_RETURN);
         }
     }
     else if (isAssignStmtParam1) {
         if (isFixedIntParam2) {
-            return handleWildcardInt(param2Int, !AppConstants::IS_EARLY_RETURN);
+            return handleOneIntOneWildcard(AppConstants::NOT_USED_FIELD, param2Int, !AppConstants::IS_EARLY_RETURN);
         }
         else if (isAssignStmtParam2 || isWildCardParam2) {
             return handleWildcardWildcard(AppConstants::PROCEDURE_DOES_NOT_EXIST, !AppConstants::IS_EARLY_RETURN);
@@ -338,7 +326,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleNonTransitive(StmtNu
     }
     else if (isWildCardParam1) {
         if (isFixedIntParam2) {
-            return handleWildcardInt(param2Int, AppConstants::IS_EARLY_RETURN);
+            return handleOneIntOneWildcard(AppConstants::NOT_USED_FIELD, param2Int, AppConstants::IS_EARLY_RETURN);
         }
         else if (isAssignStmtParam2) {
             return handleWildcardWildcard(AppConstants::PROCEDURE_DOES_NOT_EXIST, !AppConstants::IS_EARLY_RETURN);
@@ -360,15 +348,15 @@ std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(StmtNum p
             return handleIntIntTransitive(param1Int, param2Int);
         }
         else if (isAssignStmtParam2) {
-            return handleIntStmtTypeTransitive(param1Int);
+            return handleOneIntOneStmtTypeTransitive(param1Int, AppConstants::NOT_USED_FIELD);
         }
         else if (isWildCardParam2) {
-            return handleIntWildcard(param1Int, AppConstants::IS_EARLY_RETURN);
+            return handleOneIntOneWildcard(param1Int, AppConstants::NOT_USED_FIELD, AppConstants::IS_EARLY_RETURN);
         }
     }
     else if (isAssignStmtParam1) {
         if (isFixedIntParam2) {
-            return handleStmtTypeIntTransitive(param2Int);
+            return handleOneIntOneStmtTypeTransitive(AppConstants::NOT_USED_FIELD, param2Int);
         }
         else if (isAssignStmtParam2 || isWildCardParam2) {
             return handleStmtTypeStmtTypeTransitive();
@@ -376,7 +364,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(StmtNum p
     }
     else if (isWildCardParam1) {
         if (isFixedIntParam2) {
-            return handleWildcardInt(param2Int, AppConstants::IS_EARLY_RETURN);
+            return handleOneIntOneWildcard(AppConstants::NOT_USED_FIELD, param2Int, AppConstants::IS_EARLY_RETURN);
         }
         else if (isAssignStmtParam2) {
             return handleStmtTypeStmtTypeTransitive();

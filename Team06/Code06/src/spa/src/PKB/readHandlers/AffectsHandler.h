@@ -57,19 +57,15 @@ private:
     // handler methods
     // Affects(1, 2)
     std::vector<std::vector<std::string>> handleIntInt(StmtNum a1, StmtNum a2);
-    // Affects(a1, 2) or Affects(_, 2)
-    std::vector<std::vector<std::string>> handleWildcardInt(StmtNum a2, bool isEarlyReturn);
-    // Affects(1, a2) or Affects(1, _)
-    std::vector<std::vector<std::string>> handleIntWildcard(StmtNum a1, bool isEarlyReturn);
+    // Affects(a1, 2) or Affects(_, 2) OR Affects(1, a2) or Affects(1, _)
+    std::vector<std::vector<std::string>> handleOneIntOneWildcard(StmtNum a1, StmtNum a2, bool isEarlyReturn);
     // Affects(a1, a2) or Affects(_, _)
     std::vector<std::vector<std::string>> handleWildcardWildcard(ProcName proc, bool isEarlyReturn);
 
     // Affects*(1, 2)
     std::vector<std::vector<std::string>> handleIntIntTransitive(StmtNum a1, StmtNum a2);
-    // Affects*(a1, 2) or Affects*(_, 2)
-    std::vector<std::vector<std::string>> handleStmtTypeIntTransitive(StmtNum a2);
-    // Affects*(1, a2) or Affects*(1, _)
-    std::vector<std::vector<std::string>> handleIntStmtTypeTransitive(StmtNum a1);
+    // Affects*(a1, 2) or Affects*(_, 2) OR Affects*(1, a2) or Affects*(1, _)
+    std::vector<std::vector<std::string>> handleOneIntOneStmtTypeTransitive(StmtNum a1, StmtNum a2);
     // Affects*(a1, a2) or Affects*(_, _)
     std::vector<std::vector<std::string>> handleStmtTypeStmtTypeTransitive();
 
