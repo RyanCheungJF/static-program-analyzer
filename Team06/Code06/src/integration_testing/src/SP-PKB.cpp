@@ -1,7 +1,6 @@
 #include <filesystem>
 
 #include "../../spa/src/SP/SP.h"
-#include "../../spa/src/utils/AppConstants.h"
 #include "../../unit_testing/src/utils/utils.h"
 #include "catch.hpp"
 
@@ -240,24 +239,24 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 1") {
 
     SECTION("SP-PKB Integration: CFG") {
         auto cfgA = readPKB.getCFG("A");
-        REQUIRE(cfgA[1]["parents"].empty());
-        REQUIRE(cfgA[1]["children"].empty());
+        REQUIRE(cfgA[1][AppConstants::PARENTS].empty());
+        REQUIRE(cfgA[1][AppConstants::CHILDREN].empty());
 
         auto cfgB = readPKB.getCFG("B");
-        REQUIRE(cfgB[2]["parents"].empty());
-        REQUIRE(cfgB[2]["children"] == std::unordered_set({3}));
-        REQUIRE(cfgB[3]["parents"] == std::unordered_set({2}));
-        REQUIRE(cfgB[3]["children"].empty());
+        REQUIRE(cfgB[2][AppConstants::PARENTS].empty());
+        REQUIRE(cfgB[2][AppConstants::CHILDREN] == std::unordered_set({3}));
+        REQUIRE(cfgB[3][AppConstants::PARENTS] == std::unordered_set({2}));
+        REQUIRE(cfgB[3][AppConstants::CHILDREN].empty());
 
         auto cfgC = readPKB.getCFG("C");
-        REQUIRE(cfgC[4]["parents"].empty());
-        REQUIRE(cfgC[4]["children"] == std::unordered_set({5}));
-        REQUIRE(cfgC[5]["parents"] == std::unordered_set({4}));
-        REQUIRE(cfgC[5]["children"] == std::unordered_set({6}));
-        REQUIRE(cfgC[6]["parents"] == std::unordered_set({5}));
-        REQUIRE(cfgC[6]["children"].empty());
+        REQUIRE(cfgC[4][AppConstants::PARENTS].empty());
+        REQUIRE(cfgC[4][AppConstants::CHILDREN] == std::unordered_set({5}));
+        REQUIRE(cfgC[5][AppConstants::PARENTS] == std::unordered_set({4}));
+        REQUIRE(cfgC[5][AppConstants::CHILDREN] == std::unordered_set({6}));
+        REQUIRE(cfgC[6][AppConstants::PARENTS] == std::unordered_set({5}));
+        REQUIRE(cfgC[6][AppConstants::CHILDREN].empty());
 
-        REQUIRE(cfgC[2]["children"].empty()); // boundary check
+        REQUIRE(cfgC[2][AppConstants::CHILDREN].empty()); // boundary check
     }
 
     SECTION("SP-PKB Integration: Next") {
@@ -612,30 +611,30 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 2") {
 
     SECTION("SP-PKB Integration: CFG") {
         auto cfgA = readPKB.getCFG("A");
-        REQUIRE(cfgA[1]["parents"].empty());
-        REQUIRE(cfgA[1]["children"] == std::unordered_set({2}));
-        REQUIRE(cfgA[2]["parents"] == std::unordered_set({1}));
-        REQUIRE(cfgA[2]["children"] == std::unordered_set({3}));
-        REQUIRE(cfgA[3]["parents"] == std::unordered_set({2, 7}));
-        REQUIRE(cfgA[3]["children"] == std::unordered_set({4}));
-        REQUIRE(cfgA[4]["parents"] == std::unordered_set({3}));
-        REQUIRE(cfgA[4]["children"] == std::unordered_set({5, 6}));
-        REQUIRE(cfgA[5]["parents"] == std::unordered_set({4}));
-        REQUIRE(cfgA[5]["children"] == std::unordered_set({7}));
-        REQUIRE(cfgA[6]["parents"] == std::unordered_set({4}));
-        REQUIRE(cfgA[6]["children"] == std::unordered_set({7}));
-        REQUIRE(cfgA[7]["parents"] == std::unordered_set({5, 6, 10}));
-        REQUIRE(cfgA[7]["children"] == std::unordered_set({3, 8}));
-        REQUIRE(cfgA[8]["parents"] == std::unordered_set({7}));
-        REQUIRE(cfgA[8]["children"] == std::unordered_set({9}));
-        REQUIRE(cfgA[9]["parents"] == std::unordered_set({8}));
-        REQUIRE(cfgA[9]["children"] == std::unordered_set({10}));
-        REQUIRE(cfgA[10]["parents"] == std::unordered_set({9}));
-        REQUIRE(cfgA[10]["children"] == std::unordered_set({7}));
+        REQUIRE(cfgA[1][AppConstants::PARENTS].empty());
+        REQUIRE(cfgA[1][AppConstants::CHILDREN] == std::unordered_set({2}));
+        REQUIRE(cfgA[2][AppConstants::PARENTS] == std::unordered_set({1}));
+        REQUIRE(cfgA[2][AppConstants::CHILDREN] == std::unordered_set({3}));
+        REQUIRE(cfgA[3][AppConstants::PARENTS] == std::unordered_set({2, 7}));
+        REQUIRE(cfgA[3][AppConstants::CHILDREN] == std::unordered_set({4}));
+        REQUIRE(cfgA[4][AppConstants::PARENTS] == std::unordered_set({3}));
+        REQUIRE(cfgA[4][AppConstants::CHILDREN] == std::unordered_set({5, 6}));
+        REQUIRE(cfgA[5][AppConstants::PARENTS] == std::unordered_set({4}));
+        REQUIRE(cfgA[5][AppConstants::CHILDREN] == std::unordered_set({7}));
+        REQUIRE(cfgA[6][AppConstants::PARENTS] == std::unordered_set({4}));
+        REQUIRE(cfgA[6][AppConstants::CHILDREN] == std::unordered_set({7}));
+        REQUIRE(cfgA[7][AppConstants::PARENTS] == std::unordered_set({5, 6, 10}));
+        REQUIRE(cfgA[7][AppConstants::CHILDREN] == std::unordered_set({3, 8}));
+        REQUIRE(cfgA[8][AppConstants::PARENTS] == std::unordered_set({7}));
+        REQUIRE(cfgA[8][AppConstants::CHILDREN] == std::unordered_set({9}));
+        REQUIRE(cfgA[9][AppConstants::PARENTS] == std::unordered_set({8}));
+        REQUIRE(cfgA[9][AppConstants::CHILDREN] == std::unordered_set({10}));
+        REQUIRE(cfgA[10][AppConstants::PARENTS] == std::unordered_set({9}));
+        REQUIRE(cfgA[10][AppConstants::CHILDREN] == std::unordered_set({7}));
 
         auto cfgB = readPKB.getCFG("B");
-        REQUIRE(cfgA[11]["parents"].empty());
-        REQUIRE(cfgA[11]["children"].empty());
+        REQUIRE(cfgA[11][AppConstants::PARENTS].empty());
+        REQUIRE(cfgA[11][AppConstants::CHILDREN].empty());
     }
 
     SECTION("SP-PKB Integration: Next") {
@@ -1026,44 +1025,44 @@ TEST_CASE("SP-PKB Integration: Valid Source Program 3") {
 
     SECTION("SP-PKB Integration: CFG") {
         auto cfgA = readPKB.getCFG("A");
-        REQUIRE(cfgA[1]["parents"].empty());
-        REQUIRE(cfgA[1]["children"] == std::unordered_set({2}));
-        REQUIRE(cfgA[2]["parents"] == std::unordered_set({1}));
-        REQUIRE(cfgA[2]["children"] == std::unordered_set({3}));
-        REQUIRE(cfgA[3]["parents"] == std::unordered_set({2}));
-        REQUIRE(cfgA[3]["children"].empty());
+        REQUIRE(cfgA[1][AppConstants::PARENTS].empty());
+        REQUIRE(cfgA[1][AppConstants::CHILDREN] == std::unordered_set({2}));
+        REQUIRE(cfgA[2][AppConstants::PARENTS] == std::unordered_set({1}));
+        REQUIRE(cfgA[2][AppConstants::CHILDREN] == std::unordered_set({3}));
+        REQUIRE(cfgA[3][AppConstants::PARENTS] == std::unordered_set({2}));
+        REQUIRE(cfgA[3][AppConstants::CHILDREN].empty());
 
         auto cfgB = readPKB.getCFG("B");
-        REQUIRE(cfgB[4]["parents"].empty());
-        REQUIRE(cfgB[4]["children"] == std::unordered_set({5}));
-        REQUIRE(cfgB[5]["parents"] == std::unordered_set({4}));
-        REQUIRE(cfgB[5]["children"].empty());
+        REQUIRE(cfgB[4][AppConstants::PARENTS].empty());
+        REQUIRE(cfgB[4][AppConstants::CHILDREN] == std::unordered_set({5}));
+        REQUIRE(cfgB[5][AppConstants::PARENTS] == std::unordered_set({4}));
+        REQUIRE(cfgB[5][AppConstants::CHILDREN].empty());
 
         auto cfgC = readPKB.getCFG("C");
-        REQUIRE(cfgC[6]["parents"].empty());
-        REQUIRE(cfgC[6]["children"] == std::unordered_set({7}));
-        REQUIRE(cfgC[7]["parents"] == std::unordered_set({6}));
-        REQUIRE(cfgC[7]["children"].empty());
+        REQUIRE(cfgC[6][AppConstants::PARENTS].empty());
+        REQUIRE(cfgC[6][AppConstants::CHILDREN] == std::unordered_set({7}));
+        REQUIRE(cfgC[7][AppConstants::PARENTS] == std::unordered_set({6}));
+        REQUIRE(cfgC[7][AppConstants::CHILDREN].empty());
 
         auto cfgD = readPKB.getCFG("D");
-        REQUIRE(cfgD[8]["parents"] == std::unordered_set({10}));
-        REQUIRE(cfgD[8]["children"] == std::unordered_set({9, 11}));
-        REQUIRE(cfgD[9]["parents"] == std::unordered_set({8}));
-        REQUIRE(cfgD[9]["children"] == std::unordered_set({10}));
-        REQUIRE(cfgD[10]["parents"] == std::unordered_set({9}));
-        REQUIRE(cfgD[10]["children"] == std::unordered_set({8}));
-        REQUIRE(cfgD[11]["parents"] == std::unordered_set({8}));
-        REQUIRE(cfgD[11]["children"].empty());
+        REQUIRE(cfgD[8][AppConstants::PARENTS] == std::unordered_set({10}));
+        REQUIRE(cfgD[8][AppConstants::CHILDREN] == std::unordered_set({9, 11}));
+        REQUIRE(cfgD[9][AppConstants::PARENTS] == std::unordered_set({8}));
+        REQUIRE(cfgD[9][AppConstants::CHILDREN] == std::unordered_set({10}));
+        REQUIRE(cfgD[10][AppConstants::PARENTS] == std::unordered_set({9}));
+        REQUIRE(cfgD[10][AppConstants::CHILDREN] == std::unordered_set({8}));
+        REQUIRE(cfgD[11][AppConstants::PARENTS] == std::unordered_set({8}));
+        REQUIRE(cfgD[11][AppConstants::CHILDREN].empty());
 
         auto cfgE = readPKB.getCFG("E");
-        REQUIRE(cfgE[12]["parents"].empty());
-        REQUIRE(cfgE[12]["children"] == std::unordered_set({13, 14}));
-        REQUIRE(cfgE[13]["parents"] == std::unordered_set({12}));
-        REQUIRE(cfgE[13]["children"] == std::unordered_set({15}));
-        REQUIRE(cfgE[14]["parents"] == std::unordered_set({12}));
-        REQUIRE(cfgE[14]["children"] == std::unordered_set({15}));
-        REQUIRE(cfgE[15].at("parents") == std::unordered_set({13, 14}));
-        REQUIRE(cfgE[15]["children"].empty());
+        REQUIRE(cfgE[12][AppConstants::PARENTS].empty());
+        REQUIRE(cfgE[12][AppConstants::CHILDREN] == std::unordered_set({13, 14}));
+        REQUIRE(cfgE[13][AppConstants::PARENTS] == std::unordered_set({12}));
+        REQUIRE(cfgE[13][AppConstants::CHILDREN] == std::unordered_set({15}));
+        REQUIRE(cfgE[14][AppConstants::PARENTS] == std::unordered_set({12}));
+        REQUIRE(cfgE[14][AppConstants::CHILDREN] == std::unordered_set({15}));
+        REQUIRE(cfgE[15].at(AppConstants::PARENTS) == std::unordered_set({13, 14}));
+        REQUIRE(cfgE[15][AppConstants::CHILDREN].empty());
     }
 
     SECTION("SP-PKB Integration: Next") {
@@ -1107,12 +1106,11 @@ TEST_CASE("Invalid Source Program") {
     testDirectory /= "Tests06/sp/sp-pkb/";
 
     SECTION("additional ;") {
-        std::string errorMessage = "";
         try {
             auto filePath = testDirectory.string() + "invalid1.txt";
             testSP.processFile(filePath, &writePKB, &readPKB); // execution should stop here.
             REQUIRE(false);
-        } catch (std::exception e) {
+        } catch (const std::exception& e) {
             REQUIRE(true);
         }
     }

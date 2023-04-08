@@ -1,8 +1,8 @@
 
 #include <algorithm>
 
-#include "../../spa/src/PKB/ReadPKB.cpp"
-#include "../../spa/src/PKB/WritePKB.cpp"
+#include "../../spa/src/PKB/ReadPKB.h"
+#include "../../spa/src/PKB/WritePKB.h"
 #include "../../spa/src/PKB/utils/utils.h"
 #include "../../spa/src/QPS/QPS.h"
 #include "catch.hpp"
@@ -196,23 +196,23 @@ PKB buildPkb() {
 
     string lhs = "x";
     unique_ptr<Expression> patternTree = pkb_utils::buildSubtree("1");
-    writePkb.writePattern(lhs, 1, move(patternTree));
+    writePkb.writePattern(lhs, 1, std::move(patternTree));
 
     lhs = "y";
     patternTree = pkb_utils::buildSubtree("x + 2");
-    writePkb.writePattern(lhs, 4, move(patternTree));
+    writePkb.writePattern(lhs, 4, std::move(patternTree));
 
     lhs = "x";
     patternTree = pkb_utils::buildSubtree("x + 2");
-    writePkb.writePattern(lhs, 6, move(patternTree));
+    writePkb.writePattern(lhs, 6, std::move(patternTree));
 
     lhs = "y";
     patternTree = pkb_utils::buildSubtree("x + 2");
-    writePkb.writePattern(lhs, 8, move(patternTree));
+    writePkb.writePattern(lhs, 8, std::move(patternTree));
 
     lhs = "z";
     patternTree = pkb_utils::buildSubtree("x * y");
-    writePkb.writePattern(lhs, 11, move(patternTree));
+    writePkb.writePattern(lhs, 11, std::move(patternTree));
 
     writePkb.setWhilePattern(3, val19);
     writePkb.setIfPattern(9, val4);
@@ -230,17 +230,6 @@ TEST_CASE("Single Select Query") {
     readPkb.setInstancePKB(pkb);
     QPS qps;
     vector<string> result;
-
-    SECTION("adhoc test to try out ordering") {
-        string query = R"(
-		assign a; variable v; while w1; if i1; stmt s1, s2; procedure p1; call c1;
-		Select a such that Follows*(1, a) and Next*(s1, s2) and Next*(s1, _) pattern a(v, _"x"_) such that Next*(_, _) and Next*(a, s2) such that Affects*(a, _) and Affects(s1, s2) and Affects*(1, _) and Affects(i1, w1) such that Affects(a, _) with v.varName = p1.procName with p1.procName = "proc1" and s1.stmt# = 5 with s2.stmt# = s1.stmt# such that Parent(1, 2) and Calls*(_, p1) pattern w1("x", _) pattern i1(v, _,   _ ) and a("s", "t") and a("u", _) pattern a(_, _))";
-
-        result = qps.processQueries(query, readPkb);
-        //        vector<string> expected = {"Error"};
-        //        REQUIRE(expected == result);
-        REQUIRE(result.size() == 0);
-    }
 
     SECTION("Select stmt") {
         string query = R"(
@@ -748,7 +737,7 @@ TEST_CASE("Select synonym with single such that clause, synonym is in clause") {
 			Select a such that Affects(1, a))";
 
             result = qps.processQueries(query, readPkb);
-            REQUIRE(result.size() == 0);
+            REQUIRE(result.empty());
         }
 
         SECTION("syn, wildcard") {
@@ -932,7 +921,7 @@ TEST_CASE("Select synonym from single if/while pattern clause, synonym is in cla
 		Select w pattern w("abcdef", _))";
 
         result = qps.processQueries(query, readPkb);
-        REQUIRE(result.size() == 0);
+        REQUIRE(result.empty());
     }
 
     SECTION("while", "syn") {
@@ -981,7 +970,7 @@ TEST_CASE("Select synonym from single such that  clause, synonym is in clause") 
 		Select w pattern w("abcdef", _))";
 
         result = qps.processQueries(query, readPkb);
-        REQUIRE(result.size() == 0);
+        REQUIRE(result.empty());
     }
 
     SECTION("while", "syn") {
@@ -1049,6 +1038,15 @@ TEST_CASE("Select synonym from multi clause, synonym is in both clauses") {
         REQUIRE(exists(result, "y"));
         REQUIRE(exists(result, "z"));
     }
+
+    SECTION("Test with a lot of clauses to check query ordering") {
+        string query = R"(
+		assign a; variable v; while w1; if i1; stmt s1, s2; procedure p1; call c1;
+		Select a such that Follows*(1, a) and Next*(s1, s2) and Next*(s1, _) pattern a(v, _"x"_) such that Next*(_, _) and Next*(a, s2) such that Affects*(a, _) and Affects(s1, s2) and Affects*(1, _) and Affects(i1, w1) such that Affects(a, _) with v.varName = p1.procName with p1.procName = "proc1" and s1.stmt# = 5 with s2.stmt# = s1.stmt# such that Parent(1, 2) and Calls*(_, p1) pattern w1("x", _) pattern i1(v, _,   _ ) and a("s", "t") and a("u", _) pattern a(_, _))";
+
+        result = qps.processQueries(query, readPkb);
+        REQUIRE(result.empty());
+    }
 }
 
 TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
@@ -1077,7 +1075,7 @@ TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
 			Select a such that Parent(1, 2) pattern a(v, _"x"_))";
 
             result = qps.processQueries(query, readPkb);
-            REQUIRE(result.size() == 0);
+            REQUIRE(result.empty());
         }
 
         SECTION("Both clauses are empty/false") {
@@ -1086,7 +1084,7 @@ TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
 			Select a such that Parent(1, 2) pattern a(v, "x"))";
 
             result = qps.processQueries(query, readPkb);
-            REQUIRE(result.size() == 0);
+            REQUIRE(result.empty());
         }
     }
 
