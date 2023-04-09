@@ -30,7 +30,7 @@ void SemanticValidator::buildCallerCalleeTable() {
     }
 }
 
-void SemanticValidator::recurseCallStatementHelper(Statement* recurseStmt, ProcName parentProcedure) {
+void SemanticValidator::recurseCallStatementHelper(Statement* recurseStmt, const ProcName& parentProcedure) {
     if (const auto ifStmt = CAST_TO(IfStatement, recurseStmt)) {
         checkCallStatementHelper(ifStmt->getThenStatements(), parentProcedure);
         checkCallStatementHelper(ifStmt->getElseStatements(), parentProcedure);
@@ -41,7 +41,7 @@ void SemanticValidator::recurseCallStatementHelper(Statement* recurseStmt, ProcN
 }
 
 void SemanticValidator::checkCallStatementHelper(std::vector<std::unique_ptr<Statement>>& statements,
-                                                 ProcName parentProcedure) {
+                                                 const ProcName& parentProcedure) {
     for (const auto& statement : statements) {
         if (const auto callStmt = CAST_TO(CallStatement, statement.get())) {
             procCallMap[parentProcedure].insert(callStmt->procName);

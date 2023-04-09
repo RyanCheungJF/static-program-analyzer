@@ -1,6 +1,6 @@
 #include "SP.h"
 
-void SP::processFile(std::string filePath, WritePKB* writePKB, ReadPKB* readPKB) {
+void SP::processFile(const std::string& filePath, WritePKB* writePKB, ReadPKB* readPKB) {
     std::ifstream sourceFile(filePath);
     if (!sourceFile) {
         std::cerr << "File not found at path: " << filePath << std::endl;

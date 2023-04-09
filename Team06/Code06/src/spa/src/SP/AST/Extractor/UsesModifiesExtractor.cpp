@@ -3,12 +3,12 @@
 UsesModifiesExtractor::UsesModifiesExtractor(WritePKB* writePKB, ReadPKB* readPKB)
     : writeApi(writePKB), readApi(readPKB) {}
 
-void UsesModifiesExtractor::extract(std::vector<ProcName> topoOrder) {
+void UsesModifiesExtractor::extract(const std::vector<ProcName>& topoOrder) {
     processProcedures(topoOrder);
     processContainerStatements();
 }
 
-void UsesModifiesExtractor::processProcedures(std::vector<ProcName> topoOrder) {
+void UsesModifiesExtractor::processProcedures(const std::vector<ProcName>& topoOrder) {
     for (const ProcName& proc : topoOrder) {
         std::unordered_set<Ent> currUsesVariables;
         std::unordered_set<Ent> currModifiesVariables;

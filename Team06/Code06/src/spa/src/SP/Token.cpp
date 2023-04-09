@@ -4,11 +4,11 @@ Token::Token(TokenType type, std::string value) : type(std::move(type)), value(s
 
 Token::Token(TokenType type) : type(std::move(type)), value() {}
 
-bool Token::isType(TokenType tt) const {
+bool Token::isType(const TokenType& tt) const {
     return type == tt;
 }
 
-bool Token::hasValue(std::string val) const {
+bool Token::hasValue(const std::string& val) const {
     return value == val;
 }
 

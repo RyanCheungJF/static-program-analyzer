@@ -12,7 +12,7 @@ public:
     Token(TokenType type, std::string value);
     explicit Token(TokenType type);
 
-    bool isType(TokenType tt) const;
-    bool hasValue(std::string val) const;
+    bool isType(const TokenType& tt) const;
+    bool hasValue(const std::string& val) const;
     friend bool operator==(const Token& lhs, const Token& rhs);
 };
