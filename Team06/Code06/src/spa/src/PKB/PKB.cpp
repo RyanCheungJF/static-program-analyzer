@@ -295,10 +295,9 @@ std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
 std::vector<std::vector<std::string>> PKB::findWith(Comparison& c) {
     std::vector<std::vector<std::string>> res = comparisonCache->findResult(c);
     if (!res.empty()) {
-        // rmb to remove
-        std::cout << "comp cache hit" << endl;
         return res;
     }
+
     Parameter leftParam = c.getLeftParam();
     Parameter rightParam = c.getRightParam();
     bool isLeftParamFixed = leftParam.isFixedValue();

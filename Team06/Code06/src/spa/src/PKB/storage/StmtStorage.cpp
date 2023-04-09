@@ -23,7 +23,6 @@ std::unordered_set<StmtNum>& StmtStorage::getStatementNumbers(Stmt s) {
 
 Stmt StmtStorage::getStatementType(StmtNum num) {
     if (stmtNum_stmt.find(num) == stmtNum_stmt.end()) {
-        //        return AppConstants::STMTNUM_DOES_NOT_EXIST;
         return "";
     }
     return stmtNum_stmt[num];

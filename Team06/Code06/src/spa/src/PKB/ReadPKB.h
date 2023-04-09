@@ -32,25 +32,20 @@ public:
     // returns all the procedure names present in the source code
     std::unordered_set<ProcName>& getAllProcedureNames();
 
-    // returns the entire row of all Entities involved in the Uses(StmtNum, v)
-    // relationship
+    // returns the entire row of all Entities involved in the Uses(StmtNum, v) relationship
     std::unordered_set<Ent>& getUsesS(StmtNum num);
 
-    // returns the entire row of all Entities involved in the Modifies(StmtNum, v)
-    // relationship
+    // returns the entire row of all Entities involved in the Modifies(StmtNum, v) relationship
     std::unordered_set<Ent>& getModifiesS(StmtNum num);
 
-    // returns the entire row of all Entities involved in the Uses(ProcName, v)
-    // relationship
+    // returns the entire row of all Entities involved in the Uses(ProcName, v) relationship
     std::unordered_set<Ent>& getUsesP(ProcName name);
 
-    // returns the entire row of all Entities involved in the Modifies(ProcName,
-    // v) relationship
+    // returns the entire row of all Entities involved in the Modifies(ProcName, v) relationship
     std::unordered_set<Ent>& getModifiesP(ProcName name);
 
-    // returns the name of the procedure being called on line number s
-    // if line s is not a call statement, it returns a pair {AppConstants::NOT_USED_FIELD,
-    // AppConstants::PROCEDURE_DOES_NOT_EXIST}
+    // returns the name of the procedure being called on line number s. if line s is not a call statement,
+    // it returns a pair {AppConstants::NOT_USED_FIELD, AppConstants::PROCEDURE_DOES_NOT_EXIST}
     std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
 
     // returns all the procedures that are called from a given procedure
@@ -67,7 +62,9 @@ public:
 
     // returns a pointer to the CFG graph
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>&
-    getCFG(ProcName name); // todo: delete if unused
+
+    // used for unit and integration testing for sanity check
+    getCFG(ProcName name);
 
 private:
     PKB* pkbInstance = NULL;
