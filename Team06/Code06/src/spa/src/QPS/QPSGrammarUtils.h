@@ -24,6 +24,7 @@ bool isWildCard(string);
 bool isFixedString(string);
 bool isEntRef(string);
 bool isExprSpec(string);
+bool isExprWithQuotes(string);
 bool isTerm(string);
 bool isTupleStart(string);
 bool isExpr(string);
