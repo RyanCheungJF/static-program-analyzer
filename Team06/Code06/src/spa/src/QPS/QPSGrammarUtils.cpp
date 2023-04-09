@@ -154,8 +154,8 @@ bool isExprSpec(string s) {
         if (s.size() < 5) {
             return false;
         }
-        // This will get rid of _" and "_
-        // If s = _"X+Y"_ then expr = X+Y
+        // This will get rid of _ and _
+        // If s = _"X+Y"_ then expr = "X+Y"
         s = s.substr(1, s.size() - 2);
     }
     return isExprWithQuotes(s);
@@ -169,8 +169,8 @@ bool isExprWithQuotes(string s) {
         if (s.size() < 3) {
             return false;
         }
-        // This will get rid of _" and "_
-        // If s = _"X+Y"_ then expr = X+Y
+        // This will get rid of " and "
+        // If s = "X+Y" then expr = X+Y
         string expr = s.substr(1, s.size() - 2);
         return isExpr(expr);
     }
