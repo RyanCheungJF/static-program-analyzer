@@ -156,9 +156,13 @@ bool isExprSpec(string s) {
         }
         // This will get rid of _" and "_
         // If s = _"X+Y"_ then expr = X+Y
-        string expr = s.substr(1, s.size() - 2);
-        return isExprSpec(expr);
+        s = s.substr(1, s.size() - 2);
     }
+    return isExprWithQuotes(s);
+}
+
+bool isExprWithQuotes(string s) {
+    s = trim(s);
     bool startsWithQuotation = regex_search(s, regex("^\""));
     bool endsWithQuotation = regex_search(s, regex("\"$"));
     if (startsWithQuotation && endsWithQuotation) {
