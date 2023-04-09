@@ -234,7 +234,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleOneIntOneSynTransiti
     }
 
     isIntSyn ? intWildcardTransitiveCache[a1] = bfsTraversalOneWildcard(a1, AppConstants::NOT_USED_FIELD)
-                  : wildcardIntTransitiveCache[a2] = bfsTraversalOneWildcard(AppConstants::NOT_USED_FIELD, a2);
+             : wildcardIntTransitiveCache[a2] = bfsTraversalOneWildcard(AppConstants::NOT_USED_FIELD, a2);
     return isIntSyn ? intWildcardTransitiveCache[a1] : wildcardIntTransitiveCache[a2];
 }
 
