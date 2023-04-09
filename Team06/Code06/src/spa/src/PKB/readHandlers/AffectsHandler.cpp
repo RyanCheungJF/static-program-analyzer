@@ -217,28 +217,28 @@ std::vector<std::vector<std::string>> AffectsHandler::handleIntIntTransitive(Stm
     return res;
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleOneIntOneStmtTypeTransitive(StmtNum a1, StmtNum a2) {
+std::vector<std::vector<std::string>> AffectsHandler::handleOneIntOneSynTransitive(StmtNum a1, StmtNum a2) {
 
-    bool isIntStmttype = a2 == AppConstants::NOT_USED_FIELD;
+    bool isIntSyn = (a2 == AppConstants::NOT_USED_FIELD);
 
-    ProcName proc = isIntStmttype ? procStorage->getProcedure(a1) : procStorage->getProcedure(a2);
+    ProcName proc = isIntSyn ? procStorage->getProcedure(a1) : procStorage->getProcedure(a2);
     if (proc == AppConstants::PROCEDURE_DOES_NOT_EXIST) {
         return {};
     }
 
-    if (isIntStmttype && intWildcardTransitiveCache.find(a1) != intWildcardTransitiveCache.end()) {
+    if (isIntSyn && intWildcardTransitiveCache.find(a1) != intWildcardTransitiveCache.end()) {
         return intWildcardTransitiveCache[a1];
     }
     else if (wildcardIntTransitiveCache.find(a2) != wildcardIntTransitiveCache.end()) {
         return wildcardIntTransitiveCache[a2];
     }
 
-    isIntStmttype ? intWildcardTransitiveCache[a1] = bfsTraversalOneWildcard(a1, AppConstants::NOT_USED_FIELD)
+    isIntSyn ? intWildcardTransitiveCache[a1] = bfsTraversalOneWildcard(a1, AppConstants::NOT_USED_FIELD)
                   : wildcardIntTransitiveCache[a2] = bfsTraversalOneWildcard(AppConstants::NOT_USED_FIELD, a2);
-    return isIntStmttype ? intWildcardTransitiveCache[a1] : wildcardIntTransitiveCache[a2];
+    return isIntSyn ? intWildcardTransitiveCache[a1] : wildcardIntTransitiveCache[a2];
 }
 
-std::vector<std::vector<std::string>> AffectsHandler::handleStmtTypeStmtTypeTransitive() {
+std::vector<std::vector<std::string>> AffectsHandler::handleSynSynTransitive() {
 
     std::vector<std::vector<std::string>> res;
     std::unordered_map<StmtNum, unordered_set<StmtNum>> hashmap =
@@ -348,7 +348,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(StmtNum p
             return handleIntIntTransitive(param1Int, param2Int);
         }
         else if (isAssignStmtParam2) {
-            return handleOneIntOneStmtTypeTransitive(param1Int, AppConstants::NOT_USED_FIELD);
+            return handleOneIntOneSynTransitive(param1Int, AppConstants::NOT_USED_FIELD);
         }
         else if (isWildCardParam2) {
             return handleOneIntOneWildcard(param1Int, AppConstants::NOT_USED_FIELD, AppConstants::IS_EARLY_RETURN);
@@ -356,10 +356,10 @@ std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(StmtNum p
     }
     else if (isAssignStmtParam1) {
         if (isFixedIntParam2) {
-            return handleOneIntOneStmtTypeTransitive(AppConstants::NOT_USED_FIELD, param2Int);
+            return handleOneIntOneSynTransitive(AppConstants::NOT_USED_FIELD, param2Int);
         }
         else if (isAssignStmtParam2 || isWildCardParam2) {
-            return handleStmtTypeStmtTypeTransitive();
+            return handleSynSynTransitive();
         }
     }
     else if (isWildCardParam1) {
@@ -367,7 +367,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handleTransitive(StmtNum p
             return handleOneIntOneWildcard(AppConstants::NOT_USED_FIELD, param2Int, AppConstants::IS_EARLY_RETURN);
         }
         else if (isAssignStmtParam2) {
-            return handleStmtTypeStmtTypeTransitive();
+            return handleSynSynTransitive();
         }
         else if (isWildCardParam2) {
             return handleWildcardWildcard(AppConstants::PROCEDURE_DOES_NOT_EXIST, AppConstants::IS_EARLY_RETURN);

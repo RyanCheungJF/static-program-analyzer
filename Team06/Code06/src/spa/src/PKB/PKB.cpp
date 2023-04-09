@@ -237,7 +237,6 @@ std::vector<std::vector<std::string>> PKB::findPattern(Pattern& p) {
 
 std::vector<std::vector<std::string>> PKB::findAttribute(Parameter& p) {
     AttributeType attrType = p.getAttribute();
-    ParameterType paramType = p.getType();
     std::vector<std::vector<std::string>> res = attributeCache->findResult(p);
     if (!res.empty()) {
         return res;

@@ -202,7 +202,6 @@ std::vector<std::vector<std::string>> NextHandler::handleIntIntTransitive(Parame
             return res;
         }
 
-        // check with darren
         if (graph.find(curr[1]) == graph.end()) {
             continue;
         }
