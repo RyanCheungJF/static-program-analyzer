@@ -9,7 +9,7 @@ class FollowsParentHandler : public RelationshipHandler {
 public:
     FollowsParentHandler(std::shared_ptr<StmtStorage>& stmtStorage);
     std::vector<std::vector<std::string>> handle(Parameter& param1, Parameter& param2);
-    void setStorage(shared_ptr<RelationshipStorage<StmtNum, StmtNum>>& rlStorage);
+    void setStorage(std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>>& rlStorage);
 
 private:
     std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>> rlStorage;
@@ -22,13 +22,15 @@ private:
     std::vector<std::vector<std::string>> handleOneIntOneSyn(Parameter& param1, Parameter& param2, bool isIntSyn);
 
     // e.g. FollowsT(1, _) OR FollowsT(_, 2)
-    std::vector<std::vector<std::string>> handleOneIntOneWildcard(Parameter& param1, Parameter& param2, bool isIntWildcard);
+    std::vector<std::vector<std::string>> handleOneIntOneWildcard(Parameter& param1, Parameter& param2,
+                                                                  bool isIntWildcard);
 
     // e.g. FollowsT(a, while)
     std::vector<std::vector<std::string>> handleSynSyn(Parameter& param1, Parameter& param2);
 
     // e.g. FollowsT(a, _) OR FollowsT(_, a)
-    std::vector<std::vector<std::string>> handleOneSynOneWildcard(Parameter& param1, Parameter& param2, bool isSynWildcard);
+    std::vector<std::vector<std::string>> handleOneSynOneWildcard(Parameter& param1, Parameter& param2,
+                                                                  bool isSynWildcard);
 
     // e.g. FollowsT(_, _)
     std::vector<std::vector<std::string>> handleWildcardWildcard();

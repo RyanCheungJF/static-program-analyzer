@@ -7,7 +7,7 @@ void ReadPKB::setInstancePKB(PKB& pkb) {
     this->pkbInstance = &pkb;
 }
 
-std::vector<std::vector<std::string>> ReadPKB::findRelationship(shared_ptr<Relationship>& rs) {
+std::vector<std::vector<std::string>> ReadPKB::findRelationship(std::shared_ptr<Relationship>& rs) {
     return pkbInstance->findRelationship(rs);
 }
 

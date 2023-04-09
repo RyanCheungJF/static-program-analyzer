@@ -8,7 +8,7 @@ public:
     void setInstancePKB(PKB& pkb);
 
     // Returns relevant results based on the type of Relationship object passed and its parameters.
-    std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship>& rs);
+    std::vector<std::vector<std::string>> findRelationship(std::shared_ptr<Relationship>& rs);
 
     // Returns relevant results based on the type of Parameter object passed.
     std::vector<std::string> findDesignEntities(Parameter& p);

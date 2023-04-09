@@ -63,8 +63,8 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardNonT(Paramet
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtNonT(Parameter& intParam, Parameter& stmtParam,
-                                                                     bool isFindChildren) {
+std::vector<std::vector<std::string>> NextHandler::oneIntOneSynNonT(Parameter& intParam, Parameter& stmtParam,
+                                                                    bool isFindChildren) {
     StmtNum intValue = intParam.getIntValue();
     Stmt stmtType = stmtParam.getTypeString();
 
@@ -80,7 +80,7 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtNonT(Parameter& 
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardNonT(Parameter& stmtParam, bool isFindChildren) {
+std::vector<std::vector<std::string>> NextHandler::oneSynOneWildcardNonT(Parameter& stmtParam, bool isFindChildren) {
     Stmt stmtType = stmtParam.getTypeString();
 
     std::vector<std::vector<std::string>> res;
@@ -98,7 +98,7 @@ std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardNonT(Parame
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttype(Parameter& param1, Parameter& param2) {
+std::vector<std::vector<std::string>> NextHandler::handleSynSyn(Parameter& param1, Parameter& param2) {
     Stmt type1 = param1.getTypeString();
     Stmt type2 = param2.getTypeString();
     std::vector<std::vector<std::string>> res;
@@ -236,8 +236,8 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneWildcardTransitive(P
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtTransitive(Parameter& intParam, Parameter& stmtParam,
-                                                                           bool isFindChildren) {
+std::vector<std::vector<std::string>> NextHandler::oneIntOneSynTransitive(Parameter& intParam, Parameter& stmtParam,
+                                                                          bool isFindChildren) {
     StmtNum intValue = intParam.getIntValue();
     Stmt stmtType = stmtParam.getTypeString();
 
@@ -258,8 +258,8 @@ std::vector<std::vector<std::string>> NextHandler::oneIntOneStmtTransitive(Param
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardTransitive(Parameter& stmtParam,
-                                                                                bool isFindChildren) {
+std::vector<std::vector<std::string>> NextHandler::oneSynOneWildcardTransitive(Parameter& stmtParam,
+                                                                               bool isFindChildren) {
     Stmt stmtType = stmtParam.getTypeString();
 
     std::vector<std::vector<std::string>> res;
@@ -283,8 +283,7 @@ std::vector<std::vector<std::string>> NextHandler::oneStmtOneWildcardTransitive(
     return res;
 }
 
-std::vector<std::vector<std::string>> NextHandler::handleStmttypeStmttypeTransitive(Parameter& param1,
-                                                                                    Parameter& param2) {
+std::vector<std::vector<std::string>> NextHandler::handleSynSynTransitive(Parameter& param1, Parameter& param2) {
     Stmt type = param1.getTypeString();
     Stmt type2 = param2.getTypeString();
 
@@ -448,7 +447,7 @@ std::vector<std::vector<std::string>> NextHandler::handleNonTransitive(Parameter
             return handleIntInt(param1, param2);
         }
         else if (isTypedStmtParam2) {
-            return oneIntOneStmtNonT(param1, param2, IS_FIND_CHILDREN);
+            return oneIntOneSynNonT(param1, param2, IS_FIND_CHILDREN);
         }
         else if (isWildCardParam2) {
             return oneIntOneWildcardNonT(param1, IS_FIND_CHILDREN);
@@ -456,13 +455,13 @@ std::vector<std::vector<std::string>> NextHandler::handleNonTransitive(Parameter
     }
     else if (isTypedStmtParam1) {
         if (isFixedIntParam2) {
-            return oneIntOneStmtNonT(param2, param1, !IS_FIND_CHILDREN);
+            return oneIntOneSynNonT(param2, param1, !IS_FIND_CHILDREN);
         }
         else if (isTypedStmtParam2) {
-            return handleStmttypeStmttype(param1, param2);
+            return handleSynSyn(param1, param2);
         }
         else if (isWildCardParam2) {
-            return oneStmtOneWildcardNonT(param1, IS_FIND_CHILDREN);
+            return oneSynOneWildcardNonT(param1, IS_FIND_CHILDREN);
         }
     }
     else if (isWildCardParam1) {
@@ -470,7 +469,7 @@ std::vector<std::vector<std::string>> NextHandler::handleNonTransitive(Parameter
             return oneIntOneWildcardNonT(param2, !IS_FIND_CHILDREN);
         }
         else if (isTypedStmtParam2) {
-            return oneStmtOneWildcardNonT(param2, !IS_FIND_CHILDREN);
+            return oneSynOneWildcardNonT(param2, !IS_FIND_CHILDREN);
         }
         else if (isWildCardParam2) {
             return handleWildcardWildcard();
@@ -489,7 +488,7 @@ std::vector<std::vector<std::string>> NextHandler::handleTransitive(Parameter& p
             return handleIntIntTransitive(param1, param2);
         }
         else if (isTypedStmtParam2) {
-            return oneIntOneStmtTransitive(param1, param2, IS_FIND_CHILDREN);
+            return oneIntOneSynTransitive(param1, param2, IS_FIND_CHILDREN);
         }
         else if (isWildCardParam2) {
             return oneIntOneWildcardTransitive(param1, IS_FIND_CHILDREN);
@@ -497,13 +496,13 @@ std::vector<std::vector<std::string>> NextHandler::handleTransitive(Parameter& p
     }
     else if (isTypedStmtParam1) {
         if (isFixedIntParam2) {
-            return oneIntOneStmtTransitive(param2, param1, !IS_FIND_CHILDREN);
+            return oneIntOneSynTransitive(param2, param1, !IS_FIND_CHILDREN);
         }
         else if (isTypedStmtParam2) {
-            return handleStmttypeStmttypeTransitive(param1, param2);
+            return handleSynSynTransitive(param1, param2);
         }
         else if (isWildCardParam2) {
-            return oneStmtOneWildcardTransitive(param1, IS_FIND_CHILDREN);
+            return oneSynOneWildcardTransitive(param1, IS_FIND_CHILDREN);
         }
     }
     else if (isWildCardParam1) {
@@ -511,7 +510,7 @@ std::vector<std::vector<std::string>> NextHandler::handleTransitive(Parameter& p
             return oneIntOneWildcardTransitive(param2, !IS_FIND_CHILDREN);
         }
         else if (isTypedStmtParam2) {
-            return oneStmtOneWildcardTransitive(param2, !IS_FIND_CHILDREN);
+            return oneSynOneWildcardTransitive(param2, !IS_FIND_CHILDREN);
         }
         else if (isWildCardParam2) {
             return handleWildcardWildcard();

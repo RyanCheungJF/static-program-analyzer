@@ -132,9 +132,9 @@ void PKB::writeCFG(ProcName name,
     cfgStorage->writeCFG(name, graph);
 }
 
-std::vector<std::vector<std::string>> PKB::findRelationship(shared_ptr<Relationship>& rs) {
+std::vector<std::vector<std::string>> PKB::findRelationship(std::shared_ptr<Relationship>& rs) {
     RelationshipType type = rs->getType();
-    vector<Parameter> params = rs->getParameters();
+    std::vector<Parameter> params = rs->getParameters();
     Parameter param1 = params[0];
     Parameter param2 = params[1];
 

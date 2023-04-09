@@ -23,17 +23,17 @@ private:
     std::vector<std::vector<std::string>> handleIntInt(Parameter& param1, Parameter& param2);
 
     // e.g. Next(1, a2) or Next(s1, 2)
-    std::vector<std::vector<std::string>> oneIntOneStmtNonT(Parameter& intParam, Parameter& stmtParam,
-                                                            bool isFindChildren);
+    std::vector<std::vector<std::string>> oneIntOneSynNonT(Parameter& intParam, Parameter& stmtParam,
+                                                           bool isFindChildren);
 
     // e.g. Next(1, _) or Next(_, 2)
     std::vector<std::vector<std::string>> oneIntOneWildcardNonT(Parameter& intParam, bool isFindChildren);
 
     // e.g. Next(a1, _) or Next(_, s2)
-    std::vector<std::vector<std::string>> oneStmtOneWildcardNonT(Parameter& stmtParam, bool isFindChildren);
+    std::vector<std::vector<std::string>> oneSynOneWildcardNonT(Parameter& stmtParam, bool isFindChildren);
 
     // e.g. Next(w1, a1) where a1 is assign, w1 is while. They can be replaced by other valid statement types
-    std::vector<std::vector<std::string>> handleStmttypeStmttype(Parameter& param1, Parameter& param2);
+    std::vector<std::vector<std::string>> handleSynSyn(Parameter& param1, Parameter& param2);
 
     // e.g. Next(s1, s2) or Next(_, _)
     std::vector<std::vector<std::string>> handleWildcardWildcard();
@@ -42,17 +42,17 @@ private:
     std::vector<std::vector<std::string>> handleIntIntTransitive(Parameter& param1, Parameter& param2);
 
     // Next*(a1, 2) or Next*(1, a2)
-    std::vector<std::vector<std::string>> oneIntOneStmtTransitive(Parameter& intParam, Parameter& stmtParam,
-                                                                  bool isFindChildren);
+    std::vector<std::vector<std::string>> oneIntOneSynTransitive(Parameter& intParam, Parameter& stmtParam,
+                                                                 bool isFindChildren);
 
     // e.g. Next*(1, s2) or Next*(1, _)
     std::vector<std::vector<std::string>> oneIntOneWildcardTransitive(Parameter& intParam, bool isFindChildren);
 
     // e.g. Next*(s1, _) or Next*(_, w2)
-    std::vector<std::vector<std::string>> oneStmtOneWildcardTransitive(Parameter& stmtParam, bool isFindChildren);
+    std::vector<std::vector<std::string>> oneSynOneWildcardTransitive(Parameter& stmtParam, bool isFindChildren);
 
     // e.g. Next*(w1, a1) where a1 is assign, w1 is while. They can be replaced by other valid statement types
-    std::vector<std::vector<std::string>> handleStmttypeStmttypeTransitive(Parameter& param1, Parameter& param2);
+    std::vector<std::vector<std::string>> handleSynSynTransitive(Parameter& param1, Parameter& param2);
 
     // e.g. Next*(s1, s2) or Next*(_, _)
     /*std::vector<std::vector<std::string>> handleWildcardWildcardTransitive();*/

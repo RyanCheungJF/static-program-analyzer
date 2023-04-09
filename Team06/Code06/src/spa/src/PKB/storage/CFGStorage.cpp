@@ -5,7 +5,7 @@ void CFGStorage::writeCFG(
 
     // do a deepcopy once only
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> temp;
-    for (const auto &[num, nextMap] : graph) {
+    for (const auto& [num, nextMap] : graph) {
         for (const auto& [parentsOrChildren, neighbourNodes] : nextMap) {
             temp[num][parentsOrChildren].insert(neighbourNodes.begin(), neighbourNodes.end());
         }

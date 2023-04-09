@@ -72,7 +72,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynVar(Para
 
     for (StmtNum stmtNum : rlStorage->getLeftItems(paramString2)) {
         if (typedStmtNums.find(stmtNum) != typedStmtNums.end()) {
-            std::string stmtNumString = to_string(stmtNum);
+            std::string stmtNumString = std::to_string(stmtNum);
             res.push_back({stmtNumString, paramString2});
         }
     }
@@ -84,7 +84,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleStmtSynWildcard
 
     for (auto typedStmtNum : stmtStorage->getStatementNumbers(param1.getTypeString())) {
         for (Ent entity : rlStorage->getRightItems(typedStmtNum)) {
-            std::string stmtNumString = to_string(typedStmtNum);
+            std::string stmtNumString = std::to_string(typedStmtNum);
             res.push_back({stmtNumString, entity});
         }
     }
