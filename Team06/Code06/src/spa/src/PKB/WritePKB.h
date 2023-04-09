@@ -25,18 +25,13 @@ public:
     // Sets the entity along with the statement line that the entities appears in
     void setEntity(StmtNum line, std::unordered_set<Ent>& entities);
 
-    // Sets the entity along with the statement line that it appears in
-    void setEntity(Ent e, StmtNum line);
-
-    // Sets the procedure along with the statement lines that are in that
-    // procedure appears in
+    // Sets the procedure along with the statement lines that are in that procedure appears in
     void setProcedure(ProcName p, std::unordered_set<StmtNum>& lines);
 
     // Sets the procedure along with the assign statement lines that are in that procedure
     void setProcAssignStmt(ProcName p, StmtNum num);
 
-    // Sets the constants along with the statement line that the constants appears
-    // in
+    // Sets the constants along with the statement line that the constants appears in
     void setConstant(StmtNum num, std::unordered_set<Const>& constants);
 
     void setCall(StmtNum callLine, ProcName procedure_being_called);

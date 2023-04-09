@@ -16,8 +16,7 @@ void CFGStorage::writeCFG(
             temp[num][p.first].insert(otherNodes.begin(), otherNodes.end());
         }
     }
-
-    proc_graph[name] = temp;
+    proc_graph[name] = std::move(temp);
 }
 
 std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>&

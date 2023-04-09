@@ -11,8 +11,8 @@ void DesignExtractor::populatePKB() {
         auto topoOrder = semanticValidator.validate();
         extractInfo(topoOrder);
         extractCFG();
-    } catch (SemanticErrorException e) {
-        throw e;
+    } catch (SemanticErrorException& e) {
+        throw;
     }
 }
 

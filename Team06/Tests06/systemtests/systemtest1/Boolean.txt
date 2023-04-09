@@ -193,13 +193,98 @@ while w; variable v;
 Select BOOLEAN pattern w(v, _, _)
 SemanticError
 50000
-40 - Multi-constraint (1)
+40 - 2 clauses (1)
+stmt s;
+Select BOOLEAN such that Modifies(s, "a") and Uses(15, "b")
+TRUE
+5000
+41 - 2 clauses (2)
+if ifs;
+Select BOOLEAN such that Calls(_,_) pattern ifs("a",_,_)
+TRUE
+5000
+42 - 2 clauses (3)
+
+Select BOOLEAN such that Next*(34, 41) and Modifies(35, "b")
+TRUE
+5000
+43 - 2 clauses (4)
+
+Select BOOLEAN such that Parent*(34, 35) and Uses("arithmetic", "a")
+TRUE
+5000
+44 - 3 clauses (1)
+assign a; procedure p;
+Select BOOLEAN such that Follows*(24, 42) and Modifies(a, "a") and Uses(p, "a")
+TRUE
+5000
+45 - 3 clauses (2)
+assign a; call c;
+Select BOOLEAN such that Follows*(23, 42) and Uses(c, "a") with c.procName="conditionalSpam"
+TRUE
+5000
+46 - 3 clauses (3)
+assign a; variable v; if ifs;
+Select BOOLEAN such that Modifies(a, v) and Uses(a, v) pattern ifs(v,_,_)
+TRUE
+5000
+47 - 3 clauses (4)
+assign a;
+Select BOOLEAN such that Calls*("arithmetic", "conditionalSpam") and Modifies(a, "a") pattern a(_, _)
+TRUE
+5000
+48 - 3 clauses (5)
+procedure p;
+Select BOOLEAN such that Next*(34, 34) and Uses(p, "a") and Calls(p, "conditionalSpam")
+TRUE
+5000
+49 - 3 clauses (6)
 call c; procedure p; while w;
 Select BOOLEAN such that Affects(5, 7) and Modifies("conditionalSpam", "b") and Uses(30, "while")
 TRUE
 5000
-41 - Multi-constraint (2)
+50 - 4 clauses (1)
+assign a; stmt s, s1; variable v;
+Select BOOLEAN such that Follows*(s, 38) and Uses(s, v) and Modifies(s, v) and Parent*(s1, a)
+TRUE
+5000
+51 - 4 clauses (2)
 call c; procedure p; while w;
 Select BOOLEAN such that Affects(5, 7) and Affects*(13, 16) and Modifies("unknown", "b") and Uses(30, "while")
 FALSE
+5000
+52 - 4 clauses (3)
+procedure p1, p2; variable v; while w1, w2;
+Select BOOLEAN such that Parent*(w1, w2) and Calls*(p1, p2) and Uses(p1, v) pattern w1(v, _)
+TRUE
+5000
+53 - 4 clauses (4)
+assign a; stmt s1; procedure p; variable v; if ifs;
+Select BOOLEAN such that Next*(18, s1) and Modifies(s1, v) and Uses(s1, v) pattern ifs(v,_,_)
+TRUE
+5000
+54 - 5 clauses (1)
+assign a; variable v; stmt s1; procedure p; if ifs;
+Select BOOLEAN such that Uses(s1, v) and Modifies(ifs, v) such that Modifies(p, v) pattern a(v, _) such that Parent*(34, s1)
+TRUE
+5000
+55 - 5 clauses (2)
+assign a1, a2, a3; stmt s;
+Select BOOLEAN such that Parent(s, a1) and Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3, a1) pattern a1 (_, _)
+TRUE
+5000 
+56 - 6 clauses (1)
+assign a; variable v; stmt s1; procedure p1, p2; if ifs;
+Select BOOLEAN pattern a(v, _) such that Calls*(p1, p2) such that Modifies(ifs, v) and Uses(p1, _) and Uses(s1, v) and Modifies(p2, v)
+TRUE
+5000
+57 - 6 clauses (2)
+assign a; variable v; procedure p; if ifs; while w;
+Select BOOLEAN pattern a(v, _) such that Parent*(ifs, w) pattern ifs("if", _, _) such that Uses(p, v) such that Modifies(ifs, v) pattern w(v, _)
+TRUE
+5000
+58 - 7 clauses
+assign a; variable v1, v2; procedure p; if ifs; while w1, w2;
+Select BOOLEAN such that Next*(23, w2) such that Modifies(ifs, v1) such that Uses(p, v1) pattern a(v1, _) pattern w1(v2, _) such that Parent*(w1, w2) pattern ifs("N", _, _)
+TRUE
 5000

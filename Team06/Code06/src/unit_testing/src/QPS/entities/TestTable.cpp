@@ -39,9 +39,9 @@ TEST_CASE("intersectTable / intersecting large tables / return true") {
     auto start = high_resolution_clock::now();
     Table t1(h1, c1);
     Table t2(h2, c2);
-    Table t3 = t1.intersectTable(t2);
-    vector<Parameter> h3 = t3.getHeaders();
-    vector<vector<string>> c3 = t3.getContent();
+    t1.intersectTable(t2);
+    vector<Parameter> h3 = t1.getHeaders();
+    vector<vector<string>> c3 = t1.getContent();
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
     // Content size should be 8 * 8 * 4 = 256
@@ -56,9 +56,9 @@ TEST_CASE("intersectTable / intersection of one parameter is working / return tr
     vector<vector<string>> c2 = {{"d", "1"}, {"e", "2"}, {"f", "4"}};
     Table t1(h1, c1);
     Table t2(h2, c2);
-    Table t3 = t1.intersectTable(t2);
-    vector<Parameter> h3 = t3.getHeaders();
-    vector<vector<string>> c3 = t3.getContent();
+    t1.intersectTable(t2);
+    vector<Parameter> h3 = t1.getHeaders();
+    vector<vector<string>> c3 = t1.getContent();
     bool rightSize = h3.size() == 3 && c3.size() == 2;
     bool rightHeaders = h3[0].getValue() == "v" && h3[1].getValue() == "v1" && h3[2].getValue() == "s";
     REQUIRE((rightSize && rightHeaders));
@@ -87,9 +87,9 @@ TEST_CASE("selectColumns / the selection of single column will reduce the "
     vector<vector<string>> content = {{"x", "5"}};
     Table table(headers, content);
     vector<int> indexes = {0};
-    Table t = table.extractColumns(indexes);
-    int length = t.getContent().size();
-    string value = t.getContent()[0][0];
+    table.extractColumns(indexes);
+    int length = table.getContent().size();
+    string value = table.getContent()[0][0];
     REQUIRE(((length == 1) && (value == "x")));
 }
 
@@ -99,8 +99,8 @@ TEST_CASE("selectColumns / select nothing / return true") {
     vector<vector<string>> content = {{"x", "5"}};
     Table table(headers, content);
     vector<int> indexes = {};
-    Table t = table.extractColumns(indexes);
-    REQUIRE(t.getHeaders().size() == 0);
+    table.extractColumns(indexes);
+    REQUIRE(table.getHeaders().empty());
 }
 
 TEST_CASE("extractDesignEntities / test for variable and wild card / return "
@@ -110,8 +110,8 @@ TEST_CASE("extractDesignEntities / test for variable and wild card / return "
     vector<vector<string>> content = {{"x", "5"}};
     Table table(headers, content);
     vector<int> indexes = {};
-    Table t = table.extractDesignEntities();
-    REQUIRE((t.getHeaders().size() == 1 && t.getHeaders()[0].getValue() == "v"));
+    table.extractDesignEntities();
+    REQUIRE((table.getHeaders().size() == 1 && table.getHeaders()[0].getValue() == "v"));
 }
 
 TEST_CASE("extractDesignEntities / test for stmt and fixed_int / return only stmt") {
@@ -120,8 +120,8 @@ TEST_CASE("extractDesignEntities / test for stmt and fixed_int / return only stm
     vector<vector<string>> content = {{"4", "321"}};
     Table table(headers, content);
     vector<int> indexes = {};
-    Table t = table.extractDesignEntities();
-    REQUIRE((t.getHeaders().size() == 1 && t.getHeaders()[0].getValue() == "s"));
+    table.extractDesignEntities();
+    REQUIRE((table.getHeaders().size() == 1 && table.getHeaders()[0].getValue() == "s"));
 }
 
 TEST_CASE("extractDesignEntities / test for fixed_string, read and stmt / "
@@ -134,9 +134,9 @@ TEST_CASE("extractDesignEntities / test for fixed_string, read and stmt / "
     };
     vector<vector<string>> content = {{"abc", "6", "7"}};
     Table table(headers, content);
-    Table t = table.extractDesignEntities();
-    REQUIRE(
-        (t.getHeaders().size() == 2 && t.getHeaders()[0].getValue() == "rd" && t.getHeaders()[1].getValue() == "s"));
+    table.extractDesignEntities();
+    REQUIRE((table.getHeaders().size() == 2 && table.getHeaders()[0].getValue() == "rd" &&
+             table.getHeaders()[1].getValue() == "s"));
 }
 
 TEST_CASE("extractDesignEntities / test for call and fixed_string / returns call") {
@@ -145,8 +145,8 @@ TEST_CASE("extractDesignEntities / test for call and fixed_string / returns call
     vector<vector<string>> content = {{"abc", "5"}};
     Table table(headers, content);
     vector<int> indexes = {};
-    Table t = table.extractDesignEntities();
-    REQUIRE((t.getHeaders().size() == 1 && t.getHeaders()[0].getValue() == "cl"));
+    table.extractDesignEntities();
+    REQUIRE((table.getHeaders().size() == 1 && table.getHeaders()[0].getValue() == "cl"));
 }
 
 TEST_CASE("extractDesignEntities / test constant, procedure and") {
@@ -154,9 +154,9 @@ TEST_CASE("extractDesignEntities / test constant, procedure and") {
     vector<Parameter> headers = {Parameter("c", ParameterType::CONSTANT), Parameter("proc", ParameterType::PROCEDURE)};
     vector<vector<string>> content = {{"999", "main"}};
     Table table(headers, content);
-    Table t = table.extractDesignEntities();
-    REQUIRE(
-        (t.getHeaders().size() == 2 && t.getHeaders()[0].getValue() == "c" && t.getHeaders()[1].getValue() == "proc"));
+    table.extractDesignEntities();
+    REQUIRE((table.getHeaders().size() == 2 && table.getHeaders()[0].getValue() == "c" &&
+             table.getHeaders()[1].getValue() == "proc"));
 }
 
 TEST_CASE("extractDesignEntities / test synonym ifs assign / return ifs, assign") {
@@ -169,9 +169,9 @@ TEST_CASE("extractDesignEntities / test synonym ifs assign / return ifs, assign"
     vector<vector<string>> content = {{"hello", "5", "321"}};
     Table table(headers, content);
     vector<int> indexes = {};
-    Table t = table.extractDesignEntities();
-    REQUIRE(
-        (t.getHeaders().size() == 2 && t.getHeaders()[0].getValue() == "ifs" && t.getHeaders()[1].getValue() == "a"));
+    table.extractDesignEntities();
+    REQUIRE((table.getHeaders().size() == 2 && table.getHeaders()[0].getValue() == "ifs" &&
+             table.getHeaders()[1].getValue() == "a"));
 }
 
 TEST_CASE("cartesianProduct / simple 2 element tables / result in total 4 element table") {
@@ -181,9 +181,9 @@ TEST_CASE("cartesianProduct / simple 2 element tables / result in total 4 elemen
     vector<vector<string>> c2 = {{"c", "333"}, {"d", "444"}};
     Table t1 = Table(h1, c1);
     Table t2 = Table(h2, c2);
-    Table t3 = t1.cartesianProduct(t2);
-    vector<Parameter> h3 = t3.getHeaders();
-    vector<vector<string>> c3 = t3.getContent();
+    t1.cartesianProduct(t2);
+    vector<Parameter> h3 = t1.getHeaders();
+    vector<vector<string>> c3 = t1.getContent();
     REQUIRE(c3.size() == 4);
 }
 
@@ -194,9 +194,9 @@ TEST_CASE("cartesianProduct / product with second table with empty content / sho
     vector<vector<string>> c2 = {};
     Table t1 = Table(h1, c1);
     Table t2 = Table(h2, c2);
-    Table t3 = t1.cartesianProduct(t2);
-    vector<vector<string>> c3 = t3.getContent();
-    vector<Parameter> h3 = t3.getHeaders();
+    t1.cartesianProduct(t2);
+    vector<vector<string>> c3 = t1.getContent();
+    vector<Parameter> h3 = t1.getHeaders();
     REQUIRE(h3.size() == 4);
     REQUIRE(c3.empty());
 }
@@ -208,9 +208,9 @@ TEST_CASE("cartesianProduct / product with first table with empty content / shou
     vector<vector<string>> c2 = {};
     Table t1 = Table(h1, c1);
     Table t2 = Table(h2, c2);
-    Table t3 = t2.cartesianProduct(t1);
-    vector<vector<string>> c3 = t3.getContent();
-    vector<Parameter> h3 = t3.getHeaders();
+    t2.cartesianProduct(t1);
+    vector<vector<string>> c3 = t2.getContent();
+    vector<Parameter> h3 = t2.getHeaders();
     REQUIRE(h3.size() == 4);
     REQUIRE(c3.empty());
 }
@@ -237,10 +237,10 @@ TEST_CASE("cartesianProduct / massive 26 element tables / result in total 4 elem
     Table t1 = Table(h1, c1);
     Table t2 = Table(h2, c2);
     Table t3 = Table(h3, c3);
-    Table t4 = t1.cartesianProduct(t2);
-    Table t5 = t4.cartesianProduct(t3);
-    vector<Parameter> h5 = t5.getHeaders();
-    vector<vector<string>> c5 = t5.getContent();
+    t1.cartesianProduct(t2);
+    t1.cartesianProduct(t3);
+    vector<Parameter> h5 = t1.getHeaders();
+    vector<vector<string>> c5 = t1.getContent();
     REQUIRE(h5.size() == 6);
     REQUIRE(c5.size() == 26 * 26 * 26);
 }
@@ -251,9 +251,9 @@ TEST_CASE("extractColumns / extracting through using indexes / extract normally"
     vector<vector<string>> c1 = {{"a", "1", "11"}, {"b", "2", "22"}, {"c", "3", "33"}};
     Table t1 = Table(h1, c1);
     vector<int> indexes = {1, 2};
-    Table t2 = t1.extractColumns(indexes);
-    REQUIRE(t2.getHeaders().size() == 2);
-    REQUIRE(t2.getContent().size() == 3);
+    t1.extractColumns(indexes);
+    REQUIRE(t1.getHeaders().size() == 2);
+    REQUIRE(t1.getContent().size() == 3);
 }
 
 TEST_CASE("extractColumns / extracting through using indexes with duplicates / extracted table should not have dupes") {
@@ -265,9 +265,9 @@ TEST_CASE("extractColumns / extracting through using indexes with duplicates / e
     };
     Table t1 = Table(h1, c1);
     vector<int> indexes = {0, 1};
-    Table t2 = t1.extractColumns(indexes);
-    REQUIRE(t2.getHeaders().size() == 2);
-    REQUIRE(t2.getContent().size() == 2);
+    t1.extractColumns(indexes);
+    REQUIRE(t1.getHeaders().size() == 2);
+    REQUIRE(t1.getContent().size() == 2);
 }
 
 TEST_CASE("extractColumns / extracting through using params / extract normally") {
@@ -276,9 +276,9 @@ TEST_CASE("extractColumns / extracting through using params / extract normally")
     vector<Parameter> extractHeaders = {Parameter("v", ParameterType::VARIABLE), Parameter("s", ParameterType::STMT)};
     vector<vector<string>> c1 = {{"a", "1", "11"}, {"b", "2", "22"}, {"c", "3", "33"}};
     Table t1 = Table(h1, c1);
-    Table t2 = t1.extractColumns(extractHeaders);
-    REQUIRE(t2.getHeaders().size() == 2);
-    REQUIRE(t2.getContent().size() == 3);
+    t1.extractColumns(extractHeaders);
+    REQUIRE(t1.getHeaders().size() == 2);
+    REQUIRE(t1.getContent().size() == 3);
 }
 
 TEST_CASE("extractColumns / extracting through using params with duplicates / extracted table should not have dupes") {
@@ -290,16 +290,17 @@ TEST_CASE("extractColumns / extracting through using params with duplicates / ex
         {"a", "2", "66"}, {"a", "1", "77"}, {"a", "2", "88"}, {"a", "1", "99"}, {"a", "2", "00"},
     };
     Table t1 = Table(h1, c1);
-    Table t2 = t1.extractColumns(extractHeaders);
-    REQUIRE(t2.getHeaders().size() == 2);
-    REQUIRE(t2.getContent().size() == 2);
+    t1.extractColumns(extractHeaders);
+    REQUIRE(t1.getHeaders().size() == 2);
+    REQUIRE(t1.getContent().size() == 2);
 }
 
 TEST_CASE("updateValues / single header updates correctly the values of the table") {
     Table table({Parameter("v", ParameterType::VARIABLE)}, {{"1"}, {"2"}, {"3"}});
     unordered_map<string, string> map;
     map.insert({{"1", "2"}, {"2", "4"}, {"3", "6"}});
-    table = table.updateValues(Parameter("v", ParameterType::VARIABLE), map);
+    Parameter p = Parameter("v", ParameterType::VARIABLE);
+    table.updateValues(p, map);
     vector<vector<string>> resContent = table.getContent();
     vector<vector<string>> expected = {{"2"}, {"4"}, {"6"}};
     REQUIRE(find(resContent.begin(), resContent.end(), expected[0]) != resContent.end());
@@ -312,7 +313,8 @@ TEST_CASE("updateValues / multiple header updates correctly the values of the ta
                 {{"1", "11"}, {"2", "22"}, {"3", "33"}});
     unordered_map<string, string> map;
     map.insert({{"1", "2"}, {"2", "4"}, {"3", "6"}});
-    table = table.updateValues(Parameter("v", ParameterType::VARIABLE), map);
+    Parameter p = Parameter("v", ParameterType::VARIABLE);
+    table.updateValues(p, map);
     vector<vector<string>> resContent = table.getContent();
     vector<vector<string>> expected = {{"2", "11"}, {"4", "22"}, {"6", "33"}};
     REQUIRE(find(resContent.begin(), resContent.end(), expected[0]) != resContent.end());

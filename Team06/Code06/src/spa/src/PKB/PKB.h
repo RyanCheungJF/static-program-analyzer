@@ -6,6 +6,8 @@
 #include "../QPS/entities/Pattern.h"
 #include "../QPS/entities/Relationship.h"
 #include "../utils/AppConstants.h"
+#include "cache/AttributeCache.h"
+#include "cache/ComparisonCache.h"
 #include "cache/ParameterCache.h"
 #include "cache/PatternCache.h"
 #include "cache/RelationshipCache.h"
@@ -13,9 +15,9 @@
 #include "readHandlers/AssignPatternHandler.h"
 #include "readHandlers/CallsHandler.h"
 #include "readHandlers/FollowsParentHandler.h"
+#include "readHandlers/IfWhilePatternHandler.h"
 #include "readHandlers/ModifiesUsesHandler.h"
 #include "readHandlers/NextHandler.h"
-#include "readHandlers/ifWhilePatternHandler.h"
 #include "storage/CFGStorage.h"
 #include "storage/CallStorage.h"
 #include "storage/EntityStorage.h"
@@ -28,22 +30,6 @@
 #include "utils/AppConstants.h"
 
 class PKB : AppConstants {
-    struct withClauseHash {
-        std::size_t operator()(std::vector<std::string> const& vec) const {
-            return std::hash<std::string>{}(vec[1]);
-        }
-    };
-
-    struct withClauseEquals {
-        bool operator()(shared_ptr<Pattern> const& pattern1, shared_ptr<Pattern> const& pattern2) const {
-            bool check1 = pattern1->getPatternType() == pattern2->getPatternType();
-            bool check2 = *pattern1->getEntRef() == *pattern2->getEntRef();
-            bool check3 = pattern1->getExprSpecs()[0] == pattern2->getExprSpecs()[0];
-
-            return check1 && check2 && check3;
-        }
-    };
-
 public:
     void initializePkb();
 
@@ -65,15 +51,13 @@ public:
     // Sets the entity along with the statement line that the entities appears in
     void setEntity(StmtNum line, std::unordered_set<Ent>& entities);
 
-    // Sets the procedure along with the statement lines that are in that
-    // procedure it appears in
+    // Sets the procedure along with the statement lines that are in that procedure it appears in
     void setProcedure(ProcName p, std::unordered_set<StmtNum>& lines);
 
     // Sets the procedure along with the assign statement lines that are in that procedure
     void setProcAssignStmt(ProcName p, StmtNum num);
 
-    // Sets the constants along with the statement line that the constants appears
-    // in
+    // Sets the constants along with the statement line that the constants appears in
     void setConstant(StmtNum num, std::unordered_set<Const>& constants);
 
     void setCall(StmtNum callLine, ProcName procedure_being_called);
@@ -99,15 +83,19 @@ public:
     void writeCFG(ProcName name,
                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph);
 
-    std::vector<std::vector<std::string>> findRelationship(shared_ptr<Relationship>& rs);
+    // Returns relevant results based on the type of Relationship object passed and its parameters.
+    std::vector<std::vector<std::string>> findRelationship(std::shared_ptr<Relationship>& rs);
 
+    // Returns relevant results based on the type of Parameter object passed.
     std::vector<std::string> findDesignEntities(Parameter& p);
 
-    // Returns relevant strings based on Pattern object passed
+    // Returns relevant results based on Pattern object passed.
     std::vector<std::vector<std::string>> findPattern(Pattern& p);
 
+    // Returns relevant results based on the Attributes of the Parameter object passed.
     std::vector<std::vector<std::string>> findAttribute(Parameter& p);
 
+    // Returns relevant results based on the Comparison object passed.
     std::vector<std::vector<std::string>> findWith(Comparison& c);
 
     // check if given a statement type and statement line number, whether that
@@ -117,31 +105,23 @@ public:
     // returns all the statement lines that are contained in the given procedure
     std::unordered_set<StmtNum>& getProcedureStatementNumbers(ProcName p);
 
-    // returns all the assign StmtNum in the given procedure
-    std::unordered_set<StmtNum>& getProcAssignStmtNums(ProcName p);
-
     // returns all the procedure names present in the source code
     std::unordered_set<ProcName>& getAllProcedureNames();
 
-    // returns the entire row of all Entities involved in the Uses(StmtNum, v)
-    // relationship
+    // returns the entire row of all Entities involved in the Uses(StmtNum, v) relationship
     std::unordered_set<Ent>& getUsesS(StmtNum num);
 
-    // returns the entire row of all Entities involved in the Modifies(StmtNum, v)
-    // relationship
+    // returns the entire row of all Entities involved in the Modifies(StmtNum, v) relationship
     std::unordered_set<Ent>& getModifiesS(StmtNum num);
 
-    // returns the entire row of all Entities involved in the Uses(ProcName, v)
-    // relationship
+    // returns the entire row of all Entities involved in the Uses(ProcName, v) relationship
     std::unordered_set<Ent>& getUsesP(ProcName name);
 
-    // returns the entire row of all Entities involved in the Modifies(ProcName,
-    // v) relationship
+    // returns the entire row of all Entities involved in the Modifies(ProcName, v) relationship
     std::unordered_set<Ent>& getModifiesP(ProcName name);
 
-    // returns the name of the procedure being called on line number s
-    // if line s is not a call statement, it returns a pair {AppConstants::NOT_USED_FIELD,
-    // AppConstants::PROCEDURE_DOES_NOT_EXIST}
+    // returns the name of the procedure being called on line number s. if line s is not a call statement,
+    // it returns a pair {AppConstants::NOT_USED_FIELD, AppConstants::PROCEDURE_DOES_NOT_EXIST}
     std::pair<StmtNum, ProcName> getCallStmt(StmtNum s);
 
     // returns all statement numbers for if statement
@@ -187,10 +167,23 @@ private:
     std::shared_ptr<PatternStorage> ifPatternStorage;
     std::shared_ptr<PatternStorage> whilePatternStorage;
 
+    // CACHES
     std::shared_ptr<RelationshipCache> relationshipCache;
     std::shared_ptr<ParameterCache> parameterCache;
     std::shared_ptr<PatternCache> patternCache;
+    std::shared_ptr<AttributeCache> attributeCache;
+    std::shared_ptr<ComparisonCache> comparisonCache;
 
+    // HANDLERS
+    std::shared_ptr<FollowsParentHandler> followsParentHandler;
+    std::shared_ptr<ModifiesUsesHandler> modifiesUsesHandler;
+    std::shared_ptr<CallsHandler> callsHandler;
+    std::shared_ptr<AffectsHandler> affectsHandler;
+    std::shared_ptr<NextHandler> nextHandler;
+    std::shared_ptr<AssignPatternHandler> assignPatternHandler;
+    std::shared_ptr<IfWhilePatternHandler> ifWhilePatternHandler;
+
+    // MAPS
     std::unordered_map<RelationshipType, std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>>> followsParentMap = {
         {RelationshipType::FOLLOWS, NULL},
         {RelationshipType::FOLLOWST, NULL},
@@ -208,4 +201,7 @@ private:
 
     std::unordered_set<RelationshipType> nextMap = {RelationshipType::NEXT, RelationshipType::NEXTT};
     std::unordered_set<RelationshipType> affectsMap = {RelationshipType::AFFECTS, RelationshipType::AFFECTST};
+
+    // HELPER FUNCTIONS
+    void filterAttributeResult(std::vector<std::vector<std::string>>& res, std::string val);
 };

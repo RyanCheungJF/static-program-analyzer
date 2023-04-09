@@ -232,7 +232,7 @@ TEST_CASE("Invalid source program") {
 
         try {
             testTokenizer.tokenize(strStream);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -245,7 +245,7 @@ TEST_CASE("Invalid source program") {
 
         try {
             testTokenizer.tokenize(strStream);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -261,7 +261,7 @@ TEST_CASE("Invalid source program") {
 
         try {
             testTokenizer.tokenize(strStream);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -274,7 +274,7 @@ TEST_CASE("Invalid source program") {
 
         try {
             testTokenizer.tokenize(strStream);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 
@@ -287,7 +287,7 @@ TEST_CASE("Invalid source program") {
 
         try {
             testTokenizer.tokenize(strStream);
-        } catch (SyntaxErrorException e) {
+        } catch (SyntaxErrorException& e) {
             errorMessage = e.what();
         }
 

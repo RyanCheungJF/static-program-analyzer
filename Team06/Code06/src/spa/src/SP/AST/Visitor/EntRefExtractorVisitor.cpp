@@ -65,5 +65,5 @@ void EntRefExtractorVisitor::containerStmtHelper(ConditionalExpression* condExpr
     writeApi->setUsesS(stmtNum, variables);
 }
 
-void EntRefExtractorVisitor::visitExpression(Expression* variable){};
-void EntRefExtractorVisitor::visitConditionalExpression(ConditionalExpression* conditionalExpression){};
+void EntRefExtractorVisitor::visitExpression(Expression* variable) {}
+void EntRefExtractorVisitor::visitConditionalExpression(ConditionalExpression* conditionalExpression) {}

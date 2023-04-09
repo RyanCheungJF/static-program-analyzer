@@ -63,9 +63,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next*") {
                                          Parameter("_", ParameterType::WILDCARD)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::NEXTT, params);
         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
-        std::vector<std::vector<std::string>> expected = {{"1", "2"}, {"1", "3"}, {"1", "4"}, {"1", "5"},
-                                                          {"1", "6"}, {"1", "7"}, {"1", "8"}};
-        REQUIRE(unit_testing_utils::equals(expected, res));
+        REQUIRE(res.size() == 1);
     }
 
     SECTION("Next*(int, stmt)") {
@@ -83,8 +81,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next*") {
                                          Parameter("5", ParameterType::FIXED_INT)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::NEXTT, params);
         std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs1);
-        std::vector<std::vector<std::string>> expected = {{"1", "5"}, {"2", "5"}, {"3", "5"}, {"4", "5"}};
-        REQUIRE(unit_testing_utils::equals(expected, res));
+        REQUIRE(res.size() == 1);
     }
 
     SECTION("Next*(stmt, int)") {
@@ -228,9 +225,10 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next*") {
         shared_ptr<Relationship> rs3 = Relationship::makeRelationship(AppConstants::NEXTT, params3);
         std::vector<std::vector<std::string>> res3 = readPkb.findRelationship(rs3);
         REQUIRE(unit_testing_utils::equals({{"7", "7"}, {"11", "11"}, {"10", "10"}}, res3));
-    }
 
-    SECTION("Next*(_, _)") {
+        std::vector<Parameter> params4 = {Parameter("s1", ParameterType::STMT), Parameter("s2", ParameterType::STMT)};
+        shared_ptr<Relationship> rs4 = Relationship::makeRelationship(AppConstants::NEXTT, params4);
+        std::vector<std::vector<std::string>> res4 = readPkb.findRelationship(rs4);
         std::vector<std::vector<std::string>> expected = {
             {"1", "3"},  {"1", "2"},   {"1", "4"},  {"1", "5"},   {"1", "6"},   {"1", "7"},   {"1", "8"},
             {"2", "5"},  {"2", "6"},   {"2", "7"},  {"2", "8"},   {"3", "4"},   {"3", "5"},   {"3", "6"},
@@ -238,12 +236,15 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next*") {
             {"5", "7"},  {"5", "8"},   {"6", "7"},  {"6", "6"},   {"6", "8"},   {"7", "8"},   {"7", "6"},
             {"7", "7"},  {"9", "10"},  {"9", "11"}, {"9", "12"},  {"9", "9"},   {"10", "11"}, {"10", "12"},
             {"10", "9"}, {"10", "10"}, {"11", "9"}, {"11", "12"}, {"11", "10"}, {"11", "11"}};
+        REQUIRE(unit_testing_utils::equals(expected, res4));
+    }
 
+    SECTION("Next*(_, _)") {
         std::vector<Parameter> params = {Parameter("_", ParameterType::WILDCARD),
                                          Parameter("_", ParameterType::WILDCARD)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::NEXTT, params);
         std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
-        REQUIRE(unit_testing_utils::equals(expected, res1));
+        REQUIRE(res1.size() == 1);
     }
 }
 
@@ -300,7 +301,7 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Next* - complex") {
                                          Parameter("_", ParameterType::WILDCARD)};
         shared_ptr<Relationship> rs1 = Relationship::makeRelationship(AppConstants::NEXTT, params);
         std::vector<std::vector<std::string>> res1 = readPkb.findRelationship(rs1);
-        REQUIRE(unit_testing_utils::equals(expected, res1));
+        REQUIRE(res1.size() == 1);
 
         std::vector<Parameter> params2 = {Parameter("st1", ParameterType::STMT), Parameter("st2", ParameterType::STMT)};
         shared_ptr<Relationship> rs2 = Relationship::makeRelationship(AppConstants::NEXTT, params2);

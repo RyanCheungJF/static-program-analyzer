@@ -5,10 +5,10 @@ bool RelSSSyntaxValidator::validate(Relationship& rel) {
     if (ps.size() != 2) {
         throw SyntaxException();
     }
-    if (!Parameter::isSyntacticStatementRef(ps[0])) {
+    if (!ps[0].isSyntacticStatementRef()) {
         throw SyntaxException();
     }
-    if (!Parameter::isSyntacticStatementRef(ps[1])) {
+    if (!ps[1].isSyntacticStatementRef()) {
         throw SyntaxException();
     }
     return true;

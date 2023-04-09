@@ -3,22 +3,26 @@
 #include "../syntaxValidator/PatThreeParamSyntaxValidator.h"
 #include "../syntaxValidator/PatTwoParamSyntaxValidator.h"
 
-Pattern::Pattern() {}
+Pattern::Pattern() {
+    evalPriority = 0;
+}
 
 Pattern::Pattern(const Pattern& p) {
     patternSyn = p.patternSyn;
     entRef = p.entRef;
     exprSpecs = p.exprSpecs;
+    evalPriority = 0;
 }
 
 Pattern::Pattern(Parameter p, Parameter ent, vector<string>& es) {
     patternSyn = p;
     entRef = ent;
     exprSpecs = es;
+    evalPriority = 0;
 }
 
 Pattern Pattern::makePattern(Parameter p, Parameter ent, vector<string>& es) {
-    if (!Parameter::isPatternSyn(p) && !(p.getType() == ParameterType::SYNONYM)) {
+    if (!p.isPatternSyn() && !(p.getType() == ParameterType::SYNONYM)) {
         throw SyntaxException();
     }
     int paramCount = 1 + es.size();
@@ -37,21 +41,32 @@ Pattern Pattern::makePattern(Parameter p, Parameter ent, vector<string>& es) {
     return processedPat;
 }
 
-Parameter* Pattern::getPatternSyn() {
-    return &patternSyn;
+const Parameter& Pattern::getPatternSyn() const {
+    return patternSyn;
 }
 
-Parameter* Pattern::getEntRef() {
-    return &entRef;
+const Parameter& Pattern::getEntRef() const {
+    return entRef;
 }
 
-vector<string> Pattern::getExprSpecs() {
+vector<string> Pattern::getExprSpecs() const {
     return exprSpecs;
+}
+
+vector<Parameter*> Pattern::getAllUncheckedSynonyms() {
+    vector<Parameter*> synonyms;
+    if (patternSyn.isUncheckedSynonym()) {
+        synonyms.push_back(&patternSyn);
+    }
+    if (entRef.isUncheckedSynonym()) {
+        synonyms.push_back(&entRef);
+    }
+    return synonyms;
 }
 
 bool Pattern::validateParams() {
     ParameterType patternType = patternSyn.getType();
-    if (!Parameter::isEntityRef(entRef)) {
+    if (!entRef.isEntityRef()) {
         return false;
     }
     switch (patternType) {
@@ -66,20 +81,57 @@ bool Pattern::validateParams() {
     }
 }
 
-ParameterType Pattern::getPatternType() {
+ParameterType Pattern::getPatternType() const {
     return patternSyn.getType();
 }
 
-ParameterType Pattern::getEntRefType() {
+ParameterType Pattern::getEntRefType() const {
     return entRef.getType();
 }
 
-std::string Pattern::getEntRefValue() {
+std::string Pattern::getEntRefValue() const {
     return entRef.getValue();
+}
+
+bool Pattern::hasSyntacticEntityRef() const {
+    return entRef.isSyntacticEntityRef();
 }
 
 bool Pattern::operator==(const Pattern& p) const {
     return patternSyn == p.patternSyn && entRef == p.entRef && exprSpecs == p.exprSpecs;
+}
+
+bool Pattern::operator>(const Pattern& p) const {
+    return evalPriority > p.evalPriority;
+}
+
+bool Pattern::operator<(const Pattern& p) const {
+    return evalPriority < p.evalPriority;
+}
+
+double Pattern::calcPriority() {
+    int wildcardCounter = 0;
+    int fixedValCounter = 0;
+
+    if (entRef.isFixedValue()) {
+        fixedValCounter++;
+    }
+    else {
+        wildcardCounter++;
+    }
+
+    for (int i = 0; i < exprSpecs.size(); i++) {
+        if (isWildCard(exprSpecs.at(i))) {
+            wildcardCounter++;
+        }
+        else {
+            fixedValCounter++;
+        }
+    }
+
+    double prio = wildcardCounter * AppConstants::wildcardWeight + fixedValCounter * AppConstants::fixedValWeight;
+    this->evalPriority = prio;
+    return prio;
 }
 
 shared_ptr<SyntaxValidator<Pattern>> patTwoParamVal =

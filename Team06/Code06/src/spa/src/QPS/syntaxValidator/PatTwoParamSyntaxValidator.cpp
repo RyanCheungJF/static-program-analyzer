@@ -5,7 +5,7 @@ bool PatTwoParamSyntaxValidator::validate(Pattern& p) {
     if (!isExprSpec(exprSpecs[0])) {
         throw SyntaxException();
     }
-    if (!Parameter::isSyntacticEntityRef(*p.getEntRef())) {
+    if (!p.hasSyntacticEntityRef()) {
         throw SyntaxException();
     }
     return true;

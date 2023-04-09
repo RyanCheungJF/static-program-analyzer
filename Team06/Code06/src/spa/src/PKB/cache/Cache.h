@@ -5,11 +5,11 @@
 
 template <class T, typename valueType, typename hash, typename equals> class Cache {
 public:
-    void addResult(std::shared_ptr<T> key, valueType& values) {
+    void addResult(T& key, valueType& values) {
         cache[key] = values;
     }
 
-    valueType findResult(std::shared_ptr<T> key) {
+    valueType findResult(T& key) {
         if (cache.find(key) == cache.end()) {
             return valueType();
         }
@@ -22,5 +22,5 @@ public:
     }
 
 private:
-    std::unordered_map<std::shared_ptr<T>, valueType, hash, equals> cache;
+    std::unordered_map<T, valueType, hash, equals> cache;
 };

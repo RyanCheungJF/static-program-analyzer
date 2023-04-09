@@ -658,3 +658,13 @@ assign a;
 Select a such that Affects(23, a)
 none
 5000
+133 - comment
+stmt s;
+Select s such that Affects(0, 1)
+none
+5000
+134 - comment
+stmt s;
+Select s such that Affects(41, 43)
+none
+5000

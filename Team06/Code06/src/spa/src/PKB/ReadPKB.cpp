@@ -7,7 +7,7 @@ void ReadPKB::setInstancePKB(PKB& pkb) {
     this->pkbInstance = &pkb;
 }
 
-std::vector<std::vector<std::string>> ReadPKB::findRelationship(shared_ptr<Relationship>& rs) {
+std::vector<std::vector<std::string>> ReadPKB::findRelationship(std::shared_ptr<Relationship>& rs) {
     return pkbInstance->findRelationship(rs);
 }
 
@@ -33,10 +33,6 @@ bool ReadPKB::checkStatement(Stmt stmt, StmtNum num) {
 
 std::unordered_set<StmtNum>& ReadPKB::getProcedureStatementNumbers(ProcName p) {
     return pkbInstance->getProcedureStatementNumbers(p);
-}
-
-std::unordered_set<StmtNum>& ReadPKB::getProcAssignStmtNums(ProcName p) {
-    return pkbInstance->getProcAssignStmtNums(p);
 }
 
 std::unordered_set<ProcName>& ReadPKB::getAllProcedureNames() {

@@ -19,7 +19,7 @@ TEST_CASE("FollowsStorage: write(StmtNum followee, StmtNum follower)") {
 
     SECTION("getLeftWildcard(StmtNum leftStmtNum): empty storage") {
         std::unordered_set<StmtNum> res = fs.getLeftItems(2);
-        REQUIRE(res.size() == 0);
+        REQUIRE(res.empty());
     }
 
     fs.write(1, 2);
@@ -129,7 +129,7 @@ TEST_CASE("Checks that given a followee and a synonym, ReadPKB returns relevant 
     REQUIRE(unit_testing_utils::equals(check, res));
 }
 
-TEST_CASE("Checks that given a followee and a wildcard, ReadPKB returns all followee-follower pairs") {
+TEST_CASE("Checks that given a followee and a wildcard, ReadPKB does an early return") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -146,9 +146,8 @@ TEST_CASE("Checks that given a followee and a wildcard, ReadPKB returns all foll
     params.push_back(param2);
     shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWS, params);
 
-    std::vector<std::vector<std::string>> check = {{"1", "2"}};
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(unit_testing_utils::equals(check, res));
+    REQUIRE(unit_testing_utils::equals(AppConstants::EARLY_RETURN_RES, res));
 }
 
 TEST_CASE("Checks that given a synonym and a follower, ReadPKB returns relevant followee-follower pairs") {
@@ -225,7 +224,7 @@ TEST_CASE("Checks that given a synonym and a wildcard, ReadPKB returns relevant 
     REQUIRE(unit_testing_utils::equals(check, res));
 }
 
-TEST_CASE("Checks that given a wildcard and a follower, ReadPKB returns relevant followee-follower pairs") {
+TEST_CASE("Checks that given a wildcard and a follower, ReadPKB does an early return") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -243,9 +242,8 @@ TEST_CASE("Checks that given a wildcard and a follower, ReadPKB returns relevant
     params.push_back(param2);
     shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWS, params);
 
-    std::vector<std::vector<std::string>> check = {{"1", "2"}};
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(unit_testing_utils::equals(check, res));
+    REQUIRE(unit_testing_utils::equals(AppConstants::EARLY_RETURN_RES, res));
 }
 
 TEST_CASE("Checks that given a wildcard and a synonym, ReadPKB returns relevant followee-follower pairs") {
@@ -272,7 +270,7 @@ TEST_CASE("Checks that given a wildcard and a synonym, ReadPKB returns relevant 
     REQUIRE(unit_testing_utils::equals(check, res));
 }
 
-TEST_CASE("Checks that given a wildcard and a wildcard, ReadPKB returns relevant followee-follower pairs") {
+TEST_CASE("Checks that given a wildcard and a wildcard, ReadPKB does an early return") {
 
     WritePKB writePkb;
     ReadPKB readPkb;
@@ -290,9 +288,8 @@ TEST_CASE("Checks that given a wildcard and a wildcard, ReadPKB returns relevant
     params.push_back(param2);
     shared_ptr<Relationship> rs = Relationship::makeRelationship(AppConstants::FOLLOWS, params);
 
-    std::vector<std::vector<std::string>> check = {{"1", "2"}};
     std::vector<std::vector<std::string>> res = readPkb.findRelationship(rs);
-    REQUIRE(unit_testing_utils::equals(check, res));
+    REQUIRE(unit_testing_utils::equals(AppConstants::EARLY_RETURN_RES, res));
 }
 
 TEST_CASE("Checks that given a followee, if it does not have a certain follower, readPKB returns an empty vector") {

@@ -11,8 +11,8 @@ std::vector<ProcName> SemanticValidator::validate() {
         validateCalledProceduresExist();
         auto topoOrder = validateNoCycles();
         return topoOrder;
-    } catch (SemanticErrorException e) {
-        throw e;
+    } catch (SemanticErrorException& e) {
+        throw;
     }
 }
 
@@ -78,24 +78,27 @@ std::vector<ProcName> SemanticValidator::validateNoCycles() {
     std::unordered_map<ProcName, std::pair<int, std::unordered_set<ProcName>>> nodes;
     std::vector<ProcName> topoOrder;
 
+    // Initialize nodes with zero outgoing edges and empty set of incoming edges
     for (int i = 0; i < procedureNames.size(); i++) {
         nodes[procedureNames[i]] = std::make_pair(0, std::unordered_set<ProcName>());
     }
 
-    for (const auto& pair : procCallMap) {
-        ProcName callerProc = pair.first;
-        for (const auto& calledProc : pair.second) {
+    // Construct directed graph
+    for (const auto& [callerProc, calledProcs] : procCallMap) {
+        for (const auto& calledProc : calledProcs) {
             nodes[callerProc].first += 1;
             nodes[calledProc].second.insert(callerProc);
         }
     }
 
-    for (const auto& pair : nodes) {
-        if (pair.second.first == 0) {
-            queue.push_back(pair.first);
+    // Add nodes with zero outgoing edges to queue
+    for (const auto& [procName, node] : nodes) {
+        if (node.first == 0) {
+            queue.push_back(procName);
         }
     }
 
+    // Perform topological sort
     while (queue.size() > 0) {
         ProcName proc = queue.front();
         queue.pop_front();

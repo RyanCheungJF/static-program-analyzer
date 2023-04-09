@@ -4,6 +4,7 @@
 struct relationshipHash {
     std::size_t operator()(const shared_ptr<Relationship>& rs) const {
         std::vector<ParameterType> paramTypes = rs->getParameterTypes();
+        std::vector<std::string> paramValues = rs->getParameterValues();
 
         std::size_t h1 = std::hash<RelationshipType>{}(rs->getType());
         std::size_t h2 = std::hash<ParameterType>{}(paramTypes[0]);
@@ -11,11 +12,13 @@ struct relationshipHash {
 
         std::vector<Parameter> params = rs->getParameters();
         if (params[0].isFixedInt() || params[0].isFixedStringType()) {
-            h2 = std::hash<Parameter>{}(params[0]);
+            std::size_t temp = std::hash<std::string>{}(paramValues[0]);
+            h2 = h2 ^ (temp << 1);
         }
 
         if (params[1].isFixedInt() || params[1].isFixedStringType()) {
-            h3 = std::hash<Parameter>{}(params[1]);
+            std::size_t temp = std::hash<std::string>{}(paramValues[1]);
+            h3 = h3 ^ (temp << 1);
         }
 
         return ((h1 ^ (h2 << 1)) >> 1) ^ (h3 << 1);
@@ -45,5 +48,5 @@ struct relationshipEquals {
     }
 };
 
-class RelationshipCache
-    : public Cache<Relationship, std::vector<std::vector<std::string>>, relationshipHash, relationshipEquals> {};
+class RelationshipCache : public Cache<shared_ptr<Relationship>, std::vector<std::vector<std::string>>,
+                                       relationshipHash, relationshipEquals> {};

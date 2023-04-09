@@ -1,14 +1,9 @@
-//
-// Created by Faruq on 31/1/23.
-//
 #include "QPSParser.h"
-
-#include "../QPSGrammarUtils.h"
 
 QPSParser::QPSParser() {}
 
 vector<Query> QPSParser::parse(string qpsQuery) {
-    // split the code
+    // split the query
     vector<string> queryStatements = splitQuery(qpsQuery);
     SelectQueryParser selectQueryParser;
     vector<Query> queryVec;
@@ -32,10 +27,14 @@ vector<Query> QPSParser::parse(string qpsQuery) {
     }
     vStore = parseDeclarations(declarations);
     // need to do it this way cos dealing with pointer
-    for (int i = 0; i < queryVec.size(); i++) {
-        checkSynonyms(&queryVec.at(i), vStore);
+    for (Query& query : queryVec) {
+        checkSynonyms(&query, vStore);
+        vector<Parameter> selectParams = query.selectParameters;
+        if (query.booleanParamCheck()) {
+            throw SemanticException();
+        }
+        query.updateEvalOrder();
     }
-
     return queryVec;
 }
 

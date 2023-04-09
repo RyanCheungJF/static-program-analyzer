@@ -1,6 +1,6 @@
 #include "AssignPatternHandler.h"
 
-AssignPatternHandler::AssignPatternHandler(std::shared_ptr<PatternWithExprStorage> patternStorage) {
+AssignPatternHandler::AssignPatternHandler(std::shared_ptr<PatternWithExprStorage>& patternStorage) {
     this->patternStorage = patternStorage;
 }
 
@@ -55,7 +55,7 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handleVarWildcard(st
 
     std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>* pointer =
         patternStorage->getPatternWithLHS(lhs);
-    if (pointer == NULL)
+    if (pointer == nullptr)
         return res;
 
     for (const auto& pair : *pointer) {
@@ -71,7 +71,7 @@ AssignPatternHandler::handleVarPattern(std::string lhs, std::string rhs, bool (*
 
     std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>* pointer =
         patternStorage->getPatternWithLHS(lhs);
-    if (pointer == NULL)
+    if (pointer == nullptr)
         return res;
 
     for (const auto& pair : *pointer) {
@@ -88,7 +88,6 @@ std::vector<std::vector<std::string>> AssignPatternHandler::handleWildcardWildca
 
     for (auto const& row : *patternStorage->getAll()) {
         for (const auto& pair : row.second) {
-            Expression* actual = pair.second.get();
             std::vector<std::string> curr;
             curr.push_back(std::to_string(pair.first));
             curr.push_back(row.first);
@@ -136,10 +135,10 @@ AssignPatternHandler::handleWildcardPattern(std::string rhs, bool (*checkTree)(E
     return res;
 }
 
-std::vector<std::vector<std::string>> AssignPatternHandler::handle(Pattern p) {
+std::vector<std::vector<std::string>> AssignPatternHandler::handle(Pattern& p) {
     std::string rhs = p.getExprSpecs()[0];
     std::string lhsString = p.getEntRefValue();
-    Parameter lhs = *p.getEntRef();
+    const Parameter& lhs = p.getEntRef();
     bool leftWildcard = false;
     bool rightWildcard = false;
 

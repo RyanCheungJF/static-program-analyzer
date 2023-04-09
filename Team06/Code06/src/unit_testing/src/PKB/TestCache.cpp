@@ -120,18 +120,16 @@ TEST_CASE("Test Parameter Cache") {
     // variable v;
     // Select v
     Parameter p1 = Parameter("v", ParameterType::VARIABLE);
-    shared_ptr<Parameter> param1 = make_shared<Parameter>(p1);
 
     vector<string> cacheValue = {"x", "y"};
-    cache.addResult(param1, cacheValue);
+    cache.addResult(p1, cacheValue);
 
     // variable x;
     // Select x
     SECTION("Cache hit") {
         Parameter p2 = Parameter("x", ParameterType::VARIABLE);
-        shared_ptr<Parameter> param2 = make_shared<Parameter>(p2);
 
-        vector<string> res = cache.findResult(param2);
+        vector<string> res = cache.findResult(p2);
         vector<string> expected = {"x", "y"};
         REQUIRE(equals(res, expected));
     }
@@ -140,9 +138,8 @@ TEST_CASE("Test Parameter Cache") {
     // Select v
     SECTION("Cache miss") {
         Parameter p2 = Parameter("v", ParameterType::CONSTANT);
-        shared_ptr<Parameter> param2 = make_shared<Parameter>(p2);
 
-        vector<string> res = cache.findResult(param2);
+        vector<string> res = cache.findResult(p2);
         vector<string> expected = {};
         REQUIRE(equals(res, expected));
     }
@@ -163,24 +160,20 @@ TEST_CASE("Test Pattern Cache") {
     exprSpecs = {"_", "_"};
     Pattern p2 = Pattern(param3, param4, exprSpecs);
 
-    shared_ptr<Pattern> pattern1 = make_shared<Pattern>(p1);
-    shared_ptr<Pattern> pattern2 = make_shared<Pattern>(p2);
-
     vector<vector<string>> cacheValue1 = {{"1", "z"}};
     vector<vector<string>> cacheValue2 = {{"2", "z"}};
 
-    cache.addResult(pattern1, cacheValue1);
-    cache.addResult(pattern2, cacheValue2);
+    cache.addResult(p1, cacheValue1);
+    cache.addResult(p2, cacheValue2);
 
     // Pattern a("z", "_b / c_")
     SECTION("Cache hit, Assign pattern") {
         Parameter param6 = Parameter("a2", ParameterType::ASSIGN);
         Parameter param7 = Parameter("z", ParameterType::FIXED_STRING);
-        vector<string> exprSpecs = {"_b / c_"};
-        Pattern p3 = Pattern(param6, param7, exprSpecs);
-        shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
+        vector<string> queryExprSpecs = {"_b / c_"};
+        Pattern p3 = Pattern(param6, param7, queryExprSpecs);
 
-        vector<vector<string>> res = cache.findResult(pattern3);
+        vector<vector<string>> res = cache.findResult(p3);
         vector<vector<string>> expected = {{"1", "z"}};
         REQUIRE(equals(res, expected));
     }
@@ -189,35 +182,46 @@ TEST_CASE("Test Pattern Cache") {
     SECTION("Cache hit, If pattern") {
         Parameter param6 = Parameter("if", ParameterType::IF);
         Parameter param7 = Parameter("v2", ParameterType::VARIABLE);
-        vector<string> exprSpecs = {"_", "_"};
-        Pattern p3 = Pattern(param6, param7, exprSpecs);
-        shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
+        vector<string> queryExprSpecs = {"_", "_"};
+        Pattern p3 = Pattern(param6, param7, queryExprSpecs);
 
-        vector<vector<string>> res = cache.findResult(pattern3);
+        vector<vector<string>> res = cache.findResult(p3);
         vector<vector<string>> expected = {{"2", "z"}};
         REQUIRE(equals(res, expected));
     }
 
+    // pattern a("z", "b / c")
     SECTION("Cache miss, Pattern a(\"z\", \"b / c\")") {
         Parameter param6 = Parameter("a", ParameterType::ASSIGN);
         Parameter param7 = Parameter("z", ParameterType::FIXED_STRING);
-        vector<string> exprSpecs = {"b / c"};
-        Pattern p3 = Pattern(param6, param7, exprSpecs);
-        shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
+        vector<string> queryExprSpecs = {"b / c"};
+        Pattern p3 = Pattern(param6, param7, queryExprSpecs);
 
-        vector<vector<string>> res = cache.findResult(pattern3);
+        vector<vector<string>> res = cache.findResult(p3);
         vector<vector<string>> expected = {};
         REQUIRE(equals(res, expected));
     }
 
+    // pattern a(z, "_b / c_")
     SECTION("Cache miss, Pattern a(z, \"_b / c_\")") {
         Parameter param6 = Parameter("a", ParameterType::ASSIGN);
         Parameter param7 = Parameter("z", ParameterType::VARIABLE);
-        vector<string> exprSpecs = {"_b / c_"};
-        Pattern p3 = Pattern(param6, param7, exprSpecs);
-        shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
+        vector<string> queryExprSpecs = {"_b / c_"};
+        Pattern p3 = Pattern(param6, param7, queryExprSpecs);
 
-        vector<vector<string>> res = cache.findResult(pattern3);
+        vector<vector<string>> res = cache.findResult(p3);
+        vector<vector<string>> expected = {};
+        REQUIRE(equals(res, expected));
+    }
+
+    // pattern a("y", "_b / c_")
+    SECTION("Cache miss, Pattern a(\"y\", \"_b / c_\")") {
+        Parameter param6 = Parameter("a", ParameterType::ASSIGN);
+        Parameter param7 = Parameter("y", ParameterType::FIXED_STRING);
+        vector<string> queryExprSpecs = {"_b / c_"};
+        Pattern p3 = Pattern(param6, param7, queryExprSpecs);
+
+        vector<vector<string>> res = cache.findResult(p3);
         vector<vector<string>> expected = {};
         REQUIRE(equals(res, expected));
     }
@@ -226,11 +230,10 @@ TEST_CASE("Test Pattern Cache") {
     SECTION("Cache miss, While pattern") {
         Parameter param6 = Parameter("while", ParameterType::WHILE);
         Parameter param7 = Parameter("z", ParameterType::FIXED_STRING);
-        vector<string> exprSpecs = {"_"};
-        Pattern p3 = Pattern(param6, param7, exprSpecs);
-        shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
+        vector<string> queryExprSpecs = {"_"};
+        Pattern p3 = Pattern(param6, param7, queryExprSpecs);
 
-        vector<vector<string>> res = cache.findResult(pattern3);
+        vector<vector<string>> res = cache.findResult(p3);
         vector<vector<string>> expected = {};
         REQUIRE(equals(res, expected));
     }
@@ -239,12 +242,352 @@ TEST_CASE("Test Pattern Cache") {
     SECTION("Cache miss, If pattern") {
         Parameter param6 = Parameter("if", ParameterType::IF);
         Parameter param7 = Parameter("v", ParameterType::FIXED_STRING);
-        vector<string> exprSpecs = {"_", "_"};
-        Pattern p3 = Pattern(param6, param7, exprSpecs);
-        shared_ptr<Pattern> pattern3 = make_shared<Pattern>(p3);
+        vector<string> queryExprSpecs = {"_", "_"};
+        Pattern p3 = Pattern(param6, param7, queryExprSpecs);
 
-        vector<vector<string>> res = cache.findResult(pattern3);
+        vector<vector<string>> res = cache.findResult(p3);
         vector<vector<string>> expected = {};
         REQUIRE(equals(res, expected));
+    }
+}
+
+TEST_CASE("Test Attribute Cache") {
+    AttributeCache cache;
+
+    // call c;
+    // Select c.procName
+    Parameter p1 = Parameter("c", ParameterType::CALL, AttributeType::PROCNAME);
+
+    vector<vector<string>> cacheValue = {{"1", "main"}};
+    cache.addResult(p1, cacheValue);
+
+    // variable v;
+    // Select v.varName
+    Parameter p2 = Parameter("v", ParameterType::VARIABLE, AttributeType::VARNAME);
+
+    cacheValue = {{"var", "var"}};
+    cache.addResult(p2, cacheValue);
+
+    SECTION("Cache Hit") {
+        // call c;
+        // Select c.procName
+        SECTION("find c.procName") {
+            Parameter p3 = Parameter("c", ParameterType::CALL, AttributeType::PROCNAME);
+
+            vector<vector<string>> res = cache.findResult(p3);
+            vector<vector<string>> expected = {{"1", "main"}};
+            REQUIRE(equals(res, expected));
+        }
+
+        // call c1;
+        // Select c1.procName
+        SECTION("find c1.procName") {
+            Parameter p3 = Parameter("c1", ParameterType::CALL, AttributeType::PROCNAME);
+
+            vector<vector<string>> res = cache.findResult(p3);
+            vector<vector<string>> expected = {{"1", "main"}};
+            REQUIRE(equals(res, expected));
+        }
+
+        // variable v1;
+        // Select v1.varName
+        SECTION("find c1.procName") {
+            Parameter p3 = Parameter("v1", ParameterType::VARIABLE, AttributeType::VARNAME);
+
+            vector<vector<string>> res = cache.findResult(p3);
+            vector<vector<string>> expected = {{"var", "var"}};
+            REQUIRE(equals(res, expected));
+        }
+    }
+
+    SECTION("Cache Miss") {
+        // call c;
+        // Select c.stmt#
+        SECTION("find c.stmt#") {
+            Parameter p3 = Parameter("c", ParameterType::CALL, AttributeType::STMTNO);
+
+            vector<vector<string>> res = cache.findResult(p3);
+            REQUIRE(res.empty());
+        }
+
+        // print c;
+        // Select c.varName
+        SECTION("find c.varName") {
+            Parameter p3 = Parameter("c", ParameterType::PRINT, AttributeType::VARNAME);
+
+            vector<vector<string>> res = cache.findResult(p3);
+            REQUIRE(res.empty());
+        }
+
+        // constant c;
+        // Select c.value
+        SECTION("find c.value") {
+            Parameter p3 = Parameter("c", ParameterType::CONSTANT, AttributeType::VALUE);
+
+            vector<vector<string>> res = cache.findResult(p3);
+            REQUIRE(res.empty());
+        }
+    }
+}
+
+TEST_CASE("Test Comparison Cache") {
+    ComparisonCache cache;
+    // with "1" = "1"
+    Parameter param1 = Parameter("1", ParameterType::FIXED_INT, AttributeType::NONE);
+    Parameter param2 = Parameter("1", ParameterType::FIXED_INT, AttributeType::NONE);
+    Comparison c1 = Comparison(ComparisonOperator::EQUALS, param1, param2);
+
+    vector<vector<string>> cacheValue = {{"1", "1"}};
+    cache.addResult(c1, cacheValue);
+
+    // with pn.stmt# = "1"
+    Parameter param5 = Parameter("pn", ParameterType::PRINT, AttributeType::STMTNO);
+    Parameter param6 = Parameter("1", ParameterType::FIXED_INT, AttributeType::NONE);
+    Comparison c2 = Comparison(ComparisonOperator::EQUALS, param5, param6);
+
+    cacheValue = {{"1", "1"}};
+    cache.addResult(c2, cacheValue);
+
+    // with "var" = r.varName
+    Parameter param7 = Parameter("var", ParameterType::FIXED_STRING, AttributeType::NONE);
+    Parameter param8 = Parameter("r", ParameterType::READ, AttributeType::VARNAME);
+    Comparison c3 = Comparison(ComparisonOperator::EQUALS, param7, param8);
+
+    cacheValue = {{"var", "2"}};
+    cache.addResult(c3, cacheValue);
+
+    // with pn.varName = v.varName
+    Parameter param9 = Parameter("pn", ParameterType::PRINT, AttributeType::VARNAME);
+    Parameter param10 = Parameter("v", ParameterType::VARIABLE, AttributeType::VARNAME);
+    Comparison c4 = Comparison(ComparisonOperator::EQUALS, param9, param10);
+
+    cacheValue = {{"1", "var"}};
+    cache.addResult(c4, cacheValue);
+
+    SECTION("Fixed = Fixed") {
+        SECTION("Cache hit") {
+            SECTION("find with \"1\" = \"1\"") {
+                Parameter param3 = Parameter("1", ParameterType::FIXED_INT, AttributeType::NONE);
+                Parameter param4 = Parameter("1", ParameterType::FIXED_INT, AttributeType::NONE);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                vector<vector<string>> expected = {{"1", "1"}};
+                REQUIRE(equals(res, expected));
+            }
+        }
+
+        SECTION("Cache miss") {
+            SECTION("find with \"1\" = \"2\"") {
+                Parameter param3 = Parameter("1", ParameterType::FIXED_INT, AttributeType::NONE);
+                Parameter param4 = Parameter("2", ParameterType::FIXED_INT, AttributeType::NONE);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+
+            SECTION("find with \"hello\" = \"2\"") {
+                Parameter param3 = Parameter("hello", ParameterType::FIXED_STRING, AttributeType::NONE);
+                Parameter param4 = Parameter("2", ParameterType::FIXED_INT, AttributeType::NONE);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+        }
+    }
+
+    SECTION("Param = Fixed") {
+        SECTION("Cache hit") {
+            SECTION("find with pn.stmt# = \"1\"") {
+                Parameter param3 = Parameter("pn", ParameterType::PRINT, AttributeType::STMTNO);
+                Parameter param4 = Parameter("1", ParameterType::FIXED_INT, AttributeType::NONE);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                vector<vector<string>> expected = {{"1", "1"}};
+                REQUIRE(equals(res, expected));
+            }
+
+            SECTION("find with pn1.stmt# = \"1\"") {
+                Parameter param3 = Parameter("pn", ParameterType::PRINT, AttributeType::STMTNO);
+                Parameter param4 = Parameter("1", ParameterType::FIXED_INT, AttributeType::NONE);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                vector<vector<string>> expected = {{"1", "1"}};
+                REQUIRE(equals(res, expected));
+            }
+        }
+
+        SECTION("Cache miss") {
+            SECTION("find with pn.stmt# = \"3\"") {
+                Parameter param3 = Parameter("pn", ParameterType::PRINT, AttributeType::STMTNO);
+                Parameter param4 = Parameter("3", ParameterType::FIXED_INT, AttributeType::NONE);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+
+            SECTION("find with pn.varName = \"1\"") {
+                Parameter param3 = Parameter("pn", ParameterType::PRINT, AttributeType::VARNAME);
+                Parameter param4 = Parameter("1", ParameterType::FIXED_INT, AttributeType::NONE);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+
+            SECTION("find with pn.stmt# = \"1\", pn is stmt instead of print") {
+                Parameter param3 = Parameter("pn", ParameterType::STMT, AttributeType::STMTNO);
+                Parameter param4 = Parameter("1", ParameterType::FIXED_INT, AttributeType::NONE);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+        }
+    }
+
+    SECTION("Fixed = Param") {
+        // with "var1" = "var1"
+        Parameter param11 = Parameter("var1", ParameterType::FIXED_STRING, AttributeType::NONE);
+        Parameter param12 = Parameter("var1", ParameterType::FIXED_STRING, AttributeType::NONE);
+        Comparison c6 = Comparison(ComparisonOperator::EQUALS, param11, param12);
+
+        cacheValue = {{"var1", "var1"}};
+        cache.addResult(c6, cacheValue);
+        SECTION("Cache hit") {
+            SECTION("find with \"var\" = r.varName") {
+                Parameter param3 = Parameter("var", ParameterType::FIXED_STRING, AttributeType::NONE);
+                Parameter param4 = Parameter("r", ParameterType::READ, AttributeType::VARNAME);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                vector<vector<string>> expected = {{"var", "2"}};
+                REQUIRE(equals(res, expected));
+            }
+
+            SECTION("find with \"var\" = r1.varName") {
+                Parameter param3 = Parameter("var", ParameterType::FIXED_STRING, AttributeType::NONE);
+                Parameter param4 = Parameter("r1", ParameterType::READ, AttributeType::VARNAME);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                vector<vector<string>> expected = {{"var", "2"}};
+                REQUIRE(equals(res, expected));
+            }
+        }
+
+        SECTION("Cache miss") {
+            SECTION("find with \"var1\" = r.varName") {
+                Parameter param3 = Parameter("var1", ParameterType::FIXED_STRING, AttributeType::NONE);
+                Parameter param4 = Parameter("r", ParameterType::READ, AttributeType::VARNAME);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+
+            SECTION("find with \"var\" = r.varName, r is a print statement") {
+                Parameter param3 = Parameter("var", ParameterType::FIXED_STRING, AttributeType::NONE);
+                Parameter param4 = Parameter("r", ParameterType::PRINT, AttributeType::VARNAME);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+
+            SECTION("find with \"var1\" = var1.varName") {
+                Parameter param3 = Parameter("var1", ParameterType::FIXED_STRING, AttributeType::NONE);
+                Parameter param4 = Parameter("var1", ParameterType::READ, AttributeType::VARNAME);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+        }
+    }
+
+    SECTION("Param = Param") {
+        SECTION("Cache hit") {
+            SECTION("find with pn.varName = v.varName") {
+                Parameter param3 = Parameter("pn", ParameterType::PRINT, AttributeType::VARNAME);
+                Parameter param4 = Parameter("v", ParameterType::VARIABLE, AttributeType::VARNAME);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                vector<vector<string>> expected = {{"1", "var"}};
+                REQUIRE(equals(res, expected));
+            }
+
+            SECTION("find with pn1.varName = v1.varName") {
+                Parameter param3 = Parameter("pn1", ParameterType::PRINT, AttributeType::VARNAME);
+                Parameter param4 = Parameter("v1", ParameterType::VARIABLE, AttributeType::VARNAME);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                vector<vector<string>> expected = {{"1", "var"}};
+                REQUIRE(equals(res, expected));
+            }
+        }
+
+        SECTION("Cache miss") {
+            SECTION("find with pn.varName = r.varName, pn is a variable") {
+                Parameter param3 = Parameter("pn", ParameterType::VARIABLE, AttributeType::VARNAME);
+                Parameter param4 = Parameter("r", ParameterType::READ, AttributeType::VARNAME);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+
+            SECTION("find with pn.varName = pn.varName") {
+                Parameter param3 = Parameter("pn", ParameterType::PRINT, AttributeType::VARNAME);
+                Parameter param4 = Parameter("pn", ParameterType::PRINT, AttributeType::VARNAME);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+
+            SECTION("find with pn.varName = r.varName, r is print statement") {
+                Parameter param3 = Parameter("pn", ParameterType::PRINT, AttributeType::VARNAME);
+                Parameter param4 = Parameter("r", ParameterType::PRINT, AttributeType::VARNAME);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+
+            SECTION("find with pn.varName = r.stmt#") {
+                Parameter param3 = Parameter("pn", ParameterType::PRINT, AttributeType::VARNAME);
+                Parameter param4 = Parameter("r", ParameterType::READ, AttributeType::STMTNO);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+
+            SECTION("find with pn.stmt# = r.varName") {
+                Parameter param3 = Parameter("pn", ParameterType::PRINT, AttributeType::STMTNO);
+                Parameter param4 = Parameter("r", ParameterType::READ, AttributeType::VARNAME);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+
+            SECTION("find with pn.stmt# = r.varName") {
+                Parameter param3 = Parameter("pn", ParameterType::PRINT, AttributeType::STMTNO);
+                Parameter param4 = Parameter("r", ParameterType::READ, AttributeType::VARNAME);
+                Comparison c5 = Comparison(ComparisonOperator::EQUALS, param3, param4);
+
+                vector<vector<string>> res = cache.findResult(c5);
+                REQUIRE(res.empty());
+            }
+        }
     }
 }

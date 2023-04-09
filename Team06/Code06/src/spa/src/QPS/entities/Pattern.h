@@ -10,18 +10,24 @@ public:
     Parameter patternSyn;
     Parameter entRef;
     vector<string> exprSpecs;
+    double evalPriority;
     Pattern();
     Pattern(const Pattern&);
     Pattern(Parameter, Parameter, vector<string>&);
     static Pattern makePattern(Parameter, Parameter, vector<string>&);
-    Parameter* getPatternSyn();
-    Parameter* getEntRef();
-    vector<string> getExprSpecs();
+    vector<Parameter*> getAllUncheckedSynonyms();
+    const Parameter& getPatternSyn() const;
+    const Parameter& getEntRef() const;
+    vector<string> getExprSpecs() const;
     bool validateParams();
-    ParameterType getPatternType();
-    ParameterType getEntRefType();
-    std::string getEntRefValue();
+    ParameterType getPatternType() const;
+    ParameterType getEntRefType() const;
+    std::string getEntRefValue() const;
+    bool hasSyntacticEntityRef() const;
     bool operator==(const Pattern&) const;
+    bool operator>(const Pattern&) const;
+    bool operator<(const Pattern&) const;
+    double calcPriority();
 
 private:
     static const unordered_map<int, shared_ptr<SyntaxValidator<Pattern>>> paramCountToValidatorMap;

@@ -4,8 +4,5 @@ BinaryConditionalExpression::BinaryConditionalExpression() : condOperator(), lhs
 
 BinaryConditionalExpression::BinaryConditionalExpression(Operator condOperator,
                                                          std::unique_ptr<ConditionalExpression> lhs,
-                                                         std::unique_ptr<ConditionalExpression> rhs) {
-    this->condOperator = condOperator;
-    this->lhs = std::move(lhs);
-    this->rhs = std::move(rhs);
-}
+                                                         std::unique_ptr<ConditionalExpression> rhs)
+    : condOperator(condOperator), lhs(std::move(lhs)), rhs(std::move(rhs)) {}

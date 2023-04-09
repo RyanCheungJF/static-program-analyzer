@@ -6,7 +6,7 @@ using namespace std;
 
 class Exception : public exception {
 protected:
-    string errorMessage = "the programmer was too lazy to write a custom error message";
+    string errorMessage = "An exception has occurred";
 
 public:
     Exception();

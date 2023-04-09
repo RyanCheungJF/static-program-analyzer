@@ -56,6 +56,10 @@ public:
     inline static const std::string AFFECTS = "Affects";
     inline static const std::string AFFECTST = "Affects*";
 
+    // clause early returns
+    inline static const bool IS_EARLY_RETURN = true;
+    inline static const std::vector<std::vector<std::string>> EARLY_RETURN_RES = {{"-1", "-1"}};
+
     // comparisons
     inline static const std::string OP_EQUALS = "=";
 
@@ -105,5 +109,13 @@ public:
     inline static const int NOT_USED_FIELD = -1;
     inline static const int DUMMY_NODE = 0;
     inline static const std::string PROCEDURE_DOES_NOT_EXIST = "procedure does not exist";
-    inline static const int IS_FIND_CHILDREN = true;
+
+    // EvalPriority related
+    inline static const double wildcardWeight = 100;
+    inline static const double wildcardWeightEarlyReturn = 9999;
+    inline static const double stmtWeight = 100;
+    inline static const double fixedValWeight = 10000;
+    inline static const double otherWeight = 1000;
+    inline static const double typeWeight = 1;
+    inline static const double highestPriority = 100000;
 };

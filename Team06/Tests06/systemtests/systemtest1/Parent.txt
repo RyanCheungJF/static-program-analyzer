@@ -608,3 +608,8 @@ stmt s, s1; read r, r1; print pn, pn1; call c, c1; while w, w1; if i, i1; assign
 Select a such that Parent(a, a)
 none
 5000
+123 - parent is 0
+stmt s;
+Select s such that Parent(0, 1)
+none
+5000

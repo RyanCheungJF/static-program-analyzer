@@ -43,8 +43,6 @@ TEST_CASE("Check that if a statement does not exist, t returns false") {
 
 TEST_CASE("Check that given a Stmt and its StmtNum, a query for an non-existent Stmt returns false") {
     StmtStorage sts;
-
-    Stmt s = AppConstants::IF;
     REQUIRE(!sts.checkStatement(AppConstants::WHILE, 4));
 }
 

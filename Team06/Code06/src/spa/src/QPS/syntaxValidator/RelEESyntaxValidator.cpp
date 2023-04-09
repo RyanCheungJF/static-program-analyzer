@@ -5,10 +5,10 @@ bool RelEESyntaxValidator::validate(Relationship& rel) {
     if (ps.size() != 2) {
         throw SyntaxException();
     }
-    if (!Parameter::isSyntacticEntityRef(ps[0])) {
+    if (!ps[0].isSyntacticEntityRef()) {
         throw SyntaxException();
     }
-    if (!Parameter::isSyntacticEntityRef(ps[1])) {
+    if (!ps[1].isSyntacticEntityRef()) {
         throw SyntaxException();
     }
     return true;

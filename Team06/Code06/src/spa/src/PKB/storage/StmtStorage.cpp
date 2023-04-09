@@ -3,7 +3,7 @@
 void StmtStorage::writeStatement(Stmt s, StmtNum line) {
     stmt_stmtNum[AppConstants::STMT].insert(line);
     stmt_stmtNum[s].insert(line);
-    stmtNum_stmt[line].insert(s);
+    stmtNum_stmt[line] = s;
     return;
 }
 
@@ -21,9 +21,9 @@ std::unordered_set<StmtNum>& StmtStorage::getStatementNumbers(Stmt s) {
     return stmt_stmtNum[s];
 }
 
-std::unordered_set<Stmt>& StmtStorage::getStatementType(StmtNum num) {
+Stmt StmtStorage::getStatementType(StmtNum num) {
     if (stmtNum_stmt.find(num) == stmtNum_stmt.end()) {
-        return emptyStmt;
+        return "";
     }
     return stmtNum_stmt[num];
 }

@@ -136,10 +136,6 @@ bool isWildCard(string s) {
     return trim(s) == "_";
 }
 
-bool isStmtRef(string stmtRef) {
-    return isSynonym(stmtRef) || isInteger(stmtRef) || isWildCard(stmtRef);
-}
-
 bool isEntRef(string entRef) {
     return isSynonym(entRef) || isWildCard(entRef) || isFixedString(entRef);
 }

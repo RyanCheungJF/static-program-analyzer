@@ -10,7 +10,7 @@ void PatternWithExprStorage::writePattern(std::string lhs, StmtNum num, std::uni
 std::unordered_set<std::pair<int, std::unique_ptr<Expression>>, hashFunction>*
 PatternWithExprStorage::getPatternWithLHS(std::string lhs) {
     if (lhs_stmtNum_rhsPostfix.find(lhs) == lhs_stmtNum_rhsPostfix.end()) {
-        return NULL;
+        return nullptr;
     }
     return &lhs_stmtNum_rhsPostfix.at(lhs);
 }
