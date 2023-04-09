@@ -3,7 +3,7 @@
 QPSParser::QPSParser() {}
 
 vector<Query> QPSParser::parse(string qpsQuery) {
-    // split the code
+    // split the query
     vector<string> queryStatements = splitQuery(qpsQuery);
     SelectQueryParser selectQueryParser;
     vector<Query> queryVec;
