@@ -4,7 +4,10 @@
 
 .vscode/
 
+# local
 check-local-macos.py
+standardised.txt
+run2.sh
 
 ### C++ ###
 # Prerequisites
