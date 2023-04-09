@@ -17,7 +17,7 @@ vector<int> findPattern(const vector<string>& wordList);
 vector<int> findWith(const vector<string>& wordList);
 vector<int> findAnds(const vector<string>& wordList, int start, int end);
 tuple<string, vector<string>> extractParameters(string s, string containerStart, string containerEnd, string delimiter);
-tuple<string, size_t, bool> extractSubStringUntilDelimiter(const string& original, int start, string delimiter);
+tuple<string, size_t, bool> extractSubStringUntilDelimiter(const string& original, size_t start, string delimiter);
 vector<string> stringToWordList(string s);
 vector<string> stringToWordListByDelimiter(string original, string delimiter);
 string trim(const string&);

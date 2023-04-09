@@ -72,7 +72,7 @@ bool hasCorrectAttrCompForm(string s) {
     }
     string leftParamString, rightParamString;
     bool found;
-    int next;
+    size_t next;
     tie(leftParamString, next, found) = extractSubStringUntilDelimiter(s, 0, AppConstants::OP_EQUALS);
     if (!found || next >= s.size()) {
         return false;
@@ -270,7 +270,7 @@ bool isAttrRef(string s) {
     }
     string delimiter = ".";
     bool found;
-    int nextStart;
+    size_t nextStart = 0;
     string name, attribute;
     tie(name, nextStart, found) = extractSubStringUntilDelimiter(s, 0, delimiter);
     if (!found) {

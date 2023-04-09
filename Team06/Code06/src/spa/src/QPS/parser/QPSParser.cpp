@@ -46,7 +46,7 @@ vector<string> QPSParser::splitQuery(string qpsQuery) {
     }
     string delimiter = AppConstants::STRING_SEMICOLON;
     vector<string> clauses;
-    int start = 0;
+    size_t start = 0;
     bool found;
     do {
         if (start >= qpsQuery.length()) {
