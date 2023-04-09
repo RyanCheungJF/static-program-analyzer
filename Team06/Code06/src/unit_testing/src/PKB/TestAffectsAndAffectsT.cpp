@@ -1055,18 +1055,6 @@ TEST_CASE("findRelationship(shared_ptr<Relationship> rs): Affects & Affects* Tem
      * v = e; //11
      * g = a; //12
      *
-     *
-     *
-     * Valid Affects relationships:
-     * (1, 6), (1, 8) [issue], (1, 12) [issue?]
-     * (5, 10)
-     * (6, 8)
-     * (8, 12)
-     * (10, 11)
-     *
-     * Valid Affects* relationships:
-     *
-     *
      */
 
     WritePKB writePkb;

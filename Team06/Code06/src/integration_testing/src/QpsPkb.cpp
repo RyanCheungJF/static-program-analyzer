@@ -1169,8 +1169,6 @@ TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
         print pn;
         Select <pn, c, v> such that Uses(pn,v) and Uses(pr, v))";
 
-        // Select <p, c, v> such that Uses(p,v) and Uses(p, v)";
-
         result = qps.processQueries(query, readPkb);
         REQUIRE(exists(result, "7 2 x"));
         REQUIRE(exists(result, "7 12 x"));
