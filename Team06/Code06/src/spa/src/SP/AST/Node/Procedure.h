@@ -11,10 +11,10 @@ public:
     Procedure();
     Procedure(ProcName procedureName, std::unique_ptr<StatementList> statementList);
 
-    Statement* getLastStatement();
-    StmtNum getLastStatementNumber();
-    StmtNum getFirstStatementNumber();
-    std::vector<std::unique_ptr<Statement>>& getStatements();
+    Statement* getLastStatement() const;
+    StmtNum getLastStatementNumber() const;
+    StmtNum getFirstStatementNumber() const;
+    std::vector<std::unique_ptr<Statement>>& getStatements() const;
 
     void accept(ASTVisitor* visitor) override;
 };

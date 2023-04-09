@@ -1195,7 +1195,6 @@ TEST_CASE("Select synonym from multi clause, synonym is NOT in both clauses") {
     }
 
     SECTION("intersection results in empty table with select BOOLEAN") {
-        // Should return FALSE
         string query = R"(
         stmt s1;
         Select BOOLEAN such that Follows(s1, 3) and Follows(s1, 8) )";

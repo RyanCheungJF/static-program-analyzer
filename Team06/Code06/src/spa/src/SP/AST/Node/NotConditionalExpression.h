@@ -9,5 +9,5 @@ public:
     std::unique_ptr<ConditionalExpression> condExpr;
 
     NotConditionalExpression();
-    NotConditionalExpression(std::unique_ptr<ConditionalExpression> condExpr);
+    explicit NotConditionalExpression(std::unique_ptr<ConditionalExpression> condExpr);
 };

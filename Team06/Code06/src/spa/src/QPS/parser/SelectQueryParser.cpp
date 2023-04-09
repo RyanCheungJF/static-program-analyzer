@@ -241,9 +241,9 @@ vector<ClauseType> SelectQueryParser::getAllClauseTypes() {
 
 Parameter SelectQueryParser::parseParameter(string paramString) {
     string paramName;
-    int index;
+    size_t index = 0;
     bool found;
-    tie(paramName, index, found) = extractSubStringUntilDelimiter(trim(paramString), 0, ".");
+    tie(paramName, index, found) = extractSubStringUntilDelimiter(trim(paramString), index, ".");
     if (!found) {
         return Parameter::makeParameter(paramName);
     }

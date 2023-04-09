@@ -1,6 +1,6 @@
 #pragma once
 
-#define CAST_TO(ASTNodeType, value) dynamic_cast<ASTNodeType*>(value)
+#define CAST_TO(ASTNodeType, value) (dynamic_cast<ASTNodeType*>(value))
 
 // general entry point of programs
 class Program;

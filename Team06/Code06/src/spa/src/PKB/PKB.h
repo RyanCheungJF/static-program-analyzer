@@ -185,19 +185,19 @@ private:
 
     // MAPS
     std::unordered_map<RelationshipType, std::shared_ptr<RelationshipStorage<StmtNum, StmtNum>>> followsParentMap = {
-        {RelationshipType::FOLLOWS, NULL},
-        {RelationshipType::FOLLOWST, NULL},
-        {RelationshipType::PARENT, NULL},
-        {RelationshipType::PARENTT, NULL}};
+        {RelationshipType::FOLLOWS, nullptr},
+        {RelationshipType::FOLLOWST, nullptr},
+        {RelationshipType::PARENT, nullptr},
+        {RelationshipType::PARENTT, nullptr}};
 
     std::unordered_map<RelationshipType, std::shared_ptr<ModifiesUsesStorage>> modifiesUsesMap = {
-        {RelationshipType::MODIFIES, NULL}, {RelationshipType::USES, NULL}};
+        {RelationshipType::MODIFIES, nullptr}, {RelationshipType::USES, nullptr}};
 
     std::unordered_map<ParameterType, std::shared_ptr<PatternStorage>> ifWhilePatternMap = {
-        {ParameterType::IF, NULL}, {ParameterType::WHILE, NULL}};
+        {ParameterType::IF, nullptr}, {ParameterType::WHILE, nullptr}};
 
     std::unordered_map<RelationshipType, std::shared_ptr<RelationshipStorage<Ent, Ent>>> callsMap = {
-        {RelationshipType::CALLS, NULL}, {RelationshipType::CALLST, NULL}};
+        {RelationshipType::CALLS, nullptr}, {RelationshipType::CALLST, nullptr}};
 
     std::unordered_set<RelationshipType> nextMap = {RelationshipType::NEXT, RelationshipType::NEXTT};
     std::unordered_set<RelationshipType> affectsMap = {RelationshipType::AFFECTS, RelationshipType::AFFECTST};

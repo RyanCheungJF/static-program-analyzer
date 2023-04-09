@@ -9,11 +9,11 @@ WhileStatement::WhileStatement(StmtNum stmtNum, std::unique_ptr<ConditionalExpre
     this->stmtList = std::move(stmtList);
 }
 
-std::vector<std::unique_ptr<Statement>>& WhileStatement::getStatements() {
+std::vector<std::unique_ptr<Statement>>& WhileStatement::getStatements() const {
     return stmtList->statements;
 }
 
-StmtNum WhileStatement::getFirstStmtNumForList() {
+StmtNum WhileStatement::getFirstStmtNumForList() const {
     return stmtList->statements[0]->statementNumber;
 }
 

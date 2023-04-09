@@ -9,5 +9,5 @@ public:
     Ent name;
 
     Variable();
-    Variable(Ent name);
+    explicit Variable(Ent name);
 };

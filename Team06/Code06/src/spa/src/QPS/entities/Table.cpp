@@ -49,6 +49,7 @@ void Table::cartesianProduct(Table& table) {
     const vector<vector<string>>& c2 = table.getContent();
     vector<vector<string>> c3;
     headers.insert(headers.end(), h2.begin(), h2.end());
+    c3.reserve(c1.size() * c2.size());
     for (const vector<string>& row1 : c1) {
         for (const vector<string>& row2 : c2) {
             // duplicates the row
@@ -82,27 +83,27 @@ vector<vector<string>> Table::intersectContent(const vector<vector<string>>& c1,
     for (const pair<int, int>& intersectingIndex : intersectingIndexes) {
         indexesToRemove.push_back(intersectingIndex.first);
     }
-    for (int i = 0; i < c2.size(); i++) {
+    for (const auto& row : c2) {
         string key;
         for (const pair<int, int>& intersectingIndex : intersectingIndexes) {
             if (key.empty()) {
-                key += c2[i][intersectingIndex.second];
+                key += row[intersectingIndex.second];
             }
             else {
-                key += AppConstants::STRING_PLUS + c2[i][intersectingIndex.second];
+                key += AppConstants::STRING_PLUS + row[intersectingIndex.second];
             }
         }
         auto range = hashmap.equal_range(key);
         for (auto it = range.first; it != range.second; ++it) {
-            vector<vector<string>>::value_type row;
+            vector<vector<string>>::value_type newRow;
             // Insert values to row
-            row.insert(row.end(), c1[it->second].begin(), c1[it->second].end());
-            row.insert(row.end(), c2[i].begin(), c2[i].end());
+            newRow.insert(newRow.end(), c1[it->second].begin(), c1[it->second].end());
+            newRow.insert(newRow.end(), row.begin(), row.end());
             for (int k = int(indexesToRemove.size()); k > 0; k--) {
-                row.erase(row.begin() + indexesToRemove[k - 1]);
+                newRow.erase(newRow.begin() + indexesToRemove[k - 1]);
             }
             // Push the row
-            result.push_back(row);
+            result.push_back(newRow);
         }
     }
     return result;
@@ -244,6 +245,7 @@ vector<string> Table::getResult(vector<Parameter>& params) {
             }
         }
     }
+    res.reserve(contents.size());
     for (const vector<string>& stringVec : contents) {
         string row;
         for (int index : indexOrder) {

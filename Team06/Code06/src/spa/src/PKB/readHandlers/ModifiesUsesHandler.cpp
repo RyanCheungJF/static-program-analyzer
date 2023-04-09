@@ -30,6 +30,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleIntWildcard(Par
         return AppConstants::EARLY_RETURN_RES;
     }
 
+    res.reserve(entities.size());
     for (Ent entity : entities) {
         res.push_back({fixedIntString, entity});
     }
@@ -58,6 +59,7 @@ std::vector<std::vector<std::string>> ModifiesUsesHandler::handleProcWildcard(Pa
         return AppConstants::EARLY_RETURN_RES;
     }
 
+    res.reserve(entities.size());
     for (Ent entity : entities) {
         res.push_back({fixedProc, entity});
     }

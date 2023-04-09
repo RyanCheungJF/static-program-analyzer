@@ -11,7 +11,7 @@ std::unique_ptr<Program> Parser::parseProgram(std::deque<Token> tokens) {
         procedureList.push_back(parseProcedure(tokens));
     }
 
-    if (procedureList.size() == 0) {
+    if (procedureList.empty()) {
         throw SyntaxErrorException("Program should contain at least one procedure");
     }
 
@@ -48,7 +48,7 @@ std::unique_ptr<StatementList> Parser::parseStatementList(std::deque<Token>& tok
         statements.push_back(parseStatement(tokens));
     }
 
-    if (statements.size() == 0) {
+    if (statements.empty()) {
         throw SyntaxErrorException("Statement list should contain at least one statement");
     }
 

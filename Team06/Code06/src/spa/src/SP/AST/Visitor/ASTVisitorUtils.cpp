@@ -5,9 +5,9 @@ StmtNum visitLastStatementHelper(Statement* statement) {
         auto statementList = ifStmt->elseStmtList.get();
         return checkLastStatementHelper(statementList);
     }
-
-    if (const auto whileStmt = CAST_TO(WhileStatement, statement)) {
-        auto statementList = whileStmt->stmtList.get();
+    else { // Else it must be a while statement
+        const auto whileStmt = CAST_TO(WhileStatement, statement);
+        auto statementList = whileStmt ? whileStmt->stmtList.get() : nullptr;
         return checkLastStatementHelper(statementList);
     }
 }

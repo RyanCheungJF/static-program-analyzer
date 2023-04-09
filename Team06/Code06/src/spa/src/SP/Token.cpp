@@ -1,14 +1,14 @@
 #include "Token.h"
 
-Token::Token(TokenType type, std::string value) : type(type), value(value) {}
+Token::Token(TokenType type, std::string value) : type(std::move(type)), value(std::move(value)) {}
 
-Token::Token(TokenType type) : type(type), value() {}
+Token::Token(TokenType type) : type(std::move(type)), value() {}
 
-bool Token::isType(TokenType tt) {
+bool Token::isType(const TokenType& tt) const {
     return type == tt;
 }
 
-bool Token::hasValue(std::string val) {
+bool Token::hasValue(const std::string& val) const {
     return value == val;
 }
 

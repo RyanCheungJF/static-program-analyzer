@@ -12,8 +12,8 @@ private:
     std::unordered_map<ProcName, std::unordered_set<ProcName>> procCallMap;
 
     void buildCallerCalleeTable();
-    void recurseCallStatementHelper(Statement* recurseStmt, ProcName parentProcedure);
-    void checkCallStatementHelper(std::vector<std::unique_ptr<Statement>>& statements, ProcName parentProcedure);
+    void recurseCallStatementHelper(Statement* recurseStmt, const ProcName& parentProcedure);
+    void checkCallStatementHelper(std::vector<std::unique_ptr<Statement>>& statements, const ProcName& parentProcedure);
     void validateNoDuplicateProcedureName();
     void validateCalledProceduresExist();
     std::vector<ProcName> validateNoCycles();

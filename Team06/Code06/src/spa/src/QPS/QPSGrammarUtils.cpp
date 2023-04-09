@@ -72,7 +72,7 @@ bool hasCorrectAttrCompForm(string s) {
     }
     string leftParamString, rightParamString;
     bool found;
-    int next;
+    size_t next;
     tie(leftParamString, next, found) = extractSubStringUntilDelimiter(s, 0, AppConstants::OP_EQUALS);
     if (!found || next >= s.size()) {
         return false;
@@ -154,19 +154,23 @@ bool isExprSpec(string s) {
         if (s.size() < 5) {
             return false;
         }
-        // This will get rid of _" and "_
-        // If s = _"X+Y"_ then expr = X+Y
-        string expr = s.substr(1, s.size() - 2);
-        return isExprSpec(expr);
+        // This will get rid of _ and _
+        // If s = _"X+Y"_ then expr = "X+Y"
+        s = s.substr(1, s.size() - 2);
     }
+    return isExprWithQuotes(s);
+}
+
+bool isExprWithQuotes(string s) {
+    s = trim(s);
     bool startsWithQuotation = regex_search(s, regex("^\""));
     bool endsWithQuotation = regex_search(s, regex("\"$"));
     if (startsWithQuotation && endsWithQuotation) {
         if (s.size() < 3) {
             return false;
         }
-        // This will get rid of _" and "_
-        // If s = _"X+Y"_ then expr = X+Y
+        // This will get rid of " and "
+        // If s = "X+Y" then expr = X+Y
         string expr = s.substr(1, s.size() - 2);
         return isExpr(expr);
     }
@@ -270,7 +274,7 @@ bool isAttrRef(string s) {
     }
     string delimiter = ".";
     bool found;
-    int nextStart;
+    size_t nextStart = 0;
     string name, attribute;
     tie(name, nextStart, found) = extractSubStringUntilDelimiter(s, 0, delimiter);
     if (!found) {

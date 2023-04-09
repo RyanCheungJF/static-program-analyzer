@@ -106,7 +106,7 @@ tuple<string, vector<string>> extractParameters(string s, string containerStart,
     s = trim(s);
     tuple<string, vector<string>> res;
     int endOfString = s.size();
-    int curIndex = 0;
+    size_t curIndex = 0;
     string outerParam = "";
     vector<string> innerParams;
     bool found = false;
@@ -138,7 +138,7 @@ string removeCharFromString(string s, char c) {
     return s;
 }
 
-tuple<string, size_t, bool> extractSubStringUntilDelimiter(const string& original, int start, string delimiter) {
+tuple<string, size_t, bool> extractSubStringUntilDelimiter(const string& original, size_t start, string delimiter) {
     if (delimiter == "") {
         throw InternalException("Error: ParserUtils.extractSubStringUntilDelimiter bad delimiter");
     }
@@ -147,11 +147,11 @@ tuple<string, size_t, bool> extractSubStringUntilDelimiter(const string& origina
     }
     size_t end = original.find(delimiter, start);
     if (end == string::npos) {
-        return tuple<string, int, bool>(original.substr(start, original.size()), original.size(), false);
+        return tuple<string, size_t, bool>(original.substr(start, original.size()), original.size(), false);
     }
     size_t length = end - start;
     string substr = original.substr(start, length);
-    return tuple<string, int, bool>(substr, end + delimiter.size(), true);
+    return tuple<string, size_t, bool>(substr, end + delimiter.size(), true);
 }
 
 vector<string> stringToWordList(string s) {

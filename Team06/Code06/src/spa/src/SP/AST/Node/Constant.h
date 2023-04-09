@@ -9,5 +9,5 @@ public:
     Const value;
 
     Constant();
-    Constant(Const value);
+    explicit Constant(Const value);
 };

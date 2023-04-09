@@ -148,5 +148,5 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handle(Parameter& pa
             return handleWildcardWildcard();
         }
     }
-    return std::vector<std::vector<std::string>>();
+    return {};
 }

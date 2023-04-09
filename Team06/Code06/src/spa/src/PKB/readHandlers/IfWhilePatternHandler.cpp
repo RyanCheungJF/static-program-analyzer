@@ -20,6 +20,7 @@ std::vector<std::vector<std::string>> IfWhilePatternHandler::handleWildcard() {
     std::vector<StmtNum> stmtNums = stmtNumVarPairs.first;
     std::vector<Ent> vars = stmtNumVarPairs.second;
 
+    res.reserve(stmtNums.size());
     for (int i = 0; i < stmtNums.size(); i++) {
         res.push_back({std::to_string(stmtNums[i]), vars[i]});
     }

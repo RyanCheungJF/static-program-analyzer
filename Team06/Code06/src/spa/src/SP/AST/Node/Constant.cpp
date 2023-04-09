@@ -2,4 +2,4 @@
 
 Constant::Constant() : value() {}
 
-Constant::Constant(Const value) : value(value) {}
+Constant::Constant(Const value) : value(std::move(value)) {}

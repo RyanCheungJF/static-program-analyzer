@@ -8,10 +8,10 @@ private:
     WritePKB* writeApi;
     ReadPKB* readApi;
 
-    void processProcedures(std::vector<ProcName> topoOrder);
+    void processProcedures(const std::vector<ProcName>& topoOrder);
     void processContainerStatements();
 
 public:
     UsesModifiesExtractor(WritePKB* writePKB, ReadPKB* readPKB);
-    void extract(std::vector<ProcName> topoOrder);
+    void extract(const std::vector<ProcName>& topoOrder);
 };

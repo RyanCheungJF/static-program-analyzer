@@ -23,9 +23,9 @@ Relationship::Relationship(const Relationship& r) {
 
 vector<Parameter*> Relationship::getAllUncheckedSynonyms() {
     vector<Parameter*> synonyms;
-    for (int i = 0; i < params.size(); i++) {
-        if (params.at(i).isUncheckedSynonym()) {
-            synonyms.push_back(&params.at(i));
+    for (auto& param : params) {
+        if (param.isUncheckedSynonym()) {
+            synonyms.push_back(&param);
         }
     }
     return synonyms;
@@ -37,7 +37,7 @@ vector<Parameter> Relationship::getParameters() const {
 
 vector<ParameterType> Relationship::getParameterTypes() {
     vector<ParameterType> types;
-    for (auto param : params) {
+    for (auto& param : params) {
         types.push_back(param.getType());
     }
 
@@ -46,7 +46,7 @@ vector<ParameterType> Relationship::getParameterTypes() {
 
 vector<std::string> Relationship::getParameterValues() {
     vector<std::string> values;
-    for (auto param : params) {
+    for (auto& param : params) {
         values.push_back(param.getValue());
     }
 
@@ -81,8 +81,7 @@ double Relationship::calcPriority() {
     int othersCounter = 0; // subtype of stmt or procedure or variable
     int assignCounter = 0;
 
-    for (int i = 0; i < params.size(); i++) {
-        Parameter currParam = params.at(i);
+    for (auto& currParam : params) {
         if (currParam.isFixedValue()) {
             fixedValCounter++;
         }

@@ -32,6 +32,10 @@ for entry in src:
                     error = True
                     print(
                         '{}/{} has a test case which timeouts!'.format(entry, subentry))
+                elif xml_string.find(b'exception') != -1:
+                    error = True
+                    print(
+                        '{}/{} has a test case that has an exception!'.format(entry, subentry))
 
 if error:
     raise Exception('One or more system tests failed!')

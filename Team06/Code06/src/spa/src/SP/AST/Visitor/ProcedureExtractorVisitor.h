@@ -12,7 +12,7 @@ private:
     WritePKB* writeApi;
 
 public:
-    ProcedureExtractorVisitor(WritePKB* writePKB);
+    explicit ProcedureExtractorVisitor(WritePKB* writePKB);
 
     void visitProgram(Program* program) override;
     void visitProcedure(Procedure* procedure) override;

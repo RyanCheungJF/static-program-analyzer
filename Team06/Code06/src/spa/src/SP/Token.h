@@ -10,9 +10,9 @@ public:
     std::string value;
 
     Token(TokenType type, std::string value);
-    Token(TokenType type);
+    explicit Token(TokenType type);
 
-    bool isType(TokenType tt);
-    bool hasValue(std::string val);
+    bool isType(const TokenType& tt) const;
+    bool hasValue(const std::string& val) const;
     friend bool operator==(const Token& lhs, const Token& rhs);
 };

@@ -44,6 +44,7 @@ vector<string> QueryDB::fetch(vector<Parameter>& params, ReadPKB& readPKB) {
         if (!this->hasParameter(param) && param.getType() != ParameterType::BOOLEAN) {
             vector<vector<string>> contentVec = {};
             vector<string> content = readPKB.findDesignEntities(param);
+            contentVec.reserve(content.size());
             for (string& c : content) {
                 contentVec.push_back(std::move(vector<string>{c}));
             }

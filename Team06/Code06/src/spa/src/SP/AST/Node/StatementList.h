@@ -10,12 +10,12 @@ public:
     std::vector<std::unique_ptr<Statement>> statements;
 
     StatementList();
-    StatementList(std::vector<std::unique_ptr<Statement>> statements);
+    explicit StatementList(std::vector<std::unique_ptr<Statement>> statements);
 
-    Statement* getLastStatement();
-    StmtNum getLastStatementNumber();
-    Statement* getStmtForStmtIdx(int idx);
-    StmtNum getStmtNumForStmtIdx(int idx);
+    Statement* getLastStatement() const;
+    StmtNum getLastStatementNumber() const;
+    Statement* getStmtForStmtIdx(int idx) const;
+    StmtNum getStmtNumForStmtIdx(int idx) const;
 
     void accept(ASTVisitor* visitor) override;
 };

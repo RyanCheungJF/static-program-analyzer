@@ -10,7 +10,7 @@ private:
     void parentTHelper(Statement* statement);
 
 public:
-    ParentExtractorVisitor(WritePKB* writePKB);
+    explicit ParentExtractorVisitor(WritePKB* writePKB);
 
     void visitProgram(Program* program) override;
     void visitProcedure(Procedure* procedure) override;

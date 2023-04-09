@@ -14,7 +14,7 @@ private:
                              std::unordered_set<Const>& constants);
 
 public:
-    EntRefExtractorVisitor(WritePKB* writePKB);
+    explicit EntRefExtractorVisitor(WritePKB* writePKB);
 
     void visitProgram(Program* program) override;
     void visitProcedure(Procedure* procedure) override;

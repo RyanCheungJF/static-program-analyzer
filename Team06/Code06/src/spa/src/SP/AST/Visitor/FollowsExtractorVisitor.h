@@ -9,7 +9,7 @@ private:
     WritePKB* writeApi;
 
 public:
-    FollowsExtractorVisitor(WritePKB* writePKB);
+    explicit FollowsExtractorVisitor(WritePKB* writePKB);
 
     void visitProgram(Program* program) override;
     void visitProcedure(Procedure* procedure) override;

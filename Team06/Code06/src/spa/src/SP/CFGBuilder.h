@@ -11,6 +11,6 @@ private:
     void connectNodesForCFG(StmtNum curr, StmtNum next);
 
 public:
-    CFGBuilder(WritePKB* writePKB);
+    explicit CFGBuilder(WritePKB* writePKB);
     void buildCFG(Procedure* proc);
 };
