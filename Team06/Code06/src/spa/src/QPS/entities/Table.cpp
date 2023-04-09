@@ -31,7 +31,6 @@ bool Table::hasIntersectingParams(Table& t) {
 }
 
 vector<pair<int, int>> Table::getIntersectingIndex(Table& t2) {
-    // TODO: change this to accept only one table?
     vector<Parameter> h2 = t2.getHeaders();
     vector<pair<int, int>> result;
     for (int i = 0; i < headers.size(); i++) {
