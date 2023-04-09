@@ -19,46 +19,39 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleIntInt(Paramet
     return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleIntSyn(Parameter& param1, Parameter& param2) {
-    std::string paramString1 = param1.getValue();
+std::vector<std::vector<std::string>>
+FollowsParentHandler::handleOneIntOneSyn(Parameter &param1, Parameter &param2, bool isIntSyn) {
+
+    std::string paramString = isIntSyn ? param1.getValue() : param2.getValue();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum>& stmtNums = rlStorage->getRightItems(stoi(paramString1));
-    std::unordered_set<StmtNum>& typedStmtNums = stmtStorage->getStatementNumbers(param2.getTypeString());
+    std::unordered_set<StmtNum>& stmtNums = isIntSyn ? rlStorage->getRightItems(stoi(paramString)) :
+                                            rlStorage->getLeftItems(stoi(paramString));
+    
+    std::unordered_set<StmtNum>& typedStmtNums = isIntSyn ? stmtStorage->getStatementNumbers(param2.getTypeString()) :
+                                                 stmtStorage->getStatementNumbers(param1.getTypeString());
 
     for (StmtNum stmtNum : stmtNums) {
         if (typedStmtNums.find(stmtNum) != typedStmtNums.end()) {
-            std::string stmtNumString = to_string(stmtNum);
-            res.push_back({paramString1, stmtNumString});
+            std::string stmtNumString = std::to_string(stmtNum);
+
+            isIntSyn ? res.push_back({paramString, stmtNumString}) : res.push_back({stmtNumString, paramString});
         }
     }
     return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleIntWildcard(Parameter& param1) {
-    std::string paramString1 = param1.getValue();
+std::vector<std::vector<std::string>>
+FollowsParentHandler::handleOneIntOneWildcard(Parameter &param1, Parameter& param2, bool isIntWildcard) {
+
+    std::string paramString = isIntWildcard ? param1.getValue() : param2.getValue();
     std::vector<std::vector<std::string>> res;
 
-    std::unordered_set<StmtNum>& stmtNums = rlStorage->getRightItems(stoi(paramString1));
+    std::unordered_set<StmtNum>& stmtNums = isIntWildcard ? rlStorage->getRightItems(stoi(paramString)) :
+                                            rlStorage->getLeftItems(stoi(paramString));
 
     if (!stmtNums.empty()) {
         return AppConstants::EARLY_RETURN_RES;
-    }
-    return res;
-}
-
-std::vector<std::vector<std::string>> FollowsParentHandler::handleSynInt(Parameter& param1, Parameter& param2) {
-    std::string paramString2 = param2.getValue();
-    std::vector<std::vector<std::string>> res;
-
-    std::unordered_set<StmtNum>& stmtNums = rlStorage->getLeftItems(stoi(paramString2));
-    std::unordered_set<StmtNum>& typedStmtNums = stmtStorage->getStatementNumbers(param1.getTypeString());
-
-    for (StmtNum stmtNum : stmtNums) {
-        if (typedStmtNums.find(stmtNum) != typedStmtNums.end()) {
-            std::string stmtNumString = to_string(stmtNum);
-            res.push_back({stmtNumString, paramString2});
-        }
     }
     return res;
 }
@@ -77,8 +70,8 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynSyn(Paramet
     for (auto stmtNum : typedStmtNums1) {
         for (StmtNum follower : rlStorage->getRightItems(stmtNum)) {
             if (typedStmtNums2.find(follower) != typedStmtNums2.end()) {
-                std::string stmtNumString1 = to_string(stmtNum);
-                std::string stmtNumString2 = to_string(follower);
+                std::string stmtNumString1 = std::to_string(stmtNum);
+                std::string stmtNumString2 = std::to_string(follower);
                 res.push_back({stmtNumString1, stmtNumString2});
             }
         }
@@ -86,40 +79,22 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handleSynSyn(Paramet
     return res;
 }
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleSynWildcard(Parameter& param1) {
+std::vector<std::vector<std::string>>
+FollowsParentHandler::handleOneSynOneWildcard(Parameter &param1, Parameter &param2, bool isSynWildcard) {
     std::vector<std::vector<std::string>> res;
 
-    for (auto typedStmtNum : stmtStorage->getStatementNumbers(param1.getTypeString())) {
-        for (StmtNum follower : rlStorage->getRightItems(typedStmtNum)) {
-            std::string stmtNumString1 = to_string(typedStmtNum);
-            std::string stmtNumString2 = to_string(follower);
-            res.push_back({stmtNumString1, stmtNumString2});
+    for (auto typedStmtNum : isSynWildcard ? stmtStorage->getStatementNumbers(param1.getTypeString()) :
+                             stmtStorage->getStatementNumbers(param2.getTypeString())) {
+
+        for (StmtNum other : isSynWildcard ? rlStorage->getRightItems(typedStmtNum) :
+                                rlStorage->getLeftItems(typedStmtNum)) {
+
+            std::string currString = isSynWildcard ? std::to_string(typedStmtNum) : std::to_string(other);
+            std::string otherString = isSynWildcard ? std::to_string(other) : std::to_string(typedStmtNum);
+            res.push_back({currString, otherString});
+
         }
-    }
-    return res;
-}
 
-std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardInt(Parameter& param2) {
-    std::string paramString2 = param2.getValue();
-    std::vector<std::vector<std::string>> res;
-
-    std::unordered_set<StmtNum>& stmtNums = rlStorage->getLeftItems(stoi(paramString2));
-
-    if (!stmtNums.empty()) {
-        return AppConstants::EARLY_RETURN_RES;
-    }
-    return res;
-}
-
-std::vector<std::vector<std::string>> FollowsParentHandler::handleWildcardSyn(Parameter& param2) {
-    std::vector<std::vector<std::string>> res;
-
-    for (auto typedStmtNum : stmtStorage->getStatementNumbers(param2.getTypeString())) {
-        for (StmtNum followee : rlStorage->getLeftItems(typedStmtNum)) {
-            std::string stmtNumString1 = to_string(followee);
-            std::string stmtNumString2 = to_string(typedStmtNum);
-            res.push_back({stmtNumString1, stmtNumString2});
-        }
     }
     return res;
 }
@@ -146,30 +121,30 @@ std::vector<std::vector<std::string>> FollowsParentHandler::handle(Parameter& pa
             return handleIntInt(param1, param2);
         }
         else if (isSynonymParam2) {
-            return handleIntSyn(param1, param2);
+            return handleOneIntOneSyn(param1, param2, true);
         }
         else {
-            return handleIntWildcard(param1);
+            return handleOneIntOneWildcard(param1, param2, true);
         }
     }
     else if (isSynonymParam1) {
 
         if (isIntParam2) {
-            return handleSynInt(param1, param2);
+            return handleOneIntOneSyn(param1, param2, false);
         }
         else if (isSynonymParam2) {
             return handleSynSyn(param1, param2);
         }
         else {
-            return handleSynWildcard(param1);
+            return handleOneSynOneWildcard(param1, param2, true);
         }
     }
     else {
         if (isIntParam2) {
-            return handleWildcardInt(param2);
+            return handleOneIntOneWildcard(param1, param2, false);
         }
         else if (isSynonymParam2) {
-            return handleWildcardSyn(param2);
+            return handleOneSynOneWildcard(param1, param2, false);
         }
         else {
             return handleWildcardWildcard();
