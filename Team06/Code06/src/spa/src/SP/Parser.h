@@ -53,7 +53,8 @@ private:
     std::unique_ptr<Expression> parseFactor(std::deque<Token>& tokens);
     std::unique_ptr<Expression> parseConstant(std::deque<Token>& tokens);
     std::unique_ptr<Expression> parseVariable(std::deque<Token>& tokens);
-    static void assertTypeAndValue(std::deque<Token>& tokens, TokenType type, std::string value, std::string exceptionMsg);
+    static void assertTypeAndValue(std::deque<Token>& tokens, TokenType type, std::string value,
+                                   std::string exceptionMsg);
     static void assertType(std::deque<Token>& tokens, TokenType type, std::string exceptionMsg);
 
 public:
