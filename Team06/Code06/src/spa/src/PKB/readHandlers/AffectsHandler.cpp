@@ -37,7 +37,7 @@ std::vector<std::vector<std::string>> AffectsHandler::handle(Parameter& param1, 
 
     if ((param1.getValue() == param2.getValue()) && !isWildCardParam1 && !isWildCardParam2) {
         std::vector<std::vector<std::string>> res;
-        for (std::vector<std::string> curr : temp) {
+        for (std::vector<std::string>& curr : temp) {
             if (curr[0] == curr[1]) {
                 res.push_back(curr);
             }

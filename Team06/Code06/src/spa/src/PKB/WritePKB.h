@@ -58,5 +58,5 @@ public:
                   std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>>& graph);
 
 private:
-    PKB* pkbInstance = NULL;
+    PKB* pkbInstance = nullptr;
 };

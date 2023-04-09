@@ -17,8 +17,7 @@ vector<string> Query::evaluate(ReadPKB& readPKB) {
 }
 
 bool Query::evaluateRelationship(QueryDB& queryDb, ReadPKB& readPKB) {
-    for (int i = 0; i < this->relations.size(); i++) {
-        shared_ptr<Relationship>& relation = this->relations.at(i);
+    for (auto& relation : relations) {
         // Run an PKB API call for each relationship.
         // Taking the example of select s1 follows(s1, s2)
         vector<vector<string>> response = readPKB.findRelationship(relation);
@@ -104,27 +103,27 @@ Query::Query(vector<Parameter>& ss, vector<shared_ptr<Relationship>>& rs, vector
 
 vector<Parameter*> Query::getAllUncheckedSynonyms() {
     vector<Parameter*> synonyms;
-    for (int i = 0; i < selectParameters.size(); i++) {
-        if (selectParameters.at(i).isUncheckedSynonym()) {
-            synonyms.push_back(&selectParameters.at(i));
+    for (auto& selectParameter : selectParameters) {
+        if (selectParameter.isUncheckedSynonym()) {
+            synonyms.push_back(&selectParameter);
         }
     }
-    for (int i = 0; i < relations.size(); i++) {
-        vector<Parameter*> relSyns = (*relations.at(i)).getAllUncheckedSynonyms();
-        for (int j = 0; j < relSyns.size(); j++) {
-            synonyms.push_back(relSyns.at(j));
+    for (auto& relation : relations) {
+        vector<Parameter*> relSyns = relation->getAllUncheckedSynonyms();
+        for (auto& relSyn : relSyns) {
+            synonyms.push_back(relSyn);
         }
     }
-    for (int i = 0; i < patterns.size(); i++) {
-        vector<Parameter*> params = patterns.at(i).getAllUncheckedSynonyms();
-        for (int j = 0; j < params.size(); j++) {
-            synonyms.push_back(params.at(j));
+    for (auto& pattern : patterns) {
+        vector<Parameter*> patternSynonyms = pattern.getAllUncheckedSynonyms();
+        for (auto& patternSynonym : patternSynonyms) {
+            synonyms.push_back(patternSynonym);
         }
     }
-    for (int i = 0; i < comparisons.size(); i++) {
-        vector<Parameter*> params = comparisons.at(i).getAllUncheckedSynonyms();
-        for (int j = 0; j < params.size(); j++) {
-            synonyms.push_back(params.at(j));
+    for (auto& comparison : comparisons) {
+        vector<Parameter*> params = comparison.getAllUncheckedSynonyms();
+        for (auto& param : params) {
+            synonyms.push_back(param);
         }
     }
     return synonyms;
@@ -132,7 +131,7 @@ vector<Parameter*> Query::getAllUncheckedSynonyms() {
 
 bool Query::validateAllParameters() {
 
-    for (Parameter p : selectParameters) {
+    for (Parameter& p : selectParameters) {
         if (!p.hasValidAttributeType()) {
             return false;
         }
@@ -141,19 +140,19 @@ bool Query::validateAllParameters() {
         }
     }
 
-    for (Pattern p : patterns) {
+    for (Pattern& p : patterns) {
         if (!p.validateParams()) {
             return false;
         }
     }
 
-    for (shared_ptr<Relationship> r : relations) {
-        if (!(*r).validateParams()) {
+    for (shared_ptr<Relationship>& r : relations) {
+        if (!r->validateParams()) {
             return false;
         }
     }
 
-    for (Comparison c : comparisons) {
+    for (Comparison& c : comparisons) {
         if (!c.validateParams()) {
             return false;
         }
@@ -181,20 +180,20 @@ bool Query::operator==(const Query& q) const {
 
 void Query::updateEvalOrder() {
     if (relations.size() > 0) {
-        for (int i = 0; i < relations.size(); i++) {
-            relations.at(i)->calcPriority();
+        for (auto& relation : relations) {
+            relation->calcPriority();
         }
         std::sort(relations.begin(), relations.end(), SharedPtrCompare::cmp<Relationship>);
     }
     if (patterns.size() > 0) {
-        for (int i = 0; i < patterns.size(); i++) {
-            patterns.at(i).calcPriority();
+        for (auto& pattern : patterns) {
+            pattern.calcPriority();
         }
         std::sort(patterns.begin(), patterns.end(), greater());
     }
     if (comparisons.size() > 0) {
-        for (int i = 0; i < comparisons.size(); i++) {
-            comparisons.at(i).calcPriority();
+        for (auto& comparison : comparisons) {
+            comparison.calcPriority();
         }
         std::sort(comparisons.begin(), comparisons.end(), greater());
     }
