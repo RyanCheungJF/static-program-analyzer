@@ -5,12 +5,17 @@ void CFGStorage::writeCFG(
 
     // do a deepcopy once only
     std::unordered_map<StmtNum, std::unordered_map<std::string, std::unordered_set<StmtNum>>> temp;
-    for (const auto& [num, nextMap] : graph) {
-        for (const auto& [parentsOrChildren, neighbourNodes] : nextMap) {
-            temp[num][parentsOrChildren].insert(neighbourNodes.begin(), neighbourNodes.end());
+    for (auto kv : graph) {
+        StmtNum num = kv.first;
+        std::unordered_map<std::string, std::unordered_set<StmtNum>> nextMap = kv.second;
+
+        for (auto p : nextMap) {
+            std::string parentOrChildren = p.first;
+            std::unordered_set<StmtNum> otherNodes = p.second;
+
+            temp[num][p.first].insert(otherNodes.begin(), otherNodes.end());
         }
     }
-
     proc_graph[name] = std::move(temp);
 }
 
