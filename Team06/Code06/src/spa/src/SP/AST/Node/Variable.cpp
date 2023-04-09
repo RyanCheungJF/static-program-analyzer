@@ -2,4 +2,4 @@
 
 Variable::Variable() : name() {}
 
-Variable::Variable(Ent name) : name(name) {}
+Variable::Variable(Ent name) : name(std::move(name)) {}

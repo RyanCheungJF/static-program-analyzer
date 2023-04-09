@@ -13,10 +13,10 @@ public:
     IfStatement(StmtNum stmtNum, std::unique_ptr<ConditionalExpression> condExpr,
                 std::unique_ptr<StatementList> thenStmtList, std::unique_ptr<StatementList> elseStmtList);
 
-    std::vector<std::unique_ptr<Statement>>& getThenStatements();
-    std::vector<std::unique_ptr<Statement>>& getElseStatements();
-    StmtNum getFirstStmtNumForThen();
-    StmtNum getFirstStmtNumForElse();
+    std::vector<std::unique_ptr<Statement>>& getThenStatements() const;
+    std::vector<std::unique_ptr<Statement>>& getElseStatements() const;
+    StmtNum getFirstStmtNumForThen() const;
+    StmtNum getFirstStmtNumForElse() const;
 
     void accept(ASTVisitor* visitor) override;
 };

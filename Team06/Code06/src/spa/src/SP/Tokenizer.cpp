@@ -22,7 +22,7 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
             if (!isInteger(tokenValue)) {
                 throw SyntaxErrorException("Integer does not follow format: 0 | NZDIGIT ( DIGIT )*  -> " + tokenValue);
             }
-            tokens.push_back(Token(TokenType::INTEGER, tokenValue));
+            tokens.emplace_back(Token(TokenType::INTEGER, tokenValue));
         }
         else if (std::isalpha(peekNextChar(file))) { // LETTER: A-Z | a-z
             tokenValue += getNextChar(file);
@@ -30,27 +30,27 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
                 tokenValue += getNextChar(file);
             }
             // Don't need a check for name here, since format for NAME -> LETTER (LETTER | DIGIT)*
-            tokens.push_back(Token(TokenType::NAME, tokenValue));
+            tokens.emplace_back(Token(TokenType::NAME, tokenValue));
         }
         // Between two non-alphanumeric tokens, there need not be a whitespace in between the tokens
         else if (peekNextChar(file) == AppConstants::NOT) { // Handle !, !=
             getNextChar(file);
             if (peekNextChar(file) == AppConstants::EQUAL_SIGN) {
                 getNextChar(file);
-                tokens.push_back(Token(TokenType::RELATIONAL_OPR, AppConstants::NOT_EQUALS));
+                tokens.emplace_back(Token(TokenType::RELATIONAL_OPR, AppConstants::NOT_EQUALS));
             }
             else {
-                tokens.push_back(Token(TokenType::NOT));
+                tokens.emplace_back(Token(TokenType::NOT));
             }
         }
         else if (peekNextChar(file) == AppConstants::EQUAL_SIGN) { // Handle =, ==
             getNextChar(file);
             if (peekNextChar(file) == AppConstants::EQUAL_SIGN) {
                 getNextChar(file);
-                tokens.push_back(Token(TokenType::RELATIONAL_OPR, AppConstants::EQUALS));
+                tokens.emplace_back(Token(TokenType::RELATIONAL_OPR, AppConstants::EQUALS));
             }
             else {
-                tokens.push_back(Token(TokenType::ASSIGN));
+                tokens.emplace_back(Token(TokenType::ASSIGN));
             }
         }
         else if (peekNextChar(file) == AppConstants::GREATER ||
@@ -58,27 +58,27 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
             tokenValue += getNextChar(file);
             if (peekNextChar(file) == AppConstants::EQUAL_SIGN) {
                 tokenValue += getNextChar(file);
-                tokens.push_back(Token(TokenType::RELATIONAL_OPR, tokenValue));
+                tokens.emplace_back(Token(TokenType::RELATIONAL_OPR, tokenValue));
             }
             else {
-                tokens.push_back(Token(TokenType::RELATIONAL_OPR, tokenValue));
+                tokens.emplace_back(Token(TokenType::RELATIONAL_OPR, tokenValue));
             }
         }
         else if (peekNextChar(file) == AppConstants::PLUS || peekNextChar(file) == AppConstants::MINUS) { // Handle +, -
             tokenValue += getNextChar(file);
-            tokens.push_back(Token(TokenType::EXPR_ARITH_OPR, tokenValue));
+            tokens.emplace_back(Token(TokenType::EXPR_ARITH_OPR, tokenValue));
         }
         else if (peekNextChar(file) == AppConstants::MULTIPLY || peekNextChar(file) == AppConstants::DIVIDE ||
                  peekNextChar(file) == AppConstants::MODULO) { // Handle *, /, %
             tokenValue += getNextChar(file);
-            tokens.push_back(Token(TokenType::TERM_ARITH_OPR, tokenValue));
+            tokens.emplace_back(Token(TokenType::TERM_ARITH_OPR, tokenValue));
         }
         else if (peekNextChar(file) == AppConstants::AMPERSAND ||
                  peekNextChar(file) == AppConstants::VERTICAL_BAR) { // Handle &&, ||
             tokenValue += getNextChar(file);
             tokenValue += getNextChar(file);
             if (tokenValue == AppConstants::AND || tokenValue == AppConstants::OR) {
-                tokens.push_back(Token(TokenType::BINARY_LOGICAL_OPR, tokenValue));
+                tokens.emplace_back(Token(TokenType::BINARY_LOGICAL_OPR, tokenValue));
             }
             else {
                 throw SyntaxErrorException("Expected either '&&' or '||', but got -> " + tokenValue);
@@ -89,19 +89,19 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
 
             switch (tokenChar) {
             case AppConstants::LEFT_BRACE:
-                tokens.push_back(Token(TokenType::LEFT_BRACE));
+                tokens.emplace_back(Token(TokenType::LEFT_BRACE));
                 break;
             case AppConstants::RIGHT_BRACE:
-                tokens.push_back(Token(TokenType::RIGHT_BRACE));
+                tokens.emplace_back(Token(TokenType::RIGHT_BRACE));
                 break;
             case AppConstants::LEFT_PARENTHESIS:
-                tokens.push_back(Token(TokenType::LEFT_PARENTHESIS));
+                tokens.emplace_back(Token(TokenType::LEFT_PARENTHESIS));
                 break;
             case AppConstants::RIGHT_PARENTHESIS:
-                tokens.push_back(Token(TokenType::RIGHT_PARENTHESIS));
+                tokens.emplace_back(Token(TokenType::RIGHT_PARENTHESIS));
                 break;
             case AppConstants::SEMICOLON:
-                tokens.push_back(Token(TokenType::SEMICOLON));
+                tokens.emplace_back(Token(TokenType::SEMICOLON));
                 break;
             default:
                 // Getting the EOF is a bit buggy.
@@ -112,7 +112,7 @@ std::deque<Token> Tokenizer::tokenize(std::stringstream& file) {
             }
         }
     }
-    tokens.push_back(Token(TokenType::ENDOFFILE));
+    tokens.emplace_back(Token(TokenType::ENDOFFILE));
 
     return tokens;
 }

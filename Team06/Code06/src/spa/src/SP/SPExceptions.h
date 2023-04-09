@@ -8,7 +8,7 @@ private:
     std::string message;
 
 public:
-    SyntaxErrorException(const std::string msg) : message(msg) {}
+    explicit SyntaxErrorException(const std::string msg) : message(msg) {}
     const char* what() {
         return (this->message).c_str();
     }
@@ -19,7 +19,7 @@ private:
     std::string message;
 
 public:
-    SemanticErrorException(const std::string msg) : message(msg) {}
+    explicit SemanticErrorException(const std::string msg) : message(msg) {}
     const char* what() {
         return (this->message).c_str();
     }
@@ -30,7 +30,7 @@ private:
     std::string message;
 
 public:
-    FileNotFoundException(const std::string msg) : message(msg) {}
+    explicit FileNotFoundException(const std::string msg) : message(msg) {}
     const char* what() {
         return (this->message).c_str();
     }

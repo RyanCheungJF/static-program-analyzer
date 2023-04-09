@@ -9,7 +9,7 @@ void UsesModifiesExtractor::extract(std::vector<ProcName> topoOrder) {
 }
 
 void UsesModifiesExtractor::processProcedures(std::vector<ProcName> topoOrder) {
-    for (ProcName proc : topoOrder) {
+    for (const ProcName& proc : topoOrder) {
         std::unordered_set<Ent> currUsesVariables;
         std::unordered_set<Ent> currModifiesVariables;
 

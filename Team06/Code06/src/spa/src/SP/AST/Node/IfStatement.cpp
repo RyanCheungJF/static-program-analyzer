@@ -10,19 +10,19 @@ IfStatement::IfStatement(StmtNum stmtNum, std::unique_ptr<ConditionalExpression>
     this->elseStmtList = std::move(elseStmtList);
 }
 
-std::vector<std::unique_ptr<Statement>>& IfStatement::getThenStatements() {
+std::vector<std::unique_ptr<Statement>>& IfStatement::getThenStatements() const {
     return thenStmtList->statements;
 }
 
-std::vector<std::unique_ptr<Statement>>& IfStatement::getElseStatements() {
+std::vector<std::unique_ptr<Statement>>& IfStatement::getElseStatements() const {
     return elseStmtList->statements;
 }
 
-StmtNum IfStatement::getFirstStmtNumForThen() {
+StmtNum IfStatement::getFirstStmtNumForThen() const {
     return thenStmtList->statements[0]->statementNumber;
 }
 
-StmtNum IfStatement::getFirstStmtNumForElse() {
+StmtNum IfStatement::getFirstStmtNumForElse() const {
     return elseStmtList->statements[0]->statementNumber;
 }
 

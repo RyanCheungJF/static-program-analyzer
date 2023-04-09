@@ -12,8 +12,8 @@ public:
     WhileStatement(StmtNum stmtNum, std::unique_ptr<ConditionalExpression> condExpr,
                    std::unique_ptr<StatementList> stmtList);
 
-    std::vector<std::unique_ptr<Statement>>& getStatements();
-    StmtNum getFirstStmtNumForList();
+    std::vector<std::unique_ptr<Statement>>& getStatements() const;
+    StmtNum getFirstStmtNumForList() const;
 
     void accept(ASTVisitor* visitor) override;
 };

@@ -79,8 +79,8 @@ std::vector<ProcName> SemanticValidator::validateNoCycles() {
     std::vector<ProcName> topoOrder;
 
     // Initialize nodes with zero outgoing edges and empty set of incoming edges
-    for (int i = 0; i < procedureNames.size(); i++) {
-        nodes[procedureNames[i]] = std::make_pair(0, std::unordered_set<ProcName>());
+    for (const auto& procName : procedureNames) {
+        nodes[procName] = std::make_pair(0, std::unordered_set<ProcName>());
     }
 
     // Construct directed graph
@@ -99,10 +99,10 @@ std::vector<ProcName> SemanticValidator::validateNoCycles() {
     }
 
     // Perform topological sort
-    while (queue.size() > 0) {
+    while (!queue.empty()) {
         ProcName proc = queue.front();
         queue.pop_front();
-        for (Ent callerProc : nodes[proc].second) {
+        for (const Ent& callerProc : nodes[proc].second) {
             nodes[callerProc].first -= 1;
             if (nodes[callerProc].first == 0) {
                 queue.push_back(callerProc);
@@ -122,9 +122,9 @@ std::vector<ProcName> SemanticValidator::validateNoCycles() {
 
 void SemanticValidator::populateCallsTable(std::vector<ProcName>& topoOrder) {
     std::unordered_set<ProcName> calleeTSet;
-    for (ProcName p : topoOrder) {
+    for (const ProcName& p : topoOrder) {
         writeApi->setCalls(p, procCallMap[p]);
-        for (ProcName j : procCallMap[p]) {
+        for (const ProcName& j : procCallMap[p]) {
             calleeTSet.insert(j);
             calleeTSet.insert(readApi->getCallsT(j).begin(), readApi->getCallsT(j).end());
         }
