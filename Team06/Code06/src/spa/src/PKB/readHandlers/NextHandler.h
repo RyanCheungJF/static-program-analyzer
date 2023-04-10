@@ -54,10 +54,6 @@ private:
     // e.g. Next*(w1, a1) where a1 is assign, w1 is while. They can be replaced by other valid statement types
     std::vector<std::vector<std::string>> handleSynSynTransitive(Parameter& param1, Parameter& param2);
 
-    // todo: delete?
-    // e.g. Next*(s1, s2) or Next*(_, _)
-    /*std::vector<std::vector<std::string>> handleWildcardWildcardTransitive();*/
-
     // helper functions
     std::unordered_map<ProcName, std::unordered_set<StmtNum>>
     getProcedureLines(std::unordered_set<StmtNum>& statementNumbers);
