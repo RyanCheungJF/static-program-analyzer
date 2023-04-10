@@ -2,7 +2,7 @@
 #include "Cache.h"
 
 struct relationshipHash {
-    std::size_t operator()(const shared_ptr<Relationship>& rs) const {
+    std::size_t operator()(const std::shared_ptr<Relationship>& rs) const {
         std::vector<ParameterType> paramTypes = rs->getParameterTypes();
         std::vector<std::string> paramValues = rs->getParameterValues();
 
