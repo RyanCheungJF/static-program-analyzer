@@ -7,8 +7,6 @@
 
 class CFGStorage {
 public:
-    //  void writeCFG(StmtNum num, CFGNodeStub &head);
-
     /*
      * data structure of graph is as follows:
      *
