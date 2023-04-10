@@ -101,6 +101,6 @@ private:
     std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> intWildcardTransitiveCache;
     std::unordered_map<StmtNum, std::vector<std::vector<std::string>>> wildcardIntTransitiveCache;
 
-    std::unordered_map<ProcName, std::unordered_map<bool, std::unordered_map<StmtNum, unordered_set<StmtNum>>>>
+    std::unordered_map<ProcName, std::unordered_map<bool, std::unordered_map<StmtNum, std::unordered_set<StmtNum>>>>
         procAffectsGraphMap;
 };
