@@ -7,7 +7,7 @@
 class CallsHandler : public RelationshipHandler {
 public:
     std::vector<std::vector<std::string>> handle(Parameter& param1, Parameter& param2);
-    void setStorage(std::shared_ptr<RelationshipStorage<Ent, Ent>> callsStorage);
+    void setStorage(std::shared_ptr<RelationshipStorage<Ent, Ent>>& callsStorage);
 
 private:
     std::shared_ptr<RelationshipStorage<Ent, Ent>> callsStorage;
