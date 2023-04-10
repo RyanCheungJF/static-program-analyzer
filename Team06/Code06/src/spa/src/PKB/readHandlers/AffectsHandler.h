@@ -82,7 +82,7 @@ private:
                                                            bool isWildCardParam2, bool isAssignStmtParam1,
                                                            bool isAssignStmtParam2);
 
-    std::unordered_map<StmtNum, unordered_set<StmtNum>> buildAffectsGraph(bool isInverted, ProcName proc);
+    std::unordered_map<StmtNum, std::unordered_set<StmtNum>> buildAffectsGraph(bool isInverted, ProcName proc);
 
     std::vector<std::vector<std::string>> bfsTraversalOneWildcard(StmtNum a1, StmtNum a2);
 
