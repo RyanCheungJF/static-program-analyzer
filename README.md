@@ -1,4 +1,12 @@
-# Team 06
+# Static Program Analyzer
+
+## About
+
+Static Program Analyzer (SPA) built for the custom SIMPLE language.
+Language details can be found [here](https://nus-cs3203.github.io/course-website/contents/basic-spa-requirements/simple-programming.html#simple-programming-language).
+
+We have many components, and through this project I have learnt about programming languages,
+devops and a bit of C++.
 
 ## Target Environment
 
@@ -32,7 +40,7 @@ npm i
 Ensure that your `style.sh` and `styleall.sh` script has executable permissions,
 then run it to automatically style your code.
 
-`style.sh` automatically *targets* modified files based on Git,
+`style.sh` automatically _targets_ modified files based on Git,
 and is the formatter of choice used in Husky pre-commit checks.
 
 `styleall.sh` targets every single file, hence it will take a file to run.
@@ -69,11 +77,11 @@ The workflow runs on pull request to `master` and pushes to our respective branc
 
 # Team Members
 
-|                         Name |  Mobile  | Email              | Development OS/Toolchain      |
-| ---------------------------: | :------: | :----------------- | ----------------------------- |
-|                  Hoon Darren | 96353534 | e0523347@u.nus.edu | MacOS/CLion                   |
-|                 Cui Langyuan | 98225819 | e0148779@u.nus.edu | Windows 11/Visual Studio 2019 |
-| Muhammad Faruq Bin Jahangeer | 81268656 | e0544096@u.nus.edu | MacOS/CLion                   |
-|           Calvin Tan Wei Jie | 92207978 | e0544514@u.nus.edu | Windows 10/Visual Studio 2022 |
-|                 Ong Xing Wei | 81852377 | e0543718@u.nus.edu | Windows 10/Visual Studio 2022 |
-|        Ryan Cheung Jing Feng | 83213902 | e0543623@u.nus.edu | Windows 10/Visual Studio 2019 |
+| Name                         | Development OS/Toolchain      |
+| :--------------------------- | :---------------------------- |
+| Hoon Darren                  | MacOS/CLion                   |
+| Muhammad Faruq Bin Jahangeer | MacOS/CLion                   |
+| Ryan Cheung Jing Feng        | Windows 10/Visual Studio 2019 |
+| Calvin Tan Wei Jie           | Windows 10/Visual Studio 2022 |
+| Ong Xing Wei                 | Windows 10/Visual Studio 2022 |
+| Cui Langyuan                 | Windows 11/Visual Studio 2019 |
